@@ -4,13 +4,12 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
+      - name: Install dependencies
+        run: sudo apt-get install --yes clang-tidy
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Create build directory
-        run: mkdir build
-      - name: Generate
-        run: cmake -S . -B build
-      - name: Generate
-        run: cmake --build build
+      - run: mkdir build
+      - run: cmake -S . -B build
+      - run: cmake --build build
       - name: Test
         run: ./build/test/jsonbinpack_test
