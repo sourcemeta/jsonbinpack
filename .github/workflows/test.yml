@@ -11,5 +11,4 @@ jobs:
       - run: mkdir build
       - run: cmake -S . -B build
       - run: cmake --build build
-      - name: Test
-        run: ./build/test/jsonbinpack_test
+      - run: ctest --verbose --test-dir build
