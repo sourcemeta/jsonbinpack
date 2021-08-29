@@ -1,0 +1,16 @@
+name: JSON BinPack Test
+on: [ push ]
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Create build directory
+        run: mkdir build
+      - name: Generate
+        run: cmake -S . -B build
+      - name: Generate
+        run: cmake --build build
+      - name: Test
+        run: ./build/test/jsonbinpack_test
