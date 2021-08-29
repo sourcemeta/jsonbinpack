@@ -1,0 +1,11 @@
+name: Checks
+on: [ push ]
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install --yes clang-tidy clang-format
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - run: make
