@@ -1,0 +1,6 @@
+add_executable(jsonbinpack_test_stream ../runner.cc magic_test.cc)
+target_compile_options(jsonbinpack_test_stream PRIVATE -Wall -Wextra -Werror)
+add_test(stream jsonbinpack_test_stream COMMAND jsonbinpack_test_stream)
+target_link_libraries(jsonbinpack_test_stream gtest)
+target_link_libraries(jsonbinpack_test_stream jsonbinpack_stream)
+target_include_directories(jsonbinpack_test_stream PUBLIC "${PROJECT_SOURCE_DIR}")

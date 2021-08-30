@@ -1,4 +1,4 @@
-name: JSON BinPack Test
+name: Checks
 on: [ push ]
 jobs:
   test:
