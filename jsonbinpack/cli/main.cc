@@ -1,6 +1,7 @@
 // Copyright (c) 2021 Juan Cruz Viotti. All rights reserved.
 
 #include <iostream>
+
 #include "config.h"  // NOLINT(build/include) as this file is auto-generated.
 #include "jsonbinpack/stream/base.h"
 
