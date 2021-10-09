@@ -12,3 +12,4 @@ jobs:
       - run: cmake -S . -B build
       - run: cmake --build build
       - run: ctest --verbose --test-dir build
+      - run: python2 vendor/styleguide/cpplint/cpplint.py jsonbinpack/**/*.cc jsonbinpack/**/*.h test/**/*.cc
