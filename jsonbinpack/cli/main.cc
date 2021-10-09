@@ -1,6 +1,8 @@
+// Copyright (c) 2021 Juan Cruz Viotti. All rights reserved.
+
 #include <iostream>
-#include <jsonbinpack/stream/base.h>
-#include "config.h"
+#include "config.h"  // NOLINT(build/include) as this file is auto-generated.
+#include "jsonbinpack/stream/base.h"
 
 int main() {
   jsonbinpack::stream::hello();

@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Juan Cruz Viotti. All rights reserved.
+
 #include <gtest/gtest.h>
 #include <jsonbinpack/stream/base.h>
 
