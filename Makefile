@@ -14,7 +14,7 @@ CPP_SOURCES = jsonbinpack/**/*.cc test/**/*.cc test/*.cc
 CPP_HEADERS = jsonbinpack/**/*.h
 
 prepare: | $(OUTPUT_DIRECTORY)
-	cmake -S . -B $(word 1,$|)
+	cmake -S . -B $(word 1,$|) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 build: | $(OUTPUT_DIRECTORY)
 	cmake --build $(word 1,$|)
@@ -22,6 +22,7 @@ build: | $(OUTPUT_DIRECTORY)
 lint:
 	shellcheck configure .github/*.sh
 	python2 vendor/styleguide/cpplint/cpplint.py $(CPP_SOURCES) $(CPP_HEADERS)
+	clang-tidy -p $(OUTPUT_DIRECTORY) --checks='' --warnings-as-errors='' $(CPP_SOURCES) $(CPP_HEADERS)
 
 format:
 	clang-format -i $(CPP_SOURCES) $(CPP_HEADERS)
