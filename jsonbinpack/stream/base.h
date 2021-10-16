@@ -9,7 +9,7 @@ namespace stream {
 void hello();
 int sum(const int a, const int b);
 
-}
-}
+}  // namespace stream
+}  // namespace jsonbinpack
 
 #endif  // JSONBINPACK_STREAM_BASE_H_

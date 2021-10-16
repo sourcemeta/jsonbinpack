@@ -5,11 +5,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
-        run: sudo apt-get install --yes clang-tidy
+        run: sudo apt-get install --yes clang-tidy clang-format shellcheck
       - name: Checkout repository
         uses: actions/checkout@v2
-      - run: mkdir build
-      - run: cmake -S . -B build
-      - run: cmake --build build
-      - run: ctest --verbose --test-dir build
-      - run: python2 vendor/styleguide/cpplint/cpplint.py jsonbinpack/**/*.cc jsonbinpack/**/*.h test/**/*.cc
+      - run: ./configure
+      - run: make
+      - run: make test
+      - run: make lint
+      - run: make format
