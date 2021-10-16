@@ -80,7 +80,7 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-# Makefile
+Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -94,3 +94,4 @@ _deps
 # End of https://www.toptal.com/developers/gitignore/api/c++,cmake,c
 
 /out
+!/Makefile
