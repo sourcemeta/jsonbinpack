@@ -1,11 +1,16 @@
 JSON BinPack
 ============
 
+JSON BinPack is an open-source binary JSON serialization format with a **strong
+focus on space efficiency**. It supports schema-driven and schema-less modes to
+encode any [JSON](https://www.json.org) document given a matching [JSON Schema
+2020-12](http://json-schema.org) definition.
+
 Building JSON BinPack
 ---------------------
 
 JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
-build system. For convenience, the project also provides a [GNU
+build system. For convenience, the project also provides an Autotools-like [GNU
 Make](https://www.gnu.org/software/make/) integration with simple-to-use
 targets. Run the following commands to build JSON BinPack from source:
 
@@ -17,21 +22,15 @@ make
 Contributing
 ------------
 
-Run the tests as follows:
+Developing JSON BinPack typically involves running the following set of
+targets:
 
 ```sh
+# Run the tests
 make test
-```
-
-Run the linter as follows:
-
-```sh
+# Run the linter
 make lint
-```
-
-Format code changes as follows:
-
-```sh
+# Format code changes
 make format
 ```
 
