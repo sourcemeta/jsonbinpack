@@ -4,7 +4,10 @@ project(jsonbinpack VERSION 0.0.1)
 enable_testing()
 
 # Global options
-add_compile_options(-Wall -Wextra -Werror -Wpedantic -Wshadow -Wdouble-promotion -Wconversion -Wunused-parameter -fno-exceptions)
+add_compile_options(-Wall -Wextra -Werror -Wpedantic)
+add_compile_options(-Wshadow -Wdouble-promotion -Wconversion -Wunused-parameter)
+# To target safety-critical systems
+add_compile_options(-fno-exceptions)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
