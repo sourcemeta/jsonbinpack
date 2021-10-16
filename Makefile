@@ -17,7 +17,7 @@ build: | $(OUTPUT_DIRECTORY)
 	cmake --build $(word 1,$|)
 
 lint:
-	shellcheck configure
+	shellcheck configure .github/*.sh
 	python2 vendor/styleguide/cpplint/cpplint.py \
 		jsonbinpack/**/*.cc \
 		jsonbinpack/**/*.h \

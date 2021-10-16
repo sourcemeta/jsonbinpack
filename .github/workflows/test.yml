@@ -13,3 +13,5 @@ jobs:
       - run: make test
       - run: make lint
       - run: make format
+      - name: Check for staged files
+        run: ./.github/ensure-no-staged-files.sh
