@@ -10,6 +10,9 @@ $(OUTPUT_DIRECTORY):
 
 all: prepare build test
 
+CPP_SOURCES = jsonbinpack/**/*.cc jsonbinpack/**/*.h
+CPP_HEADERS = jsonbinpack/**/*.h
+
 prepare: | $(OUTPUT_DIRECTORY)
 	cmake -S . -B $(word 1,$|)
 
@@ -18,16 +21,10 @@ build: | $(OUTPUT_DIRECTORY)
 
 lint:
 	shellcheck configure .github/*.sh
-	python2 vendor/styleguide/cpplint/cpplint.py \
-		jsonbinpack/**/*.cc \
-		jsonbinpack/**/*.h \
-		test/**/*.cc
+	python2 vendor/styleguide/cpplint/cpplint.py $(CPP_SOURCES) $(CPP_HEADERS)
 
 format:
-	clang-format -i \
-		jsonbinpack/**/*.cc \
-		jsonbinpack/**/*.h \
-		test/**/*.cc
+	clang-format -i $(CPP_SOURCES) $(CPP_HEADERS)
 
 test: | $(OUTPUT_DIRECTORY)
 	ctest --verbose --test-dir $(word 1,$|)
