@@ -4,7 +4,7 @@ project(jsonbinpack VERSION 0.0.1)
 enable_testing()
 
 # Global options
-add_compile_options(-Wall -Wextra -Werror -fno-exceptions)
+add_compile_options(-Wall -Wextra -Werror -Wpedantic -fno-exceptions)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
