@@ -2,12 +2,23 @@
 
 #include <iostream>
 
-#include "config.h"  // NOLINT(build/include) as this file is auto-generated.
-#include "jsonbinpack/stream/base.h"
+#include "jsonbinpack/cli/command_help.h"
+#include "jsonbinpack/cli/command_version.h"
 
-int main() {
-  jsonbinpack::stream::hello();
-  std::cout << JSONBINPACK_VERSION_MAJOR << std::endl;
-  std::cout << JSONBINPACK_VERSION_MINOR << std::endl;
-  std::cout << JSONBINPACK_VERSION_PATCH << std::endl;
+static const char *kCommandVersion = "version";
+
+int main(int argc, char **argv) {
+  const std::string_view command{argc <= 1 ? "help" : argv[1]};
+  if (command == kCommandVersion) {
+    return jsonbinpack::cli::command::Version();
+  }
+
+  const int code = jsonbinpack::cli::command::Help(argv[0]);
+  // This means the user executed the tool without passing any argument,
+  // in which case a non-zero exit code is more appropriate.
+  if (code == 0 && argc == 1) {
+    return 1;
+  }
+
+  return code;
 }
