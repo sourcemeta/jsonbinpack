@@ -10,7 +10,7 @@ $(OUTPUT_DIRECTORY):
 
 all: prepare build test
 
-CPP_SOURCES = jsonbinpack/**/*.cc jsonbinpack/**/*.h
+CPP_SOURCES = jsonbinpack/**/*.cc test/**/*.cc test/*.cc
 CPP_HEADERS = jsonbinpack/**/*.h
 
 prepare: | $(OUTPUT_DIRECTORY)
