@@ -10,7 +10,16 @@ Building JSON BinPack
 ---------------------
 
 JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
-build system. For convenience, the project also provides an Autotools-like [GNU
+build system. You can build the project using the standard CMake flow:
+
+```sh
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+For convenience, the project also provides an Autotools-like [GNU
 Make](https://www.gnu.org/software/make/) integration with simple-to-use
 targets. Run the following commands to build JSON BinPack from source:
 
