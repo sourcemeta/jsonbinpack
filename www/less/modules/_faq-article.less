@@ -1,0 +1,32 @@
+.faq-article{
+	margin-bottom: 30px;
+}
+
+.faq-category-title{
+	.fz(34);
+	position: relative;
+	padding: 20px 30px 20px 0;
+	margin-bottom: 15px;
+	border-bottom: 1px solid @color_grey-light;
+
+	&:before{
+		content: attr(data-icon);
+		color: @color_grey-dark;
+		font-family: @icons-stroke;
+		display: block;
+		right: 0px;
+		font-size: 30px;
+		position: absolute;
+		speak: none;
+		top: 20px;
+		line-height: 1;
+	}
+}
+
+.faq-article-title{
+	padding: 15px 0;
+	color: @color_blue;
+	line-height: 1.4;
+	margin: 0;
+	.fz(23);
+}

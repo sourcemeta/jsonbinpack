@@ -1,0 +1,106 @@
+.page-404{
+	background-image: url(../images/14.jpg);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	background-size: cover;
+	min-height: 600px;
+}
+
+.page-404-general{
+	padding: 60px 25px;
+	position: relative;
+	padding-left: 155px;
+}
+
+.page-404-error{
+	padding: 15px 25px;
+	position: absolute;
+	top: 60px;
+	left: 0;
+}
+
+.page-404-error-text{
+	font-size: 50px;
+	line-height: 53px;
+	color: @color_black;
+	opacity: 0.22;
+	font-weight: @font_black;
+	display: block;
+}
+
+.page-404-info{
+	padding: 15px 25px;
+	border-left: 1px solid #dbdbdb;
+}
+
+.page-404-info-title{
+	font-size: 50px;
+	line-height: 53px;
+	font-weight: @font_thin;
+	opacity: 0.73;
+	margin: 0;
+}
+
+.page-404-info-description{
+	font-size: 24px;
+	font-weight: @font_light;
+	opacity: 0.60;
+	padding: 20px 0;
+	margin: 0;
+	line-height: 1.5;
+}
+
+.page-404-redirect{
+	font-size: 18px;
+	font-weight: @font_light;
+	color: @color_blue;
+	margin-bottom: 15px;
+	display: inline-block;
+	vertical-align: top;
+	text-decoration: none;
+
+	&:hover{
+		text-decoration: none;
+	}
+
+	i{
+		margin-left: 8px;
+	}
+}
+
+@media all and (max-width: @break-small){
+	.page-404-info-description{
+		font-size: 21px;
+		padding: 15px 0;
+	}
+
+	.page-404-info-title{
+		font-size: 45px;
+	    line-height: 47px;
+	}
+
+	.page-404-error-text{
+		font-size: 45px;
+		line-height: 47px;
+	}
+
+	.page-404-general{
+		padding: 60px 25px 60px 144px;
+	}
+}
+
+@media all and (max-width: @break-small-x){
+	.page-404-error{
+		position: relative;
+		top: auto;
+		padding: 15px 0;
+	}
+	.page-404-info{
+		border-left: none;
+		border-top: 1px solid #dbdbdb;
+		padding: 15px 0;
+	}
+	.page-404-general{
+		padding: 30px 25px;
+	}
+}

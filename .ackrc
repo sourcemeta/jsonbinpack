@@ -1,3 +1,4 @@
 --ignore-dir=vendor
+--ignore-dir=node_modules
 --ignore-dir=Testing
 --ignore-dir=out

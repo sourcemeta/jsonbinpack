@@ -1,0 +1,19 @@
+.image{
+	padding: 4px;
+	border: 1px solid @color_grey-light;
+	border-radius: 3px;
+	margin-bottom: 15px;
+	max-width: 100%;
+
+	&.remove-border{
+		border: 0;
+	}
+
+	&.isolated{
+		margin: 30px 0;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.image.isolated{ margin: 0 0 15px 0; }
+}

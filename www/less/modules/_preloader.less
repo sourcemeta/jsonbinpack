@@ -1,0 +1,72 @@
+
+@preloader-size: 30px;
+@preloader-wieght: 1px;
+@preloader-satelit-size: 8px;
+@preloader-orbit-size: (@preloader-size * 1.1); 
+
+.preloader{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	z-index: 9999;
+}
+
+.preloader-animation{
+	width: @preloader-size;
+	height: @preloader-size;
+	border: @preloader-wieght solid @color_blue;
+	border-radius: 50%;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-top: -@preloader-size / 2;
+	margin-left: -@preloader-size / 2;
+	background-color: lighten(@color_blue, 40%);
+	box-shadow: 0 0 0 @preloader-orbit-size white, 0 0 0 @preloader-orbit-size + @preloader-wieght lighten(@color_blue, 30%);
+	backface-visibility: hidden;
+
+	&:after, &:before{
+		content: '';
+		display: block;
+		width: @preloader-satelit-size;
+		height: @preloader-satelit-size;
+		border-radius: 50%;
+		background-color: @color_blue;
+		border: @preloader-wieght solid @color_blue;
+		left: 50%;
+		.transform(translateX(-50%));
+		position: absolute;
+		background-color: lighten(@color_blue, 40%);
+	}
+
+	&:after{
+		top: -@preloader-orbit-size - (@preloader-satelit-size / 2) - @preloader-wieght;
+		-webkit-transform-origin: 0 (@preloader-size / 2) + (@preloader-satelit-size / 2) + @preloader-orbit-size;
+		-moz-transform-origin: 0 (@preloader-size / 2) + (@preloader-satelit-size / 2) + @preloader-orbit-size;
+		-ms-transform-origin: 0 (@preloader-size / 2) + (@preloader-satelit-size / 2) + @preloader-orbit-size;
+		-o-transform-origin: 0 (@preloader-size / 2) + (@preloader-satelit-size / 2) + @preloader-orbit-size;
+		transform-origin: 0 (@preloader-size / 2) + (@preloader-satelit-size / 2) + @preloader-orbit-size;
+		.animation(preloader-anim 1.5s linear infinite);
+	}
+
+	&:before{
+		bottom: -@preloader-orbit-size - (@preloader-satelit-size / 2) - @preloader-wieght;
+		-webkit-transform-origin: 0 -(@preloader-size / 2) + (@preloader-satelit-size / 2) - @preloader-orbit-size;
+		-moz-transform-origin: 0 -(@preloader-size / 2) + (@preloader-satelit-size / 2) - @preloader-orbit-size;
+		-ms-transform-origin: 0 -(@preloader-size / 2) + (@preloader-satelit-size / 2) - @preloader-orbit-size;
+		-o-transform-origin: 0 -(@preloader-size / 2) + (@preloader-satelit-size / 2) - @preloader-orbit-size;
+		transform-origin: 0 -(@preloader-size / 2) + (@preloader-satelit-size / 2) - @preloader-orbit-size;
+		.animation(preloader-anim 1.3s linear infinite);
+	}
+}
+
+.keyframes(preloader-anim; {
+	0%{
+		.transform(rotate(-180deg) translateX(-50%));
+	}
+
+	100%{
+		.transform(rotate(180deg) translateX(-50%));
+	}
+});

@@ -1,0 +1,39 @@
+.header-back-app-block{
+	position: relative;
+}
+
+.header-back-app-img{
+	display: block;
+	margin: -30px auto -178px;
+	max-width: 100%;
+}
+
+.media-mixin(@break) when (@break = @break-large-x) {
+	.header-back-app {
+	    padding: 140px 0 100px;
+	    margin-bottom: 0;
+	}
+}
+.media-mixin(@break) when (@break = @break-medium) {
+	.header-back-app{
+		margin-bottom: 80px;
+
+		.page-info, .header-back-buttons{
+			text-align: center;
+		}
+		.header-back-buttons{
+			margin-bottom: 80px;
+		}
+		.header-back-app-img{
+			margin: 0 auto -190px;
+		}
+	}
+
+}
+.media-mixin(@break) when (@break = @break-small-x){
+	.header-back-app{
+		.header-back-buttons{
+			margin-bottom: 40px;
+		}
+	}
+}

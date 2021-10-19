@@ -1,0 +1,66 @@
+// SlickNav
+@import (less) '../libs/owl.carousel.css';
+
+.steps-slider{
+	margin-bottom: 30px;
+
+	.owl-nav{
+		font-family: @icons;
+	}
+
+	.owl-item{
+		backface-visibility: visible;
+	}
+
+	.owl-prev, .owl-next{
+		position: absolute;
+		bottom: 30px;
+		width: 40px;
+		height: 40px;
+		border: 1px solid @color_blue;
+		text-align: center;
+		border-radius: 3px;
+		color: @color_blue;
+		line-height: 38px;
+		background-color: white;
+	}
+
+	.owl-prev{
+		right: 130px;
+	}
+
+	.owl-next{
+		right: 30px;
+	}
+}
+
+.steps-slider-item{
+	border: 1px solid @color_grey-light;
+	border-radius: 3px;
+}
+
+.steps-slider-step{
+	position: absolute;
+	right: 80px;
+	bottom: 30px;
+	width: 40px;
+	height: 40px;
+	border: 1px solid @color_blue;
+	text-align: center;
+	border-radius: 3px;
+	color: @color_blue;
+	line-height: 38px;
+	background-color: white;
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.steps-slider .owl-next, .steps-slider .owl-prev, .steps-slider-step{
+		width: 30px;
+		height: 30px;
+		line-height: 28px;
+		bottom: 20px;
+	}
+	.steps-slider .owl-next { right: 20px; }
+	.steps-slider .owl-prev { right: 100px; }
+	.steps-slider-step { right: 60px; }
+}

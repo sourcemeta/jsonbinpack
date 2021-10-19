@@ -1,0 +1,67 @@
+.transition(@property){
+	-webkit-transition: @property .25s ease;
+	   -moz-transition: @property .25s ease;
+	    -ms-transition: @property .25s ease;
+	     -o-transition: @property .25s ease;
+	        transition: @property .25s ease;
+}
+
+.transition-custom(...){
+	@values: ~`"@{arguments}".replace(/[\[\]]/g, '')`;
+	-webkit-transition: @values;
+	   -moz-transition: @values;
+	    -ms-transition: @values;
+	     -o-transition: @values;
+	        transition: @values;
+}
+
+.placeholder(@rules) {
+
+    &::-webkit-input-placeholder {
+        @rules();
+    }
+    &:-moz-placeholder {
+        @rules();
+    }
+    &::-moz-placeholder {
+        @rules();
+    }
+    &:-ms-input-placeholder {
+        @rules();
+    }
+}
+
+
+.fz( @value: @font-size_base, @context: @font-size_base ) {
+	font-size: (@value / @context) + 0em;
+}
+
+.translateX(@value){
+	-webkit-transform: translateX(@value);
+	   -moz-transform: translateX(@value);
+	    -ms-transform: translateX(@value);
+	     -o-transform: translateX(@value);
+	        transform: translateX(@value);
+}
+
+.animation(@arguments) {
+	-webkit-animation: @arguments;
+	   -moz-animation: @arguments;
+	    -ms-animation: @arguments;
+	     -o-animation: @arguments;
+	        animation: @arguments;
+}
+
+.transform(@value){
+	-webkit-transform: @value;
+	   -moz-transform: @value;
+	    -ms-transform: @value;
+	     -o-transform: @value;
+	        transform: @value;
+}
+
+.keyframes(@name; @arguments) {
+	@-moz-keyframes @name { @arguments(); }
+	@-webkit-keyframes @name { @arguments(); }
+	@keyframes @name { @arguments(); }
+}

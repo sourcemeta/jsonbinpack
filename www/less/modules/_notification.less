@@ -1,0 +1,64 @@
+.notification{
+	padding: 150px 0;
+	position: relative;
+}
+
+.notification-icon{
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.notification-close{
+	position: absolute;
+	right: 30px;
+	top: 30px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+
+	&:before, &:after{
+		width: 2px;
+		height: 30px;
+		position: absolute;
+		display: block;
+		content: '';
+		background-color: @color_grey-dark;
+		top: 0;
+		left: 13px;
+	}
+
+	&:before{
+		.transform(rotate(45deg));
+	}
+
+	&:after{
+		.transform(rotate(-45deg));
+	}
+}
+
+.notification-title{
+	.fz(38);
+	text-align: center;
+}
+
+.notification-description{
+	.fz(20);
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.notification-buttons{
+	text-align: center;
+
+	.button{
+		margin-right: 10px;
+
+		&:last-child{
+			margin-right: 0;
+		}
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.notification{ padding: 70px 0; }
+}

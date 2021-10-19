@@ -1,0 +1,14 @@
+@import (less) '../libs/twentytwenty.css';
+
+// Before and After
+.before-and-after{
+	margin-bottom: 30px;
+
+	img{
+		width: 100%;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.twentytwenty-before-label, .twentytwenty-after-label, .twentytwenty-overlay{ display: none; }
+}

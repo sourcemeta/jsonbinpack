@@ -1,0 +1,63 @@
+.book{
+	margin-bottom: 30px;
+}
+
+.book-image{
+	max-width: 100%;
+}
+
+.book-title{
+	.fz(44);
+	margin-top: 60px;
+}
+
+.book-description{
+	.fz(20);
+	color: @color_grey-dark;
+	margin-bottom: 30px;
+}
+
+.book-download-list{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.book-download-item{
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1;
+	*display: inline;
+	margin-right: 10px;
+	margin-bottom: 10px;
+
+	a{
+		padding: 10px 20px;
+		background-color: @color_green;
+		color: white;
+		display: block;
+		line-height: 1.4;
+		border-radius: 3px;
+		font-weight: @font_light;
+		.transition-color-background();
+
+		i{
+			margin-right: 5px;
+		}
+
+		&:hover{
+			text-decoration: none;
+			background-color: darken(@color_green, 5%)
+		}
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small) {
+	.book-title{ .fz(35); margin-top: 48px; }
+	.book-description{ .fz(16); margin-bottom: 24px; }
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.book-title{ .fz(28); margin-top: 38px; }
+	.book-description{ .fz(13); margin-bottom: 19px; }
+}

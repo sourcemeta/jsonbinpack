@@ -1,0 +1,182 @@
+.button{
+	display: inline-block;
+	vertical-align: middle;
+	zoom: 1;
+	*display: inline;
+	text-decoration: none;
+	.fz(16);
+	font-weight: @font_light;
+	color: @color_black;
+	border: 1px solid @color_grey-light;
+	white-space: nowrap;
+	cursor: pointer;
+	line-height: 1;
+	padding: 12px 20px;
+	border-radius: 3px;
+	text-align: center;
+	-o-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+    background-color: @color_grey-lighter;
+    outline: none;
+    .transition-color-background();
+
+    &.button-icon-right{
+        i{
+            margin-right: 0;
+            margin-left: 10px;
+        }
+    }
+
+    i{
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    // State
+    &:active{
+        bottom: -1px;
+    }
+
+    // Sizes
+    &.large{
+    	.fz(18);
+    	padding: 18px 42px;
+    	border-radius: 5px;
+
+        &.button-icon{
+            padding: 16px 42px 16px 22px;
+        }
+
+        &.button-icon-right{
+            padding: 16px 22px 16px 42px;
+        }
+    }
+
+    &.rounded{
+        border-radius: 21px;
+
+        &.small{
+            border-radius: 16px;
+        }
+
+        &.large{
+            border-radius: 27px;
+        }
+    }
+
+    &.small{
+    	.fz(14);
+	    padding: 8px 16px;
+    }
+
+    &.full{
+    	display: block;
+        width: 100%;
+    }
+
+    // Colors
+    &.green, &.blue, &.blue-light, &.purple, &.orange, &.red{
+    	color: white;
+    	border: 1px solid rgba(0,0,0,.2);
+    }
+
+    &.green { 
+        background-color: @color_green;
+        &:hover{ background-color: darken(@color_green, 5%);}
+    }
+    &.blue { 
+        background-color: @color_blue;
+        &:hover{ background-color: darken( @color_blue, 5%);}
+    }
+    &.blue-light{ 
+        background-color: @color_blue-light;
+        &:hover{ background-color: darken( @color_blue-light, 5%);}
+    }
+    &.purple { 
+        background-color: @color_purple;
+        &:hover{ background-color: darken( @color_purple, 5%);}
+    }
+    &.orange { 
+        background-color: @color_orange;
+        &:hover{ background-color: darken( @color_orange, 5%);}
+    }
+    &.red { 
+        background-color: @color_red;
+        &:hover{ background-color: darken( @color_red, 5%);}
+    }
+
+    &.stroke{
+    	background-color: transparent;
+    	&.green {
+    		color: @color_green;
+    		border-color: @color_green;
+    	}
+    	&.blue {
+    		color: @color_blue;
+    		border-color: @color_blue;
+    	}
+    	&.blue-light {
+    		color: @color_blue-light;
+    		border-color: @color_blue-light;
+    	}
+    	&.purple {
+    		color: @color_purple;
+    		border-color: @color_purple;
+    	}
+    	&.orange {
+    		color: @color_orange;
+    		border-color: @color_orange;
+    	}
+    	&.red {
+    		color: @color_red;
+    		border-color: @color_red;
+    	}
+
+        &.white{
+            color: white;
+            border-color: white;
+        }
+
+        &.black{
+            color: @color_black;
+            border-color: @color_black;
+        }
+
+        &.green:hover, &.blue:hover, &.blue-light:hover, &.purple:hover, &.orange:hover, &.red:hover{
+            color: white;
+        }
+    }
+
+    &:hover{
+        text-decoration: none;
+    }
+}
+
+.button-list{
+    .button{
+        margin-right: 10px;
+        margin-bottom: 10px;
+
+        &:last-child{
+            margin-right: 0;
+        }
+    }
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+    .button.large{
+        padding: 13px 32px;
+        font-size: 14px;
+
+        &.button-icon{
+            padding: 11px 37px 11px 17px;
+        }
+        &.button-right{
+            padding: 11px 17px 11px 37px;
+        }
+    }
+}

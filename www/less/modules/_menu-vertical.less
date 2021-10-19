@@ -1,0 +1,149 @@
+// Vertical Menu
+.menu-vertical-wrapper{
+
+	&.menu-fixed{
+		position: fixed;
+		top: 0;
+	}
+
+	&.menu-bottom{
+		position: absolute;
+		top: auto;
+		bottom: 0;
+	}
+}
+
+.menu-vertical{
+	line-height: 40px;
+	margin: 0;
+	list-style-type: none;
+	color: @color_black;
+	font-weight: 300;
+	margin-bottom: 30px;
+	background-color: @color_grey-lighter;
+
+	li{
+		&.has-children > a{
+			padding-right: 40px;
+		}
+
+		&.has-children > a:before{
+			content: '+';
+			position: absolute;
+			right: 15px;
+			color: @color_grey-dark;
+		}
+
+		&.has-children.selected > a:before{
+			color: @color_blue;
+			content: '—';
+			font-size: 12px;
+		}
+	}
+
+	ul{
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		line-height: 40px;
+
+		li.selected > a {
+			color: @color_blue;
+		}
+
+		a { padding-left: 40px;}
+		ul a { padding-left: 55px; }
+		ul ul a { padding-left: 70px; }
+	}
+
+	& > li{
+		position: relative;
+
+		&.selected{
+
+
+			& > a{
+				color: @color_blue;
+
+				&:hover{
+					// background-color: darken(@color_blue, 5%);
+				}
+			}
+		}
+	}
+
+	a {
+		padding: 0 15px 0 20px;
+		display: block;
+		position: relative;
+		color: inherit;
+		font-size: 14px;
+		text-decoration: none;
+		line-height: inherit;
+		border-radius: 3px;
+		border-bottom: 1px solid lighten(@color_grey-light, 10%);
+
+		.transition-background();
+
+		&:hover{
+			background-color: @color_grey-lighter;
+		}
+	}
+}
+
+.vertical-menu-select{
+	position: relative;
+	padding:0;
+	border: 1px solid @color_grey-light;
+	margin-bottom: 40px;
+
+
+	select {
+		cursor: pointer;
+		width:100%;
+		margin:0;
+		background:none;
+		border: 1px solid transparent;
+		outline: none;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		font-size:1em;
+		font-weight: @font_light;
+		color: #444;
+		padding: .6em 1.9em 0.6em .8em;
+		line-height:1.3;
+
+		&:focus{
+			outline:none;
+			background-color:transparent;
+			color: #222;
+		}
+
+		&::-ms-expand {
+		    display: none;
+		}
+	}
+
+	&:after{
+		content: "\e688";
+		position: absolute;
+		display: block;
+		width: 30px;
+		height: 30px;
+		line-height: 30px;
+		right: 5px;
+		top: 7px;
+		color: @color_grey;
+		font-family: @icons-stroke;
+		font-size: 30px;
+	}
+
+	&:hover{
+		border:1px solid #888;
+	}
+
+}

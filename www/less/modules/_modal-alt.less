@@ -1,0 +1,99 @@
+.modal-alt{
+	display: none;
+	width: 500px;
+	max-width: 90%;
+	border-radius: 3px;
+	padding: 25px 60px 20px 60px;
+	position: relative;
+	background-color: #fff;
+}
+
+.modal-alt-header{
+	margin-bottom: 25px;
+}
+
+.modal-alt-header-ico{
+	position: relative;
+	padding: 0 8px;
+	background-color: #fff;
+	width: 36px;
+	margin: 0 auto 20px;
+
+	i{
+		font-size: 23px;
+		color: fade(@color_black, 30%);
+	}
+}
+
+.modal-alt-header-line{
+	position: absolute;
+	width: 15px;
+	height: 1px;
+	background-color: fade(@color_black, 30%);
+	top: 50%;
+	.transform(translateY(-50%));
+
+	&:after{
+		width: 3px;
+		height: 3px;
+		background-color: fade(@color_black, 30%);
+		position: absolute;
+		content: '';
+		top: -1px;
+	}
+
+	&.line-right{
+		right: -15px;
+
+		&:after{
+			right: 0;
+		}
+	}
+
+	&.line-left{
+		left: -15px;
+
+		&:after{
+			left: 0;
+		}
+	}
+}
+
+.modal-alt-title{
+	font-size: 34px;
+	font-weight: 100;
+	text-align: center;
+}
+
+.modal-alt-description{
+	font-size: 16px;
+	line-height: 22px;
+	font-weight: 300;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+
+
+.modal-alt-button{
+	margin-bottom: -50px;
+}
+
+.media-mixin(@break) when (@break = @break-small){
+	.modal-alt{
+	    padding: 25px 40px 20px;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x){
+	.modal-alt{
+	    padding: 25px 20px 20px;
+	}
+	.modal-alt-title{
+		font-size: 25px;
+		margin-bottom: 15px;
+	}
+	.modal-alt-description{
+		font-size: 14px;
+	}
+}

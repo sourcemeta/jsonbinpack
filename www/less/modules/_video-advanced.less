@@ -1,0 +1,79 @@
+// Youtube TV
+@import (less) '../libs/ytv.css';
+
+.ytv-canvas{
+	height: 420px;
+	margin-bottom: 30px;
+	background-color: white;
+}
+
+.ytv-video{
+	border-left: 1px solid @color_grey-light;
+	border-top: 1px solid @color_grey-light;
+	border-bottom: 1px solid @color_grey-light;
+}
+
+.ytv-playlist-open .ytv-playlists{
+	background-color: white;
+}
+
+.ytv-canvas ::-webkit-scrollbar{
+	border-left: none;
+	width: 6px;
+	margin-right: 3px;
+}
+
+.ytv-list .ytv-arrow{
+	display: none;
+}
+
+.ytv-canvas ::-webkit-scrollbar-thumb{
+	background: @color_grey-light !important;
+	border-radius: 3px;
+}
+
+.ytv-canvas ::-webkit-scrollbar{
+	border-left: 1px solid @color_grey-light !important;
+}
+
+.ytv-list-header{
+	box-shadow: none;
+	border-bottom: 1px solid @color_grey-light;
+}
+
+.ytv-list{
+	border: 1px solid @color_grey-light;
+}
+
+.ytv-list a{
+	color: @color_black;
+	border-bottom: none;
+	padding: 10px 10px 0 10px;
+
+	li:last-child &{
+		padding: 10px;
+	}
+}
+
+.ytv-list .ytv-content{
+	padding-left: 130px;
+}
+
+.ytv-list .ytv-thumb{
+	outline: none;
+	border: 1px solid @color_grey-light;
+}
+
+.media-mixin(@break) when (@break = @break-small) {
+	.ytv-list-header{ display: none; }
+	.ytv-list-inner { top: 0; }
+	.ytv-content { display: none; }
+	.ytv-list { width: 150px; }
+	.ytv-video { width: 100%; padding-right: 150px; }
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.ytv-canvas { height: 300px; }
+	.ytv-list { display: none; }
+	.ytv-video { width: 100%; padding-right: 0; }
+}

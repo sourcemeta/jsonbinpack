@@ -1,0 +1,52 @@
+.skill{
+	margin-bottom: 30px;
+
+	&.inline{
+		.skill-title, .skill-level{
+			display: inline-block;
+			vertical-align: top;
+			zoom: 1;
+			*display: inline;
+			line-height: 50px;
+			margin: 0;
+		}
+
+		.skill-title{
+			margin-right: 15px;
+		}
+
+		&.small .skill-title{
+			margin-right: 10px;
+		}
+		
+	}
+
+	&.large{
+		.skill-title{ .fz(35) }
+		.skill-level{ .fz(20) }
+	}
+
+	&.small{
+		.skill-title{ .fz(16) }
+		.skill-level{ .fz(10) }
+	}
+}
+
+.skill-title{
+
+}
+
+.skill-level{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+
+	& > li{
+		color: @color_yellow;
+		display: inline-block;
+		vertical-align: top;
+		zoom: 1;
+		*display: inline;
+		.fz(20);
+	}
+}

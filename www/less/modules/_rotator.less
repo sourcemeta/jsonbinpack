@@ -1,0 +1,33 @@
+.morphext > .animated {
+    display: inline-block;
+    color: @color_blue;
+    z-index: 4;
+    position: relative;
+}
+
+.rotator{
+	margin-bottom: 40px;
+}
+
+.rotator-light{
+	color: white;
+}
+
+.rotator-text{
+	.fz(66);
+	text-align: center;
+	line-height: 1.2;
+	font-weight: @font_thin;
+}
+
+
+
+.media-mixin(@break) when (@break = @break-large) {
+	.rotator-text{ 
+		.fz(50);	
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.rotator-text{ .fz(40); }
+}

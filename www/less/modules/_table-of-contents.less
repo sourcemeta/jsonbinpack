@@ -1,0 +1,130 @@
+.table-of-contents{
+	background-color: @color_grey-lighter;
+	padding: 20px 30px;
+	margin-bottom: 30px;
+
+	ol{
+		list-style-type: none;
+	}
+
+	&>ol{
+		padding: 0;
+		margin: 0;
+		padding-left: 25px;
+		border-left: 1px solid lighten(@color_grey-light, 5%);
+		position: relative;
+		counter-reset: b;
+
+		&:after{
+			position: absolute;
+			content: '';
+			display: block;
+			width: 3px;
+			height: 13px;
+			background-color: @color_grey-lighter;
+			top: 0;
+			left: -2px;
+		}
+
+		&:before{
+			position: absolute;
+			content: '';
+			display: block;
+			width: 3px;
+			height: 13px;
+			background-color: @color_grey-lighter;
+			bottom: 0;
+			left: -2px;
+		}
+
+		&>li{
+			position: relative;
+
+			&:after{
+				position: absolute;
+				content: '';
+				display: block;
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				border: 1px solid @color_blue;
+				background-color:  @color_grey-lighter;
+				top: 13px;
+				left: -28px;
+			}
+
+			&:before{
+				content: "";
+				counter-increment: b;
+				font-weight: 300;
+				color: @color_black;
+				font-size: 16px;
+			}
+
+			ol{
+				margin: 0;
+				padding: 5px 0 5px 15px;
+			}
+			a{
+				font-weight: 300;
+				color: @color_black;
+				font-size: 18px;
+
+				&:hover{
+					text-decoration: none;
+					color: @color_blue;
+					.transition(color);
+				}
+			}
+
+			&>ol{
+				counter-reset: c;
+
+				a{
+					font-size: 16px;
+				}
+
+				&>li{
+
+					&:before{
+						content: counter(b) "." counter(c) ". ";
+					    counter-increment: c;
+					    font-weight: 300;
+					    color: @color_black;
+					    font-size: 16px;
+					}
+
+					&>ol{
+						counter-reset: d;
+						&>li{
+
+							&:before{
+								content: counter(b) "." counter(c) ". " counter(d) ". ";
+								counter-increment: d;
+								font-weight: 300;
+								color: @color_black;
+								font-size: 16px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media all and (max-width: @break-small-x){
+	.table-of-content{
+		padding: 20px;
+
+		&>ol{
+			padding-left: 20px;
+
+			&>li{
+				&:after{
+					left: -23px;
+				}
+			}
+		}
+	}
+}

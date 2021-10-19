@@ -5,7 +5,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
-        run: sudo apt-get install --yes clang-tidy clang-format shellcheck
+        run: sudo apt-get install --yes clang-tidy clang-format imagemagick
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
       - name: Checkout repository
         uses: actions/checkout@v2
       - run: ./configure
@@ -13,5 +17,5 @@ jobs:
       - run: make test
       - run: make lint
       - run: make format
-      - name: Check for staged files
-        run: ./.github/ensure-no-staged-files.sh
+      - run: npm ci
+      - run: make web
