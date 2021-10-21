@@ -1,0 +1,36 @@
+.video-section{
+    border-top: 1px solid #e9eaec;
+    border-bottom: 1px solid #e9eaec;
+    background-image: url(../images/13.jpg);
+    background-position: center;
+    background-size: cover;
+    padding: 20% 0;
+    position: relative;
+}
+
+.video-section-fullwidth{
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.video-section-button-img{
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    .transform (translateX(-50%) translateY(-50%));
+    display: block;
+    max-height: 50%;
+    max-width: 100%;
+    cursor: pointer;
+    height: 225px;
+}
+
+@media all and (max-width: @break-small-x){
+	.video-section-button-img{
+		max-height: 70%;
+	}
+
+    .video-section{
+        padding: 30% 0;
+    }
+}

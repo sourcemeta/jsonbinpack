@@ -1,0 +1,82 @@
+.note{
+	padding: 20px 20px 20px 25px;
+	border: 1px solid @color_grey-light;
+	border-radius: 3px;
+	box-shadow: inset 5px 0px 0px 0px @color_orange;
+	margin-bottom: 30px;
+	position: relative;
+
+	&.green{
+		box-shadow: inset 5px 0px 0px 0px @color_green;
+		.note-title{ color: @color_green}
+	}
+	&.blue{
+		box-shadow: inset 5px 0px 0px 0px @color_blue;
+		.note-title{ color: @color_blue}
+	}
+	&.blue-light{
+		box-shadow: inset 5px 0px 0px 0px @color_blue-light;
+		.note-title{ color: @color_blue-light}
+	}
+	&.red{
+		box-shadow: inset 5px 0px 0px 0px @color_red;
+		.note-title{ color: @color_red}
+	}
+	&.purple{
+		box-shadow: inset 5px 0px 0px 0px @color_purple;
+		.note-title{ color: @color_purple}
+	}
+
+}
+
+.note-bounce{
+	.animation(note-bounce 3s Ease-in-out infinite);
+}
+
+.note-pulse{
+	.animation(note-pulse 3s Ease-in-out infinite);
+}
+
+.keyframes(note-pulse; {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	50% {
+		transform: scale3d(1.03, 1.03, 1.03);
+	}
+
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+});
+
+.keyframes(note-bounce; {
+	0%, 20%, 50%, 80%, 100% {
+		.transform(translateY(0));
+	}
+	40% {
+		.transform(translateY(-25px));
+	}
+	60% {
+		.transform(translateY(-10px));
+	}
+});
+
+.note-close{
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	color: @color_grey-dark;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+.note-title{
+	.fz(22);
+	color: @color_orange;
+}
+
+.note-description{
+	margin: 0;
+}

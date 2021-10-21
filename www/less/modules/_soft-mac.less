@@ -1,0 +1,33 @@
+.header-soft-mac{
+	position: relative;
+}
+
+.header-soft-mac-img{
+	max-width: 100%;
+	display: block;
+	margin: 150px auto -400px;
+}
+
+.media-mixin(@break) when (@break = @break-large-x){
+	.header-soft-mac-img {
+	    margin: 100px auto -350px;
+	}
+}
+.media-mixin(@break) when (@break = @break-medium){
+	.header-soft-mac-img {
+	    margin: 100px auto -300px;
+	}
+}
+.media-mixin(@break) when (@break = @break-small){
+	.header-soft-mac-img {
+	    margin: 100px auto -250px;
+	}
+}
+.media-mixin(@break) when (@break = @break-small-x){
+	.header-soft-mac {
+	    display: none;
+	}
+	.header-back-soft {
+	    padding: 150px 0 100px;
+	}
+}

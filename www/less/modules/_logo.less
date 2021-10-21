@@ -1,0 +1,62 @@
+// Logo image
+.logo-image{
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1;
+	*display: inline;
+	position: relative;
+	max-width: 100%;
+	height: auto;
+
+	img{
+		display: block;
+		max-width: 100%;
+		height: 40px;
+		width: auto;
+	}
+
+	.footer &{
+		opacity: 0.8;
+		margin-right: 5px;
+	}
+	
+	.one-page-logo & img{
+		height: 50px;
+	}
+
+	.login & img, .register & img{
+		opacity: 0.8;
+		height: 60px;
+	}
+}
+
+.logo-animated{
+	.animation(logo-anim 12s Ease-in-out infinite);
+}
+
+.keyframes(logo-anim; {
+	0%, 50%{
+		.transform(rotate(0));
+	}
+
+	100%{
+		.transform(rotate(360deg));
+	}
+});
+
+// Logo text
+.logo-text{
+	font-size: 2em;
+	line-height: 40px;
+	color: @color_grey-dark;
+	text-decoration: none;
+	font-weight: 300;
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1;
+	*display: inline;
+
+	&:hover{
+		text-decoration: none;
+	}
+}

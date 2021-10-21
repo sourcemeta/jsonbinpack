@@ -1,0 +1,74 @@
+.page.login-page, .page.register-page{
+	height: 100%;
+}
+
+.login, .register{
+	position: relative;
+	display: table;
+	height: 100%;
+	width: 100%;
+	background-color: #404448;
+}
+
+.login-content, .register-content{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.login-wrapper, .register-wrapper{
+	padding: 45px 60px;
+	max-width: 500px;
+	margin: 0 auto;
+	border-radius: 3px;
+	background-color: @color_grey-lighter;
+}
+
+.login-inputs, .register-inputs{
+	margin: 50px 0 30px 0;
+
+	input{
+		padding: 13px 20px;
+		height: 50px;
+		border-radius: 0;
+		border-bottom: 0;
+		line-height: 18px;
+
+		&:first-child{
+			border-radius: 3px 3px 0 0;
+		}
+
+		&:last-child{
+			border-radius: 0 0 3px 3px;
+			border-bottom: 1px solid @color_grey-light;
+		}
+	}
+}
+
+.register-inputs{
+	margin-bottom: 20px;
+}
+
+input.login-checkbox, input.register-checkbox{
+	margin-right: 5px;
+	margin-bottom: 30px;
+}
+
+.login-form, .register-form{
+	margin-bottom: 30px;
+}
+
+.login-helpers, .register-helpers{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+
+	.login-helper-item, .register-helper-item{
+		text-align: center;
+		.fz(14);
+		color: @color_grey-dark;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.login-wrapper, .register-wrapper{ padding: 35px 30px }
+}

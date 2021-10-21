@@ -1,0 +1,223 @@
+.category-info{
+	padding: 60px 0 20px 0;
+}
+
+.category-title{
+	.fz(45);
+	position: relative;
+	font-weight: @font_light;
+	padding-right: 60px;
+}
+
+.category-description{
+	.fz(22);
+	line-height: 1.5;
+	margin-bottom: 20px;
+	font-weight: @font_light;
+	color: @color_grey-dark;
+}
+
+.category-content{
+	color: darken(@color_grey-dark, 10%);
+}
+
+.fragment-identifier{
+	color: @color_grey-light;
+	display: block;
+	font-size: 19px;
+	border: 1px solid @color_grey-light;
+	width: 45px;
+	height: 45px;
+	text-align: center;
+	line-height: 45px;
+	position: absolute;
+	right: 0;
+	border-radius: 3px;
+	top: 0;
+	outline: none;
+	.transition-custom(color .3s ease, border-color .3s ease);
+
+	&:hover{
+		text-decoration: none;
+		border: 1px solid @color_grey;
+		color: @color_grey;
+
+		&:after, &:before{
+			opacity: 1;
+		}
+	}
+
+	&.fragment-identifier-copied{
+
+		&:after{
+			content: 'copied';
+			color: @color_green;
+			border-color: @color_green;
+			width: 70px;
+			margin-left: -35px;
+		}
+
+		&:before{
+			border-color: @color_green;
+		}
+	}
+
+	&.fragment-identifier-error{
+
+		&:after{
+			content: 'not supported :(';
+			color: @color_orange;
+			border-color: @color_orange;
+			width: 110px;
+			margin-left: -55px;
+		}
+
+		&:before{
+			border-color: @color_orange;
+		}
+	}
+
+	&:after{
+		content: 'copy fragment identifier';
+		display: block;
+		position: absolute;
+		font-size: 13px;
+		width: 170px;
+		left: 50%;
+		margin-left: -85px;
+		top: -43px;
+		opacity: 0;
+		line-height: 1;	
+		text-align: center;
+		color: @color_grey-dark;
+		border: 1px solid @color_grey-light;
+		line-height: 31px;
+		border-radius: 3px;
+		.transition-custom(color .3s ease, border-color .3s ease, opacity .3s ease);
+		background-color: white;
+		z-index: 5;
+		pointer-events: none;
+	}
+
+	&:before{
+		width: 4px;
+		height: 4px;
+		opacity: 0;
+		display: block;
+		position: absolute;
+		content: '';
+		border-right: 1px solid @color_grey;
+		border-bottom: 1px solid @color_grey;
+		background-color: white;
+		.transform(rotate(45deg));
+		.transition(opacity);
+		top: -12px;
+		left: 50%;
+		margin-left: -2px;
+		z-index: 10;
+		pointer-events: none;
+	}
+
+}
+
+// Fix the horizontal scroll bar
+@media (min-width: 1200px) {
+	.container-fluid .fragment-identifier:after{
+		top: 5px;
+		left: auto;
+		right: 55px;
+		margin: 0;
+	}
+
+	.container-fluid .fragment-identifier:before{
+		margin: 0;
+		left: auto;
+		right: 53px;
+		top: 20px;
+		.transform(rotate(-45deg));
+	}
+}
+// End of fix the horizontal scrollbar
+
+@media (max-width: 1300px) {
+	.fragment-identifier{
+		&:after{
+			top: 5px;
+			left: auto;
+			right: 55px;
+			margin: 0;
+		}
+
+		&:before{
+			margin: 0;
+			left: auto;
+			right: 53px;
+			top: 20px;
+			.transform(rotate(-45deg));
+		}
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small) {
+	.category-info { padding: 48px 0 20px 0; }
+	.category-title{ .fz(38); }
+	.category-description{ .fz(17); }
+
+	.fragment-identifier{
+		width: 35px;
+		height: 35px;
+		line-height: 35px;
+		font-size: 15px;
+		top: 5px;
+
+		&:after{
+			top: 1px;
+			left: auto;
+			right: 45px;
+			margin: 0;
+		}
+
+		&:before{
+			margin: 0;
+			left: auto;
+			right: 43px;
+			top: 16px;
+			.transform(rotate(-45deg));
+		}
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.category-info { padding: 38px 0 20px 0; }
+	.category-title{ .fz(30); }
+	.category-description{ .fz(14); }
+
+	.fragment-identifier{
+		width: 30px;
+		height: 30px;
+		line-height: 35px;
+		font-size: 14px;
+		top: -1px;
+		line-height: 30px;
+		// border: none;
+
+		&:after{
+			top: 0px;
+			left: auto;
+			right: 38px;
+			margin: 0;
+			font-size: 12px;
+			line-height: 28px;
+			width: 150px;
+			color: @color_black;
+		}
+
+		&:before{
+			margin: 0;
+			left: auto;
+			right: 36px;
+			top: 13px;
+			.transform(rotate(-45deg));
+		}
+	}
+}

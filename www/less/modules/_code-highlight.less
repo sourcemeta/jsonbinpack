@@ -1,0 +1,150 @@
+// Prism.js
+@import (less) '../libs/prism.css';
+
+.code-highlight{
+	position: relative;
+	margin-bottom: 30px;
+
+	&.code-highlight-with-label:after{
+		content: attr(data-label);
+		position: absolute;
+		display: block;
+		top: 4px;
+		right: 71px;
+		.fz(14);
+		color: @color_grey-dark;
+		border-radius: 3px;
+		font-weight: @font_light;
+		padding: 0px 14px;
+		line-height: 35px;
+		height: 35px;
+		background-color: #fdfdfd;
+		border-radius: 3px;
+	}
+
+	:not(pre)>code[class*=language-], pre[class*=language-]{
+		background-color: #fdfdfd;
+		border: 1px solid lighten(@color_grey-light, 5%);
+	}
+
+	.copy-code{
+		.fz(14);
+		cursor: pointer;
+		top: 0;
+		right: 0;
+		font-weight: @font_light;
+		position: absolute;
+		border: 1px solid lighten(@color_grey-light, 5%);
+		padding: 9px 10px;
+		border-radius: 0 3px 0 3px;
+		z-index: 2;
+		color: darken(@color_grey-dark, 20%);
+		background-color: @color_grey-lighter;
+		-webkit-transition: color .25s ease;
+		   -moz-transition: color .25s ease;
+		    -ms-transition: color .25s ease;
+		     -o-transition: color .25s ease;
+		        transition: color .25s ease;
+
+		&:before{
+			content: '\e665';
+			font-family: @icons-stroke;
+			font-size: 16px;
+			vertical-align: middle;
+			margin-right: 4px;
+		}
+
+		&.copy-code-error, &.copy-code-error:hover{
+			color: @color_orange;
+		}
+
+		&:hover{
+			color: @color_green;
+		}
+	}
+}
+
+.code-highlight-attached{
+	margin-bottom: 30px;
+
+	.code-highlight{
+		margin-bottom: 0;
+
+		&:first-child pre[class*=language-]{
+			border-radius: 3px 3px 0 0;
+		}
+
+		&:last-child pre[class*=language-]{
+			border-radius: 0 0 3px 3px;
+			border-bottom: 1px solid lighten(@color_grey-light, 7%);
+		}
+
+		pre[class*=language-]{
+			border-bottom: 0;
+			margin: 0;
+			border-radius: 0;
+		}
+	}
+}
+
+.code-highlight-tabs.tabs{
+	.content{
+		padding: 0;
+		border: none;
+	}
+
+	&.code-highlight-tabs-center{
+		.content{
+			padding: 35px 0;
+		}
+
+		pre{
+			margin: 0;
+		}
+
+		.steps {
+			width: 100%;
+			text-align: center;
+
+			li{
+				border: 1px solid transparent;
+
+				a{
+					display: block;
+					padding: 5px 15px;
+				}
+			}
+
+			li.current{
+				border: 1px solid @color_grey-light;
+				background-color: @color_grey-lighter;
+			}
+		}
+	}
+
+	.steps ul>li{
+		background-color: transparent;
+		border: 0;
+
+		& a{
+			color: @color_grey-dark;
+			padding: 0 10px;
+		}
+
+		&.current a{
+			color: @color_blue;
+		}
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.code-highlight{
+		.fz(14);
+	}
+
+	.code-highlight-tabs.tabs .steps ul>li{
+		width: auto;
+		display: inline-block;
+		margin: 0;
+	}
+}

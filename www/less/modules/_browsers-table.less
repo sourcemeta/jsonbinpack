@@ -1,0 +1,45 @@
+// Browsers table
+.browsers-table{
+	font-size: 18px;
+	font-weight: @font_light;
+	margin-bottom: 30px;
+	width: 100%;
+	line-height: 1.6;
+}
+
+.browsers-table-row{
+	border-bottom: 1px solid @color_grey-light;
+
+	&:last-child{
+		border-bottom: none;
+	}
+
+	td{
+		padding: 20px 0px;
+	}
+}
+
+.browsers-table-icon{
+	margin-right: 15px;
+	font-size: 26px;
+	color: @color_grey-dark;
+}
+
+.browsers-table-comment{ text-align: center; }
+.browsers-table-recommended{ color: @color_green; }
+.browsers-table-partial{ color: @color_orange; }
+
+@media all and (max-width: @break-small-x){
+	.browsers-table-comment{
+		display: none;
+	}
+
+	.browsers-table td{
+		text-align: center;
+	}
+
+	.browsers-table-icon{
+		display: block;
+		margin: 0 0 10px 0;
+	}
+}

@@ -1,0 +1,109 @@
+.file-tree-title{
+	background-color: @color_grey-lighter;
+	margin: 0;
+	padding: 15px 20px;
+	border-top: 1px solid @color_grey-light;
+	border-left: 1px solid @color_grey-light;
+	border-right: 1px solid @color_grey-light;
+	border-radius: 3px 3px 0 0;
+	position: relative;
+	padding-right: 300px;
+	line-height: 1.4;
+
+	&:after{
+		display: block;
+		content: '';
+		clear: both;
+	}
+
+}
+
+.file-tree-description{
+	.fz(13);
+	vertical-align: middle;
+	color: @color_grey-dark;
+}
+
+.file-tree-buttons{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 300px;
+	padding: 0 20px;
+	line-height: 1.4;
+	text-align: right;
+	.fz(14);
+	
+	li{
+		display: inline-block;
+		vertical-align: top;
+		zoom: 1;
+		*display: inline;
+		cursor: pointer;
+		padding: 15px 0;
+
+		&:first-child{
+			margin-right: 20px;
+		}
+
+		i{
+			font-size: 12px;
+			margin-right: 4px;
+		}
+	}
+}
+
+.file-tree-list, .file-tree-list ul {
+	list-style-type: none;
+	overflow: hidden;
+	margin: 0;
+}
+
+.file-tree-list{
+	.fz(16);
+	border: 1px solid @color_grey-light;
+	border-radius: 0 0 3px 3px;
+	padding: 20px 25px 25px;
+	font-weight: @font_light;
+	margin-bottom: 30px;
+}
+
+.file-tree-list ul {
+	padding-left: 30px;
+}
+
+.file-tree-list li{
+	line-height: 1.8;
+	&:before{
+		font: normal normal normal 14px/1 @icons;
+		margin-right: 8px;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		transform: translate(0,0);
+		display: inline-block;
+		vertical-align: 0px;
+		zoom: 1;
+		*display: inline;
+		webkit-backface-visibility: hidden;
+	    -webkit-transform: translateZ(0) scale(1.0, 1.0);
+	}
+
+	&.is-folder:before{ width: 16px;content: "\f114"; color: @color_blue;}
+	&.is-folder.items-expanded:before{ width: 16px;content: "\f115"; color: @color_blue;}
+	&.is-file:before{ width: 16px;content: "\f016"; color: @color_green; font-size: 15px; text-indent: 1px; }
+}
+
+.file-tree-list li.contains-items {
+	cursor: pointer;
+} 
+
+.file-tree-list li.items-expanded {
+	cursor: default;
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.file-tree-title{ padding: 15px 0 15px 20px; }
+	.file-tree-buttons{	display: none; }
+}

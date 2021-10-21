@@ -1,12 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>JSON BinPack</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
+	<title>JSON BinPack</title>
+	<meta name="description" content="An open-source binary JSON serialization format based on JSON Schema 2020-12 with a strong focus on space efficiency.">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+	<link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+	<link rel="stylesheet" href="css/style.min.css">
 </head>
-<body>
-  <h1>JSON BinPack</h1>
+
+<body class="">
+	<!--[if lt IE 8]>
+	    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+	<div class="page">
+		<!-- Header -->
+		<div class="header header-over large">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3 col-sm-6 col-xs-5">
+						<a href="index.html" class="logo-image logo-animated">
+							<img src="logo.png" alt="logo">
+						</a>
+					</div>
+					<div class="col-md-9 col-sm-6 col-xs-7">
+						<nav class="right helper">
+							<ul class="menu sf-menu">
+								<li>
+									<a target="_blank" href="https://github.com/jviotti/jsonbinpack">Docs</a>
+								</li>
+								<li>
+									<a target="_blank" href="https://github.com/jviotti/jsonbinpack/issues">Issues</a>
+								</li>
+								<li>
+									<a target="_blank" href="https://github.com/jviotti/jsonbinpack/releases">Releases</a>
+								</li>
+								<li>
+									<a target="_blank" href="https://github.com/jviotti/jsonbinpack">GitHub</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Header -->
+		<!-- Header Back -->
+		<div class="header-back header-back-simple">
+			<div class="header-back-container">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<!-- Page Info -->
+							<div class="page-info helper center">
+								<h1 class="page-title">JSON BinPack</h1>
+                <h2 class="page-description"><b>space-efficient</b> binary serialization based on <b>JSON Schema<b></h2>
+							</div>
+							<!-- End Page Info -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End of Header Back -->
+		<div id="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<!-- Promo Title -->
+						<div class="promo-title-wrapper helper pt60">
+							<h3 class="promo-title" data-icon="&#xe6af"> Unique Features </h3>
+							<p class="promo-description"> Amet quis suscipit modi animi quia veniam id, sed nihil? Necessitatibus expedita, velit, itaque tenetur quisquam impedit cumque eum. Dolorum, natus earum. </p>
+						</div>
+						<!-- End of Promo Title -->
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Box -->
+								<div class="box box-small-icon-alt">
+									<i class="pe-7s-plugin box-icon"></i>
+									<h4 class="box-title">Components</h4>
+									<p class="box-description">Dolores, dolore! Iusto veritatis nesciunt quaerat officia eveniet sunt eligendi. Nulla ducimus expedita, voluptas beatae, ipsum itaque.</p>
+								</div>
+								<!-- End of Box -->
+							</div>
+							<div class="col-md-6">
+								<!-- Box -->
+								<div class="box box-small-icon-alt">
+									<i class="pe-7s-eyedropper box-icon"></i>
+									<h4 class="box-title">Colors</h4>
+									<p class="box-description">Architecto tempora id, reprehenderit, aliquam corporis illum in eius vero rem qui reiciendis, dolorem nam iure totam.</p>
+								</div>
+								<!-- End of Box -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Box -->
+								<div class="box box-small-icon-alt">
+									<i class="pe-7s-tools box-icon"></i>
+									<h4 class="box-title">Customization</h4>
+									<p class="box-description">Nemo, aliquid, alias! A quod doloremque minima porro sequi, facilis velit dolorum iusto assumenda, sed, nemo provident?</p>
+								</div>
+								<!-- End of Box -->
+							</div>
+							<div class="col-md-6">
+								<!-- Box -->
+								<div class="box box-small-icon-alt">
+									<i class="pe-7s-cup box-icon"></i>
+									<h4 class="box-title">Premium</h4>
+									<p class="box-description">Voluptates, rerum, iusto sit, temporibus iure autem vel esse sapiente dolorum nostrum qui dignissimos officiis ea! Possimus.</p>
+								</div>
+								<!-- End of Box -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Call to Action -->
+			<div class="call-to-action helper mt60">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 class="call-to-action-title"> Got a minute? Join us, it's free! </h3>
+							<p class="call-to-action-description"> Dolorem sint neque dolores, soluta et vitae dignissimos harum ut adipisci obcaecati. </p>
+							<div class="call-to-action-buttons">
+								<a href="#" class="call-to-action-button">Get Started</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Call to Action -->
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<!-- Promo Title -->
+						<div class="promo-title-wrapper promo-title-no-icon">
+							<h3 class="promo-title" data-icon="&#xe6af"> FAQ </h3>
+							<p class="promo-description"> Error perferendis, harum optio at sequi odit voluptate repudiandae. Natus placeat ipsam, veniam, maiores facere odio alias nisi repellat! Debitis, animi assumenda? </p>
+						</div>
+						<!-- End of Promo Title -->
+						<div class="row">
+							<div class="col-md-4">
+								<!-- FAQ Grid -->
+								<div class="faq-grid">
+									<h4 class="faq-grid-question">Where do I get an overview?</h4>
+									<p class="faq-grid-answer">Ex amet velit autem eius at necessitatibus alias nulla expedita quas quibusdam. Iusto sed dolores ut, fugiat omnis minus, ab! Nihil odit, saepe tempore illo nisi voluptas tenetur quae inventore unde nesciunt.</p>
+								</div>
+								<!-- End of FAQ Grid -->
+							</div>
+							<div class="col-md-4">
+								<!-- FAQ Grid -->
+								<div class="faq-grid">
+									<h4 class="faq-grid-question">How do I request a feature?</h4>
+									<p class="faq-grid-answer">Dicta quisquam totam est error deserunt mollitia, saepe natus cum temporibus a aliquam magnam consectetur, impedit eligendi? Dolore laborum, culpa, esse, optio ut dicta unde veniam ab a quisquam provident nisi! Nostrum.</p>
+								</div>
+								<!-- End of FAQ Grid -->
+							</div>
+							<div class="col-md-4">
+								<!-- FAQ Grid -->
+								<div class="faq-grid">
+									<h4 class="faq-grid-question">How do I update?</h4>
+									<p class="faq-grid-answer">Consectetur quae eveniet ab ipsa velit, veniam aliquam dolor quos dolore. Maxime vitae recusandae, quam tempore perspiciatis magni odit asperiores cumque incidunt, blanditiis architecto, facere iure dolores nesciunt illo laborum quaerat!</p>
+								</div>
+								<!-- End of FAQ Grid -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="helper center">
+									<a href="faq.html" class="faq-grid-show-more">View all
+										<i class="fa fa-angle-right"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer -->
+		<footer>
+			<!-- Footer Extended -->
+			<div class="footer-extended">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="footer-extended-container">
+								<div class="row">
+									<div class="col-md-2 col-sm-2 col-xs-4">
+										<div class="footer-extended-menu">
+											<h5 class="footer-extended-menu-title">About</h5>
+											<ul class="footer-extended-menu-list">
+												<li>
+													<a href="#">Our Vision</a>
+												</li>
+												<li>
+													<a href="#">Technologies</a>
+												</li>
+												<li>
+													<a href="#">Newsletter</a>
+												</li>
+												<li>
+													<a href="#">Blog</a>
+												</li>
+												<li>
+													<a href="#">Contact Us</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-4">
+										<div class="footer-extended-menu">
+											<h5 class="footer-extended-menu-title">Downloads</h5>
+											<ul class="footer-extended-menu-list">
+												<li>
+													<a href="#">All releases</a>
+												</li>
+												<li>
+													<a href="#">Source code</a>
+												</li>
+												<li>
+													<a href="#">Platforms</a>
+												</li>
+												<li>
+													<a href="#">License</a>
+												</li>
+												<li>
+													<a href="#">Terms of Use</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-2 col-sm-2 col-xs-4">
+										<div class="footer-extended-menu">
+											<h5 class="footer-extended-menu-title">Docs</h5>
+											<ul class="footer-extended-menu-list">
+												<li>
+													<a href="#">Docs</a>
+												</li>
+												<li>
+													<a href="#">Beginner's Guide</a>
+												</li>
+												<li>
+													<a href="#">FAQ</a>
+												</li>
+												<li>
+													<a href="#">Non-English Docs</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="clearfix visible-xs-block"></div>
+									<div class="col-md-2 col-sm-2 col-xs-4">
+										<div class="footer-extended-menu">
+											<h5 class="footer-extended-menu-title">Community</h5>
+											<ul class="footer-extended-menu-list">
+												<li>
+													<a href="#">Diversity</a>
+												</li>
+												<li>
+													<a href="#">Mailing Lists</a>
+												</li>
+												<li>
+													<a href="#">Wiki</a>
+												</li>
+												<li>
+													<a href="#">Merchandise</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-4 col-xs-8">
+										<div class="footer-extended-menu">
+											<h5 class="footer-extended-menu-title">Subscribe</h5>
+											<ul class="socials-footer">
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-facebook"></i>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-twitter"></i>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-youtube-play"></i>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-linkedin"></i>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-google-plus"></i>
+													</a>
+												</li>
+												<li>
+													<a href="#" class="socials-footer-link">
+														<i class="fa fa-github-alt"></i>
+													</a>
+												</li>
+											</ul>
+											<div class="subscribe-form-block-footer">
+												<form action="#">
+													<input type="text" name="email" id="subscribe-email-footer" class="subscribe-input-footer" placeholder="Email address">
+													<button class="subscribe-button-footer">
+														<i class="fa fa-angle-right"></i>
+													</button>
+												</form>
+											</div>
+											<p class="text-footer">For any questions contact us at:
+												<a href="mailto:support@vsart.me" target="_top">support@vsart.me</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Footer Extended -->
+			<!-- Footer Default -->
+			<div class="footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="footer-logo-wrapper">
+								<!-- Logo Image -->
+								<a href="index.html" class="logo-image ">
+									<img src="logo.png" alt="logo">
+								</a>
+								<!-- End of Logo Image -->
+								<!-- Slogan -->
+								<p class="slogan"> Learn.
+									<br>Create.
+									<br>Impress. </p>
+								<!-- End of Slogan -->
+							</div>
+						</div>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="footer-wrapper">
+								<!-- Scroll top -->
+								<span class="scroll-top">
+									<i class="fa fa-angle-up"></i>
+								</span>
+								<!-- End of Scroll top -->
+								<!-- Version -->
+								<div class="docs-version">
+									<span class="docs-current-version">v3.5</span>
+									<ul class="js-docs-version-list">
+										<li>
+											<a href="#">1.0</a>
+										</li>
+										<li>
+											<a href="#">1.5</a>
+										</li>
+										<li>
+											<a href="#">2.5</a>
+										</li>
+										<li>
+											<a href="#">3.0</a>
+										</li>
+										<li>
+											<a href="#">3.1</a>
+										</li>
+									</ul>
+								</div>
+								<!-- End of Version -->
+								<!-- Footer Menu -->
+								<ul class="footer-menu helper right">
+									<li>
+										<a href="#"> About us </a>
+									</li>
+									<li>
+										<a href="#"> Privacy Policy </a>
+									</li>
+									<li>
+										<a href="#"> Terms & Condotions </a>
+									</li>
+									<li>
+										<a href="#"> My account </a>
+									</li>
+									<li>
+										<a href="#"> Support service </a>
+									</li>
+								</ul>
+								<!-- End of Footer Menu -->
+								<!-- Copyright -->
+								<p class="copyright helper right">
+									<a href="http://vsart.me">VSArt</a>, all rights reserved. 2016 &copy; </p>
+								<!-- End of Copyright -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Footer Default -->
+		</footer>
+		<!-- End of Footer -->
+	</div>
 </body>
 </html>

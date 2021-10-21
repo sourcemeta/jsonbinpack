@@ -1,0 +1,39 @@
+@import (less) '../libs/social-likes_birman.css';
+
+// Social Share
+.social-share{
+	margin: 0 0 20px 0;
+	padding-top: 10px;
+}
+
+.social-likes__widget{
+	padding: 10px 15px;
+}
+
+.social-likes__button{
+	padding: 1px 6px 1px 30px;
+}
+
+.social-likes__widget{
+	margin: 0 5px 14px 5px;
+	border: 1px solid @color_grey-light;
+
+	&:first-child{
+		margin-left: 0;
+	}
+
+	&:last-child{
+		margin-right: 0;
+	}
+}
+
+.social-likes__counter{
+	margin-left: 5px;
+	padding-left: 11px;
+}
+
+.media-mixin(@break) when (@break = @break-small) {
+	.social-share{
+    	text-align: center;
+    }
+}

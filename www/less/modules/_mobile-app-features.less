@@ -1,0 +1,76 @@
+.mobile-app-features{
+	position: relative;
+}
+.mobile-app-features-image{
+	left: 50%;
+    .transform(translateX(-50%));
+    position: relative;
+}
+
+.mobile-app-feature{
+	margin-bottom: 30px;
+	padding-top: 30px;
+}
+
+.mobile-app-feature-icon{
+	width: 60px;
+	position: relative;
+	overflow: hidden;
+	border-bottom: 1px solid @color_grey-light;
+	margin: 0 auto 20px;
+
+	i{
+		font-size: 47px;
+		color: @color_blue;
+		bottom: -9px;
+		position: relative;
+	}
+}
+
+.mobile-app-feature-title{
+	font-size: 25px;
+	margin-bottom: 15px;
+	font-weight: 300;
+}
+
+.mobile-app-feature-description{
+	font-size: 16px;
+	line-height: 24px;
+	color: @color_grey-dark;
+}
+
+.media-mixin(@break) when (@break = @break-large-x){
+	.mobile-app-features-image{
+		max-width: 200%;
+	}
+	.mobile-app-feature{
+		padding-top: 0;
+		margin-bottom: 40px;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-medium){
+	.mobile-app-features-image{
+		max-width: 300%;
+	}
+	.mobile-app-features-image-block{
+		padding-top: 20px;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small){
+	.mobile-app-features-image-block{
+		position: relative;
+		padding-top: 0;
+		margin-bottom: 40px;
+	}
+	.mobile-app-features-image{
+		max-width: 160%;
+	}
+}
+
+.media-mixin(@break) when (@break = @break-small-x){
+	.mobile-app-features-image{
+		max-width: 250%;
+	}
+}

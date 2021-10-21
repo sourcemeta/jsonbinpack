@@ -1,0 +1,27 @@
+.contacts-info{
+	padding: 60px;
+	background-color: @color_grey-lighter;
+}
+
+.contacts-info-title{
+	text-transform: uppercase;
+	.fz(15);
+	color: @color_grey-dark;
+	font-weight: @font_normal;
+	margin-bottom: 10px;
+}
+
+.contacts-info-description{
+	.fz(13);
+	color: @color_grey;
+	margin: 0 0 5px 0;
+}
+
+.contacts-info-data{
+	margin-bottom: 20px;
+	.fz(13);
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	.contacts-info { padding: 30px; }
+}

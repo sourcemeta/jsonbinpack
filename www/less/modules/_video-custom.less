@@ -1,0 +1,92 @@
+// Video custom
+@import (less) '../libs/videojs.css';
+
+.video-js {
+    width: 100%!important;
+    height: auto!important;
+    text-shadow: .8px .8px #fff
+}
+
+.video-js:after {
+    content: '.';
+    display: block;
+    position: relative;
+    visibility: hidden;
+    margin: 0 0 0 -100%;
+    padding: 40.1% 0 0
+}
+
+.vjs-default-skin {
+    color: #000
+}
+
+.vjs-default-skin .vjs-play-progress,
+.vjs-default-skin .vjs-volume-level {
+    background-color: #4f4f4f
+}
+
+.vjs-default-skin .vjs-big-play-button,
+.vjs-default-skin .vjs-control-bar {
+    background: rgba(255, 255, 255, 1)
+}
+
+.vjs-default-skin .vjs-slider {
+    background: rgba(255, 255, 255, .3333333333333333)
+}
+.vjs-default-skin .vjs-control-bar { 
+    font-size: 80% 
+
+}
+
+.vjs-big-play-button {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto
+}
+
+.video-js-responsive-container {
+    width: 70%;
+    box-shadow: 0 0 80px 20px rgba(255, 255, 255, .2333333333333333);
+    margin: 0 auto
+}
+
+.video-js {
+    &:hover button.vjs-big-play-button{
+        color: @color_blue;
+        border-color: @color_blue;
+    }
+
+    button.vjs-big-play-button{
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border-color: white;
+        color: white;
+        font-size: 50px;
+        line-height: 95px;
+        background-color: #73859f;
+        background-color: rgba(115,133,159,.5);
+        transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .vjs-control-bar{
+        background-color: rgb(34, 136, 204)!important;
+        background-color: rgba(34, 136, 204, .7)!important;
+    }
+}
+
+.vjs-poster{
+    outline: none;
+}
+
+.video-js, .vjs-control-bar{
+    border-radius: 0 !important;
+}
+
+.video-js{
+    margin-bottom: 30px;
+}

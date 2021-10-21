@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Headings
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6{
+	font-family: @font_primary;
+	font-weight: 300;
+	line-height: 100%;
+}
+
+h1 { font-size: 3em;     margin: 0 0 .5em 0; }
+h2 { font-size: 2em;     margin: 0 0 .5em 0; }
+h3 { font-size: 1.5em;   margin: 0 0 .5em 0; }
+h4 { font-size: 1.17em;  margin: 0 0 .5em 0; }
+h5 { font-size: 1.12em;  margin: 0 0 .5em 0; }
+h6 { font-size: .83em;   margin: 0 0 .5em 0; }
+
+
+/* ==========================================================================
+   Paragraph
+   ========================================================================== */
+
+p { 
+	font-size: 1em; 
+	margin: 0 0 1em 0; 
+	font-weight: 300;
+	line-height: 1.8;
+}
+
+/* ==========================================================================
+   Block quote
+   ========================================================================== */
+
+blockquote{
+	margin: 0 0 1em 0;
+	padding: 0 0 0 30px;
+	color: @color_grey-dark;
+	font-style: italic;
+	border-left: 5px solid @color_grey-light;
+}
+
+/* ==========================================================================
+   Link
+   ========================================================================== */
+
+a{
+	color: @color_blue;
+	text-decoration: none;
+	font-size: inherit;
+
+	&:hover{
+		text-decoration: underline;
+	}
+}
+
+/* ==========================================================================
+   Mark inside text
+   ========================================================================== */
+
+.mark{
+
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+
+	&.bold{ font-weight: 400; }
+	&.bolder{ font-weight: 700; }
+	&.italic { font-style: italic; }
+	&.underline { text-decoration: underline; }
+	&.line-through { text-decoration: line-through; }
+	&.sup { vertical-align: super; font-size: 0.8em; }
+	&.sub { vertical-align: sub; font-size: 0.8em; }
+	&.small { font-size: 0.8em; }
+	&.help { border-bottom: 1px dotted @color_grey-dark; cursor: help; }
+	&.code { font-family: monospace; }
+	&.fill{
+	    padding: .3em .6em;
+		border-radius: 4px;
+		vertical-align: baseline;
+		display: inline;
+		font-size: 80%;
+		line-height: 1;
+		color: white;
+		text-align: center;
+		white-space: nowrap;
+
+		i{
+			font-size: 70%;
+			vertical-align: middle;
+			padding: 0 4px;
+		}
+
+		&.blue{       background-color: @color_blue;        }
+		&.blue-light{ background-color: @color_blue-light;  }
+		&.purple{     background-color: @color_purple;      }
+		&.green{      background-color: @color_green;       }
+		&.orange{     background-color: @color_orange;      }
+		&.red{        background-color: @color_red;         }
+		&.grey{       background-color: lighten(@color_grey-light, 5%);  color: @color_black; }
+	}
+
+}
+
+
+/* ==========================================================================
+   Text colors
+   ========================================================================== */
+
+a, p, h1, h2, h3, h4, h5, h6, span{
+	&.color{
+		&.blue{       color: @color_blue;       }
+		&.blue-light{ color: @color_blue-light; }
+		&.purple{     color: @color_purple;     }
+		&.green{      color: @color_green;      }
+		&.orange{     color: @color_orange;     }
+		&.red{        color: @color_red;        }
+		&.grey{       color: @color_grey;       }
+	}
+}
+
+/*==============================
+=            Labels            =
+==============================*/

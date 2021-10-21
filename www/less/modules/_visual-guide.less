@@ -1,0 +1,74 @@
+.visual-guide-steps{
+	padding: 0;
+	padding-top: 90px;
+	margin: 0;
+	list-style-type: none;
+}
+
+.visual-guide-step{
+	padding-left: 60px;
+	position: relative;
+	margin-bottom: 30px;
+}
+
+.visual-guide-step-number{
+	position: absolute;
+	display: block;
+	font-size: 52px;
+	line-height: 37px;
+	font-weight: bold;
+	color: lighten(@color_grey-light, 9%);
+	top: 0;
+	left: 0;
+	padding-right: 15px;
+
+	&:after{
+		position: absolute;
+		content: '';
+		display: block;
+		width: 7px;
+		height: 7px;
+		background-color: lighten(@color_grey-light, 9%);
+		right: 0;
+		bottom: 0;
+	}
+}
+
+.visual-guide-step-title{
+	font-size: 22px;
+	font-weight: 300;
+	margin-bottom: 10px;
+	color: @color_blue;
+}
+
+.visual-guide-step-description{
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 25px;
+}
+
+@media all and (max-width: @break-medium){
+	.visual-guide-steps{
+		padding-top: 0;
+	}
+
+	.visual-guide-img{
+		margin-bottom: 70px;
+	}
+}
+
+@media all and (max-width: @break-small-x){
+	.visual-guide-step-number{
+		font-size: 40px;
+		line-height: 30px;
+		padding-right: 10px;
+
+		&:after{
+			width: 5px;
+			height: 5px;
+		}
+	}
+	.visual-guide-step{
+		padding-left: 50px;
+	}
+}

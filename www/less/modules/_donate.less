@@ -1,0 +1,56 @@
+.donate-money-list{
+	position: relative;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+
+	&:after{
+		display: block;
+		content: '';
+		clear: both;
+	}
+}
+
+.donate-money{
+	float: left;
+	margin-right: 40px;
+	border: 1px solid @color_grey-light;
+	border-radius: 3px;
+	text-align: center;
+	width: 140px;
+	margin-bottom: 40px;
+
+	a{
+		text-decoration: none;
+	}
+}
+
+.donate-summ{
+	display: block;
+	background-color: @color_grey-lighter;
+	height: 100px;
+	line-height: 100px;
+	font-size: 54px;
+	font-weight: 100;
+	color: @color_black;
+
+	.currency{
+		font-size: 31px;
+		line-height: 1;
+	}
+
+	.custom-plus{
+		font-size: 35px;
+		line-height: 1;
+		vertical-align: middle;
+	}
+}
+
+.donate-button{
+	display: block;
+	line-height: 37px;
+	font-size: 15px;
+	text-transform: uppercase;
+	color: @color_blue;
+	font-weight: 300;
+}

@@ -1,0 +1,41 @@
+// SlickNav
+@import (less) '../libs/gifplayer.css';
+
+.gif-player{
+	border: 1px solid @color_grey-light;
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1;
+	*display: inline;
+	margin-bottom: 30px;
+	max-width: 100%;
+
+	.gifplayer-wrapper{
+		max-width: 100% !important;
+		height: auto !important;
+		width: auto !important;
+		position: relative;
+	}
+
+	img{
+		max-width: 100%;
+	}
+
+	.gp-gif-element{
+		position: relative !important;
+	}
+
+	ins.play-gif{
+		font-family: @icons;
+		width: 80px;
+		height: 80px;
+		font-size: 24px;
+		padding-left: 5px;
+		line-height: 70px;
+		position: absolute;
+		left: 50% !important;
+		top: 50% !important;
+		margin-left: -40px;
+		margin-top: -40px;
+	}
+}
