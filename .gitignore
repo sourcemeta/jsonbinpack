@@ -95,3 +95,4 @@ _deps
 
 /out
 !/Makefile
+.DS_Store

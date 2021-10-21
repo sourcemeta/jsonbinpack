@@ -3,11 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "jsonbinpack/cli/command_help.h"
-#include "jsonbinpack/cli/command_version.h"
-
-static const char *kCommandVersion = "version";
-static const char *kCommandHelp = "help";
+#include "jsonbinpack/cli/command.h"
 
 int main(int argc, char **argv) {
   // This means the user executed the tool without passing any argument,
@@ -18,9 +14,9 @@ int main(int argc, char **argv) {
   }
 
   const std::string_view command{argv[1]};
-  if (command == kCommandVersion) {
+  if (command == "version") {
     return jsonbinpack::cli::command::Version();
-  } else if (command == kCommandHelp) {
+  } else if (command == "help") {
     return jsonbinpack::cli::command::Help(argv[0]);
   } else {
     std::cerr << "Unknown command: " << command << "\n";

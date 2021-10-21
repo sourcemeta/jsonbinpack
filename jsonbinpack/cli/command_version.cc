@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Juan Cruz Viotti. All rights reserved.
 
-#include "jsonbinpack/cli/command_version.h"
+#include "jsonbinpack/cli/command.h"
 
 #include <iostream>
 
