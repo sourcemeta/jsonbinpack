@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+CDPATH='' cd -- "$(dirname -- "$0")" || exit 1
+project_directory="$(dirname "$(pwd -P)")"
+executable="$project_directory/out/jsonbinpack/cli/jsonbinpack"
+if [ ! -x "$executable" ]
+then
+  make -C "$project_directory" prepare build
+fi
+
+exec "$executable" "$@"
