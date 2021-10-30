@@ -28,6 +28,13 @@ targets. Run the following commands to build JSON BinPack from source:
 make
 ```
 
+Once the project has been built, the JSON BinPack command-line tool can be
+executed through the `bin/jsonbinpack` utility script:
+
+```sh
+./bin/jsonbinpack version
+```
+
 Contributing
 ------------
 
