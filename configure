@@ -3,5 +3,6 @@
 set -o errexit
 set -o nounset
 
-SCRIPT_DIRECTORY="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
-exec make -C "$SCRIPT_DIRECTORY" prepare
+CDPATH='' cd -- "$(dirname -- "$0")" || exit 1
+project_directory="$(pwd -P)"
+exec make -C "$project_directory" prepare
