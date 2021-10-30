@@ -25,7 +25,7 @@ build: | $(OUTPUT_DIRECTORY)
 lint:
 	python2 vendor/styleguide/cpplint/cpplint.py $(CPP_SOURCES) $(CPP_HEADERS)
 	clang-tidy -p $(OUTPUT_DIRECTORY) --checks='' --warnings-as-errors='' $(CPP_SOURCES) $(CPP_HEADERS)
-	shellcheck bin/jsonbinpack
+	shellcheck bin/jsonbinpack configure
 
 format:
 	clang-format -i $(CPP_SOURCES) $(CPP_HEADERS)
