@@ -1,0 +1,5 @@
+add_executable(jsonbinpack_test_utils ../runner.cc zigzag_test.cc)
+add_test(utils jsonbinpack_test_utils COMMAND jsonbinpack_test_utils)
+target_link_libraries(jsonbinpack_test_utils gtest)
+target_link_libraries(jsonbinpack_test_utils jsonbinpack_utils)
+target_include_directories(jsonbinpack_test_utils PRIVATE "${PROJECT_SOURCE_DIR}")

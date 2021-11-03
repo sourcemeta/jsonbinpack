@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_subdirectory(vendor/googletest)
 
 # Internal modules
+add_subdirectory(jsonbinpack/utils)
 add_subdirectory(jsonbinpack/stream)
 add_subdirectory(jsonbinpack/cli)
 add_subdirectory(test)
