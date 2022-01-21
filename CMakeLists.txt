@@ -1,6 +1,18 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(jsonbinpack VERSION 0.0.1 LANGUAGES CXX)
+
+# Only allow Debug and Release builds
+# Adapted from Professional CMake (https://crascit.com/professional-cmake/)
+set(BUILD_TYPES Debug Release)
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${BUILD_TYPES}")
+# Set a sensible default instead of the ambiguous empty string
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
+elseif(NOT CMAKE_BUILD_TYPE IN_LIST BUILD_TYPES)
+  message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
 enable_testing()
 
 # Global options
