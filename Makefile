@@ -1,6 +1,9 @@
 include vendor/vendorpull/targets.mk
 .DEFAULT_GOAL = all
-.PHONY: all prepare compile lint format test clean
+.PHONY: all all-debug all-release \
+	prepare-debug prepare-release \
+	compile-debug compile-release lint \
+	test-debug test-release clean
 
 #################################################
 # Variables
@@ -31,15 +34,28 @@ CTEST ?= ctest
 $(OUTPUT):
 	$(MKDIR) $@
 
-all: prepare lint compile test
+all-debug: prepare-debug compile-debug test-debug
+all-release: prepare-release compile-release test-release
 
-prepare: | $(OUTPUT)
-	$(CMAKE) -S . -B $(word 1,$|) -D CMAKE_EXPORT_COMPILE_COMMANDS=ON
+all: all-release
 
-compile: | $(OUTPUT)
-	$(CMAKE) --build $(word 1,$|)
+prepare-debug: | $(OUTPUT)
+	$(CMAKE) -S . -B $(word 1,$|) --log-context \
+		-D CMAKE_BUILD_TYPE:STRING=Debug \
+		-D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
+prepare-release: | $(OUTPUT)
+	$(CMAKE) -S . -B $(word 1,$|) --log-context \
+		-D CMAKE_BUILD_TYPE:STRING=Release \
+		-D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
 
-test: | $(OUTPUT)
+compile-debug: | $(OUTPUT)
+	$(CMAKE) --build $(word 1,$|) --config Debug
+compile-release: | $(OUTPUT)
+	$(CMAKE) --build $(word 1,$|) --config Release
+
+test-debug: | $(OUTPUT)
+	$(CTEST) --verbose --test-dir $(word 1,$|)
+test-release: | $(OUTPUT)
 	$(CTEST) --verbose --test-dir $(word 1,$|)
 
 clean:
