@@ -1,5 +1,5 @@
-add_library(jsontoolkit json.cc)
+add_library(jsontoolkit json_rapidjson.cc)
 add_library(sourcemeta::jsontoolkit ALIAS jsontoolkit)
-target_link_libraries(jsontoolkit PRIVATE rapidjson)
+# target_link_libraries(jsontoolkit PRIVATE rapidjson)
 target_include_directories(jsontoolkit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 # target_include_directories(jsontoolkit PRIVATE "${PROJECT_SOURCE_DIR}/vendor/rapidjson/include")

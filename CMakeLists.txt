@@ -32,6 +32,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Hide symbols from shared libraries by default
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+
 # External dependencies
 add_subdirectory(vendor/googletest)
 # set(RAPIDJSON_BUILD_DOC OFF)
@@ -44,6 +48,9 @@ add_subdirectory(src/jsontoolkit)
 add_subdirectory(src/cli)
 
 # Define the final library to install
+# TODO: Support creating a shared library instead,
+# automatically generating exports with CMake's
+# generate_export_header()
 add_library(jsonbinpack INTERFACE)
 add_library(sourcemeta::jsonbinpack ALIAS jsonbinpack)
 target_link_libraries(jsonbinpack INTERFACE jsontoolkit)
