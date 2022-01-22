@@ -1,1 +1,1 @@
-add_executable(jsonbinpack main.cc)
+add_executable(jsonbinpack-cli main.cc)

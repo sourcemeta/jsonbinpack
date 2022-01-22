@@ -43,5 +43,10 @@ add_subdirectory(vendor/googletest)
 add_subdirectory(src/jsontoolkit)
 add_subdirectory(src/cli)
 
+# Define the final library to install
+add_library(jsonbinpack INTERFACE)
+add_library(sourcemeta::jsonbinpack ALIAS jsonbinpack)
+target_link_libraries(jsonbinpack INTERFACE jsontoolkit)
+
 # Tests
 add_subdirectory(test/jsontoolkit)
