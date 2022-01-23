@@ -57,3 +57,4 @@ target_link_libraries(jsonbinpack INTERFACE jsontoolkit)
 
 # Tests
 add_subdirectory(test/jsontoolkit)
+add_subdirectory(test/cli)
