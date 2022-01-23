@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
-
 project(jsonbinpack VERSION 0.0.1 LANGUAGES CXX)
+enable_testing()
 
 # Only allow Debug and Release builds
 # Adapted from Professional CMake (https://crascit.com/professional-cmake/)
@@ -12,8 +12,6 @@ if(NOT CMAKE_BUILD_TYPE)
 elseif(NOT CMAKE_BUILD_TYPE IN_LIST BUILD_TYPES)
   message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
 endif()
-
-enable_testing()
 
 # Global options
 add_compile_options(
@@ -36,26 +34,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
-# External dependencies
-include(GoogleTest)
-add_subdirectory(vendor/googletest)
-# set(RAPIDJSON_BUILD_DOC OFF)
-# set(RAPIDJSON_BUILD_TESTS OFF)
-# set(RAPIDJSON_BUILD_EXAMPLES OFF)
-# add_subdirectory(vendor/rapidjson)
+add_subdirectory(src)
 
-# Internal modules
-add_subdirectory(src/jsontoolkit)
-add_subdirectory(src/cli)
+# Only for top-level builds
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  # Tests
+  include(GoogleTest)
+  add_subdirectory(vendor/googletest)
+  add_subdirectory(test/jsontoolkit)
+  add_subdirectory(test/cli)
 
-# Define the final library to install
-# TODO: Support creating a shared library instead,
-# automatically generating exports with CMake's
-# generate_export_header()
-add_library(jsonbinpack INTERFACE)
-add_library(sourcemeta::jsonbinpack ALIAS jsonbinpack)
-target_link_libraries(jsonbinpack INTERFACE jsontoolkit)
-
-# Tests
-add_subdirectory(test/jsontoolkit)
-add_subdirectory(test/cli)
+  # TODO: Define packaging
+endif()
