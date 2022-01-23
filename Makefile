@@ -54,9 +54,9 @@ compile-release: | $(OUTPUT)
 	$(CMAKE) --build $(word 1,$|) --config Release --verbose
 
 test-debug: | $(OUTPUT)
-	$(CTEST) --verbose --test-dir $(word 1,$|)
+	$(CTEST) -C Debug --verbose --test-dir $(word 1,$|)
 test-release: | $(OUTPUT)
-	$(CTEST) --verbose --test-dir $(word 1,$|)
+	$(CTEST) -C Release --verbose --test-dir $(word 1,$|)
 
 clean:
 	$(RMRF) $(OUTPUT)
