@@ -1,4 +1,4 @@
-add_executable(jsontoolkit_test ../runner.cc json_test.cc)
-add_test(NAME jsontoolkit_test COMMAND jsontoolkit_test)
-target_link_libraries(jsontoolkit_test gtest)
-target_link_libraries(jsontoolkit_test jsontoolkit)
+add_executable(jsontoolkit_unit ../runner.cc json_test.cc)
+add_test(NAME jsontoolkit_unit COMMAND jsontoolkit_unit)
+target_link_libraries(jsontoolkit_unit gtest)
+target_link_libraries(jsontoolkit_unit jsontoolkit)
