@@ -1,1 +1,1 @@
-add_test(NAME cli_smoke_run COMMAND jsonbinpack-cli)
+add_test(NAME jsonbinpack.cli_smoke_run COMMAND sourcemeta::jsonbinpack_cli)
