@@ -37,6 +37,7 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 # External dependencies
+include(GoogleTest)
 add_subdirectory(vendor/googletest)
 # set(RAPIDJSON_BUILD_DOC OFF)
 # set(RAPIDJSON_BUILD_TESTS OFF)
