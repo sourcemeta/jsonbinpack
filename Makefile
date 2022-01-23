@@ -49,9 +49,9 @@ prepare-release: | $(OUTPUT)
 		-D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
 
 compile-debug: | $(OUTPUT)
-	$(CMAKE) --build $(word 1,$|) --config Debug
+	$(CMAKE) --build $(word 1,$|) --config Debug --verbose
 compile-release: | $(OUTPUT)
-	$(CMAKE) --build $(word 1,$|) --config Release
+	$(CMAKE) --build $(word 1,$|) --config Release --verbose
 
 test-debug: | $(OUTPUT)
 	$(CTEST) --verbose --test-dir $(word 1,$|)
