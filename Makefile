@@ -31,32 +31,25 @@ CTEST ?= ctest
 # Targets
 #################################################
 
-$(OUTPUT):
-	$(MKDIR) $@
-
 all-debug: prepare-debug compile-debug test-debug
 all-release: prepare-release compile-release test-release
 
 all: all-release
 
-prepare-debug: | $(OUTPUT)
-	$(CMAKE) -S . -B $(word 1,$|) --log-context \
-		-D CMAKE_BUILD_TYPE:STRING=Debug \
-		-D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
-prepare-release: | $(OUTPUT)
-	$(CMAKE) -S . -B $(word 1,$|) --log-context \
-		-D CMAKE_BUILD_TYPE:STRING=Release \
-		-D CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
+prepare-debug: CMakePresets.json
+	$(CMAKE) --preset debug --log-context
+prepare-release: CMakePresets.json
+	$(CMAKE) --preset release --log-context
 
-compile-debug: | $(OUTPUT)
-	$(CMAKE) --build $(word 1,$|) --config Debug --verbose
-compile-release: | $(OUTPUT)
-	$(CMAKE) --build $(word 1,$|) --config Release --verbose
+compile-debug: CMakePresets.json
+	$(CMAKE) --build --preset debug
+compile-release: CMakePresets.json
+	$(CMAKE) --build --preset release
 
-test-debug: | $(OUTPUT)
-	$(CTEST) -C Debug --verbose --test-dir $(word 1,$|)
-test-release: | $(OUTPUT)
-	$(CTEST) -C Release --verbose --test-dir $(word 1,$|)
+test-debug: CMakePresets.json
+	$(CTEST) --preset debug
+test-release: CMakePresets.json
+	$(CTEST) --preset release
 
 clean:
 	$(RMRF) $(OUTPUT)

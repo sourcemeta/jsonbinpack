@@ -220,3 +220,4 @@ dist
 /build
 !/Makefile
 .DS_Store
+CMakeUserPresets.json
