@@ -34,7 +34,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
-add_subdirectory(src)
+# Options
+option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
+
+# Sources
+add_subdirectory(src/jsontoolkit)
+if(JSONBINPACK_CLI)
+  add_subdirectory(src/cli)
+endif()
 
 # Only for top-level builds
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -42,7 +49,9 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   include(GoogleTest)
   add_subdirectory(vendor/googletest)
   add_subdirectory(test/jsontoolkit)
-  add_subdirectory(test/cli)
+  if(JSONBINPACK_CLI)
+    add_subdirectory(test/cli)
+  endif()
 
   # TODO: Define packaging
 endif()
