@@ -1,7 +1,6 @@
 include vendor/vendorpull/targets.mk
 .DEFAULT_GOAL = all
 
-RMRF ?= rm -rf
 CMAKE ?= cmake
 CTEST ?= ctest
 
@@ -14,5 +13,5 @@ preset-%: CMakePresets.json
 	$(CTEST) --preset $(subst preset-,,$@)
 
 clean:
-	$(RMRF) build
+	$(CMAKE) -E rm -R build
 .PHONY: clean
