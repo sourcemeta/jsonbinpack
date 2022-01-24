@@ -3,8 +3,10 @@
 
 #include <string>
 
-#ifdef SOURCEMETA_JSONTOOLKIT_RAPIDJSON
+#ifdef SOURCEMETA_JSONTOOLKIT_BACKEND_RAPIDJSON
 #include <rapidjson/document.h>
+#else
+#error No JSON backend is defined
 #endif
 
 namespace sourcemeta {
@@ -14,8 +16,10 @@ namespace sourcemeta {
       public:
         JSON(const std::string &json);
       private:
-#ifdef SOURCEMETA_JSONTOOLKIT_RAPIDJSON
+#ifdef SOURCEMETA_JSONTOOLKIT_BACKEND_RAPIDJSON
         rapidjson::Document document;
+#else
+#error No JSON backend is defined
 #endif
     };
 

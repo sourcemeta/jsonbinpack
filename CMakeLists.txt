@@ -38,12 +38,6 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
 
-# Dependencies
-set(RAPIDJSON_BUILD_DOC OFF)
-set(RAPIDJSON_BUILD_EXAMPLES OFF)
-set(RAPIDJSON_BUILD_TESTS OFF)
-add_subdirectory(vendor/rapidjson)
-
 # Sources
 add_subdirectory(src/jsontoolkit)
 if(JSONBINPACK_CLI)
