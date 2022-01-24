@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <string>
+#include <rapidjson/document.h>
 
 namespace sourcemeta {
   namespace jsontoolkit {
@@ -10,8 +11,7 @@ namespace sourcemeta {
       public:
         JSON(const std::string &json);
       private:
-        const std::string document;
-        // rapidjson::Document document;
+        rapidjson::Document document;
     };
 
   }
