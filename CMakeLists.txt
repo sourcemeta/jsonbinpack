@@ -36,6 +36,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
+option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
 
 # Dependencies
 set(RAPIDJSON_BUILD_DOC OFF)
@@ -51,12 +52,14 @@ endif()
 
 # Only for top-level builds
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-  # Tests
-  include(GoogleTest)
-  add_subdirectory(vendor/googletest)
-  add_subdirectory(test/jsontoolkit)
-  if(JSONBINPACK_CLI)
-    add_subdirectory(test/cli)
+  if(JSONBINPACK_TESTS)
+    # Tests
+    include(GoogleTest)
+    add_subdirectory(vendor/googletest)
+    add_subdirectory(test/jsontoolkit)
+    if(JSONBINPACK_CLI)
+      add_subdirectory(test/cli)
+    endif()
   endif()
 
   # TODO: Define packaging

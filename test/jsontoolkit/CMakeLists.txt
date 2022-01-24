@@ -1,4 +1,4 @@
-add_executable(sourcemeta_jsontoolkit_unit ../runner.cc json_test.cc)
+add_executable(sourcemeta_jsontoolkit_unit ../gtest-runner.cc json_test.cc)
 add_executable(sourcemeta::jsontoolkit_unit ALIAS sourcemeta_jsontoolkit_unit)
 target_link_libraries(sourcemeta_jsontoolkit_unit PRIVATE gtest)
 target_link_libraries(sourcemeta_jsontoolkit_unit PRIVATE sourcemeta::jsontoolkit)
