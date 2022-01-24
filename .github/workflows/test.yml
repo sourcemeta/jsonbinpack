@@ -8,4 +8,6 @@ jobs:
         run: sudo apt-get install --yes clang-tidy clang-format
       - name: Checkout repository
         uses: actions/checkout@v2
-      - run: make
+      - run: cmake --preset release --log-context
+      - run: cmake --build --preset release
+      - run: ctest --preset release
