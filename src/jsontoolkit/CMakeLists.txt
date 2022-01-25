@@ -1,4 +1,4 @@
-add_library(sourcemeta_jsontoolkit json.cc)
+add_library(sourcemeta_jsontoolkit json_rapidjson.cc)
 add_library(sourcemeta::jsontoolkit ALIAS sourcemeta_jsontoolkit)
 target_include_directories(sourcemeta_jsontoolkit PRIVATE
   "${PROJECT_SOURCE_DIR}/vendor/rapidjson/include")
