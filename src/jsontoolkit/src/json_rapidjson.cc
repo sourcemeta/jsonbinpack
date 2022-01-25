@@ -1,7 +1,7 @@
 #include <string>
 #include <memory>
 #include <rapidjson/document.h>
-#include "json.h"
+#include <jsontoolkit/json.h>
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
   rapidjson::Document document;
