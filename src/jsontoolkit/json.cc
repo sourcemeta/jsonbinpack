@@ -1,4 +1,5 @@
 #include <string>
+#include <memory>
 #include <rapidjson/document.h>
 #include "json.h"
 
