@@ -2,12 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <string>
-
-#ifdef SOURCEMETA_JSONTOOLKIT_BACKEND_RAPIDJSON
-#include <rapidjson/document.h>
-#else
-#error No JSON backend is defined
-#endif
+#include <memory>
 
 namespace sourcemeta {
   namespace jsontoolkit {
@@ -16,11 +11,10 @@ namespace sourcemeta {
       public:
         JSON(const std::string &json);
       private:
-#ifdef SOURCEMETA_JSONTOOLKIT_BACKEND_RAPIDJSON
-        rapidjson::Document document;
-#else
-#error No JSON backend is defined
-#endif
+        // Hide the JSON backend
+        // See https://en.cppreference.com/w/cpp/language/pimpl
+        struct Backend;
+        std::unique_ptr<Backend> backend;
     };
 
   }
