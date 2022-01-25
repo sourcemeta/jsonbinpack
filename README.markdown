@@ -19,35 +19,11 @@ cmake ..
 cmake --build .
 ```
 
-For convenience, the project also provides an Autotools-like [GNU
-Make](https://www.gnu.org/software/make/) integration with simple-to-use
-targets. Run the following commands to build JSON BinPack from source:
-
-```sh
-./configure
-make
-```
-
 Once the project has been built, the JSON BinPack command-line tool can be
 executed through the `bin/jsonbinpack` utility script:
 
 ```sh
 ./bin/jsonbinpack version
-```
-
-Contributing
-------------
-
-Developing JSON BinPack typically involves running the following set of
-targets:
-
-```sh
-# Run the tests
-make test
-# Run the linter
-make lint
-# Format code changes
-make format
 ```
 
 License
