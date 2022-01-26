@@ -21,7 +21,7 @@ cmake --list-presets
 You can configure, build and test the project using a given preset as follows:
 
 ```sh
-cmake --preset <preset> --log-context
+cmake --preset <preset>
 cmake --build --preset <preset>
 ctest --preset <preset>
 ```
