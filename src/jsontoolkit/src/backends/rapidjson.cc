@@ -22,3 +22,7 @@ sourcemeta::jsontoolkit::JSON::~JSON() {}
 bool sourcemeta::jsontoolkit::JSON::is_object() const {
   return this->backend->document.IsObject();
 }
+
+bool sourcemeta::jsontoolkit::JSON::is_array() const {
+  return this->backend->document.IsArray();
+}

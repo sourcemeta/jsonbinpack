@@ -12,6 +12,7 @@ namespace sourcemeta {
         JSON(const std::string &json);
         ~JSON();
         bool is_object() const;
+        bool is_array() const;
       private:
         // Hide the JSON backend
         // See https://en.cppreference.com/w/cpp/language/pimpl

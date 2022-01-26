@@ -12,6 +12,16 @@ TEST(jsontoolkit_JSON, EmptyArrayIsObject) {
   EXPECT_FALSE(document.is_object());
 }
 
+TEST(jsontoolkit_JSON, EmptyObjectIsArray) {
+  sourcemeta::jsontoolkit::JSON document{"{}"};
+  EXPECT_FALSE(document.is_array());
+}
+
+TEST(jsontoolkit_JSON, EmptyArrayIsArray) {
+  sourcemeta::jsontoolkit::JSON document{"[]"};
+  EXPECT_TRUE(document.is_array());
+}
+
 TEST(jsontoolkit_JSON, InvalidDocument) {
   EXPECT_THROW({
     sourcemeta::jsontoolkit::JSON document{"{foo"};
