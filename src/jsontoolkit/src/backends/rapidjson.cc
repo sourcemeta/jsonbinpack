@@ -2,6 +2,7 @@
 #include <memory>
 #include <stdexcept>
 #include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
 #include <jsontoolkit/json.h>
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
@@ -13,7 +14,8 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
 {
   this->backend->document.Parse(json.c_str());
   if (this->backend->document.HasParseError()) {
-    throw std::invalid_argument("Invalid JSON document");
+    throw std::invalid_argument(
+        rapidjson::GetParseError_En(this->backend->document.GetParseError()));
   }
 }
 
@@ -25,4 +27,8 @@ bool sourcemeta::jsontoolkit::JSON::is_object() const {
 
 bool sourcemeta::jsontoolkit::JSON::is_array() const {
   return this->backend->document.IsArray();
+}
+
+bool sourcemeta::jsontoolkit::JSON::is_structural() const {
+  return this->is_object() || this->is_array();
 }
