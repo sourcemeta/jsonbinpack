@@ -10,21 +10,24 @@ Building JSON BinPack
 ---------------------
 
 JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
-build system. You can build the project using the standard CMake flow:
+build system. JSON BinPack provides a set of CMake
+[presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) to
+configure, build and test the project.
 
 ```sh
-mkdir build
-cd build
-cmake ..
-cmake --build .
+cmake --list-presets
+```
+
+You can configure, build and test the project using a given preset as follows:
+
+```sh
+cmake --preset <preset> --log-context
+cmake --build --preset <preset>
+ctest --preset <preset>
 ```
 
 Once the project has been built, the JSON BinPack command-line tool can be
-executed through the `bin/jsonbinpack` utility script:
-
-```sh
-./bin/jsonbinpack version
-```
+found at `build/<preset>/src/cli/jsonbinpack`.
 
 License
 -------
