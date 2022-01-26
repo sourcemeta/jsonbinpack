@@ -72,6 +72,18 @@ TEST(jsontoolkit_JSON, NullIsBoolean) {
   EXPECT_FALSE(document.is_boolean());
 }
 
+TEST(jsontoolkit_JSON, NullIsNull) {
+  sourcemeta::jsontoolkit::JSON document{"null"};
+  EXPECT_TRUE(document.is_null());
+}
+
+TEST(jsontoolkit_JSON, BooleanIsNull) {
+  sourcemeta::jsontoolkit::JSON document_true{"true"};
+  sourcemeta::jsontoolkit::JSON document_false{"false"};
+  EXPECT_FALSE(document_true.is_null());
+  EXPECT_FALSE(document_false.is_null());
+}
+
 TEST(jsontoolkit_JSON, InvalidDocument) {
   EXPECT_THROW({
     sourcemeta::jsontoolkit::JSON document{"{foo"};

@@ -33,6 +33,10 @@ bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
   return this->backend->document.IsTrue() || this->backend->document.IsFalse();
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_null() const {
+  return this->backend->document.IsNull();
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_structural() const {
   return this->is_object() || this->is_array();
 }
