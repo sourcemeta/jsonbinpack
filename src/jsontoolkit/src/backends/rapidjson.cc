@@ -12,3 +12,9 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
 {
   this->backend->document.Parse(json.c_str());
 }
+
+sourcemeta::jsontoolkit::JSON::~JSON() {}
+
+bool sourcemeta::jsontoolkit::JSON::is_object() const {
+  return this->backend->document.IsObject();
+}

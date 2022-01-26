@@ -10,6 +10,8 @@ namespace sourcemeta {
     class JSON {
       public:
         JSON(const std::string &json);
+        ~JSON();
+        bool is_object() const;
       private:
         // Hide the JSON backend
         // See https://en.cppreference.com/w/cpp/language/pimpl
