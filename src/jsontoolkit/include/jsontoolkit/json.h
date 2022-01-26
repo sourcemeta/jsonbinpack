@@ -13,6 +13,7 @@ namespace sourcemeta {
         ~JSON();
         bool is_object() const;
         bool is_array() const;
+        bool is_boolean() const;
         bool is_structural() const;
       private:
         // Hide the JSON backend

@@ -29,6 +29,10 @@ bool sourcemeta::jsontoolkit::JSON::is_array() const {
   return this->backend->document.IsArray();
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
+  return this->backend->document.IsTrue() || this->backend->document.IsFalse();
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_structural() const {
   return this->is_object() || this->is_array();
 }
