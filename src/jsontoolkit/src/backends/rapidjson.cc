@@ -3,10 +3,11 @@
 #include <stdexcept>
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
+#include <rapidjson/allocators.h>
 #include <jsontoolkit/json.h>
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
-  rapidjson::Document document;
+  rapidjson::GenericDocument<rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>> document;
 };
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
