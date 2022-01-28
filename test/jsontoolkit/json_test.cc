@@ -281,3 +281,28 @@ TEST(jsontoolkit_JSON, RealToInteger) {
     document.to_integer();
   }, std::logic_error);
 }
+
+TEST(jsontoolkit_JSON, PositiveIntegerToDouble) {
+  sourcemeta::jsontoolkit::JSON document{"5"};
+  EXPECT_EQ(document.to_double(), 5);
+}
+
+TEST(jsontoolkit_JSON, ZeroToDouble) {
+  sourcemeta::jsontoolkit::JSON document{"0"};
+  EXPECT_EQ(document.to_double(), 0);
+}
+
+TEST(jsontoolkit_JSON, NegativeIntegerToDouble) {
+  sourcemeta::jsontoolkit::JSON document{"-3"};
+  EXPECT_EQ(document.to_double(), -3);
+}
+
+TEST(jsontoolkit_JSON, NegativeRealToDouble) {
+  sourcemeta::jsontoolkit::JSON document{"-110"};
+  EXPECT_EQ(document.to_double(), -110);
+}
+
+TEST(jsontoolkit_JSON, PositiveRealToDouble) {
+  sourcemeta::jsontoolkit::JSON document{"150.345"};
+  EXPECT_EQ(document.to_double(), 150.345);
+}

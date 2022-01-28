@@ -27,6 +27,7 @@ namespace sourcemeta {
         bool to_boolean() const;
         std::string to_string() const;
         std::int64_t to_integer() const;
+        double to_double() const;
       private:
         // Hide the JSON backend
         // See https://en.cppreference.com/w/cpp/language/pimpl

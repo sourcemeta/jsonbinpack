@@ -90,3 +90,8 @@ std::int64_t sourcemeta::jsontoolkit::JSON::to_integer() const {
   if (!this->is_integer()) throw std::logic_error("Not an integer");
   return this->backend->document.GetInt64();
 }
+
+double sourcemeta::jsontoolkit::JSON::to_double() const {
+  if (!this->is_number()) throw std::logic_error("Not a number");
+  return this->backend->document.GetDouble();
+}
