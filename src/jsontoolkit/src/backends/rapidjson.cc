@@ -76,3 +76,9 @@ bool sourcemeta::jsontoolkit::JSON::to_boolean() const {
   if (!this->is_boolean()) throw std::logic_error("Not a boolean");
   return this->backend->document.GetBool();
 }
+
+std::string sourcemeta::jsontoolkit::JSON::to_string() const {
+  if (!this->is_string()) throw std::logic_error("Not a string");
+  std::string result{this->backend->document.GetString()};
+  return result;
+}

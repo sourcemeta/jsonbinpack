@@ -242,3 +242,20 @@ TEST(jsontoolkit_JSON, NullToBoolean) {
     document.to_boolean();
   }, std::logic_error);
 }
+
+TEST(jsontoolkit_JSON, EmptyStringToString) {
+  sourcemeta::jsontoolkit::JSON document{"\"\""};
+  EXPECT_EQ(document.to_string(), "");
+}
+
+TEST(jsontoolkit_JSON, SmallStringToString) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_EQ(document.to_string(), "foo");
+}
+
+TEST(jsontoolkit_JSON, NullToString) {
+  sourcemeta::jsontoolkit::JSON document{"null"};
+  EXPECT_THROW({
+    document.to_string();
+  }, std::logic_error);
+}
