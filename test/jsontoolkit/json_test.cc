@@ -174,3 +174,18 @@ TEST(jsontoolkit_JSON, SmallStringLength) {
   sourcemeta::jsontoolkit::JSON document{"\"foo bar\""};
   EXPECT_EQ(document.length(), 7);
 }
+
+TEST(jsontoolkit_JSON, EmptyArrayLength) {
+  sourcemeta::jsontoolkit::JSON document{"[]"};
+  EXPECT_EQ(document.length(), 0);
+}
+
+TEST(jsontoolkit_JSON, OneItemArrayLength) {
+  sourcemeta::jsontoolkit::JSON document{"[1]"};
+  EXPECT_EQ(document.length(), 1);
+}
+
+TEST(jsontoolkit_JSON, SmallArrayLength) {
+  sourcemeta::jsontoolkit::JSON document{"[1,2,3,4,5]"};
+  EXPECT_EQ(document.length(), 5);
+}

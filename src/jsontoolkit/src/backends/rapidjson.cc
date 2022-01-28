@@ -30,6 +30,8 @@ std::size_t sourcemeta::jsontoolkit::JSON::length() const {
   switch (this->backend->type) {
     case rapidjson::kStringType:
       return this->backend->document.GetStringLength();
+    case rapidjson::kArrayType:
+      return this->backend->document.Size();
     default:
       return 0;
   }
