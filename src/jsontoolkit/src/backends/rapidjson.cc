@@ -31,7 +31,7 @@ bool sourcemeta::jsontoolkit::JSON::is_array() const {
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
-  return this->backend->document.IsTrue() || this->backend->document.IsFalse();
+  return this->backend->document.IsBool();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_number() const {
