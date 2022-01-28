@@ -5,9 +5,19 @@
 #include <memory>
 #include <cinttypes>
 
+// Use a 64-bit size type
+#define RAPIDJSON_NO_SIZETYPEDEFINE
+namespace rapidjson {
+  typedef std::size_t SizeType;
+}
+
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/document.h>
+#include <rapidjson/allocators.h>
+#include <rapidjson/error/en.h>
+
 namespace sourcemeta {
   namespace jsontoolkit {
-
     class JSON {
       public:
         JSON(const std::string &json);
@@ -28,13 +38,14 @@ namespace sourcemeta {
         std::string to_string() const;
         std::int64_t to_integer() const;
         double to_double() const;
-      private:
-        // Hide the JSON backend
-        // See https://en.cppreference.com/w/cpp/language/pimpl
-        struct Backend;
-        std::unique_ptr<Backend> backend;
-    };
 
+        JSON at(const std::size_t index);
+      private:
+        using Backend = rapidjson::GenericValue<
+          rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>;
+        JSON(Backend &&state);
+        Backend backend;
+    };
   }
 }
 
