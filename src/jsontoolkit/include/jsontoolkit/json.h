@@ -11,6 +11,9 @@ namespace sourcemeta {
       public:
         JSON(const std::string &json);
         ~JSON();
+
+        std::size_t length() const;
+
         bool is_object() const;
         bool is_array() const;
         bool is_boolean() const;

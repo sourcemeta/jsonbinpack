@@ -159,3 +159,18 @@ TEST(jsontoolkit_JSON, BooleanIsString) {
   sourcemeta::jsontoolkit::JSON document{"true"};
   EXPECT_FALSE(document.is_string());
 }
+
+TEST(jsontoolkit_JSON, EmptyStringLength) {
+  sourcemeta::jsontoolkit::JSON document{"\"\""};
+  EXPECT_EQ(document.length(), 0);
+}
+
+TEST(jsontoolkit_JSON, OneCharacterStringLength) {
+  sourcemeta::jsontoolkit::JSON document{"\"x\""};
+  EXPECT_EQ(document.length(), 1);
+}
+
+TEST(jsontoolkit_JSON, SmallStringLength) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo bar\""};
+  EXPECT_EQ(document.length(), 7);
+}

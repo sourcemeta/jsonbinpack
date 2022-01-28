@@ -26,6 +26,15 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
 
 sourcemeta::jsontoolkit::JSON::~JSON() {}
 
+std::size_t sourcemeta::jsontoolkit::JSON::length() const {
+  switch (this->backend->type) {
+    case rapidjson::kStringType:
+      return this->backend->document.GetStringLength();
+    default:
+      return 0;
+  }
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_object() const {
   return this->backend->type == rapidjson::kObjectType;
 }
