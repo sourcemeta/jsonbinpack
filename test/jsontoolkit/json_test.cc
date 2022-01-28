@@ -259,3 +259,25 @@ TEST(jsontoolkit_JSON, NullToString) {
     document.to_string();
   }, std::logic_error);
 }
+
+TEST(jsontoolkit_JSON, PositiveIntegerToInteger) {
+  sourcemeta::jsontoolkit::JSON document{"5"};
+  EXPECT_EQ(document.to_integer(), 5);
+}
+
+TEST(jsontoolkit_JSON, ZeroToInteger) {
+  sourcemeta::jsontoolkit::JSON document{"0"};
+  EXPECT_EQ(document.to_integer(), 0);
+}
+
+TEST(jsontoolkit_JSON, NegativeIntegerToInteger) {
+  sourcemeta::jsontoolkit::JSON document{"-3"};
+  EXPECT_EQ(document.to_integer(), -3);
+}
+
+TEST(jsontoolkit_JSON, RealToInteger) {
+  sourcemeta::jsontoolkit::JSON document{"3.14"};
+  EXPECT_THROW({
+    document.to_integer();
+  }, std::logic_error);
+}

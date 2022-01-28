@@ -1,9 +1,12 @@
 #include <string>
 #include <memory>
 #include <stdexcept>
+#include <cinttypes>
+
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <rapidjson/allocators.h>
+
 #include <jsontoolkit/json.h>
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
@@ -81,4 +84,9 @@ std::string sourcemeta::jsontoolkit::JSON::to_string() const {
   if (!this->is_string()) throw std::logic_error("Not a string");
   std::string result{this->backend->document.GetString()};
   return result;
+}
+
+std::int64_t sourcemeta::jsontoolkit::JSON::to_integer() const {
+  if (!this->is_integer()) throw std::logic_error("Not an integer");
+  return this->backend->document.GetInt64();
 }
