@@ -149,3 +149,13 @@ TEST(jsontoolkit_JSON, StringIsInteger) {
   sourcemeta::jsontoolkit::JSON document{"\"4\""};
   EXPECT_FALSE(document.is_integer());
 }
+
+TEST(jsontoolkit_JSON, IntegerStringIsString) {
+  sourcemeta::jsontoolkit::JSON document{"\"4\""};
+  EXPECT_TRUE(document.is_string());
+}
+
+TEST(jsontoolkit_JSON, BooleanIsString) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_FALSE(document.is_string());
+}

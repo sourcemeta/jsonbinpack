@@ -42,6 +42,10 @@ bool sourcemeta::jsontoolkit::JSON::is_integer() const {
   return this->backend->document.IsInt();
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_string() const {
+  return this->backend->document.IsString();
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_null() const {
   return this->backend->document.IsNull();
 }
