@@ -119,3 +119,33 @@ TEST(jsontoolkit_JSON, InvalidDocument) {
     sourcemeta::jsontoolkit::JSON document{"{foo"};
   }, std::invalid_argument);
 }
+
+TEST(jsontoolkit_JSON, PositiveIntegerIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"5"};
+  EXPECT_TRUE(document.is_integer());
+}
+
+TEST(jsontoolkit_JSON, NegativeIntegerIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"-5"};
+  EXPECT_TRUE(document.is_integer());
+}
+
+TEST(jsontoolkit_JSON, ZeroIntegerIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"0"};
+  EXPECT_TRUE(document.is_integer());
+}
+
+TEST(jsontoolkit_JSON, PositiveRealIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"3.5"};
+  EXPECT_FALSE(document.is_integer());
+}
+
+TEST(jsontoolkit_JSON, NegativeRealIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"-0.5"};
+  EXPECT_FALSE(document.is_integer());
+}
+
+TEST(jsontoolkit_JSON, StringIsInteger) {
+  sourcemeta::jsontoolkit::JSON document{"\"4\""};
+  EXPECT_FALSE(document.is_integer());
+}

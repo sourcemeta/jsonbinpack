@@ -38,6 +38,10 @@ bool sourcemeta::jsontoolkit::JSON::is_number() const {
   return this->backend->document.IsNumber();
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_integer() const {
+  return this->backend->document.IsInt();
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_null() const {
   return this->backend->document.IsNull();
 }

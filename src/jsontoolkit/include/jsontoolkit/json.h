@@ -15,6 +15,7 @@ namespace sourcemeta {
         bool is_array() const;
         bool is_boolean() const;
         bool is_number() const;
+        bool is_integer() const;
         bool is_null() const;
         bool is_structural() const;
       private:
