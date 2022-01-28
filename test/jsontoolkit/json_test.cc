@@ -204,3 +204,24 @@ TEST(jsontoolkit_JSON, SmallObjectLength) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":1,\"bar\":2,\"baz\":3}"};
   EXPECT_EQ(document.length(), 3);
 }
+
+TEST(jsontoolkit_JSON, BooleanLength) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_THROW({
+    document.length();
+  }, std::domain_error);
+}
+
+TEST(jsontoolkit_JSON, NullLength) {
+  sourcemeta::jsontoolkit::JSON document{"null"};
+  EXPECT_THROW({
+    document.length();
+  }, std::domain_error);
+}
+
+TEST(jsontoolkit_JSON, IntegerLength) {
+  sourcemeta::jsontoolkit::JSON document{"4"};
+  EXPECT_THROW({
+    document.length();
+  }, std::domain_error);
+}
