@@ -82,8 +82,7 @@ bool sourcemeta::jsontoolkit::JSON::to_boolean() const {
 
 std::string sourcemeta::jsontoolkit::JSON::to_string() const {
   if (!this->is_string()) throw std::logic_error("Not a string");
-  std::string result{this->backend->document.GetString()};
-  return result;
+  return std::string(this->backend->document.GetString());
 }
 
 std::int64_t sourcemeta::jsontoolkit::JSON::to_integer() const {
