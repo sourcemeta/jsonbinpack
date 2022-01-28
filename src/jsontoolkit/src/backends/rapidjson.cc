@@ -35,7 +35,7 @@ std::size_t sourcemeta::jsontoolkit::JSON::length() const {
     case rapidjson::kObjectType:
       return this->backend->document.MemberCount();
     default:
-      throw std::domain_error("Not applicable to given type");
+      throw std::logic_error("Not applicable to given type");
   }
 }
 
