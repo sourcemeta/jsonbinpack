@@ -32,6 +32,8 @@ std::size_t sourcemeta::jsontoolkit::JSON::length() const {
       return this->backend->document.GetStringLength();
     case rapidjson::kArrayType:
       return this->backend->document.Size();
+    case rapidjson::kObjectType:
+      return this->backend->document.MemberCount();
     default:
       return 0;
   }
