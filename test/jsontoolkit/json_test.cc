@@ -225,3 +225,20 @@ TEST(jsontoolkit_JSON, IntegerLength) {
     document.length();
   }, std::logic_error);
 }
+
+TEST(jsontoolkit_JSON, TrueToBoolean) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_EQ(document.to_boolean(), true);
+}
+
+TEST(jsontoolkit_JSON, FalseToBoolean) {
+  sourcemeta::jsontoolkit::JSON document{"false"};
+  EXPECT_EQ(document.to_boolean(), false);
+}
+
+TEST(jsontoolkit_JSON, NullToBoolean) {
+  sourcemeta::jsontoolkit::JSON document{"null"};
+  EXPECT_THROW({
+    document.to_boolean();
+  }, std::logic_error);
+}

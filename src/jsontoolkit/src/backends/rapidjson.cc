@@ -71,3 +71,8 @@ bool sourcemeta::jsontoolkit::JSON::is_null() const {
 bool sourcemeta::jsontoolkit::JSON::is_structural() const {
   return this->is_object() || this->is_array();
 }
+
+bool sourcemeta::jsontoolkit::JSON::to_boolean() const {
+  if (!this->is_boolean()) throw std::logic_error("Not a boolean");
+  return this->backend->document.GetBool();
+}

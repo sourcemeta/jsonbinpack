@@ -22,6 +22,8 @@ namespace sourcemeta {
         bool is_string() const;
         bool is_null() const;
         bool is_structural() const;
+
+        bool to_boolean() const;
       private:
         // Hide the JSON backend
         // See https://en.cppreference.com/w/cpp/language/pimpl
