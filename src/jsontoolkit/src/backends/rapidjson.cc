@@ -8,6 +8,8 @@
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
   rapidjson::GenericDocument<rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>> document;
+  // We cache this and keep it in sync for performance reasons
+  rapidjson::Type type;
 };
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
@@ -18,24 +20,27 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
     throw std::invalid_argument(
         rapidjson::GetParseError_En(this->backend->document.GetParseError()));
   }
+
+  this->backend->type = this->backend->document.GetType();
 }
 
 sourcemeta::jsontoolkit::JSON::~JSON() {}
 
 bool sourcemeta::jsontoolkit::JSON::is_object() const {
-  return this->backend->document.IsObject();
+  return this->backend->type == rapidjson::kObjectType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_array() const {
-  return this->backend->document.IsArray();
+  return this->backend->type == rapidjson::kArrayType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
-  return this->backend->document.IsBool();
+  return this->backend->type == rapidjson::kFalseType ||
+    this->backend->type == rapidjson::kTrueType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_number() const {
-  return this->backend->document.IsNumber();
+  return this->backend->type == rapidjson::kNumberType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_integer() const {
@@ -43,11 +48,11 @@ bool sourcemeta::jsontoolkit::JSON::is_integer() const {
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_string() const {
-  return this->backend->document.IsString();
+  return this->backend->type == rapidjson::kStringType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_null() const {
-  return this->backend->document.IsNull();
+  return this->backend->type == rapidjson::kNullType;
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_structural() const {
