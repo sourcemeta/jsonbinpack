@@ -15,7 +15,7 @@ struct sourcemeta::jsontoolkit::JSON::Backend {
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
   : backend{std::make_unique<Backend>()}
 {
-  this->backend->document.Parse(json.c_str());
+  this->backend->document.Parse(json);
   if (this->backend->document.HasParseError()) {
     throw std::invalid_argument(
         rapidjson::GetParseError_En(this->backend->document.GetParseError()));
