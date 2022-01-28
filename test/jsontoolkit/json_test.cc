@@ -84,6 +84,36 @@ TEST(jsontoolkit_JSON, BooleanIsNull) {
   EXPECT_FALSE(document_false.is_null());
 }
 
+TEST(jsontoolkit_JSON, PositiveIntegerIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"5"};
+  EXPECT_TRUE(document.is_number());
+}
+
+TEST(jsontoolkit_JSON, NegativeIntegerIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"-5"};
+  EXPECT_TRUE(document.is_number());
+}
+
+TEST(jsontoolkit_JSON, PositiveRealIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"3.5"};
+  EXPECT_TRUE(document.is_number());
+}
+
+TEST(jsontoolkit_JSON, NegativeRealIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"-0.5"};
+  EXPECT_TRUE(document.is_number());
+}
+
+TEST(jsontoolkit_JSON, BooleanRealIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_FALSE(document.is_number());
+}
+
+TEST(jsontoolkit_JSON, StringIsNumber) {
+  sourcemeta::jsontoolkit::JSON document{"\"4\""};
+  EXPECT_FALSE(document.is_number());
+}
+
 TEST(jsontoolkit_JSON, InvalidDocument) {
   EXPECT_THROW({
     sourcemeta::jsontoolkit::JSON document{"{foo"};

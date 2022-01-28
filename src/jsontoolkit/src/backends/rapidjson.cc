@@ -34,6 +34,10 @@ bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
   return this->backend->document.IsTrue() || this->backend->document.IsFalse();
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_number() const {
+  return this->backend->document.IsNumber();
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_null() const {
   return this->backend->document.IsNull();
 }
