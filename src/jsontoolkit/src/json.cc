@@ -87,16 +87,17 @@ double sourcemeta::jsontoolkit::JSON::to_double() const {
 }
 
 bool sourcemeta::jsontoolkit::JSON::has(const std::size_t index) const {
+  if (!this->is_array()) throw std::logic_error("Not an array");
   return this->length() > index;
 }
 
 bool sourcemeta::jsontoolkit::JSON::has(const std::string &key) const {
+  if (!this->is_object()) throw std::logic_error("Not an object");
   return this->backend.HasMember(key);
 }
 
 sourcemeta::jsontoolkit::JSON
 sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
-  if (!this->is_array()) throw std::logic_error("Not an array");
   if (!this->has(index)) throw std::out_of_range("Invalid index");
   rapidjson::Value& element = this->backend[index];
   return sourcemeta::jsontoolkit::JSON(element);
