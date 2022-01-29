@@ -23,8 +23,6 @@ namespace sourcemeta {
         JSON(const std::string &json);
         ~JSON();
 
-        std::size_t length() const;
-
         bool is_object() const;
         bool is_array() const;
         bool is_boolean() const;
@@ -39,9 +37,11 @@ namespace sourcemeta {
         std::int64_t to_integer() const;
         double to_double() const;
 
+        std::size_t length() const;
         bool has(const std::size_t index) const;
         bool has(const std::string &key) const;
         JSON at(const std::size_t index);
+        JSON at(const std::string &key);
       private:
         using Backend = rapidjson::GenericValue<
           rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>;

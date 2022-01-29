@@ -102,3 +102,10 @@ sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   rapidjson::Value& element = this->backend[index];
   return sourcemeta::jsontoolkit::JSON(element);
 }
+
+sourcemeta::jsontoolkit::JSON
+sourcemeta::jsontoolkit::JSON::at(const std::string &key) {
+  if (!this->has(key)) throw std::out_of_range("Invalid key");
+  rapidjson::Value& element = this->backend[key];
+  return sourcemeta::jsontoolkit::JSON(element);
+}

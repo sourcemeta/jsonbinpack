@@ -320,8 +320,15 @@ TEST(jsontoolkit_JSON, ArrayStringIntegerAt) {
 TEST(jsontoolkit_JSON, ArrayOutOfBoundsAt) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo\",3,\"baz\"]"};
   EXPECT_THROW({
-    sourcemeta::jsontoolkit::JSON element1 = document.at(3);
+    sourcemeta::jsontoolkit::JSON element = document.at(3);
   }, std::out_of_range);
+}
+
+TEST(jsontoolkit_JSON, ArrayKeyIndex) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo\",3,\"baz\"]"};
+  EXPECT_THROW({
+    sourcemeta::jsontoolkit::JSON element = document.at("foo");
+  }, std::logic_error);
 }
 
 TEST(jsontoolkit_JSON, ArrayHas) {
@@ -338,4 +345,28 @@ TEST(jsontoolkit_JSON, ObjectHas) {
   EXPECT_TRUE(document.has("bar"));
   EXPECT_FALSE(document.has("baz"));
   EXPECT_FALSE(document.has(""));
+}
+
+TEST(jsontoolkit_JSON, ObjectStringIntegerAt) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"baz\",\"bar\":2}"};
+  sourcemeta::jsontoolkit::JSON element1 = document.at("foo");
+  sourcemeta::jsontoolkit::JSON element2 = document.at("bar");
+  EXPECT_TRUE(element1.is_string());
+  EXPECT_TRUE(element2.is_integer());
+  EXPECT_EQ(element1.to_string(), "baz");
+  EXPECT_EQ(element2.to_integer(), 2);
+}
+
+TEST(jsontoolkit_JSON, ObjectOutOfBoundsAt) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"baz\",\"bar\":2}"};
+  EXPECT_THROW({
+    sourcemeta::jsontoolkit::JSON element = document.at("xxx");
+  }, std::out_of_range);
+}
+
+TEST(jsontoolkit_JSON, ObjectIndexAt) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"baz\",\"bar\":2}"};
+  EXPECT_THROW({
+    sourcemeta::jsontoolkit::JSON element = document.at(0);
+  }, std::logic_error);
 }
