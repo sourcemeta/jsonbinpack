@@ -313,4 +313,13 @@ TEST(jsontoolkit_JSON, ArrayStringIntegerAt) {
   sourcemeta::jsontoolkit::JSON element2 = document.at(1);
   EXPECT_TRUE(element1.is_string());
   EXPECT_TRUE(element2.is_integer());
+  EXPECT_EQ(element1.to_string(), "foo");
+  EXPECT_EQ(element2.to_integer(), 3);
+}
+
+TEST(jsontoolkit_JSON, ArrayOutOfBoundsAt) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo\",3,\"baz\"]"};
+  EXPECT_THROW({
+    sourcemeta::jsontoolkit::JSON element1 = document.at(3);
+  }, std::out_of_range);
 }
