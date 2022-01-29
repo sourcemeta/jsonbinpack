@@ -48,6 +48,8 @@ endif()
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   if(JSONBINPACK_TESTS)
     # Tests
+    set(BUILD_GMOCK OFF)
+    set(INSTALL_GTEST OFF)
     include(GoogleTest)
     add_subdirectory(vendor/googletest)
     add_subdirectory(test/jsontoolkit)
