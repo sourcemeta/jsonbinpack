@@ -3,6 +3,9 @@
 
 #include <string>
 #include <cinttypes>
+#include <cstddef>
+#include <iterator>
+#include <type_traits>
 
 // Use a 64-bit size type
 #define RAPIDJSON_NO_SIZETYPEDEFINE
@@ -15,15 +18,45 @@ namespace rapidjson {
 #include <rapidjson/allocators.h>
 #include <rapidjson/error/en.h>
 
+#define SOURCEMETA_JSONTOOLKIT_JSON_BACKEND \
+  rapidjson::GenericValue<rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>
+#define SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR sourcemeta::jsontoolkit::JSONIterator< \
+  sourcemeta::jsontoolkit::JSON, \
+  rapidjson::GenericValue<rapidjson::UTF8<>>::ValueIterator>
+
 namespace sourcemeta {
   namespace jsontoolkit {
+    template<typename Type, typename BackendType>
+    class JSONIterator {
+      public:
+        JSONIterator(BackendType &iterator);
+
+        // std::iterator_traits support
+        // See https://en.cppreference.com/w/cpp/iterator/iterator_traits
+        using iterator_category = std::random_access_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = Type;
+        using pointer = Type *;
+        using reference = Type &;
+
+        // Operators
+        reference operator*();
+        pointer operator->();
+        JSONIterator<Type, BackendType>& operator++();
+        JSONIterator<Type, BackendType>& operator--();
+        bool operator==(const JSONIterator<Type, BackendType>& other) const;
+        bool operator!=(const JSONIterator<Type, BackendType>& other) const;
+      private:
+        BackendType backend;
+        typename std::remove_const<Type>::type wrapper;
+    };
+
     class JSON {
       public:
         JSON(const std::string &json);
         ~JSON();
 
         // TODO: Implement setters
-        // TODO: Implement iterators
 
         bool is_object() const;
         bool is_array() const;
@@ -44,9 +77,15 @@ namespace sourcemeta {
         bool has(const std::string &key) const;
         JSON at(const std::size_t index);
         JSON at(const std::string &key);
+
+        // TODO: Implement iterators
+        // TODO: Implement const and reverse and reverse const iterators
+        using iterator = SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR;
+        friend iterator;
+        iterator begin();
+        iterator end();
       private:
-        using Backend = rapidjson::GenericValue<
-          rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>;
+        using Backend = SOURCEMETA_JSONTOOLKIT_JSON_BACKEND;
         JSON(Backend &state);
         Backend backend;
     };

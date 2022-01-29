@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
+#include <vector>
 #include <jsontoolkit/json.h>
 
 TEST(jsontoolkit_JSON, EmptyObjectIsObject) {
@@ -369,4 +370,17 @@ TEST(jsontoolkit_JSON, ObjectIndexAt) {
   EXPECT_THROW({
     sourcemeta::jsontoolkit::JSON element = document.at(0);
   }, std::logic_error);
+}
+
+TEST(jsontoolkit_JSON, ArrayReferenceIterator) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo\",\"bar\",\"baz\"]"};
+  std::vector<std::string> result;
+  for (sourcemeta::jsontoolkit::JSON &element : document) {
+    result.push_back(element.to_string());
+  }
+
+  EXPECT_EQ(result.size(), 3);
+  EXPECT_EQ(result.at(0), "foo");
+  EXPECT_EQ(result.at(1), "bar");
+  EXPECT_EQ(result.at(2), "baz");
 }
