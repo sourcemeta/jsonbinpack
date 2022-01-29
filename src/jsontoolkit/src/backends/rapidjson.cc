@@ -3,6 +3,13 @@
 #include <stdexcept>
 #include <cinttypes>
 
+// Use a 64-bit size type
+#define RAPIDJSON_NO_SIZETYPEDEFINE
+namespace rapidjson {
+  typedef ::std::size_t SizeType;
+}
+
+#include <rapidjson/rapidjson.h>
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <rapidjson/allocators.h>
