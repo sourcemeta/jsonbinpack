@@ -16,7 +16,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
   }
 }
 
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::JSON::Backend &&state)
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::JSON::Backend &state)
   : backend{static_cast<rapidjson::Value&&>(state)} {}
 
 sourcemeta::jsontoolkit::JSON::~JSON() {}
@@ -91,5 +91,5 @@ sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   if (!this->is_array()) throw std::logic_error("Not an array");
   if (index >= this->length()) throw std::out_of_range("Invalid index");
   rapidjson::Value& element = this->backend[index];
-  return sourcemeta::jsontoolkit::JSON(std::move(element));
+  return sourcemeta::jsontoolkit::JSON(element);
 }

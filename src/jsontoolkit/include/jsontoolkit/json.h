@@ -43,7 +43,7 @@ namespace sourcemeta {
       private:
         using Backend = rapidjson::GenericValue<
           rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>;
-        JSON(Backend &&state);
+        JSON(Backend &state);
         Backend backend;
     };
   }
