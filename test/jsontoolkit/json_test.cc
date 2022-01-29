@@ -323,3 +323,19 @@ TEST(jsontoolkit_JSON, ArrayOutOfBoundsAt) {
     sourcemeta::jsontoolkit::JSON element1 = document.at(3);
   }, std::out_of_range);
 }
+
+TEST(jsontoolkit_JSON, ArrayHas) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo\",3,\"baz\"]"};
+  EXPECT_TRUE(document.has(0));
+  EXPECT_TRUE(document.has(1));
+  EXPECT_TRUE(document.has(2));
+  EXPECT_FALSE(document.has(3));
+}
+
+TEST(jsontoolkit_JSON, ObjectHas) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1,\"bar\":2}"};
+  EXPECT_TRUE(document.has("foo"));
+  EXPECT_TRUE(document.has("bar"));
+  EXPECT_FALSE(document.has("baz"));
+  EXPECT_FALSE(document.has(""));
+}

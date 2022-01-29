@@ -90,6 +90,10 @@ bool sourcemeta::jsontoolkit::JSON::has(const std::size_t index) const {
   return this->length() > index;
 }
 
+bool sourcemeta::jsontoolkit::JSON::has(const std::string &key) const {
+  return this->backend.HasMember(key);
+}
+
 sourcemeta::jsontoolkit::JSON
 sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   if (!this->is_array()) throw std::logic_error("Not an array");

@@ -40,6 +40,7 @@ namespace sourcemeta {
         double to_double() const;
 
         bool has(const std::size_t index) const;
+        bool has(const std::string &key) const;
         JSON at(const std::size_t index);
       private:
         using Backend = rapidjson::GenericValue<
