@@ -1,4 +1,4 @@
-![](./banner.png)
+![](./assets/banner.png)
 
 JSON BinPack is an open-source binary JSON serialization format with a **strong
 focus on space efficiency**. It supports schema-driven and schema-less modes to
