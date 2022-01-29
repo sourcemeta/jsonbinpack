@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <string>
-#include <memory>
 #include <cinttypes>
 
 // Use a 64-bit size type

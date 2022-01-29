@@ -1,5 +1,4 @@
 #include <string>
-#include <memory>
 #include <stdexcept>
 #include <cinttypes>
 #include <jsontoolkit/json.h>
