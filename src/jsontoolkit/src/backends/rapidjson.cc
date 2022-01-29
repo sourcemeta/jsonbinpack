@@ -18,8 +18,6 @@ namespace rapidjson {
 
 struct sourcemeta::jsontoolkit::JSON::Backend {
   rapidjson::GenericDocument<rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>> document;
-  // We cache this and keep it in sync for performance reasons
-  rapidjson::Type type;
 };
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
@@ -30,14 +28,12 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
     throw std::invalid_argument(
         rapidjson::GetParseError_En(this->backend->document.GetParseError()));
   }
-
-  this->backend->type = this->backend->document.GetType();
 }
 
 sourcemeta::jsontoolkit::JSON::~JSON() {}
 
 std::size_t sourcemeta::jsontoolkit::JSON::length() const {
-  switch (this->backend->type) {
+  switch (this->backend->document.GetType()) {
     case rapidjson::kStringType:
       return this->backend->document.GetStringLength();
     case rapidjson::kArrayType:
@@ -50,20 +46,19 @@ std::size_t sourcemeta::jsontoolkit::JSON::length() const {
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_object() const {
-  return this->backend->type == rapidjson::kObjectType;
+  return this->backend->document.IsObject();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_array() const {
-  return this->backend->type == rapidjson::kArrayType;
+  return this->backend->document.IsArray();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
-  return this->backend->type == rapidjson::kFalseType ||
-    this->backend->type == rapidjson::kTrueType;
+  return this->backend->document.IsBool();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_number() const {
-  return this->backend->type == rapidjson::kNumberType;
+  return this->backend->document.IsNumber();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_integer() const {
@@ -71,11 +66,11 @@ bool sourcemeta::jsontoolkit::JSON::is_integer() const {
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_string() const {
-  return this->backend->type == rapidjson::kStringType;
+  return this->backend->document.IsString();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_null() const {
-  return this->backend->type == rapidjson::kNullType;
+  return this->backend->document.IsNull();
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_structural() const {
