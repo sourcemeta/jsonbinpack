@@ -86,10 +86,14 @@ double sourcemeta::jsontoolkit::JSON::to_double() const {
   return this->backend.GetDouble();
 }
 
+bool sourcemeta::jsontoolkit::JSON::has(const std::size_t index) const {
+  return this->length() > index;
+}
+
 sourcemeta::jsontoolkit::JSON
 sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   if (!this->is_array()) throw std::logic_error("Not an array");
-  if (index >= this->length()) throw std::out_of_range("Invalid index");
+  if (!this->has(index)) throw std::out_of_range("Invalid index");
   rapidjson::Value& element = this->backend[index];
   return sourcemeta::jsontoolkit::JSON(element);
 }
