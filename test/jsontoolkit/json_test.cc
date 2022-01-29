@@ -306,3 +306,11 @@ TEST(jsontoolkit_JSON, PositiveRealToDouble) {
   sourcemeta::jsontoolkit::JSON document{"150.345"};
   EXPECT_EQ(document.to_double(), 150.345);
 }
+
+TEST(jsontoolkit_JSON, ArrayStringIntegerAt) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo\",3,\"baz\"]"};
+  sourcemeta::jsontoolkit::JSON element1 = document.at(0);
+  sourcemeta::jsontoolkit::JSON element2 = document.at(1);
+  EXPECT_TRUE(element1.is_string());
+  EXPECT_TRUE(element2.is_integer());
+}
