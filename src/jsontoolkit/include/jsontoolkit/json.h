@@ -23,6 +23,9 @@ namespace sourcemeta {
         JSON(const std::string &json);
         ~JSON();
 
+        // TODO: Implement setters
+        // TODO: Implement iterators
+
         bool is_object() const;
         bool is_array() const;
         bool is_boolean() const;
