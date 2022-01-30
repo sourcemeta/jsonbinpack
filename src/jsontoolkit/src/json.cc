@@ -108,3 +108,83 @@ sourcemeta::jsontoolkit::JSON::at(const std::string &key) {
   rapidjson::Value& element = this->backend[key];
   return sourcemeta::jsontoolkit::JSON(element);
 }
+
+sourcemeta::jsontoolkit::JSON::iterator
+sourcemeta::jsontoolkit::JSON::begin() {
+  rapidjson::GenericValue<rapidjson::UTF8<>>::ValueIterator cursor = this->backend.Begin();
+  return sourcemeta::jsontoolkit::JSON::iterator(cursor);
+}
+
+sourcemeta::jsontoolkit::JSON::iterator
+sourcemeta::jsontoolkit::JSON::end() {
+  rapidjson::GenericValue<rapidjson::UTF8<>>::ValueIterator cursor = this->backend.End();
+  return sourcemeta::jsontoolkit::JSON::iterator(cursor);
+}
+
+// JSON Iterator
+
+template <typename Type, typename BackendType>
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::JSONIterator(BackendType &iterator)
+  : backend{iterator}, wrapper(*(this->backend)) {}
+
+template <typename Type, typename BackendType>
+typename sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::reference
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator*() {
+  return this->wrapper;
+}
+
+template <typename Type, typename BackendType>
+typename sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::pointer
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator->() {
+  return &this->wrapper;
+}
+
+template <typename Type, typename BackendType>
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>&
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator++() {
+  this->backend++;
+  this->wrapper.backend.~GenericValue();
+  this->wrapper.backend = *(this->backend);
+  return *this;
+}
+
+template <typename Type, typename BackendType>
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>&
+sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator--() {
+  this->backend--;
+  this->wrapper.backend.~GenericValue();
+  this->wrapper.backend = *(this->backend);
+  return *this;
+}
+
+template <typename Type, typename BackendType>
+bool sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator==(
+    const sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>& other
+) const {
+  return other.backend == this->backend;
+}
+
+template <typename Type, typename BackendType>
+bool sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>::operator!=(
+    const sourcemeta::jsontoolkit::JSONIterator<Type, BackendType>& other
+) const {
+  return other.backend != this->backend;
+}
+
+// We need to instantiate the operator templates in order to not keep in the definition
+// See http://isocpp.org/wiki/faq/templates#templates-defn-vs-decl
+
+template SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::reference
+SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator*();
+template SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::pointer
+SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator->();
+
+template SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR&
+SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator++();
+template SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR&
+SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator--();
+
+template bool SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator==(
+  const SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR& other) const;
+template bool SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR::operator!=(
+  const SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR& other) const;
