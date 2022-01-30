@@ -7,22 +7,11 @@
 #include <iterator>
 #include <type_traits>
 
-// Use a 64-bit size type
-#define RAPIDJSON_NO_SIZETYPEDEFINE
-namespace rapidjson {
-  typedef std::size_t SizeType;
-}
-
-#include <rapidjson/rapidjson.h>
-#include <rapidjson/document.h>
-#include <rapidjson/allocators.h>
-#include <rapidjson/error/en.h>
-
-#define SOURCEMETA_JSONTOOLKIT_JSON_BACKEND \
-  rapidjson::GenericValue<rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator<>>
-#define SOURCEMETA_JSONTOOLKIT_JSON_ITERATOR sourcemeta::jsontoolkit::JSONIterator< \
-  sourcemeta::jsontoolkit::JSON, \
-  rapidjson::GenericValue<rapidjson::UTF8<>>::ValueIterator>
+#if SOURCEMETA_JSONTOOLKIT_JSON_BACKEND == rapidjson
+#include <jsontoolkit/json_rapidjson.h>
+#else
+#error Invalid backend: SOURCEMETA_JSONTOOLKIT_JSON_BACKEND
+#endif
 
 namespace sourcemeta {
   namespace jsontoolkit {

@@ -1,7 +1,10 @@
+#include <jsontoolkit/json.h>
+
 #include <string>
 #include <stdexcept>
 #include <cinttypes>
-#include <jsontoolkit/json.h>
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &json)
   : backend{static_cast<rapidjson::Value&&>(rapidjson::Document().Parse(json))} {
