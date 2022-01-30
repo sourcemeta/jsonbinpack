@@ -37,6 +37,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
+set(JSONTOOLKIT_BACKEND rapidjson CACHE STRING "Choose the JSONToolkit backend")
 
 # Sources
 add_subdirectory(src/jsontoolkit)
