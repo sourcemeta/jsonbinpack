@@ -92,3 +92,10 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::at(const std::size
   return std::get<std::shared_ptr<
     sourcemeta::jsontoolkit::Array<JSON>>>(this->data)->at(index);
 }
+
+sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::JSON::size() {
+  this->parse();
+  return std::get<std::shared_ptr<
+    sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>>(this->data)->size();
+}

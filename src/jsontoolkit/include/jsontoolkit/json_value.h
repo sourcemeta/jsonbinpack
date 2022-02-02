@@ -24,6 +24,7 @@ namespace sourcemeta {
         bool is_boolean();
         bool is_array();
         JSON& at(const std::size_t index);
+        sourcemeta::jsontoolkit::Array<JSON>::size_type size();
       private:
         JSON& parse();
         const std::string_view source;
