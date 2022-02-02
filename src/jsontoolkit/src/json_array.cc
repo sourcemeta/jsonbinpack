@@ -14,7 +14,7 @@ sourcemeta::jsontoolkit::Type sourcemeta::jsontoolkit::Array<Wrapper>::type() co
 }
 
 template <typename Wrapper>
-Wrapper& sourcemeta::jsontoolkit::Array<Wrapper>::at(const std::size_t index) {
+Wrapper& sourcemeta::jsontoolkit::Array<Wrapper>::at(const sourcemeta::jsontoolkit::Array<Wrapper>::size_type index) {
   return this->parse().data.at(index);
 }
 
@@ -109,7 +109,8 @@ template sourcemeta::jsontoolkit::Type
 sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::type() const;
 
 template sourcemeta::jsontoolkit::JSON&
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::at(const std::size_t);
+sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::at(
+    const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type);
 
 template typename sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size();

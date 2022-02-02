@@ -13,8 +13,8 @@ namespace sourcemeta {
         Array();
         Array(const std::string_view &document);
         sourcemeta::jsontoolkit::Type type() const;
-        Wrapper& at(const std::size_t index);
         using size_type = typename std::vector<Wrapper>::size_type;
+        Wrapper& at(const size_type index);
         size_type size();
         friend Wrapper;
 
