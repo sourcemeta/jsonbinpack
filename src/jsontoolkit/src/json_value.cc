@@ -81,6 +81,12 @@ bool sourcemeta::jsontoolkit::JSON::is_boolean() {
     sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data);
 }
 
+sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {
+  std::get<std::shared_ptr<
+    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data)->set(value);
+  return *this;
+}
+
 bool sourcemeta::jsontoolkit::JSON::is_array() {
   this->parse();
   return std::holds_alternative<std::shared_ptr<

@@ -22,6 +22,7 @@ namespace sourcemeta {
         bool to_boolean();
         std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>> to_array();
         bool is_boolean();
+        JSON& set_boolean(const bool value);
         bool is_array();
         JSON& at(const std::size_t index);
         sourcemeta::jsontoolkit::Array<JSON>::size_type size();

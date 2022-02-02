@@ -16,15 +16,15 @@ TEST(Boolean, false_bool) {
 }
 
 TEST(Boolean, set) {
-  sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document {false};
-  EXPECT_EQ(document.type(), sourcemeta::jsontoolkit::Type::False);
-  EXPECT_FALSE(document.value());
-  document.set(true);
-  EXPECT_EQ(document.type(), sourcemeta::jsontoolkit::Type::True);
-  EXPECT_TRUE(document.value());
-  document.set(false);
-  EXPECT_EQ(document.type(), sourcemeta::jsontoolkit::Type::False);
-  EXPECT_FALSE(document.value());
+  sourcemeta::jsontoolkit::JSON document {false};
+  EXPECT_TRUE(document.is_boolean());
+  EXPECT_FALSE(document.to_boolean());
+  document.set_boolean(true);
+  EXPECT_TRUE(document.is_boolean());
+  EXPECT_TRUE(document.to_boolean());
+  document.set_boolean(false);
+  EXPECT_TRUE(document.is_boolean());
+  EXPECT_FALSE(document.to_boolean());
 }
 
 TEST(Array, BooleanArrayAt) {
