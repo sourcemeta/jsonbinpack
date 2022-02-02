@@ -3,40 +3,16 @@
 #include <functional> // std::reference_wrapper
 #include <jsontoolkit/json.h>
 
-TEST(Boolean, true_value) {
-  sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document {true};
-  EXPECT_TRUE(document.value());
+TEST(Boolean, true_bool) {
+  sourcemeta::jsontoolkit::JSON document {true};
+  EXPECT_TRUE(document.is_boolean());
+  EXPECT_TRUE(document.to_boolean());
 }
 
-TEST(Boolean, true_type) {
-  sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document {true};
-  EXPECT_EQ(document.type(), sourcemeta::jsontoolkit::Type::True);
-}
-
-TEST(Boolean, false_value) {
-  sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document {false};
-  EXPECT_FALSE(document.value());
-}
-
-TEST(Boolean, false_type) {
-  sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document {false};
-  EXPECT_EQ(document.type(), sourcemeta::jsontoolkit::Type::False);
-}
-
-TEST(JSON, VectorOfBooleans) {
-  std::vector<std::reference_wrapper<
-    const sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>> values;
-  const sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document1 {false};
-  const sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document2 {true};
-  const sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> document3 {false};
-
-  values.push_back(document1);
-  values.push_back(document2);
-  values.push_back(document3);
-
-  EXPECT_EQ(values.at(0).get().type(), sourcemeta::jsontoolkit::Type::False);
-  EXPECT_EQ(values.at(1).get().type(), sourcemeta::jsontoolkit::Type::True);
-  EXPECT_EQ(values.at(2).get().type(), sourcemeta::jsontoolkit::Type::False);
+TEST(Boolean, false_bool) {
+  sourcemeta::jsontoolkit::JSON document {false};
+  EXPECT_TRUE(document.is_boolean());
+  EXPECT_FALSE(document.to_boolean());
 }
 
 TEST(Boolean, set) {
