@@ -123,7 +123,7 @@ TEST(JSON, BooleanArrayReverseIterator) {
   EXPECT_TRUE(result.at(2));
 }
 
-TEST(JSON, ArrayParseEmptyPrefix) {
-  sourcemeta::jsontoolkit::JSON value {std::string_view("  [true,false,false]")};
+TEST(JSON, ArrayParsePadded) {
+  sourcemeta::jsontoolkit::JSON value {std::string_view("  [true,false,false]  ")};
   EXPECT_TRUE(value.is_array());
 }

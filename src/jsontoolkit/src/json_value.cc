@@ -40,7 +40,8 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
     const std::size_t start = this->source.find_first_not_of(" ");
-    const std::string_view document {this->source.substr(start, this->source.size() - start)};
+    const std::size_t end = this->source.find_last_not_of(" ");
+    const std::string_view document {this->source.substr(start, end - start + 1)};
 
     switch (document.front()) {
       case '[':
