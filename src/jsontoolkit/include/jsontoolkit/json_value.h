@@ -21,8 +21,8 @@ namespace sourcemeta {
         JSON(sourcemeta::jsontoolkit::Array<JSON> &value);
         bool to_boolean();
         std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>> to_array();
-        bool is_boolean() const;
-        bool is_array() const;
+        bool is_boolean();
+        bool is_array();
         JSON& at(const std::size_t index);
       private:
         JSON& parse();
@@ -33,6 +33,8 @@ namespace sourcemeta {
           std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>>
         > data;
     };
+
+    using ArrayImpl = sourcemeta::jsontoolkit::Array<JSON>;
   }
 }
 

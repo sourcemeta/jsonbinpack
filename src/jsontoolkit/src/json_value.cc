@@ -39,9 +39,22 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
-    // TODO: Support creating other types
-    this->data = std::make_shared<
-      sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(this->source);
+    const std::size_t start = this->source.find_first_not_of(" ");
+    const std::string_view document {this->source.substr(start, this->source.size() - start)};
+
+    switch (document.front()) {
+      case '[':
+        this->data = std::make_shared<
+          sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>(document);
+        break;
+      case 't':
+      case 'f':
+        this->data = std::make_shared<
+          sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(document);
+        break;
+      default:
+        throw std::domain_error("Invalid document");
+    }
   }
 
   this->must_parse = false;
@@ -61,12 +74,14 @@ sourcemeta::jsontoolkit::JSON::to_array() {
     sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_boolean() const {
+bool sourcemeta::jsontoolkit::JSON::is_boolean() {
+  this->parse();
   return std::holds_alternative<std::shared_ptr<
     sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_array() const {
+bool sourcemeta::jsontoolkit::JSON::is_array() {
+  this->parse();
   return std::holds_alternative<std::shared_ptr<
     sourcemeta::jsontoolkit::Array<JSON>>>(this->data);
 }
