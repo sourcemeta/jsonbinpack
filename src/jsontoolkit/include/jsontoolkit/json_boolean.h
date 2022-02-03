@@ -7,18 +7,18 @@
 
 namespace sourcemeta {
   namespace jsontoolkit {
-    template <typename Wrapper> class Boolean {
+    template <typename Wrapper> class GenericBoolean {
       public:
-        Boolean();
-        Boolean(const bool value);
-        Boolean(const std::string_view &document);
+        GenericBoolean();
+        GenericBoolean(const bool value);
+        GenericBoolean(const std::string_view &document);
         bool value();
         sourcemeta::jsontoolkit::Type type() const;
-        Boolean& set(const bool value);
+        GenericBoolean& set(const bool value);
         friend Wrapper;
       private:
         const std::string_view source;
-        Boolean& parse();
+        GenericBoolean& parse();
         bool must_parse;
         bool data;
     };

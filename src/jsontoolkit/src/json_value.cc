@@ -10,19 +10,19 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document) :
   data{} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> &value) :
+    sourcemeta::jsontoolkit::Boolean &value) :
   source{value.source},
   must_parse{false},
   data{std::in_place_type<
-    std::shared_ptr<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(value)} {}
+    std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>,
+    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
 sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON> &&value) :
+    sourcemeta::jsontoolkit::Boolean &&value) :
   source{value.source},
   must_parse{false},
   data{std::in_place_type<
-    std::shared_ptr<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(value)} {}
+    std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>,
+    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value) :
   source{value.source},
@@ -34,8 +34,8 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
   source{value ? JSON_TRUE : JSON_FALSE},
   must_parse{false},
   data{std::in_place_type<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(value)} {}
+    sourcemeta::jsontoolkit::Boolean>>,
+    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
@@ -46,12 +46,12 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
     switch (document.front()) {
       case '[':
         this->data = std::make_shared<
-          sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>(document);
+          sourcemeta::jsontoolkit::Array>(document);
         break;
       case 't':
       case 'f':
         this->data = std::make_shared<
-          sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(document);
+          sourcemeta::jsontoolkit::Boolean>(document);
         break;
       default:
         throw std::domain_error("Invalid document");
@@ -65,25 +65,24 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
 bool sourcemeta::jsontoolkit::JSON::to_boolean() {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data)->value();
+    sourcemeta::jsontoolkit::Boolean>>(this->data)->value();
 }
 
-std::shared_ptr<sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>
+std::shared_ptr<sourcemeta::jsontoolkit::Array>
 sourcemeta::jsontoolkit::JSON::to_array() {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>>(this->data);
+    sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() {
   this->parse();
   return std::holds_alternative<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data);
+    sourcemeta::jsontoolkit::Boolean>>(this->data);
 }
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {
-  std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data)->set(value);
+  std::get<std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>(this->data)->set(value);
   return *this;
 }
 
@@ -99,9 +98,9 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::at(const std::size
     sourcemeta::jsontoolkit::Array>>(this->data)->at(index);
 }
 
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::Array::size_type
 sourcemeta::jsontoolkit::JSON::size() {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>>(this->data)->size();
+    sourcemeta::jsontoolkit::Array>>(this->data)->size();
 }
