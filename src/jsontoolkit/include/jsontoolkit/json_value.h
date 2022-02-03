@@ -26,7 +26,6 @@ namespace sourcemeta {
         JSON& set_boolean(const bool value);
 
         // Null
-        // TODO: Make null a simple type
         JSON(const std::nullptr_t);
         bool is_null();
 
