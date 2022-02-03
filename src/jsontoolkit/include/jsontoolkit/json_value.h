@@ -17,15 +17,19 @@ namespace sourcemeta {
     class JSON {
       public:
         JSON();
-        JSON(const bool value);
         JSON(const std::string_view &document);
+
+        // Boolean
+        JSON(const bool value);
         JSON(sourcemeta::jsontoolkit::Boolean &value);
         JSON(sourcemeta::jsontoolkit::Boolean &&value);
-        JSON(sourcemeta::jsontoolkit::Array &value);
         bool to_boolean();
-        std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
         bool is_boolean();
         JSON& set_boolean(const bool value);
+
+        // Array
+        JSON(sourcemeta::jsontoolkit::Array &value);
+        std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
         bool is_array();
         JSON& at(const std::size_t index);
         sourcemeta::jsontoolkit::Array::size_type size();
