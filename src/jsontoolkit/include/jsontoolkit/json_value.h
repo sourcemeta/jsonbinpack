@@ -2,7 +2,9 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_string.h>
 
+#include <string> // std::string
 #include <string_view> // std::string_view
 #include <variant> // std::variant
 #include <memory> // std::shared_ptr
@@ -13,6 +15,7 @@ namespace sourcemeta {
   namespace jsontoolkit {
     class JSON;
     using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
+    using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
     class JSON {
       public:
         JSON();
