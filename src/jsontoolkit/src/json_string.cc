@@ -13,7 +13,7 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::GenericString(const st
   : source{document}, must_parse{true} {}
 
 template <typename Wrapper, typename Backend>
-Backend& sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::value() {
+const Backend& sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::value() {
   return this->parse().data;
 }
 
@@ -91,7 +91,7 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crend() {
 template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::GenericString();
 template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::GenericString(const std::string_view&);
 
-template std::string&
+template const std::string&
 sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::value();
 
 template typename sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::size_type

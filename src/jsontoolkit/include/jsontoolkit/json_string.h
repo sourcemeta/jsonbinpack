@@ -9,7 +9,7 @@ namespace sourcemeta {
       public:
         GenericString();
         GenericString(const std::string_view &document);
-        Backend& value();
+        const Backend& value();
 
         using traits_type = typename Backend::traits_type;
         using value_type = typename Backend::value_type;
