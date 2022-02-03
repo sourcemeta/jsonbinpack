@@ -9,11 +9,6 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(const std::string_v
   : source{document}, must_parse{true} {}
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::Type sourcemeta::jsontoolkit::GenericArray<Wrapper>::type() const {
-  return sourcemeta::jsontoolkit::Type::Array;
-}
-
-template <typename Wrapper>
 Wrapper& sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index) {
   return this->parse().data.at(index);
 }
@@ -104,9 +99,6 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() {
 template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::GenericArray();
 template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::GenericArray(
     const std::string_view&);
-
-template sourcemeta::jsontoolkit::Type
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::type() const;
 
 template sourcemeta::jsontoolkit::JSON&
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(

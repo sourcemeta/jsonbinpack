@@ -1,8 +1,6 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
-#include <jsontoolkit/json_type.h>
-
 #include <string_view>
 #include <vector>
 
@@ -12,7 +10,6 @@ namespace sourcemeta {
       public:
         GenericArray();
         GenericArray(const std::string_view &document);
-        sourcemeta::jsontoolkit::Type type() const;
         using size_type = typename std::vector<Wrapper>::size_type;
         Wrapper& at(const size_type index);
         size_type size();

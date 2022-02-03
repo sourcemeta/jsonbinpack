@@ -1,7 +1,6 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 
-#include <jsontoolkit/json_type.h>
 #include <jsontoolkit/json_array.h>
 
 #include <string_view>
