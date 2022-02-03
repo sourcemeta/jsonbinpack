@@ -10,20 +10,10 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document) :
   must_parse{true},
   data{} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::Boolean &value) :
-  source{value.source},
-  must_parse{false},
-  data{std::in_place_type<
-    std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
-sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::Boolean &&value) :
-  source{value.source},
-  must_parse{false},
-  data{std::in_place_type<
-    std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
+sourcemeta::jsontoolkit::JSON::JSON(const sourcemeta::jsontoolkit::JSON &document) :
+  source{document.source},
+  must_parse{document.must_parse},
+  data{document.data} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value) :
   source{value.source},
@@ -34,9 +24,7 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value) :
 sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
   source{value ? JSON_TRUE : JSON_FALSE},
   must_parse{false},
-  data{std::in_place_type<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean>>,
-    std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
+  data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t) :
   source{JSON_NULL},
@@ -61,9 +49,10 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
           sourcemeta::jsontoolkit::Null>(document);
         break;
       case 't':
+        this->set_boolean(true);
+        break;
       case 'f':
-        this->data = std::make_shared<
-          sourcemeta::jsontoolkit::Boolean>(document);
+        this->set_boolean(false);
         break;
       default:
         throw std::domain_error("Invalid document");
@@ -76,8 +65,7 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
 
 bool sourcemeta::jsontoolkit::JSON::to_boolean() {
   this->parse();
-  return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean>>(this->data)->value();
+  return std::get<bool>(this->data);
 }
 
 std::shared_ptr<sourcemeta::jsontoolkit::Array>
@@ -89,8 +77,7 @@ sourcemeta::jsontoolkit::JSON::to_array() {
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() {
   this->parse();
-  return std::holds_alternative<std::shared_ptr<
-    sourcemeta::jsontoolkit::Boolean>>(this->data);
+  return std::holds_alternative<bool>(this->data);
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_null() {
@@ -100,7 +87,7 @@ bool sourcemeta::jsontoolkit::JSON::is_null() {
 }
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {
-  std::get<std::shared_ptr<sourcemeta::jsontoolkit::Boolean>>(this->data)->set(value);
+  this->data = value;
   return *this;
 }
 
