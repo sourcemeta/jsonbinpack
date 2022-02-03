@@ -40,6 +40,7 @@ namespace sourcemeta {
         sourcemeta::jsontoolkit::Array::size_type size();
 
         // String
+        JSON(sourcemeta::jsontoolkit::String &value);
         bool is_string();
         std::string to_string();
       private:

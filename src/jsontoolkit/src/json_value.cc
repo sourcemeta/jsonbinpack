@@ -23,6 +23,12 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value) :
   data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
     std::make_shared<sourcemeta::jsontoolkit::Array>(value)} {}
 
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value) :
+  source{value.source},
+  must_parse{false},
+  data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::String>>,
+    std::make_shared<sourcemeta::jsontoolkit::String>(value)} {}
+
 sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
   source{value ? JSON_TRUE : JSON_FALSE},
   must_parse{false},

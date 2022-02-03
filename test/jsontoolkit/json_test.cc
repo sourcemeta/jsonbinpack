@@ -89,6 +89,8 @@ TEST(JSON, array_padded_parse) {
 
 TEST(String, parse_non_empty) {
   sourcemeta::jsontoolkit::String value {"\"foo\""};
+  sourcemeta::jsontoolkit::JSON document {value};
+  EXPECT_TRUE(document.is_string());
   EXPECT_EQ(value.size(), 3);
-  EXPECT_EQ(value.value(), "foo");
+  EXPECT_EQ(document.to_string(), "foo");
 }
