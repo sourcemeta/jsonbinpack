@@ -7,11 +7,12 @@
 #include <variant> // std::variant
 #include <memory> // std::shared_ptr
 #include <cstddef> // std::nullptr_t
+#include <vector> // std::vector
 
 namespace sourcemeta {
   namespace jsontoolkit {
     class JSON;
-    using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
+    using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
     class JSON {
       public:
         JSON();
