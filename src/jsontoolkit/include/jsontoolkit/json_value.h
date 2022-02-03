@@ -40,6 +40,8 @@ namespace sourcemeta {
         std::size_t size();
 
         // String
+        // TODO: How can we create a constructor that takes std::string
+        // without being ambiguous with the constructor that takes JSON string?
         JSON(sourcemeta::jsontoolkit::String &value);
         bool is_string();
         std::string to_string();
