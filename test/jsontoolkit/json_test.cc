@@ -86,3 +86,9 @@ TEST(JSON, array_padded_parse) {
   sourcemeta::jsontoolkit::JSON value {std::string_view("  [true,false,false]  ")};
   EXPECT_TRUE(value.is_array());
 }
+
+TEST(String, parse_non_empty) {
+  sourcemeta::jsontoolkit::String value {"\"foo\""};
+  EXPECT_EQ(value.size(), 3);
+  EXPECT_EQ(value.value(), "foo");
+}
