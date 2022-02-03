@@ -95,6 +95,17 @@ bool sourcemeta::jsontoolkit::JSON::is_array() {
     sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
+bool sourcemeta::jsontoolkit::JSON::is_string() {
+  this->parse();
+  return std::holds_alternative<std::shared_ptr<
+    sourcemeta::jsontoolkit::String>>(this->data);
+}
+
+std::string sourcemeta::jsontoolkit::JSON::to_string() {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)->value();
+}
+
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   this->parse();
   return std::get<std::shared_ptr<

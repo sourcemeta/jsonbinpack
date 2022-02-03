@@ -38,6 +38,10 @@ namespace sourcemeta {
         bool is_array();
         JSON& at(const std::size_t index);
         sourcemeta::jsontoolkit::Array::size_type size();
+
+        // String
+        bool is_string();
+        std::string to_string();
       private:
         JSON& parse();
         const std::string_view source;
@@ -45,7 +49,8 @@ namespace sourcemeta {
         std::variant<
           bool,
           std::nullptr_t,
-          std::shared_ptr<sourcemeta::jsontoolkit::Array>
+          std::shared_ptr<sourcemeta::jsontoolkit::Array>,
+          std::shared_ptr<sourcemeta::jsontoolkit::String>
         > data;
     };
   }
