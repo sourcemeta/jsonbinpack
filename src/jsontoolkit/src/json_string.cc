@@ -27,6 +27,54 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
   return *this;
 }
 
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::begin() {
+  return this->parse().data.begin();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::end() {
+  return this->parse().data.end();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::const_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cbegin() {
+  return this->parse().data.cbegin();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::const_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cend() {
+  return this->parse().data.cend();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::reverse_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rbegin() {
+  return this->parse().data.rbegin();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::reverse_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rend() {
+  return this->parse().data.rend();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crbegin() {
+  return this->parse().data.crbegin();
+}
+
+template <typename Wrapper, typename Backend>
+typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crend() {
+  return this->parse().data.crend();
+}
+
 // Explicit instantiation
 
 template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::GenericString();
@@ -37,3 +85,23 @@ sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::strin
 
 template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>&
 sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::parse();
+
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::begin();
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::end();
+
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::const_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::cbegin();
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::const_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::cend();
+
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::reverse_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::rbegin();
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::reverse_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::rend();
+
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::crbegin();
+template sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericString<sourcemeta::jsontoolkit::JSON, std::string>::crend();
