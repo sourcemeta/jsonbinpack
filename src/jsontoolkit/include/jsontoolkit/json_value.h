@@ -11,6 +11,8 @@
 
 namespace sourcemeta {
   namespace jsontoolkit {
+    class JSON;
+    using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
     class JSON {
       public:
         JSON();
@@ -18,25 +20,23 @@ namespace sourcemeta {
         JSON(const std::string_view &document);
         JSON(sourcemeta::jsontoolkit::Boolean<JSON> &value);
         JSON(sourcemeta::jsontoolkit::Boolean<JSON> &&value);
-        JSON(sourcemeta::jsontoolkit::Array<JSON> &value);
+        JSON(sourcemeta::jsontoolkit::Array &value);
         bool to_boolean();
-        std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>> to_array();
+        std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
         bool is_boolean();
         JSON& set_boolean(const bool value);
         bool is_array();
         JSON& at(const std::size_t index);
-        sourcemeta::jsontoolkit::Array<JSON>::size_type size();
+        sourcemeta::jsontoolkit::Array::size_type size();
       private:
         JSON& parse();
         const std::string_view source;
         bool must_parse;
         std::variant<
           std::shared_ptr<sourcemeta::jsontoolkit::Boolean<JSON>>,
-          std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>>
+          std::shared_ptr<sourcemeta::jsontoolkit::Array>
         > data;
     };
-
-    using ArrayImpl = sourcemeta::jsontoolkit::Array<JSON>;
   }
 }
 

@@ -8,10 +8,10 @@
 
 namespace sourcemeta {
   namespace jsontoolkit {
-    template <typename Wrapper> class Array {
+    template <typename Wrapper> class GenericArray {
       public:
-        Array();
-        Array(const std::string_view &document);
+        GenericArray();
+        GenericArray(const std::string_view &document);
         sourcemeta::jsontoolkit::Type type() const;
         using size_type = typename std::vector<Wrapper>::size_type;
         Wrapper& at(const size_type index);
@@ -33,7 +33,7 @@ namespace sourcemeta {
         const_reverse_iterator crend();
       private:
         const std::string_view source;
-        Array& parse();
+        GenericArray& parse();
         bool must_parse;
         std::vector<Wrapper> data;
     };

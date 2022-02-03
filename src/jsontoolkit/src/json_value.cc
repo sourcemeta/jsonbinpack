@@ -24,11 +24,11 @@ sourcemeta::jsontoolkit::JSON::JSON(
     std::shared_ptr<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>,
     std::make_shared<sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>(value)} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array<JSON> &value) :
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value) :
   source{value.source},
   must_parse{false},
-  data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array<JSON>>>,
-    std::make_shared<sourcemeta::jsontoolkit::Array<JSON>>(value)} {}
+  data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
+    std::make_shared<sourcemeta::jsontoolkit::Array>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
   source{value ? JSON_TRUE : JSON_FALSE},
@@ -46,7 +46,7 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
     switch (document.front()) {
       case '[':
         this->data = std::make_shared<
-          sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>(document);
+          sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>(document);
         break;
       case 't':
       case 'f':
@@ -68,11 +68,11 @@ bool sourcemeta::jsontoolkit::JSON::to_boolean() {
     sourcemeta::jsontoolkit::Boolean<sourcemeta::jsontoolkit::JSON>>>(this->data)->value();
 }
 
-std::shared_ptr<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>
+std::shared_ptr<sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>
 sourcemeta::jsontoolkit::JSON::to_array() {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>>(this->data);
+    sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>>(this->data);
 }
 
 bool sourcemeta::jsontoolkit::JSON::is_boolean() {
@@ -90,18 +90,18 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const 
 bool sourcemeta::jsontoolkit::JSON::is_array() {
   this->parse();
   return std::holds_alternative<std::shared_ptr<
-    sourcemeta::jsontoolkit::Array<JSON>>>(this->data);
+    sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Array<JSON>>>(this->data)->at(index);
+    sourcemeta::jsontoolkit::Array>>(this->data)->at(index);
 }
 
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::JSON::size() {
   this->parse();
   return std::get<std::shared_ptr<
-    sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>>>(this->data)->size();
+    sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>>>(this->data)->size();
 }

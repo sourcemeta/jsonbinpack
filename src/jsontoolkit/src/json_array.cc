@@ -2,30 +2,30 @@
 #include <jsontoolkit/json_array.h>
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::Array<Wrapper>::Array() : source{"[]"}, must_parse{false} {}
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray() : source{"[]"}, must_parse{false} {}
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::Array<Wrapper>::Array(const std::string_view &document)
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(const std::string_view &document)
   : source{document}, must_parse{true} {}
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::Type sourcemeta::jsontoolkit::Array<Wrapper>::type() const {
+sourcemeta::jsontoolkit::Type sourcemeta::jsontoolkit::GenericArray<Wrapper>::type() const {
   return sourcemeta::jsontoolkit::Type::Array;
 }
 
 template <typename Wrapper>
-Wrapper& sourcemeta::jsontoolkit::Array<Wrapper>::at(const sourcemeta::jsontoolkit::Array<Wrapper>::size_type index) {
+Wrapper& sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index) {
   return this->parse().data.at(index);
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::size_type
-sourcemeta::jsontoolkit::Array<Wrapper>::size() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() {
   return this->parse().data.size();
 }
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::Array<Wrapper>& sourcemeta::jsontoolkit::Array<Wrapper>::parse() {
+sourcemeta::jsontoolkit::GenericArray<Wrapper>& sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse() {
   if (this->must_parse) {
     std::string_view::size_type cursor = 0;
 
@@ -52,88 +52,88 @@ sourcemeta::jsontoolkit::Array<Wrapper>& sourcemeta::jsontoolkit::Array<Wrapper>
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::begin() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::begin() {
   return this->parse().data.begin();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::end() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::end() {
   return this->parse().data.end();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::const_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::cbegin() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::cbegin() {
   return this->parse().data.cbegin();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::const_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::cend() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::cend() {
   return this->parse().data.cend();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::reverse_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::rbegin() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::rbegin() {
   return this->parse().data.rbegin();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::reverse_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::rend() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::rend() {
   return this->parse().data.rend();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::const_reverse_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::crbegin() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::crbegin() {
   return this->parse().data.crbegin();
 }
 
 template <typename Wrapper>
-typename sourcemeta::jsontoolkit::Array<Wrapper>::const_reverse_iterator
-sourcemeta::jsontoolkit::Array<Wrapper>::crend() {
+typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() {
   return this->parse().data.crend();
 }
 
 // Explicit instantiation
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::Array();
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::Array(
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::GenericArray();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::GenericArray(
     const std::string_view&);
 
 template sourcemeta::jsontoolkit::Type
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::type() const;
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::type() const;
 
 template sourcemeta::jsontoolkit::JSON&
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::at(
-    const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type);
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
+    const sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size_type);
 
-template typename sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size_type
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::size();
+template typename sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size();
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>&
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::parse();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>&
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::parse();
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::begin();
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::end();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::begin();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::end();
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::cbegin();
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::cend();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cbegin();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cend();
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::reverse_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::rbegin();
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::reverse_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::rend();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::rbegin();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::rend();
 
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::crbegin();
-template sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON>::crend();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin();
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend();
