@@ -37,7 +37,7 @@ namespace sourcemeta {
         std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
         bool is_array();
         JSON& at(const std::size_t index);
-        sourcemeta::jsontoolkit::Array::size_type size();
+        std::size_t size();
 
         // String
         JSON(sourcemeta::jsontoolkit::String &value);

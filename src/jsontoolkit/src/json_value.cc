@@ -50,6 +50,10 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
         this->data = std::make_shared<
           sourcemeta::jsontoolkit::Array>(document);
         break;
+      case '"':
+        this->data = std::make_shared<
+          sourcemeta::jsontoolkit::String>(document);
+        break;
       case 'n':
         this->data = nullptr;
         break;
@@ -118,9 +122,16 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::at(const std::size
     sourcemeta::jsontoolkit::Array>>(this->data)->at(index);
 }
 
-sourcemeta::jsontoolkit::Array::size_type
-sourcemeta::jsontoolkit::JSON::size() {
+std::size_t sourcemeta::jsontoolkit::JSON::size() {
   this->parse();
+
+  // TODO: We need a function get the type as an
+  // enum to implement a constant time switch
+  if (this->is_string()) {
+    return std::get<std::shared_ptr<
+      sourcemeta::jsontoolkit::String>>(this->data)->size();
+  }
+
   return std::get<std::shared_ptr<
     sourcemeta::jsontoolkit::Array>>(this->data)->size();
 }
