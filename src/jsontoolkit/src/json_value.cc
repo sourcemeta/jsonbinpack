@@ -29,9 +29,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t) :
   source{JSON_NULL},
   must_parse{false},
-  data{std::in_place_type<std::shared_ptr<
-    sourcemeta::jsontoolkit::Null>>,
-    std::make_shared<sourcemeta::jsontoolkit::Null>()} {}
+  data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
@@ -45,8 +43,7 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
           sourcemeta::jsontoolkit::Array>(document);
         break;
       case 'n':
-        this->data = std::make_shared<
-          sourcemeta::jsontoolkit::Null>(document);
+        this->data = nullptr;
         break;
       case 't':
         this->set_boolean(true);
@@ -82,8 +79,7 @@ bool sourcemeta::jsontoolkit::JSON::is_boolean() {
 
 bool sourcemeta::jsontoolkit::JSON::is_null() {
   this->parse();
-  return std::holds_alternative<std::shared_ptr<
-    sourcemeta::jsontoolkit::Null>>(this->data);
+  return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {

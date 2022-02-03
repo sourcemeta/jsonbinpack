@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 
 #include <jsontoolkit/json_type.h>
-#include <jsontoolkit/json_null.h>
 #include <jsontoolkit/json_array.h>
 
 #include <string_view>
@@ -14,7 +13,6 @@ namespace sourcemeta {
   namespace jsontoolkit {
     class JSON;
     using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
-    using Null = sourcemeta::jsontoolkit::GenericNull<JSON>;
     class JSON {
       public:
         JSON();
@@ -28,6 +26,7 @@ namespace sourcemeta {
         JSON& set_boolean(const bool value);
 
         // Null
+        // TODO: Make null a simple type
         JSON(const std::nullptr_t);
         bool is_null();
 
@@ -43,7 +42,7 @@ namespace sourcemeta {
         bool must_parse;
         std::variant<
           bool,
-          std::shared_ptr<sourcemeta::jsontoolkit::Null>,
+          std::nullptr_t,
           std::shared_ptr<sourcemeta::jsontoolkit::Array>
         > data;
     };
