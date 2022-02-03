@@ -3,9 +3,9 @@
 
 #include <jsontoolkit/json_array.h>
 
-#include <string_view>
-#include <variant>
-#include <memory>
+#include <string_view> // std::string_view
+#include <variant> // std::variant
+#include <memory> // std::shared_ptr
 #include <cstddef> // std::nullptr_t
 
 namespace sourcemeta {
