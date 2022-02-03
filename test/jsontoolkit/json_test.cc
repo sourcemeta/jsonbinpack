@@ -3,6 +3,16 @@
 #include <string_view> // std::string_view
 #include <jsontoolkit/json.h>
 
+TEST(JSON, null_string) {
+  sourcemeta::jsontoolkit::JSON document {std::string_view("null")};
+  EXPECT_TRUE(document.is_null());
+}
+
+TEST(JSON, nullptr) {
+  sourcemeta::jsontoolkit::JSON document {nullptr};
+  EXPECT_TRUE(document.is_null());
+}
+
 TEST(JSON, true_bool) {
   sourcemeta::jsontoolkit::JSON document {true};
   EXPECT_TRUE(document.is_boolean());

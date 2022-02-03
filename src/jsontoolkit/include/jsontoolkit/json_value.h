@@ -3,16 +3,19 @@
 
 #include <jsontoolkit/json_type.h>
 #include <jsontoolkit/json_boolean.h>
+#include <jsontoolkit/json_null.h>
 #include <jsontoolkit/json_array.h>
 
 #include <string_view>
 #include <variant>
 #include <memory>
+#include <cstddef> // std::nullptr_t
 
 namespace sourcemeta {
   namespace jsontoolkit {
     class JSON;
     using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
+    using Null = sourcemeta::jsontoolkit::GenericNull<JSON>;
     using Boolean = sourcemeta::jsontoolkit::GenericBoolean<JSON>;
     class JSON {
       public:
@@ -20,12 +23,17 @@ namespace sourcemeta {
         JSON(const std::string_view &document);
 
         // Boolean
+        // TODO: Remove the whole Boolean class in favor of just bool in the variant
         JSON(const bool value);
         JSON(sourcemeta::jsontoolkit::Boolean &value);
         JSON(sourcemeta::jsontoolkit::Boolean &&value);
         bool to_boolean();
         bool is_boolean();
         JSON& set_boolean(const bool value);
+
+        // Null
+        JSON(const std::nullptr_t);
+        bool is_null();
 
         // Array
         JSON(sourcemeta::jsontoolkit::Array &value);
@@ -39,6 +47,7 @@ namespace sourcemeta {
         bool must_parse;
         std::variant<
           std::shared_ptr<sourcemeta::jsontoolkit::Boolean>,
+          std::shared_ptr<sourcemeta::jsontoolkit::Null>,
           std::shared_ptr<sourcemeta::jsontoolkit::Array>
         > data;
     };

@@ -30,6 +30,7 @@ sourcemeta::jsontoolkit::GenericBoolean<Wrapper>& sourcemeta::jsontoolkit::Gener
     }
   }
 
+  this->must_parse = false;
   return *this;
 }
 

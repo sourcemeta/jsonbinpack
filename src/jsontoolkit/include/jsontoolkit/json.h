@@ -3,7 +3,5 @@
 
 #include <jsontoolkit/json_type.h>
 #include <jsontoolkit/json_value.h>
-#include <jsontoolkit/json_boolean.h>
-#include <jsontoolkit/json_array.h>
 
 #endif

@@ -1,6 +1,7 @@
 #include <jsontoolkit/json_value.h>
 #include <utility>
 
+static const char * const JSON_NULL = "null";
 static const char * const JSON_TRUE = "true";
 static const char * const JSON_FALSE = "false";
 
@@ -37,6 +38,13 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value) :
     sourcemeta::jsontoolkit::Boolean>>,
     std::make_shared<sourcemeta::jsontoolkit::Boolean>(value)} {}
 
+sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t) :
+  source{JSON_NULL},
+  must_parse{false},
+  data{std::in_place_type<std::shared_ptr<
+    sourcemeta::jsontoolkit::Null>>,
+    std::make_shared<sourcemeta::jsontoolkit::Null>()} {}
+
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
     const std::size_t start = this->source.find_first_not_of(" ");
@@ -47,6 +55,10 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
       case '[':
         this->data = std::make_shared<
           sourcemeta::jsontoolkit::Array>(document);
+        break;
+      case 'n':
+        this->data = std::make_shared<
+          sourcemeta::jsontoolkit::Null>(document);
         break;
       case 't':
       case 'f':
@@ -79,6 +91,12 @@ bool sourcemeta::jsontoolkit::JSON::is_boolean() {
   this->parse();
   return std::holds_alternative<std::shared_ptr<
     sourcemeta::jsontoolkit::Boolean>>(this->data);
+}
+
+bool sourcemeta::jsontoolkit::JSON::is_null() {
+  this->parse();
+  return std::holds_alternative<std::shared_ptr<
+    sourcemeta::jsontoolkit::Null>>(this->data);
 }
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {
