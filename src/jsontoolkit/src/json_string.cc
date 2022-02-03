@@ -1,6 +1,8 @@
-#include <string>
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_string.h>
+
+#include <string>
+#include <stdexcept> // std::domain_error
 
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::GenericString()
@@ -20,7 +22,11 @@ template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
   if (this->must_parse) {
-    //
+    if (this->source.front() != '"' || this->source.back() != '"') {
+      throw std::domain_error("Invalid document");
+    }
+
+    this->data = this->source.substr(1, this->source.size() - 1);
   }
 
   this->must_parse = false;

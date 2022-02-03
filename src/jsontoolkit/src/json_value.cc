@@ -1,5 +1,7 @@
 #include <jsontoolkit/json_value.h>
+
 #include <utility>
+#include <stdexcept> // std::domain_error
 
 static const char * const JSON_NULL = "null";
 static const char * const JSON_TRUE = "true";
