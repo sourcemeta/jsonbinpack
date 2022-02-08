@@ -3,6 +3,9 @@ include vendor/vendorpull/targets.mk
 
 CMAKE ?= cmake
 CTEST ?= ctest
+MKDIR ?= mkdir
+INSTALL ?= install
+CONVERT ?= convert
 
 all: preset-release
 .PHONY: all
@@ -15,3 +18,29 @@ preset-%: CMakePresets.json
 clean:
 	$(CMAKE) -E rm -R build
 .PHONY: clean
+
+build:
+	$(MKDIR) $@
+build/www: | build
+	$(MKDIR) $@
+
+build/www/icon-%.png: assets/favicon.png | build/www
+	$(CONVERT) -resize $(basename $(notdir $(subst icon-,,$@))) $< $@
+build/www/apple-touch-icon.png: build/www/icon-180x180.png
+	$(INSTALL) -m 0664 $< $@
+build/www/icon.svg: assets/favicon.svg | build/www
+	$(INSTALL) -m 0664 $< $@
+build/www/favicon.ico: build/www/icon-32x32.png
+	$(CONVERT) $^ $@
+build/www/manifest.webmanifest: www/manifest.webmanifest
+	$(INSTALL) -m 0664 $< $@
+
+html: \
+	build/www/icon-192x192.png \
+	build/www/icon-512x512.png \
+	build/www/icon.svg \
+	build/www/favicon.ico \
+	build/www/manifest.webmanifest \
+	build/www/apple-touch-icon.png
+.PHONY: html
+
