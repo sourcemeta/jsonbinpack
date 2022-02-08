@@ -32,12 +32,10 @@ build/www/icon.svg: assets/favicon.svg | build/www
 	$(INSTALL) -m 0664 $< $@
 build/www/favicon.ico: build/www/icon-32x32.png
 	$(CONVERT) $^ $@
-build/www/manifest.webmanifest: www/manifest.webmanifest
+build/www/manifest.webmanifest: www/manifest.webmanifest build/www/icon-192x192.png build/www/icon-512x512.png
 	$(INSTALL) -m 0664 $< $@
 
 html: \
-	build/www/icon-192x192.png \
-	build/www/icon-512x512.png \
 	build/www/icon.svg \
 	build/www/favicon.ico \
 	build/www/manifest.webmanifest \
