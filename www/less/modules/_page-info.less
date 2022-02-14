@@ -1,0 +1,21 @@
+.page-title {
+	.fz(80);
+	color: darken(@color_black, 10%);
+	font-weight: @font_thin;
+	margin-bottom: 30px;
+}
+
+.page-description {
+	color: darken(@color_black, 10%);
+	text-transform: uppercase;
+	.fz(20);
+	letter-spacing: 2px;
+	line-height: 1.5;
+	font-weight: @font_light;
+	margin-bottom: 40px;
+}
+
+.media-mixin(@break) when (@break = @break-small) {
+	.page-title { .fz(50); }
+  .page-description { .fz(16); }
+}

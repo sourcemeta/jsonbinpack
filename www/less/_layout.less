@@ -1,0 +1,25 @@
+html, body {
+	height: 100%;
+	margin: 0 !important;
+}
+
+body {
+	font-size: 1em;
+	line-height: 100%;
+	font-family: @font_primary;
+	color: @color_black;
+}
+
+#content {
+	padding: 60px 0;
+}
+
+.page {
+	min-height: 100%;
+	position: relative;
+}
+
+.media-mixin(@break) when (@break = @break-small-x) {
+	#content { padding: 40px 0; }
+	body { font-size: 0.9em; }
+}
