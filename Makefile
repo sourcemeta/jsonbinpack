@@ -18,6 +18,7 @@ clean:
 
 MKDIR ?= mkdir
 INSTALL ?= install
+TOUCH ?= touch
 CONVERT ?= convert
 NPM ?= npm
 NODE ?= node
@@ -79,6 +80,8 @@ build/www/logo.png: assets/logo.png | build/www
 	$(INSTALL) -m 0664 $< $@
 build/www/example.png: assets/example.png | build/www
 	$(INSTALL) -m 0664 $< $@
+build/www/.nojekyll: | build/www
+	$(TOUCH) $@
 
 build/www/stats.html: www/stats.html
 	$(INSTALL) -m 0664 $< $@
@@ -94,5 +97,5 @@ build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/fonts/Pe-icon-7-stroke.woff
 	$(INSTALL) -m 0664 $< $@
 
-html: build/www/index.html build/www/stats.html build/www/CNAME
+html: build/www/index.html build/www/stats.html build/www/CNAME build/www/.nojekyll
 .PHONY: html
