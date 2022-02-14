@@ -80,6 +80,8 @@ build/www/logo.png: assets/logo.png | build/www
 build/www/example.png: assets/example.png | build/www
 	$(INSTALL) -m 0664 $< $@
 
+build/www/stats.html: www/stats.html
+	$(INSTALL) -m 0664 $< $@
 build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/manifest.webmanifest build/www/icon.svg build/www/favicon.ico build/www/apple-touch-icon.png \
 	build/www/logo.png \
@@ -92,5 +94,5 @@ build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/fonts/Pe-icon-7-stroke.woff
 	$(INSTALL) -m 0664 $< $@
 
-html: build/www/index.html build/www/CNAME
+html: build/www/index.html build/www/stats.html build/www/CNAME
 .PHONY: html
