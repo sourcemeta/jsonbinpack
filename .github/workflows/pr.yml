@@ -1,0 +1,17 @@
+name: JSON BinPack
+on:
+  push:
+    branches-ignore:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install --yes clang-tidy clang-format
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - run: cmake --preset release --log-context
+      - run: cmake --build --preset release
+      - run: ctest --preset release
+      - run: make html

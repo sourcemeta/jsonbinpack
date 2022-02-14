@@ -1,5 +1,8 @@
-name: Checks
-on: [ push ]
+name: JSON BinPack
+on:
+  push:
+    branches:
+      - master
 jobs:
   test:
     runs-on: ubuntu-20.04
@@ -12,3 +15,7 @@ jobs:
       - run: cmake --build --preset release
       - run: ctest --preset release
       - run: make html
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/www
