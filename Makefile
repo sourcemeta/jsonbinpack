@@ -83,7 +83,11 @@ build/www/example.png: assets/example.png | build/www
 build/www/.nojekyll: | build/www
 	$(TOUCH) $@
 
-build/www/stats.html: www/stats.html
+build/www/stats.html: www/stats.html | build/www
+	$(INSTALL) -m 0664 $< $@
+build/www/stats: | build/www
+	$(MKDIR) $@
+build/www/stats/index.html: www/stats.html | build/www/stats
 	$(INSTALL) -m 0664 $< $@
 build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/manifest.webmanifest build/www/icon.svg build/www/favicon.ico build/www/apple-touch-icon.png \
@@ -97,5 +101,6 @@ build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/fonts/Pe-icon-7-stroke.woff
 	$(INSTALL) -m 0664 $< $@
 
-html: build/www/index.html build/www/stats.html build/www/CNAME build/www/.nojekyll
+html: build/www/index.html build/www/stats.html build/www/stats/index.html \
+	build/www/CNAME build/www/.nojekyll
 .PHONY: html
