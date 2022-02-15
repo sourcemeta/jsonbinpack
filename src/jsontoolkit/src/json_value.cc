@@ -1,4 +1,5 @@
 #include <jsontoolkit/json_value.h>
+#include "utils.h"
 
 #include <utility>
 #include <stdexcept> // std::domain_error
@@ -41,9 +42,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t) :
 
 sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
   if (this->must_parse) {
-    const std::size_t start = this->source.find_first_not_of(" ");
-    const std::size_t end = this->source.find_last_not_of(" ");
-    const std::string_view document {this->source.substr(start, end - start + 1)};
+    const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
 
     switch (document.front()) {
       case '[':
