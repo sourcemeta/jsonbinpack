@@ -1,6 +1,7 @@
 #include <vector>
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_array.h>
+#include "utils.h"
 
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::GenericArray()
@@ -26,18 +27,19 @@ template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
   if (this->must_parse) {
+    const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
     std::string_view::size_type cursor = 0;
 
-    for (std::string_view::size_type index = 0; index < this->source.size(); index++) {
-      switch (this->source[index]) {
+    for (std::string_view::size_type index = 0; index < document.size(); index++) {
+      switch (document[index]) {
         case '[':
           cursor = index + 1;
           break;
         case ']':
-          this->data.push_back(Wrapper(this->source.substr(cursor, index - cursor)));
+          this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
           break;
         case ',':
-          this->data.push_back(Wrapper(this->source.substr(cursor, index - cursor)));
+          this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
           cursor = index + 1;
           break;
         default:

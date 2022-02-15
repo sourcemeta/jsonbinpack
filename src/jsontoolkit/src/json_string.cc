@@ -1,5 +1,6 @@
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_string.h>
+#include "utils.h"
 
 #include <string>
 #include <stdexcept> // std::domain_error
@@ -27,11 +28,12 @@ template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
   if (this->must_parse) {
-    if (this->source.front() != '"' || this->source.back() != '"') {
+    const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
+    if (document.front() != '"' || document.back() != '"') {
       throw std::domain_error("Invalid document");
     }
 
-    this->data = this->source.substr(1, this->source.size() - 2);
+    this->data = document.substr(1, document.size() - 2);
   }
 
   this->must_parse = false;
