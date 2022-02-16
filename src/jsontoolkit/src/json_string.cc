@@ -62,36 +62,35 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
         case '\u002F':
           value << next;
           index += 1;
-          break;
+          continue;
         case 'b':
           value << '\b';
           index += 1;
-          break;
+          continue;
         case 'f':
           value << '\f';
           index += 1;
-          break;
+          continue;
         case 'n':
           value << '\n';
           index += 1;
-          break;
+          continue;
         case 'r':
           value << '\r';
           index += 1;
-          break;
+          continue;
         case 't':
           value << '\t';
           index += 1;
-          break;
-        default:
-          value << character;
+          continue;
       }
+    }
 
     // All code points may be placed within the quotation marks except for the code
     // points that must be escaped: quotation mark (U+0022), reverse solidus
     // (U+005C), and the control characters U+0000 to U+001F
     // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    } else if (character == '\u0022' || character == '\u005C' ||
+    if (character == '\u0022' || character == '\u005C' ||
       (character >= '\u0000' && character <= '\u001F')) {
       throw std::domain_error("Invalid unescaped character in string");
     } else {
