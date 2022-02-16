@@ -8,6 +8,11 @@ static const char * const JSON_NULL = "null";
 static const char * const JSON_TRUE = "true";
 static const char * const JSON_FALSE = "false";
 
+sourcemeta::jsontoolkit::JSON::JSON(const char * const document) :
+  source{document},
+  must_parse{true},
+  data{} {}
+
 sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document) :
   source{document},
   must_parse{true},
@@ -57,10 +62,20 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
         this->data = nullptr;
         break;
       case 't':
-        this->set_boolean(true);
+        if (document.substr(1) == "rue") {
+          this->set_boolean(true);
+        } else {
+          throw std::domain_error("Invalid document");
+        }
+
         break;
       case 'f':
-        this->set_boolean(false);
+        if (document.substr(1) == "alse") {
+          this->set_boolean(false);
+        } else {
+          throw std::domain_error("Invalid document");
+        }
+
         break;
       default:
         throw std::domain_error("Invalid document");

@@ -1,10 +1,9 @@
 #include <gtest/gtest.h>
 #include <vector> // std::vector
-#include <string_view> // std::string_view
 #include <jsontoolkit/json.h>
 
 TEST(JSON, null_string) {
-  sourcemeta::jsontoolkit::JSON document {std::string_view("null")};
+  sourcemeta::jsontoolkit::JSON document {"null"};
   EXPECT_TRUE(document.is_null());
 }
 
@@ -38,7 +37,7 @@ TEST(JSON, set_boolean) {
 }
 
 TEST(JSON, at_boolean) {
-  sourcemeta::jsontoolkit::JSON document {std::string_view("[true,false,true]")};
+  sourcemeta::jsontoolkit::JSON document {"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
@@ -52,7 +51,7 @@ TEST(JSON, at_boolean) {
 }
 
 TEST(JSON, boolean_array_iterator) {
-  sourcemeta::jsontoolkit::JSON value {std::string_view("[true,false,false]")};
+  sourcemeta::jsontoolkit::JSON value {"[true,false,false]"};
   std::vector<bool> result;
 
   // TODO: Can we make range for loops nicer?
@@ -67,7 +66,7 @@ TEST(JSON, boolean_array_iterator) {
 }
 
 TEST(JSON, boolean_array_reverse_iterator) {
-  sourcemeta::jsontoolkit::JSON value {std::string_view("[true,false,false]")};
+  sourcemeta::jsontoolkit::JSON value {"[true,false,false]"};
   std::vector<bool> result;
 
   // TODO: Can we hide the Array type somehow?
@@ -83,13 +82,6 @@ TEST(JSON, boolean_array_reverse_iterator) {
 }
 
 TEST(JSON, array_padded_parse) {
-  sourcemeta::jsontoolkit::JSON value {std::string_view("  [true,false,false]  ")};
+  sourcemeta::jsontoolkit::JSON value {"  [true,false,false]  "};
   EXPECT_TRUE(value.is_array());
-}
-
-TEST(String, parse_non_empty) {
-  sourcemeta::jsontoolkit::JSON document {std::string_view("\"foo\"")};
-  EXPECT_TRUE(document.is_string());
-  EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document.to_string(), "foo");
 }

@@ -2,8 +2,9 @@
 #include <jsontoolkit/json_string.h>
 #include "utils.h"
 
-#include <string>
+#include <string> // std::string
 #include <stdexcept> // std::domain_error
+#include <sstream> // std::ostringstream
 
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::GenericString()
@@ -24,18 +25,73 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
   return this->parse().data.size();
 }
 
+// A string is a sequence of Unicode code points wrapped with quotation marks (U+0022)
+// See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+static const char JSON_QUOTATION_MARK = '\u0022';
+
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
-  if (this->must_parse) {
-    const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
-    if (document.front() != '"' || document.back() != '"') {
-      throw std::domain_error("Invalid document");
-    }
-
-    this->data = document.substr(1, document.size() - 2);
+  if (!this->must_parse) return *this;
+  const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
+  if (document.front() != JSON_QUOTATION_MARK || document.back() != JSON_QUOTATION_MARK) {
+    throw std::domain_error("Invalid document");
   }
 
+  std::ostringstream value;
+  // Strip the quotes
+  const std::string_view string_data {document.substr(1, document.size() - 2)};
+  for (std::string_view::size_type index = 0; index < string_data.size(); index++) {
+    std::string_view::const_reference character = string_data.at(index);
+
+    // There are two-character escape sequence representations of some characters.
+    // \" represents the quotation mark character (U+0022).
+    // \\ represents the reverse solidus character (U+005C).
+    // \/ represents the solidus character (U+002F).
+    // \b represents the backspace character (U+0008).
+    // \f represents the form feed character (U+000C).
+    // \n represents the line feed character (U+000A).
+    // \r represents the carriage return character (U+000D).
+    // \t represents the character tabulation character (U+0009).
+    // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+    if (character == '\\' && index < string_data.size() - 1) {
+      std::string_view::const_reference next = string_data.at(index + 1);
+      switch (next) {
+        case '\u0022':
+        case '\u005C':
+        case '\u002F':
+          value << next;
+          index += 1;
+          break;
+        case 'b':
+          value << '\b';
+          index += 1;
+          break;
+        case 'f':
+          value << '\f';
+          index += 1;
+          break;
+        case 'n':
+          value << '\n';
+          index += 1;
+          break;
+        case 'r':
+          value << '\r';
+          index += 1;
+          break;
+        case 't':
+          value << '\t';
+          index += 1;
+          break;
+        default:
+          value << character;
+      }
+    } else {
+      value << character;
+    }
+  }
+
+  this->data = value.str();
   this->must_parse = false;
   return *this;
 }
