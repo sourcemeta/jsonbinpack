@@ -103,9 +103,7 @@ TEST(String, escaped_tab) {
 
 TEST(String, escaped_invalid) {
   sourcemeta::jsontoolkit::JSON document {"\"foo\\xbar\""};
-  EXPECT_TRUE(document.is_string());
-  EXPECT_EQ(document.size(), 8);
-  EXPECT_EQ(document.to_string(), "foo\\xbar");
+  EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(String, escaped_incomplete) {
