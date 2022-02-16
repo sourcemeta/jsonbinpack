@@ -19,6 +19,10 @@ namespace sourcemeta {
     class JSON {
       public:
         JSON();
+
+        // Accept string literals
+        JSON(const char * const document);
+
         JSON(const std::string_view &document);
         JSON(const JSON &document);
 
