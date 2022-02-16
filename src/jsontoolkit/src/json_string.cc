@@ -54,7 +54,7 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
     // \r represents the carriage return character (U+000D).
     // \t represents the character tabulation character (U+0009).
     // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    if (character == '\\' && index < string_data.size() - 1) {
+    if (character == '\u005C' && index < string_data.size() - 1) {
       std::string_view::const_reference next = string_data.at(index + 1);
       switch (next) {
         case '\u0022':
@@ -86,6 +86,14 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
         default:
           value << character;
       }
+
+    // All code points may be placed within the quotation marks except for the code
+    // points that must be escaped: quotation mark (U+0022), reverse solidus
+    // (U+005C), and the control characters U+0000 to U+001F
+    // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+    } else if (character == '\u0022' || character == '\u005C' ||
+      (character >= '\u0000' && character <= '\u001F')) {
+      throw std::domain_error("Invalid unescaped character in string");
     } else {
       value << character;
     }
