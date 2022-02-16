@@ -2,7 +2,7 @@
 #include <jsontoolkit/json_string.h>
 #include "utils.h"
 
-#include <string> // std::string
+#include <string> // std::string, std::stoul
 #include <stdexcept> // std::domain_error
 #include <sstream> // std::ostringstream
 
@@ -28,6 +28,20 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
 // A string is a sequence of Unicode code points wrapped with quotation marks (U+0022)
 // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
 static const char JSON_QUOTATION_MARK = '\u0022';
+
+// All code points may be placed within the quotation marks except for the code
+// points that must be escaped: quotation mark (U+0022), reverse solidus
+// (U+005C), and the control characters U+0000 to U+001F
+// See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+static constexpr bool is_character_allowed_in_json_string(const char character) {
+  if (character == '\u0022' || character == '\u005C') {
+    return false;
+  } else if (character >= '\u0000' && character <= '\u001F') {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>&
@@ -83,15 +97,26 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
           value << '\t';
           index += 1;
           continue;
+        case 'u':
+          // Out of bounds
+          if (index + 6 > string_data.size()) {
+            throw std::domain_error("Invalid unicode code point");
+          }
+
+          const char new_character = static_cast<char>(
+              std::stoul(std::string(string_data.substr(index + 2, 4)), nullptr, 16));
+          if (!is_character_allowed_in_json_string(new_character)) {
+            throw std::domain_error("Invalid unescaped character in string");
+          }
+
+          value << new_character;
+          // The reverse solidus + u + 4 hex characters
+          index += 5;
+          continue;
       }
     }
 
-    // All code points may be placed within the quotation marks except for the code
-    // points that must be escaped: quotation mark (U+0022), reverse solidus
-    // (U+005C), and the control characters U+0000 to U+001F
-    // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    if (character == '\u0022' || character == '\u005C' ||
-      (character >= '\u0000' && character <= '\u001F')) {
+    if (!is_character_allowed_in_json_string(character)) {
       throw std::domain_error("Invalid unescaped character in string");
     } else {
       value << character;
