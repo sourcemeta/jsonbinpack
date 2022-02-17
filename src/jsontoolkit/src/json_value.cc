@@ -59,7 +59,12 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
           sourcemeta::jsontoolkit::String>(document);
         break;
       case 'n':
-        this->data = nullptr;
+        if (document.substr(1) == "ull") {
+          this->data = nullptr;
+        } else {
+          throw std::domain_error("Invalid document");
+        }
+
         break;
       case 't':
         if (document.substr(1) == "rue") {
