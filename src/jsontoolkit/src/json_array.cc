@@ -1,7 +1,11 @@
-#include <vector>
+#include <vector> // std::vector
+#include <cstddef> // std::size_t
+
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_array.h>
+
 #include "utils.h"
+#include "tokens.h"
 
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::GenericArray()
@@ -23,28 +27,79 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size() {
   return this->parse().data.size();
 }
 
+// TODO: Refactor and cleanup this function
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
   if (this->must_parse) {
     const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
+    if (document.front() != sourcemeta::jsontoolkit::JSON_ARRAY_START ||
+        document.back() != sourcemeta::jsontoolkit::JSON_ARRAY_END) {
+      throw std::domain_error("Invalid document");
+    }
+
     std::string_view::size_type cursor = 0;
+    std::size_t level = 0;
+    bool found_element = false;
+    bool expect_element = false;
 
     for (std::string_view::size_type index = 0; index < document.size(); index++) {
-      switch (document[index]) {
-        case '[':
-          cursor = index + 1;
+      std::string_view::const_reference character = document.at(index);
+      switch (character) {
+        case sourcemeta::jsontoolkit::JSON_ARRAY_START:
+          if (level == 0) {
+            if (index > 0) throw std::domain_error("Invalid document");
+            cursor = index + 1;
+          }
+
+          level += 1;
           break;
-        case ']':
-          this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
+        case sourcemeta::jsontoolkit::JSON_ARRAY_END:
+          level -= 1;
+          if (cursor >= index) {
+            if (expect_element) {
+              this->data.clear();
+              throw std::domain_error("Invalid document");
+            } else {
+              break;
+            }
+          }
+
+          if (level < 1) {
+            this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
+            found_element = false;
+            expect_element = false;
+          }
+
           break;
-        case ',':
+        case sourcemeta::jsontoolkit::JSON_ARRAY_SEPARATOR:
+          if (!found_element) {
+            this->data.clear();
+            throw std::domain_error("Invalid document");
+          }
+
           this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
+          found_element = false;
+          expect_element = true;
           cursor = index + 1;
           break;
         default:
+          if (!found_element) {
+            // Ignore irrelevant whitespace
+            if (sourcemeta::jsontoolkit::is_blank(character)) {
+              cursor = index + 1;
+            } else {
+              found_element = true;
+              expect_element = false;
+            }
+          }
+
           continue;
       }
+    }
+
+    if (level > 0) {
+      throw std::domain_error("Invalid document");
     }
   }
 

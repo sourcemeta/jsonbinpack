@@ -1,5 +1,6 @@
 #include <jsontoolkit/json_value.h>
 #include "utils.h"
+#include "tokens.h"
 
 #include <utility>
 #include <stdexcept> // std::domain_error
@@ -50,11 +51,11 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
     const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
 
     switch (document.front()) {
-      case '[':
+      case sourcemeta::jsontoolkit::JSON_ARRAY_START:
         this->data = std::make_shared<
           sourcemeta::jsontoolkit::Array>(document);
         break;
-      case '"':
+      case sourcemeta::jsontoolkit::JSON_STRING_QUOTE:
         this->data = std::make_shared<
           sourcemeta::jsontoolkit::String>(document);
         break;

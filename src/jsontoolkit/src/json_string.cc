@@ -1,6 +1,7 @@
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_string.h>
 #include "utils.h"
+#include "tokens.h"
 
 #include <string> // std::string, std::stoul
 #include <stdexcept> // std::domain_error
@@ -25,16 +26,12 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
   return this->parse().data.size();
 }
 
-// A string is a sequence of Unicode code points wrapped with quotation marks (U+0022)
-// See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-static const char JSON_QUOTATION_MARK = '\u0022';
-
 // All code points may be placed within the quotation marks except for the code
 // points that must be escaped: quotation mark (U+0022), reverse solidus
 // (U+005C), and the control characters U+0000 to U+001F
 // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
 static constexpr bool is_character_allowed_in_json_string(const char character) {
-  if (character == '\u0022' || character == '\u005C') {
+  if (character == sourcemeta::jsontoolkit::JSON_STRING_QUOTE || character == '\u005C') {
     return false;
   } else if (character >= '\u0000' && character <= '\u001F') {
     return false;
@@ -48,7 +45,8 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
   if (!this->must_parse) return *this;
   const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
-  if (document.front() != JSON_QUOTATION_MARK || document.back() != JSON_QUOTATION_MARK) {
+  if (document.front() != sourcemeta::jsontoolkit::JSON_STRING_QUOTE ||
+      document.back() != sourcemeta::jsontoolkit::JSON_STRING_QUOTE) {
     throw std::domain_error("Invalid document");
   }
 
