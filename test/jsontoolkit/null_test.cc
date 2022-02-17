@@ -17,6 +17,11 @@ TEST(Null, valid_with_padding) {
   EXPECT_TRUE(document.is_null());
 }
 
+TEST(Null, more_than_needed) {
+  sourcemeta::jsontoolkit::JSON document {"nulll"};
+  EXPECT_THROW(document.is_null(), std::domain_error);
+}
+
 TEST(Null, incomplete_1) {
   sourcemeta::jsontoolkit::JSON document {"nul"};
   EXPECT_THROW(document.is_null(), std::domain_error);
