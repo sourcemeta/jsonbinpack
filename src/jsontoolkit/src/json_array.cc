@@ -77,9 +77,7 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
             this->data.push_back(Wrapper(
               document.substr(element_start_index, index - element_start_index + 1)));
             element_start_index = 0;
-          }
-
-          if (!sourcemeta::jsontoolkit::is_blank(character) &&
+          } else if (!sourcemeta::jsontoolkit::is_blank(character) &&
               element_start_index == 0 &&
               level == 0) {
             element_start_index = index;
