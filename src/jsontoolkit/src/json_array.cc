@@ -33,12 +33,13 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
     const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
     if (document.front() != sourcemeta::jsontoolkit::JSON_ARRAY_START ||
         document.back() != sourcemeta::jsontoolkit::JSON_ARRAY_END) {
-      throw std::domain_error("Invalid document");
+      throw std::domain_error("Invalid array");
     }
 
     const std::string_view::size_type size = document.size();
     std::string_view::size_type element_start_index = 0;
     std::string_view::size_type level = 0;
+    bool is_string = false;
 
     for (std::string_view::size_type index = 1; index < size - 1; index++) {
       std::string_view::const_reference character = document.at(index);
@@ -46,11 +47,13 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
 
       switch (character) {
         case sourcemeta::jsontoolkit::JSON_ARRAY_START:
+          if (is_string) break;
           // The start of an array at level 0 is by definition a new element
           if (level == 0) element_start_index = index;
           level += 1;
           break;
         case sourcemeta::jsontoolkit::JSON_ARRAY_END:
+          if (is_string) break;
           if (level == 0) throw std::domain_error("Unexpected right bracket");
           level -= 1;
 
@@ -63,6 +66,7 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
 
           break;
         case sourcemeta::jsontoolkit::JSON_ARRAY_SEPARATOR:
+          if (is_string) break;
           if (element_start_index == 0) throw std::domain_error("Separator without a preceding element");
           if (is_last_character) throw std::domain_error("Trailing comma");
           if (level == 0) {
@@ -81,6 +85,15 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
               element_start_index == 0 &&
               level == 0) {
             element_start_index = index;
+          }
+
+          if (character == sourcemeta::jsontoolkit::JSON_STRING_QUOTE) {
+            if (is_string) {
+              is_string = false;
+            } else if (index == 0 ||
+              document.at(index - 1) != sourcemeta::jsontoolkit::JSON_STRING_ESCAPE_CHARACTER) {
+              is_string = true;
+            }
           }
 
           break;

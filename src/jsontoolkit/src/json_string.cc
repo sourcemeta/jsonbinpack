@@ -31,7 +31,8 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
 // (U+005C), and the control characters U+0000 to U+001F
 // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
 static constexpr bool is_character_allowed_in_json_string(const char character) {
-  if (character == sourcemeta::jsontoolkit::JSON_STRING_QUOTE || character == '\u005C') {
+  if (character == sourcemeta::jsontoolkit::JSON_STRING_QUOTE ||
+      character == sourcemeta::jsontoolkit::JSON_STRING_ESCAPE_CHARACTER) {
     return false;
   } else if (character >= '\u0000' && character <= '\u001F') {
     return false;
@@ -66,11 +67,12 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
     // \r represents the carriage return character (U+000D).
     // \t represents the character tabulation character (U+0009).
     // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    if (character == '\u005C' && index < string_data.size() - 1) {
+    if (character == sourcemeta::jsontoolkit::JSON_STRING_ESCAPE_CHARACTER &&
+        index < string_data.size() - 1) {
       std::string_view::const_reference next = string_data.at(index + 1);
       switch (next) {
         case '\u0022':
-        case '\u005C':
+        case sourcemeta::jsontoolkit::JSON_STRING_ESCAPE_CHARACTER:
         case '\u002F':
           value << next;
           index += 1;
