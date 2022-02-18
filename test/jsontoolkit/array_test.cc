@@ -117,3 +117,47 @@ TEST(Array, one_level_nested_array) {
   EXPECT_TRUE(document.at(0).to_array()->at(0).to_boolean());
   EXPECT_FALSE(document.at(1).to_boolean());
 }
+
+TEST(Array, one_level_nested_array_with_padding) {
+  sourcemeta::jsontoolkit::JSON document {"  [ [  true ]  ,  false  ]   "};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.at(0).is_array());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_EQ(document.at(0).to_array()->size(), 1);
+  EXPECT_TRUE(document.at(0).to_array()->at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).to_array()->at(0).to_boolean());
+  EXPECT_FALSE(document.at(1).to_boolean());
+}
+
+TEST(Array, two_levels_nested_array) {
+  sourcemeta::jsontoolkit::JSON document {"[true,[false,[true]]]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).is_array());
+  EXPECT_EQ(document.at(1).to_array()->size(), 2);
+  EXPECT_TRUE(document.at(1).to_array()->at(0).is_boolean());
+  EXPECT_FALSE(document.at(1).to_array()->at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).to_array()->at(1).is_array());
+  EXPECT_EQ(document.at(1).to_array()->at(1).size(), 1);
+  EXPECT_TRUE(document.at(1).to_array()->at(1).to_array()->at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).to_array()->at(1).to_array()->at(0).to_boolean());
+}
+
+TEST(Array, two_levels_nested_array_with_padding) {
+  sourcemeta::jsontoolkit::JSON document {"  [  true , [  false  , [ true ]  ]  ] "};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).is_array());
+  EXPECT_EQ(document.at(1).to_array()->size(), 2);
+  EXPECT_TRUE(document.at(1).to_array()->at(0).is_boolean());
+  EXPECT_FALSE(document.at(1).to_array()->at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).to_array()->at(1).is_array());
+  EXPECT_EQ(document.at(1).to_array()->at(1).size(), 1);
+  EXPECT_TRUE(document.at(1).to_array()->at(1).to_array()->at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).to_array()->at(1).to_array()->at(0).to_boolean());
+}
