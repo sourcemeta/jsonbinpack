@@ -1,5 +1,4 @@
 #include <vector> // std::vector
-#include <cstddef> // std::size_t
 
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_array.h>
@@ -27,7 +26,6 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size() {
   return this->parse().data.size();
 }
 
-// TODO: Refactor and cleanup this function
 template <typename Wrapper, typename Backend>
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>&
 sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
@@ -38,68 +36,61 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
       throw std::domain_error("Invalid document");
     }
 
-    std::string_view::size_type cursor = 0;
-    std::size_t level = 0;
-    bool found_element = false;
-    bool expect_element = false;
+    const std::string_view::size_type size = document.size();
+    std::string_view::size_type element_start_index = 0;
+    std::string_view::size_type level = 0;
 
-    for (std::string_view::size_type index = 0; index < document.size(); index++) {
+    for (std::string_view::size_type index = 1; index < size - 1; index++) {
       std::string_view::const_reference character = document.at(index);
+      const bool is_last_character = index == size - 2;
+
       switch (character) {
         case sourcemeta::jsontoolkit::JSON_ARRAY_START:
-          if (level == 0) {
-            if (index > 0) throw std::domain_error("Invalid document");
-            cursor = index + 1;
-          }
-
+          // The start of an array at level 0 is by definition a new element
+          if (level == 0) element_start_index = index;
           level += 1;
           break;
         case sourcemeta::jsontoolkit::JSON_ARRAY_END:
+          if (level == 0) throw std::domain_error("Unexpected right bracket");
           level -= 1;
-          if (cursor >= index) {
-            if (expect_element) {
-              this->data.clear();
-              throw std::domain_error("Invalid document");
-            } else {
-              break;
-            }
-          }
 
-          if (level < 1) {
-            this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
-            found_element = false;
-            expect_element = false;
+          // Only push an element on a final right bracket
+          if (is_last_character && element_start_index > 0) {
+            this->data.push_back(Wrapper(
+              document.substr(element_start_index, index - element_start_index + 1)));
+            element_start_index = 0;
           }
 
           break;
         case sourcemeta::jsontoolkit::JSON_ARRAY_SEPARATOR:
-          if (!found_element) {
-            this->data.clear();
-            throw std::domain_error("Invalid document");
+          if (element_start_index == 0) throw std::domain_error("Separator without a preceding element");
+          if (is_last_character) throw std::domain_error("Trailing comma");
+          if (level == 0) {
+            this->data.push_back(Wrapper(
+              document.substr(element_start_index, index - element_start_index)));
+            element_start_index = 0;
           }
 
-          this->data.push_back(Wrapper(document.substr(cursor, index - cursor)));
-          found_element = false;
-          expect_element = true;
-          cursor = index + 1;
           break;
         default:
-          if (!found_element) {
-            // Ignore irrelevant whitespace
-            if (sourcemeta::jsontoolkit::is_blank(character)) {
-              cursor = index + 1;
-            } else {
-              found_element = true;
-              expect_element = false;
-            }
+          if (is_last_character && element_start_index > 0) {
+            this->data.push_back(Wrapper(
+              document.substr(element_start_index, index - element_start_index + 1)));
+            element_start_index = 0;
           }
 
-          continue;
+          if (!sourcemeta::jsontoolkit::is_blank(character) &&
+              element_start_index == 0 &&
+              level == 0) {
+            element_start_index = index;
+          }
+
+          break;
       }
     }
 
     if (level > 0) {
-      throw std::domain_error("Invalid document");
+      throw std::domain_error("Unbalanced array");
     }
   }
 
