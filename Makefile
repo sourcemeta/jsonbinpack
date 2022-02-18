@@ -4,7 +4,7 @@ include vendor/vendorpull/targets.mk
 CMAKE ?= cmake
 CTEST ?= ctest
 
-all: preset-release
+all: preset-debug
 .PHONY: all
 
 preset-%: CMakePresets.json
