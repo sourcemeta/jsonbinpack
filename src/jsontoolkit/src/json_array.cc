@@ -1,4 +1,5 @@
 #include <vector> // std::vector
+#include <stdexcept> // std::domain_error
 
 #include <jsontoolkit/json_value.h>
 #include <jsontoolkit/json_array.h>
