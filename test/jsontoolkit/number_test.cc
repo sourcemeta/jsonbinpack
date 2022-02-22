@@ -214,3 +214,225 @@ TEST(Number, single_digit_negative_real_integer_trailing_zero) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1.0);
 }
+
+// Invalid exponential numbers
+
+TEST(Number, exponential_notation_error_double_upper_e) {
+  sourcemeta::jsontoolkit::JSON document{"3EE2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_double_lower_e) {
+  sourcemeta::jsontoolkit::JSON document{"3ee2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_double_mixed_e) {
+  sourcemeta::jsontoolkit::JSON document{"3eE2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_trailing_upper_e) {
+  sourcemeta::jsontoolkit::JSON document{"3E"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_trailing_lower_e) {
+  sourcemeta::jsontoolkit::JSON document{"3e"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_trailing_upper_e_minus) {
+  sourcemeta::jsontoolkit::JSON document{"3E-"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_trailing_lower_e_minus) {
+  sourcemeta::jsontoolkit::JSON document{"3e-"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_leading_upper_e) {
+  sourcemeta::jsontoolkit::JSON document{"E2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_leading_lower_e) {
+  sourcemeta::jsontoolkit::JSON document{"e2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_minus_leading_upper_e) {
+  sourcemeta::jsontoolkit::JSON document{"-E2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_minus_leading_lower_e) {
+  sourcemeta::jsontoolkit::JSON document{"-e2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_double_e_with_digits) {
+  sourcemeta::jsontoolkit::JSON document{"3E1E2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_left_e_space) {
+  sourcemeta::jsontoolkit::JSON document{"3 E2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_right_e_space) {
+  sourcemeta::jsontoolkit::JSON document{"3E 2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_double_minus_after_e) {
+  sourcemeta::jsontoolkit::JSON document{"3E--2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_double_minus_with_digits_after_e) {
+  sourcemeta::jsontoolkit::JSON document{"3E-2-2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, exponential_notation_error_plus_after_e) {
+  sourcemeta::jsontoolkit::JSON document{"3E+2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+// From https://en.wikipedia.org/wiki/Scientific_notation
+
+TEST(Number, exponential_notation_integer_1_upper) {
+  sourcemeta::jsontoolkit::JSON document{"2E0"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 2.0);
+}
+
+TEST(Number, exponential_notation_integer_2_upper) {
+  sourcemeta::jsontoolkit::JSON document{"3E2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 300.0);
+}
+
+TEST(Number, exponential_notation_integer_3_upper) {
+  sourcemeta::jsontoolkit::JSON document{"4.321768E3"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 4321.768);
+}
+
+TEST(Number, exponential_notation_integer_4_upper) {
+  sourcemeta::jsontoolkit::JSON document{"-5.3E4"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), -53000);
+}
+
+TEST(Number, exponential_notation_integer_5_upper) {
+  sourcemeta::jsontoolkit::JSON document{"6.72E9"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 6720000000);
+}
+
+TEST(Number, exponential_notation_integer_6_upper) {
+  sourcemeta::jsontoolkit::JSON document{"2E-1"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 0.2);
+}
+
+TEST(Number, exponential_notation_integer_7_upper) {
+  sourcemeta::jsontoolkit::JSON document{"9.87E2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 987);
+}
+
+TEST(Number, exponential_notation_integer_8_upper) {
+  sourcemeta::jsontoolkit::JSON document{"7.51E-9"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 0.00000000751);
+}
+
+TEST(Number, exponential_notation_integer_1_lower) {
+  sourcemeta::jsontoolkit::JSON document{"2e0"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 2.0);
+}
+
+TEST(Number, exponential_notation_integer_2_lower) {
+  sourcemeta::jsontoolkit::JSON document{"3e2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 300.0);
+}
+
+TEST(Number, exponential_notation_integer_3_lower) {
+  sourcemeta::jsontoolkit::JSON document{"4.321768e3"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 4321.768);
+}
+
+TEST(Number, exponential_notation_integer_4_lower) {
+  sourcemeta::jsontoolkit::JSON document{"-5.3e4"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), -53000);
+}
+
+TEST(Number, exponential_notation_integer_5_lower) {
+  sourcemeta::jsontoolkit::JSON document{"6.72e9"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 6720000000);
+}
+
+TEST(Number, exponential_notation_integer_6_lower) {
+  sourcemeta::jsontoolkit::JSON document{"2e-1"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 0.2);
+}
+
+TEST(Number, exponential_notation_integer_7_lower) {
+  sourcemeta::jsontoolkit::JSON document{"9.87e2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 987);
+}
+
+TEST(Number, exponential_notation_integer_8_lower) {
+  sourcemeta::jsontoolkit::JSON document{"7.51e-9"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 0.00000000751);
+}
+
+TEST(Number, exponential_notation_integer_1_real) {
+  sourcemeta::jsontoolkit::JSON document{"2.0e0"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 2.0);
+}
+
+TEST(Number, exponential_notation_integer_2_real) {
+  sourcemeta::jsontoolkit::JSON document{"3.0e2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 300.0);
+}
+
+TEST(Number, exponential_notation_integer_3_real) {
+  sourcemeta::jsontoolkit::JSON document{"2.0e-1"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 0.2);
+}

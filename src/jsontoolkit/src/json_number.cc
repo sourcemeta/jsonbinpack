@@ -1,5 +1,6 @@
 #include "tokens.h"
 #include "utils.h"
+#include <cmath> // std::modf
 #include <jsontoolkit/json_number.h>
 #include <stdexcept> // std::domain_error
 #include <string>    // std::to_string, std::stol, std::stod
@@ -71,9 +72,18 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
   }
 
   bool integer = true;
+  std::string_view::size_type exponential_index = 0;
   for (std::string_view::size_type index = 1; index < size - 1; index++) {
     std::string_view::const_reference character = document.at(index);
     std::string_view::const_reference previous = document.at(index - 1);
+
+    if (!sourcemeta::jsontoolkit::is_digit(character) &&
+        character != sourcemeta::jsontoolkit::JSON_MINUS &&
+        character != sourcemeta::jsontoolkit::JSON_DECIMAL_POINT &&
+        character != sourcemeta::jsontoolkit::JSON_EXPONENT_LOWER &&
+        character != sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER) {
+      throw std::domain_error("Invalid real number");
+    }
 
     if (character == sourcemeta::jsontoolkit::JSON_MINUS &&
         previous != sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER &&
@@ -87,6 +97,15 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
       }
 
       integer = false;
+    } else if (character == sourcemeta::jsontoolkit::JSON_EXPONENT_LOWER ||
+               character == sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER) {
+      if (!sourcemeta::jsontoolkit::is_digit(previous) ||
+          exponential_index != 0) {
+        throw std::domain_error("Invalid exponential number");
+      }
+
+      exponential_index = index;
+      integer = false;
     }
   }
 
@@ -95,7 +114,6 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
    */
 
   // TODO: Can we avoid converting to std::string?
-  // TODO: Add support for exponents
   if (integer) {
     this->data = std::stol(std::string(document));
   } else {
