@@ -3,6 +3,7 @@
 
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_string.h>
+#include <jsontoolkit/json_number.h>
 
 #include <string> // std::string
 #include <string_view> // std::string_view
@@ -10,12 +11,14 @@
 #include <memory> // std::shared_ptr
 #include <cstddef> // std::nullptr_t
 #include <vector> // std::vector
+#include <cstdint> // std::int64_t
 
 namespace sourcemeta {
   namespace jsontoolkit {
     class JSON;
     using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
     using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
+    using Number = sourcemeta::jsontoolkit::GenericNumber;
     class JSON {
       public:
         JSON();
@@ -43,6 +46,14 @@ namespace sourcemeta {
         JSON& at(const std::size_t index);
         std::size_t size();
 
+        // Number
+        JSON(const std::int64_t value);
+        JSON(const double value);
+        bool is_integer();
+        bool is_real();
+        std::int64_t to_integer();
+        double to_real();
+
         // String
         // TODO: How can we create a constructor that takes std::string
         // without being ambiguous with the constructor that takes JSON string?
@@ -57,7 +68,8 @@ namespace sourcemeta {
           bool,
           std::nullptr_t,
           std::shared_ptr<sourcemeta::jsontoolkit::Array>,
-          std::shared_ptr<sourcemeta::jsontoolkit::String>
+          std::shared_ptr<sourcemeta::jsontoolkit::String>,
+          std::shared_ptr<sourcemeta::jsontoolkit::Number>
         > data;
     };
   }

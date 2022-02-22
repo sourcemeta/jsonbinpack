@@ -2,8 +2,9 @@
 #include "utils.h"
 #include "tokens.h"
 
-#include <utility>
+#include <utility> // std::in_place_type
 #include <stdexcept> // std::domain_error
+#include <string> // std::to_string
 
 static const char * const JSON_NULL = "null";
 static const char * const JSON_TRUE = "true";
@@ -18,6 +19,18 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document) :
   source{document},
   must_parse{true},
   data{} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value) :
+  source{std::to_string(value)},
+  must_parse{false},
+  data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Number>>,
+    std::make_shared<sourcemeta::jsontoolkit::Number>(value)} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(const double value) :
+  source{std::to_string(value)},
+  must_parse{false},
+  data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Number>>,
+    std::make_shared<sourcemeta::jsontoolkit::Number>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const sourcemeta::jsontoolkit::JSON &document) :
   source{document.source},
@@ -58,6 +71,23 @@ sourcemeta::jsontoolkit::JSON& sourcemeta::jsontoolkit::JSON::parse() {
       case sourcemeta::jsontoolkit::JSON_STRING_QUOTE:
         this->data = std::make_shared<
           sourcemeta::jsontoolkit::String>(document);
+        break;
+
+      // A number is a sequence of decimal digits with no superfluous leading
+      // zero. It may have a preceding minus sign (U+002D).
+      // See https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+      case sourcemeta::jsontoolkit::JSON_MINUS:
+      case sourcemeta::jsontoolkit::JSON_ZERO:
+      case sourcemeta::jsontoolkit::JSON_ONE:
+      case sourcemeta::jsontoolkit::JSON_TWO:
+      case sourcemeta::jsontoolkit::JSON_THREE:
+      case sourcemeta::jsontoolkit::JSON_FOUR:
+      case sourcemeta::jsontoolkit::JSON_FIVE:
+      case sourcemeta::jsontoolkit::JSON_SIX:
+      case sourcemeta::jsontoolkit::JSON_SEVEN:
+      case sourcemeta::jsontoolkit::JSON_EIGHT:
+      case sourcemeta::jsontoolkit::JSON_NINE:
+        this->data = std::make_shared<sourcemeta::jsontoolkit::Number>(document);
         break;
       case 'n':
         if (document.substr(1) == "ull") {
@@ -154,4 +184,26 @@ std::size_t sourcemeta::jsontoolkit::JSON::size() {
 
   return std::get<std::shared_ptr<
     sourcemeta::jsontoolkit::Array>>(this->data)->size();
+}
+
+bool sourcemeta::jsontoolkit::JSON::is_integer() {
+  this->parse();
+  return std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
+    std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)->is_integer();
+}
+
+bool sourcemeta::jsontoolkit::JSON::is_real() {
+  this->parse();
+  return std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
+    !std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)->is_integer();
+}
+
+std::int64_t sourcemeta::jsontoolkit::JSON::to_integer() {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)->integer_value();
+}
+
+double sourcemeta::jsontoolkit::JSON::to_real() {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)->real_value();
 }

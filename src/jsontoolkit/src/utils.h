@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_UTILS_H_
 
 #include <string_view> // std::string_view
+#include "tokens.h"
 
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character tabulation
@@ -25,6 +26,11 @@ namespace sourcemeta {
     constexpr bool is_blank(const char character) {
       // We can use .contains() on C++23
       return JSON_WHITESPACE_CHARACTERS.find(character) != JSON_WHITESPACE_CHARACTERS.npos;
+    }
+
+    constexpr bool is_digit(const char character) {
+      return character >= sourcemeta::jsontoolkit::JSON_ZERO &&
+        character <= sourcemeta::jsontoolkit::JSON_NINE;
     }
   }
 }
