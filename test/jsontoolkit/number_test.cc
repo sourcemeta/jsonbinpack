@@ -186,3 +186,31 @@ TEST(Number, multiple_separate_periods) {
   sourcemeta::jsontoolkit::JSON document {"12.34.56"};
   EXPECT_THROW(document.is_real(), std::domain_error);
 }
+
+TEST(Number, single_digit_positive_real_integer) {
+  sourcemeta::jsontoolkit::JSON document {"1.0"};
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), 1.0);
+}
+
+TEST(Number, single_digit_positive_real_integer_trailing_zero) {
+  sourcemeta::jsontoolkit::JSON document {"1.0000000"};
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), 1.0);
+}
+
+TEST(Number, single_digit_negative_real_integer) {
+  sourcemeta::jsontoolkit::JSON document {"-1.0"};
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), -1.0);
+}
+
+TEST(Number, single_digit_negative_real_integer_trailing_zero) {
+  sourcemeta::jsontoolkit::JSON document {"-1.0000000"};
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), -1.0);
+}
