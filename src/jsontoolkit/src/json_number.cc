@@ -21,23 +21,23 @@ sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const double value)
     : source{std::to_string(value)},
       must_parse{false}, data{std::in_place_type<double>, value} {}
 
-std::int64_t sourcemeta::jsontoolkit::GenericNumber::integer_value() {
+auto sourcemeta::jsontoolkit::GenericNumber::integer_value() -> std::int64_t {
   this->parse();
   return std::get<std::int64_t>(this->data);
 }
 
-double sourcemeta::jsontoolkit::GenericNumber::real_value() {
+auto sourcemeta::jsontoolkit::GenericNumber::real_value() -> double {
   this->parse();
   return std::get<double>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::GenericNumber::is_integer() {
+auto sourcemeta::jsontoolkit::GenericNumber::is_integer() -> bool {
   this->parse();
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
-sourcemeta::jsontoolkit::GenericNumber &
-sourcemeta::jsontoolkit::GenericNumber::parse() {
+auto sourcemeta::jsontoolkit::GenericNumber::parse()
+    -> sourcemeta::jsontoolkit::GenericNumber & {
   if (!this->must_parse)
     return *this;
   const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);

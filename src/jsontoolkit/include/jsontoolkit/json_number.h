@@ -5,25 +5,23 @@
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
 
-namespace sourcemeta {
-namespace jsontoolkit {
+namespace sourcemeta::jsontoolkit {
 class GenericNumber {
 public:
   GenericNumber();
   GenericNumber(const std::string_view &document);
   GenericNumber(const std::int64_t value);
   GenericNumber(const double value);
-  std::int64_t integer_value();
-  double real_value();
-  bool is_integer();
+  auto integer_value() -> std::int64_t;
+  auto real_value() -> double;
+  auto is_integer() -> bool;
 
 private:
   const std::string_view source;
-  GenericNumber &parse();
+  auto parse() -> GenericNumber &;
   bool must_parse;
   std::variant<std::int64_t, double> data;
 };
-} // namespace jsontoolkit
-} // namespace sourcemeta
+} // namespace sourcemeta::jsontoolkit
 
 #endif

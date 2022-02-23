@@ -13,9 +13,8 @@
 static constexpr std::string_view JSON_WHITESPACE_CHARACTERS =
     "\u0009\u000A\u000D\u0020";
 
-namespace sourcemeta {
-namespace jsontoolkit {
-constexpr std::string_view trim(const std::string_view &string) {
+namespace sourcemeta::jsontoolkit {
+constexpr auto trim(const std::string_view &string) -> std::string_view {
   const std::string_view::size_type start =
       string.find_first_not_of(JSON_WHITESPACE_CHARACTERS);
   const std::string_view::size_type end =
@@ -25,17 +24,16 @@ constexpr std::string_view trim(const std::string_view &string) {
              : string.substr(start, end - start + 1);
 }
 
-constexpr bool is_blank(const char character) {
+constexpr auto is_blank(const char character) -> bool {
   // We can use .contains() on C++23
   return JSON_WHITESPACE_CHARACTERS.find(character) !=
          JSON_WHITESPACE_CHARACTERS.npos;
 }
 
-constexpr bool is_digit(const char character) {
+constexpr auto is_digit(const char character) -> bool {
   return character >= sourcemeta::jsontoolkit::JSON_ZERO &&
          character <= sourcemeta::jsontoolkit::JSON_NINE;
 }
-} // namespace jsontoolkit
-} // namespace sourcemeta
+} // namespace sourcemeta::jsontoolkit
 
 #endif
