@@ -59,4 +59,28 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   endif()
 
   # TODO: Define packaging
+
+  # ClangFormat
+  find_program(CLANG_FORMAT_BIN NAMES clang-format)
+  set(CLANG_FORMAT_CXX_FILE_EXTENSIONS *.cc *.h)
+  set(CLANG_FORMAT_STYLE LLVM)
+  file(GLOB_RECURSE CLANG_FORMAT_ALL_SOURCE_FILES ${CLANG_FORMAT_CXX_FILE_EXTENSIONS})
+  # Ignore certain directories
+  set(CLANG_FORMAT_EXCLUDE_PATTERNS "/build/" "/node_modules/" "/vendor/" "/www/")
+  foreach (SOURCE_FILE ${CLANG_FORMAT_ALL_SOURCE_FILES})
+    foreach (EXCLUDE_PATTERN ${CLANG_FORMAT_EXCLUDE_PATTERNS})
+      string(FIND ${SOURCE_FILE} ${EXCLUDE_PATTERN} EXCLUDE_FOUND)
+      if (NOT ${EXCLUDE_FOUND} EQUAL -1)
+        list(REMOVE_ITEM CLANG_FORMAT_ALL_SOURCE_FILES ${SOURCE_FILE})
+      endif()
+    endforeach()
+  endforeach()
+  add_custom_target(clang_format
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    VERBATIM
+    COMMAND ${CLANG_FORMAT_BIN} --style=${CLANG_FORMAT_STYLE} -i ${CLANG_FORMAT_ALL_SOURCE_FILES})
+  add_custom_target(clang_format_test
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    VERBATIM
+    COMMAND ${CLANG_FORMAT_BIN} --style=${CLANG_FORMAT_STYLE} --dry-run -Werror -i ${CLANG_FORMAT_ALL_SOURCE_FILES})
 endif()

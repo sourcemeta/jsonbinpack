@@ -1,5 +1,5 @@
-#include <iostream>
 #include "version.h"
+#include <iostream>
 
 int main() {
   std::cout << "JSON BinPack" << std::endl;
