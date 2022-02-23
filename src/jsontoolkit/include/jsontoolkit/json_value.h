@@ -13,8 +13,7 @@
 #include <variant>     // std::variant
 #include <vector>      // std::vector
 
-namespace sourcemeta {
-namespace jsontoolkit {
+namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
 using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
@@ -31,38 +30,38 @@ public:
 
   // Boolean
   JSON(const bool value);
-  bool to_boolean();
-  bool is_boolean();
-  JSON &set_boolean(const bool value);
+  auto to_boolean() -> bool;
+  auto is_boolean() -> bool;
+  auto set_boolean(const bool value) -> JSON &;
 
   // Null
   JSON(const std::nullptr_t);
-  bool is_null();
+  auto is_null() -> bool;
 
   // Array
   JSON(sourcemeta::jsontoolkit::Array &value);
-  std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
-  bool is_array();
-  JSON &at(const std::size_t index);
-  std::size_t size();
+  auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
+  auto is_array() -> bool;
+  auto at(const std::size_t index) -> JSON &;
+  auto size() -> std::size_t;
 
   // Number
   JSON(const std::int64_t value);
   JSON(const double value);
-  bool is_integer();
-  bool is_real();
-  std::int64_t to_integer();
-  double to_real();
+  auto is_integer() -> bool;
+  auto is_real() -> bool;
+  auto to_integer() -> std::int64_t;
+  auto to_real() -> double;
 
   // String
   // TODO: How can we create a constructor that takes std::string
   // without being ambiguous with the constructor that takes JSON string?
   JSON(sourcemeta::jsontoolkit::String &value);
-  bool is_string();
-  std::string to_string();
+  auto is_string() -> bool;
+  auto to_string() -> std::string;
 
 private:
-  JSON &parse();
+  auto parse() -> JSON &;
   const std::string_view source;
   bool must_parse;
   std::variant<bool, std::nullptr_t,
@@ -71,7 +70,6 @@ private:
                std::shared_ptr<sourcemeta::jsontoolkit::Number>>
       data;
 };
-} // namespace jsontoolkit
-} // namespace sourcemeta
+} // namespace sourcemeta::jsontoolkit
 
 #endif

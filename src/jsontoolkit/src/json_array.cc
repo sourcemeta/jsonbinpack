@@ -17,21 +17,22 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::GenericArray(
     : source{document}, must_parse{true} {}
 
 template <typename Wrapper, typename Backend>
-Wrapper &sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::at(
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size_type
-        index) {
+        index) -> Wrapper & {
   return this->parse().data.at(index);
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size_type
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::size() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
+                                                   Backend>::size_type {
   return this->parse().data.size();
 }
 
 template <typename Wrapper, typename Backend>
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend> &
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse()
+    -> sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend> & {
   if (this->must_parse) {
     const std::string_view document =
         sourcemeta::jsontoolkit::trim(this->source);
@@ -121,54 +122,56 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::parse() {
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::begin() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::begin() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::iterator {
   return this->parse().data.begin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::end() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::end() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::iterator {
   return this->parse().data.end();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::cbegin() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::cbegin() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
+                                                   Backend>::const_iterator {
   return this->parse().data.cbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::cend() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::cend() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
+                                                   Backend>::const_iterator {
   return this->parse().data.cend();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
-                                               Backend>::reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::rbegin() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::rbegin() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
+                                                   Backend>::reverse_iterator {
   return this->parse().data.rbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
-                                               Backend>::reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::rend() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::rend() ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
+                                                   Backend>::reverse_iterator {
   return this->parse().data.rend();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
-                                               Backend>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::crbegin() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::crbegin() ->
+    typename sourcemeta::jsontoolkit::GenericArray<
+        Wrapper, Backend>::const_reverse_iterator {
   return this->parse().data.crbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericArray<Wrapper,
-                                               Backend>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::crend() {
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper, Backend>::crend() ->
+    typename sourcemeta::jsontoolkit::GenericArray<
+        Wrapper, Backend>::const_reverse_iterator {
   return this->parse().data.crend();
 }
 

@@ -17,14 +17,15 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::GenericString(
     : source{document}, must_parse{true} {}
 
 template <typename Wrapper, typename Backend>
-const Backend &
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::value() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::value()
+    -> const Backend & {
   return this->parse().data;
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size_type
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::size_type {
   return this->parse().data.size();
 }
 
@@ -33,8 +34,8 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::size() {
 // (U+005C), and the control characters U+0000 to U+001F
 // See
 // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-static constexpr bool
-is_character_allowed_in_json_string(const char character) {
+static constexpr auto is_character_allowed_in_json_string(const char character)
+    -> bool {
   if (character == sourcemeta::jsontoolkit::JSON_STRING_QUOTE ||
       character == sourcemeta::jsontoolkit::JSON_STRING_ESCAPE_CHARACTER) {
     return false;
@@ -46,8 +47,8 @@ is_character_allowed_in_json_string(const char character) {
 }
 
 template <typename Wrapper, typename Backend>
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend> &
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse()
+    -> sourcemeta::jsontoolkit::GenericString<Wrapper, Backend> & {
   if (!this->must_parse)
     return *this;
   const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
@@ -137,56 +138,58 @@ sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::parse() {
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::begin() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::begin() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::iterator {
   return this->parse().data.begin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::end() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::end() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::iterator {
   return this->parse().data.end();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::const_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cbegin() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cbegin() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::const_iterator {
   return this->parse().data.cbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::const_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cend() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::cend() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::const_iterator {
   return this->parse().data.cend();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::reverse_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rbegin() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rbegin() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::reverse_iterator {
   return this->parse().data.rbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::reverse_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rend() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::rend() ->
+    typename sourcemeta::jsontoolkit::GenericString<Wrapper,
+                                                    Backend>::reverse_iterator {
   return this->parse().data.rend();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crbegin() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crbegin() ->
+    typename sourcemeta::jsontoolkit::GenericString<
+        Wrapper, Backend>::const_reverse_iterator {
   return this->parse().data.crbegin();
 }
 
 template <typename Wrapper, typename Backend>
-typename sourcemeta::jsontoolkit::GenericString<Wrapper,
-                                                Backend>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crend() {
+auto sourcemeta::jsontoolkit::GenericString<Wrapper, Backend>::crend() ->
+    typename sourcemeta::jsontoolkit::GenericString<
+        Wrapper, Backend>::const_reverse_iterator {
   return this->parse().data.crend();
 }
 

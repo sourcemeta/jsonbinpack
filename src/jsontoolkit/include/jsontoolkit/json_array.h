@@ -3,8 +3,7 @@
 
 #include <string_view>
 
-namespace sourcemeta {
-namespace jsontoolkit {
+namespace sourcemeta::jsontoolkit {
 template <typename Wrapper, typename Backend> class GenericArray {
 public:
   GenericArray();
@@ -23,27 +22,26 @@ public:
   using difference_type = typename Backend::difference_type;
   using size_type = typename Backend::size_type;
 
-  Wrapper &at(const size_type index);
-  size_type size();
+  auto at(const size_type index) -> Wrapper &;
+  auto size() -> size_type;
 
-  iterator begin();
-  iterator end();
-  const_iterator cbegin();
-  const_iterator cend();
-  reverse_iterator rbegin();
-  reverse_iterator rend();
-  const_reverse_iterator crbegin();
-  const_reverse_iterator crend();
+  auto begin() -> iterator;
+  auto end() -> iterator;
+  auto cbegin() -> const_iterator;
+  auto cend() -> const_iterator;
+  auto rbegin() -> reverse_iterator;
+  auto rend() -> reverse_iterator;
+  auto crbegin() -> const_reverse_iterator;
+  auto crend() -> const_reverse_iterator;
 
   friend Wrapper;
 
 private:
   const std::string_view source;
-  GenericArray &parse();
+  auto parse() -> GenericArray &;
   bool must_parse;
   Backend data;
 };
-} // namespace jsontoolkit
-} // namespace sourcemeta
+} // namespace sourcemeta::jsontoolkit
 
 #endif

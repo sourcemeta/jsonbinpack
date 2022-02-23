@@ -1,8 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_TOKENS_H_
 #define SOURCEMETA_JSONTOOLKIT_TOKENS_H_
 
-namespace sourcemeta {
-namespace jsontoolkit {
+namespace sourcemeta::jsontoolkit {
 const char JSON_ARRAY_START = '[';
 const char JSON_ARRAY_END = ']';
 const char JSON_ARRAY_SEPARATOR = ',';
@@ -35,7 +34,6 @@ const char JSON_NINE = '\u0039';
 const char JSON_EXPONENT_UPPER = '\u0045';
 const char JSON_EXPONENT_LOWER = '\u0065';
 const char JSON_DECIMAL_POINT = '\u002E';
-} // namespace jsontoolkit
-} // namespace sourcemeta
+} // namespace sourcemeta::jsontoolkit
 
 #endif

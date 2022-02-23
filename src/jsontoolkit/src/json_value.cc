@@ -27,9 +27,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const double value)
            std::make_shared<sourcemeta::jsontoolkit::Number>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(
-    const sourcemeta::jsontoolkit::JSON &document)
-    : source{document.source},
-      must_parse{document.must_parse}, data{document.data} {}
+    const sourcemeta::jsontoolkit::JSON &document) = default;
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : source{value.source}, must_parse{false},
@@ -49,7 +47,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
     : source{JSON_NULL},
       must_parse{false}, data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
-sourcemeta::jsontoolkit::JSON &sourcemeta::jsontoolkit::JSON::parse() {
+auto sourcemeta::jsontoolkit::JSON::parse() -> sourcemeta::jsontoolkit::JSON & {
   if (this->must_parse) {
     const std::string_view document =
         sourcemeta::jsontoolkit::trim(this->source);
@@ -112,59 +110,59 @@ sourcemeta::jsontoolkit::JSON &sourcemeta::jsontoolkit::JSON::parse() {
   return *this;
 }
 
-bool sourcemeta::jsontoolkit::JSON::to_boolean() {
+auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
   this->parse();
   return std::get<bool>(this->data);
 }
 
-std::shared_ptr<sourcemeta::jsontoolkit::Array>
-sourcemeta::jsontoolkit::JSON::to_array() {
+auto sourcemeta::jsontoolkit::JSON::to_array()
+    -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_boolean() {
+auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
   this->parse();
   return std::holds_alternative<bool>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_null() {
+auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   this->parse();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
-sourcemeta::jsontoolkit::JSON &
-sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) {
+auto sourcemeta::jsontoolkit::JSON::set_boolean(const bool value)
+    -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
   return *this;
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_array() {
+auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
   this->parse();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_string() {
+auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
   this->parse();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
 }
 
-std::string sourcemeta::jsontoolkit::JSON::to_string() {
+auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
       ->value();
 }
 
-sourcemeta::jsontoolkit::JSON &
-sourcemeta::jsontoolkit::JSON::at(const std::size_t index) {
+auto sourcemeta::jsontoolkit::JSON::at(const std::size_t index)
+    -> sourcemeta::jsontoolkit::JSON & {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
       ->at(index);
 }
 
-std::size_t sourcemeta::jsontoolkit::JSON::size() {
+auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse();
 
   // TODO: We need a function get the type as an
@@ -179,7 +177,7 @@ std::size_t sourcemeta::jsontoolkit::JSON::size() {
       ->size();
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_integer() {
+auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
   this->parse();
   return std::holds_alternative<
              std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
@@ -187,7 +185,7 @@ bool sourcemeta::jsontoolkit::JSON::is_integer() {
              ->is_integer();
 }
 
-bool sourcemeta::jsontoolkit::JSON::is_real() {
+auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
   this->parse();
   return std::holds_alternative<
              std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
@@ -195,13 +193,13 @@ bool sourcemeta::jsontoolkit::JSON::is_real() {
               ->is_integer();
 }
 
-std::int64_t sourcemeta::jsontoolkit::JSON::to_integer() {
+auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
       ->integer_value();
 }
 
-double sourcemeta::jsontoolkit::JSON::to_real() {
+auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
       ->real_value();
