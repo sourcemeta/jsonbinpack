@@ -2,77 +2,76 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 
 #include <jsontoolkit/json_array.h>
-#include <jsontoolkit/json_string.h>
 #include <jsontoolkit/json_number.h>
+#include <jsontoolkit/json_string.h>
 
-#include <string> // std::string
+#include <cstddef>     // std::nullptr_t
+#include <cstdint>     // std::int64_t
+#include <memory>      // std::shared_ptr
+#include <string>      // std::string
 #include <string_view> // std::string_view
-#include <variant> // std::variant
-#include <memory> // std::shared_ptr
-#include <cstddef> // std::nullptr_t
-#include <vector> // std::vector
-#include <cstdint> // std::int64_t
+#include <variant>     // std::variant
+#include <vector>      // std::vector
 
 namespace sourcemeta {
-  namespace jsontoolkit {
-    class JSON;
-    using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
-    using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
-    using Number = sourcemeta::jsontoolkit::GenericNumber;
-    class JSON {
-      public:
-        JSON();
+namespace jsontoolkit {
+class JSON;
+using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
+using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
+using Number = sourcemeta::jsontoolkit::GenericNumber;
+class JSON {
+public:
+  JSON();
 
-        // Accept string literals
-        JSON(const char * const document);
+  // Accept string literals
+  JSON(const char *const document);
 
-        JSON(const std::string_view &document);
-        JSON(const JSON &document);
+  JSON(const std::string_view &document);
+  JSON(const JSON &document);
 
-        // Boolean
-        JSON(const bool value);
-        bool to_boolean();
-        bool is_boolean();
-        JSON& set_boolean(const bool value);
+  // Boolean
+  JSON(const bool value);
+  bool to_boolean();
+  bool is_boolean();
+  JSON &set_boolean(const bool value);
 
-        // Null
-        JSON(const std::nullptr_t);
-        bool is_null();
+  // Null
+  JSON(const std::nullptr_t);
+  bool is_null();
 
-        // Array
-        JSON(sourcemeta::jsontoolkit::Array &value);
-        std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
-        bool is_array();
-        JSON& at(const std::size_t index);
-        std::size_t size();
+  // Array
+  JSON(sourcemeta::jsontoolkit::Array &value);
+  std::shared_ptr<sourcemeta::jsontoolkit::Array> to_array();
+  bool is_array();
+  JSON &at(const std::size_t index);
+  std::size_t size();
 
-        // Number
-        JSON(const std::int64_t value);
-        JSON(const double value);
-        bool is_integer();
-        bool is_real();
-        std::int64_t to_integer();
-        double to_real();
+  // Number
+  JSON(const std::int64_t value);
+  JSON(const double value);
+  bool is_integer();
+  bool is_real();
+  std::int64_t to_integer();
+  double to_real();
 
-        // String
-        // TODO: How can we create a constructor that takes std::string
-        // without being ambiguous with the constructor that takes JSON string?
-        JSON(sourcemeta::jsontoolkit::String &value);
-        bool is_string();
-        std::string to_string();
-      private:
-        JSON& parse();
-        const std::string_view source;
-        bool must_parse;
-        std::variant<
-          bool,
-          std::nullptr_t,
-          std::shared_ptr<sourcemeta::jsontoolkit::Array>,
-          std::shared_ptr<sourcemeta::jsontoolkit::String>,
-          std::shared_ptr<sourcemeta::jsontoolkit::Number>
-        > data;
-    };
-  }
-}
+  // String
+  // TODO: How can we create a constructor that takes std::string
+  // without being ambiguous with the constructor that takes JSON string?
+  JSON(sourcemeta::jsontoolkit::String &value);
+  bool is_string();
+  std::string to_string();
+
+private:
+  JSON &parse();
+  const std::string_view source;
+  bool must_parse;
+  std::variant<bool, std::nullptr_t,
+               std::shared_ptr<sourcemeta::jsontoolkit::Array>,
+               std::shared_ptr<sourcemeta::jsontoolkit::String>,
+               std::shared_ptr<sourcemeta::jsontoolkit::Number>>
+      data;
+};
+} // namespace jsontoolkit
+} // namespace sourcemeta
 
 #endif

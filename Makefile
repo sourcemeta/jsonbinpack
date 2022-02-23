@@ -9,6 +9,7 @@ all: preset-debug
 
 preset-%: CMakePresets.json
 	$(CMAKE) --preset $(subst preset-,,$@) --log-context
+	$(CMAKE) --build --preset $(subst preset-,,$@) --target clang_format
 	$(CMAKE) --build --preset $(subst preset-,,$@)
 	$(CTEST) --preset $(subst preset-,,$@)
 

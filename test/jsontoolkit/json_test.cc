@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include <vector> // std::vector
 #include <jsontoolkit/json.h>
+#include <vector> // std::vector
 
 TEST(JSON, set_boolean) {
-  sourcemeta::jsontoolkit::JSON document {false};
+  sourcemeta::jsontoolkit::JSON document{false};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_FALSE(document.to_boolean());
   document.set_boolean(true);
@@ -15,7 +15,7 @@ TEST(JSON, set_boolean) {
 }
 
 TEST(JSON, at_boolean) {
-  sourcemeta::jsontoolkit::JSON document {"[true,false,true]"};
+  sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
@@ -29,7 +29,7 @@ TEST(JSON, at_boolean) {
 }
 
 TEST(JSON, boolean_array_iterator) {
-  sourcemeta::jsontoolkit::JSON value {"[true,false,false]"};
+  sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
   std::vector<bool> result;
 
   // TODO: Can we make range for loops nicer?
@@ -44,12 +44,13 @@ TEST(JSON, boolean_array_iterator) {
 }
 
 TEST(JSON, boolean_array_reverse_iterator) {
-  sourcemeta::jsontoolkit::JSON value {"[true,false,false]"};
+  sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
   std::vector<bool> result;
 
   // TODO: Can we hide the Array type somehow?
-  for (sourcemeta::jsontoolkit::Array::reverse_iterator
-      iterator = value.to_array()->rbegin(); iterator != value.to_array()->rend(); iterator++) {
+  for (sourcemeta::jsontoolkit::Array::reverse_iterator iterator =
+           value.to_array()->rbegin();
+       iterator != value.to_array()->rend(); iterator++) {
     result.push_back(iterator->to_boolean());
   }
 
@@ -60,6 +61,6 @@ TEST(JSON, boolean_array_reverse_iterator) {
 }
 
 TEST(JSON, array_padded_parse) {
-  sourcemeta::jsontoolkit::JSON value {"  [true,false,false]  "};
+  sourcemeta::jsontoolkit::JSON value{"  [true,false,false]  "};
   EXPECT_TRUE(value.is_array());
 }

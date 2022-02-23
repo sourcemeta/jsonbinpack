@@ -1,23 +1,25 @@
-#include <jsontoolkit/json_number.h>
-#include <utility> // std::in_place_type
-#include <string> // std::to_string, std::stol, std::stod
-#include <stdexcept> // std::domain_error
-#include "utils.h"
 #include "tokens.h"
+#include "utils.h"
+#include <jsontoolkit/json_number.h>
+#include <stdexcept> // std::domain_error
+#include <string>    // std::to_string, std::stol, std::stod
+#include <utility>   // std::in_place_type
 
 sourcemeta::jsontoolkit::GenericNumber::GenericNumber()
-  : source{"0"}, must_parse{false}, data{std::in_place_type<std::int64_t>, 0} {}
+    : source{"0"}, must_parse{false}, data{std::in_place_type<std::int64_t>,
+                                           0} {}
 
-sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const std::string_view &document)
-  : source{document}, must_parse{true} {}
+sourcemeta::jsontoolkit::GenericNumber::GenericNumber(
+    const std::string_view &document)
+    : source{document}, must_parse{true} {}
 
 sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const std::int64_t value)
-  : source{std::to_string(value)}, must_parse{false},
-  data{std::in_place_type<std::int64_t>, value} {}
+    : source{std::to_string(value)},
+      must_parse{false}, data{std::in_place_type<std::int64_t>, value} {}
 
 sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const double value)
-  : source{std::to_string(value)}, must_parse{false},
-  data{std::in_place_type<double>, value} {}
+    : source{std::to_string(value)},
+      must_parse{false}, data{std::in_place_type<double>, value} {}
 
 std::int64_t sourcemeta::jsontoolkit::GenericNumber::integer_value() {
   this->parse();
@@ -34,9 +36,10 @@ bool sourcemeta::jsontoolkit::GenericNumber::is_integer() {
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
-sourcemeta::jsontoolkit::GenericNumber&
+sourcemeta::jsontoolkit::GenericNumber &
 sourcemeta::jsontoolkit::GenericNumber::parse() {
-  if (!this->must_parse) return *this;
+  if (!this->must_parse)
+    return *this;
   const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
 
   /*
@@ -48,7 +51,7 @@ sourcemeta::jsontoolkit::GenericNumber::parse() {
   if (front != sourcemeta::jsontoolkit::JSON_MINUS &&
       !sourcemeta::jsontoolkit::is_digit(front)) {
     throw std::domain_error("Invalid number");
-  // A JSON number ends with a digit
+    // A JSON number ends with a digit
   } else if (!sourcemeta::jsontoolkit::is_digit(document.back())) {
     throw std::domain_error("Invalid number");
   }
@@ -57,8 +60,8 @@ sourcemeta::jsontoolkit::GenericNumber::parse() {
   if (front == sourcemeta::jsontoolkit::JSON_ZERO && size > 1) {
     std::string_view::const_reference second = document.at(1);
     if (second != sourcemeta::jsontoolkit::JSON_DECIMAL_POINT &&
-      second != sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER &&
-      second != sourcemeta::jsontoolkit::JSON_EXPONENT_LOWER) {
+        second != sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER &&
+        second != sourcemeta::jsontoolkit::JSON_EXPONENT_LOWER) {
       throw std::domain_error("Invalid leading zero");
     }
   }

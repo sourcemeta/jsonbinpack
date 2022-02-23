@@ -12,6 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - run: cmake --preset release --log-context
+      - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release
       - run: ctest --preset release
       - run: make html
