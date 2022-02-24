@@ -11,12 +11,12 @@ static const char *const JSON_TRUE = "true";
 static const char *const JSON_FALSE = "false";
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
-    : source{document}, must_parse{true} {}
+    : source{document} {}
 
 sourcemeta::jsontoolkit::JSON::~JSON() = default;
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
-    : source{document}, must_parse{true} {}
+    : source{document} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
     : source{std::to_string(value)}, must_parse{false},

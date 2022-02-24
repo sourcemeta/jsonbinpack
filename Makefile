@@ -12,6 +12,10 @@ all:
 	$(CTEST) --preset $(PRESET)
 .PHONY: all
 
+lint:
+	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
+.PHONY: lint
+
 clean:
 	$(CMAKE) -E rm -R -f build
 .PHONY: clean
