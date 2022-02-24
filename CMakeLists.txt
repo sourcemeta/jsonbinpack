@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 project(jsonbinpack VERSION 0.0.1 LANGUAGES CXX)
-enable_testing()
 
 # Only allow Debug and Release builds
 # Adapted from Professional CMake (https://crascit.com/professional-cmake/)
@@ -44,22 +43,23 @@ if(JSONBINPACK_CLI)
   add_subdirectory(src/cli)
 endif()
 
+# Testing
+if(JSONBINPACK_TESTS)
+  enable_testing()
+  set(BUILD_GMOCK OFF)
+  set(INSTALL_GTEST OFF)
+  include(GoogleTest)
+  add_subdirectory(vendor/googletest)
+  add_subdirectory(test/jsontoolkit)
+  if(JSONBINPACK_CLI)
+    add_subdirectory(test/cli)
+  endif()
+endif()
+
 # Only for top-level builds
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   file(GLOB_RECURSE JSONBINPACK_CXX_SOURCE_FILES src/*.cc src/*.h test/*.cc test/*.h)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-format.cmake)
-
-  if(JSONBINPACK_TESTS)
-    # Tests
-    set(BUILD_GMOCK OFF)
-    set(INSTALL_GTEST OFF)
-    include(GoogleTest)
-    add_subdirectory(vendor/googletest)
-    add_subdirectory(test/jsontoolkit)
-    if(JSONBINPACK_CLI)
-      add_subdirectory(test/cli)
-    endif()
-  endif()
 
   # TODO: Define packaging
 endif()
