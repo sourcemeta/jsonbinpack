@@ -21,12 +21,20 @@ using Number = sourcemeta::jsontoolkit::GenericNumber;
 class JSON {
 public:
   JSON();
+  ~JSON();
+  JSON(const JSON &document);
+  JSON(JSON &&document) noexcept;
+
+  // We cannot implement copy/move assignment operators
+  // given that the source JSON string is kept as a
+  // constant only set during construction.
+  auto operator=(const JSON &) -> JSON & = delete;
+  auto operator=(JSON &&) -> JSON & = delete;
 
   // Accept string literals
   JSON(const char *document);
 
   JSON(const std::string_view &document);
-  JSON(const JSON &document);
 
   // Boolean
   JSON(bool value);
