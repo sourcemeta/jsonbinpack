@@ -71,7 +71,7 @@ public:
 private:
   auto parse() -> JSON &;
   const std::string_view source;
-  bool must_parse;
+  bool must_parse = true;
   std::variant<bool, std::nullptr_t,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
                std::shared_ptr<sourcemeta::jsontoolkit::String>,

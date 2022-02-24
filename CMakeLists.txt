@@ -60,6 +60,7 @@ endif()
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   file(GLOB_RECURSE JSONBINPACK_CXX_SOURCE_FILES src/*.cc src/*.h test/*.cc test/*.h)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-format.cmake)
+  include(${PROJECT_SOURCE_DIR}/cmake/clang-tidy.cmake)
 
   # TODO: Define packaging
 endif()
