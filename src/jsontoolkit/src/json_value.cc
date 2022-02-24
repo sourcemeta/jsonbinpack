@@ -13,6 +13,8 @@ static const char *const JSON_FALSE = "false";
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : source{document}, must_parse{true} {}
 
+sourcemeta::jsontoolkit::JSON::~JSON() = default;
+
 sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
     : source{document}, must_parse{true} {}
 
@@ -28,6 +30,9 @@ sourcemeta::jsontoolkit::JSON::JSON(const double value)
 
 sourcemeta::jsontoolkit::JSON::JSON(
     const sourcemeta::jsontoolkit::JSON &document) = default;
+
+sourcemeta::jsontoolkit::JSON::JSON(
+    sourcemeta::jsontoolkit::JSON &&document) noexcept = default;
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : source{value.source}, must_parse{false},
