@@ -10,8 +10,8 @@ class GenericNumber {
 public:
   GenericNumber();
   GenericNumber(const std::string_view &document);
-  GenericNumber(const std::int64_t value);
-  GenericNumber(const double value);
+  GenericNumber(std::int64_t value);
+  GenericNumber(double value);
   auto integer_value() -> std::int64_t;
   auto real_value() -> double;
   auto is_integer() -> bool;

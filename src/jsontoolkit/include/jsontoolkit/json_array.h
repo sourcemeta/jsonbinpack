@@ -22,7 +22,7 @@ public:
   using difference_type = typename Backend::difference_type;
   using size_type = typename Backend::size_type;
 
-  auto at(const size_type index) -> Wrapper &;
+  auto at(size_type index) -> Wrapper &;
   auto size() -> size_type;
 
   auto begin() -> iterator;

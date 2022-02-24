@@ -19,15 +19,14 @@ constexpr auto trim(const std::string_view &string) -> std::string_view {
       string.find_first_not_of(JSON_WHITESPACE_CHARACTERS);
   const std::string_view::size_type end =
       string.find_last_not_of(JSON_WHITESPACE_CHARACTERS);
-  return start == string.npos || end == string.npos
+  return start == std::string_view::npos || end == std::string_view::npos
              ? ""
              : string.substr(start, end - start + 1);
 }
 
 constexpr auto is_blank(const char character) -> bool {
   // We can use .contains() on C++23
-  return JSON_WHITESPACE_CHARACTERS.find(character) !=
-         JSON_WHITESPACE_CHARACTERS.npos;
+  return JSON_WHITESPACE_CHARACTERS.find(character) != std::string_view::npos;
 }
 
 constexpr auto is_digit(const char character) -> bool {

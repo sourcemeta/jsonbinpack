@@ -23,31 +23,31 @@ public:
   JSON();
 
   // Accept string literals
-  JSON(const char *const document);
+  JSON(const char *document);
 
   JSON(const std::string_view &document);
   JSON(const JSON &document);
 
   // Boolean
-  JSON(const bool value);
+  JSON(bool value);
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
-  auto set_boolean(const bool value) -> JSON &;
+  auto set_boolean(bool value) -> JSON &;
 
   // Null
-  JSON(const std::nullptr_t);
+  JSON(std::nullptr_t);
   auto is_null() -> bool;
 
   // Array
   JSON(sourcemeta::jsontoolkit::Array &value);
   auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
-  auto at(const std::size_t index) -> JSON &;
+  auto at(std::size_t index) -> JSON &;
   auto size() -> std::size_t;
 
   // Number
-  JSON(const std::int64_t value);
-  JSON(const double value);
+  JSON(std::int64_t value);
+  JSON(double value);
   auto is_integer() -> bool;
   auto is_real() -> bool;
   auto to_integer() -> std::int64_t;
