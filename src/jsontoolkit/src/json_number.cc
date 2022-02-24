@@ -38,8 +38,10 @@ auto sourcemeta::jsontoolkit::GenericNumber::is_integer() -> bool {
 
 auto sourcemeta::jsontoolkit::GenericNumber::parse()
     -> sourcemeta::jsontoolkit::GenericNumber & {
-  if (!this->must_parse)
+  if (!this->must_parse) {
     return *this;
+  }
+
   const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
 
   /*
@@ -51,8 +53,10 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
   if (front != sourcemeta::jsontoolkit::JSON_MINUS &&
       !sourcemeta::jsontoolkit::is_digit(front)) {
     throw std::domain_error("Invalid number");
-    // A JSON number ends with a digit
-  } else if (!sourcemeta::jsontoolkit::is_digit(document.back())) {
+  }
+
+  // A JSON number ends with a digit
+  if (!sourcemeta::jsontoolkit::is_digit(document.back())) {
     throw std::domain_error("Invalid number");
   }
 
@@ -75,7 +79,9 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
         previous != sourcemeta::jsontoolkit::JSON_EXPONENT_UPPER &&
         previous != sourcemeta::jsontoolkit::JSON_EXPONENT_LOWER) {
       throw std::domain_error("Invalid minus sign");
-    } else if (character == sourcemeta::jsontoolkit::JSON_DECIMAL_POINT) {
+    }
+
+    if (character == sourcemeta::jsontoolkit::JSON_DECIMAL_POINT) {
       if (!integer || previous == sourcemeta::jsontoolkit::JSON_MINUS) {
         throw std::domain_error("Invalid real number");
       }
@@ -91,9 +97,9 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
   // TODO: Can we avoid converting to std::string?
   // TODO: Add support for exponents
   if (integer) {
-    this->data = std::stol(std::string(document), nullptr, 10);
+    this->data = std::stol(std::string(document));
   } else {
-    this->data = std::stod(std::string(document), nullptr);
+    this->data = std::stod(std::string(document));
   }
 
   this->must_parse = false;
