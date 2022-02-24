@@ -4,14 +4,13 @@ include vendor/vendorpull/targets.mk
 CMAKE ?= cmake
 CTEST ?= ctest
 
-all: preset-debug
+PRESET ?= debug
+all:
+	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --build --preset $(PRESET) --target clang_format
+	$(CMAKE) --build --preset $(PRESET)
+	$(CTEST) --preset $(PRESET)
 .PHONY: all
-
-preset-%: CMakePresets.json
-	$(CMAKE) --preset $(subst preset-,,$@) --log-context
-	$(CMAKE) --build --preset $(subst preset-,,$@) --target clang_format
-	$(CMAKE) --build --preset $(subst preset-,,$@)
-	$(CTEST) --preset $(subst preset-,,$@)
 
 clean:
 	$(CMAKE) -E rm -R -f build
