@@ -1,8 +1,8 @@
 #include <stdexcept> // std::domain_error
 #include <vector>    // std::vector
 
+#include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
-#include <jsontoolkit/json_value.h>
 
 #include "tokens.h"
 #include "utils.h"

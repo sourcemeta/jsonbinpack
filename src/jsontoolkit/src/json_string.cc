@@ -1,7 +1,7 @@
 #include "tokens.h"
 #include "utils.h"
+#include <jsontoolkit/json.h>
 #include <jsontoolkit/json_string.h>
-#include <jsontoolkit/json_value.h>
 
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
