@@ -12,6 +12,16 @@ all:
 	$(CTEST) --preset $(PRESET)
 .PHONY: all
 
+CASE ?=
+ifdef CASE
+test:
+	$(CTEST) --preset $(PRESET) --tests-regex $(CASE)
+else
+test:
+	$(CTEST) --preset $(PRESET)
+endif
+.PHONY: test
+
 lint:
 	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
 .PHONY: lint
