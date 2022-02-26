@@ -41,19 +41,13 @@
       "name": "release",
       "displayName": "Release",
       "configurePreset": "release",
-      "configuration": "Release",
-      "output": {
-        "verbosity": "verbose"
-      }
+      "configuration": "Release"
     },
     {
       "name": "debug",
       "displayName": "Debug",
       "configurePreset": "debug",
-      "configuration": "Debug",
-      "output": {
-        "verbosity": "verbose"
-      }
+      "configuration": "Debug"
     }
   ]
 }
