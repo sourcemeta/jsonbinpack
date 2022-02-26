@@ -17,7 +17,6 @@ namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
 using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
-using Number = sourcemeta::jsontoolkit::GenericNumber;
 class JSON {
 public:
   JSON();
@@ -72,10 +71,9 @@ private:
   auto parse() -> JSON &;
   const std::string_view source;
   bool must_parse = true;
-  std::variant<bool, std::nullptr_t,
+  std::variant<bool, std::nullptr_t, std::int64_t, double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
-               std::shared_ptr<sourcemeta::jsontoolkit::String>,
-               std::shared_ptr<sourcemeta::jsontoolkit::Number>>
+               std::shared_ptr<sourcemeta::jsontoolkit::String>>
       data;
 };
 } // namespace sourcemeta::jsontoolkit

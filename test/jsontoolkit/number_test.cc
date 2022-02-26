@@ -1,12 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 
-TEST(Number, default_constructor) {
-  sourcemeta::jsontoolkit::Number document;
-  EXPECT_TRUE(document.is_integer());
-  EXPECT_EQ(document.integer_value(), 0);
-}
-
 TEST(Number, string_integer_zero) {
   sourcemeta::jsontoolkit::JSON document{"0"};
   EXPECT_TRUE(document.is_integer());
