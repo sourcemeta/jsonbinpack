@@ -5,10 +5,12 @@
 #include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit {
-template <typename Wrapper> class GenericString {
+// Forward declaration
+class JSON;
+class String {
 public:
-  GenericString();
-  GenericString(const std::string_view &document);
+  String();
+  String(const std::string_view &document);
   auto value() -> const std::string &;
 
   using traits_type = typename std::string::traits_type;
@@ -36,11 +38,11 @@ public:
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
 
-  friend Wrapper;
+  friend JSON;
 
 private:
   const std::string_view source;
-  auto parse() -> GenericString &;
+  auto parse() -> String &;
   bool must_parse;
   std::string data;
 };
