@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <jsontoolkit/json_array.h>
-#include <jsontoolkit/json_number.h>
 #include <jsontoolkit/json_string.h>
 
 #include <cstddef>     // std::nullptr_t
