@@ -1,26 +1,30 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
-#include <string_view>
+#include <string_view> // std::string_view
+#include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
-template <typename Wrapper, typename Backend> class GenericArray {
+// Forward declaration
+class JSON;
+template <typename Wrapper> class GenericArray {
 public:
   GenericArray();
   GenericArray(const std::string_view &document);
 
-  using value_type = typename Backend::value_type;
-  using allocator_type = typename Backend::allocator_type;
-  using reference = typename Backend::reference;
-  using const_reference = typename Backend::const_reference;
-  using pointer = typename Backend::pointer;
-  using const_pointer = typename Backend::const_pointer;
-  using iterator = typename Backend::iterator;
-  using const_iterator = typename Backend::const_iterator;
-  using reverse_iterator = typename Backend::reverse_iterator;
-  using const_reverse_iterator = typename Backend::const_reverse_iterator;
-  using difference_type = typename Backend::difference_type;
-  using size_type = typename Backend::size_type;
+  using value_type = typename std::vector<Wrapper>::value_type;
+  using allocator_type = typename std::vector<Wrapper>::allocator_type;
+  using reference = typename std::vector<Wrapper>::reference;
+  using const_reference = typename std::vector<Wrapper>::const_reference;
+  using pointer = typename std::vector<Wrapper>::pointer;
+  using const_pointer = typename std::vector<Wrapper>::const_pointer;
+  using iterator = typename std::vector<Wrapper>::iterator;
+  using const_iterator = typename std::vector<Wrapper>::const_iterator;
+  using reverse_iterator = typename std::vector<Wrapper>::reverse_iterator;
+  using const_reverse_iterator =
+      typename std::vector<Wrapper>::const_reverse_iterator;
+  using difference_type = typename std::vector<Wrapper>::difference_type;
+  using size_type = typename std::vector<Wrapper>::size_type;
 
   auto at(size_type index) -> Wrapper &;
   auto size() -> size_type;
@@ -34,13 +38,13 @@ public:
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
 
-  friend Wrapper;
+  friend JSON;
 
 private:
   const std::string_view source;
   auto parse() -> GenericArray &;
   bool must_parse;
-  Backend data;
+  std::vector<Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit
 

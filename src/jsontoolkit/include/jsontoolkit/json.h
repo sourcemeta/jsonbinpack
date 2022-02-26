@@ -10,11 +10,10 @@
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
-#include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
 class JSON;
-using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
+using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
 class JSON {
 public:
   JSON();
