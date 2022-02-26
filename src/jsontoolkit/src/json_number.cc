@@ -3,47 +3,11 @@
 #include <cmath> // std::modf
 #include <jsontoolkit/json_number.h>
 #include <stdexcept> // std::domain_error
-#include <string>    // std::to_string, std::stol, std::stod
-#include <utility>   // std::in_place_type
+#include <string>    // std::stol, std::stod
 
-sourcemeta::jsontoolkit::GenericNumber::GenericNumber()
-    : source{"0"}, must_parse{false}, data{std::in_place_type<std::int64_t>,
-                                           0} {}
-
-sourcemeta::jsontoolkit::GenericNumber::GenericNumber(
-    const std::string_view &document)
-    : source{document}, must_parse{true} {}
-
-sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const std::int64_t value)
-    : source{std::to_string(value)},
-      must_parse{false}, data{std::in_place_type<std::int64_t>, value} {}
-
-sourcemeta::jsontoolkit::GenericNumber::GenericNumber(const double value)
-    : source{std::to_string(value)},
-      must_parse{false}, data{std::in_place_type<double>, value} {}
-
-auto sourcemeta::jsontoolkit::GenericNumber::integer_value() -> std::int64_t {
-  this->parse();
-  return std::get<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::GenericNumber::real_value() -> double {
-  this->parse();
-  return std::get<double>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::GenericNumber::is_integer() -> bool {
-  this->parse();
-  return std::holds_alternative<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::GenericNumber::parse()
-    -> sourcemeta::jsontoolkit::GenericNumber & {
-  if (!this->must_parse) {
-    return *this;
-  }
-
-  const std::string_view document = sourcemeta::jsontoolkit::trim(this->source);
+auto sourcemeta::jsontoolkit::parse_number(const std::string_view &input)
+    -> std::variant<std::int64_t, double> {
+  const std::string_view document = sourcemeta::jsontoolkit::trim(input);
 
   /*
    * Validate the input number and decide whether it is an integer or a double
@@ -115,11 +79,8 @@ auto sourcemeta::jsontoolkit::GenericNumber::parse()
 
   // TODO: Can we avoid converting to std::string?
   if (integer) {
-    this->data = std::stol(std::string(document));
-  } else {
-    this->data = std::stod(std::string(document));
+    return std::stol(std::string(document));
   }
 
-  this->must_parse = false;
-  return *this;
+  return std::stod(std::string(document));
 }

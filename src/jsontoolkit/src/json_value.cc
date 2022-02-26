@@ -19,14 +19,12 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
     : source{document} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : source{std::to_string(value)}, must_parse{false},
-      data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Number>>,
-           std::make_shared<sourcemeta::jsontoolkit::Number>(value)} {}
+    : source{std::to_string(value)},
+      must_parse{false}, data{std::in_place_type<std::int64_t>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : source{std::to_string(value)}, must_parse{false},
-      data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Number>>,
-           std::make_shared<sourcemeta::jsontoolkit::Number>(value)} {}
+    : source{std::to_string(value)},
+      must_parse{false}, data{std::in_place_type<double>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(
     const sourcemeta::jsontoolkit::JSON &document) = default;
@@ -56,6 +54,7 @@ auto sourcemeta::jsontoolkit::JSON::parse() -> sourcemeta::jsontoolkit::JSON & {
   if (this->must_parse) {
     const std::string_view document =
         sourcemeta::jsontoolkit::trim(this->source);
+    std::variant<std::int64_t, double> number_result;
 
     switch (document.front()) {
     case sourcemeta::jsontoolkit::JSON_ARRAY_START:
@@ -80,7 +79,13 @@ auto sourcemeta::jsontoolkit::JSON::parse() -> sourcemeta::jsontoolkit::JSON & {
     case sourcemeta::jsontoolkit::JSON_SEVEN:
     case sourcemeta::jsontoolkit::JSON_EIGHT:
     case sourcemeta::jsontoolkit::JSON_NINE:
-      this->data = std::make_shared<sourcemeta::jsontoolkit::Number>(document);
+      number_result = sourcemeta::jsontoolkit::parse_number(document);
+      if (std::holds_alternative<std::int64_t>(number_result)) {
+        this->data = std::get<std::int64_t>(number_result);
+      } else {
+        this->data = std::get<double>(number_result);
+      }
+
       break;
     case 'n':
       if (document.substr(1) == "ull") {
@@ -184,28 +189,20 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
   this->parse();
-  return std::holds_alternative<
-             std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
-         std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
-             ->is_integer();
+  return std::holds_alternative<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
   this->parse();
-  return std::holds_alternative<
-             std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data) &&
-         !std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
-              ->is_integer();
+  return std::holds_alternative<double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
   this->parse();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
-      ->integer_value();
+  return std::get<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
   this->parse();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Number>>(this->data)
-      ->real_value();
+  return std::get<double>(this->data);
 }

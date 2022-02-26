@@ -6,22 +6,10 @@
 #include <variant>     // std::variant
 
 namespace sourcemeta::jsontoolkit {
-class GenericNumber {
-public:
-  GenericNumber();
-  GenericNumber(const std::string_view &document);
-  GenericNumber(std::int64_t value);
-  GenericNumber(double value);
-  auto integer_value() -> std::int64_t;
-  auto real_value() -> double;
-  auto is_integer() -> bool;
 
-private:
-  const std::string_view source;
-  auto parse() -> GenericNumber &;
-  bool must_parse;
-  std::variant<std::int64_t, double> data;
-};
+auto parse_number(const std::string_view &input)
+    -> std::variant<std::int64_t, double>;
+
 } // namespace sourcemeta::jsontoolkit
 
 #endif
