@@ -194,3 +194,43 @@ TEST(Array, escaped_quote_within_string_element) {
   EXPECT_TRUE(document.at(0).is_string());
   EXPECT_EQ(document.at(0).to_string(), "foo\"bar");
 }
+
+TEST(Array, single_positive_integer_element) {
+  sourcemeta::jsontoolkit::JSON document{"[4]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.at(0).is_integer());
+  EXPECT_EQ(document.at(0).to_integer(), 4);
+}
+
+TEST(Array, single_negative_integer_element) {
+  sourcemeta::jsontoolkit::JSON document{"[-4]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.at(0).is_integer());
+  EXPECT_EQ(document.at(0).to_integer(), -4);
+}
+
+TEST(Array, single_positive_real_number_element) {
+  sourcemeta::jsontoolkit::JSON document{"[4.3]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), 4.3);
+}
+
+TEST(Array, single_negative_real_number_element) {
+  sourcemeta::jsontoolkit::JSON document{"[-4.3]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), -4.3);
+}
+
+TEST(Array, single_exponential_number_element) {
+  sourcemeta::jsontoolkit::JSON document{"[3e2]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), 300.0);
+}
