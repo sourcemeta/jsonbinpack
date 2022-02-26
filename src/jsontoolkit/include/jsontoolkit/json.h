@@ -15,7 +15,7 @@
 namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON, std::vector<JSON>>;
-using String = sourcemeta::jsontoolkit::GenericString<JSON, std::string>;
+using String = sourcemeta::jsontoolkit::GenericString<JSON>;
 class JSON {
 public:
   JSON();
