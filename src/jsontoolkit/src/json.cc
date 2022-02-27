@@ -6,37 +6,37 @@
 #include <utility>   // std::in_place_type
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
-    : JSONContainer{document, true} {}
+    : Container{document, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
-    : JSONContainer{document, true} {}
+    : Container{document, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : JSONContainer{std::to_string(value), false},
+    : Container{std::to_string(value), false},
       data{std::in_place_type<std::int64_t>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : JSONContainer{std::to_string(value), false},
-      data{std::in_place_type<double>, value} {}
+    : Container{std::to_string(value), false}, data{std::in_place_type<double>,
+                                                    value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
-    : JSONContainer{value.source(), false},
+    : Container{value.source(), false},
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
            std::make_shared<sourcemeta::jsontoolkit::Array>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
-    : JSONContainer{value.source(), false},
+    : Container{value.source(), false},
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::String>>,
            std::make_shared<sourcemeta::jsontoolkit::String>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : JSONContainer{value ? sourcemeta::jsontoolkit::parser::JSON_TRUE
-                          : sourcemeta::jsontoolkit::parser::JSON_FALSE,
-                    false},
+    : Container{value ? sourcemeta::jsontoolkit::parser::JSON_TRUE
+                      : sourcemeta::jsontoolkit::parser::JSON_FALSE,
+                false},
       data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : JSONContainer{sourcemeta::jsontoolkit::parser::JSON_NULL, false},
+    : Container{sourcemeta::jsontoolkit::parser::JSON_NULL, false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {

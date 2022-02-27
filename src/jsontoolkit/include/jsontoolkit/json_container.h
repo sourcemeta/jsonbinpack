@@ -4,9 +4,9 @@
 #include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit {
-class JSONContainer {
+class Container {
 public:
-  JSONContainer(const std::string_view &document, const bool parse)
+  Container(const std::string_view &document, const bool parse)
       : _source{document}, must_parse{parse} {}
 
 protected:

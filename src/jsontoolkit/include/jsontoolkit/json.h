@@ -15,7 +15,7 @@
 namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
-class JSON final : public JSONContainer {
+class JSON final : public Container {
 public:
   // Accept string literals
   JSON(const char *document);
