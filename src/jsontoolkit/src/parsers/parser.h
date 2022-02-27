@@ -1,13 +1,19 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
 #define SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
 
-#include <cstdint>     // std::int64_t
-#include <string>      // std::string
-#include <string_view> // std::string_view
-#include <variant>     // std::variant
-#include <vector>      // std::vector
+#include <cstdint>       // std::int64_t
+#include <string>        // std::string
+#include <string_view>   // std::string_view
+#include <unordered_map> // std::unordered_map
+#include <variant>       // std::variant
+#include <vector>        // std::vector
 
 namespace sourcemeta::jsontoolkit::parser {
+
+const char JSON_OBJECT_START = '{';
+const char JSON_OBJECT_END = '}';
+const char JSON_OBJECT_KEY_DELIMITER = ':';
+const char JSON_OBJECT_SEPARATOR = ',';
 
 const char JSON_ARRAY_START = '[';
 const char JSON_ARRAY_END = ']';
@@ -81,6 +87,10 @@ auto string(const std::string_view &input) -> std::string;
 
 template <typename Wrapper>
 auto array(const std::string_view &input, std::vector<Wrapper> &output) -> void;
+
+template <typename Wrapper>
+auto object(const std::string_view &input,
+            std::unordered_map<std::string_view, Wrapper> &output) -> void;
 
 } // namespace sourcemeta::jsontoolkit::parser
 

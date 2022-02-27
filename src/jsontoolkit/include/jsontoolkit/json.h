@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 
 #include <cstddef>     // std::nullptr_t
@@ -14,6 +15,7 @@
 namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
+using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
 class JSON {
 public:
   JSON();
@@ -32,6 +34,9 @@ public:
 
   JSON(const std::string_view &document);
 
+  // General
+  auto size() -> std::size_t;
+
   // Boolean
   JSON(bool value);
   auto to_boolean() -> bool;
@@ -47,7 +52,11 @@ public:
   auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
   auto at(std::size_t index) -> JSON &;
-  auto size() -> std::size_t;
+
+  // Object
+  JSON(sourcemeta::jsontoolkit::Object &value);
+  auto to_object() -> std::shared_ptr<sourcemeta::jsontoolkit::Object>;
+  auto is_object() -> bool;
 
   // Number
   JSON(std::int64_t value);
@@ -70,6 +79,7 @@ private:
   bool must_parse = true;
   std::variant<bool, std::nullptr_t, std::int64_t, double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
+               std::shared_ptr<sourcemeta::jsontoolkit::Object>,
                std::shared_ptr<sourcemeta::jsontoolkit::String>>
       data;
 };
