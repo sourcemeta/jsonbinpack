@@ -6,15 +6,14 @@
 auto sourcemeta::jsontoolkit::parser::number(const std::string_view &input)
     -> std::variant<std::int64_t, double> {
 
-  const std::string_view document =
-      sourcemeta::jsontoolkit::parser::trim(input);
+  const std::string_view document{sourcemeta::jsontoolkit::parser::trim(input)};
 
   /*
    * Validate the input number and decide whether it is an integer or a double
    */
 
   // A JSON number starts with a digit or the minus sign
-  std::string_view::const_reference front = document.front();
+  std::string_view::const_reference front{document.front()};
   if (front != sourcemeta::jsontoolkit::parser::JSON_MINUS &&
       !sourcemeta::jsontoolkit::parser::is_digit(front)) {
     throw std::domain_error("Invalid number");
@@ -25,9 +24,9 @@ auto sourcemeta::jsontoolkit::parser::number(const std::string_view &input)
     throw std::domain_error("Invalid number");
   }
 
-  const std::string_view::size_type size = document.size();
+  const std::string_view::size_type size{document.size()};
   if (front == sourcemeta::jsontoolkit::parser::JSON_ZERO && size > 1) {
-    std::string_view::const_reference second = document.at(1);
+    std::string_view::const_reference second{document.at(1)};
     if (second != sourcemeta::jsontoolkit::parser::JSON_DECIMAL_POINT &&
         second != sourcemeta::jsontoolkit::parser::JSON_EXPONENT_UPPER &&
         second != sourcemeta::jsontoolkit::parser::JSON_EXPONENT_LOWER) {
@@ -36,10 +35,10 @@ auto sourcemeta::jsontoolkit::parser::number(const std::string_view &input)
   }
 
   bool integer = true;
-  std::string_view::size_type exponential_index = 0;
+  std::string_view::size_type exponential_index{0};
   for (std::string_view::size_type index = 1; index < size - 1; index++) {
-    std::string_view::const_reference character = document.at(index);
-    std::string_view::const_reference previous = document.at(index - 1);
+    std::string_view::const_reference character{document.at(index)};
+    std::string_view::const_reference previous{document.at(index - 1)};
 
     if (!sourcemeta::jsontoolkit::parser::is_digit(character) &&
         character != sourcemeta::jsontoolkit::parser::JSON_MINUS &&
@@ -81,8 +80,8 @@ auto sourcemeta::jsontoolkit::parser::number(const std::string_view &input)
 
   // TODO: Can we avoid converting to std::string?
   if (integer) {
-    return std::stol(std::string(document));
+    return std::stol(std::string{document});
   }
 
-  return std::stod(std::string(document));
+  return std::stod(std::string{document});
 }

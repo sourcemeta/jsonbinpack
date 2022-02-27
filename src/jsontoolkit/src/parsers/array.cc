@@ -12,13 +12,13 @@ auto sourcemeta::jsontoolkit::parser::array(const std::string_view &input)
     throw std::domain_error("Invalid array");
   }
 
-  const std::string_view::size_type size = document.size();
+  const std::string_view::size_type size{document.size()};
   std::string_view::size_type element_start_index = 0;
   std::string_view::size_type level = 0;
   bool is_string = false;
 
   for (std::string_view::size_type index = 1; index < size - 1; index++) {
-    std::string_view::const_reference character = document.at(index);
+    std::string_view::const_reference character{document.at(index)};
     const bool is_last_character = index == size - 2;
 
     switch (character) {
