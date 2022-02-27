@@ -17,17 +17,6 @@ class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
 class JSON final : public JSONContainer {
 public:
-  JSON();
-  ~JSON();
-  JSON(const JSON &document);
-  JSON(JSON &&document) noexcept;
-
-  // We cannot implement copy/move assignment operators
-  // given that the source JSON string is kept as a
-  // constant only set during construction.
-  auto operator=(const JSON &) -> JSON & = delete;
-  auto operator=(JSON &&) -> JSON & = delete;
-
   // Accept string literals
   JSON(const char *document);
 
