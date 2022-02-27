@@ -29,7 +29,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
-  sourcemeta::jsontoolkit::parser::array<Wrapper>(this->source(), this->data);
+  this->data = sourcemeta::jsontoolkit::parser::array<Wrapper>(this->source());
 }
 
 template <typename Wrapper>

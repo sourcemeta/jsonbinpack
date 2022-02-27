@@ -3,11 +3,10 @@
 #include <stdexcept> // std::domain_error
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::parser::array(const std::string_view &input,
-                                            std::vector<Wrapper> &output)
-    -> void {
-  const std::string_view document =
-      sourcemeta::jsontoolkit::parser::trim(input);
+auto sourcemeta::jsontoolkit::parser::array(const std::string_view &input)
+    -> std::vector<Wrapper> {
+  std::vector<Wrapper> output;
+  const std::string_view document{sourcemeta::jsontoolkit::parser::trim(input)};
   if (document.front() != sourcemeta::jsontoolkit::parser::JSON_ARRAY_START ||
       document.back() != sourcemeta::jsontoolkit::parser::JSON_ARRAY_END) {
     throw std::domain_error("Invalid array");
@@ -104,8 +103,10 @@ auto sourcemeta::jsontoolkit::parser::array(const std::string_view &input,
   if (level > 0) {
     throw std::domain_error("Unbalanced array");
   }
+
+  return output;
 }
 
-template void
+template auto
 sourcemeta::jsontoolkit::parser::array<sourcemeta::jsontoolkit::JSON>(
-    const std::string_view &, std::vector<sourcemeta::jsontoolkit::JSON> &);
+    const std::string_view &) -> std::vector<sourcemeta::jsontoolkit::JSON>;

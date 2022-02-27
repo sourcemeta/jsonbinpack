@@ -80,7 +80,7 @@ auto number(const std::string_view &input)
 auto string(const std::string_view &input) -> std::string;
 
 template <typename Wrapper>
-auto array(const std::string_view &input, std::vector<Wrapper> &output) -> void;
+auto array(const std::string_view &input) -> std::vector<Wrapper>;
 
 } // namespace sourcemeta::jsontoolkit::parser
 
