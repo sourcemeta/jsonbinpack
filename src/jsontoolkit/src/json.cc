@@ -46,7 +46,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
     : source{sourcemeta::jsontoolkit::parser::JSON_NULL},
       must_parse{false}, data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
-auto sourcemeta::jsontoolkit::JSON::parse() -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::parse() -> void {
   if (this->must_parse) {
     const std::string_view document =
         sourcemeta::jsontoolkit::parser::trim(this->source);
@@ -113,7 +113,6 @@ auto sourcemeta::jsontoolkit::JSON::parse() -> sourcemeta::jsontoolkit::JSON & {
   }
 
   this->must_parse = false;
-  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {

@@ -42,7 +42,7 @@ public:
 
 private:
   const std::string_view source;
-  auto parse() -> String &;
+  auto parse() -> void;
   bool must_parse;
   std::string data;
 };

@@ -65,7 +65,7 @@ public:
   auto to_string() -> std::string;
 
 private:
-  auto parse() -> JSON &;
+  auto parse() -> void;
   const std::string_view source;
   bool must_parse = true;
   std::variant<bool, std::nullptr_t, std::int64_t, double,

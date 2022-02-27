@@ -42,7 +42,7 @@ public:
 
 private:
   const std::string_view source;
-  auto parse() -> GenericArray &;
+  auto parse() -> void;
   bool must_parse;
   std::vector<Wrapper> data;
 };
