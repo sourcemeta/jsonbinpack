@@ -6,7 +6,7 @@
 #include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
-template <typename Wrapper> class GenericArray final : public JSONContainer {
+template <typename Wrapper> class GenericArray final : public Container {
 public:
   GenericArray();
   GenericArray(const std::string_view &document);

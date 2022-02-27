@@ -5,12 +5,12 @@
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
-    : JSONContainer{"[]", false} {}
+    : Container{"[]", false} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     const std::string_view &document)
-    : JSONContainer{document, true} {}
+    : Container{document, true} {}
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
