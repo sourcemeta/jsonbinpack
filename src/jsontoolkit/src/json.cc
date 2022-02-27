@@ -8,8 +8,6 @@
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : JSONContainer{document, true} {}
 
-sourcemeta::jsontoolkit::JSON::~JSON() = default;
-
 sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
     : JSONContainer{document, true} {}
 
@@ -20,12 +18,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
     : JSONContainer{std::to_string(value), false},
       data{std::in_place_type<double>, value} {}
-
-sourcemeta::jsontoolkit::JSON::JSON(
-    const sourcemeta::jsontoolkit::JSON &document) = default;
-
-sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::JSON &&document) noexcept = default;
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : JSONContainer{value.source(), false},
