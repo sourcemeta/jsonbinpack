@@ -5,12 +5,12 @@
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
-    : source{"[]"}, must_parse{false} {}
+    : JSONContainer{"[]", false} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     const std::string_view &document)
-    : source{document}, must_parse{true} {}
+    : JSONContainer{document, true} {}
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
@@ -28,11 +28,8 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
 }
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse() -> void {
-  if (this->must_parse) {
-    sourcemeta::jsontoolkit::parser::array<Wrapper>(this->source, this->data);
-    this->must_parse = false;
-  }
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
+  sourcemeta::jsontoolkit::parser::array<Wrapper>(this->source(), this->data);
 }
 
 template <typename Wrapper>
@@ -109,8 +106,8 @@ template typename sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size();
 
-template void
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::parse();
+template void sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::parse_source();
 
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::iterator

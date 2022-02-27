@@ -1,13 +1,14 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_STRING_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_STRING_H_
 
+#include <jsontoolkit/json_container.h>
 #include <string>      // std::string
 #include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit {
 // Forward declaration
 class JSON;
-class String {
+class String final : public JSONContainer {
 public:
   String();
   String(const std::string_view &document);
@@ -41,9 +42,7 @@ public:
   friend JSON;
 
 private:
-  const std::string_view source;
-  auto parse() -> void;
-  bool must_parse;
+  auto parse_source() -> void override;
   std::string data;
 };
 } // namespace sourcemeta::jsontoolkit
