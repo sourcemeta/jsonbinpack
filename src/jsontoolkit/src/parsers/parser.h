@@ -56,10 +56,10 @@ static constexpr std::string_view JSON_WHITESPACE_CHARACTERS =
     "\u0009\u000A\u000D\u0020";
 
 constexpr auto trim(const std::string_view &string) -> std::string_view {
-  const std::string_view::size_type start =
-      string.find_first_not_of(JSON_WHITESPACE_CHARACTERS);
-  const std::string_view::size_type end =
-      string.find_last_not_of(JSON_WHITESPACE_CHARACTERS);
+  const std::string_view::size_type start{
+      string.find_first_not_of(JSON_WHITESPACE_CHARACTERS)};
+  const std::string_view::size_type end{
+      string.find_last_not_of(JSON_WHITESPACE_CHARACTERS)};
   return start == std::string_view::npos || end == std::string_view::npos
              ? ""
              : string.substr(start, end - start + 1);
