@@ -1,10 +1,10 @@
 #include "parsers/parser.h"
 #include <jsontoolkit/json_string.h>
 
-sourcemeta::jsontoolkit::String::String() : source{"\"\""}, must_parse{false} {}
+sourcemeta::jsontoolkit::String::String() : JSONContainer{"\"\"", false} {}
 
 sourcemeta::jsontoolkit::String::String(const std::string_view &document)
-    : source{document}, must_parse{true} {}
+    : JSONContainer{document, true} {}
 
 auto sourcemeta::jsontoolkit::String::value() -> const std::string & {
   this->parse();
@@ -17,11 +17,8 @@ auto sourcemeta::jsontoolkit::String::size() ->
   return this->data.size();
 }
 
-auto sourcemeta::jsontoolkit::String::parse() -> void {
-  if (this->must_parse) {
-    this->data = sourcemeta::jsontoolkit::parser::string(this->source);
-    this->must_parse = false;
-  }
+auto sourcemeta::jsontoolkit::String::parse_source() -> void {
+  this->data = sourcemeta::jsontoolkit::parser::string(this->source());
 }
 
 auto sourcemeta::jsontoolkit::String::begin() ->

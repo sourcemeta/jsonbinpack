@@ -1,13 +1,12 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
+#include <jsontoolkit/json_container.h>
 #include <string_view> // std::string_view
 #include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
-// Forward declaration
-class JSON;
-template <typename Wrapper> class GenericArray {
+template <typename Wrapper> class GenericArray final : public JSONContainer {
 public:
   GenericArray();
   GenericArray(const std::string_view &document);
@@ -38,12 +37,10 @@ public:
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
 
-  friend JSON;
+  friend Wrapper;
 
 private:
-  const std::string_view source;
-  auto parse() -> void;
-  bool must_parse;
+  auto parse_source() -> void override;
   std::vector<Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit
