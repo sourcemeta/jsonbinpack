@@ -1,12 +1,18 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <stdexcept> // std::domain_error
+#include <string>    // std::string
 
 #include "parsers/parser.h"
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
-    : Container{"[]", false} {}
+    : Container{
+          std::string{
+              sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin} +
+              std::string{
+                  sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end},
+          false} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(

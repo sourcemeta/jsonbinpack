@@ -4,7 +4,10 @@
 #include <stdexcept> // std::domain_error
 #include <utility>   // std::move
 
-sourcemeta::jsontoolkit::String::String() : Container{"\"\"", false} {}
+sourcemeta::jsontoolkit::String::String()
+    : Container{std::string{sourcemeta::jsontoolkit::String::token_begin} +
+                    std::string{sourcemeta::jsontoolkit::String::token_end},
+                false} {}
 
 sourcemeta::jsontoolkit::String::String(const std::string_view &document)
     : Container{document, true} {}
