@@ -2,7 +2,6 @@
 #include <jsontoolkit/json.h>
 
 #include <stdexcept> // std::domain_error
-#include <string>    // std::to_string
 #include <utility>   // std::in_place_type
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
@@ -12,12 +11,12 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
     : Container{document, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : Container{std::to_string(value), false},
+    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
       data{std::in_place_type<std::int64_t>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : Container{std::to_string(value), false}, data{std::in_place_type<double>,
-                                                    value} {}
+    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
+      data{std::in_place_type<double>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : Container{value.source(), false},
@@ -34,7 +33,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value)
       data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{sourcemeta::jsontoolkit::Null::token_constant, false},
+    : Container{sourcemeta::jsontoolkit::Null::stringify(), false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {

@@ -9,6 +9,16 @@ static constexpr auto is_digit(const char character) -> bool {
          character <= sourcemeta::jsontoolkit::Number::token_number_nine;
 }
 
+auto sourcemeta::jsontoolkit::Number::stringify(const std::int64_t value)
+    -> std::string {
+  return std::to_string(value);
+}
+
+auto sourcemeta::jsontoolkit::Number::stringify(const double value)
+    -> std::string {
+  return std::to_string(value);
+}
+
 auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
     -> std::variant<std::int64_t, double> {
 
