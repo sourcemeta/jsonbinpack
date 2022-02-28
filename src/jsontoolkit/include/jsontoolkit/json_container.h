@@ -6,8 +6,7 @@
 namespace sourcemeta::jsontoolkit {
 class Container {
 public:
-  Container(const std::string_view &document, const bool parse)
-      : _source{document}, must_parse{parse} {}
+  Container(const std::string_view &document, bool parse);
   ~Container() = default;
 
   // Disable copy/move assignment due to slicing
