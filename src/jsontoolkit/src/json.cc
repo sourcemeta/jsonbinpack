@@ -30,9 +30,7 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
            std::make_shared<sourcemeta::jsontoolkit::String>(value)} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{value ? sourcemeta::jsontoolkit::parser::JSON_TRUE
-                      : sourcemeta::jsontoolkit::parser::JSON_FALSE,
-                false},
+    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false},
       data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
@@ -79,21 +77,9 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     }
 
     break;
-  case 't':
-    if (document.substr(1) == "rue") {
-      this->set_boolean(true);
-    } else {
-      throw std::domain_error("Invalid document");
-    }
-
-    break;
-  case 'f':
-    if (document.substr(1) == "alse") {
-      this->set_boolean(false);
-    } else {
-      throw std::domain_error("Invalid document");
-    }
-
+  case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
+  case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
+    this->set_boolean(sourcemeta::jsontoolkit::Boolean::parse(document));
     break;
   default:
     throw std::domain_error("Invalid document");

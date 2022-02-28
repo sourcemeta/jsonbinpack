@@ -1,5 +1,5 @@
 add_library(sourcemeta_jsontoolkit src/json.cc src/json_container.cc
-  src/json_array.cc src/json_string.cc src/json_number.cc)
+  src/json_array.cc src/json_string.cc src/json_number.cc src/json_boolean.cc)
 add_library(sourcemeta::jsontoolkit ALIAS sourcemeta_jsontoolkit)
 target_include_directories(sourcemeta_jsontoolkit PRIVATE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
