@@ -69,13 +69,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
 
     break;
   case sourcemeta::jsontoolkit::Null::token_constant.front():
-    if (document.substr(1) ==
-        sourcemeta::jsontoolkit::Null::token_constant.substr(1)) {
-      this->data = nullptr;
-    } else {
-      throw std::domain_error("Invalid document");
-    }
-
+    this->data = sourcemeta::jsontoolkit::Null::parse(document);
     break;
   case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
   case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
