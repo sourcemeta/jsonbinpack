@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_NUMBER_H_
 
 #include <cstdint>     // std::int64_t
+#include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
 
@@ -31,6 +32,8 @@ const char token_number_eight = '\u0038';
 const char token_number_nine = '\u0039';
 
 auto parse(const std::string_view &input) -> std::variant<std::int64_t, double>;
+auto stringify(std::int64_t value) -> std::string;
+auto stringify(double value) -> std::string;
 
 } // namespace sourcemeta::jsontoolkit::Number
 
