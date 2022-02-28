@@ -3,6 +3,7 @@
 
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
+#include <jsontoolkit/json_null.h>
 #include <jsontoolkit/json_number.h>
 #include <jsontoolkit/json_string.h>
 
