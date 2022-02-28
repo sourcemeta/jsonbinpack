@@ -51,23 +51,18 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   case sourcemeta::jsontoolkit::String::token_begin:
     this->data = std::make_shared<sourcemeta::jsontoolkit::String>(document);
     break;
-
-  // A number is a sequence of decimal digits with no superfluous leading
-  // zero. It may have a preceding minus sign (U+002D).
-  // See
-  // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-  case sourcemeta::jsontoolkit::parser::JSON_MINUS:
-  case sourcemeta::jsontoolkit::parser::JSON_ZERO:
-  case sourcemeta::jsontoolkit::parser::JSON_ONE:
-  case sourcemeta::jsontoolkit::parser::JSON_TWO:
-  case sourcemeta::jsontoolkit::parser::JSON_THREE:
-  case sourcemeta::jsontoolkit::parser::JSON_FOUR:
-  case sourcemeta::jsontoolkit::parser::JSON_FIVE:
-  case sourcemeta::jsontoolkit::parser::JSON_SIX:
-  case sourcemeta::jsontoolkit::parser::JSON_SEVEN:
-  case sourcemeta::jsontoolkit::parser::JSON_EIGHT:
-  case sourcemeta::jsontoolkit::parser::JSON_NINE:
-    number_result = sourcemeta::jsontoolkit::parser::number(document);
+  case sourcemeta::jsontoolkit::Number::token_minus_sign:
+  case sourcemeta::jsontoolkit::Number::token_number_zero:
+  case sourcemeta::jsontoolkit::Number::token_number_one:
+  case sourcemeta::jsontoolkit::Number::token_number_two:
+  case sourcemeta::jsontoolkit::Number::token_number_three:
+  case sourcemeta::jsontoolkit::Number::token_number_four:
+  case sourcemeta::jsontoolkit::Number::token_number_five:
+  case sourcemeta::jsontoolkit::Number::token_number_six:
+  case sourcemeta::jsontoolkit::Number::token_number_seven:
+  case sourcemeta::jsontoolkit::Number::token_number_eight:
+  case sourcemeta::jsontoolkit::Number::token_number_nine:
+    number_result = sourcemeta::jsontoolkit::Number::parse(document);
     if (std::holds_alternative<std::int64_t>(number_result)) {
       this->data = std::get<std::int64_t>(number_result);
     } else {
