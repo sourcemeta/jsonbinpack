@@ -86,12 +86,13 @@ auto sourcemeta::jsontoolkit::parser::array(const std::string_view &input)
         element_start_index = index;
       }
 
-      if (character == sourcemeta::jsontoolkit::parser::JSON_STRING_QUOTE) {
+      if (character == sourcemeta::jsontoolkit::String::token_begin ||
+          character == sourcemeta::jsontoolkit::String::token_end) {
         if (is_string) {
           is_string = false;
-        } else if (index == 0 || document.at(index - 1) !=
-                                     sourcemeta::jsontoolkit::parser::
-                                         JSON_STRING_ESCAPE_CHARACTER) {
+        } else if (index == 0 ||
+                   document.at(index - 1) !=
+                       sourcemeta::jsontoolkit::String::token_escape) {
           is_string = true;
         }
       }

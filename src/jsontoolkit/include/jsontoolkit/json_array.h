@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
 #include <jsontoolkit/json_container.h>
+#include <jsontoolkit/json_string.h>
 #include <string_view> // std::string_view
 #include <vector>      // std::vector
 

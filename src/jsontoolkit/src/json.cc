@@ -48,7 +48,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   case sourcemeta::jsontoolkit::parser::JSON_ARRAY_START:
     this->data = std::make_shared<sourcemeta::jsontoolkit::Array>(document);
     break;
-  case sourcemeta::jsontoolkit::parser::JSON_STRING_QUOTE:
+  case sourcemeta::jsontoolkit::String::token_begin:
     this->data = std::make_shared<sourcemeta::jsontoolkit::String>(document);
     break;
 
