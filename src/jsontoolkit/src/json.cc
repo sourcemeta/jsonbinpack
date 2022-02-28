@@ -1,4 +1,4 @@
-#include "parsers/parser.h"
+#include "utils.h"
 #include <jsontoolkit/json.h>
 
 #include <stdexcept> // std::domain_error
@@ -38,7 +38,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
 
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   const std::string_view document =
-      sourcemeta::jsontoolkit::parser::trim(this->source());
+      sourcemeta::jsontoolkit::utils::trim(this->source());
   std::variant<std::int64_t, double> number_result;
 
   switch (document.front()) {

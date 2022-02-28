@@ -1,9 +1,9 @@
-#ifndef SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
-#define SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
+#ifndef SOURCEMETA_JSONTOOLKIT_UTILS_H_
+#define SOURCEMETA_JSONTOOLKIT_UTILS_H_
 
 #include <string_view> // std::string_view
 
-namespace sourcemeta::jsontoolkit::parser {
+namespace sourcemeta::jsontoolkit::utils {
 
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character
@@ -30,6 +30,6 @@ constexpr auto is_blank(const char character) -> bool {
   return JSON_WHITESPACE_CHARACTERS.find(character) != std::string_view::npos;
 }
 
-} // namespace sourcemeta::jsontoolkit::parser
+} // namespace sourcemeta::jsontoolkit::utils
 
 #endif

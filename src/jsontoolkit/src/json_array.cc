@@ -3,7 +3,7 @@
 #include <stdexcept> // std::domain_error
 #include <string>    // std::string
 
-#include "parsers/parser.h"
+#include "utils.h"
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
@@ -37,7 +37,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
   const std::string_view document{
-      sourcemeta::jsontoolkit::parser::trim(this->source())};
+      sourcemeta::jsontoolkit::utils::trim(this->source())};
   if (document.front() !=
           sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin ||
       document.back() !=
@@ -112,9 +112,9 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
             element_start_index, index - element_start_index + 1)));
         element_start_index = 0;
       } else if (is_last_character && element_start_index == 0 &&
-                 !sourcemeta::jsontoolkit::parser::is_blank(character)) {
+                 !sourcemeta::jsontoolkit::utils::is_blank(character)) {
         this->data.push_back(Wrapper(document.substr(index, 1)));
-      } else if (!sourcemeta::jsontoolkit::parser::is_blank(character) &&
+      } else if (!sourcemeta::jsontoolkit::utils::is_blank(character) &&
                  element_start_index == 0 && level == 0) {
         element_start_index = index;
       }

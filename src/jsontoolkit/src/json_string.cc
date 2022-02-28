@@ -1,4 +1,4 @@
-#include "parsers/parser.h"
+#include "utils.h"
 #include <jsontoolkit/json_string.h>
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
@@ -41,7 +41,7 @@ static constexpr auto is_character_allowed_in_json_string(const char character)
 
 auto sourcemeta::jsontoolkit::String::parse_source() -> void {
   const std::string_view document{
-      sourcemeta::jsontoolkit::parser::trim(this->source())};
+      sourcemeta::jsontoolkit::utils::trim(this->source())};
 
   if (document.front() != sourcemeta::jsontoolkit::String::token_begin ||
       document.back() != sourcemeta::jsontoolkit::String::token_end) {
