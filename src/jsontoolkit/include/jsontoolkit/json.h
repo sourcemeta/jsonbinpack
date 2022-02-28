@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_H_
 
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_boolean.h>
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_null.h>
 #include <jsontoolkit/json_number.h>

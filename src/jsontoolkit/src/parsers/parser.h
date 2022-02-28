@@ -5,9 +5,6 @@
 
 namespace sourcemeta::jsontoolkit::parser {
 
-const char *const JSON_TRUE = "true";
-const char *const JSON_FALSE = "false";
-
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character
 // tabulation (U+0009), line feed (U+000A), carriage return (U+000D), and space
