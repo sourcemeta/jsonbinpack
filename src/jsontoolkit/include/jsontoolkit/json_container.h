@@ -8,23 +8,22 @@ class Container {
 public:
   Container(const std::string_view &document, const bool parse)
       : _source{document}, must_parse{parse} {}
+  ~Container() = default;
+
+  // Disable copy/move assignment due to slicing
+  auto operator=(const Container &) -> Container & = delete;
+  auto operator=(Container &&) -> Container & = delete;
 
 protected:
-  // Child classes are expected to override
-  // parse_source() but never parse().
-  virtual auto parse() -> void final {
-    if (!this->must_parse) {
-      return;
-    }
-
-    this->parse_source();
-    this->must_parse = false;
-  }
-
+  // Child classes are expected to override parse_source().
   virtual auto parse_source() -> void = 0;
-  [[nodiscard]] auto source() const -> const std::string_view & {
-    return this->_source;
-  }
+
+  auto parse() -> void;
+  [[nodiscard]] auto source() const -> const std::string_view &;
+
+  // Enable copy/move semantics for derived classes
+  Container(const Container &) = default;
+  Container(Container &&) = default;
 
 private:
   const std::string_view _source;

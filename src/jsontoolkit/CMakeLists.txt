@@ -1,4 +1,4 @@
-add_library(sourcemeta_jsontoolkit src/json.cc
+add_library(sourcemeta_jsontoolkit src/json.cc src/json_container.cc
   src/json_array.cc src/json_string.cc
   src/parsers/array.cc src/parsers/number.cc src/parsers/string.cc)
 add_library(sourcemeta::jsontoolkit ALIAS sourcemeta_jsontoolkit)
