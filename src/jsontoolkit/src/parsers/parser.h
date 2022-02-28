@@ -1,13 +1,10 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
 #define SOURCEMETA_JSONTOOLKIT_PARSERS_PARSE_H_
 
-#include <string>      // std::string
 #include <string_view> // std::string_view
-#include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit::parser {
 
-const char *const JSON_NULL = "null";
 const char *const JSON_TRUE = "true";
 const char *const JSON_FALSE = "false";
 

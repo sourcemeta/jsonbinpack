@@ -36,7 +36,7 @@ sourcemeta::jsontoolkit::JSON::JSON(const bool value)
       data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{sourcemeta::jsontoolkit::parser::JSON_NULL, false},
+    : Container{sourcemeta::jsontoolkit::Null::token_constant, false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
@@ -70,8 +70,9 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     }
 
     break;
-  case 'n':
-    if (document.substr(1) == "ull") {
+  case sourcemeta::jsontoolkit::Null::token_constant.front():
+    if (document.substr(1) ==
+        sourcemeta::jsontoolkit::Null::token_constant.substr(1)) {
       this->data = nullptr;
     } else {
       throw std::domain_error("Invalid document");
