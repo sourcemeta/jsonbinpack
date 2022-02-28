@@ -28,6 +28,14 @@ public:
   using reverse_iterator = typename std::string::reverse_iterator;
   using const_reverse_iterator = typename std::string::const_reverse_iterator;
 
+  // A string is a sequence of Unicode code points wrapped with quotation marks
+  // (U+0022)
+  // See
+  // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
+  static const char token_begin = '\u0022';
+  static const char token_end = '\u0022';
+  static const char token_escape = '\u005C';
+
   auto size() -> size_type;
 
   auto begin() -> iterator;

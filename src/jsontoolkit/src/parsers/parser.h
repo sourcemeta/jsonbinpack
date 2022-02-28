@@ -13,13 +13,6 @@ const char JSON_ARRAY_START = '[';
 const char JSON_ARRAY_END = ']';
 const char JSON_ARRAY_SEPARATOR = ',';
 
-// A string is a sequence of Unicode code points wrapped with quotation marks
-// (U+0022) See
-// https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-const char JSON_STRING_QUOTE = '\u0022';
-
-const char JSON_STRING_ESCAPE_CHARACTER = '\u005C';
-
 // A number is a sequence of decimal digits with no superfluous leading
 // zero. It may have a preceding minus sign (U+002D). It may have a
 // fractional part prefixed by a decimal point (U+002E). It may have an
@@ -76,8 +69,6 @@ constexpr auto is_digit(const char character) -> bool {
 
 auto number(const std::string_view &input)
     -> std::variant<std::int64_t, double>;
-
-auto string(const std::string_view &input) -> std::string;
 
 template <typename Wrapper>
 auto array(const std::string_view &input) -> std::vector<Wrapper>;
