@@ -1,4 +1,4 @@
-#include "parsers/parser.h"
+#include "utils.h"
 #include <cmath> // std::modf
 #include <jsontoolkit/json_number.h>
 #include <stdexcept> // std::domain_error
@@ -22,7 +22,7 @@ auto sourcemeta::jsontoolkit::Number::stringify(const double value)
 auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
     -> std::variant<std::int64_t, double> {
 
-  const std::string_view document{sourcemeta::jsontoolkit::parser::trim(input)};
+  const std::string_view document{sourcemeta::jsontoolkit::utils::trim(input)};
 
   /*
    * Validate the input number and decide whether it is an integer or a double
