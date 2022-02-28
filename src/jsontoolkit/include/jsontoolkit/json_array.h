@@ -26,6 +26,10 @@ public:
   using difference_type = typename std::vector<Wrapper>::difference_type;
   using size_type = typename std::vector<Wrapper>::size_type;
 
+  static const char token_begin = '[';
+  static const char token_end = ']';
+  static const char token_delimiter = ',';
+
   auto at(size_type index) -> Wrapper &;
   auto size() -> size_type;
 

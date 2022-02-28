@@ -9,10 +9,6 @@
 
 namespace sourcemeta::jsontoolkit::parser {
 
-const char JSON_ARRAY_START = '[';
-const char JSON_ARRAY_END = ']';
-const char JSON_ARRAY_SEPARATOR = ',';
-
 // A number is a sequence of decimal digits with no superfluous leading
 // zero. It may have a preceding minus sign (U+002D). It may have a
 // fractional part prefixed by a decimal point (U+002E). It may have an
@@ -69,9 +65,6 @@ constexpr auto is_digit(const char character) -> bool {
 
 auto number(const std::string_view &input)
     -> std::variant<std::int64_t, double>;
-
-template <typename Wrapper>
-auto array(const std::string_view &input) -> std::vector<Wrapper>;
 
 } // namespace sourcemeta::jsontoolkit::parser
 

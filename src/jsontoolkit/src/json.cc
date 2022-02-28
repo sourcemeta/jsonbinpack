@@ -45,7 +45,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   std::variant<std::int64_t, double> number_result;
 
   switch (document.front()) {
-  case sourcemeta::jsontoolkit::parser::JSON_ARRAY_START:
+  case sourcemeta::jsontoolkit::Array::token_begin:
     this->data = std::make_shared<sourcemeta::jsontoolkit::Array>(document);
     break;
   case sourcemeta::jsontoolkit::String::token_begin:
