@@ -12,9 +12,14 @@ sourcemeta::jsontoolkit::String::String()
 sourcemeta::jsontoolkit::String::String(const std::string_view &document)
     : Container{document, true} {}
 
-auto sourcemeta::jsontoolkit::String::value() -> const std::string & {
+auto sourcemeta::jsontoolkit::String::value() & -> const std::string & {
   this->parse();
   return this->data;
+}
+
+auto sourcemeta::jsontoolkit::String::value() && -> std::string {
+  this->parse();
+  return std::move(this->data);
 }
 
 auto sourcemeta::jsontoolkit::String::size() ->
