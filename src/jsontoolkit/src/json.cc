@@ -124,7 +124,7 @@ auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
       ->value();
 }
 
-auto sourcemeta::jsontoolkit::JSON::at(const std::size_t index)
+auto sourcemeta::jsontoolkit::JSON::operator[](const std::size_t index)
     -> sourcemeta::jsontoolkit::JSON & {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
