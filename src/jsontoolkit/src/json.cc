@@ -2,7 +2,7 @@
 #include <jsontoolkit/json.h>
 
 #include <stdexcept> // std::domain_error
-#include <utility>   // std::in_place_type
+#include <utility>   // std::in_place_type, std::move
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : Container{document, true} {}
@@ -85,7 +85,7 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array()
-    -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
+    & -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
@@ -100,10 +100,8 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::set_boolean(const bool value)
-    -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) & -> void {
   this->data = value;
-  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
@@ -124,11 +122,19 @@ auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
       ->value();
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator[](const std::size_t index)
-    -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::operator[](
+    const std::size_t index) & -> sourcemeta::jsontoolkit::JSON & {
   this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
       ->at(index);
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator[](
+    const std::size_t index) && -> sourcemeta::jsontoolkit::JSON {
+  this->parse();
+  return std::move(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+          ->at(index));
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {

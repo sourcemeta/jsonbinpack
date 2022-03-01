@@ -12,7 +12,8 @@ class String final : public Container {
 public:
   String();
   String(const std::string_view &document);
-  auto value() -> const std::string &;
+  auto value() & -> const std::string &;
+  auto value() && -> std::string;
 
   using traits_type = typename std::string::traits_type;
   using value_type = typename std::string::value_type;

@@ -2,6 +2,7 @@
 #include <jsontoolkit/json_array.h>
 #include <stdexcept> // std::domain_error
 #include <string>    // std::string
+#include <utility>   // std::move
 
 #include "utils.h"
 
@@ -22,9 +23,17 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    -> Wrapper & {
+    & -> Wrapper & {
   this->parse();
   return this->data.at(index);
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
+    const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
+    && -> Wrapper {
+  this->parse();
+  return std::move(this->data.at(index));
 }
 
 template <typename Wrapper>
@@ -207,7 +216,12 @@ template sourcemeta::jsontoolkit::GenericArray<
 template sourcemeta::jsontoolkit::JSON &
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
     const sourcemeta::jsontoolkit::GenericArray<
-        sourcemeta::jsontoolkit::JSON>::size_type);
+        sourcemeta::jsontoolkit::JSON>::size_type) &;
+
+template sourcemeta::jsontoolkit::JSON
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
+    const sourcemeta::jsontoolkit::GenericArray<
+        sourcemeta::jsontoolkit::JSON>::size_type) &&;
 
 template typename sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::size_type

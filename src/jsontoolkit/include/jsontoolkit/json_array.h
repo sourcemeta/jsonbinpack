@@ -30,7 +30,8 @@ public:
   static const char token_end = ']';
   static const char token_delimiter = ',';
 
-  auto at(size_type index) -> Wrapper &;
+  auto at(size_type index) & -> Wrapper &;
+  auto at(size_type index) && -> Wrapper;
   auto size() -> size_type;
 
   auto begin() -> iterator;

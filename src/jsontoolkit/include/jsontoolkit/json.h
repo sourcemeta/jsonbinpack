@@ -29,7 +29,7 @@ public:
   JSON(bool value);
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
-  auto set_boolean(bool value) -> JSON &;
+  auto set_boolean(bool value) & -> void;
 
   // Null
   JSON(std::nullptr_t);
@@ -37,9 +37,10 @@ public:
 
   // Array
   JSON(sourcemeta::jsontoolkit::Array &value);
-  auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
+  auto to_array() & -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
-  auto operator[](std::size_t index) -> JSON &;
+  auto operator[](std::size_t index) & -> JSON &;
+  auto operator[](std::size_t index) && -> JSON;
   auto size() -> std::size_t;
 
   // Number
