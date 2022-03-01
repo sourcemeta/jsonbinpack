@@ -19,13 +19,13 @@ TEST(JSON, at_boolean) {
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
-  EXPECT_TRUE(document.at(0).is_boolean());
-  EXPECT_TRUE(document.at(1).is_boolean());
-  EXPECT_TRUE(document.at(2).is_boolean());
+  EXPECT_TRUE(document[0].is_boolean());
+  EXPECT_TRUE(document[1].is_boolean());
+  EXPECT_TRUE(document[2].is_boolean());
 
-  EXPECT_TRUE(document.at(0).to_boolean());
-  EXPECT_FALSE(document.at(1).to_boolean());
-  EXPECT_TRUE(document.at(2).to_boolean());
+  EXPECT_TRUE(document[0].to_boolean());
+  EXPECT_FALSE(document[1].to_boolean());
+  EXPECT_TRUE(document[2].to_boolean());
 }
 
 TEST(JSON, boolean_array_iterator) {

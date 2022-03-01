@@ -39,7 +39,7 @@ public:
   JSON(sourcemeta::jsontoolkit::Array &value);
   auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
-  auto at(std::size_t index) -> JSON &;
+  auto operator[](std::size_t index) -> JSON &;
   auto size() -> std::size_t;
 
   // Number
