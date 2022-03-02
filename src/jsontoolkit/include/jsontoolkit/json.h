@@ -53,6 +53,8 @@ public:
   auto is_real() -> bool;
   auto to_integer() -> std::int64_t;
   auto to_real() -> double;
+  auto operator==(std::int64_t) const -> bool;
+  auto operator==(double) const -> bool;
 
   // String
   // TODO: How can we create a constructor that takes std::string

@@ -87,6 +87,28 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
          std::get<bool>(this->data) == value;
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return (std::holds_alternative<std::int64_t>(this->data) &&
+          std::get<std::int64_t>(this->data) == value) ||
+         (std::holds_alternative<double>(this->data) &&
+          std::get<double>(this->data) == value);
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return (std::holds_alternative<std::int64_t>(this->data) &&
+          std::get<std::int64_t>(this->data) == value) ||
+         (std::holds_alternative<double>(this->data) &&
+          std::get<double>(this->data) == value);
+}
+
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
     -> bool {
   if (!this->is_parsed()) {
