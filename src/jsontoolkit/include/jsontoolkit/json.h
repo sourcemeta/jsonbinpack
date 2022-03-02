@@ -35,6 +35,8 @@ public:
   // Null
   JSON(std::nullptr_t);
   auto is_null() -> bool;
+  auto operator==(std::nullptr_t) const -> bool;
+  auto operator=(std::nullptr_t) & -> JSON &;
 
   // Array
   JSON(sourcemeta::jsontoolkit::Array &value);

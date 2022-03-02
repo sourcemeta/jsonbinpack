@@ -5,13 +5,13 @@
 TEST(JSON, set_boolean) {
   sourcemeta::jsontoolkit::JSON document{false};
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
   document = true;
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_TRUE(document.to_boolean());
+  EXPECT_EQ(document, true);
   document = false;
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
 }
 
 TEST(JSON, at_boolean) {
@@ -23,9 +23,9 @@ TEST(JSON, at_boolean) {
   EXPECT_TRUE(document[1].is_boolean());
   EXPECT_TRUE(document[2].is_boolean());
 
-  EXPECT_TRUE(document[0].to_boolean());
-  EXPECT_FALSE(document[1].to_boolean());
-  EXPECT_TRUE(document[2].to_boolean());
+  EXPECT_EQ(document[0], true);
+  EXPECT_EQ(document[1], false);
+  EXPECT_EQ(document[2], true);
 }
 
 TEST(JSON, boolean_array_iterator) {

@@ -87,6 +87,14 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
          std::get<bool>(this->data) == value;
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return std::holds_alternative<std::nullptr_t>(this->data);
+}
+
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
   this->parse();
   return std::get<bool>(this->data);
@@ -111,6 +119,12 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const bool value) & -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::nullptr_t) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = nullptr;
   return *this;
 }
 
