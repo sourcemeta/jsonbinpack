@@ -150,6 +150,24 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   return *this;
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::int64_t value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const int value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = static_cast<std::int64_t>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const double value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = value;
+  return *this;
+}
+
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
   this->parse();
   return std::holds_alternative<

@@ -1,6 +1,54 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 
+TEST(Number, set_negative_integer) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = -4;
+  EXPECT_TRUE(document.is_integer());
+  EXPECT_FALSE(document.is_real());
+}
+
+TEST(Number, set_negative_real) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = -4.3;
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+}
+
+TEST(Number, set_negative_integral_real) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = -4.0;
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+}
+
+TEST(Number, set_positive_integer) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = 4;
+  EXPECT_TRUE(document.is_integer());
+  EXPECT_FALSE(document.is_real());
+}
+
+TEST(Number, set_positive_real) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = 4.3;
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+}
+
+TEST(Number, set_positive_integral_real) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  EXPECT_TRUE(document.is_boolean());
+  document = 4.0;
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_TRUE(document.is_real());
+}
+
 TEST(Number, string_integer_zero) {
   sourcemeta::jsontoolkit::JSON document{"0"};
   EXPECT_TRUE(document.is_integer());

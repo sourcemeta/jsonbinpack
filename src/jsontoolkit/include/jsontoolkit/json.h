@@ -55,6 +55,9 @@ public:
   auto to_real() -> double;
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
+  auto operator=(std::int64_t) & -> JSON &;
+  auto operator=(int) & -> JSON &;
+  auto operator=(double) & -> JSON &;
 
   // String
   // TODO: How can we create a constructor that takes std::string
