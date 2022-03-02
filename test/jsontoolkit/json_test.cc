@@ -14,6 +14,18 @@ TEST(JSON, set_boolean) {
   EXPECT_EQ(document, false);
 }
 
+TEST(JSON, not_bool_equality_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_FALSE(document.is_boolean());
+  EXPECT_FALSE(document == true);
+}
+
+TEST(JSON, not_bool_equality_int) {
+  sourcemeta::jsontoolkit::JSON document{static_cast<std::int64_t>(6)};
+  EXPECT_FALSE(document.is_boolean());
+  EXPECT_FALSE(document == true);
+}
+
 TEST(JSON, at_boolean) {
   sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
