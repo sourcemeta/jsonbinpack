@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <jsontoolkit/json.h>
 
+#include <cmath>     // std::modf
 #include <stdexcept> // std::domain_error, std::logic_error
 #include <utility>   // std::in_place_type, std::move
 
@@ -92,10 +93,19 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
   if (!this->is_parsed()) {
     throw std::logic_error("Not parsed");
   }
-  return (std::holds_alternative<std::int64_t>(this->data) &&
-          std::get<std::int64_t>(this->data) == value) ||
-         (std::holds_alternative<double>(this->data) &&
-          std::get<double>(this->data) == value);
+
+  if (std::holds_alternative<std::int64_t>(this->data)) {
+    return std::get<std::int64_t>(this->data) == value;
+  }
+
+  if (std::holds_alternative<double>(this->data)) {
+    double integral = 0.0;
+    const double fractional =
+        std::modf(std::get<double>(this->data), &integral);
+    return fractional == 0.0 && static_cast<std::int64_t>(integral) == value;
+  }
+
+  return false;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
@@ -103,10 +113,19 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
   if (!this->is_parsed()) {
     throw std::logic_error("Not parsed");
   }
-  return (std::holds_alternative<std::int64_t>(this->data) &&
-          std::get<std::int64_t>(this->data) == value) ||
-         (std::holds_alternative<double>(this->data) &&
-          std::get<double>(this->data) == value);
+
+  if (std::holds_alternative<double>(this->data)) {
+    return std::get<double>(this->data) == value;
+  }
+
+  if (std::holds_alternative<std::int64_t>(this->data)) {
+    double integral = 0.0;
+    const double fractional = std::modf(value, &integral);
+    return fractional == 0.0 && std::get<std::int64_t>(this->data) ==
+                                    static_cast<std::int64_t>(integral);
+  }
+
+  return false;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const

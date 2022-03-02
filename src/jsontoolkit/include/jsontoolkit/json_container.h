@@ -17,7 +17,7 @@ protected:
   // Child classes are expected to override parse_source().
   virtual auto parse_source() -> void = 0;
 
-  auto is_parsed() const -> bool;
+  [[nodiscard]] auto is_parsed() const -> bool;
   auto parse() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
 
