@@ -27,8 +27,3 @@ ctest --preset <preset>
 
 Once the project has been built, the JSON BinPack command-line tool can be
 found at `build/<preset>/src/cli/jsonbinpack`.
-
-License
--------
-
-Copyright (C) Juan Cruz Viotti - All Rights Reserved.
