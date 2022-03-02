@@ -5,13 +5,25 @@
 TEST(JSON, set_boolean) {
   sourcemeta::jsontoolkit::JSON document{false};
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_FALSE(document.to_boolean());
-  document.set_boolean(true);
+  EXPECT_EQ(document, false);
+  document = true;
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_TRUE(document.to_boolean());
-  document.set_boolean(false);
+  EXPECT_EQ(document, true);
+  document = false;
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
+}
+
+TEST(JSON, not_bool_equality_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_FALSE(document.is_boolean());
+  EXPECT_FALSE(document == true);
+}
+
+TEST(JSON, not_bool_equality_int) {
+  sourcemeta::jsontoolkit::JSON document{static_cast<std::int64_t>(6)};
+  EXPECT_FALSE(document.is_boolean());
+  EXPECT_FALSE(document == true);
 }
 
 TEST(JSON, at_boolean) {
@@ -23,9 +35,9 @@ TEST(JSON, at_boolean) {
   EXPECT_TRUE(document[1].is_boolean());
   EXPECT_TRUE(document[2].is_boolean());
 
-  EXPECT_TRUE(document[0].to_boolean());
-  EXPECT_FALSE(document[1].to_boolean());
-  EXPECT_TRUE(document[2].to_boolean());
+  EXPECT_EQ(document[0], true);
+  EXPECT_EQ(document[1], false);
+  EXPECT_EQ(document[2], true);
 }
 
 TEST(JSON, boolean_array_iterator) {

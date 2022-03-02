@@ -1,7 +1,8 @@
 #include "utils.h"
 #include <jsontoolkit/json.h>
 
-#include <stdexcept> // std::domain_error
+#include <cmath>     // std::modf
+#include <stdexcept> // std::domain_error, std::logic_error
 #include <utility>   // std::in_place_type, std::move
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
@@ -72,11 +73,67 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     break;
   case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
   case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
-    this->set_boolean(sourcemeta::jsontoolkit::Boolean::parse(document));
+    *this = sourcemeta::jsontoolkit::Boolean::parse(document);
     break;
   default:
     throw std::domain_error("Invalid document");
   }
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return std::holds_alternative<bool>(this->data) &&
+         std::get<bool>(this->data) == value;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  if (std::holds_alternative<std::int64_t>(this->data)) {
+    return std::get<std::int64_t>(this->data) == value;
+  }
+
+  if (std::holds_alternative<double>(this->data)) {
+    double integral = 0.0;
+    const double fractional =
+        std::modf(std::get<double>(this->data), &integral);
+    return fractional == 0.0 && static_cast<std::int64_t>(integral) == value;
+  }
+
+  return false;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  if (std::holds_alternative<double>(this->data)) {
+    return std::get<double>(this->data) == value;
+  }
+
+  if (std::holds_alternative<std::int64_t>(this->data)) {
+    double integral = 0.0;
+    const double fractional = std::modf(value, &integral);
+    return fractional == 0.0 && std::get<std::int64_t>(this->data) ==
+                                    static_cast<std::int64_t>(integral);
+  }
+
+  return false;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
@@ -100,8 +157,34 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) & -> void {
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const bool value) & -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::nullptr_t) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = nullptr;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::int64_t value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const int value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = static_cast<std::int64_t>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const double value) & -> sourcemeta::jsontoolkit::JSON & {
+  this->data = value;
+  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {

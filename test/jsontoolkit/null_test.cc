@@ -5,16 +5,28 @@
 TEST(Null, nullptr) {
   sourcemeta::jsontoolkit::JSON document{nullptr};
   EXPECT_TRUE(document.is_null());
+  EXPECT_EQ(document, nullptr);
+}
+
+TEST(Null, set_null) {
+  sourcemeta::jsontoolkit::JSON document{true};
+  EXPECT_FALSE(document.is_null());
+  EXPECT_EQ(document, true);
+  document = nullptr;
+  EXPECT_TRUE(document.is_null());
+  EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, valid) {
   sourcemeta::jsontoolkit::JSON document{"null"};
   EXPECT_TRUE(document.is_null());
+  EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, valid_with_padding) {
   sourcemeta::jsontoolkit::JSON document{"   null   "};
   EXPECT_TRUE(document.is_null());
+  EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, more_than_needed) {

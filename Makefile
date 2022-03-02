@@ -15,10 +15,10 @@ all:
 CASE ?=
 ifdef CASE
 test:
-	$(CTEST) --preset $(PRESET) --tests-regex $(CASE)
+	$(CTEST) --preset $(PRESET) --verbose --tests-regex $(CASE)
 else
 test:
-	$(CTEST) --preset $(PRESET)
+	$(CTEST) --preset $(PRESET) --verbose
 endif
 .PHONY: test
 
