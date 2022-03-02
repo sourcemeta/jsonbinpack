@@ -6,36 +6,40 @@ TEST(Boolean, true_bool) {
   sourcemeta::jsontoolkit::JSON document{true};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_TRUE(document.to_boolean());
+  EXPECT_EQ(document, true);
 }
 
 TEST(Boolean, false_bool) {
   sourcemeta::jsontoolkit::JSON document{false};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
 }
 
 TEST(Boolean, true_string) {
   sourcemeta::jsontoolkit::JSON document{"true"};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_TRUE(document.to_boolean());
+  EXPECT_EQ(document, true);
 }
 
 TEST(Boolean, false_string) {
   sourcemeta::jsontoolkit::JSON document{"false"};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
 }
 
 TEST(Boolean, true_string_padded) {
   sourcemeta::jsontoolkit::JSON document{"  true  "};
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_TRUE(document.to_boolean());
+  EXPECT_EQ(document, true);
 }
 
 TEST(Boolean, false_string_padded) {
   sourcemeta::jsontoolkit::JSON document{"  false  "};
   EXPECT_TRUE(document.is_boolean());
-  EXPECT_FALSE(document.to_boolean());
+  EXPECT_EQ(document, false);
 }
 
 TEST(Boolean, true_more_than_needed) {

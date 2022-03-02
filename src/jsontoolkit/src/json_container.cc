@@ -4,6 +4,10 @@ sourcemeta::jsontoolkit::Container::Container(const std::string_view &document,
                                               const bool parse)
     : _source{document}, must_parse{parse} {}
 
+auto sourcemeta::jsontoolkit::Container::is_parsed() const -> bool {
+  return !this->must_parse;
+}
+
 auto sourcemeta::jsontoolkit::Container::parse() -> void {
   if (!this->must_parse) {
     return;

@@ -29,7 +29,8 @@ public:
   JSON(bool value);
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
-  auto set_boolean(bool value) & -> void;
+  auto operator==(bool) const -> bool;
+  auto operator=(bool) & -> JSON &;
 
   // Null
   JSON(std::nullptr_t);

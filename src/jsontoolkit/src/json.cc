@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <jsontoolkit/json.h>
 
-#include <stdexcept> // std::domain_error
+#include <stdexcept> // std::domain_error, std::logic_error
 #include <utility>   // std::in_place_type, std::move
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
@@ -72,11 +72,19 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     break;
   case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
   case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
-    this->set_boolean(sourcemeta::jsontoolkit::Boolean::parse(document));
+    *this = sourcemeta::jsontoolkit::Boolean::parse(document);
     break;
   default:
     throw std::domain_error("Invalid document");
   }
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+  return std::holds_alternative<bool>(this->data) &&
+         std::get<bool>(this->data) == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
@@ -100,8 +108,10 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::set_boolean(const bool value) & -> void {
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const bool value) & -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
+  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {

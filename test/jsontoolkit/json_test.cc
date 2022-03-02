@@ -6,10 +6,10 @@ TEST(JSON, set_boolean) {
   sourcemeta::jsontoolkit::JSON document{false};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_FALSE(document.to_boolean());
-  document.set_boolean(true);
+  document = true;
   EXPECT_TRUE(document.is_boolean());
   EXPECT_TRUE(document.to_boolean());
-  document.set_boolean(false);
+  document = false;
   EXPECT_TRUE(document.is_boolean());
   EXPECT_FALSE(document.to_boolean());
 }
