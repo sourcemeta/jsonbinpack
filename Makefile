@@ -92,6 +92,8 @@ build/www/images/%: www/images/% | build/www/images
 	$(INSTALL) -m 0664 $< $@
 build/www/logo.png: assets/logo.png | build/www
 	$(INSTALL) -m 0664 $< $@
+build/www/example@2x.png: assets/example@2x.png | build/www
+	$(INSTALL) -m 0664 $< $@
 build/www/example.png: assets/example.png | build/www
 	$(INSTALL) -m 0664 $< $@
 build/www/.nojekyll: | build/www
@@ -107,6 +109,7 @@ build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/manifest.webmanifest build/www/icon.svg build/www/favicon.ico build/www/apple-touch-icon.png \
 	build/www/logo.png \
 	build/www/example.png \
+	build/www/example@2x.png \
 	build/www/images/jumbotron.jpg \
 	build/www/images/background-secondary.png \
 	build/www/fonts/Pe-icon-7-stroke.eot \
