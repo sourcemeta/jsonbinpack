@@ -48,6 +48,13 @@ public:
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
 
+  auto operator==(const std::string &) const -> bool;
+  auto operator==(const std::string_view &) const -> bool;
+  auto operator=(const std::string &) &noexcept -> String &;
+  auto operator=(const std::string_view &) &noexcept -> String &;
+  auto operator=(std::string &&) &noexcept -> String &;
+  auto operator=(std::string_view &&) &noexcept -> String &;
+
   friend JSON;
 
 private:

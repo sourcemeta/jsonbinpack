@@ -39,12 +39,15 @@ public:
   auto operator=(std::nullptr_t) &noexcept -> JSON &;
 
   // Array
+  // TODO: Add constructors from compatible std types like vector, array, list,
+  // etc
   JSON(sourcemeta::jsontoolkit::Array &value);
   auto to_array() & -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
   auto operator[](std::size_t index) & -> JSON &;
   auto operator[](std::size_t index) && -> JSON;
   auto size() -> std::size_t;
+  // TODO: Implement array assignment and comparison operators
 
   // Number
   JSON(std::int64_t value);
@@ -65,6 +68,15 @@ public:
   JSON(sourcemeta::jsontoolkit::String &value);
   auto is_string() -> bool;
   auto to_string() -> std::string;
+  auto operator==(const char *) const -> bool;
+  auto operator==(const std::string &) const -> bool;
+  auto operator==(const std::string_view &) const -> bool;
+  // TODO: It must be possible to set to a string that is not a quoted string
+  auto operator=(const char *) &noexcept -> JSON &;
+  auto operator=(const std::string &) &noexcept -> JSON &;
+  auto operator=(const std::string_view &) &noexcept -> JSON &;
+  auto operator=(std::string &&) &noexcept -> JSON &;
+  auto operator=(std::string_view &&) &noexcept -> JSON &;
 
 private:
   auto parse_source() -> void override;

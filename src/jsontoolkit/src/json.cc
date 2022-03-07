@@ -2,6 +2,7 @@
 #include <jsontoolkit/json.h>
 
 #include <cmath>     // std::modf
+#include <memory>    // std::make_shared
 #include <stdexcept> // std::domain_error, std::logic_error
 #include <utility>   // std::in_place_type, std::move
 
@@ -136,6 +137,41 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
+    -> bool {
+  return this->operator==(std::string_view{value});
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+          this->data)) {
+    return false;
+  }
+
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
+             ->value() == value;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(
+    const std::string_view &value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+          this->data)) {
+    return false;
+  }
+
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
+             ->value() == value;
+}
+
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
   this->parse();
   return std::get<bool>(this->data);
@@ -184,6 +220,38 @@ auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
 auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
+  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::string_view &value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data =
+      std::make_shared<sourcemeta::jsontoolkit::String>(std::move(value));
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    std::string_view &&value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
+  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
   return *this;
 }
 
