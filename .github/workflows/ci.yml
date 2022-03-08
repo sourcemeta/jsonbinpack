@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
-        run: sudo apt-get install --yes clang-tidy clang-format
+        run: sudo apt-get install --yes clang-tidy clang-format hugo
       - name: Checkout repository
         uses: actions/checkout@v2
 

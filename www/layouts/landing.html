@@ -1,3 +1,6 @@
+{{ $logo := (.Resources.GetMatch "logo.png").Resize "40x40" }}
+{{ $logo2x := (.Resources.GetMatch "logo.png").Resize "80x80" }}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>JSON BinPack</title>
+  <title>{{ .Title }}</title>
   <link rel="canonical" href="https://www.jsonbinpack.org">
-  <meta name="description" content="A space-efficient open-source binary JSON serialization format based on JSON Schema">
+  <meta name="description" content="{{ .Description }}">
 
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -24,21 +27,21 @@
 				<div class="row">
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<a href="https://www.jsonbinpack.org" class="logo-image">
-							<img src="logo.png" srcset="logo@2x.png 2x, logo.png 1x" width="40px" height="40px" alt="logo">
+              <img src="{{ $logo.RelPermalink | safeURL }}"
+                srcset="{{ $logo2x.RelPermalink | safeURL }} 2x, {{ $logo.RelPermalink | safeURL }} 1x"
+                width="40px" height="40px" alt="logo">
 						</a>
 					</div>
 					<div class="col-md-9 col-sm-9 col-xs-9">
 						<nav class="right helper">
 							<ul class="menu">
-								<li>
-									<a href="https://github.com/jviotti/jsonbinpack/tree/main/docs">Docs</a>
-								</li>
-								<li>
-									<a href="https://github.com/jviotti/jsonbinpack/issues">Issues</a>
-								</li>
-								<li>
-									<a href="https://github.com/jviotti/jsonbinpack">GitHub</a>
-								</li>
+                {{ range $.Site.Data.menu }}
+                  {{ if .primary }}
+                  <li>
+                    <a href="{{ .url }}">{{ .name }}</a>
+                  </li>
+                  {{ end }}
+                {{ end }}
 							</ul>
 						</nav>
 					</div>
@@ -52,8 +55,8 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="page-info helper center">
-								<h1 class="page-title">JSON BinPack</h1>
-								<h2 class="page-description">The Space-efficient Binary JSON Serialization Format</h2>
+                <h1 class="page-title">{{ .Title }}</h1>
+                <h2 class="page-description">{{ .Params.slogan }}</h2>
 							</div>
 						</div>
 					</div>
@@ -111,7 +114,11 @@
 
               <div class="row">
                 <div class="col-sm-12">
-                  <img src="example.png" srcset="example@2x.png 2x, example.png 1x" style="width: 100%;">
+                  {{ $example := (.Resources.GetMatch "example.png").Resize "1090x490" }}
+                  {{ $example2x := (.Resources.GetMatch "example.png").Resize "2180x980" }}
+                  <img src="{{ $example.RelPermalink | safeURL }}"
+                    srcset="{{ $example2x.RelPermalink | safeURL }} 2x, {{ $example.RelPermalink | safeURL }} 1x"
+                    style="width: 100%;">
                 </div>
               </div>
             </div>
@@ -213,15 +220,11 @@
 										<div class="footer-extended-menu">
 											<h5 class="footer-extended-menu-title">Sourcemeta</h5>
 											<ul class="footer-extended-menu-list">
-												<li>
-													<a href="https://github.com/sourcemeta">Organization</a>
-												</li>
-												<li>
-													<a href="https://sourcemeta.github.io/json-size-benchmark/">Space-efficiency Benchmark</a>
-												</li>
-												<li>
-													<a href="https://github.com/sourcemeta/json-taxonomy">Taxonomy for JSON documents</a>
-												</li>
+                        {{ range $.Site.Data.sourcemeta }}
+                          <li>
+                            <a href="{{ .url }}">{{ .title }}</a>
+                          </li>
+                        {{ end }}
 											</ul>
 										</div>
 									</div>
@@ -229,15 +232,15 @@
 										<div class="footer-extended-menu">
 											<h5 class="footer-extended-menu-title">Research</h5>
 											<ul class="footer-extended-menu-list">
-												<li>
-													<a href="https://arxiv.org/abs/2201.02089">A Survey of JSON-compatible Binary Serialization Specifications</a>
-												</li>
-												<li>
-													<a href="https://arxiv.org/abs/2201.03051">A Benchmark of JSON-compatible Binary Serialization Specifications</a>
-												</li>
-												<li>
-													(Coming Soon) JSON BinPack: A space-efficient schema-driven and schema-less binary serialization specification based on JSON Schema
-												</li>
+                        {{ range $.Site.Data.papers }}
+                          <li>
+                            {{ if isset . "url" }}
+                            <a href="{{ .url }}">{{ .title }}</a>
+                            {{ else }}
+                            (Coming Soon) {{ .title }}
+                            {{ end }}
+                          </li>
+                        {{ end }}
 											</ul>
 										</div>
 									</div>
@@ -254,27 +257,19 @@
 						<div class="col-md-3 col-sm-3 col-xs-12">
 							<div class="footer-logo-wrapper">
 								<a href="https://www.jsonbinpack.org" class="logo-image">
-									<img src="logo.png" alt="logo">
+                  <img src="{{ $logo.RelPermalink | safeURL }}"
+                    srcset="{{ $logo2x.RelPermalink | safeURL }} 2x, {{ $logo.RelPermalink | safeURL }} 1x"
+                    width="40px" height="40px" alt="logo">
 								</a>
 							</div>
 						</div>
 						<div class="col-md-9 col-sm-9 col-xs-12">
               <ul class="footer-menu helper right">
-                <li>
-                  <a href="https://github.com/jviotti/jsonbinpack/blob/main/LICENSE">License</a>
-                </li>
-                <li>
-                  <a href="https://github.com/jviotti/jsonbinpack/tree/main/docs">Docs</a>
-                </li>
-                <li>
-                  <a href="https://github.com/jviotti/jsonbinpack/issues">Issues</a>
-                </li>
-                <li>
-                  <a href="https://www.npmjs.com/package/jsonbinpack">Releases</a>
-                </li>
-                <li>
-                  <a href="https://github.com/jviotti/jsonbinpack">GitHub</a>
-                </li>
+                {{ range $.Site.Data.menu }}
+                  <li>
+                    <a href="{{ .url }}">{{ .name }}</a>
+                  </li>
+                {{ end }}
               </ul>
 
               <p class="copyright helper right">
