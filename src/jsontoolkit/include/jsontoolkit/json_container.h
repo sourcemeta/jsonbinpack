@@ -23,7 +23,7 @@ protected:
 
   // Enable copy/move semantics for derived classes
   Container(const Container &) = default;
-  Container(Container &&) = default;
+  Container(Container &&) noexcept = default;
 
 private:
   const std::string_view _source;

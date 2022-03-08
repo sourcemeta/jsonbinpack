@@ -157,32 +157,32 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const bool value) & -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const std::nullptr_t) & -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
   this->data = nullptr;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
-    const std::int64_t value) & -> sourcemeta::jsontoolkit::JSON & {
+    const std::int64_t value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const int value) & -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const double value) & -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
   return *this;
 }
