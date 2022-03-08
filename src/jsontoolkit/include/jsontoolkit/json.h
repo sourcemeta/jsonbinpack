@@ -30,13 +30,13 @@ public:
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
   auto operator==(bool) const -> bool;
-  auto operator=(bool) & -> JSON &;
+  auto operator=(bool) &noexcept -> JSON &;
 
   // Null
   JSON(std::nullptr_t);
   auto is_null() -> bool;
   auto operator==(std::nullptr_t) const -> bool;
-  auto operator=(std::nullptr_t) & -> JSON &;
+  auto operator=(std::nullptr_t) &noexcept -> JSON &;
 
   // Array
   JSON(sourcemeta::jsontoolkit::Array &value);
@@ -55,9 +55,9 @@ public:
   auto to_real() -> double;
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
-  auto operator=(std::int64_t) & -> JSON &;
-  auto operator=(int) & -> JSON &;
-  auto operator=(double) & -> JSON &;
+  auto operator=(std::int64_t) &noexcept -> JSON &;
+  auto operator=(int) &noexcept -> JSON &;
+  auto operator=(double) &noexcept -> JSON &;
 
   // String
   // TODO: How can we create a constructor that takes std::string

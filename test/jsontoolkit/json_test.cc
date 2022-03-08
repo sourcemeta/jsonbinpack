@@ -1,6 +1,12 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
-#include <vector> // std::vector
+#include <type_traits> // std::is_nothrow_move_constructible
+#include <vector>      // std::vector
+
+TEST(JSON, nothrow_move_constructible) {
+  EXPECT_TRUE(
+      std::is_nothrow_move_constructible<sourcemeta::jsontoolkit::JSON>::value);
+}
 
 TEST(JSON, set_boolean) {
   sourcemeta::jsontoolkit::JSON document{false};
