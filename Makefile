@@ -54,8 +54,6 @@ build/www/favicon.ico: build/www/icon-32x32.png
 	$(CONVERT) $^ $@
 build/www/manifest.webmanifest: www/manifest.webmanifest build/www/icon-192x192.png build/www/icon-512x512.png
 	$(INSTALL) -m 0664 $< $@
-build/www/CNAME: www/CNAME
-	$(INSTALL) -m 0664 $< $@
 
 build/www/style.min.css: www/less/style.less node_modules \
 	www/less/_backgrounds.less \
@@ -86,29 +84,29 @@ build/www/fonts/%: www/fonts/% | build/www/fonts
 	$(INSTALL) -m 0664 $< $@
 build/www/images: | build/www
 	$(MKDIR) $@
-build/www/images/background-secondary.png: assets/background-secondary.png | build/www/images
+build/www/images/%: assets/% | build/www/images
 	$(INSTALL) -m 0664 $< $@
-build/www/images/%: www/images/% | build/www/images
+build/www/%.png: assets/%.png | build/www
 	$(INSTALL) -m 0664 $< $@
-build/www/logo@2x.png: assets/logo@2x.png | build/www
-	$(INSTALL) -m 0664 $< $@
-build/www/logo.png: assets/logo.png | build/www
-	$(INSTALL) -m 0664 $< $@
-build/www/example@2x.png: assets/example@2x.png | build/www
-	$(INSTALL) -m 0664 $< $@
-build/www/example.png: assets/example.png | build/www
-	$(INSTALL) -m 0664 $< $@
+
 build/www/.nojekyll: | build/www
 	$(TOUCH) $@
+build/www/CNAME: www/CNAME
+	$(INSTALL) -m 0664 $< $@
 
-build/www/stats.html: www/stats.html | build/www
+build/www/%.html: www/%.html | build/www
 	$(INSTALL) -m 0664 $< $@
 build/www/stats: | build/www
 	$(MKDIR) $@
-build/www/stats/index.html: www/stats.html | build/www/stats
+build/www/%/index.html: www/%.html | build/www/%
 	$(INSTALL) -m 0664 $< $@
-build/www/index.html: www/index.html build/www/style.min.css \
-	build/www/manifest.webmanifest build/www/icon.svg build/www/favicon.ico build/www/apple-touch-icon.png \
+
+html: \
+	build/www/style.min.css \
+	build/www/manifest.webmanifest \
+	build/www/icon.svg \
+	build/www/favicon.ico \
+	build/www/apple-touch-icon.png \
 	build/www/logo.png \
 	build/www/logo@2x.png \
 	build/www/example.png \
@@ -118,9 +116,10 @@ build/www/index.html: www/index.html build/www/style.min.css \
 	build/www/fonts/Pe-icon-7-stroke.eot \
 	build/www/fonts/Pe-icon-7-stroke.svg \
 	build/www/fonts/Pe-icon-7-stroke.ttf \
-	build/www/fonts/Pe-icon-7-stroke.woff
-	$(INSTALL) -m 0664 $< $@
-
-html: build/www/index.html build/www/stats.html build/www/stats/index.html \
-	build/www/CNAME build/www/.nojekyll
+	build/www/fonts/Pe-icon-7-stroke.woff \
+	build/www/index.html \
+	build/www/stats.html \
+	build/www/stats/index.html \
+	build/www/CNAME \
+	build/www/.nojekyll
 .PHONY: html
