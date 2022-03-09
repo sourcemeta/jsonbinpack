@@ -31,11 +31,9 @@ clean:
 .PHONY: clean
 
 MKDIR ?= mkdir
-INSTALL ?= install
-TOUCH ?= touch
-CONVERT ?= convert
 NPM ?= npm
 NODE ?= node
+HUGO ?= hugo
 
 node_modules: package.json package-lock.json
 	$(NPM) ci
@@ -44,17 +42,6 @@ build:
 	$(MKDIR) $@
 build/www: | build
 	$(MKDIR) $@
-build/www/icon-%.png: assets/favicon.png | build/www
-	$(CONVERT) -resize $(basename $(notdir $(subst icon-,,$@))) $< $@
-build/www/apple-touch-icon.png: build/www/icon-180x180.png
-	$(INSTALL) -m 0664 $< $@
-build/www/icon.svg: assets/favicon.svg | build/www
-	$(INSTALL) -m 0664 $< $@
-build/www/favicon.ico: build/www/icon-32x32.png
-	$(CONVERT) $^ $@
-build/www/manifest.webmanifest: www/manifest.webmanifest build/www/icon-192x192.png build/www/icon-512x512.png
-	$(INSTALL) -m 0664 $< $@
-
 build/www/style.min.css: www/less/style.less node_modules \
 	www/less/_backgrounds.less \
 	www/less/_config.less \
@@ -78,48 +65,9 @@ build/www/style.min.css: www/less/style.less node_modules \
 	www/less/modules/_call-to-action.less | build/www
 	$(NODE) node_modules/less/bin/lessc --compress $< > $@
 
-build/www/fonts: | build/www
-	$(MKDIR) $@
-build/www/fonts/%: www/fonts/% | build/www/fonts
-	$(INSTALL) -m 0664 $< $@
-build/www/images: | build/www
-	$(MKDIR) $@
-build/www/images/%: assets/% | build/www/images
-	$(INSTALL) -m 0664 $< $@
-build/www/%.png: assets/%.png | build/www
-	$(INSTALL) -m 0664 $< $@
-
-build/www/.nojekyll: | build/www
-	$(TOUCH) $@
-build/www/CNAME: www/CNAME
-	$(INSTALL) -m 0664 $< $@
-
-build/www/%.html: www/%.html | build/www
-	$(INSTALL) -m 0664 $< $@
-build/www/stats: | build/www
-	$(MKDIR) $@
-build/www/%/index.html: www/%.html | build/www/%
-	$(INSTALL) -m 0664 $< $@
-
-html: \
-	build/www/style.min.css \
-	build/www/manifest.webmanifest \
-	build/www/icon.svg \
-	build/www/favicon.ico \
-	build/www/apple-touch-icon.png \
-	build/www/logo.png \
-	build/www/logo@2x.png \
-	build/www/example.png \
-	build/www/example@2x.png \
-	build/www/images/jumbotron.jpg \
-	build/www/images/background-secondary.png \
-	build/www/fonts/Pe-icon-7-stroke.eot \
-	build/www/fonts/Pe-icon-7-stroke.svg \
-	build/www/fonts/Pe-icon-7-stroke.ttf \
-	build/www/fonts/Pe-icon-7-stroke.woff \
-	build/www/index.html \
-	build/www/stats.html \
-	build/www/stats/index.html \
-	build/www/CNAME \
-	build/www/.nojekyll
+html: build/www/style.min.css
+	$(HUGO) --source $(realpath www) --destination $(realpath build/www)
 .PHONY: html
+serve: build/www/style.min.css
+	$(HUGO) serve --source $(realpath www) --destination $(realpath build/www)
+.PHONY: serve

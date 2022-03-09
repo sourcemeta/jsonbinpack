@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Redirect to Sourcemeta's JSON Taxonomy Online App for URL backwards compatibility -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>JSON Stats Tool</title>
-  <link rel="canonical" href="https://www.jsonbinpack.org/stats">
-  <meta name="description" content="JSON Stats Online Analyzer">
-  <meta http-equiv="refresh" content="1; URL=https://sourcemeta.github.io/json-taxonomy/" />
+  <title>{{ .Title }}</title>
+  <link rel="canonical" href="{{ .Params.destination }}">
+  <meta name="description" content="Redirecting to {{ .Title }}">
+  <meta http-equiv="refresh" content="1; URL={{ .Params.destination }}" />
 
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -18,6 +17,6 @@
   <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
-  <p>Redirecting to <a href="https://sourcemeta.github.io/json-taxonomy/">https://sourcemeta.github.io/json-taxonomy/</a>...</p>
+  <p>Redirecting to <a href="{{ .Params.destination }}">{{ .Params.destination }}</a>...</p>
 </body>
 </html>

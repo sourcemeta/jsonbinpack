@@ -221,3 +221,5 @@ dist
 !/Makefile
 .DS_Store
 CMakeUserPresets.json
+/www/resources
+.hugo_build.lock

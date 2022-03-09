@@ -1,0 +1,15 @@
+- name: License
+  primary: false
+  url: https://github.com/jviotti/jsonbinpack/blob/main/LICENSE
+- name: Docs
+  primary: true
+  url: https://github.com/jviotti/jsonbinpack/tree/main/docs
+- name: Issues
+  primary: true
+  url: https://github.com/jviotti/jsonbinpack/issues
+- name: Releases
+  primary: false
+  url: https://www.npmjs.com/package/jsonbinpack
+- name: GitHub
+  primary: true
+  url: https://github.com/jviotti/jsonbinpack
