@@ -6,6 +6,7 @@
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_null.h>
 #include <jsontoolkit/json_number.h>
+#include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 
 #include <cstddef>     // std::nullptr_t
@@ -18,6 +19,7 @@
 namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
+using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
 class JSON final : public Container {
 public:
   // Accept string literals
@@ -38,6 +40,14 @@ public:
   auto operator==(std::nullptr_t) const -> bool;
   auto operator=(std::nullptr_t) &noexcept -> JSON &;
 
+  // Containers
+  auto size() -> std::size_t;
+
+  // Object
+  JSON(sourcemeta::jsontoolkit::Object &value);
+  auto to_object() -> std::shared_ptr<sourcemeta::jsontoolkit::Object>;
+  auto is_object() -> bool;
+
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,
   // etc
@@ -46,7 +56,6 @@ public:
   auto is_array() -> bool;
   auto operator[](std::size_t index) & -> JSON &;
   auto operator[](std::size_t index) && -> JSON;
-  auto size() -> std::size_t;
   // TODO: Implement array assignment and comparison operators
 
   // Number
@@ -82,6 +91,7 @@ private:
   auto parse_source() -> void override;
   std::variant<bool, std::nullptr_t, std::int64_t, double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
+               std::shared_ptr<sourcemeta::jsontoolkit::Object>,
                std::shared_ptr<sourcemeta::jsontoolkit::String>>
       data;
 };
