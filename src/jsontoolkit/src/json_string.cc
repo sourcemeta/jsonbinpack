@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <jsontoolkit/json_string.h>
 #include <sstream>   // std::ostringstream
-#include <stdexcept> // std::domain_error
+#include <stdexcept> // std::domain_error, std::logic_error
 #include <utility>   // std::move
 
 sourcemeta::jsontoolkit::String::String()
@@ -178,4 +178,47 @@ auto sourcemeta::jsontoolkit::String::crend() ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
   this->parse();
   return this->data.crend();
+}
+
+auto sourcemeta::jsontoolkit::String::operator==(const std::string &value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value;
+}
+
+auto sourcemeta::jsontoolkit::String::operator==(
+    const std::string_view &value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value;
+}
+
+auto sourcemeta::jsontoolkit::String::operator=(
+    const std::string &value) &noexcept -> sourcemeta::jsontoolkit::String & {
+  this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::String::operator=(
+    const std::string_view &value) &noexcept
+    -> sourcemeta::jsontoolkit::String & {
+  this->data = value;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::String::operator=(std::string &&value) &noexcept
+    -> sourcemeta::jsontoolkit::String & {
+  this->data = std::move(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::String::operator=(
+    std::string_view &&value) &noexcept -> sourcemeta::jsontoolkit::String & {
+  this->data = value;
+  return *this;
 }

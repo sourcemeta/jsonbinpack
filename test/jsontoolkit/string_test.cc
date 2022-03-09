@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 #include <stdexcept>   // std::domain_error
+#include <string>      // std::string
+#include <string_view> // std::string_view
 #include <type_traits> // std::is_nothrow_move_constructible
 
 TEST(String, nothrow_move_constructible) {
@@ -8,11 +10,65 @@ TEST(String, nothrow_move_constructible) {
               sourcemeta::jsontoolkit::String>::value);
 }
 
+TEST(String, assignment_string_from_boolean) {
+  sourcemeta::jsontoolkit::JSON document{"false"};
+  EXPECT_FALSE(document.is_string());
+  document = std::string{"\"foo\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+}
+
+TEST(String, assignment_string_from_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+  document = std::string{"\"bar\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "bar");
+}
+
+TEST(String, assignment_string_view_from_boolean) {
+  sourcemeta::jsontoolkit::JSON document{"false"};
+  EXPECT_FALSE(document.is_string());
+  document = std::string_view{"\"foo\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+}
+
+TEST(String, assignment_string_view_from_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+  document = std::string_view{"\"bar\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "bar");
+}
+
+TEST(String, assignment_literal_from_boolean) {
+  sourcemeta::jsontoolkit::JSON document{"false"};
+  EXPECT_FALSE(document.is_string());
+  document = "\"foo\"";
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+}
+
+TEST(String, assignment_literal_from_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+  document = "\"bar\"";
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "bar");
+}
+
 TEST(String, empty_string) {
   sourcemeta::jsontoolkit::JSON document{"\"\""};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document.size(), 0);
   EXPECT_EQ(document.to_string(), "");
+  EXPECT_EQ(document, "");
+  EXPECT_EQ(document, std::string{""});
+  EXPECT_EQ(document, std::string_view{""});
 }
 
 TEST(String, parse_non_empty) {
@@ -20,6 +76,9 @@ TEST(String, parse_non_empty) {
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document.size(), 3);
   EXPECT_EQ(document.to_string(), "foo");
+  EXPECT_EQ(document, "foo");
+  EXPECT_EQ(document, std::string{"foo"});
+  EXPECT_EQ(document, std::string_view{"foo"});
 }
 
 TEST(String, parse_padded) {
