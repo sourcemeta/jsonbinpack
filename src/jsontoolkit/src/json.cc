@@ -25,6 +25,11 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
            std::make_shared<sourcemeta::jsontoolkit::Array>(value)} {}
 
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Object &value)
+    : Container{value.source(), false},
+      data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Object>>,
+           std::make_shared<sourcemeta::jsontoolkit::Object>(value)} {}
+
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
     : Container{value.source(), false},
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::String>>,
@@ -46,6 +51,9 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   switch (document.front()) {
   case sourcemeta::jsontoolkit::Array::token_begin:
     this->data = std::make_shared<sourcemeta::jsontoolkit::Array>(document);
+    break;
+  case sourcemeta::jsontoolkit::Object::token_begin:
+    this->data = std::make_shared<sourcemeta::jsontoolkit::Object>(document);
     break;
   case sourcemeta::jsontoolkit::String::token_begin:
     this->data = std::make_shared<sourcemeta::jsontoolkit::String>(document);
@@ -177,6 +185,12 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
   return std::get<bool>(this->data);
 }
 
+auto sourcemeta::jsontoolkit::JSON::to_object()
+    -> std::shared_ptr<sourcemeta::jsontoolkit::Object> {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
+}
+
 auto sourcemeta::jsontoolkit::JSON::to_array()
     & -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
   this->parse();
@@ -191,6 +205,12 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   this->parse();
   return std::holds_alternative<std::nullptr_t>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
+  this->parse();
+  return std::holds_alternative<
+      std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
@@ -295,6 +315,12 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   // enum to implement a constant time switch
   if (this->is_string()) {
     return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+               this->data)
+        ->size();
+  }
+
+  if (this->is_object()) {
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
                this->data)
         ->size();
   }
