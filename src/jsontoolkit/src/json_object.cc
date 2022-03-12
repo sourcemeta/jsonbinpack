@@ -1,5 +1,7 @@
 #include <jsontoolkit/json.h>
+#include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
+#include <jsontoolkit/json_string.h>
 #include <stdexcept> // std::domain_error
 
 #include "utils.h"
@@ -58,6 +60,133 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
           sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin ||
       document.back() !=
           sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end) {
+    throw std::domain_error("Invalid object");
+  }
+
+  const std::string_view::size_type size{document.size()};
+  std::string_view::size_type key_start_index = 0;
+  std::string_view::size_type key_end_index = 0;
+  std::string_view::size_type value_start_index = 0;
+  std::string_view::size_type array_level = 0;
+  std::string_view::size_type string_level = 0;
+  bool expecting_value_end = false;
+
+  for (std::string_view::size_type index = 1; index < size; index++) {
+    std::string_view::const_reference character{document.at(index)};
+    const bool is_protected_section = array_level > 0 || string_level > 0;
+
+    switch (character) {
+    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
+      array_level += 1;
+      break;
+    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end:
+      array_level -= 1;
+      break;
+    case sourcemeta::jsontoolkit::String::token_begin:
+      // We do not have a key
+      if (key_start_index == 0 && key_end_index == 0) {
+        key_start_index = index + 1;
+        string_level += 1;
+        // We have the beginning of a key already
+      } else if (key_start_index != 0 && key_end_index == 0) {
+        key_end_index = index;
+        string_level -= 1;
+        // We have a key and we are likely entering a string value
+      } else if (key_start_index != 0 && key_end_index != 0) {
+        if (string_level == 0) {
+          string_level += 1;
+        } else {
+          string_level -= 1;
+        }
+      }
+
+      break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end:
+      if (is_protected_section) {
+        break;
+      }
+
+      if (value_start_index == index) {
+        throw std::domain_error("Invalid object value");
+      }
+
+      // We have a key and the start of the value, but the object ended
+      if (key_start_index != 0 && key_end_index != 0 &&
+          value_start_index != 0) {
+        this->data.insert(
+            {document.substr(key_start_index, key_end_index - key_start_index),
+             Wrapper{document.substr(value_start_index,
+                                     index - value_start_index)}});
+        value_start_index = 0;
+        key_start_index = 0;
+        key_end_index = 0;
+        expecting_value_end = false;
+      }
+
+      break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter:
+      if (is_protected_section) {
+        break;
+      }
+
+      // We have a key and the start of the value, but we found a comma
+      if (key_start_index != 0 && key_end_index != 0 &&
+          value_start_index != 0) {
+        this->data.insert(
+            {document.substr(key_start_index, key_end_index - key_start_index),
+             Wrapper{document.substr(value_start_index,
+                                     index - value_start_index)}});
+        value_start_index = 0;
+        key_start_index = 0;
+        key_end_index = 0;
+        expecting_value_end = false;
+      }
+
+      break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter:
+      if (is_protected_section) {
+        break;
+      }
+
+      if (value_start_index != 0) {
+        throw std::domain_error("Invalid object");
+      }
+
+      // We have a key, and what follows must be a value
+      if (key_start_index != 0 && key_end_index != 0) {
+        value_start_index = index + 1;
+        expecting_value_end = true;
+      } else {
+        throw std::domain_error("Invalid object key");
+      }
+
+      break;
+    default:
+      if (key_start_index == 0 &&
+          !sourcemeta::jsontoolkit::utils::is_blank(character)) {
+        throw std::domain_error("Invalid object key");
+      }
+
+      if (key_start_index != 0 && key_end_index != 0 &&
+          !sourcemeta::jsontoolkit::utils::is_blank(character) &&
+          value_start_index == 0) {
+        throw std::domain_error("Invalid object");
+      }
+
+      if (value_start_index > 0 && expecting_value_end) {
+        if (sourcemeta::jsontoolkit::utils::is_blank(character) &&
+            !is_protected_section) {
+          value_start_index = index + 1;
+        } else {
+          expecting_value_end = false;
+        }
+      }
+
+      break;
+    }
+  }
+
+  if (array_level != 0 || string_level != 0) {
     throw std::domain_error("Invalid object");
   }
 }
