@@ -213,6 +213,13 @@ auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
       std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
 }
 
+auto sourcemeta::jsontoolkit::JSON::contains(
+    const sourcemeta::jsontoolkit::Object::key_type &key) -> bool {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
+      ->contains(key);
+}
+
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
@@ -306,6 +313,23 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
   return std::move(
       std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
           ->at(index));
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator[](
+    const sourcemeta::jsontoolkit::Object::key_type &key)
+    & -> sourcemeta::jsontoolkit::JSON & {
+  this->parse();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
+      ->at(key);
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator[](
+    const sourcemeta::jsontoolkit::Object::key_type &key)
+    && -> sourcemeta::jsontoolkit::JSON {
+  this->parse();
+  return std::move(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
+          ->at(key));
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {

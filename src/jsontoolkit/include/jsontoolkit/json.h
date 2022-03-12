@@ -47,6 +47,10 @@ public:
   JSON(sourcemeta::jsontoolkit::Object &value);
   auto to_object() -> std::shared_ptr<sourcemeta::jsontoolkit::Object>;
   auto is_object() -> bool;
+  // TODO: We can also implement this for array?
+  auto contains(const std::string_view &key) -> bool;
+  auto operator[](const std::string_view &key) & -> JSON &;
+  auto operator[](const std::string_view &key) && -> JSON;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,

@@ -23,7 +23,7 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    & -> Wrapper & {
+    & -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::reference {
   this->parse();
   return this->data.at(index);
 }
@@ -31,7 +31,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    && -> Wrapper {
+    && -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::value_type {
   this->parse();
   return std::move(this->data.at(index));
 }
@@ -213,12 +213,14 @@ template sourcemeta::jsontoolkit::GenericArray<
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::GenericArray(const std::string_view &);
 
-template sourcemeta::jsontoolkit::JSON &
+template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::reference
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
     const sourcemeta::jsontoolkit::GenericArray<
         sourcemeta::jsontoolkit::JSON>::size_type) &;
 
-template sourcemeta::jsontoolkit::JSON
+template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::value_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
     const sourcemeta::jsontoolkit::GenericArray<
         sourcemeta::jsontoolkit::JSON>::size_type) &&;
