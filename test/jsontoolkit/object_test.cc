@@ -152,6 +152,15 @@ TEST(Object, string_key_with_comma) {
   EXPECT_EQ(document["foo,bar"], "baz");
 }
 
+TEST(Object, string_key_with_space) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo bar\":\"baz\"}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo bar"));
+  EXPECT_TRUE(document["foo bar"].is_string());
+  EXPECT_EQ(document["foo bar"], "baz");
+}
+
 TEST(Object, string_value_with_stringified_object) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"{\\\"x\\\":1}\"}"};
   EXPECT_TRUE(document.is_object());
