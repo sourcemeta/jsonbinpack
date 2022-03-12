@@ -55,6 +55,9 @@ public:
   static const char token_delimiter = ',';
 
   auto size() -> size_type;
+  auto contains(const key_type &key) -> bool;
+  auto at(const key_type &key) & -> mapped_type &;
+  auto at(const key_type &key) && -> mapped_type;
 
   auto begin() -> iterator;
   auto end() -> iterator;
