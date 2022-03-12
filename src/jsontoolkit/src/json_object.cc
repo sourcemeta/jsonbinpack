@@ -63,7 +63,6 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
     throw std::domain_error("Invalid object");
   }
 
-  const std::string_view::size_type size{document.size()};
   std::string_view::size_type key_start_index = 0;
   std::string_view::size_type key_end_index = 0;
   std::string_view::size_type value_start_index = 0;
@@ -71,7 +70,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   std::string_view::size_type string_level = 0;
   bool expecting_value_end = false;
 
-  for (std::string_view::size_type index = 1; index < size; index++) {
+  for (std::string_view::size_type index = 1; index < document.size();
+       index++) {
     std::string_view::const_reference character{document.at(index)};
     const bool is_protected_section = array_level > 0 || string_level > 0;
 
@@ -83,21 +83,32 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       array_level -= 1;
       break;
     case sourcemeta::jsontoolkit::String::token_begin:
+      // Don't do anything if this is a escaped quote
+      if (document.at(index - 1) ==
+          sourcemeta::jsontoolkit::String::token_escape) {
+        break;
+      }
+
       // We do not have a key
-      if (key_start_index == 0 && key_end_index == 0) {
+      if (key_start_index == 0) {
         key_start_index = index + 1;
+        key_end_index = 0;
         string_level += 1;
-        // We have the beginning of a key already
-      } else if (key_start_index != 0 && key_end_index == 0) {
+        break;
+      }
+
+      // We have the beginning of a key already
+      if (key_end_index == 0) {
         key_end_index = index;
         string_level -= 1;
-        // We have a key and we are likely entering a string value
-      } else if (key_start_index != 0 && key_end_index != 0) {
-        if (string_level == 0) {
-          string_level += 1;
-        } else {
-          string_level -= 1;
-        }
+        break;
+      }
+
+      // We have a key and we are likely entering a string value
+      if (string_level == 0) {
+        string_level += 1;
+      } else {
+        string_level -= 1;
       }
 
       break;

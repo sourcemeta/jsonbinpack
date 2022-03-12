@@ -125,6 +125,15 @@ TEST(Object, string_value_with_comma) {
   EXPECT_EQ(document["foo"], "bar,baz");
 }
 
+TEST(Object, string_value_with_escaped_quote) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"bar\\\"baz\"}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar\"baz");
+}
+
 TEST(Object, empty_string_key) {
   sourcemeta::jsontoolkit::JSON document{"{\"\":\"foo\"}"};
   EXPECT_TRUE(document.is_object());
