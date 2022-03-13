@@ -1,9 +1,8 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_string.h>
-#include <stdexcept> // std::domain_error
-#include <string>    // std::string
-#include <utility>   // std::move
+#include <string>  // std::string
+#include <utility> // std::move
 
 #include "utils.h"
 
@@ -48,12 +47,12 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
-  if (document.front() !=
-          sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin ||
-      document.back() !=
-          sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end) {
-    throw std::domain_error("Invalid array");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      document.front() ==
+              sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin &&
+          document.back() ==
+              sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end,
+      "Invalid array");
 
   const std::string_view::size_type size{document.size()};
   std::string_view::size_type element_start_index = 0;

@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <jsontoolkit/json_string.h>
 #include <sstream>   // std::ostringstream
-#include <stdexcept> // std::domain_error, std::logic_error
+#include <stdexcept> // std::logic_error
 #include <utility>   // std::move
 
 sourcemeta::jsontoolkit::String::String()
@@ -47,11 +47,10 @@ static constexpr auto is_character_allowed_in_json_string(const char character)
 auto sourcemeta::jsontoolkit::String::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
-
-  if (document.front() != sourcemeta::jsontoolkit::String::token_begin ||
-      document.back() != sourcemeta::jsontoolkit::String::token_end) {
-    throw std::domain_error("Invalid document");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      document.front() == sourcemeta::jsontoolkit::String::token_begin &&
+          document.back() == sourcemeta::jsontoolkit::String::token_end,
+      "Invalid string");
 
   std::ostringstream value;
   // Strip the quotes
@@ -106,15 +105,15 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
         // "\" + "u" + hex + hex + hex + hex
         const std::size_t UNICODE_CODE_POINT_LENGTH = 6;
         // Out of bounds
-        if (index + UNICODE_CODE_POINT_LENGTH > string_data.size()) {
-          throw std::domain_error("Invalid unicode code point");
-        }
+        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+            index + UNICODE_CODE_POINT_LENGTH <= string_data.size(),
+            "Invalid unicode code point");
 
         const char new_character = static_cast<char>(std::stoul(
             std::string{string_data.substr(index + 2, 4)}, nullptr, 16));
-        if (!is_character_allowed_in_json_string(new_character)) {
-          throw std::domain_error("Invalid unescaped character in string");
-        }
+        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+            is_character_allowed_in_json_string(new_character),
+            "Invalid unescaped character in string");
 
         value << new_character;
         index += UNICODE_CODE_POINT_LENGTH - 1;
@@ -122,9 +121,9 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
       }
     }
 
-    if (!is_character_allowed_in_json_string(character)) {
-      throw std::domain_error("Invalid unescaped character in string");
-    }
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        is_character_allowed_in_json_string(character),
+        "Invalid unescaped character in string");
 
     value << character;
   }
