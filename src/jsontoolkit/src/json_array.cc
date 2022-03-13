@@ -1,5 +1,6 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 #include <string>  // std::string
 #include <utility> // std::move
@@ -58,12 +59,14 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
   std::string_view::size_type element_start_index = 0;
   std::string_view::size_type element_cursor = 0;
   std::string_view::size_type level = 0;
+  std::string_view::size_type object_level = 0;
   bool is_string = false;
   bool expecting_value = false;
 
   for (std::string_view::size_type index = 0; index < size; index++) {
     std::string_view::const_reference character{document.at(index)};
-    const bool is_protected_section = is_string || level > 1;
+    const bool is_protected_section =
+        is_string || level > 1 || object_level > 0;
 
     switch (character) {
     case sourcemeta::jsontoolkit::String::token_begin:
@@ -75,9 +78,21 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
 
       if (!is_protected_section) {
         element_start_index = index;
+        element_cursor = index;
       }
 
       is_string = !is_string;
+      break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin:
+      object_level += 1;
+      if (!is_protected_section) {
+        element_start_index = index;
+        element_cursor = index;
+      }
+
+      break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end:
+      object_level -= 1;
       break;
     case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
       sourcemeta::jsontoolkit::utils::ENSURE_PARSE(index == 0 || level != 0,
