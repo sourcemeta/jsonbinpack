@@ -2,7 +2,6 @@
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
-#include <stdexcept> // std::domain_error
 
 #include "utils.h"
 
@@ -56,12 +55,12 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
-  if (document.front() !=
-          sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin ||
-      document.back() !=
-          sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end) {
-    throw std::domain_error("Invalid object");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      document.front() ==
+              sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin &&
+          document.back() ==
+              sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end,
+      "Invalid object");
 
   std::string_view::size_type key_start_index = 0;
   std::string_view::size_type key_end_index = 0;
@@ -118,9 +117,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         break;
       }
 
-      if (value_start_index == index) {
-        throw std::domain_error("Invalid object value");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index != index,
+                                                   "Invalid object value");
 
       // We have a key and the start of the value, but the object ended
       if (key_start_index != 0 && key_end_index != 0 &&
@@ -160,30 +158,26 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         break;
       }
 
-      if (value_start_index != 0) {
-        throw std::domain_error("Invalid object");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index == 0,
+                                                   "Invalid object");
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          key_start_index != 0 && key_end_index != 0, "Invalid object key");
 
       // We have a key, and what follows must be a value
-      if (key_start_index != 0 && key_end_index != 0) {
-        value_start_index = index + 1;
-        expecting_value_end = true;
-      } else {
-        throw std::domain_error("Invalid object key");
-      }
-
+      value_start_index = index + 1;
+      expecting_value_end = true;
       break;
     default:
-      if (key_start_index == 0 &&
-          !sourcemeta::jsontoolkit::utils::is_blank(character)) {
-        throw std::domain_error("Invalid object key");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          key_start_index != 0 ||
+              sourcemeta::jsontoolkit::utils::is_blank(character),
+          "Invalid object key");
 
-      if (key_start_index != 0 && key_end_index != 0 &&
-          !sourcemeta::jsontoolkit::utils::is_blank(character) &&
-          value_start_index == 0) {
-        throw std::domain_error("Invalid object");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          key_start_index == 0 || key_end_index == 0 ||
+              sourcemeta::jsontoolkit::utils::is_blank(character) ||
+              value_start_index != 0,
+          "Invalid object");
 
       if (value_start_index > 0 && expecting_value_end) {
         if (sourcemeta::jsontoolkit::utils::is_blank(character) &&
@@ -198,9 +192,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
     }
   }
 
-  if (array_level != 0 || string_level != 0) {
-    throw std::domain_error("Invalid object");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      array_level == 0 && string_level == 0, "Invalid object");
 }
 
 template <typename Wrapper>

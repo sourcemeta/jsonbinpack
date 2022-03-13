@@ -1,8 +1,7 @@
 #include "utils.h"
 #include <cmath> // std::modf
 #include <jsontoolkit/json_number.h>
-#include <stdexcept> // std::domain_error
-#include <string>    // std::stol, std::stod
+#include <string> // std::stol, std::stod
 
 static constexpr auto is_digit(const char character) -> bool {
   return character >= sourcemeta::jsontoolkit::Number::token_number_zero &&
@@ -30,24 +29,23 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
 
   // A JSON number starts with a digit or the minus sign
   std::string_view::const_reference front{document.front()};
-  if (front != sourcemeta::jsontoolkit::Number::token_minus_sign &&
-      !is_digit(front)) {
-    throw std::domain_error("Invalid number");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      front == sourcemeta::jsontoolkit::Number::token_minus_sign ||
+          is_digit(front),
+      "Invalid number");
 
   // A JSON number ends with a digit
-  if (!is_digit(document.back())) {
-    throw std::domain_error("Invalid number");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(is_digit(document.back()),
+                                               "Invalid number");
 
   const std::string_view::size_type size{document.size()};
   if (front == sourcemeta::jsontoolkit::Number::token_number_zero && size > 1) {
     std::string_view::const_reference second{document.at(1)};
-    if (second != sourcemeta::jsontoolkit::Number::token_decimal_point &&
-        second != sourcemeta::jsontoolkit::Number::token_exponent_upper &&
-        second != sourcemeta::jsontoolkit::Number::token_exponent_lower) {
-      throw std::domain_error("Invalid leading zero");
-    }
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        second == sourcemeta::jsontoolkit::Number::token_decimal_point ||
+            second == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
+            second == sourcemeta::jsontoolkit::Number::token_exponent_lower,
+        "Invalid leading zero");
   }
 
   bool integer = true;
@@ -56,35 +54,35 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
     std::string_view::const_reference character{document.at(index)};
     std::string_view::const_reference previous{document.at(index - 1)};
 
-    if (!is_digit(character) &&
-        character != sourcemeta::jsontoolkit::Number::token_minus_sign &&
-        character != sourcemeta::jsontoolkit::Number::token_decimal_point &&
-        character != sourcemeta::jsontoolkit::Number::token_exponent_upper &&
-        character != sourcemeta::jsontoolkit::Number::token_exponent_lower) {
-      throw std::domain_error("Invalid real number");
-    }
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        is_digit(character) ||
+            character == sourcemeta::jsontoolkit::Number::token_minus_sign ||
+            character == sourcemeta::jsontoolkit::Number::token_decimal_point ||
+            character ==
+                sourcemeta::jsontoolkit::Number::token_exponent_upper ||
+            character == sourcemeta::jsontoolkit::Number::token_exponent_lower,
+        "Invalid real number");
 
-    if (character == sourcemeta::jsontoolkit::Number::token_minus_sign &&
-        previous != sourcemeta::jsontoolkit::Number::token_exponent_upper &&
-        previous != sourcemeta::jsontoolkit::Number::token_exponent_lower) {
-      throw std::domain_error("Invalid minus sign");
-    }
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        character != sourcemeta::jsontoolkit::Number::token_minus_sign ||
+            previous == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
+            previous == sourcemeta::jsontoolkit::Number::token_exponent_lower,
+        "Invalid minus sign");
 
     if (character == sourcemeta::jsontoolkit::Number::token_decimal_point) {
-      if (!integer ||
-          previous == sourcemeta::jsontoolkit::Number::token_minus_sign) {
-        throw std::domain_error("Invalid real number");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          integer &&
+              previous != sourcemeta::jsontoolkit::Number::token_minus_sign,
+          "Invalid real number");
 
       integer = false;
     } else if (character ==
                    sourcemeta::jsontoolkit::Number::token_exponent_upper ||
                character ==
                    sourcemeta::jsontoolkit::Number::token_exponent_lower) {
-      if (!is_digit(previous) || exponential_index != 0) {
-        throw std::domain_error("Invalid exponential number");
-      }
-
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          is_digit(previous) && exponential_index == 0,
+          "Invalid exponential number");
       exponential_index = index;
       integer = false;
     }
