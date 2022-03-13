@@ -66,14 +66,13 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   std::string_view::size_type key_end_index = 0;
   std::string_view::size_type value_start_index = 0;
   std::string_view::size_type array_level = 0;
-  // TODO: Convert this into a boolean
-  std::string_view::size_type string_level = 0;
+  bool is_string = false;
   bool expecting_value_end = false;
 
   for (std::string_view::size_type index = 1; index < document.size();
        index++) {
     std::string_view::const_reference character{document.at(index)};
-    const bool is_protected_section = array_level > 0 || string_level > 0;
+    const bool is_protected_section = array_level > 0 || is_string;
 
     switch (character) {
     case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
@@ -93,24 +92,19 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       if (key_start_index == 0) {
         key_start_index = index + 1;
         key_end_index = 0;
-        string_level += 1;
+        is_string = true;
         break;
       }
 
       // We have the beginning of a key already
       if (key_end_index == 0) {
         key_end_index = index;
-        string_level -= 1;
+        is_string = false;
         break;
       }
 
       // We have a key and we are likely entering a string value
-      if (string_level == 0) {
-        string_level += 1;
-      } else {
-        string_level -= 1;
-      }
-
+      is_string = !is_string;
       break;
     case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end:
       if (is_protected_section) {
@@ -192,8 +186,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
     }
   }
 
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
-      array_level == 0 && string_level == 0, "Invalid object");
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(array_level == 0 && !is_string,
+                                               "Invalid object");
 }
 
 template <typename Wrapper>
