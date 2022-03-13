@@ -1,5 +1,6 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_string.h>
 #include <stdexcept> // std::domain_error
 #include <string>    // std::string
 #include <utility>   // std::move
@@ -56,86 +57,95 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
 
   const std::string_view::size_type size{document.size()};
   std::string_view::size_type element_start_index = 0;
+  std::string_view::size_type element_cursor = 0;
   std::string_view::size_type level = 0;
   bool is_string = false;
+  bool expecting_value = false;
 
-  for (std::string_view::size_type index = 1; index < size - 1; index++) {
+  for (std::string_view::size_type index = 0; index < size; index++) {
     std::string_view::const_reference character{document.at(index)};
-    const bool is_last_character = index == size - 2;
+    const bool is_protected_section = is_string || level > 1;
 
     switch (character) {
-    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
-      if (is_string) {
+    case sourcemeta::jsontoolkit::String::token_begin:
+      // Don't do anything if this is a escaped quote
+      if (document.at(index - 1) ==
+          sourcemeta::jsontoolkit::String::token_escape) {
         break;
       }
 
-      // The start of an array at level 0 is by definition a new element
-      if (level == 0) {
+      if (!is_protected_section) {
         element_start_index = index;
       }
 
+      is_string = !is_string;
+      break;
+    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(index == 0 || level != 0,
+                                                   "Invalid start of array");
       level += 1;
+
+      if (level > 1 && !is_protected_section) {
+        element_start_index = index;
+        expecting_value = false;
+      } else if (is_protected_section && expecting_value) {
+        element_start_index = index;
+        expecting_value = false;
+      } else {
+        element_cursor = index + 1;
+      }
+
       break;
     case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end:
-      if (is_string) {
+      level -= 1;
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          level != 0 || !expecting_value, "Invalid end of array");
+
+      if (is_protected_section) {
         break;
       }
 
-      if (level == 0) {
-        throw std::domain_error("Unexpected right bracket");
-      }
-
-      level -= 1;
-
-      // Only push an element on a final right bracket
-      if (is_last_character && element_start_index > 0) {
-        this->data.push_back(Wrapper(document.substr(
-            element_start_index, index - element_start_index + 1)));
+      // Push the last element, if any, into the array
+      if (level == 0 && element_start_index > 0) {
+        this->data.push_back(Wrapper(
+            document.substr(element_start_index, index - element_start_index)));
         element_start_index = 0;
+        element_cursor = 0;
+        expecting_value = false;
       }
 
       break;
     case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_delimiter:
-      if (is_string) {
+      if (is_protected_section) {
         break;
       }
 
-      if (element_start_index == 0) {
-        throw std::domain_error("Separator without a preceding element");
-      }
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          element_start_index != 0, "No array value before delimiter");
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(element_start_index != index,
+                                                   "Invalid array value");
 
-      if (is_last_character) {
-        throw std::domain_error("Trailing comma");
-      }
-
-      if (level == 0) {
-        this->data.push_back(Wrapper(
-            document.substr(element_start_index, index - element_start_index)));
-        element_start_index = 0;
-      }
-
+      this->data.push_back(Wrapper(
+          document.substr(element_start_index, index - element_start_index)));
+      element_start_index = 0;
+      element_cursor = index + 1;
+      // We expect another value after a delimiter by definition
+      expecting_value = true;
       break;
     default:
-      if (is_last_character && element_start_index > 0) {
-        this->data.push_back(Wrapper(document.substr(
-            element_start_index, index - element_start_index + 1)));
-        element_start_index = 0;
-      } else if (is_last_character && element_start_index == 0 &&
-                 !sourcemeta::jsontoolkit::utils::is_blank(character)) {
-        this->data.push_back(Wrapper(document.substr(index, 1)));
-      } else if (!sourcemeta::jsontoolkit::utils::is_blank(character) &&
-                 element_start_index == 0 && level == 0) {
-        element_start_index = index;
+      if (is_protected_section) {
+        break;
       }
 
-      if (character == sourcemeta::jsontoolkit::String::token_begin ||
-          character == sourcemeta::jsontoolkit::String::token_end) {
-        if (is_string) {
-          is_string = false;
-        } else if (index == 0 ||
-                   document.at(index - 1) !=
-                       sourcemeta::jsontoolkit::String::token_escape) {
-          is_string = true;
+      // Handle whitespace between array items
+      if (element_cursor == 0) {
+        element_cursor = index;
+      } else if (element_cursor > 0 && element_start_index == 0) {
+        if (sourcemeta::jsontoolkit::utils::is_blank(character)) {
+          element_cursor = index + 1;
+        } else {
+          element_start_index = element_cursor;
+          expecting_value = false;
         }
       }
 
@@ -143,9 +153,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
     }
   }
 
-  if (level > 0) {
-    throw std::domain_error("Unbalanced array");
-  }
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(level == 0, "Unbalanced array");
 }
 
 template <typename Wrapper>

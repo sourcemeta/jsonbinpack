@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_UTILS_H_
 #define SOURCEMETA_JSONTOOLKIT_UTILS_H_
 
+#include <stdexcept>   // std::domain_error
 #include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit::utils {
@@ -28,6 +29,13 @@ constexpr auto trim(const std::string_view &string) -> std::string_view {
 constexpr auto is_blank(const char character) -> bool {
   // We can use .contains() on C++23
   return JSON_WHITESPACE_CHARACTERS.find(character) != std::string_view::npos;
+}
+
+constexpr inline auto ENSURE_PARSE(const bool condition,
+                                   const char *const message) -> void {
+  if (!condition) {
+    throw std::domain_error(message);
+  }
 }
 
 } // namespace sourcemeta::jsontoolkit::utils

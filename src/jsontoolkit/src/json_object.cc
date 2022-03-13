@@ -67,6 +67,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   std::string_view::size_type key_end_index = 0;
   std::string_view::size_type value_start_index = 0;
   std::string_view::size_type array_level = 0;
+  // TODO: Convert this into a boolean
   std::string_view::size_type string_level = 0;
   bool expecting_value_end = false;
 
