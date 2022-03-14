@@ -205,3 +205,13 @@ TEST(Object, one_array_element_with_space) {
   EXPECT_TRUE(document["foo"][0].to_boolean());
   EXPECT_FALSE(document["foo"][1].to_boolean());
 }
+
+TEST(Object, minified_nested_object) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_object());
+  EXPECT_EQ(document["foo"].size(), 1);
+  EXPECT_TRUE(document["foo"].contains("bar"));
+}
