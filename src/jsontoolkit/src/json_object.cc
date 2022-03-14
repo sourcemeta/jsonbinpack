@@ -30,6 +30,7 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) -> bool {
+  this->parse();
   return this->data.find(key) != this->data.end();
 }
 

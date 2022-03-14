@@ -79,6 +79,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
       if (!is_protected_section) {
         element_start_index = index;
         element_cursor = index;
+        expecting_value = false;
       }
 
       is_string = !is_string;
@@ -88,6 +89,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
       if (!is_protected_section) {
         element_start_index = index;
         element_cursor = index;
+        expecting_value = false;
       }
 
       break;
