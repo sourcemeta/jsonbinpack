@@ -65,6 +65,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   std::string_view::size_type key_start_index = 0;
   std::string_view::size_type key_end_index = 0;
   std::string_view::size_type value_start_index = 0;
+  std::string_view::size_type level = 1;
   std::string_view::size_type array_level = 0;
   bool is_string = false;
   bool expecting_value_end = false;
@@ -72,7 +73,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   for (std::string_view::size_type index = 1; index < document.size();
        index++) {
     std::string_view::const_reference character{document.at(index)};
-    const bool is_protected_section = array_level > 0 || is_string;
+    const bool is_protected_section = array_level > 0 || is_string || level > 1;
 
     switch (character) {
     case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
@@ -106,7 +107,11 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       // We have a key and we are likely entering a string value
       is_string = !is_string;
       break;
+    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin:
+      level += 1;
+      break;
     case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end:
+      level -= 1;
       if (is_protected_section) {
         break;
       }
@@ -186,8 +191,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
     }
   }
 
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(array_level == 0 && !is_string,
-                                               "Invalid object");
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      array_level == 0 && !is_string && level == 0, "Unbalanced object");
 }
 
 template <typename Wrapper>
