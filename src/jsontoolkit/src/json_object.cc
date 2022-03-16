@@ -127,6 +127,11 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         break;
       }
 
+      // This means we found a key without a corresponding value
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          key_start_index == 0 || key_end_index == 0 || value_start_index != 0,
+          "Invalid object value");
+
       sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index != index,
                                                    "Invalid object value");
 
