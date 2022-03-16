@@ -18,7 +18,7 @@ protected:
   virtual auto parse_source() -> void = 0;
 
   [[nodiscard]] auto is_parsed() const -> bool;
-  auto parse() -> void;
+  auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
 
   // Enable copy/move semantics for derived classes

@@ -181,41 +181,41 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::get<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object()
     -> std::shared_ptr<sourcemeta::jsontoolkit::Object> {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array()
     & -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::contains(
     const sourcemeta::jsontoolkit::Object::key_type &key) -> bool {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
       ->contains(key);
 }
@@ -283,33 +283,33 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
       ->value();
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const std::size_t index) & -> sourcemeta::jsontoolkit::JSON & {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
       ->at(index);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const std::size_t index) && -> sourcemeta::jsontoolkit::JSON {
-  this->parse();
+  this->parse_flat();
   return std::move(
       std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
           ->at(index));
@@ -318,7 +318,7 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const sourcemeta::jsontoolkit::Object::key_type &key)
     & -> sourcemeta::jsontoolkit::JSON & {
-  this->parse();
+  this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
       ->at(key);
 }
@@ -326,14 +326,14 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const sourcemeta::jsontoolkit::Object::key_type &key)
     && -> sourcemeta::jsontoolkit::JSON {
-  this->parse();
+  this->parse_flat();
   return std::move(
       std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
           ->at(key));
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
-  this->parse();
+  this->parse_flat();
 
   // TODO: We need a function get the type as an
   // enum to implement a constant time switch
@@ -354,21 +354,21 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
-  this->parse();
+  this->parse_flat();
   return std::holds_alternative<double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
-  this->parse();
+  this->parse_flat();
   return std::get<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
-  this->parse();
+  this->parse_flat();
   return std::get<double>(this->data);
 }

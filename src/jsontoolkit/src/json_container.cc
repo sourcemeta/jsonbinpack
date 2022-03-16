@@ -8,7 +8,7 @@ auto sourcemeta::jsontoolkit::Container::is_parsed() const -> bool {
   return !this->must_parse;
 }
 
-auto sourcemeta::jsontoolkit::Container::parse() -> void {
+auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
   if (!this->must_parse) {
     return;
   }
