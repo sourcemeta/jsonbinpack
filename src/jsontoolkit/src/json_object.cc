@@ -154,6 +154,9 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         break;
       }
 
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index != 0,
+                                                   "Invalid object value");
+
       // We have a key and the start of the value, but we found a comma
       if (key_start_index != 0 && key_end_index != 0 &&
           value_start_index != 0) {
