@@ -80,6 +80,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
   std::string_view::size_type array_level = 0;
   bool is_string = false;
   bool expecting_value_end = false;
+  bool expecting_element_after_delimiter = false;
 
   for (std::string_view::size_type index = 1; index < document.size();
        index++) {
@@ -146,8 +147,11 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         key_start_index = 0;
         key_end_index = 0;
         expecting_value_end = false;
+        expecting_element_after_delimiter = false;
       }
 
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          !expecting_element_after_delimiter, "Trailing object comma");
       break;
     case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter:
       if (is_protected_section) {
@@ -170,6 +174,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
         expecting_value_end = false;
       }
 
+      expecting_element_after_delimiter = true;
       break;
     case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter:
       if (is_protected_section) {
