@@ -71,6 +71,20 @@ TEST(String, empty_string) {
   EXPECT_EQ(document, std::string_view{""});
 }
 
+TEST(String, parse_deep_success) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  document.parse();
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document.size(), 3);
+  EXPECT_EQ(document.to_string(), "foo");
+  EXPECT_EQ(document, "foo");
+}
+
+TEST(String, parse_deep_failure) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
 TEST(String, parse_non_empty) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());

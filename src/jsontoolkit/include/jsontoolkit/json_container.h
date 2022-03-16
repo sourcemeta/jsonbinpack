@@ -13,12 +13,15 @@ public:
   auto operator=(const Container &) -> Container & = delete;
   auto operator=(Container &&) -> Container & = delete;
 
+  auto parse() -> void;
+
 protected:
   // Child classes are expected to override parse_source().
   virtual auto parse_source() -> void = 0;
+  virtual auto parse_deep() -> void = 0;
 
   [[nodiscard]] auto is_parsed() const -> bool;
-  auto parse() -> void;
+  auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
 
   // Enable copy/move semantics for derived classes
@@ -28,6 +31,7 @@ protected:
 private:
   const std::string_view _source;
   bool must_parse = true;
+  bool must_parse_deep = true;
 };
 } // namespace sourcemeta::jsontoolkit
 

@@ -59,6 +59,7 @@ public:
 
 private:
   auto parse_source() -> void override;
+  auto parse_deep() -> void override;
   std::string data;
 };
 } // namespace sourcemeta::jsontoolkit

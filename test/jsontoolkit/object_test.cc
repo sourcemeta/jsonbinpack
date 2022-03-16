@@ -73,6 +73,26 @@ TEST(Object, multiple_colons) {
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
+TEST(Object, parse_deep_success) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true}"};
+  document.parse();
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_boolean());
+  EXPECT_TRUE(document["foo"].to_boolean());
+}
+
+TEST(Object, parse_deep_failure) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, parse_deep_failure_member) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":tru}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
 TEST(Object, minified_one_true_boolean_element) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":true}"};
   EXPECT_TRUE(document.is_object());

@@ -1,3 +1,4 @@
+#include <algorithm> // std::for_each
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
@@ -22,7 +23,7 @@ sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
-  this->parse();
+  this->parse_flat();
   return this->data.size();
 }
 
@@ -30,7 +31,7 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) -> bool {
-  this->parse();
+  this->parse_flat();
   return this->data.find(key) != this->data.end();
 }
 
@@ -39,7 +40,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) & ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
-  this->parse();
+  this->parse_flat();
   return this->data.at(key);
 }
 
@@ -48,8 +49,17 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) && ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type {
-  this->parse();
+  this->parse_flat();
   return std::move(this->data.at(key));
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
+  this->parse_flat();
+  std::for_each(
+      this->data.begin(), this->data.end(),
+      [](typename std::unordered_map<std::string_view, Wrapper>::value_type
+             &p) { p.second.parse(); });
 }
 
 template <typename Wrapper>
@@ -199,28 +209,28 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::begin() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.begin();
 }
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::end() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.end();
 }
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.cbegin();
 }
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.cend();
 }
 
@@ -251,6 +261,8 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<
         sourcemeta::jsontoolkit::JSON>::key_type &key) &&;
 
+template void sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::parse_deep();
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_source();
 

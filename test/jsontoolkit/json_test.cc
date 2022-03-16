@@ -1,5 +1,7 @@
+#include <cstdint> // std::int64_t
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <stdexcept>   // std::domain_error
 #include <type_traits> // std::is_nothrow_move_constructible
 #include <vector>      // std::vector
 
@@ -18,6 +20,83 @@ TEST(JSON, set_boolean) {
   document = false;
   EXPECT_TRUE(document.is_boolean());
   EXPECT_EQ(document, false);
+}
+
+TEST(JSON, bool_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"true"};
+  document.parse();
+  EXPECT_EQ(document, true);
+}
+
+TEST(JSON, bool_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"tru"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, int_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"4"};
+  document.parse();
+  EXPECT_EQ(document, static_cast<std::int64_t>(4));
+}
+
+TEST(JSON, int_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"32,2"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, real_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"3.14"};
+  document.parse();
+  EXPECT_EQ(document, 3.14);
+}
+
+TEST(JSON, real_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"32.2.2"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, null_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"null"};
+  document.parse();
+  EXPECT_EQ(document, nullptr);
+}
+
+TEST(JSON, null_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"nul"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(json, string_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  document.parse();
+  EXPECT_EQ(document, "foo");
+}
+
+TEST(JSON, string_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, array_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
+  document.parse();
+  EXPECT_EQ(document.size(), 3);
+}
+
+TEST(JSON, array_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"[true,fals,true]"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, object_deep_parse) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":2}"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+}
+
+TEST(JSON, object_deep_parse_failure) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":tru}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, not_bool_equality_string) {

@@ -13,18 +13,18 @@ sourcemeta::jsontoolkit::String::String(const std::string_view &document)
     : Container{document, true} {}
 
 auto sourcemeta::jsontoolkit::String::value() & -> const std::string & {
-  this->parse();
+  this->parse_flat();
   return this->data;
 }
 
 auto sourcemeta::jsontoolkit::String::value() && -> std::string {
-  this->parse();
+  this->parse_flat();
   return std::move(this->data);
 }
 
 auto sourcemeta::jsontoolkit::String::size() ->
     typename sourcemeta::jsontoolkit::String::size_type {
-  this->parse();
+  this->parse_flat();
   return this->data.size();
 }
 
@@ -42,6 +42,10 @@ static constexpr auto is_character_allowed_in_json_string(const char character)
   default:
     return character < '\u0000' || character > '\u001F';
   }
+}
+
+auto sourcemeta::jsontoolkit::String::parse_deep() -> void {
+  this->parse_flat();
 }
 
 auto sourcemeta::jsontoolkit::String::parse_source() -> void {
@@ -133,49 +137,49 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
 
 auto sourcemeta::jsontoolkit::String::begin() ->
     typename sourcemeta::jsontoolkit::String::iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.begin();
 }
 
 auto sourcemeta::jsontoolkit::String::end() ->
     typename sourcemeta::jsontoolkit::String::iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.end();
 }
 
 auto sourcemeta::jsontoolkit::String::cbegin() ->
     typename sourcemeta::jsontoolkit::String::const_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.cbegin();
 }
 
 auto sourcemeta::jsontoolkit::String::cend() ->
     typename sourcemeta::jsontoolkit::String::const_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.cend();
 }
 
 auto sourcemeta::jsontoolkit::String::rbegin() ->
     typename sourcemeta::jsontoolkit::String::reverse_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.rbegin();
 }
 
 auto sourcemeta::jsontoolkit::String::rend() ->
     typename sourcemeta::jsontoolkit::String::reverse_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.rend();
 }
 
 auto sourcemeta::jsontoolkit::String::crbegin() ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.crbegin();
 }
 
 auto sourcemeta::jsontoolkit::String::crend() ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
-  this->parse();
+  this->parse_flat();
   return this->data.crend();
 }
 
