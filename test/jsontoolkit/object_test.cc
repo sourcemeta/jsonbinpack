@@ -93,6 +93,16 @@ TEST(Object, parse_deep_failure_member) {
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
+TEST(Object, key_without_value) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\"}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, key_without_value_after_valid_key) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,\"bar\"}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
 TEST(Object, minified_one_true_boolean_element) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":true}"};
   EXPECT_TRUE(document.is_object());
