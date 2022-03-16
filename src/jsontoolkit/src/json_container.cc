@@ -8,6 +8,15 @@ auto sourcemeta::jsontoolkit::Container::is_parsed() const -> bool {
   return !this->must_parse;
 }
 
+auto sourcemeta::jsontoolkit::Container::parse() -> void {
+  if (!this->must_parse_deep) {
+    return;
+  }
+
+  this->parse_deep();
+  this->must_parse_deep = false;
+}
+
 auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
   if (!this->must_parse) {
     return;

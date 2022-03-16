@@ -44,6 +44,10 @@ static constexpr auto is_character_allowed_in_json_string(const char character)
   }
 }
 
+auto sourcemeta::jsontoolkit::String::parse_deep() -> void {
+  this->parse_flat();
+}
+
 auto sourcemeta::jsontoolkit::String::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};

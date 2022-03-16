@@ -1,3 +1,4 @@
+#include <algorithm> // std::for_each
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
@@ -50,6 +51,15 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type {
   this->parse_flat();
   return std::move(this->data.at(key));
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
+  this->parse_flat();
+  std::for_each(
+      this->data.begin(), this->data.end(),
+      [](typename std::unordered_map<std::string_view, Wrapper>::value_type
+             &p) { p.second.parse(); });
 }
 
 template <typename Wrapper>
@@ -251,6 +261,8 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<
         sourcemeta::jsontoolkit::JSON>::key_type &key) &&;
 
+template void sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::parse_deep();
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_source();
 

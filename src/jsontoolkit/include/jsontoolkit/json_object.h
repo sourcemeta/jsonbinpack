@@ -68,6 +68,7 @@ public:
 
 private:
   auto parse_source() -> void override;
+  auto parse_deep() -> void override;
   std::unordered_map<std::string_view, Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit

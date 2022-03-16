@@ -44,6 +44,30 @@ TEST(Array, empty_with_comma_and_spacing) {
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
+TEST(Array, parse_deep_success) {
+  sourcemeta::jsontoolkit::JSON document{"[true]"};
+  document.parse();
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_EQ(document[0].to_boolean(), true);
+}
+
+TEST(Array, parse_deep_failure) {
+  sourcemeta::jsontoolkit::JSON document{"[true"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Array, parse_deep_failure_in_item) {
+  sourcemeta::jsontoolkit::JSON document{"[tru]"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Array, parse_is_lazy) {
+  sourcemeta::jsontoolkit::JSON document{"[x,x]"};
+  // Would throw otherwise
+  EXPECT_EQ(document.size(), 2);
+}
+
 TEST(Array, single_element) {
   sourcemeta::jsontoolkit::JSON document{"[true]"};
   EXPECT_TRUE(document.is_array());

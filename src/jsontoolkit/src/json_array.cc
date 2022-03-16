@@ -1,3 +1,4 @@
+#include <algorithm> // std::for_each
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
@@ -42,6 +43,13 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
     typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type {
   this->parse_flat();
   return this->data.size();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_deep() -> void {
+  this->parse_flat();
+  std::for_each(this->data.begin(), this->data.end(),
+                [](Wrapper &element) { element.parse(); });
 }
 
 template <typename Wrapper>
@@ -252,6 +260,9 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
 template typename sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size();
+
+template void sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::parse_deep();
 
 template void sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::parse_source();

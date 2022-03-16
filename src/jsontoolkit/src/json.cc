@@ -43,6 +43,23 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
     : Container{sourcemeta::jsontoolkit::Null::stringify(), false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
+auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
+  this->parse_flat();
+
+  // TODO: We should be able to get the type in order to
+  // implement a switch statement
+  if (this->is_string()) {
+    std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
+        ->parse();
+  } else if (this->is_array()) {
+    std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+        ->parse();
+  } else if (this->is_object()) {
+    std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
+        ->parse();
+  }
+}
+
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   const std::string_view document =
       sourcemeta::jsontoolkit::utils::trim(this->source());

@@ -47,6 +47,7 @@ public:
 
 private:
   auto parse_source() -> void override;
+  auto parse_deep() -> void override;
   std::vector<Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit
