@@ -103,8 +103,33 @@ TEST(Object, key_without_value_after_valid_key) {
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
+TEST(Object, trailing_comma_after_element) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,\"bar\":0,}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, trailing_comma) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, trailing_comma_with_spacing) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1  ,   } "};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, trailing_comma_with_left_spacing) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1  ,}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
 TEST(Object, multiple_commas) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,,,,,}"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(Object, multiple_commas_with_spacing) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1 ,  ,  , , }"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
