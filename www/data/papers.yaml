@@ -3,3 +3,4 @@
 - title: 'A Benchmark of JSON-compatible Binary Serialization Specifications'
   url: https://arxiv.org/abs/2201.03051
 - title: 'JSON BinPack: A space-efficient schema-driven and schema-less binary serialization specification based on JSON Schema'
+  url: https://www.jviotti.com/assets/dissertation.pdf
