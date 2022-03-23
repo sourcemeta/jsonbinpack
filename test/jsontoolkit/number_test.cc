@@ -310,20 +310,12 @@ TEST(Number, single_digit_negative_real_integer_trailing_zero) {
 
 TEST(Number, string_integer_with_plus) {
   sourcemeta::jsontoolkit::JSON document{"+5"};
-  EXPECT_TRUE(document.is_integer());
-  EXPECT_FALSE(document.is_real());
-  EXPECT_EQ(document.to_integer(), 5);
-  EXPECT_EQ(document, static_cast<std::int64_t>(5));
-  EXPECT_EQ(document, static_cast<double>(5.0));
+  EXPECT_THROW(document.is_integer(), std::domain_error);
 }
 
 TEST(Number, string_zero_with_plus) {
   sourcemeta::jsontoolkit::JSON document{"+0"};
-  EXPECT_TRUE(document.is_integer());
-  EXPECT_FALSE(document.is_real());
-  EXPECT_EQ(document.to_integer(), 0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(0));
-  EXPECT_EQ(document, static_cast<double>(0));
+  EXPECT_THROW(document.is_integer(), std::domain_error);
 }
 
 TEST(Number, large_positive_exponential_number) {

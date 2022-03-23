@@ -31,7 +31,6 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
   std::string_view::const_reference front{document.front()};
   sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
       front == sourcemeta::jsontoolkit::Number::token_minus_sign ||
-          front == sourcemeta::jsontoolkit::Number::token_plus_sign ||
           is_digit(front),
       "Invalid number");
 
