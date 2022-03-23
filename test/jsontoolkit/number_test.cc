@@ -334,6 +334,32 @@ TEST(Number, large_positive_exponential_number) {
   EXPECT_EQ(document.to_real(), 1e28);
 }
 
+TEST(Number, leading_zero_positive_integer_number) {
+  sourcemeta::jsontoolkit::JSON document{"02"};
+  EXPECT_THROW(document.is_integer(), std::domain_error);
+}
+
+TEST(Number, leading_zero_negative_integer_number) {
+  sourcemeta::jsontoolkit::JSON document{"-02"};
+  EXPECT_THROW(document.is_integer(), std::domain_error);
+}
+
+TEST(Number, two_leading_zeroes_real_number) {
+  sourcemeta::jsontoolkit::JSON document{"-00.2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, multiple_leading_zeroes_real_number) {
+  sourcemeta::jsontoolkit::JSON document{"-00000.2"};
+  EXPECT_THROW(document.is_real(), std::domain_error);
+}
+
+TEST(Number, leading_zero_real_number) {
+  sourcemeta::jsontoolkit::JSON document{"-0.2"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), -0.2);
+}
+
 TEST(Number, large_negative_exponential_number) {
   sourcemeta::jsontoolkit::JSON document{"-1.0e28"};
   EXPECT_TRUE(document.is_real());
