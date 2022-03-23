@@ -16,6 +16,7 @@ namespace sourcemeta::jsontoolkit::Number {
 // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
 
 const char token_minus_sign = '\u002D';
+const char token_plus_sign = '\u002B';
 const char token_exponent_upper = '\u0045';
 const char token_exponent_lower = '\u0065';
 const char token_decimal_point = '\u002E';

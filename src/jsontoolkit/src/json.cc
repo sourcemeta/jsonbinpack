@@ -76,6 +76,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     this->data = std::make_shared<sourcemeta::jsontoolkit::String>(document);
     break;
   case sourcemeta::jsontoolkit::Number::token_minus_sign:
+  case sourcemeta::jsontoolkit::Number::token_plus_sign:
   case sourcemeta::jsontoolkit::Number::token_number_zero:
   case sourcemeta::jsontoolkit::Number::token_number_one:
   case sourcemeta::jsontoolkit::Number::token_number_two:

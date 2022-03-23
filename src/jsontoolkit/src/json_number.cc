@@ -31,6 +31,7 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
   std::string_view::const_reference front{document.front()};
   sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
       front == sourcemeta::jsontoolkit::Number::token_minus_sign ||
+          front == sourcemeta::jsontoolkit::Number::token_plus_sign ||
           is_digit(front),
       "Invalid number");
 
@@ -57,6 +58,7 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
     sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
         is_digit(character) ||
             character == sourcemeta::jsontoolkit::Number::token_minus_sign ||
+            character == sourcemeta::jsontoolkit::Number::token_plus_sign ||
             character == sourcemeta::jsontoolkit::Number::token_decimal_point ||
             character ==
                 sourcemeta::jsontoolkit::Number::token_exponent_upper ||
@@ -68,6 +70,11 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
             previous == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
             previous == sourcemeta::jsontoolkit::Number::token_exponent_lower,
         "Invalid minus sign");
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        character != sourcemeta::jsontoolkit::Number::token_plus_sign ||
+            previous == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
+            previous == sourcemeta::jsontoolkit::Number::token_exponent_lower,
+        "Invalid plus sign");
 
     if (character == sourcemeta::jsontoolkit::Number::token_decimal_point) {
       sourcemeta::jsontoolkit::utils::ENSURE_PARSE(

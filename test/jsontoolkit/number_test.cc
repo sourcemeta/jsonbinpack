@@ -168,6 +168,11 @@ TEST(Number, leading_minus_and_period) {
   EXPECT_THROW(document.is_integer(), std::domain_error);
 }
 
+TEST(Number, multiple_leading_plus) {
+  sourcemeta::jsontoolkit::JSON document{"++5"};
+  EXPECT_THROW(document.is_integer(), std::domain_error);
+}
+
 TEST(Number, trailing_zero_positive) {
   sourcemeta::jsontoolkit::JSON document{"1.50000"};
   EXPECT_FALSE(document.is_integer());
@@ -303,6 +308,48 @@ TEST(Number, single_digit_negative_real_integer_trailing_zero) {
   EXPECT_EQ(document, static_cast<std::int64_t>(-1));
 }
 
+TEST(Number, string_integer_with_plus) {
+  sourcemeta::jsontoolkit::JSON document{"+5"};
+  EXPECT_TRUE(document.is_integer());
+  EXPECT_FALSE(document.is_real());
+  EXPECT_EQ(document.to_integer(), 5);
+  EXPECT_EQ(document, static_cast<std::int64_t>(5));
+  EXPECT_EQ(document, static_cast<double>(5.0));
+}
+
+TEST(Number, string_zero_with_plus) {
+  sourcemeta::jsontoolkit::JSON document{"+0"};
+  EXPECT_TRUE(document.is_integer());
+  EXPECT_FALSE(document.is_real());
+  EXPECT_EQ(document.to_integer(), 0);
+  EXPECT_EQ(document, static_cast<std::int64_t>(0));
+  EXPECT_EQ(document, static_cast<double>(0));
+}
+
+TEST(Number, large_positive_exponential_number) {
+  sourcemeta::jsontoolkit::JSON document{"1.0e28"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), 1e28);
+}
+
+TEST(Number, large_negative_exponential_number) {
+  sourcemeta::jsontoolkit::JSON document{"-1.0e28"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), -1e28);
+}
+
+TEST(Number, large_positive_exponential_number_with_plus_exponent) {
+  sourcemeta::jsontoolkit::JSON document{"1.0e+28"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), 1e28);
+}
+
+TEST(Number, large_negative_exponential_number_with_plus_exponent) {
+  sourcemeta::jsontoolkit::JSON document{"-1.0e+28"};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_EQ(document.to_real(), -1e28);
+}
+
 // Invalid exponential numbers
 
 TEST(Number, exponential_notation_error_double_upper_e) {
@@ -385,9 +432,13 @@ TEST(Number, exponential_notation_error_double_minus_with_digits_after_e) {
   EXPECT_THROW(document.is_real(), std::domain_error);
 }
 
-TEST(Number, exponential_notation_error_plus_after_e) {
+TEST(Number, exponential_notation_plus_after_e) {
   sourcemeta::jsontoolkit::JSON document{"3E+2"};
-  EXPECT_THROW(document.is_real(), std::domain_error);
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 300.0);
+  EXPECT_EQ(document, static_cast<std::int64_t>(300));
+  EXPECT_EQ(document, static_cast<double>(300));
 }
 
 // From https://en.wikipedia.org/wiki/Scientific_notation
