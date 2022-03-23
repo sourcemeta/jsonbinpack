@@ -41,13 +41,15 @@
       "name": "release",
       "displayName": "Release",
       "configurePreset": "release",
-      "configuration": "Release"
+      "configuration": "Release",
+      "output": { "outputOnFailure": true }
     },
     {
       "name": "debug",
       "displayName": "Debug",
       "configurePreset": "debug",
-      "configuration": "Debug"
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true }
     }
   ]
 }
