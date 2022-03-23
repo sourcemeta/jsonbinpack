@@ -318,6 +318,16 @@ TEST(Number, string_zero_with_plus) {
   EXPECT_THROW(document.is_integer(), std::domain_error);
 }
 
+TEST(Number, negative_with_leading_zero) {
+  sourcemeta::jsontoolkit::JSON document{"-05"};
+  EXPECT_THROW(document.is_integer(), std::domain_error);
+}
+
+TEST(Number, negative_with_leading_zero_and_space) {
+  sourcemeta::jsontoolkit::JSON document{"-0 5"};
+  EXPECT_THROW(document.is_integer(), std::domain_error);
+}
+
 TEST(Number, large_positive_exponential_number) {
   sourcemeta::jsontoolkit::JSON document{"1.0e28"};
   EXPECT_TRUE(document.is_real());

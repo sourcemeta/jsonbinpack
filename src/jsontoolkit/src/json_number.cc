@@ -46,6 +46,11 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
             second == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
             second == sourcemeta::jsontoolkit::Number::token_exponent_lower,
         "Invalid leading zero");
+  } else if (front == sourcemeta::jsontoolkit::Number::token_minus_sign &&
+             size > 2) {
+    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        document[1] != sourcemeta::jsontoolkit::Number::token_number_zero,
+        "Invalid leading zero");
   }
 
   bool integer = true;
