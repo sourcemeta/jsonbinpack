@@ -109,6 +109,11 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
                                                    "Invalid start of array");
       level += 1;
 
+      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+          is_protected_section || element_start_index == 0 ||
+              element_start_index >= index,
+          "Unexpected start of array");
+
       if (level > 1 && !is_protected_section) {
         element_start_index = index;
         expecting_value = false;
