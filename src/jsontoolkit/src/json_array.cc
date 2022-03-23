@@ -70,11 +70,11 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
   std::string_view::size_type object_level = 0;
   bool is_string = false;
   bool expecting_value = false;
+  bool is_protected_section = false;
 
   for (std::string_view::size_type index = 0; index < size; index++) {
     std::string_view::const_reference character{document.at(index)};
-    const bool is_protected_section =
-        is_string || level > 1 || object_level > 0;
+    is_protected_section = is_string || level > 1 || object_level > 0;
 
     switch (character) {
     case sourcemeta::jsontoolkit::String::token_begin:
@@ -182,7 +182,8 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
     }
   }
 
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(level == 0, "Unbalanced array");
+  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      level == 0 && !is_protected_section, "Unbalanced array");
 }
 
 template <typename Wrapper>

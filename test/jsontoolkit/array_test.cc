@@ -73,6 +73,11 @@ TEST(Array, array_without_comma_after_element) {
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
+TEST(Array, unclosed_string_element) {
+  sourcemeta::jsontoolkit::JSON document{"[\"foo]"};
+  EXPECT_THROW(document.parse(), std::domain_error);
+}
+
 TEST(Array, single_element) {
   sourcemeta::jsontoolkit::JSON document{"[true]"};
   EXPECT_TRUE(document.is_array());
