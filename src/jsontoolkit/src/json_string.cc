@@ -54,7 +54,8 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
   sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
-      document.front() == sourcemeta::jsontoolkit::String::token_begin &&
+      document.size() > 1 &&
+          document.front() == sourcemeta::jsontoolkit::String::token_begin &&
           document.back() == sourcemeta::jsontoolkit::String::token_end,
       "Invalid string");
 

@@ -124,6 +124,11 @@ TEST(String, no_single_quotes) {
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
+TEST(String, only_quote) {
+  sourcemeta::jsontoolkit::JSON document{"\""};
+  EXPECT_THROW(document.size(), std::domain_error);
+}
+
 TEST(String, escaped_quotes) {
   sourcemeta::jsontoolkit::JSON document{"\"\\\"foo\\\"\""};
   EXPECT_TRUE(document.is_string());
