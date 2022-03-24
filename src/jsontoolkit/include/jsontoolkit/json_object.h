@@ -58,6 +58,7 @@ public:
   auto contains(const key_type &key) -> bool;
   auto at(const key_type &key) & -> mapped_type &;
   auto at(const key_type &key) && -> mapped_type;
+  auto erase(const key_type &key) -> size_type;
 
   auto begin() -> iterator;
   auto end() -> iterator;

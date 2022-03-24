@@ -54,6 +54,15 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
 }
 
 template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::erase(
+    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
+        &key) ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
+  this->parse_flat();
+  return this->data.erase(key);
+}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
   this->parse_flat();
   std::for_each(
@@ -273,6 +282,12 @@ template typename sourcemeta::jsontoolkit::GenericObject<
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<
         sourcemeta::jsontoolkit::JSON>::key_type &key) &&;
+
+template typename sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::erase(
+    const typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type &key);
 
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_deep();
