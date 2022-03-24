@@ -121,7 +121,7 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
         sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
             std::all_of(
                 code_point.cbegin(), code_point.cend(),
-                [](const char character) { return std::isxdigit(character); }),
+                [](const char element) { return std::isxdigit(element); }),
             "Invalid unicode code point");
 
         // We don't need to perform any further validation here.
