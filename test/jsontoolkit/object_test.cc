@@ -163,6 +163,32 @@ TEST(Object, minified_two_boolean_values) {
   EXPECT_FALSE(document["bar"].to_boolean());
 }
 
+TEST(Object, must_delete_one_existent_key) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true,\"bar\":false}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.contains("bar"));
+  const std::size_t count = document.erase("foo");
+  EXPECT_EQ(count, 1);
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_FALSE(document.contains("foo"));
+  EXPECT_TRUE(document.contains("bar"));
+}
+
+TEST(Object, must_delete_one_non_existent_key) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true,\"bar\":false}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.contains("bar"));
+  const std::size_t count = document.erase("xxx");
+  EXPECT_EQ(count, 0);
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.contains("bar"));
+}
+
 TEST(Object, minified_one_array_element) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":[true,false]}"};
   EXPECT_TRUE(document.is_object());

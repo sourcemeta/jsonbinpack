@@ -349,6 +349,13 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
           ->at(key));
 }
 
+auto sourcemeta::jsontoolkit::JSON::erase(const std::string_view &key)
+    -> std::size_t {
+  this->parse_flat();
+  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
+      ->erase(key);
+}
+
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse_flat();
 

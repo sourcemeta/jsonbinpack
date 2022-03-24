@@ -51,6 +51,7 @@ public:
   auto contains(const std::string_view &key) -> bool;
   auto operator[](const std::string_view &key) & -> JSON &;
   auto operator[](const std::string_view &key) && -> JSON;
+  auto erase(const std::string_view &key) -> std::size_t;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,
