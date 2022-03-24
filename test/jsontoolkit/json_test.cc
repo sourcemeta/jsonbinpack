@@ -36,7 +36,7 @@ TEST(JSON, bool_deep_parse_failure) {
 TEST(JSON, int_deep_parse) {
   sourcemeta::jsontoolkit::JSON document{"4"};
   document.parse();
-  EXPECT_EQ(document, static_cast<std::int64_t>(4));
+  EXPECT_EQ(document, 4);
 }
 
 TEST(JSON, int_deep_parse_failure) {
@@ -106,7 +106,7 @@ TEST(JSON, not_bool_equality_string) {
 }
 
 TEST(JSON, not_bool_equality_int) {
-  sourcemeta::jsontoolkit::JSON document{static_cast<std::int64_t>(6)};
+  sourcemeta::jsontoolkit::JSON document{6};
   EXPECT_FALSE(document.is_boolean());
   EXPECT_FALSE(document == true);
 }

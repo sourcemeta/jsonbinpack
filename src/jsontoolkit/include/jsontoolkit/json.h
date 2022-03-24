@@ -64,12 +64,15 @@ public:
 
   // Number
   JSON(std::int64_t value);
+  JSON(int value);
   JSON(double value);
   auto is_integer() -> bool;
   auto is_real() -> bool;
   auto to_integer() -> std::int64_t;
   auto to_real() -> double;
   auto operator==(std::int64_t) const -> bool;
+  auto operator==(int) const -> bool;
+  auto operator==(long) const -> bool;
   auto operator==(double) const -> bool;
   auto operator=(std::int64_t) &noexcept -> JSON &;
   auto operator=(int) &noexcept -> JSON &;

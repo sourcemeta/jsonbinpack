@@ -16,6 +16,9 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
     : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
       data{std::in_place_type<std::int64_t>, value} {}
 
+sourcemeta::jsontoolkit::JSON::JSON(const int value)
+    : JSON{static_cast<std::int64_t>(value)} {}
+
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
     : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
       data{std::in_place_type<double>, value} {}
@@ -132,6 +135,14 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
   }
 
   return false;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const int value) const -> bool {
+  return *this == static_cast<std::int64_t>(value);
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const long value) const -> bool {
+  return *this == static_cast<std::int64_t>(value);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
