@@ -46,17 +46,21 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
   this->parse_flat();
 
-  // TODO: We should be able to get the type in order to
-  // implement a switch statement
-  if (this->is_string()) {
-    std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-        ->parse();
-  } else if (this->is_array()) {
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
         ->parse();
-  } else if (this->is_object()) {
+    break;
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
     std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
         ->parse();
+    break;
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
+        ->parse();
+    break;
+  default:
+    break;
   }
 }
 
@@ -359,22 +363,21 @@ auto sourcemeta::jsontoolkit::JSON::erase(const std::string_view &key)
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse_flat();
 
-  // TODO: We need a function get the type as an
-  // enum to implement a constant time switch
-  if (this->is_string()) {
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               this->data)
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
         ->size();
-  }
-
-  if (this->is_object()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
     return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
                this->data)
         ->size();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+               this->data)
+        ->size();
+  default:
+    throw std::logic_error("Data type has no size");
   }
-
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
-      ->size();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
