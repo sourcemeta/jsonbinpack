@@ -1,3 +1,4 @@
 vendorpull https://github.com/jviotti/vendorpull 49c571c86569d147511d15737b14216aba90e089
 googletest https://github.com/google/googletest e2239ee6043f73722e7aa812a459f54a28552929
 normalize https://github.com/necolas/normalize.css fc091cce1534909334c1911709a39c22d406977b
+jsontestsuite https://github.com/nst/JSONTestSuite d64aefb55228d9584d3e5b2433f720ea8fd00c82
