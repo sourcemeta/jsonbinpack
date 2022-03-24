@@ -1,4 +1,6 @@
 #include "utils.h"
+#include <algorithm> // std::all_of
+#include <cctype>    // std::isxdigit
 #include <jsontoolkit/json_string.h>
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::logic_error
@@ -52,7 +54,8 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
   sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
-      document.front() == sourcemeta::jsontoolkit::String::token_begin &&
+      document.size() > 1 &&
+          document.front() == sourcemeta::jsontoolkit::String::token_begin &&
           document.back() == sourcemeta::jsontoolkit::String::token_end,
       "Invalid string");
 
@@ -113,12 +116,19 @@ auto sourcemeta::jsontoolkit::String::parse_source() -> void {
             index + UNICODE_CODE_POINT_LENGTH <= string_data.size(),
             "Invalid unicode code point");
 
-        const char new_character = static_cast<char>(std::stoul(
-            std::string{string_data.substr(index + 2, 4)}, nullptr, 16));
+        const std::string_view code_point{
+            string_data.substr(index + 2, UNICODE_CODE_POINT_LENGTH - 2)};
         sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
-            is_character_allowed_in_json_string(new_character),
-            "Invalid unescaped character in string");
+            std::all_of(
+                code_point.cbegin(), code_point.cend(),
+                [](const char element) { return std::isxdigit(element); }),
+            "Invalid unicode code point");
 
+        // We don't need to perform any further validation here.
+        // According to ECMA 404, \u can be followed by "any"
+        // sequence of 4 hexadecimal digits.
+        const char new_character =
+            static_cast<char>(std::stoul(std::string{code_point}, nullptr, 16));
         value << new_character;
         index += UNICODE_CODE_POINT_LENGTH - 1;
         continue;
