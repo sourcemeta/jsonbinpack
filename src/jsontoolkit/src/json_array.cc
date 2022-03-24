@@ -85,6 +85,8 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
       }
 
       if (!is_protected_section) {
+        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(element_start_index == 0,
+                                                     "Invalid start of string");
         element_start_index = index;
         element_cursor = index;
         expecting_value = false;
