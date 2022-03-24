@@ -16,9 +16,9 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
     : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
       data{std::in_place_type<std::int64_t>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const double value)
+sourcemeta::jsontoolkit::JSON::JSON(const long double value)
     : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
-      data{std::in_place_type<double>, value} {}
+      data{std::in_place_type<long double>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : Container{value.source(), false},
@@ -63,7 +63,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   const std::string_view document =
       sourcemeta::jsontoolkit::utils::trim(this->source());
-  std::variant<std::int64_t, double> number_result;
+  std::variant<std::int64_t, long double> number_result;
 
   switch (document.front()) {
   case sourcemeta::jsontoolkit::Array::token_begin:
@@ -90,7 +90,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     if (std::holds_alternative<std::int64_t>(number_result)) {
       this->data = std::get<std::int64_t>(number_result);
     } else {
-      this->data = std::get<double>(number_result);
+      this->data = std::get<long double>(number_result);
     }
 
     break;
@@ -124,29 +124,29 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
     return std::get<std::int64_t>(this->data) == value;
   }
 
-  if (std::holds_alternative<double>(this->data)) {
-    double integral = 0.0;
-    const double fractional =
-        std::modf(std::get<double>(this->data), &integral);
+  if (std::holds_alternative<long double>(this->data)) {
+    long double integral = 0.0;
+    const long double fractional =
+        std::modf(std::get<long double>(this->data), &integral);
     return fractional == 0.0 && static_cast<std::int64_t>(integral) == value;
   }
 
   return false;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
+auto sourcemeta::jsontoolkit::JSON::operator==(const long double value) const
     -> bool {
   if (!this->is_parsed()) {
     throw std::logic_error("Not parsed");
   }
 
-  if (std::holds_alternative<double>(this->data)) {
-    return std::get<double>(this->data) == value;
+  if (std::holds_alternative<long double>(this->data)) {
+    return std::get<long double>(this->data) == value;
   }
 
   if (std::holds_alternative<std::int64_t>(this->data)) {
-    double integral = 0.0;
-    const double fractional = std::modf(value, &integral);
+    long double integral = 0.0;
+    const long double fractional = std::modf(value, &integral);
     return fractional == 0.0 && std::get<std::int64_t>(this->data) ==
                                     static_cast<std::int64_t>(integral);
   }
@@ -261,7 +261,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
+auto sourcemeta::jsontoolkit::JSON::operator=(const long double value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->data = value;
   return *this;
@@ -377,7 +377,7 @@ auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
 
 auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
   this->parse_flat();
-  return std::holds_alternative<double>(this->data);
+  return std::holds_alternative<long double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
@@ -385,7 +385,7 @@ auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
   return std::get<std::int64_t>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
+auto sourcemeta::jsontoolkit::JSON::to_real() -> long double {
   this->parse_flat();
-  return std::get<double>(this->data);
+  return std::get<long double>(this->data);
 }

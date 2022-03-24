@@ -2,7 +2,7 @@
 #include <cmath> // std::modf
 #include <jsontoolkit/json_number.h>
 #include <stdexcept> // std::domain_error
-#include <string>    // std::stol, std::stod
+#include <string>    // std::stol, std::stold
 
 static constexpr auto is_digit(const char character) -> bool {
   return character >= sourcemeta::jsontoolkit::Number::token_number_zero &&
@@ -14,13 +14,13 @@ auto sourcemeta::jsontoolkit::Number::stringify(const std::int64_t value)
   return std::to_string(value);
 }
 
-auto sourcemeta::jsontoolkit::Number::stringify(const double value)
+auto sourcemeta::jsontoolkit::Number::stringify(const long double value)
     -> std::string {
   return std::to_string(value);
 }
 
 auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
-    -> std::variant<std::int64_t, double> {
+    -> std::variant<std::int64_t, long double> {
 
   const std::string_view document{sourcemeta::jsontoolkit::utils::trim(input)};
 
@@ -127,5 +127,5 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string_view &input)
     return std::stol(std::string{document});
   }
 
-  return std::stod(std::string{document});
+  return std::stold(std::string{document});
 }

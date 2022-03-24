@@ -47,7 +47,7 @@ TEST(JSON, int_deep_parse_failure) {
 TEST(JSON, real_deep_parse) {
   sourcemeta::jsontoolkit::JSON document{"3.14"};
   document.parse();
-  EXPECT_EQ(document, 3.14);
+  EXPECT_EQ(document, static_cast<long double>(3.14));
 }
 
 TEST(JSON, real_deep_parse_failure) {
@@ -285,8 +285,8 @@ TEST(JSON, rfc8259_example_2) {
 
   // Member values
   EXPECT_EQ(value[0]["precision"], "zip");
-  EXPECT_EQ(value[0]["Latitude"], 37.7668);
-  EXPECT_EQ(value[0]["Longitude"], -122.3959);
+  EXPECT_EQ(value[0]["Latitude"], static_cast<long double>(37.7668));
+  EXPECT_EQ(value[0]["Longitude"], static_cast<long double>(-122.3959));
   EXPECT_EQ(value[0]["Address"], "");
   EXPECT_EQ(value[0]["City"], "SAN FRANCISCO");
   EXPECT_EQ(value[0]["State"], "CA");
@@ -319,8 +319,8 @@ TEST(JSON, rfc8259_example_2) {
 
   // Member values
   EXPECT_EQ(value[1]["precision"], "zip");
-  EXPECT_EQ(value[1]["Latitude"], 37.371991);
-  EXPECT_EQ(value[1]["Longitude"], -122.026020);
+  EXPECT_EQ(value[1]["Latitude"], static_cast<long double>(37.371991));
+  EXPECT_EQ(value[1]["Longitude"], static_cast<long double>(-122.026020));
   EXPECT_EQ(value[1]["Address"], "");
   EXPECT_EQ(value[1]["City"], "SUNNYVALE");
   EXPECT_EQ(value[1]["State"], "CA");

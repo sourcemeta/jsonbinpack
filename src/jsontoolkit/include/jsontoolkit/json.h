@@ -64,16 +64,16 @@ public:
 
   // Number
   JSON(std::int64_t value);
-  JSON(double value);
+  JSON(long double value);
   auto is_integer() -> bool;
   auto is_real() -> bool;
   auto to_integer() -> std::int64_t;
-  auto to_real() -> double;
+  auto to_real() -> long double;
   auto operator==(std::int64_t) const -> bool;
-  auto operator==(double) const -> bool;
+  auto operator==(long double) const -> bool;
   auto operator=(std::int64_t) &noexcept -> JSON &;
   auto operator=(int) &noexcept -> JSON &;
-  auto operator=(double) &noexcept -> JSON &;
+  auto operator=(long double) &noexcept -> JSON &;
 
   // String
   // TODO: How can we create a constructor that takes std::string
@@ -94,7 +94,7 @@ public:
 private:
   auto parse_source() -> void override;
   auto parse_deep() -> void override;
-  std::variant<bool, std::nullptr_t, std::int64_t, double,
+  std::variant<bool, std::nullptr_t, std::int64_t, long double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
                std::shared_ptr<sourcemeta::jsontoolkit::Object>,
                std::shared_ptr<sourcemeta::jsontoolkit::String>>
