@@ -25,7 +25,6 @@ constexpr auto trim(const std::string_view &string) -> std::string_view {
              : string.substr(start, end - start + 1);
 }
 
-// TODO: Move to json_array.cc
 constexpr auto is_blank(const char character) -> bool {
   // We can use .contains() on C++23
   return JSON_WHITESPACE_CHARACTERS.find(character) != std::string_view::npos;

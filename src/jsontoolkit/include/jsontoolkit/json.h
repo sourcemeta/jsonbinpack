@@ -95,6 +95,17 @@ public:
 private:
   auto parse_source() -> void override;
   auto parse_deep() -> void override;
+
+  // We must keep the enum and the variant types in order
+  enum class types {
+    boolean = 0,
+    null = 1,
+    integer = 2,
+    real = 3,
+    array = 4,
+    object = 5,
+    string = 6
+  };
   std::variant<bool, std::nullptr_t, std::int64_t, double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
                std::shared_ptr<sourcemeta::jsontoolkit::Object>,
