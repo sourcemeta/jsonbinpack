@@ -33,41 +33,31 @@ clean:
 MKDIR ?= mkdir
 NPM ?= npm
 NODE ?= node
-HUGO ?= hugo
+INSTALL ?= install
 
 node_modules: package.json package-lock.json
 	$(NPM) ci
-
 build:
 	$(MKDIR) $@
 build/www: | build
 	$(MKDIR) $@
-build/www/style.min.css: www/less/style.less node_modules \
-	www/less/_backgrounds.less \
-	www/less/_config.less \
-	www/less/_general.less \
-	www/less/_grid.less \
-	www/less/_layout.less \
-	www/less/_list.less \
-	www/less/_media.less \
-	www/less/_mixins.less \
-	www/less/_text.less \
-	www/less/modules/_pe-icon-7-stroke.less \
-	www/less/modules/_logo.less \
-	www/less/modules/_header-back.less \
-	www/less/modules/_header.less \
-	www/less/modules/_footer.less \
-	www/less/modules/_menu.less \
-	www/less/modules/_page-info.less \
-	www/less/modules/_promo-title.less \
-	www/less/modules/_box.less \
-	www/less/modules/_faq.less \
-	www/less/modules/_call-to-action.less | build/www
-	$(NODE) node_modules/less/bin/lessc --compress $< > $@
-
-html: build/www/style.min.css
-	$(HUGO) --source $(realpath www) --destination $(realpath build/www)
+build/www/style.min.css: www/main.scss node_modules | build/www
+	$(NODE) node_modules/.bin/sass $< | $(NODE) node_modules/.bin/csso > $@
+build/www/%: www/% | build/www
+	$(INSTALL) -m 0664 $< $@
+html: \
+	build/www/style.min.css \
+	build/www/apple-touch-icon.png \
+	build/www/benchmark-deck.png \
+	build/www/example.png \
+	build/www/favicon.ico \
+	build/www/hybrid.png \
+	build/www/icon-192x192.png \
+	build/www/icon-512x512.png \
+	build/www/icon.svg \
+	build/www/jsonschema.png \
+	build/www/manifest.webmanifest \
+	build/www/index.html \
+	build/www/.nojekyll \
+	build/www/CNAME
 .PHONY: html
-serve: build/www/style.min.css
-	$(HUGO) serve --source $(realpath www) --destination $(realpath build/www)
-.PHONY: serve

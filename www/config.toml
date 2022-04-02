@@ -1,6 +1,0 @@
-baseURL = 'https://www.jsonbinpack.org/'
-languageCode = 'en-us'
-enableRobotsTXT = true
-defaultContentLanguage = 'en'
-title = 'JSON BinPack'
-copyright = 'All rights reserved. 2022'
