@@ -5,6 +5,12 @@ focus on space efficiency**. It supports schema-driven and schema-less modes to
 encode any [JSON](https://www.json.org) document given a matching [JSON Schema
 2020-12](http://json-schema.org) definition.
 
+Documentation
+-------------
+
+Refer to the project website for documentation:
+[https://www.jsonbinpack.org](https://www.jsonbinpack.org).
+
 Building JSON BinPack
 ---------------------
 
