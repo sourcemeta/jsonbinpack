@@ -39,6 +39,7 @@ option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
 
 # Sources
 add_subdirectory(src/jsontoolkit)
+add_subdirectory(src/canonicalizer)
 if(JSONBINPACK_CLI)
   add_subdirectory(src/cli)
 endif()
