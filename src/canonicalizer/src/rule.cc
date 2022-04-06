@@ -10,14 +10,15 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::name() const
   return this->_name;
 }
 
-auto sourcemeta::jsonbinpack::canonicalizer::Rule::operator()(
-    sourcemeta::jsontoolkit::JSON &value) -> sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
+    sourcemeta::jsontoolkit::JSON &value) const -> bool {
   if (this->condition(value)) {
     this->transform(value);
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
     assert(!this->condition(value));
+    return true;
   }
 
-  return value;
+  return false;
 }
