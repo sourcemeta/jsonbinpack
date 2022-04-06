@@ -11,7 +11,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::name() const
 }
 
 auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
-    sourcemeta::jsontoolkit::JSON &value) const -> bool {
+    sourcemeta::jsontoolkit::JSON &value) -> bool {
   if (this->condition(value)) {
     this->transform(value);
     // The condition must always be false after applying the
