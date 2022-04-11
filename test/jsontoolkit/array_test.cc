@@ -303,3 +303,12 @@ TEST(Array, single_object_element_with_two_simple_keys) {
   EXPECT_TRUE(document[0]["bar"].is_integer());
   EXPECT_EQ(document[0]["bar"].to_integer(), 2);
 }
+
+TEST(Array, initializer_list_integers) {
+  // TODO: Can we make this nicer without static_cast?
+  sourcemeta::jsontoolkit::JSON document{{static_cast<std::int64_t>(1),
+                                          static_cast<std::int64_t>(2),
+                                          static_cast<std::int64_t>(3)}};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 3);
+}

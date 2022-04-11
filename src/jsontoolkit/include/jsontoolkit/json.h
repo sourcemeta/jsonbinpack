@@ -9,12 +9,13 @@
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 
-#include <cstddef>     // std::nullptr_t
-#include <cstdint>     // std::int64_t
-#include <memory>      // std::shared_ptr
-#include <string>      // std::string
-#include <string_view> // std::string_view
-#include <variant>     // std::variant
+#include <cstddef>          // std::nullptr_t
+#include <cstdint>          // std::int64_t
+#include <initializer_list> // std::initializer_list
+#include <memory>           // std::shared_ptr
+#include <string>           // std::string
+#include <string_view>      // std::string_view
+#include <variant>          // std::variant
 
 namespace sourcemeta::jsontoolkit {
 class JSON;
@@ -26,6 +27,17 @@ public:
   JSON(const char *document);
 
   JSON(const std::string_view &document);
+
+  // Initializer list
+  JSON(std::initializer_list<JSON> args)
+      : Container{"XXXXXX", true},
+        data{
+            std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
+            std::make_shared<sourcemeta::jsontoolkit::Array>()} {
+    for (auto element : args) {
+      // TODO
+    }
+  }
 
   // Boolean
   JSON(bool value);
