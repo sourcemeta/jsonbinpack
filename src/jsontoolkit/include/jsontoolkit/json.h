@@ -28,14 +28,14 @@ public:
   JSON(const std::string_view &document);
 
   // Boolean
-  JSON(bool value);
+  explicit JSON(bool value);
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
   auto operator==(bool) const -> bool;
   auto operator=(bool) &noexcept -> JSON &;
 
   // Null
-  JSON(std::nullptr_t);
+  explicit JSON(std::nullptr_t);
   auto is_null() -> bool;
   auto operator==(std::nullptr_t) const -> bool;
   auto operator=(std::nullptr_t) &noexcept -> JSON &;
