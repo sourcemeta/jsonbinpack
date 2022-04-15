@@ -235,3 +235,12 @@ auto sourcemeta::jsontoolkit::String::operator=(
   this->data = value;
   return *this;
 }
+
+auto sourcemeta::jsontoolkit::String::operator==(
+    const sourcemeta::jsontoolkit::String &value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value.data;
+}
