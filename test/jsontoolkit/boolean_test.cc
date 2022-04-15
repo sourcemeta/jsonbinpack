@@ -86,3 +86,51 @@ TEST(Boolean, false_incomplete_4) {
   sourcemeta::jsontoolkit::JSON document{"f"};
   EXPECT_THROW(document.is_boolean(), std::domain_error);
 }
+
+TEST(Boolean, false_literal_equality) {
+  sourcemeta::jsontoolkit::JSON left{false};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{false};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{true};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
+
+TEST(Boolean, true_literal_equality) {
+  sourcemeta::jsontoolkit::JSON left{true};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{true};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{false};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
+
+TEST(Boolean, false_equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"false"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  false  "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"true"};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
+
+TEST(Boolean, true_equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"true"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  true  "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"false"};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}

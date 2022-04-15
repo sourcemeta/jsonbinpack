@@ -643,3 +643,15 @@ TEST(Number, integer_equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Number, real_equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"5.4"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  5.4   "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"  5 "};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}

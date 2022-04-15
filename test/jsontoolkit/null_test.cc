@@ -48,3 +48,27 @@ TEST(Null, incomplete_3) {
   sourcemeta::jsontoolkit::JSON document{"n"};
   EXPECT_THROW(document.is_null(), std::domain_error);
 }
+
+TEST(Null, equality_with_literal) {
+  sourcemeta::jsontoolkit::JSON left{nullptr};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{nullptr};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{false};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
+
+TEST(Null, equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"null"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  null  "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"false"};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
