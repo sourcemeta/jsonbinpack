@@ -177,7 +177,19 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
     throw std::logic_error("Not parsed");
   }
 
-  return this->data == value.data;
+  if (this->data.index() != value.data.index()) {
+    return false;
+  }
+
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    return *std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+               this->data) ==
+           *std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+               value.data);
+  default:
+    return this->data == value.data;
+  }
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const

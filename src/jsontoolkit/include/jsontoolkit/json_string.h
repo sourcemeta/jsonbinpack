@@ -55,6 +55,8 @@ public:
   auto operator=(std::string &&) &noexcept -> String &;
   auto operator=(std::string_view &&) &noexcept -> String &;
 
+  auto operator==(const String &) const -> bool;
+
   friend JSON;
 
 private:

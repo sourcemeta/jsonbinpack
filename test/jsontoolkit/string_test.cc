@@ -319,3 +319,15 @@ TEST(String, incomplete_code_point_space) {
   sourcemeta::jsontoolkit::JSON document{"\"\\u0F 2F\""};
   EXPECT_THROW(document.size(), std::domain_error);
 }
+
+TEST(String, equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"\"foo\""};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  \"foo\"  "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"\"fooo\""};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
