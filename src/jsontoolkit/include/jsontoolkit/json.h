@@ -14,6 +14,7 @@
 #include <memory>      // std::shared_ptr
 #include <string>      // std::string
 #include <string_view> // std::string_view
+#include <type_traits> // std::decay_t, std::enable_if_t, std::is_same
 #include <variant>     // std::variant
 
 namespace sourcemeta::jsontoolkit {
@@ -28,7 +29,14 @@ public:
   JSON(const std::string_view &document);
 
   // Boolean
-  explicit JSON(bool value);
+  // Resolve int/double/bool literal ambiguity through SFINAE
+  template <typename T>
+  JSON(T value, [[maybe_unused]] std::enable_if_t<
+                    std::is_same<std::decay_t<T>, bool>::value, int>
+                    _ = 0)
+      : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false},
+        data{std::in_place_type<bool>, value} {}
+
   auto to_boolean() -> bool;
   auto is_boolean() -> bool;
   auto operator==(bool) const -> bool;
@@ -65,7 +73,15 @@ public:
 
   // Number
   JSON(std::int64_t value);
-  JSON(double value);
+
+  // Resolve int/double literal ambiguity through SFINAE
+  template <typename T>
+  JSON(T value, [[maybe_unused]] std::enable_if_t<
+                    std::is_same<std::decay_t<T>, double>::value, int>
+                    _ = 0)
+      : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
+        data{std::in_place_type<double>, value} {}
+
   auto is_integer() -> bool;
   auto is_real() -> bool;
   auto to_integer() -> std::int64_t;

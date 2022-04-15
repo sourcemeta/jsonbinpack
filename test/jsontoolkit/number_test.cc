@@ -94,6 +94,20 @@ TEST(Number, string_integer_negative_long_integer) {
   EXPECT_EQ(document, static_cast<double>(-12345));
 }
 
+TEST(Number, integer_literal) {
+  sourcemeta::jsontoolkit::JSON document{5};
+  EXPECT_FALSE(document.is_real());
+  EXPECT_TRUE(document.is_integer());
+  EXPECT_EQ(document.to_integer(), 5);
+}
+
+TEST(Number, real_number_literal) {
+  sourcemeta::jsontoolkit::JSON document{1.23};
+  EXPECT_TRUE(document.is_real());
+  EXPECT_FALSE(document.is_integer());
+  EXPECT_EQ(document.to_real(), 1.23);
+}
+
 TEST(Number, string_integer_minus_zero) {
   sourcemeta::jsontoolkit::JSON document{"-0"};
   EXPECT_TRUE(document.is_integer());

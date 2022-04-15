@@ -16,10 +16,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
     : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
       data{std::in_place_type<std::int64_t>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
-      data{std::in_place_type<double>, value} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
     : Container{value.source(), false},
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::Array>>,
@@ -34,10 +30,6 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
     : Container{value.source(), false},
       data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::String>>,
            std::make_shared<sourcemeta::jsontoolkit::String>(value)} {}
-
-sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false},
-      data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
     : Container{sourcemeta::jsontoolkit::Null::stringify(), false},
