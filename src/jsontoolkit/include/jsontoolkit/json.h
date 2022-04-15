@@ -27,6 +27,8 @@ public:
 
   JSON(const std::string_view &document);
 
+  auto operator==(const JSON &) const -> bool;
+
   // Boolean
   explicit JSON(bool value);
   auto to_boolean() -> bool;
