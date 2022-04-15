@@ -171,6 +171,15 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
   return this->operator==(std::string_view{value});
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator==(
+    const sourcemeta::jsontoolkit::JSON &value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value.data;
+}
+
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     -> bool {
   if (!this->is_parsed()) {

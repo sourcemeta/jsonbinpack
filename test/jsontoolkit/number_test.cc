@@ -631,3 +631,15 @@ TEST(Number, exponential_notation_integer_3_real) {
   EXPECT_FALSE(document == static_cast<std::int64_t>(0));
   EXPECT_FALSE(document == static_cast<std::int64_t>(1));
 }
+
+TEST(Number, integer_equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"5"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  5   "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{"  5.1 "};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
