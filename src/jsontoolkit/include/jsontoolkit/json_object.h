@@ -65,6 +65,8 @@ public:
   auto cbegin() -> const_iterator;
   auto cend() -> const_iterator;
 
+  auto operator==(const GenericObject<Wrapper> &) const -> bool;
+
   friend Wrapper;
 
 private:

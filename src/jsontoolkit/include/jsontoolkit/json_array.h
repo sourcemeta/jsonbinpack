@@ -43,6 +43,8 @@ public:
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
 
+  auto operator==(const GenericArray<Wrapper> &) const -> bool;
+
   friend Wrapper;
 
 private:
