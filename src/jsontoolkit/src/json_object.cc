@@ -256,6 +256,17 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() ->
   return this->data.cend();
 }
 
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
+    const sourcemeta::jsontoolkit::GenericObject<Wrapper> &value) const
+    -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value.data;
+}
+
 // Explicit instantiation
 
 template sourcemeta::jsontoolkit::GenericObject<
@@ -307,3 +318,9 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cbegin();
 template sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::const_iterator
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cend();
+
+template bool
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
+operator==(
+    const sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>
+        &) const;

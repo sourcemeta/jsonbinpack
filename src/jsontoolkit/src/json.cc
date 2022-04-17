@@ -182,6 +182,16 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
   }
 
   switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return *std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(
+               this->data) ==
+           *std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(
+               value.data);
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
+    return *std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               this->data) ==
+           *std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               value.data);
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
     return *std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
                this->data) ==

@@ -246,6 +246,16 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() ->
   return this->data.crend();
 }
 
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
+    const sourcemeta::jsontoolkit::GenericArray<Wrapper> &value) const -> bool {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
+
+  return this->data == value.data;
+}
+
 // Explicit instantiation
 
 template sourcemeta::jsontoolkit::GenericArray<
@@ -302,3 +312,9 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin();
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend();
+
+template bool
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
+operator==(
+    const sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>
+        &) const;

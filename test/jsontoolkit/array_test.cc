@@ -303,3 +303,15 @@ TEST(Array, single_object_element_with_two_simple_keys) {
   EXPECT_TRUE(document[0]["bar"].is_integer());
   EXPECT_EQ(document[0]["bar"].to_integer(), 2);
 }
+
+TEST(Array, equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"[1,2,3]"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"   [ 1  , 2,  3 ]"};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{" [1,2,2]"};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}

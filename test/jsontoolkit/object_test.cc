@@ -301,3 +301,15 @@ TEST(Object, minified_nested_object) {
   EXPECT_EQ(document["foo"].size(), 1);
   EXPECT_TRUE(document["foo"].contains("bar"));
 }
+
+TEST(Object, equality_with_padding) {
+  sourcemeta::jsontoolkit::JSON left{"{\"foo\":1}"};
+  left.parse();
+  sourcemeta::jsontoolkit::JSON right{"  { \"foo\"   : 1 } "};
+  right.parse();
+  sourcemeta::jsontoolkit::JSON extra{" { \"fo\":1 }"};
+  extra.parse();
+  EXPECT_EQ(left, right);
+  EXPECT_FALSE(left == extra);
+  EXPECT_FALSE(right == extra);
+}
