@@ -134,3 +134,15 @@ TEST(Boolean, true_equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Boolean, stringify_false) {
+  sourcemeta::jsontoolkit::JSON document{false};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "false");
+}
+
+TEST(Boolean, stringify_true) {
+  sourcemeta::jsontoolkit::JSON document{true};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "true");
+}

@@ -72,3 +72,9 @@ TEST(Null, equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Null, stringify) {
+  sourcemeta::jsontoolkit::JSON document{nullptr};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "null");
+}

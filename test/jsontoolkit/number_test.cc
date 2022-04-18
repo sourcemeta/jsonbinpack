@@ -655,3 +655,33 @@ TEST(Number, real_equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Number, stringify_positive_integer) {
+  sourcemeta::jsontoolkit::JSON document{"54"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "54");
+}
+
+TEST(Number, stringify_negative_integer) {
+  sourcemeta::jsontoolkit::JSON document{"-54"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "-54");
+}
+
+TEST(Number, stringify_zero) {
+  sourcemeta::jsontoolkit::JSON document{"0"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "0");
+}
+
+TEST(Number, stringify_positive_real) {
+  sourcemeta::jsontoolkit::JSON document{"5.4"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "5.4");
+}
+
+TEST(Number, stringify_negative_real) {
+  sourcemeta::jsontoolkit::JSON document{"-5.4"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "-5.4");
+}
