@@ -2,8 +2,11 @@
 #include <jsontoolkit/json.h>
 
 #include <cmath>     // std::modf
+#include <iomanip>   // std::noshowpoint
 #include <memory>    // std::make_shared
+#include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error, std::logic_error
+#include <string>    // std::to_string
 #include <utility>   // std::in_place_type, std::move
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
@@ -429,4 +432,29 @@ auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
 auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
   this->parse_flat();
   return std::get<double>(this->data);
+}
+
+// Because std::to_string tries too hard to imitate
+// sprintf and leaves trailing zeroes.
+static auto double_to_string(double value) -> std::string {
+  std::ostringstream stream;
+  stream << std::noshowpoint << value;
+  return stream.str();
+}
+
+auto sourcemeta::jsontoolkit::JSON::stringify() -> std::string {
+  this->parse_flat();
+
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::boolean):
+    return std::get<bool>(this->data) ? "true" : "false";
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::null):
+    return "null";
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::integer):
+    return std::to_string(std::get<std::int64_t>(this->data));
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::real):
+    return double_to_string(std::get<double>(this->data));
+  default:
+    throw std::domain_error("Invalid type");
+  }
 }
