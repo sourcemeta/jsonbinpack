@@ -331,3 +331,15 @@ TEST(String, equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(String, stringify_empty) {
+  sourcemeta::jsontoolkit::JSON document{"\"\""};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "\"\"");
+}
+
+TEST(String, stringify_short_string) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "\"foo\"");
+}

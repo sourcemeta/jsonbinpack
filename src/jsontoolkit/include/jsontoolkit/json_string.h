@@ -38,6 +38,7 @@ public:
   static const char token_escape = '\u005C';
 
   auto size() -> size_type;
+  auto stringify() -> std::string;
 
   auto begin() -> iterator;
   auto end() -> iterator;

@@ -244,3 +244,12 @@ auto sourcemeta::jsontoolkit::String::operator==(
 
   return this->data == value.data;
 }
+
+auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
+  this->parse_flat();
+  std::ostringstream stream;
+  stream << sourcemeta::jsontoolkit::String::token_begin;
+  stream << this->data;
+  stream << sourcemeta::jsontoolkit::String::token_end;
+  return stream.str();
+}

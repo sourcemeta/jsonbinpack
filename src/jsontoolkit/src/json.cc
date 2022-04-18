@@ -454,6 +454,10 @@ auto sourcemeta::jsontoolkit::JSON::stringify() -> std::string {
     return std::to_string(std::get<std::int64_t>(this->data));
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::real):
     return double_to_string(std::get<double>(this->data));
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
+               this->data)
+        ->stringify();
   default:
     throw std::domain_error("Invalid type");
   }
