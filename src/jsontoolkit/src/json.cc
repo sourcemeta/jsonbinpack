@@ -462,6 +462,10 @@ auto sourcemeta::jsontoolkit::JSON::stringify(std::size_t space)
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
         ->stringify(space);
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               this->data)
+        ->stringify(space);
   default:
     throw std::domain_error("Invalid type");
   }

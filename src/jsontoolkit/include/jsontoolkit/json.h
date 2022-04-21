@@ -28,6 +28,8 @@ public:
   JSON(const std::string_view &document);
 
   auto operator==(const JSON &) const -> bool;
+
+  // TODO: We probably want this function to be thread-safe
   auto stringify(std::size_t space = 0) -> std::string;
 
   // Boolean

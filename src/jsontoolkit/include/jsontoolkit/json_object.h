@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 
 #include <jsontoolkit/json_container.h>
+#include <string>        // std::string
 #include <string_view>   // std::string_view
 #include <unordered_map> // std::unordered_map
 
@@ -59,6 +60,8 @@ public:
   auto at(const key_type &key) & -> mapped_type &;
   auto at(const key_type &key) && -> mapped_type;
   auto erase(const key_type &key) -> size_type;
+
+  auto stringify(std::size_t space = 0) -> std::string;
 
   auto begin() -> iterator;
   auto end() -> iterator;
