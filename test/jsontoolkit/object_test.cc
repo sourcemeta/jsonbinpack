@@ -329,23 +329,35 @@ TEST(Object, stringify_scalars_no_space) {
   EXPECT_TRUE(matches);
 }
 
-TEST(Object, stringify_single_scalar_1) {
+TEST(Object, stringify_single_scalar_pretty) {
   sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
-  const std::string result{document.stringify(1)};
-  EXPECT_EQ(result, "{\n \"foo\": 1\n}");
-}
-
-TEST(Object, stringify_single_scalar_2) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
-  const std::string result{document.stringify(2)};
+  const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "{\n  \"foo\": 1\n}");
 }
 
-TEST(Object, stringify_scalars_2) {
+TEST(Object, stringify_scalars_pretty) {
   sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": true }"};
-  const std::string result{document.stringify(2)};
+  const std::string result{document.stringify(true)};
   // Because order is irrelevant
   const bool matches = result == "{\n  \"foo\": 1,\n  \"bar\": true\n}" ||
                        result == "{\n  \"bar\": true,\n  \"foo\": 1\n}";
   EXPECT_TRUE(matches);
+}
+
+TEST(Object, stringify_single_array_no_space) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": [1,2] }"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "{\"foo\":[1,2]}");
+}
+
+TEST(Object, stringify_single_array_pretty) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": [1,2] }"};
+  const std::string result{document.stringify(true)};
+  EXPECT_EQ(result, "{\n  \"foo\": [\n    1,\n    2\n  ]\n}");
+}
+
+TEST(Object, stringify_single_object_pretty) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": {\"bar\":1} }"};
+  const std::string result{document.stringify(true)};
+  EXPECT_EQ(result, "{\n  \"foo\": {\n    \"bar\": 1\n  }\n}");
 }

@@ -30,7 +30,7 @@ public:
   auto operator==(const JSON &) const -> bool;
 
   // TODO: We probably want this function to be thread-safe
-  auto stringify(std::size_t space = 0) -> std::string;
+  auto stringify(bool pretty = false) -> std::string;
 
   // Boolean
   explicit JSON(bool value);
@@ -99,6 +99,8 @@ public:
 
   static const char token_space = ' ';
   static const char token_new_line = '\n';
+
+  static const std::size_t indentation = 2;
 
 private:
   auto parse_source() -> void override;

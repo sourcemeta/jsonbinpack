@@ -2,12 +2,16 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
 #include <jsontoolkit/json_container.h>
+#include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
+// Forward definition to avoid circular dependency
+template <typename Wrapper> class GenericObject;
+
 template <typename Wrapper> class GenericArray final : public Container {
 public:
   GenericArray();
@@ -35,8 +39,6 @@ public:
   auto at(size_type index) && -> value_type;
   auto size() -> size_type;
 
-  auto stringify(std::size_t space = 0) -> std::string;
-
   auto begin() -> iterator;
   auto end() -> iterator;
   auto cbegin() -> const_iterator;
@@ -49,6 +51,10 @@ public:
   auto operator==(const GenericArray<Wrapper> &) const -> bool;
 
   friend Wrapper;
+  friend sourcemeta::jsontoolkit::GenericObject<Wrapper>;
+
+protected:
+  auto stringify(std::size_t indent) -> std::string;
 
 private:
   auto parse_source() -> void override;
