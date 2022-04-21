@@ -3,6 +3,7 @@
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
+#include <sstream> // std::ostringstream
 
 #include "utils.h"
 
@@ -267,6 +268,48 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
   return this->data == value.data;
 }
 
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
+    std::size_t space) -> std::string {
+  this->parse_flat();
+  std::ostringstream stream;
+
+  stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin;
+  if (space > 0) {
+    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+  }
+
+  for (auto pair = this->data.begin(); pair != this->data.end(); ++pair) {
+    stream << std::string(space, sourcemeta::jsontoolkit::JSON::token_space);
+    stream << sourcemeta::jsontoolkit::String::token_begin;
+    // TODO: We should use JSON string escaping logic here too
+    stream << pair->first;
+    stream << sourcemeta::jsontoolkit::String::token_end;
+    stream
+        << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter;
+    if (space > 0) {
+      stream << sourcemeta::jsontoolkit::JSON::token_space;
+    }
+
+    // TODO: Increment space for nested non-scalar types
+    stream << pair->second.stringify(space);
+    if (std::next(pair) != this->data.end()) {
+      stream
+          << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter;
+      if (space > 0) {
+        stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+      }
+    }
+  }
+
+  if (space > 0) {
+    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+  }
+
+  stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end;
+  return stream.str();
+}
+
 // Explicit instantiation
 
 template sourcemeta::jsontoolkit::GenericObject<
@@ -324,3 +367,6 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
 operator==(
     const sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>
         &) const;
+
+template std::string sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);

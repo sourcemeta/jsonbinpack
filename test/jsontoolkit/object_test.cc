@@ -313,3 +313,39 @@ TEST(Object, equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Object, stringify_single_scalar_no_space) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "{\"foo\":1}");
+}
+
+TEST(Object, stringify_scalars_no_space) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": true }"};
+  const std::string result{document.stringify()};
+  // Because order is irrelevant
+  const bool matches = result == "{\"foo\":1,\"bar\":true}" ||
+                       result == "{\"bar\":true,\"foo\":1}";
+  EXPECT_TRUE(matches);
+}
+
+TEST(Object, stringify_single_scalar_1) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
+  const std::string result{document.stringify(1)};
+  EXPECT_EQ(result, "{\n \"foo\": 1\n}");
+}
+
+TEST(Object, stringify_single_scalar_2) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
+  const std::string result{document.stringify(2)};
+  EXPECT_EQ(result, "{\n  \"foo\": 1\n}");
+}
+
+TEST(Object, stringify_scalars_2) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": true }"};
+  const std::string result{document.stringify(2)};
+  // Because order is irrelevant
+  const bool matches = result == "{\n  \"foo\": 1,\n  \"bar\": true\n}" ||
+                       result == "{\n  \"bar\": true,\n  \"foo\": 1\n}";
+  EXPECT_TRUE(matches);
+}
