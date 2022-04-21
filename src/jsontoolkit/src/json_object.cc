@@ -270,40 +270,53 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
-    std::size_t space) -> std::string {
+    std::size_t indent) -> std::string {
   this->parse_flat();
   std::ostringstream stream;
+  const bool pretty = indent > 0;
 
   stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin;
-  if (space > 0) {
+  if (pretty) {
     stream << sourcemeta::jsontoolkit::JSON::token_new_line;
   }
 
   for (auto pair = this->data.begin(); pair != this->data.end(); ++pair) {
-    stream << std::string(space, sourcemeta::jsontoolkit::JSON::token_space);
+    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation * indent,
+                          sourcemeta::jsontoolkit::JSON::token_space);
     stream << sourcemeta::jsontoolkit::String::token_begin;
     // TODO: We should use JSON string escaping logic here too
     stream << pair->first;
     stream << sourcemeta::jsontoolkit::String::token_end;
     stream
         << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter;
-    if (space > 0) {
+    if (pretty) {
       stream << sourcemeta::jsontoolkit::JSON::token_space;
     }
 
-    // TODO: Increment space for nested non-scalar types
-    stream << pair->second.stringify(space);
+    if (pair->second.is_array()) {
+      stream << pair->second.to_array()->stringify(pretty ? indent + 1
+                                                          : indent);
+    } else if (pair->second.is_object()) {
+      stream << pair->second.to_object()->stringify(pretty ? indent + 1
+                                                           : indent);
+    } else {
+      stream << pair->second.stringify(pretty);
+    }
+
     if (std::next(pair) != this->data.end()) {
       stream
           << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter;
-      if (space > 0) {
+      if (pretty) {
         stream << sourcemeta::jsontoolkit::JSON::token_new_line;
       }
     }
   }
 
-  if (space > 0) {
+  if (pretty) {
     stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation *
+                              (indent - 1),
+                          sourcemeta::jsontoolkit::JSON::token_space);
   }
 
   stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end;

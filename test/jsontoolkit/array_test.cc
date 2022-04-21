@@ -322,20 +322,20 @@ TEST(Array, stringify_scalars_no_space) {
   EXPECT_EQ(result, "[1,2,3]");
 }
 
-TEST(Array, stringify_scalars_space_0) {
+TEST(Array, stringify_scalars_space_pretty) {
   sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
-  const std::string result{document.stringify(0)};
-  EXPECT_EQ(result, "[1,2,3]");
-}
-
-TEST(Array, stringify_scalars_space_1) {
-  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
-  const std::string result{document.stringify(1)};
-  EXPECT_EQ(result, "[\n 1,\n 2,\n 3\n]");
-}
-
-TEST(Array, stringify_scalars_space_2) {
-  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
-  const std::string result{document.stringify(2)};
+  const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "[\n  1,\n  2,\n  3\n]");
+}
+
+TEST(Array, stringify_array_pretty) {
+  sourcemeta::jsontoolkit::JSON document{"[ 1, [2,3], 4 ]"};
+  const std::string result{document.stringify(true)};
+  EXPECT_EQ(result, "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
+}
+
+TEST(Array, stringify_object_pretty) {
+  sourcemeta::jsontoolkit::JSON document{"[ { \"foo\": 1 } ]"};
+  const std::string result{document.stringify(true)};
+  EXPECT_EQ(result, "[\n  {\n    \"foo\": 1\n  }\n]");
 }

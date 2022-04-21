@@ -1,12 +1,16 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 
+#include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
 #include <string>        // std::string
 #include <string_view>   // std::string_view
 #include <unordered_map> // std::unordered_map
 
 namespace sourcemeta::jsontoolkit {
+// Forward definition to avoid circular dependency
+template <typename Wrapper> class GenericArray;
+
 template <typename Wrapper> class GenericObject final : public Container {
 public:
   GenericObject();
@@ -61,8 +65,6 @@ public:
   auto at(const key_type &key) && -> mapped_type;
   auto erase(const key_type &key) -> size_type;
 
-  auto stringify(std::size_t space = 0) -> std::string;
-
   auto begin() -> iterator;
   auto end() -> iterator;
   auto cbegin() -> const_iterator;
@@ -71,6 +73,10 @@ public:
   auto operator==(const GenericObject<Wrapper> &) const -> bool;
 
   friend Wrapper;
+  friend sourcemeta::jsontoolkit::GenericArray<Wrapper>;
+
+protected:
+  auto stringify(std::size_t indent) -> std::string;
 
 private:
   auto parse_source() -> void override;
