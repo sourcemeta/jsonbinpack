@@ -249,7 +249,15 @@ auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
   this->parse_flat();
   std::ostringstream stream;
   stream << sourcemeta::jsontoolkit::String::token_begin;
-  stream << this->data;
+
+  for (const char character : this->data) {
+    if (!is_character_allowed_in_json_string(character)) {
+      stream << sourcemeta::jsontoolkit::String::token_escape;
+    }
+
+    stream << character;
+  }
+
   stream << sourcemeta::jsontoolkit::String::token_end;
   return stream.str();
 }

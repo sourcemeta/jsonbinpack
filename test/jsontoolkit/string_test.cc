@@ -343,3 +343,15 @@ TEST(String, stringify_short_string) {
   const std::string result{document.stringify()};
   EXPECT_EQ(result, "\"foo\"");
 }
+
+TEST(String, stringify_quote) {
+  sourcemeta::jsontoolkit::JSON document{"\"\\\"\""};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "\"\\\"\"");
+}
+
+TEST(String, stringify_unicode_solidus) {
+  sourcemeta::jsontoolkit::JSON document{"\"\\u002F\""};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "\"/\"");
+}
