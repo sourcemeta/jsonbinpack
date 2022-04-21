@@ -442,7 +442,8 @@ static auto double_to_string(double value) -> std::string {
   return stream.str();
 }
 
-auto sourcemeta::jsontoolkit::JSON::stringify() -> std::string {
+auto sourcemeta::jsontoolkit::JSON::stringify(std::size_t space)
+    -> std::string {
   this->parse_flat();
 
   switch (this->data.index()) {
@@ -458,6 +459,9 @@ auto sourcemeta::jsontoolkit::JSON::stringify() -> std::string {
     return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
                this->data)
         ->stringify();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+        ->stringify(space);
   default:
     throw std::domain_error("Invalid type");
   }

@@ -3,6 +3,7 @@
 
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_string.h>
+#include <string>      // std::string
 #include <string_view> // std::string_view
 #include <vector>      // std::vector
 
@@ -33,6 +34,8 @@ public:
   auto at(size_type index) & -> reference;
   auto at(size_type index) && -> value_type;
   auto size() -> size_type;
+
+  auto stringify(std::size_t space = 0) -> std::string;
 
   auto begin() -> iterator;
   auto end() -> iterator;

@@ -28,7 +28,7 @@ public:
   JSON(const std::string_view &document);
 
   auto operator==(const JSON &) const -> bool;
-  auto stringify() -> std::string;
+  auto stringify(std::size_t space = 0) -> std::string;
 
   // Boolean
   explicit JSON(bool value);
@@ -94,6 +94,9 @@ public:
   auto operator=(const std::string_view &) &noexcept -> JSON &;
   auto operator=(std::string &&) &noexcept -> JSON &;
   auto operator=(std::string_view &&) &noexcept -> JSON &;
+
+  static const char token_space = ' ';
+  static const char token_new_line = '\n';
 
 private:
   auto parse_source() -> void override;

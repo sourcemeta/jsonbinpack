@@ -315,3 +315,27 @@ TEST(Array, equality_with_padding) {
   EXPECT_FALSE(left == extra);
   EXPECT_FALSE(right == extra);
 }
+
+TEST(Array, stringify_scalars_no_space) {
+  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
+  const std::string result{document.stringify()};
+  EXPECT_EQ(result, "[1,2,3]");
+}
+
+TEST(Array, stringify_scalars_space_0) {
+  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
+  const std::string result{document.stringify(0)};
+  EXPECT_EQ(result, "[1,2,3]");
+}
+
+TEST(Array, stringify_scalars_space_1) {
+  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
+  const std::string result{document.stringify(1)};
+  EXPECT_EQ(result, "[\n 1,\n 2,\n 3\n]");
+}
+
+TEST(Array, stringify_scalars_space_2) {
+  sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
+  const std::string result{document.stringify(2)};
+  EXPECT_EQ(result, "[\n  1,\n  2,\n  3\n]");
+}
