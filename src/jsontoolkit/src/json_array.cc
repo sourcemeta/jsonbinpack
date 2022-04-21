@@ -3,6 +3,7 @@
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
+#include <sstream> // std::ostringstream
 #include <string>  // std::string
 #include <utility> // std::move
 
@@ -256,6 +257,38 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
   return this->data == value.data;
 }
 
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
+    std::size_t space) -> std::string {
+  this->parse_flat();
+  std::ostringstream stream;
+  stream << sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin;
+
+  if (space > 0) {
+    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+  }
+
+  for (auto element = this->data.begin(); element != this->data.end();
+       ++element) {
+    stream << std::string(space, sourcemeta::jsontoolkit::JSON::token_space);
+    // TODO: Increment space for nested non-scalar types
+    stream << element->stringify(space);
+    if (std::next(element) != this->data.end()) {
+      stream << sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_delimiter;
+      if (space > 0) {
+        stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+      }
+    }
+  }
+
+  if (space > 0) {
+    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+  }
+
+  stream << sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end;
+  return stream.str();
+}
+
 // Explicit instantiation
 
 template sourcemeta::jsontoolkit::GenericArray<
@@ -318,3 +351,6 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
 operator==(
     const sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>
         &) const;
+
+template std::string sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
