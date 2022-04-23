@@ -18,6 +18,11 @@ auto sourcemeta::jsontoolkit::String::value() & -> const std::string & {
   return this->data;
 }
 
+auto sourcemeta::jsontoolkit::String::value() const & -> const std::string & {
+  this->assert_parsed();
+  return this->data;
+}
+
 auto sourcemeta::jsontoolkit::String::value() && -> std::string {
   this->parse_flat();
   return std::move(this->data);
@@ -26,6 +31,12 @@ auto sourcemeta::jsontoolkit::String::value() && -> std::string {
 auto sourcemeta::jsontoolkit::String::size() ->
     typename sourcemeta::jsontoolkit::String::size_type {
   this->parse_flat();
+  return this->data.size();
+}
+
+auto sourcemeta::jsontoolkit::String::size() const ->
+    typename sourcemeta::jsontoolkit::String::size_type {
+  this->assert_parsed();
   return this->data.size();
 }
 
@@ -168,6 +179,18 @@ auto sourcemeta::jsontoolkit::String::cend() ->
   return this->data.cend();
 }
 
+auto sourcemeta::jsontoolkit::String::cbegin() const ->
+    typename sourcemeta::jsontoolkit::String::const_iterator {
+  this->assert_parsed();
+  return this->data.cbegin();
+}
+
+auto sourcemeta::jsontoolkit::String::cend() const ->
+    typename sourcemeta::jsontoolkit::String::const_iterator {
+  this->assert_parsed();
+  return this->data.cend();
+}
+
 auto sourcemeta::jsontoolkit::String::rbegin() ->
     typename sourcemeta::jsontoolkit::String::reverse_iterator {
   this->parse_flat();
@@ -189,6 +212,18 @@ auto sourcemeta::jsontoolkit::String::crbegin() ->
 auto sourcemeta::jsontoolkit::String::crend() ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
   this->parse_flat();
+  return this->data.crend();
+}
+
+auto sourcemeta::jsontoolkit::String::crbegin() const ->
+    typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
+  this->assert_parsed();
+  return this->data.crbegin();
+}
+
+auto sourcemeta::jsontoolkit::String::crend() const ->
+    typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
+  this->assert_parsed();
   return this->data.crend();
 }
 
@@ -235,12 +270,11 @@ auto sourcemeta::jsontoolkit::String::operator==(
   return this->data == value.data;
 }
 
-auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
-  this->parse_flat();
+static auto stringify_impl(const std::string &data) -> std::string {
   std::ostringstream stream;
   stream << sourcemeta::jsontoolkit::String::token_begin;
 
-  for (const char character : this->data) {
+  for (const char character : data) {
     if (!is_character_allowed_in_json_string(character)) {
       stream << sourcemeta::jsontoolkit::String::token_escape;
     }
@@ -250,4 +284,14 @@ auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
 
   stream << sourcemeta::jsontoolkit::String::token_end;
   return stream.str();
+}
+
+auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
+  this->parse_flat();
+  return stringify_impl(this->data);
+}
+
+auto sourcemeta::jsontoolkit::String::stringify() const -> std::string {
+  this->assert_parsed();
+  return stringify_impl(this->data);
 }
