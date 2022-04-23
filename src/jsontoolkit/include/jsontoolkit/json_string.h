@@ -13,6 +13,7 @@ public:
   String();
   String(const std::string_view &document);
   auto value() & -> const std::string &;
+  [[nodiscard]] auto value() const & -> const std::string &;
   auto value() && -> std::string;
 
   using traits_type = typename std::string::traits_type;
@@ -38,16 +39,22 @@ public:
   static const char token_escape = '\u005C';
 
   auto size() -> size_type;
+  [[nodiscard]] auto size() const -> size_type;
   auto stringify() -> std::string;
+  [[nodiscard]] auto stringify() const -> std::string;
 
   auto begin() -> iterator;
   auto end() -> iterator;
   auto cbegin() -> const_iterator;
   auto cend() -> const_iterator;
+  [[nodiscard]] auto cbegin() const -> const_iterator;
+  [[nodiscard]] auto cend() const -> const_iterator;
   auto rbegin() -> reverse_iterator;
   auto rend() -> reverse_iterator;
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
+  [[nodiscard]] auto crbegin() const -> const_reverse_iterator;
+  [[nodiscard]] auto crend() const -> const_reverse_iterator;
 
   auto operator==(const std::string &) const -> bool;
   auto operator==(const std::string_view &) const -> bool;
