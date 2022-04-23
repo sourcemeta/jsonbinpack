@@ -2,9 +2,8 @@
 #include <algorithm> // std::all_of
 #include <cctype>    // std::isxdigit
 #include <jsontoolkit/json_string.h>
-#include <sstream>   // std::ostringstream
-#include <stdexcept> // std::logic_error
-#include <utility>   // std::move
+#include <sstream> // std::ostringstream
+#include <utility> // std::move
 
 sourcemeta::jsontoolkit::String::String()
     : Container{std::string{sourcemeta::jsontoolkit::String::token_begin} +
@@ -195,19 +194,13 @@ auto sourcemeta::jsontoolkit::String::crend() ->
 
 auto sourcemeta::jsontoolkit::String::operator==(const std::string &value) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   return this->data == value;
 }
 
 auto sourcemeta::jsontoolkit::String::operator==(
     const std::string_view &value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   return this->data == value;
 }
 
@@ -238,10 +231,7 @@ auto sourcemeta::jsontoolkit::String::operator=(
 
 auto sourcemeta::jsontoolkit::String::operator==(
     const sourcemeta::jsontoolkit::String &value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   return this->data == value.data;
 }
 

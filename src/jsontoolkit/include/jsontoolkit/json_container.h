@@ -28,6 +28,8 @@ protected:
   Container(const Container &) = default;
   Container(Container &&) noexcept = default;
 
+  auto assert_parsed() const -> void;
+
 private:
   const std::string_view _source;
   bool must_parse = true;

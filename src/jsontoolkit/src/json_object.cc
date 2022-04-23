@@ -261,10 +261,7 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
     const sourcemeta::jsontoolkit::GenericObject<Wrapper> &value) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   return this->data == value.data;
 }
 
