@@ -35,26 +35,37 @@ public:
   // Boolean
   explicit JSON(bool value);
   auto to_boolean() -> bool;
+  [[nodiscard]] auto to_boolean() const -> bool;
   auto is_boolean() -> bool;
+  [[nodiscard]] auto is_boolean() const -> bool;
+
   auto operator==(bool) const -> bool;
   auto operator=(bool) &noexcept -> JSON &;
 
   // Null
   explicit JSON(std::nullptr_t);
   auto is_null() -> bool;
+  [[nodiscard]] auto is_null() const -> bool;
   auto operator==(std::nullptr_t) const -> bool;
   auto operator=(std::nullptr_t) &noexcept -> JSON &;
 
   // Containers
   auto size() -> std::size_t;
+  [[nodiscard]] auto size() const -> std::size_t;
 
   // Object
   JSON(sourcemeta::jsontoolkit::Object &value);
   auto to_object() -> std::shared_ptr<sourcemeta::jsontoolkit::Object>;
+  [[nodiscard]] auto to_object() const
+      -> std::shared_ptr<const sourcemeta::jsontoolkit::Object>;
   auto is_object() -> bool;
+  [[nodiscard]] auto is_object() const -> bool;
   // TODO: We can also implement this for array?
   auto contains(const std::string_view &key) -> bool;
+  [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
   auto operator[](const std::string_view &key) & -> JSON &;
+  [[nodiscard]] auto
+  operator[](const std::string_view &key) const & -> const JSON &;
   auto operator[](const std::string_view &key) && -> JSON;
   auto erase(const std::string_view &key) -> std::size_t;
 
@@ -62,9 +73,13 @@ public:
   // TODO: Add constructors from compatible std types like vector, array, list,
   // etc
   JSON(sourcemeta::jsontoolkit::Array &value);
-  auto to_array() & -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
+  auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
+  [[nodiscard]] auto to_array() const
+      -> std::shared_ptr<const sourcemeta::jsontoolkit::Array>;
   auto is_array() -> bool;
+  [[nodiscard]] auto is_array() const -> bool;
   auto operator[](std::size_t index) & -> JSON &;
+  [[nodiscard]] auto operator[](std::size_t index) const & -> const JSON &;
   auto operator[](std::size_t index) && -> JSON;
   // TODO: Implement array assignment and comparison operators
 
@@ -72,9 +87,13 @@ public:
   JSON(std::int64_t value);
   JSON(double value);
   auto is_integer() -> bool;
+  [[nodiscard]] auto is_integer() const -> bool;
   auto is_real() -> bool;
+  [[nodiscard]] auto is_real() const -> bool;
   auto to_integer() -> std::int64_t;
+  [[nodiscard]] auto to_integer() const -> std::int64_t;
   auto to_real() -> double;
+  [[nodiscard]] auto to_real() const -> double;
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
   auto operator=(std::int64_t) &noexcept -> JSON &;
@@ -86,7 +105,9 @@ public:
   // without being ambiguous with the constructor that takes JSON string?
   JSON(sourcemeta::jsontoolkit::String &value);
   auto is_string() -> bool;
+  [[nodiscard]] auto is_string() const -> bool;
   auto to_string() -> std::string;
+  [[nodiscard]] auto to_string() const -> std::string;
   auto operator==(const char *) const -> bool;
   auto operator==(const std::string &) const -> bool;
   auto operator==(const std::string_view &) const -> bool;

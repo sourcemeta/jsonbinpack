@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 #include <stdexcept>   // std::domain_error
 #include <type_traits> // std::is_nothrow_move_constructible
+#include <utility>     // std::as_const
 #include <vector>      // std::vector
 
 TEST(JSON, nothrow_move_constructible) {
@@ -81,6 +82,7 @@ TEST(JSON, array_deep_parse) {
   sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
   document.parse();
   EXPECT_EQ(document.size(), 3);
+  EXPECT_EQ(std::as_const(document).size(), 3);
 }
 
 TEST(JSON, array_deep_parse_failure) {
@@ -92,6 +94,7 @@ TEST(JSON, object_deep_parse) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":2}"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
+  EXPECT_EQ(std::as_const(document).size(), 1);
 }
 
 TEST(JSON, object_deep_parse_failure) {
@@ -115,6 +118,7 @@ TEST(JSON, at_boolean) {
   sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
+  EXPECT_EQ(std::as_const(document).size(), 3);
 
   EXPECT_TRUE(document[0].is_boolean());
   EXPECT_TRUE(document[1].is_boolean());
@@ -258,10 +262,12 @@ TEST(JSON, rfc8259_example_2) {
   // Type and size
   EXPECT_TRUE(value.is_array());
   EXPECT_EQ(value.size(), 2);
+  EXPECT_EQ(std::as_const(value).size(), 2);
 
   // Type and size
   EXPECT_TRUE(value[0].is_object());
   EXPECT_EQ(value[0].size(), 8);
+  EXPECT_EQ(std::as_const(value[0]).size(), 8);
 
   // Member keys
   EXPECT_TRUE(value[0].contains("precision"));
@@ -296,6 +302,7 @@ TEST(JSON, rfc8259_example_2) {
   // Type and size
   EXPECT_TRUE(value[1].is_object());
   EXPECT_EQ(value[1].size(), 8);
+  EXPECT_EQ(std::as_const(value[1]).size(), 8);
 
   // Member keys
   EXPECT_TRUE(value[1].contains("precision"));
