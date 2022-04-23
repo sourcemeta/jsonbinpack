@@ -37,16 +37,23 @@ public:
 
   auto at(size_type index) & -> reference;
   auto at(size_type index) && -> value_type;
+  [[nodiscard]] auto at(size_type index) const & -> const_reference;
+
   auto size() -> size_type;
+  [[nodiscard]] auto size() const -> size_type;
 
   auto begin() -> iterator;
   auto end() -> iterator;
   auto cbegin() -> const_iterator;
   auto cend() -> const_iterator;
+  [[nodiscard]] auto cbegin() const -> const_iterator;
+  [[nodiscard]] auto cend() const -> const_iterator;
   auto rbegin() -> reverse_iterator;
   auto rend() -> reverse_iterator;
   auto crbegin() -> const_reverse_iterator;
   auto crend() -> const_reverse_iterator;
+  [[nodiscard]] auto crbegin() const -> const_reverse_iterator;
+  [[nodiscard]] auto crend() const -> const_reverse_iterator;
 
   auto operator==(const GenericArray<Wrapper> &) const -> bool;
 
@@ -54,6 +61,7 @@ public:
   friend sourcemeta::jsontoolkit::GenericObject<Wrapper>;
 
 protected:
+  // TODO: Implement "const" stringify
   auto stringify(std::size_t indent) -> std::string;
 
 private:

@@ -34,6 +34,14 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
+    const & -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_reference {
+  this->assert_parsed();
+  return this->data.at(index);
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
+    const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
     && -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::value_type {
   this->parse_flat();
   return std::move(this->data.at(index));
@@ -43,6 +51,13 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
     typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type {
   this->parse_flat();
+  return this->data.size();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() const ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type {
+  this->assert_parsed();
   return this->data.size();
 }
 
@@ -218,6 +233,20 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cend() ->
 }
 
 template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cbegin() const ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
+  this->assert_parsed();
+  return this->data.cbegin();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cend() const ->
+    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
+  this->assert_parsed();
+  return this->data.cend();
+}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::rbegin() ->
     typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::reverse_iterator {
   this->parse_flat();
@@ -244,6 +273,22 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() ->
     typename sourcemeta::jsontoolkit::GenericArray<
         Wrapper>::const_reverse_iterator {
   this->parse_flat();
+  return this->data.crend();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crbegin() const ->
+    typename sourcemeta::jsontoolkit::GenericArray<
+        Wrapper>::const_reverse_iterator {
+  this->assert_parsed();
+  return this->data.crbegin();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() const ->
+    typename sourcemeta::jsontoolkit::GenericArray<
+        Wrapper>::const_reverse_iterator {
+  this->assert_parsed();
   return this->data.crend();
 }
 
@@ -312,6 +357,12 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
         sourcemeta::jsontoolkit::JSON>::size_type) &;
 
 template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::const_reference
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
+    const sourcemeta::jsontoolkit::GenericArray<
+        sourcemeta::jsontoolkit::JSON>::size_type) const &;
+
+template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::value_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
     const sourcemeta::jsontoolkit::GenericArray<
@@ -320,6 +371,11 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
 template typename sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size();
+
+template typename sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size()
+    const;
 
 template void sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::parse_deep();
@@ -342,6 +398,15 @@ template sourcemeta::jsontoolkit::GenericArray<
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cend();
 
 template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cbegin()
+    const;
+template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cend()
+    const;
+
+template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::reverse_iterator
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::rbegin();
 template sourcemeta::jsontoolkit::GenericArray<
@@ -354,6 +419,15 @@ sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin();
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend();
+
+template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin()
+    const;
+template sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend()
+    const;
 
 template bool
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
