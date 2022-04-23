@@ -29,10 +29,25 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() ->
 }
 
 template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() const ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
+  this->assert_parsed();
+  return this->data.size();
+}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) -> bool {
   this->parse_flat();
+  return this->data.find(key) != this->data.end();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
+    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
+        &key) const -> bool {
+  this->assert_parsed();
   return this->data.find(key) != this->data.end();
 }
 
@@ -42,6 +57,15 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
         &key) & ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
   this->parse_flat();
+  return this->data.at(key);
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
+    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
+        &key) const & -> const
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
+  this->assert_parsed();
   return this->data.at(key);
 }
 
@@ -251,9 +275,23 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() ->
 }
 
 template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() const ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
+  this->assert_parsed();
+  return this->data.cbegin();
+}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
   this->parse_flat();
+  return this->data.cend();
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() const ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
+  this->assert_parsed();
   return this->data.cend();
 }
 
@@ -331,15 +369,30 @@ template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::size();
 
+template typename sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::size_type
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::size()
+    const;
+
 template bool
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
     const std::string_view &);
+
+template bool
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
+    const std::string_view &) const;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type &
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<
         sourcemeta::jsontoolkit::JSON>::key_type &key) &;
+
+template const typename sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::mapped_type &
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
+    const typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type &key) const &;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type
