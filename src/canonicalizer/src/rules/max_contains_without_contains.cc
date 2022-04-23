@@ -7,7 +7,9 @@ class MaxContainsWithoutContains final
     : public sourcemeta::jsonbinpack::canonicalizer::Rule {
 public:
   MaxContainsWithoutContains() : Rule("max_contains_without_contains"){};
-  auto condition(sourcemeta::jsontoolkit::JSON &schema) -> bool override {
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON &schema) const
+      -> bool override {
     return schema.contains("maxContains") && !schema.contains("contains");
   }
 
