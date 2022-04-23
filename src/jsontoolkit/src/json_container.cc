@@ -1,4 +1,5 @@
 #include <jsontoolkit/json_container.h>
+#include <stdexcept> // std::logic_error
 
 sourcemeta::jsontoolkit::Container::Container(const std::string_view &document,
                                               const bool parse)
@@ -29,4 +30,10 @@ auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
 auto sourcemeta::jsontoolkit::Container::source() const
     -> const std::string_view & {
   return this->_source;
+}
+
+auto sourcemeta::jsontoolkit::Container::assert_parsed() const -> void {
+  if (!this->is_parsed()) {
+    throw std::logic_error("Not parsed");
+  }
 }

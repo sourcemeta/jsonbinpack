@@ -250,10 +250,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() ->
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper> &value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   return this->data == value.data;
 }
 

@@ -114,19 +114,14 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
+  this->assert_parsed();
   return std::holds_alternative<bool>(this->data) &&
          std::get<bool>(this->data) == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   if (std::holds_alternative<std::int64_t>(this->data)) {
     return std::get<std::int64_t>(this->data) == value;
   }
@@ -143,10 +138,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
-
+  this->assert_parsed();
   if (std::holds_alternative<double>(this->data)) {
     return std::get<double>(this->data) == value;
   }
@@ -163,9 +155,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
+  this->assert_parsed();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
@@ -176,9 +166,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const sourcemeta::jsontoolkit::JSON &value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
+  this->assert_parsed();
 
   if (this->data.index() != value.data.index()) {
     return false;
@@ -207,9 +195,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
+  this->assert_parsed();
 
   if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
           this->data)) {
@@ -222,9 +208,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const std::string_view &value) const -> bool {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
-  }
+  this->assert_parsed();
 
   if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
           this->data)) {
