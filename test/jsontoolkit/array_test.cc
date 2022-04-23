@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 #include <stdexcept> // std::domain_error
+#include <utility>   // std::as_const
 
 TEST(Array, nothrow_move_constructible) {
   EXPECT_TRUE(std::is_nothrow_move_constructible<
@@ -318,24 +319,27 @@ TEST(Array, equality_with_padding) {
 
 TEST(Array, stringify_scalars_no_space) {
   sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "[1,2,3]");
+  EXPECT_EQ(document.stringify(), "[1,2,3]");
+  EXPECT_EQ(std::as_const(document).stringify(), "[1,2,3]");
 }
 
 TEST(Array, stringify_scalars_space_pretty) {
   sourcemeta::jsontoolkit::JSON document{"[ 1, 2, 3 ]"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "[\n  1,\n  2,\n  3\n]");
+  EXPECT_EQ(document.stringify(true), "[\n  1,\n  2,\n  3\n]");
+  EXPECT_EQ(std::as_const(document).stringify(true), "[\n  1,\n  2,\n  3\n]");
 }
 
 TEST(Array, stringify_array_pretty) {
   sourcemeta::jsontoolkit::JSON document{"[ 1, [2,3], 4 ]"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
+  EXPECT_EQ(document.stringify(true),
+            "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
+  EXPECT_EQ(std::as_const(document).stringify(true),
+            "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
 }
 
 TEST(Array, stringify_object_pretty) {
   sourcemeta::jsontoolkit::JSON document{"[ { \"foo\": 1 } ]"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "[\n  {\n    \"foo\": 1\n  }\n]");
+  EXPECT_EQ(document.stringify(true), "[\n  {\n    \"foo\": 1\n  }\n]");
+  EXPECT_EQ(std::as_const(document).stringify(true),
+            "[\n  {\n    \"foo\": 1\n  }\n]");
 }

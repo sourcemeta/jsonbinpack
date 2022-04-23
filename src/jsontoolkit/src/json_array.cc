@@ -302,7 +302,16 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
     std::size_t indent) -> std::string {
-  this->parse_flat();
+  this->parse_deep();
+  return static_cast<const sourcemeta::jsontoolkit::GenericArray<Wrapper> *>(
+             this)
+      ->stringify(indent);
+}
+
+template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
+    std::size_t indent) const -> std::string {
+  this->assert_parsed();
   std::ostringstream stream;
   const bool pretty = indent > 0;
 
@@ -437,3 +446,5 @@ operator==(
 
 template std::string sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
+template std::string sourcemeta::jsontoolkit::GenericArray<
+    sourcemeta::jsontoolkit::JSON>::stringify(std::size_t) const;

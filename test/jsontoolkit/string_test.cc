@@ -4,6 +4,7 @@
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <type_traits> // std::is_nothrow_move_constructible
+#include <utility>     // std::as_const
 
 TEST(String, nothrow_move_constructible) {
   EXPECT_TRUE(std::is_nothrow_move_constructible<
@@ -334,24 +335,24 @@ TEST(String, equality_with_padding) {
 
 TEST(String, stringify_empty) {
   sourcemeta::jsontoolkit::JSON document{"\"\""};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "\"\"");
+  EXPECT_EQ(document.stringify(), "\"\"");
+  EXPECT_EQ(std::as_const(document).stringify(), "\"\"");
 }
 
 TEST(String, stringify_short_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "\"foo\"");
+  EXPECT_EQ(document.stringify(), "\"foo\"");
+  EXPECT_EQ(std::as_const(document).stringify(), "\"foo\"");
 }
 
 TEST(String, stringify_quote) {
   sourcemeta::jsontoolkit::JSON document{"\"\\\"\""};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "\"\\\"\"");
+  EXPECT_EQ(document.stringify(), "\"\\\"\"");
+  EXPECT_EQ(std::as_const(document).stringify(), "\"\\\"\"");
 }
 
 TEST(String, stringify_unicode_solidus) {
   sourcemeta::jsontoolkit::JSON document{"\"\\u002F\""};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "\"/\"");
+  EXPECT_EQ(document.stringify(), "\"/\"");
+  EXPECT_EQ(std::as_const(document).stringify(), "\"/\"");
 }
