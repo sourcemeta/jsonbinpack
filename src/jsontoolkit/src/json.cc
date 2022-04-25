@@ -557,3 +557,13 @@ auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
     throw std::domain_error("Invalid type");
   }
 }
+
+// This operator needs to be defined on the same namespace as the class
+namespace sourcemeta::jsontoolkit {
+auto operator<<(std::ostream &stream, const JSON &document) -> std::ostream & {
+  // TODO: Start streaming as soon as possible.
+  // With the current implementation, stringify() creates the string
+  // and THEN starts piping it to the stream.
+  return stream << document.stringify();
+}
+} // namespace sourcemeta::jsontoolkit
