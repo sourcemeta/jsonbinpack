@@ -61,8 +61,8 @@ public:
   friend sourcemeta::jsontoolkit::GenericObject<Wrapper>;
 
 protected:
-  // TODO: Implement "const" stringify
   auto stringify(std::size_t indent) -> std::string;
+  [[nodiscard]] auto stringify(std::size_t indent) const -> std::string;
 
 private:
   auto parse_source() -> void override;

@@ -453,22 +453,7 @@ auto sourcemeta::jsontoolkit::JSON::erase(const std::string_view &key)
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse_flat();
-
-  switch (this->data.index()) {
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
-        ->size();
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
-               this->data)
-        ->size();
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               this->data)
-        ->size();
-  default:
-    throw std::logic_error("Data type has no size");
-  }
+  return static_cast<const JSON *>(this)->size();
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
@@ -541,6 +526,12 @@ static auto double_to_string(double value) -> std::string {
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) -> std::string {
   this->parse_flat();
+  return static_cast<const JSON *>(this)->stringify(pretty);
+}
+
+auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
+    -> std::string {
+  this->assert_parsed();
 
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::boolean):

@@ -29,8 +29,9 @@ public:
 
   auto operator==(const JSON &) const -> bool;
 
-  // TODO: We probably want this function to be thread-safe
+  // TODO: We probably want these functions to be thread-safe
   auto stringify(bool pretty = false) -> std::string;
+  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
 
   // Boolean
   explicit JSON(bool value);
