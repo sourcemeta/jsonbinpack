@@ -12,6 +12,7 @@
 #include <cstddef>     // std::nullptr_t
 #include <cstdint>     // std::int64_t
 #include <memory>      // std::shared_ptr
+#include <ostream>     // std::ostream
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
@@ -123,6 +124,9 @@ public:
   static const char token_new_line = '\n';
 
   static const std::size_t indentation = 2;
+
+  friend auto operator<<(std::ostream &stream, const JSON &document)
+      -> std::ostream &;
 
 private:
   auto parse_source() -> void override;
