@@ -7,7 +7,7 @@ namespace sourcemeta::jsontoolkit {
 class Container {
 public:
   Container(const std::string_view &document, bool parse);
-  ~Container() = default;
+  virtual ~Container() = default;
 
   // Disable copy/move assignment due to slicing
   auto operator=(const Container &) -> Container & = delete;
