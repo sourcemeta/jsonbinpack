@@ -33,3 +33,8 @@ auto sourcemeta::jsontoolkit::Schema::has_vocabulary(
     const std::string &uri) const -> bool {
   return (this->schema.is_object() || this->schema.is_array()) && !uri.empty();
 }
+
+auto sourcemeta::jsontoolkit::Schema::contains(
+    const std::string_view &key) const -> bool {
+  return this->schema.contains(key);
+}
