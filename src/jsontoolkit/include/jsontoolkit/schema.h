@@ -2,7 +2,8 @@
 #define SOURCEMETA_JSONTOOLKIT_SCHEMA_H_
 
 #include <jsontoolkit/json.h>
-#include <string> // std::string
+#include <string>      // std::string
+#include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit {
 /*
@@ -14,6 +15,7 @@ public:
   Schema(const sourcemeta::jsontoolkit::JSON &);
   static auto is_schema(const sourcemeta::jsontoolkit::JSON &) -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
+  [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
 
   // https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.1.1
   inline static const std::string keyword_core_schema = "$schema";

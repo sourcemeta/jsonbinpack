@@ -4,6 +4,7 @@
 
 TEST(Canonicalizer, max_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "maxContains": 2
   })JSON");
@@ -11,6 +12,7 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
   sourcemeta::jsonbinpack::canonicalizer::apply(document);
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array"
   })JSON");
 
@@ -21,6 +23,7 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
 
 TEST(Canonicalizer, max_contains_without_contains_2) {
   sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "contains": { "type": "string" },
     "maxContains": 2
@@ -29,6 +32,7 @@ TEST(Canonicalizer, max_contains_without_contains_2) {
   sourcemeta::jsonbinpack::canonicalizer::apply(document);
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "contains": { "type": "string" },
     "maxContains": 2
