@@ -1,5 +1,7 @@
+#include <algorithm> // std::all_of
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <utility> // std::move
 
 TEST(Object, empty_object_string) {
   sourcemeta::jsontoolkit::JSON document{"{}"};
@@ -360,4 +362,32 @@ TEST(Object, stringify_single_object_pretty) {
   sourcemeta::jsontoolkit::JSON document{"{ \"foo\": {\"bar\":1} }"};
   const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "{\n  \"foo\": {\n    \"bar\": 1\n  }\n}");
+}
+
+TEST(Object, const_all_of_true) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": 2 }"};
+  document.parse();
+  const bool result =
+      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+                  [](auto pair) { return pair.second.is_integer(); });
+  EXPECT_TRUE(result);
+}
+
+TEST(Object, const_all_of_false) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": \"2\" }"};
+  document.parse();
+  const bool result =
+      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+                  [](auto pair) { return pair.second.is_integer(); });
+  EXPECT_FALSE(result);
+}
+
+TEST(Object, const_all_of_on_const_instance) {
+  sourcemeta::jsontoolkit::JSON source{"{ \"foo\": 1, \"bar\": 2 }"};
+  source.parse();
+  const sourcemeta::jsontoolkit::JSON document{std::move(source)};
+  const bool result =
+      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+                  [](auto pair) { return pair.second.is_integer(); });
+  EXPECT_TRUE(result);
 }
