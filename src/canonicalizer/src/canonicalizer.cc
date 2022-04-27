@@ -1,3 +1,4 @@
+#include "rules/content_schema_without_content_media_type.cc"
 #include "rules/max_contains_without_contains.cc"
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
@@ -10,5 +11,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   MaxContainsWithoutContains>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  ContentSchemaWithoutContentMediaType>());
   return bundle.apply(document);
 }
