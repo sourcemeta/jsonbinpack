@@ -434,6 +434,15 @@ template sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::const_iterator
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cend();
 
+template sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cbegin()
+    const;
+template sourcemeta::jsontoolkit::GenericObject<
+    sourcemeta::jsontoolkit::JSON>::const_iterator
+sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cend()
+    const;
+
 template bool
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
 operator==(
