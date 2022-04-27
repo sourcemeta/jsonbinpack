@@ -16,6 +16,9 @@ public:
   static auto is_schema(const sourcemeta::jsontoolkit::JSON &) -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
   [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
+  [[nodiscard]] auto
+  operator[](const sourcemeta::jsontoolkit::Object::key_type &) const & -> const
+      sourcemeta::jsontoolkit::JSON &;
 
   // https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.1.1
   inline static const std::string keyword_core_schema = "$schema";
