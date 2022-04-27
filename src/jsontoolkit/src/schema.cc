@@ -44,3 +44,12 @@ auto sourcemeta::jsontoolkit::Schema::operator[](
     sourcemeta::jsontoolkit::JSON & {
   return this->schema[key];
 }
+
+auto sourcemeta::jsontoolkit::Schema::is_object() const -> bool {
+  return this->schema.is_object();
+}
+
+auto sourcemeta::jsontoolkit::Schema::to_object() const
+    -> std::shared_ptr<const sourcemeta::jsontoolkit::Object> {
+  return this->schema.to_object();
+}

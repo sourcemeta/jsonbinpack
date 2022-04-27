@@ -13,7 +13,8 @@ public:
       -> bool override {
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.contains("maxContains") && !schema.contains("contains");
+           schema.is_object() && schema.contains("maxContains") &&
+           !schema.contains("contains");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {

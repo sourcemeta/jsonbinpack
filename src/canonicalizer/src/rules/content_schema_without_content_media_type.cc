@@ -14,7 +14,7 @@ public:
       -> bool override {
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/content") &&
-           schema.contains("contentSchema") &&
+           schema.is_object() && schema.contains("contentSchema") &&
            !schema.contains("contentMediaType");
   }
 
