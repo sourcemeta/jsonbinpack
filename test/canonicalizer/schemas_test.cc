@@ -191,3 +191,47 @@ TEST(Canonicalizer, implied_array_unique_items_5) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, min_properties_required_tautology_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 1
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, min_properties_required_tautology_2) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}

@@ -99,6 +99,7 @@ public:
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
   auto operator=(std::int64_t) &noexcept -> JSON &;
+  auto operator=(std::size_t) &noexcept -> JSON &;
   auto operator=(int) &noexcept -> JSON &;
   auto operator=(double) &noexcept -> JSON &;
 

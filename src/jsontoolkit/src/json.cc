@@ -317,6 +317,12 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   return *this;
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator=(const std::size_t value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data = static_cast<std::int64_t>(value);
+  return *this;
+}
+
 auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->data = static_cast<std::int64_t>(value);
