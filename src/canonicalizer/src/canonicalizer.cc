@@ -1,6 +1,7 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
+#include "rules/min_properties_required_tautology.h"
 #include "rules/unsatisfiable_max_contains.h"
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
@@ -19,5 +20,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
                                   UnsatisfiableMaxContains>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   ImpliedArrayUniqueItems>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  MinPropertiesRequiredTautology>());
   return bundle.apply(document);
 }
