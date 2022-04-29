@@ -1,4 +1,5 @@
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/if_without_then_else.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
@@ -22,5 +23,8 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
                                   ImpliedArrayUniqueItems>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   MinPropertiesRequiredTautology>());
+  bundle.add(
+      std::make_unique<
+          sourcemeta::jsonbinpack::canonicalizer::rules::IfWithoutThenElse>());
   return bundle.apply(document);
 }
