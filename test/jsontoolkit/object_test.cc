@@ -15,6 +15,18 @@ TEST(Object, blank_object_string) {
   EXPECT_EQ(document.size(), 0);
 }
 
+TEST(Object, blank_object_string_empty) {
+  sourcemeta::jsontoolkit::JSON document{"{    }"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_TRUE(document.empty());
+}
+
+TEST(Object, non_blank_object_string_not_empty) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_FALSE(document.empty());
+}
+
 TEST(Object, empty_object_missing_left_curly) {
   sourcemeta::jsontoolkit::JSON document{"}"};
   EXPECT_THROW(document.size(), std::domain_error);

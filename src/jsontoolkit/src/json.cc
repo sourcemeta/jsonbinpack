@@ -482,6 +482,14 @@ auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
   }
 }
 
+auto sourcemeta::jsontoolkit::JSON::empty() -> bool {
+  return this->size() == 0;
+}
+
+auto sourcemeta::jsontoolkit::JSON::empty() const -> bool {
+  return this->size() == 0;
+}
+
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
   this->parse_flat();
   return std::holds_alternative<std::int64_t>(this->data);
