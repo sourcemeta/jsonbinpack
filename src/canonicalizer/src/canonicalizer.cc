@@ -3,6 +3,7 @@
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
+#include "rules/then_else_without_if.h"
 #include "rules/unsatisfiable_max_contains.h"
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
@@ -26,5 +27,8 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(
       std::make_unique<
           sourcemeta::jsonbinpack::canonicalizer::rules::IfWithoutThenElse>());
+  bundle.add(
+      std::make_unique<
+          sourcemeta::jsonbinpack::canonicalizer::rules::ThenElseWithoutIf>());
   return bundle.apply(document);
 }
