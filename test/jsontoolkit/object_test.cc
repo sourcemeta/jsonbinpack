@@ -316,6 +316,16 @@ TEST(Object, minified_nested_object) {
   EXPECT_TRUE(document["foo"].contains("bar"));
 }
 
+TEST(Object, empty_nested_object_with_new_line_before_end) {
+  sourcemeta::jsontoolkit::JSON document("{\"x\":{}\n}");
+  document.parse();
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("x"));
+  EXPECT_TRUE(document["x"].is_object());
+  EXPECT_EQ(document["x"].size(), 0);
+}
+
 TEST(Object, equality_with_padding) {
   sourcemeta::jsontoolkit::JSON left{"{\"foo\":1}"};
   left.parse();

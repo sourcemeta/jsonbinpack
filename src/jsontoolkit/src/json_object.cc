@@ -239,7 +239,11 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       if (value_start_index > 0 && expecting_value_end) {
         if (sourcemeta::jsontoolkit::utils::is_blank(character) &&
             !is_protected_section) {
-          value_start_index = index + 1;
+          // Only increment the start index if we find blank characters
+          // before the presence of a value
+          if (index - value_start_index <= 1) {
+            value_start_index = index + 1;
+          }
         } else {
           expecting_value_end = false;
         }
