@@ -62,6 +62,12 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() const ->
 }
 
 template <typename Wrapper>
+auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::clear() -> void {
+  this->parse_flat();
+  return this->data.clear();
+}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_deep() -> void {
   this->parse_flat();
   std::for_each(this->data.begin(), this->data.end(),
@@ -385,6 +391,9 @@ template typename sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size()
     const;
+
+template void
+sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::clear();
 
 template void sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::parse_deep();

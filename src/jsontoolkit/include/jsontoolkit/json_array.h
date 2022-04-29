@@ -41,6 +41,7 @@ public:
 
   auto size() -> size_type;
   [[nodiscard]] auto size() const -> size_type;
+  auto clear() -> void;
 
   auto begin() -> iterator;
   auto end() -> iterator;

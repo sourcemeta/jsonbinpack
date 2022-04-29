@@ -56,6 +56,7 @@ public:
   [[nodiscard]] auto size() const -> std::size_t;
   auto empty() -> bool;
   [[nodiscard]] auto empty() const -> bool;
+  auto clear() -> void;
 
   // Object
   JSON(sourcemeta::jsontoolkit::Object &value);

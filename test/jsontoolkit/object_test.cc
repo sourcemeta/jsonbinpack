@@ -306,6 +306,22 @@ TEST(Object, one_array_element_with_space) {
   EXPECT_FALSE(document["foo"][1].to_boolean());
 }
 
+TEST(Object, nested_object_clear) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  document.clear();
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 0);
+}
+
+TEST(Object, nested_object_clear_non_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  document.clear();
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 0);
+}
+
 TEST(Object, minified_nested_object) {
   sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
   EXPECT_TRUE(document.is_object());
