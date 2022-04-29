@@ -54,6 +54,8 @@ public:
   // Containers
   auto size() -> std::size_t;
   [[nodiscard]] auto size() const -> std::size_t;
+  auto empty() -> bool;
+  [[nodiscard]] auto empty() const -> bool;
 
   // Object
   JSON(sourcemeta::jsontoolkit::Object &value);
