@@ -1,4 +1,5 @@
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
@@ -30,5 +31,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(
       std::make_unique<
           sourcemeta::jsonbinpack::canonicalizer::rules::ThenElseWithoutIf>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  EmptyPatternProperties>());
   return bundle.apply(document);
 }
