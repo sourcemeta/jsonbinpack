@@ -61,6 +61,7 @@ public:
 
   auto size() -> size_type;
   [[nodiscard]] auto size() const -> size_type;
+  auto clear() -> void;
 
   auto contains(const key_type &key) -> bool;
   [[nodiscard]] auto contains(const key_type &key) const -> bool;

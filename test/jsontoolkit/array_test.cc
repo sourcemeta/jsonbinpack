@@ -186,6 +186,22 @@ TEST(Array, two_levels_nested_array) {
   EXPECT_TRUE(document[1].to_array()->at(1).to_array()->at(0).to_boolean());
 }
 
+TEST(Array, two_levels_nested_array_clear) {
+  sourcemeta::jsontoolkit::JSON document{"[true,[false,[true]]]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 2);
+  document.clear();
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 0);
+}
+
+TEST(Array, two_levels_nested_array_clear_non_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"[true,[false,[true]]]"};
+  document.clear();
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 0);
+}
+
 TEST(Array, two_levels_nested_array_with_padding) {
   sourcemeta::jsontoolkit::JSON document{
       "  [  true , [  false  , [ true ]  ]  ] "};

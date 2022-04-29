@@ -490,6 +490,21 @@ auto sourcemeta::jsontoolkit::JSON::empty() const -> bool {
   return this->size() == 0;
 }
 
+auto sourcemeta::jsontoolkit::JSON::clear() -> void {
+  this->parse_flat();
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+        ->clear();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               this->data)
+        ->clear();
+  default:
+    throw std::logic_error("Data type is not a container");
+  }
+}
+
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
   this->parse_flat();
   return std::holds_alternative<std::int64_t>(this->data);
