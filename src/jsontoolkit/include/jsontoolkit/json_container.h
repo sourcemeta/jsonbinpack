@@ -9,9 +9,10 @@ public:
   Container(const std::string_view &document, bool parse);
   virtual ~Container() = default;
 
-  // Disable copy/move assignment due to slicing
-  auto operator=(const Container &) -> Container & = delete;
-  auto operator=(Container &&) -> Container & = delete;
+  Container(const Container &) = default;
+  Container(Container &&) noexcept = default;
+  auto operator=(const Container &) -> Container & = default;
+  auto operator=(Container &&) -> Container & = default;
 
   auto parse() -> void;
 
@@ -23,10 +24,6 @@ protected:
   [[nodiscard]] auto is_parsed() const -> bool;
   auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
-
-  // Enable copy/move semantics for derived classes
-  Container(const Container &) = default;
-  Container(Container &&) noexcept = default;
 
   auto assert_parsed() const -> void;
 
