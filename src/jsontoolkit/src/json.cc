@@ -371,6 +371,21 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   return *this;
 }
 
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::vector<sourcemeta::jsontoolkit::JSON> &value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data = std::make_shared<sourcemeta::jsontoolkit::Array>(value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    std::vector<sourcemeta::jsontoolkit::JSON> &&value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->data =
+      std::make_shared<sourcemeta::jsontoolkit::Array>(std::move(value));
+  return *this;
+}
+
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
   this->parse_flat();
   return std::holds_alternative<

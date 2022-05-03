@@ -16,6 +16,7 @@
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
+#include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
 class JSON;
@@ -85,7 +86,9 @@ public:
   auto operator[](std::size_t index) & -> JSON &;
   [[nodiscard]] auto operator[](std::size_t index) const & -> const JSON &;
   auto operator[](std::size_t index) && -> JSON;
-  // TODO: Implement array assignment and comparison operators
+  auto operator=(const std::vector<JSON> &) &noexcept -> JSON &;
+  auto operator=(std::vector<JSON> &&) &noexcept -> JSON &;
+  // TODO: Implement array comparison operators
 
   // Number
   JSON(std::int64_t value);
