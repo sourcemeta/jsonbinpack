@@ -16,6 +16,8 @@ template <typename Wrapper> class GenericArray final : public Container {
 public:
   GenericArray();
   GenericArray(const std::string_view &document);
+  GenericArray(const std::vector<Wrapper> &elements);
+  GenericArray(std::vector<Wrapper> &&elements);
 
   using value_type = typename std::vector<Wrapper>::value_type;
   using allocator_type = typename std::vector<Wrapper>::allocator_type;

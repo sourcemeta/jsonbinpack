@@ -24,6 +24,18 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     : Container{document, true} {}
 
 template <typename Wrapper>
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
+    const std::vector<Wrapper> &elements)
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false},
+      data{elements} {}
+
+template <typename Wrapper>
+sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
+    std::vector<Wrapper> &&elements)
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false},
+      data{std::move(elements)} {}
+
+template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
     const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
     & -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::reference {
@@ -364,6 +376,11 @@ template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::GenericArray();
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::GenericArray(const std::string_view &);
+
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
+    GenericArray(const std::vector<sourcemeta::jsontoolkit::JSON> &);
+template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
+    GenericArray(std::vector<sourcemeta::jsontoolkit::JSON> &&);
 
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::reference
