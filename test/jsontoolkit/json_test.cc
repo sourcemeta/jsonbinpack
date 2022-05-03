@@ -133,8 +133,7 @@ TEST(JSON, boolean_array_iterator) {
   sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
   std::vector<bool> result;
 
-  // TODO: Can we make range for loops nicer?
-  for (sourcemeta::jsontoolkit::JSON &element : *(value.to_array())) {
+  for (sourcemeta::jsontoolkit::JSON &element : value.to_array()) {
     result.push_back(element.to_boolean());
   }
 
@@ -150,8 +149,8 @@ TEST(JSON, boolean_array_reverse_iterator) {
 
   // TODO: Can we hide the Array type somehow?
   for (sourcemeta::jsontoolkit::Array::reverse_iterator iterator =
-           value.to_array()->rbegin();
-       iterator != value.to_array()->rend(); iterator++) {
+           value.to_array().rbegin();
+       iterator != value.to_array().rend(); iterator++) {
     result.push_back(iterator->to_boolean());
   }
 

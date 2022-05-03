@@ -18,12 +18,12 @@ public:
 
     const bool singular_by_const = schema.contains("const") &&
                                    schema["const"].is_array() &&
-                                   schema["const"].to_array()->size() <= 1;
+                                   schema["const"].to_array().size() <= 1;
 
     const bool singular_by_enum =
         schema.contains("enum") && schema["enum"].is_array() &&
-        std::all_of(schema["enum"].to_array()->cbegin(),
-                    schema["enum"].to_array()->cend(),
+        std::all_of(schema["enum"].to_array().cbegin(),
+                    schema["enum"].to_array().cend(),
                     [](const sourcemeta::jsontoolkit::JSON &element) {
                       return !element.is_array() || element.size() <= 1;
                     });

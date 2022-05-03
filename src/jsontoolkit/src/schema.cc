@@ -50,11 +50,11 @@ auto sourcemeta::jsontoolkit::Schema::is_object() const -> bool {
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_object() const
-    -> std::shared_ptr<const sourcemeta::jsontoolkit::Object> {
+    -> const sourcemeta::jsontoolkit::Object & {
   return this->schema.to_object();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array() const
-    -> std::shared_ptr<const sourcemeta::jsontoolkit::Array> {
+    -> const sourcemeta::jsontoolkit::Array & {
   return this->schema.to_array();
 }
