@@ -429,3 +429,109 @@ TEST(Object, const_all_of_on_const_instance) {
                   [](auto pair) { return pair.second.is_integer(); });
   EXPECT_TRUE(result);
 }
+
+TEST(Object, key_copy_assignment_same_type_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  value.parse();
+  document["foo"] = value;
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "baz");
+}
+
+TEST(Object, key_move_assignment_same_type_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  value.parse();
+  document["foo"] = std::move(value);
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "baz");
+}
+
+TEST(Object, key_copy_assignment_different_type_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"1"};
+  value.parse();
+  document["foo"] = value;
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_integer());
+  EXPECT_EQ(document["foo"], static_cast<std::int64_t>(1));
+}
+
+TEST(Object, key_move_assignment_different_type_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"1"};
+  value.parse();
+  document["foo"] = std::move(value);
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_integer());
+  EXPECT_EQ(document["foo"], static_cast<std::int64_t>(1));
+}
+
+TEST(Object, key_copy_assignment_same_type_unparsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  document["foo"] = value;
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "baz");
+}
+
+TEST(Object, key_move_assignment_same_type_unparsed) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  document["foo"] = std::move(value);
+
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "baz");
+}
