@@ -332,9 +332,9 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
                           sourcemeta::jsontoolkit::JSON::token_space);
 
     if (element->is_array()) {
-      stream << element->to_array()->stringify(pretty ? indent + 1 : indent);
+      stream << element->to_array().stringify(pretty ? indent + 1 : indent);
     } else if (element->is_object()) {
-      stream << element->to_object()->stringify(pretty ? indent + 1 : indent);
+      stream << element->to_object().stringify(pretty ? indent + 1 : indent);
     } else {
       stream << element->stringify(pretty);
     }

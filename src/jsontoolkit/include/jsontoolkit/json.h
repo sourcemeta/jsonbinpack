@@ -60,9 +60,9 @@ public:
 
   // Object
   JSON(sourcemeta::jsontoolkit::Object &value);
-  auto to_object() -> std::shared_ptr<sourcemeta::jsontoolkit::Object>;
+  auto to_object() -> sourcemeta::jsontoolkit::Object &;
   [[nodiscard]] auto to_object() const
-      -> std::shared_ptr<const sourcemeta::jsontoolkit::Object>;
+      -> const sourcemeta::jsontoolkit::Object &;
   auto is_object() -> bool;
   [[nodiscard]] auto is_object() const -> bool;
   // TODO: We can also implement this for array?
@@ -78,9 +78,8 @@ public:
   // TODO: Add constructors from compatible std types like vector, array, list,
   // etc
   JSON(sourcemeta::jsontoolkit::Array &value);
-  auto to_array() -> std::shared_ptr<sourcemeta::jsontoolkit::Array>;
-  [[nodiscard]] auto to_array() const
-      -> std::shared_ptr<const sourcemeta::jsontoolkit::Array>;
+  auto to_array() -> sourcemeta::jsontoolkit::Array &;
+  [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array &;
   auto is_array() -> bool;
   [[nodiscard]] auto is_array() const -> bool;
   auto operator[](std::size_t index) & -> JSON &;

@@ -230,27 +230,31 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean() const -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object()
-    -> std::shared_ptr<sourcemeta::jsontoolkit::Object> {
+    -> sourcemeta::jsontoolkit::Object & {
   this->parse_flat();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
+  return *(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data));
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object() const
-    -> std::shared_ptr<const sourcemeta::jsontoolkit::Object> {
+    -> const sourcemeta::jsontoolkit::Object & {
   this->assert_parsed();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
+  return *(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data));
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array()
-    -> std::shared_ptr<sourcemeta::jsontoolkit::Array> {
+    -> sourcemeta::jsontoolkit::Array & {
   this->parse_flat();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
+  return *(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data));
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array() const
-    -> std::shared_ptr<const sourcemeta::jsontoolkit::Array> {
+    -> const sourcemeta::jsontoolkit::Array & {
   this->assert_parsed();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
+  return *(
+      std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data));
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {

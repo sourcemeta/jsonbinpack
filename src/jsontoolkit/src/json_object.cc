@@ -348,11 +348,10 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     }
 
     if (pair->second.is_array()) {
-      stream << pair->second.to_array()->stringify(pretty ? indent + 1
-                                                          : indent);
+      stream << pair->second.to_array().stringify(pretty ? indent + 1 : indent);
     } else if (pair->second.is_object()) {
-      stream << pair->second.to_object()->stringify(pretty ? indent + 1
-                                                           : indent);
+      stream << pair->second.to_object().stringify(pretty ? indent + 1
+                                                          : indent);
     } else {
       stream << pair->second.stringify(pretty);
     }

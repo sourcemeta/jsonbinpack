@@ -406,7 +406,7 @@ TEST(Object, const_all_of_true) {
   sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": 2 }"};
   document.parse();
   const bool result =
-      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+      std::all_of(document.to_object().cbegin(), document.to_object().cend(),
                   [](auto pair) { return pair.second.is_integer(); });
   EXPECT_TRUE(result);
 }
@@ -415,7 +415,7 @@ TEST(Object, const_all_of_false) {
   sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": \"2\" }"};
   document.parse();
   const bool result =
-      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+      std::all_of(document.to_object().cbegin(), document.to_object().cend(),
                   [](auto pair) { return pair.second.is_integer(); });
   EXPECT_FALSE(result);
 }
@@ -425,7 +425,7 @@ TEST(Object, const_all_of_on_const_instance) {
   source.parse();
   const sourcemeta::jsontoolkit::JSON document{std::move(source)};
   const bool result =
-      std::all_of(document.to_object()->cbegin(), document.to_object()->cend(),
+      std::all_of(document.to_object().cbegin(), document.to_object().cend(),
                   [](auto pair) { return pair.second.is_integer(); });
   EXPECT_TRUE(result);
 }
