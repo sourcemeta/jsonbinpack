@@ -31,7 +31,7 @@ protected:
   auto assert_parsed() const -> void;
 
 private:
-  const std::string_view _source;
+  std::string_view _source;
   bool must_parse = true;
   bool must_parse_deep = true;
 };
