@@ -9,6 +9,9 @@
 #include <string>    // std::to_string
 #include <utility>   // std::in_place_type, std::move
 
+sourcemeta::jsontoolkit::JSON::JSON()
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, true} {}
+
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : Container{document, true} {}
 
