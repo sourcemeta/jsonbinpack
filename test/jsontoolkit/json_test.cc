@@ -1,14 +1,21 @@
 #include <cstdint> // std::int64_t
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
-#include <stdexcept>   // std::domain_error
-#include <type_traits> // std::is_nothrow_move_constructible
-#include <utility>     // std::as_const
-#include <vector>      // std::vector
+#include <stdexcept> // std::domain_error
+#include <type_traits> // std::is_nothrow_move_constructible, std::is_default_constructible
+#include <utility> // std::as_const
+#include <vector>  // std::vector
 
 TEST(JSON, nothrow_move_constructible) {
   EXPECT_TRUE(
       std::is_nothrow_move_constructible<sourcemeta::jsontoolkit::JSON>::value);
+}
+
+TEST(JSON, default_constructible_is_invalid) {
+  EXPECT_TRUE(
+      std::is_default_constructible<sourcemeta::jsontoolkit::JSON>::value);
+  sourcemeta::jsontoolkit::JSON document;
+  EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, set_boolean) {

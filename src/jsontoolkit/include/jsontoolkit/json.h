@@ -24,6 +24,10 @@ using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
 using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
 class JSON : public Container {
 public:
+  // Only to make the class default-constructible.
+  // The resulting document is still invalid.
+  JSON();
+
   // Accept string literals
   JSON(const char *document);
 

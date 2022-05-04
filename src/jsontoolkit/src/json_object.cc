@@ -63,7 +63,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
         &key) & ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
   this->parse_flat();
-  return this->data.at(key);
+  return this->data[key];
 }
 
 template <typename Wrapper>
@@ -81,7 +81,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
         &key) && ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type {
   this->parse_flat();
-  return std::move(this->data.at(key));
+  return std::move(this->data[key]);
 }
 
 template <typename Wrapper>
