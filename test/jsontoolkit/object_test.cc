@@ -557,3 +557,25 @@ TEST(Object, new_key_copy_assignment) {
   EXPECT_TRUE(document["bar"].is_string());
   EXPECT_EQ(document["bar"], "baz");
 }
+
+TEST(Object, new_key_move_assignment) {
+  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  sourcemeta::jsontoolkit::JSON new_value{"\"baz\""};
+  document["bar"] = std::move(new_value);
+
+  EXPECT_EQ(document.size(), 2);
+
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document["foo"].is_string());
+  EXPECT_EQ(document["foo"], "bar");
+
+  EXPECT_TRUE(document.contains("bar"));
+  EXPECT_TRUE(document["bar"].is_string());
+  EXPECT_EQ(document["bar"], "baz");
+}
