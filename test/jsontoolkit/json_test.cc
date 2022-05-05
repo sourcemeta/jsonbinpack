@@ -371,3 +371,62 @@ TEST(JSON, array_key_copy_assignment_vector) {
   EXPECT_EQ(document["foo"][1], static_cast<std::int64_t>(2));
   EXPECT_EQ(document["foo"][2], static_cast<std::int64_t>(3));
 }
+
+TEST(JSON, modify_object_after_copy) {
+  // Original document
+  sourcemeta::jsontoolkit::JSON document{"{ \"x\": 1, \"y\": 2 }"};
+  document.parse();
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("x"));
+  EXPECT_TRUE(document.contains("y"));
+  EXPECT_EQ(document["x"], static_cast<std::int64_t>(1));
+  EXPECT_EQ(document["y"], static_cast<std::int64_t>(2));
+
+  // Make copy
+  sourcemeta::jsontoolkit::JSON copy{document};
+  EXPECT_EQ(copy.size(), 2);
+  EXPECT_TRUE(copy.contains("x"));
+  EXPECT_TRUE(copy.contains("y"));
+  EXPECT_EQ(copy["x"], static_cast<std::int64_t>(1));
+  EXPECT_EQ(copy["y"], static_cast<std::int64_t>(2));
+
+  // Modify copy
+  copy.erase("x");
+  EXPECT_EQ(copy.size(), 1);
+  EXPECT_TRUE(copy.contains("y"));
+  EXPECT_EQ(copy["y"], static_cast<std::int64_t>(2));
+
+  // Original document must remain intact
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("x"));
+  EXPECT_TRUE(document.contains("y"));
+  EXPECT_EQ(document["x"], static_cast<std::int64_t>(1));
+  EXPECT_EQ(document["y"], static_cast<std::int64_t>(2));
+}
+
+TEST(JSON, modify_array_after_copy) {
+  // Original document
+  sourcemeta::jsontoolkit::JSON document{"[1,2,3]"};
+  document.parse();
+  EXPECT_EQ(document.size(), 3);
+  EXPECT_EQ(document[0], static_cast<std::int64_t>(1));
+  EXPECT_EQ(document[1], static_cast<std::int64_t>(2));
+  EXPECT_EQ(document[2], static_cast<std::int64_t>(3));
+
+  // Make copy
+  sourcemeta::jsontoolkit::JSON copy{document};
+  EXPECT_EQ(copy.size(), 3);
+  EXPECT_EQ(copy[0], static_cast<std::int64_t>(1));
+  EXPECT_EQ(copy[1], static_cast<std::int64_t>(2));
+  EXPECT_EQ(copy[2], static_cast<std::int64_t>(3));
+
+  // Modify copy
+  copy[1] = 5;
+  EXPECT_EQ(copy[1], static_cast<std::int64_t>(5));
+
+  // Original document must remain intact
+  EXPECT_EQ(document.size(), 3);
+  EXPECT_EQ(document[0], static_cast<std::int64_t>(1));
+  EXPECT_EQ(document[1], static_cast<std::int64_t>(2));
+  EXPECT_EQ(document[2], static_cast<std::int64_t>(3));
+}
