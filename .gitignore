@@ -221,3 +221,4 @@ dist
 !/Makefile
 .DS_Store
 CMakeUserPresets.json
+*.trace

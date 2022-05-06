@@ -38,6 +38,7 @@ option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
 
 # Sources
+add_subdirectory(src/tracing)
 add_subdirectory(src/jsontoolkit)
 add_subdirectory(src/canonicalizer)
 if(JSONBINPACK_CLI)

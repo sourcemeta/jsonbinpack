@@ -41,6 +41,18 @@ debug:
 endif
 .PHONY: debug
 
+ifdef CASE
+trace: scripts/trace.sh
+	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --build --preset $(PRESET)
+	$(CTEST) --preset $(PRESET) --tests-regex $(CASE) --show-only=json-v1 | ./$< $(CASE)
+else
+trace:
+	@echo "Missing CASE option" 1>&2
+	exit 1
+endif
+.PHONY: trace
+
 clean:
 	$(CMAKE) -E rm -R -f build
 .PHONY: clean

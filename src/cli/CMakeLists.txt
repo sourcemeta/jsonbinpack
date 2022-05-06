@@ -7,3 +7,4 @@ target_include_directories(sourcemeta_jsonbinpack_cli PRIVATE "${CMAKE_CURRENT_B
 set_target_properties(sourcemeta_jsonbinpack_cli PROPERTIES
   OUTPUT_NAME jsonbinpack
 )
+target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::tracing)
