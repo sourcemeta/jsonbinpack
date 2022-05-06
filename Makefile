@@ -33,6 +33,18 @@ lint:
 	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
 .PHONY: lint
 
+ifdef CASE
+debug: scripts/lldb.sh
+	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --build --preset $(PRESET)
+	./$< $(PRESET) $(CASE)
+else
+debug:
+	@echo "Missing CASE option" 1>&2
+	exit 1
+endif
+.PHONY: debug
+
 clean:
 	$(CMAKE) -E rm -R -f build
 .PHONY: clean
