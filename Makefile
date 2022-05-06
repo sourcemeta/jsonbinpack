@@ -29,10 +29,6 @@ test:
 endif
 .PHONY: test
 
-lint:
-	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
-.PHONY: lint
-
 ifdef CASE
 debug: scripts/lldb.sh
 	$(CMAKE) --preset $(PRESET) --log-context
