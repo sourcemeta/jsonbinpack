@@ -31,7 +31,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() ->
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() const ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return this->data.size();
 }
 
@@ -53,7 +53,7 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return this->data.find(key) != this->data.end();
 }
 
@@ -71,7 +71,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
     const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
         &key) const & -> const
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return this->data.at(key);
 }
 
@@ -286,7 +286,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() ->
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() const ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return this->data.cbegin();
 }
 
@@ -300,7 +300,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() ->
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() const ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return this->data.cend();
 }
 
@@ -308,7 +308,7 @@ template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
     const sourcemeta::jsontoolkit::GenericObject<Wrapper> &value) const
     -> bool {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return this->data == value.data;
 }
 
@@ -324,7 +324,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     std::size_t indent) const -> std::string {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   std::ostringstream stream;
   const bool pretty = indent > 0;
 

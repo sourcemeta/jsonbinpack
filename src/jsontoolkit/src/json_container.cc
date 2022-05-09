@@ -2,12 +2,8 @@
 #include <stdexcept> // std::logic_error
 
 sourcemeta::jsontoolkit::Container::Container(const std::string_view &document,
-                                              const bool parse)
-    : _source{document}, must_parse{parse} {}
-
-auto sourcemeta::jsontoolkit::Container::is_parsed() const -> bool {
-  return !this->must_parse;
-}
+                                              const bool parse_flat)
+    : _source{document}, must_parse_flat{parse_flat} {}
 
 auto sourcemeta::jsontoolkit::Container::parse() -> void {
   // Deep parsing implies flat parsing
@@ -22,12 +18,12 @@ auto sourcemeta::jsontoolkit::Container::parse() -> void {
 }
 
 auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
-  if (!this->must_parse) {
+  if (!this->must_parse_flat) {
     return;
   }
 
   this->parse_source();
-  this->must_parse = false;
+  this->must_parse_flat = false;
 }
 
 auto sourcemeta::jsontoolkit::Container::source() const
@@ -35,8 +31,16 @@ auto sourcemeta::jsontoolkit::Container::source() const
   return this->_source;
 }
 
-auto sourcemeta::jsontoolkit::Container::assert_parsed() const -> void {
-  if (!this->is_parsed()) {
-    throw std::logic_error("Not parsed");
+auto sourcemeta::jsontoolkit::Container::assert_parsed_flat() const -> void {
+  if (this->must_parse_flat) {
+    throw std::logic_error(
+        "The JSON document must be flat-parsed at this point");
+  }
+}
+
+auto sourcemeta::jsontoolkit::Container::assert_parsed_deep() const -> void {
+  if (this->must_parse_deep) {
+    throw std::logic_error(
+        "The JSON document must be deep-parsed at this point");
   }
 }
