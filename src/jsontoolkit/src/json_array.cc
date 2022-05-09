@@ -81,7 +81,6 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::clear() -> void {
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_deep() -> void {
-  this->parse_flat();
   std::for_each(this->data.begin(), this->data.end(),
                 [](Wrapper &element) { element.parse(); });
 }
@@ -320,7 +319,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
     std::size_t indent) -> std::string {
-  this->parse_deep();
+  this->parse();
   return static_cast<const sourcemeta::jsontoolkit::GenericArray<Wrapper> *>(
              this)
       ->stringify(indent);

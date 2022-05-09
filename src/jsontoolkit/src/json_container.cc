@@ -10,6 +10,9 @@ auto sourcemeta::jsontoolkit::Container::is_parsed() const -> bool {
 }
 
 auto sourcemeta::jsontoolkit::Container::parse() -> void {
+  // Deep parsing implies flat parsing
+  this->parse_flat();
+
   if (!this->must_parse_deep) {
     return;
   }
