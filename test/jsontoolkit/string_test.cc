@@ -16,15 +16,18 @@ TEST(String, assignment_string_from_boolean) {
   EXPECT_FALSE(document.is_string());
   document = std::string{"\"foo\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
 }
 
 TEST(String, assignment_string_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
   document = std::string{"\"bar\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "bar");
 }
 
@@ -33,15 +36,18 @@ TEST(String, assignment_string_view_from_boolean) {
   EXPECT_FALSE(document.is_string());
   document = std::string_view{"\"foo\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
 }
 
 TEST(String, assignment_string_view_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
   document = std::string_view{"\"bar\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "bar");
 }
 
@@ -50,15 +56,18 @@ TEST(String, assignment_literal_from_boolean) {
   EXPECT_FALSE(document.is_string());
   document = "\"foo\"";
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
 }
 
 TEST(String, assignment_literal_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "foo");
   document = "\"bar\"";
   EXPECT_TRUE(document.is_string());
+  document.parse();
   EXPECT_EQ(document, "bar");
 }
 

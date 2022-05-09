@@ -189,6 +189,7 @@ TEST(JSON, rfc8259_example_1) {
       "\"IDs\": [116, 943, 234, 38793]\n"
       "}\n"
       "}"};
+  value.parse();
 
   // Top level object
   EXPECT_TRUE(value.is_object());
@@ -264,6 +265,7 @@ TEST(JSON, rfc8259_example_2) {
                                       "\"Country\":   \"US\"\n"
                                       "}\n"
                                       "]"};
+  value.parse();
 
   // Type and size
   EXPECT_TRUE(value.is_array());

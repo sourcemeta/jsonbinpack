@@ -16,6 +16,8 @@ auto sourcemeta::jsontoolkit::Container::parse() -> void {
 
   this->parse_deep();
   this->must_parse_deep = false;
+  // Deep parsing implies flat parsing
+  this->must_parse = false;
 }
 
 auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
@@ -36,4 +38,8 @@ auto sourcemeta::jsontoolkit::Container::assert_parsed() const -> void {
   if (!this->is_parsed()) {
     throw std::logic_error("Not parsed");
   }
+}
+
+auto sourcemeta::jsontoolkit::Container::reset_parse_deep() -> void {
+  this->must_parse_deep = true;
 }

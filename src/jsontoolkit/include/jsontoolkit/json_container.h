@@ -26,6 +26,7 @@ protected:
   [[nodiscard]] auto source() const -> const std::string_view &;
 
   auto assert_parsed() const -> void;
+  auto reset_parse_deep() -> void;
 
 private:
   std::string_view _source;

@@ -38,8 +38,7 @@ sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Object &value)
 
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
     : Container{value.source(), false},
-      data{std::in_place_type<std::shared_ptr<sourcemeta::jsontoolkit::String>>,
-           std::make_shared<sourcemeta::jsontoolkit::String>(value)} {}
+      data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
     : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false},
@@ -62,8 +61,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
         ->parse();
     break;
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-        ->parse();
+    std::get<sourcemeta::jsontoolkit::String>(this->data).parse();
     break;
   default:
     break;
@@ -83,7 +81,7 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
     this->data = std::make_shared<sourcemeta::jsontoolkit::Object>(document);
     break;
   case sourcemeta::jsontoolkit::String::token_begin:
-    this->data = std::make_shared<sourcemeta::jsontoolkit::String>(document);
+    this->data = sourcemeta::jsontoolkit::String{document};
     break;
   case sourcemeta::jsontoolkit::Number::token_minus_sign:
   case sourcemeta::jsontoolkit::Number::token_number_zero:
@@ -187,10 +185,8 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
            *std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
                value.data);
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return *std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               this->data) ==
-           *std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               value.data);
+    return std::get<sourcemeta::jsontoolkit::String>(this->data) ==
+           std::get<sourcemeta::jsontoolkit::String>(value.data);
   default:
     return this->data == value.data;
   }
@@ -200,26 +196,22 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     -> bool {
   this->assert_parsed();
 
-  if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-          this->data)) {
+  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     return false;
   }
 
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-             ->value() == value;
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const std::string_view &value) const -> bool {
   this->assert_parsed();
 
-  if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-          this->data)) {
+  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     return false;
   }
 
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-             ->value() == value;
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
@@ -308,75 +300,86 @@ auto sourcemeta::jsontoolkit::JSON::contains(
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = nullptr;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::int64_t value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::size_t value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  this->reset_parse_deep();
+  this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  this->reset_parse_deep();
+  this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::string_view &value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  this->reset_parse_deep();
+  this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->data =
-      std::make_shared<sourcemeta::jsontoolkit::String>(std::move(value));
+  this->reset_parse_deep();
+  this->data = sourcemeta::jsontoolkit::String{std::move(value)};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     std::string_view &&value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->data = std::make_shared<sourcemeta::jsontoolkit::String>(value);
+  this->reset_parse_deep();
+  this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::vector<sourcemeta::jsontoolkit::JSON> &value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data = std::make_shared<sourcemeta::jsontoolkit::Array>(value);
   return *this;
 }
@@ -384,6 +387,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
 auto sourcemeta::jsontoolkit::JSON::operator=(
     std::vector<sourcemeta::jsontoolkit::JSON> &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->reset_parse_deep();
   this->data =
       std::make_shared<sourcemeta::jsontoolkit::Array>(std::move(value));
   return *this;
@@ -403,26 +407,22 @@ auto sourcemeta::jsontoolkit::JSON::is_array() const -> bool {
 
 auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
   this->parse_flat();
-  return std::holds_alternative<
-      std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
+  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
   this->assert_parsed();
-  return std::holds_alternative<
-      std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
+  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
   this->parse_flat();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-      ->value();
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
   this->assert_parsed();
-  return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
-      ->value();
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
@@ -481,7 +481,20 @@ auto sourcemeta::jsontoolkit::JSON::erase(const std::string_view &key)
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse_flat();
-  return static_cast<const JSON *>(this)->size();
+
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+        ->size();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               this->data)
+        ->size();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
+  default:
+    throw std::logic_error("Data type has no size");
+  }
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
@@ -496,9 +509,7 @@ auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
                this->data)
         ->size();
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               this->data)
-        ->size();
+    return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
   default:
     throw std::logic_error("Data type has no size");
   }
@@ -577,7 +588,28 @@ static auto double_to_string(double value) -> std::string {
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) -> std::string {
   this->parse_flat();
-  return static_cast<const JSON *>(this)->stringify(pretty);
+
+  switch (this->data.index()) {
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::boolean):
+    return std::get<bool>(this->data) ? "true" : "false";
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::null):
+    return "null";
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::integer):
+    return std::to_string(std::get<std::int64_t>(this->data));
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::real):
+    return double_to_string(std::get<double>(this->data));
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
+    return std::get<sourcemeta::jsontoolkit::String>(this->data).stringify();
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
+        ->stringify(pretty ? 1 : 0);
+  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
+    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(
+               this->data)
+        ->stringify(pretty ? 1 : 0);
+  default:
+    throw std::domain_error("Invalid type");
+  }
 }
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
@@ -594,9 +626,7 @@ auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::real):
     return double_to_string(std::get<double>(this->data));
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
-               this->data)
-        ->stringify();
+    return std::get<sourcemeta::jsontoolkit::String>(this->data).stringify();
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
         ->stringify(pretty ? 1 : 0);

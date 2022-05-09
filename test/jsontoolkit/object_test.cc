@@ -222,6 +222,7 @@ TEST(Object, string_value_with_comma) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document["foo"].is_string());
+  document.parse();
   EXPECT_EQ(document["foo"], "bar,baz");
 }
 
@@ -231,6 +232,7 @@ TEST(Object, string_value_with_escaped_quote) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document["foo"].is_string());
+  document.parse();
   EXPECT_EQ(document["foo"], "bar\"baz");
 }
 
@@ -240,6 +242,7 @@ TEST(Object, empty_string_key) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains(""));
   EXPECT_TRUE(document[""].is_string());
+  document.parse();
   EXPECT_EQ(document[""], "foo");
 }
 
@@ -249,6 +252,7 @@ TEST(Object, string_key_with_comma) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo,bar"));
   EXPECT_TRUE(document["foo,bar"].is_string());
+  document.parse();
   EXPECT_EQ(document["foo,bar"], "baz");
 }
 
@@ -258,6 +262,7 @@ TEST(Object, string_key_with_space) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo bar"));
   EXPECT_TRUE(document["foo bar"].is_string());
+  document.parse();
   EXPECT_EQ(document["foo bar"], "baz");
 }
 
@@ -267,6 +272,7 @@ TEST(Object, string_value_with_stringified_object) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document["foo"].is_string());
+  document.parse();
   EXPECT_EQ(document["foo"], "{\"x\":1}");
 }
 
