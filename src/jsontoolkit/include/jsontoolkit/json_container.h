@@ -6,7 +6,7 @@
 namespace sourcemeta::jsontoolkit {
 class Container {
 public:
-  Container(const std::string_view &document, bool parse);
+  Container(const std::string_view &document, bool parse_flat);
   virtual ~Container() = default;
 
   Container(const Container &) = default;
@@ -21,15 +21,15 @@ protected:
   virtual auto parse_source() -> void = 0;
   virtual auto parse_deep() -> void = 0;
 
-  [[nodiscard]] auto is_parsed() const -> bool;
   auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
 
-  auto assert_parsed() const -> void;
+  auto assert_parsed_flat() const -> void;
+  auto assert_parsed_deep() const -> void;
 
 private:
   std::string_view _source;
-  bool must_parse = true;
+  bool must_parse_flat = true;
   bool must_parse_deep = true;
 };
 } // namespace sourcemeta::jsontoolkit

@@ -50,8 +50,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
-  this->parse_flat();
-
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
@@ -117,14 +115,12 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
-  this->assert_parsed();
   return std::holds_alternative<bool>(this->data) &&
          std::get<bool>(this->data) == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
     -> bool {
-  this->assert_parsed();
   if (std::holds_alternative<std::int64_t>(this->data)) {
     return std::get<std::int64_t>(this->data) == value;
   }
@@ -141,7 +137,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
     -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   if (std::holds_alternative<double>(this->data)) {
     return std::get<double>(this->data) == value;
   }
@@ -158,7 +154,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
     -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
@@ -169,7 +165,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const sourcemeta::jsontoolkit::JSON &value) const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_deep();
 
   if (this->data.index() != value.data.index()) {
     return false;
@@ -198,7 +194,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     -> bool {
-  this->assert_parsed();
+  this->assert_parsed_deep();
 
   if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
           this->data)) {
@@ -211,7 +207,7 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const std::string_view &value) const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_deep();
 
   if (!std::holds_alternative<std::shared_ptr<sourcemeta::jsontoolkit::String>>(
           this->data)) {
@@ -228,7 +224,7 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::get<bool>(this->data);
 }
 
@@ -241,7 +237,7 @@ auto sourcemeta::jsontoolkit::JSON::to_object()
 
 auto sourcemeta::jsontoolkit::JSON::to_object() const
     -> const sourcemeta::jsontoolkit::Object & {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return *(
       std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data));
 }
@@ -255,7 +251,7 @@ auto sourcemeta::jsontoolkit::JSON::to_array()
 
 auto sourcemeta::jsontoolkit::JSON::to_array() const
     -> const sourcemeta::jsontoolkit::Array & {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return *(
       std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data));
 }
@@ -266,7 +262,7 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<bool>(this->data);
 }
 
@@ -276,7 +272,7 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
@@ -287,7 +283,7 @@ auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data);
 }
@@ -301,7 +297,7 @@ auto sourcemeta::jsontoolkit::JSON::contains(
 
 auto sourcemeta::jsontoolkit::JSON::contains(
     const sourcemeta::jsontoolkit::Object::key_type &key) const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
       ->contains(key);
 }
@@ -396,31 +392,33 @@ auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
-  this->parse_flat();
+  // In the case of strings, flat and deep parse are the same
+  this->parse();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<
       std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
-  this->parse_flat();
+  // In the case of strings, flat and deep parse are the same
+  this->parse();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
       ->value();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::String>>(this->data)
       ->value();
 }
@@ -434,7 +432,7 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const std::size_t index) const & -> const sourcemeta::jsontoolkit::JSON & {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Array>>(this->data)
       ->at(index);
 }
@@ -458,7 +456,7 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
 auto sourcemeta::jsontoolkit::JSON::operator[](
     const sourcemeta::jsontoolkit::Object::key_type &key) const & -> const
     sourcemeta::jsontoolkit::JSON & {
-  this->assert_parsed();
+  this->assert_parsed_deep();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
       ->at(key);
 }
@@ -485,7 +483,7 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
-  this->assert_parsed();
+  this->assert_parsed_flat();
 
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
@@ -533,7 +531,7 @@ auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
@@ -543,7 +541,7 @@ auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real() const -> bool {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::holds_alternative<double>(this->data);
 }
 
@@ -553,7 +551,7 @@ auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() const -> std::int64_t {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::get<std::int64_t>(this->data);
 }
 
@@ -563,7 +561,7 @@ auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real() const -> double {
-  this->assert_parsed();
+  this->assert_parsed_flat();
   return std::get<double>(this->data);
 }
 
@@ -576,13 +574,13 @@ static auto double_to_string(double value) -> std::string {
 }
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) -> std::string {
-  this->parse_flat();
+  this->parse();
   return static_cast<const JSON *>(this)->stringify(pretty);
 }
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
     -> std::string {
-  this->assert_parsed();
+  this->assert_parsed_deep();
 
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::boolean):
