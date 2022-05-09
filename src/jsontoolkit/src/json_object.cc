@@ -95,7 +95,6 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::erase(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
-  this->parse_flat();
   std::for_each(
       this->data.begin(), this->data.end(),
       [](typename std::unordered_map<std::string_view, Wrapper>::value_type
@@ -316,7 +315,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     std::size_t indent) -> std::string {
-  this->parse_deep();
+  this->parse();
   return static_cast<const sourcemeta::jsontoolkit::GenericObject<Wrapper> *>(
              this)
       ->stringify(indent);
