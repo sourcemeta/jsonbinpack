@@ -11,7 +11,6 @@
 
 #include <cstddef>     // std::nullptr_t
 #include <cstdint>     // std::int64_t
-#include <memory>      // std::shared_ptr
 #include <ostream>     // std::ostream
 #include <string>      // std::string
 #include <string_view> // std::string_view
@@ -151,8 +150,7 @@ private:
     string = 6
   };
   std::variant<bool, std::nullptr_t, std::int64_t, double,
-               sourcemeta::jsontoolkit::Array,
-               std::shared_ptr<sourcemeta::jsontoolkit::Object>,
+               sourcemeta::jsontoolkit::Array, sourcemeta::jsontoolkit::Object,
                sourcemeta::jsontoolkit::String>
       data;
 };
