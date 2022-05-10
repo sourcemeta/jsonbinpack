@@ -3,7 +3,9 @@
 
 sourcemeta::jsontoolkit::Container::Container(const std::string_view &document,
                                               const bool parse_flat)
-    : _source{document}, must_parse_flat{parse_flat} {}
+    : _source{document}, must_parse_flat{parse_flat} {
+  this->reset_parse_deep();
+}
 
 auto sourcemeta::jsontoolkit::Container::parse() -> void {
   // Deep parsing implies flat parsing
@@ -43,4 +45,8 @@ auto sourcemeta::jsontoolkit::Container::assert_parsed_deep() const -> void {
     throw std::logic_error(
         "The JSON document must be deep-parsed at this point");
   }
+}
+
+auto sourcemeta::jsontoolkit::Container::reset_parse_deep() -> void {
+  this->must_parse_deep = true;
 }

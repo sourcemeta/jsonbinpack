@@ -155,7 +155,7 @@ private:
   std::variant<bool, std::nullptr_t, std::int64_t, double,
                std::shared_ptr<sourcemeta::jsontoolkit::Array>,
                std::shared_ptr<sourcemeta::jsontoolkit::Object>,
-               std::shared_ptr<sourcemeta::jsontoolkit::String>>
+               sourcemeta::jsontoolkit::String>
       data;
 };
 } // namespace sourcemeta::jsontoolkit

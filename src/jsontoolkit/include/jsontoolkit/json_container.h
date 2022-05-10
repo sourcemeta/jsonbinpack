@@ -23,6 +23,7 @@ protected:
 
   auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> const std::string_view &;
+  auto reset_parse_deep() -> void;
 
   auto assert_parsed_flat() const -> void;
   auto assert_parsed_deep() const -> void;
