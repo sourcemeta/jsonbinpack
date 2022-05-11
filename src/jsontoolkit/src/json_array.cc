@@ -20,7 +20,7 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
-    const std::string_view &document)
+    std::string_view document)
     : Container{document, true} {}
 
 template <typename Wrapper>
@@ -374,7 +374,7 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
 template sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::GenericArray();
 template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::GenericArray(const std::string_view &);
+    sourcemeta::jsontoolkit::JSON>::GenericArray(std::string_view);
 
 template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
     GenericArray(const std::vector<sourcemeta::jsontoolkit::JSON> &);
