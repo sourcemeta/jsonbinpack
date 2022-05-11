@@ -11,7 +11,7 @@ class JSON;
 class String final : public Container {
 public:
   String();
-  String(const std::string_view &document);
+  String(std::string_view document);
   auto value() & -> const std::string &;
   [[nodiscard]] auto value() const & -> const std::string &;
   auto value() && -> std::string;
@@ -57,11 +57,10 @@ public:
   [[nodiscard]] auto crend() const -> const_reverse_iterator;
 
   auto operator==(const std::string &) const -> bool;
-  auto operator==(const std::string_view &) const -> bool;
+  auto operator==(std::string_view) const -> bool;
   auto operator=(const std::string &) &noexcept -> String &;
-  auto operator=(const std::string_view &) &noexcept -> String &;
+  auto operator=(std::string_view) &noexcept -> String &;
   auto operator=(std::string &&) &noexcept -> String &;
-  auto operator=(std::string_view &&) &noexcept -> String &;
 
   auto operator==(const String &) const -> bool;
 

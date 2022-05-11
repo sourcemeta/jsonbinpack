@@ -15,7 +15,7 @@ template <typename Wrapper> class GenericObject;
 template <typename Wrapper> class GenericArray final : public Container {
 public:
   GenericArray();
-  GenericArray(const std::string_view &document);
+  GenericArray(std::string_view document);
   GenericArray(const std::vector<Wrapper> &elements);
   GenericArray(std::vector<Wrapper> &&elements);
 
