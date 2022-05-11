@@ -76,7 +76,8 @@ public:
   auto operator[](std::string_view key) & -> JSON &;
   [[nodiscard]] auto operator[](std::string_view key) const & -> const JSON &;
   auto operator[](std::string_view key) && -> JSON;
-  auto erase(std::string_view key) -> std::size_t;
+  auto erase(typename sourcemeta::jsontoolkit::Object::key_type key)
+      -> std::size_t;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,
