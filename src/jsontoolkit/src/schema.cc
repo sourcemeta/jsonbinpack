@@ -39,9 +39,8 @@ auto sourcemeta::jsontoolkit::Schema::contains(
   return this->schema.contains(key);
 }
 
-auto sourcemeta::jsontoolkit::Schema::operator[](
-    const sourcemeta::jsontoolkit::Object::key_type &key) const & -> const
-    sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::Schema::operator[](const std::string_view &key)
+    const & -> const sourcemeta::jsontoolkit::JSON & {
   return this->schema[key];
 }
 
