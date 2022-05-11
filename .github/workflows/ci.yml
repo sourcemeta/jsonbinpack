@@ -3,10 +3,10 @@ on:
   - push
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: macos-11
     steps:
       - name: Install dependencies
-        run: sudo apt-get install --yes clang-tidy clang-format shellcheck cmake
+        run: brew install clang-format shellcheck cmake
       - name: Checkout repository
         uses: actions/checkout@v2
 

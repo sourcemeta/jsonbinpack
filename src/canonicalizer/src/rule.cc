@@ -1,7 +1,7 @@
-#include <cassert> // assert
 #include <jsonbinpack/canonicalizer/rule.h>
 #include <jsontoolkit/schema.h>
-#include <utility> // std::move
+#include <stdexcept> // std::logic_error
+#include <utility>   // std::move
 
 sourcemeta::jsonbinpack::canonicalizer::Rule::Rule(std::string name)
     : _name{std::move(name)} {}
@@ -24,7 +24,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
     const sourcemeta::jsontoolkit::Schema new_schema{value};
-    assert(!this->condition(new_schema));
+    if (this->condition(new_schema)) {
+      throw std::logic_error("Rule condition still holds");
+    }
     return true;
   }
 
