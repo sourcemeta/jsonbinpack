@@ -15,7 +15,7 @@ sourcemeta::jsontoolkit::JSON::JSON()
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : Container{document, true} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const std::string_view &document)
+sourcemeta::jsontoolkit::JSON::JSON(std::string_view document)
     : Container{document, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
@@ -195,8 +195,8 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
   return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator==(
-    const std::string_view &value) const -> bool {
+auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
+    -> bool {
   this->assert_parsed_deep();
 
   if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
@@ -338,8 +338,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const std::string_view &value) &noexcept
+auto sourcemeta::jsontoolkit::JSON::operator=(std::string_view value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->reset_parse_deep();
   this->data = sourcemeta::jsontoolkit::String{value};
@@ -350,13 +349,6 @@ auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->reset_parse_deep();
   this->data = sourcemeta::jsontoolkit::String{std::move(value)};
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    std::string_view &&value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
-  this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 

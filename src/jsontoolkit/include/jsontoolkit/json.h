@@ -31,7 +31,7 @@ public:
   // Accept string literals
   JSON(const char *document);
 
-  JSON(const std::string_view &document);
+  JSON(std::string_view document);
 
   auto operator==(const JSON &) const -> bool;
 
@@ -122,13 +122,12 @@ public:
   [[nodiscard]] auto to_string() const -> std::string;
   auto operator==(const char *) const -> bool;
   auto operator==(const std::string &) const -> bool;
-  auto operator==(const std::string_view &) const -> bool;
+  auto operator==(std::string_view) const -> bool;
   // TODO: It must be possible to set to a string that is not a quoted string
   auto operator=(const char *) &noexcept -> JSON &;
   auto operator=(const std::string &) &noexcept -> JSON &;
-  auto operator=(const std::string_view &) &noexcept -> JSON &;
+  auto operator=(std::string_view) &noexcept -> JSON &;
   auto operator=(std::string &&) &noexcept -> JSON &;
-  auto operator=(std::string_view &&) &noexcept -> JSON &;
 
   static const char token_space = ' ';
   static const char token_new_line = '\n';
