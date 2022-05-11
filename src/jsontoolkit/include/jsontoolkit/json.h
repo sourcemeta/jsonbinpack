@@ -71,13 +71,12 @@ public:
   auto is_object() -> bool;
   [[nodiscard]] auto is_object() const -> bool;
   // TODO: We can also implement this for array?
-  auto contains(const std::string_view &key) -> bool;
-  [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
-  auto operator[](const std::string_view &key) & -> JSON &;
-  [[nodiscard]] auto
-  operator[](const std::string_view &key) const & -> const JSON &;
-  auto operator[](const std::string_view &key) && -> JSON;
-  auto erase(const std::string_view &key) -> std::size_t;
+  auto contains(std::string_view key) -> bool;
+  [[nodiscard]] auto contains(std::string_view key) const -> bool;
+  auto operator[](std::string_view key) & -> JSON &;
+  [[nodiscard]] auto operator[](std::string_view key) const & -> const JSON &;
+  auto operator[](std::string_view key) && -> JSON;
+  auto erase(std::string_view key) -> std::size_t;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,
