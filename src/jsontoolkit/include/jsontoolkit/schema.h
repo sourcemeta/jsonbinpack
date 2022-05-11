@@ -17,8 +17,7 @@ public:
   static auto is_schema(const sourcemeta::jsontoolkit::JSON &) -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
   [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
-  [[nodiscard]] auto
-  operator[](const sourcemeta::jsontoolkit::Object::key_type &) const & -> const
+  [[nodiscard]] auto operator[](const std::string_view &) const & -> const
       sourcemeta::jsontoolkit::JSON &;
   [[nodiscard]] auto is_object() const -> bool;
   [[nodiscard]] auto to_object() const

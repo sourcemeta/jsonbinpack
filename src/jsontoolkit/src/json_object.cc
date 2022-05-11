@@ -396,11 +396,13 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::clear();
 
 template bool
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
-    const std::string_view &);
+    const typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type &);
 
 template bool
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
-    const std::string_view &) const;
+    const typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type &) const;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type &
