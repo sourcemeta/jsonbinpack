@@ -14,7 +14,7 @@ template <typename Wrapper> class GenericArray;
 template <typename Wrapper> class GenericObject final : public Container {
 public:
   GenericObject();
-  GenericObject(const std::string_view &document);
+  GenericObject(std::string_view document);
 
   using key_type =
       typename std::unordered_map<std::string_view, Wrapper>::key_type;
