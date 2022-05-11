@@ -440,7 +440,8 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
           ->at(key));
 }
 
-auto sourcemeta::jsontoolkit::JSON::erase(std::string_view key) -> std::size_t {
+auto sourcemeta::jsontoolkit::JSON::erase(
+    typename sourcemeta::jsontoolkit::Object::key_type key) -> std::size_t {
   this->parse_flat();
   return std::get<std::shared_ptr<sourcemeta::jsontoolkit::Object>>(this->data)
       ->erase(key);
