@@ -5,17 +5,29 @@ jobs:
   test:
     strategy:
       matrix:
-        os:
-          - macos-11
-    runs-on: ${{ matrix.os }}
+        platform:
+          - os: macos-11
+            cc: clang
+            cxx: clang++
+          - os: ubuntu-20.04
+            cc: gcc
+            cxx: g++
+
+    runs-on: ${{ matrix.platform.os }}
+    env:
+      CC: ${{ matrix.platform.cc }}
+      CXX: ${{ matrix.platform.cxx }}
     steps:
       - name: Install dependencies (macOS)
         if: runner.os == 'macos'
-        run: |
-          brew install cmake clang-format shellcheck
+        run: brew install cmake clang-format shellcheck
         env:
           HOMEBREW_NO_ANALYTICS: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
+      - name: Install dependencies (GNU/Linux)
+        if: runner.os == 'linux'
+        run: sudo apt-get install --yes clang-format shellcheck
+
       - uses: actions/checkout@v2
       - run: shellcheck scripts/*.sh
       - run: cmake --version

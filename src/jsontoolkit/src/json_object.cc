@@ -93,10 +93,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::erase(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
-  std::for_each(
-      this->data.begin(), this->data.end(),
-      [](typename std::unordered_map<std::string_view, Wrapper>::value_type
-             &p) { p.second.parse(); });
+  std::for_each(this->data.begin(), this->data.end(),
+                [](auto &p) { p.second.parse(); });
 }
 
 template <typename Wrapper>
