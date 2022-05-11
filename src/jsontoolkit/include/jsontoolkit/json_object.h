@@ -63,14 +63,14 @@ public:
   [[nodiscard]] auto size() const -> size_type;
   auto clear() -> void;
 
-  auto contains(const key_type &key) -> bool;
-  [[nodiscard]] auto contains(const key_type &key) const -> bool;
+  auto contains(key_type key) -> bool;
+  [[nodiscard]] auto contains(key_type key) const -> bool;
 
-  auto at(const key_type &key) & -> mapped_type &;
-  auto at(const key_type &key) && -> mapped_type;
-  [[nodiscard]] auto at(const key_type &key) const & -> const mapped_type &;
+  auto at(key_type key) & -> mapped_type &;
+  auto at(key_type key) && -> mapped_type;
+  [[nodiscard]] auto at(key_type key) const & -> const mapped_type &;
 
-  auto erase(const key_type &key) -> size_type;
+  auto erase(key_type key) -> size_type;
 
   auto begin() -> iterator;
   auto end() -> iterator;
