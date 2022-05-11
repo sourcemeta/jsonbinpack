@@ -43,24 +43,23 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::clear() -> void {
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) -> bool {
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
+    -> bool {
   this->parse_flat();
   return this->data.find(key) != this->data.end();
 }
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) const -> bool {
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
+    const -> bool {
   this->assert_parsed_flat();
   return this->data.find(key) != this->data.end();
 }
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) & ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key) & ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
   this->parse_flat();
   return this->data[key];
@@ -68,8 +67,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) const & -> const
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
+    const & -> const
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type & {
   this->assert_parsed_deep();
   return this->data.at(key);
@@ -77,8 +76,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) && ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
+    && ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::mapped_type {
   this->parse_flat();
   return std::move(this->data[key]);
@@ -86,8 +85,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::at(
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::erase(
-    const typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type
-        &key) ->
+    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key) ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
   this->parse_flat();
   return this->data.erase(key);
@@ -395,38 +393,38 @@ template void
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::clear();
 
 template bool
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &);
+    sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
+        contains(typename sourcemeta::jsontoolkit::GenericObject<
+                 sourcemeta::jsontoolkit::JSON>::key_type);
 
 template bool
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::contains(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &) const;
+    sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
+        contains(typename sourcemeta::jsontoolkit::GenericObject<
+                 sourcemeta::jsontoolkit::JSON>::key_type) const;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type &
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &key) &;
+    typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type key) &;
 
 template const typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type &
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &key) const &;
+    typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type key) const &;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::mapped_type
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::at(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &key) &&;
+    typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type key) &&;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::size_type
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::erase(
-    const typename sourcemeta::jsontoolkit::GenericObject<
-        sourcemeta::jsontoolkit::JSON>::key_type &key);
+    typename sourcemeta::jsontoolkit::GenericObject<
+        sourcemeta::jsontoolkit::JSON>::key_type key);
 
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_deep();
