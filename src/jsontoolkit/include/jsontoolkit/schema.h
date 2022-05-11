@@ -2,9 +2,8 @@
 #define SOURCEMETA_JSONTOOLKIT_SCHEMA_H_
 
 #include <jsontoolkit/json.h>
-#include <memory>      // std::shared_ptr
-#include <string>      // std::string
-#include <string_view> // std::string_view
+#include <memory> // std::shared_ptr
+#include <string> // std::string
 
 namespace sourcemeta::jsontoolkit {
 /*
@@ -16,9 +15,12 @@ public:
   Schema(const sourcemeta::jsontoolkit::JSON &);
   static auto is_schema(const sourcemeta::jsontoolkit::JSON &) -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
-  [[nodiscard]] auto contains(const std::string_view &key) const -> bool;
-  [[nodiscard]] auto operator[](const std::string_view &) const & -> const
-      sourcemeta::jsontoolkit::JSON &;
+  [[nodiscard]] auto
+  contains(typename sourcemeta::jsontoolkit::Object::key_type key) const
+      -> bool;
+  [[nodiscard]] auto
+  operator[](typename sourcemeta::jsontoolkit::Object::key_type key)
+      const & -> const sourcemeta::jsontoolkit::JSON &;
   [[nodiscard]] auto is_object() const -> bool;
   [[nodiscard]] auto to_object() const
       -> const sourcemeta::jsontoolkit::Object &;

@@ -35,12 +35,13 @@ auto sourcemeta::jsontoolkit::Schema::has_vocabulary(
 }
 
 auto sourcemeta::jsontoolkit::Schema::contains(
-    const std::string_view &key) const -> bool {
+    typename sourcemeta::jsontoolkit::Object::key_type key) const -> bool {
   return this->schema.contains(key);
 }
 
-auto sourcemeta::jsontoolkit::Schema::operator[](const std::string_view &key)
-    const & -> const sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::Schema::operator[](
+    typename sourcemeta::jsontoolkit::Object::key_type key) const & -> const
+    sourcemeta::jsontoolkit::JSON & {
   return this->schema[key];
 }
 
