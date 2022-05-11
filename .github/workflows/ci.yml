@@ -12,6 +12,7 @@ jobs:
 
       - run: shellcheck scripts/*.sh
       - run: cmake --version
+      - run: which cmake
       - run: cmake --preset release --log-context
       - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release --target clang_tidy
