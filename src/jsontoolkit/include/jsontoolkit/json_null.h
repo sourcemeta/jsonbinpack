@@ -9,7 +9,7 @@
 namespace sourcemeta::jsontoolkit::Null {
 
 constexpr std::string_view token_constant{"null"};
-auto parse(const std::string_view &document) -> std::nullptr_t;
+auto parse(std::string_view document) -> std::nullptr_t;
 auto stringify() -> std::string;
 
 } // namespace sourcemeta::jsontoolkit::Null

@@ -10,7 +10,7 @@ auto sourcemeta::jsontoolkit::Boolean::stringify(const bool value)
                    sourcemeta::jsontoolkit::Boolean::token_constant_false};
 }
 
-auto sourcemeta::jsontoolkit::Boolean::parse(const std::string_view &document)
+auto sourcemeta::jsontoolkit::Boolean::parse(std::string_view document)
     -> bool {
   if (document == sourcemeta::jsontoolkit::Boolean::token_constant_true) {
     return true;
