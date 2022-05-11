@@ -1,7 +1,7 @@
 #include <jsontoolkit/json_container.h>
 #include <stdexcept> // std::logic_error
 
-sourcemeta::jsontoolkit::Container::Container(const std::string_view &document,
+sourcemeta::jsontoolkit::Container::Container(std::string_view document,
                                               const bool parse_flat)
     : _source{document}, must_parse_flat{parse_flat} {
   this->reset_parse_deep();
@@ -28,8 +28,7 @@ auto sourcemeta::jsontoolkit::Container::parse_flat() -> void {
   this->must_parse_flat = false;
 }
 
-auto sourcemeta::jsontoolkit::Container::source() const
-    -> const std::string_view & {
+auto sourcemeta::jsontoolkit::Container::source() const -> std::string_view {
   return this->_source;
 }
 
