@@ -18,7 +18,7 @@ sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject()
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject(
-    const std::string_view &document)
+    std::string_view document)
     : Container{document, true} {}
 
 template <typename Wrapper>
@@ -380,7 +380,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
 template sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::GenericObject();
 template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::GenericObject(const std::string_view &);
+    sourcemeta::jsontoolkit::JSON>::GenericObject(std::string_view);
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::size_type
