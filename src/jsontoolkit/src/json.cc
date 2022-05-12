@@ -265,14 +265,13 @@ auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
   return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::contains(
-    typename sourcemeta::jsontoolkit::Object::key_type key) -> bool {
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
   this->parse_flat();
   return std::get<sourcemeta::jsontoolkit::Object>(this->data).contains(key);
 }
 
-auto sourcemeta::jsontoolkit::JSON::contains(
-    typename sourcemeta::jsontoolkit::Object::key_type key) const -> bool {
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
+    -> bool {
   this->assert_parsed_flat();
   return std::get<sourcemeta::jsontoolkit::Object>(this->data).contains(key);
 }
@@ -409,29 +408,26 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
-    typename sourcemeta::jsontoolkit::Object::key_type key)
-    & -> sourcemeta::jsontoolkit::JSON & {
+    const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
   this->parse_flat();
   return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
-    typename sourcemeta::jsontoolkit::Object::key_type key) const & -> const
-    sourcemeta::jsontoolkit::JSON & {
+    const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON & {
   this->assert_parsed_deep();
   return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator[](
-    typename sourcemeta::jsontoolkit::Object::key_type key)
-    && -> sourcemeta::jsontoolkit::JSON {
+    const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
   this->parse_flat();
   return std::move(
       std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key));
 }
 
-auto sourcemeta::jsontoolkit::JSON::erase(
-    typename sourcemeta::jsontoolkit::Object::key_type key) -> std::size_t {
+auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key)
+    -> std::size_t {
   this->parse_flat();
   return std::get<sourcemeta::jsontoolkit::Object>(this->data).erase(key);
 }
