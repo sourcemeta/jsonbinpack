@@ -34,14 +34,13 @@ auto sourcemeta::jsontoolkit::Schema::has_vocabulary(
   return (this->schema.is_object() || this->schema.is_array()) && !uri.empty();
 }
 
-auto sourcemeta::jsontoolkit::Schema::contains(
-    typename sourcemeta::jsontoolkit::Object::key_type key) const -> bool {
+auto sourcemeta::jsontoolkit::Schema::contains(const std::string &key) const
+    -> bool {
   return this->schema.contains(key);
 }
 
 auto sourcemeta::jsontoolkit::Schema::operator[](
-    typename sourcemeta::jsontoolkit::Object::key_type key) const & -> const
-    sourcemeta::jsontoolkit::JSON & {
+    const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON & {
   return this->schema[key];
 }
 
