@@ -3,9 +3,9 @@
 
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
-#include <string>        // std::string
-#include <string_view>   // std::string_view
-#include <unordered_map> // std::unordered_map
+#include <map>         // std::map
+#include <string>      // std::string
+#include <string_view> // std::string_view
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
@@ -16,43 +16,27 @@ public:
   GenericObject();
   GenericObject(std::string_view document);
 
-  using key_type =
-      typename std::unordered_map<std::string_view, Wrapper>::key_type;
-  using mapped_type =
-      typename std::unordered_map<std::string_view, Wrapper>::mapped_type;
-  using value_type =
-      typename std::unordered_map<std::string_view, Wrapper>::value_type;
-  using size_type =
-      typename std::unordered_map<std::string_view, Wrapper>::size_type;
+  using key_type = typename std::map<std::string_view, Wrapper>::key_type;
+  using mapped_type = typename std::map<std::string_view, Wrapper>::mapped_type;
+  using value_type = typename std::map<std::string_view, Wrapper>::value_type;
+  using size_type = typename std::map<std::string_view, Wrapper>::size_type;
   using difference_type =
-      typename std::unordered_map<std::string_view, Wrapper>::difference_type;
-  using hasher = typename std::unordered_map<std::string_view, Wrapper>::hasher;
-  using key_equal =
-      typename std::unordered_map<std::string_view, Wrapper>::key_equal;
+      typename std::map<std::string_view, Wrapper>::difference_type;
+  using key_compare = typename std::map<std::string_view, Wrapper>::key_compare;
   using allocator_type =
-      typename std::unordered_map<std::string_view, Wrapper>::allocator_type;
-  using reference =
-      typename std::unordered_map<std::string_view, Wrapper>::reference;
+      typename std::map<std::string_view, Wrapper>::allocator_type;
+  using reference = typename std::map<std::string_view, Wrapper>::reference;
   using const_reference =
-      typename std::unordered_map<std::string_view, Wrapper>::const_reference;
-  using pointer =
-      typename std::unordered_map<std::string_view, Wrapper>::pointer;
+      typename std::map<std::string_view, Wrapper>::const_reference;
+  using pointer = typename std::map<std::string_view, Wrapper>::pointer;
   using const_pointer =
-      typename std::unordered_map<std::string_view, Wrapper>::const_pointer;
-  using iterator =
-      typename std::unordered_map<std::string_view, Wrapper>::iterator;
+      typename std::map<std::string_view, Wrapper>::const_pointer;
+  using iterator = typename std::map<std::string_view, Wrapper>::iterator;
   using const_iterator =
-      typename std::unordered_map<std::string_view, Wrapper>::const_iterator;
-  using local_iterator =
-      typename std::unordered_map<std::string_view, Wrapper>::local_iterator;
-  using const_local_iterator =
-      typename std::unordered_map<std::string_view,
-                                  Wrapper>::const_local_iterator;
-  using node_type =
-      typename std::unordered_map<std::string_view, Wrapper>::node_type;
+      typename std::map<std::string_view, Wrapper>::const_iterator;
+  using node_type = typename std::map<std::string_view, Wrapper>::node_type;
   using insert_return_type =
-      typename std::unordered_map<std::string_view,
-                                  Wrapper>::insert_return_type;
+      typename std::map<std::string_view, Wrapper>::insert_return_type;
 
   static const char token_begin = '{';
   static const char token_end = '}';
@@ -91,7 +75,7 @@ protected:
 private:
   auto parse_source() -> void override;
   auto parse_deep() -> void override;
-  std::unordered_map<std::string_view, Wrapper> data;
+  std::map<std::string_view, Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit
 
