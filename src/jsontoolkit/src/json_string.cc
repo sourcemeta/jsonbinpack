@@ -8,10 +8,10 @@
 sourcemeta::jsontoolkit::String::String()
     : Container{std::string{sourcemeta::jsontoolkit::String::token_begin} +
                     std::string{sourcemeta::jsontoolkit::String::token_end},
-                false} {}
+                true, true} {}
 
 sourcemeta::jsontoolkit::String::String(std::string_view document)
-    : Container{document, true} {}
+    : Container{document, true, true} {}
 
 auto sourcemeta::jsontoolkit::String::value() & -> const std::string & {
   this->parse();

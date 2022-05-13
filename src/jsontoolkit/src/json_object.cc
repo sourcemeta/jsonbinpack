@@ -14,12 +14,12 @@ sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject()
               sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin} +
               std::string{
                   sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end},
-          false} {}
+          true, true} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject(
     std::string_view document)
-    : Container{document, true} {}
+    : Container{document, true, true} {}
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() ->

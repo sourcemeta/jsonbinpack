@@ -9,41 +9,44 @@
 #include <utility>   // std::in_place_type, std::move
 
 sourcemeta::jsontoolkit::JSON::JSON()
-    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, true} {}
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, true, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
-    : Container{document, true} {}
+    : Container{document, true, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(std::string_view document)
-    : Container{document, true} {}
+    : Container{document, true, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
+    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false,
+                false},
       data{std::in_place_type<std::int64_t>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false},
+    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false,
+                false},
       data{std::in_place_type<double>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
-    : Container{value.source(), false},
-      data{std::in_place_type<sourcemeta::jsontoolkit::Array>, value} {}
-
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Object &value)
-    : Container{value.source(), false},
-      data{std::in_place_type<sourcemeta::jsontoolkit::Object>, value} {}
-
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
-    : Container{value.source(), false},
-      data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false},
+    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false,
+                false},
       data{std::in_place_type<bool>, value} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{sourcemeta::jsontoolkit::Null::stringify(), false},
+    : Container{sourcemeta::jsontoolkit::Null::stringify(), false, false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Array &value)
+    : Container{value.source(), false, !value.is_flat_parsed()},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Array>, value} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Object &value)
+    : Container{value.source(), false, !value.is_flat_parsed()},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Object>, value} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
+    : Container{value.source(), false, !value.is_flat_parsed()},
+      data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
 
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
   switch (this->data.index()) {
