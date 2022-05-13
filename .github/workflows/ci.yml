@@ -1,6 +1,12 @@
 name: JSON BinPack
 on:
   - push
+
+# Do not run multiple jobs for the same branch
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # Only run clang-tidy on GNU/Linux as a separate jobs
   # given how expensive clang-tidy this, even more on
