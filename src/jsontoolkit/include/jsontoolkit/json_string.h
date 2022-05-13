@@ -40,8 +40,6 @@ public:
 
   auto size() -> size_type;
   [[nodiscard]] auto size() const -> size_type;
-  auto stringify() -> std::string;
-  [[nodiscard]] auto stringify() const -> std::string;
 
   auto begin() -> iterator;
   auto end() -> iterator;
@@ -65,6 +63,10 @@ public:
   auto operator==(const String &) const -> bool;
 
   friend JSON;
+
+protected:
+  auto stringify() -> std::string;
+  [[nodiscard]] auto stringify() const -> std::string;
 
 private:
   auto parse_source() -> void override;

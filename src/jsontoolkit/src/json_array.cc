@@ -16,23 +16,23 @@ sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
               sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin} +
               std::string{
                   sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end},
-          false} {}
+          true, true} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     std::string_view document)
-    : Container{document, true} {}
+    : Container{document, true, true} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     const std::vector<Wrapper> &elements)
-    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false},
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false, true},
       data{elements} {}
 
 template <typename Wrapper>
 sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
     std::vector<Wrapper> &&elements)
-    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false},
+    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false, true},
       data{std::move(elements)} {}
 
 template <typename Wrapper>
