@@ -49,10 +49,27 @@ auto sourcemeta::jsontoolkit::Container::assert_parsed_deep() const -> void {
   }
 }
 
-auto sourcemeta::jsontoolkit::Container::reset_parse_deep() -> void {
-  this->must_parse_deep = true;
+auto sourcemeta::jsontoolkit::Container::set_parse_flat(bool value) -> void {
+  this->must_parse_flat = value;
+  // A document cannot be deep parsed but not flat parsed
+  if (this->must_parse_flat) {
+    this->must_parse_deep = true;
+  }
+}
+
+auto sourcemeta::jsontoolkit::Container::set_parse_deep(bool value) -> void {
+  this->must_parse_deep = value;
+}
+
+auto sourcemeta::jsontoolkit::Container::set_source(std::string_view new_source)
+    -> void {
+  this->_source = new_source;
 }
 
 auto sourcemeta::jsontoolkit::Container::is_flat_parsed() const -> bool {
   return !this->must_parse_flat;
+}
+
+auto sourcemeta::jsontoolkit::Container::is_deep_parsed() const -> bool {
+  return !this->must_parse_deep;
 }
