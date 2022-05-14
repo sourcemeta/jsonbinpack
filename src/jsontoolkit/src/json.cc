@@ -11,6 +11,39 @@
 sourcemeta::jsontoolkit::JSON::JSON()
     : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, true, true} {}
 
+sourcemeta::jsontoolkit::JSON::JSON(
+    const sourcemeta::jsontoolkit::JSON &document)
+    : Container{document.source(), !document.is_flat_parsed(),
+                !document.is_deep_parsed()},
+      data{document.data} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(
+    sourcemeta::jsontoolkit::JSON &&document) noexcept
+    : Container{document.source(), !document.is_flat_parsed(),
+                !document.is_deep_parsed()},
+      data{std::move(document.data)} {}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const sourcemeta::jsontoolkit::JSON &document)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->set_source(document.source());
+  this->set_parse_flat(!document.is_flat_parsed());
+  this->set_parse_deep(!document.is_deep_parsed());
+  this->data = document.data;
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    sourcemeta::jsontoolkit::JSON &&document) noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->set_source(document.source());
+  this->set_parse_flat(!document.is_flat_parsed());
+  this->set_parse_deep(!document.is_deep_parsed());
+  this->data = std::move(document.data);
+  document.data = nullptr;
+  return *this;
+}
+
 sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
     : Container{document, true, true} {}
 
@@ -281,64 +314,70 @@ auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = nullptr;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::int64_t value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::size_t value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_flat(false);
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(std::string_view value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::String{std::move(value)};
   return *this;
 }
@@ -346,7 +385,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::vector<sourcemeta::jsontoolkit::JSON> &value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::Array{value};
   return *this;
 }
@@ -354,7 +393,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
 auto sourcemeta::jsontoolkit::JSON::operator=(
     std::vector<sourcemeta::jsontoolkit::JSON> &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->reset_parse_deep();
+  this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::Array{std::move(value)};
   return *this;
 }

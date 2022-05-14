@@ -22,10 +22,14 @@ protected:
   virtual auto parse_deep() -> void = 0;
 
   [[nodiscard]] auto is_flat_parsed() const -> bool;
+  [[nodiscard]] auto is_deep_parsed() const -> bool;
 
   auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> std::string_view;
-  auto reset_parse_deep() -> void;
+  auto set_source(std::string_view) -> void;
+
+  auto set_parse_flat(bool) -> void;
+  auto set_parse_deep(bool) -> void;
 
   auto assert_parsed_flat() const -> void;
   auto assert_parsed_deep() const -> void;

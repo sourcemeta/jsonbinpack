@@ -26,6 +26,11 @@ public:
   // Only to make the class default-constructible.
   // The resulting document is still invalid.
   JSON();
+  ~JSON() override = default;
+  JSON(const JSON &document);
+  JSON(JSON &&document) noexcept;
+  auto operator=(const JSON &document) -> JSON &;
+  auto operator=(JSON &&document) noexcept -> JSON &;
 
   // Accept string literals
   JSON(const char *document);
