@@ -314,13 +314,17 @@ auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
 
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
   this->parse_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).contains(key);
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.find(key) != document.data.end();
 }
 
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
     -> bool {
   this->assert_parsed_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).contains(key);
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.find(key) != document.data.end();
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept

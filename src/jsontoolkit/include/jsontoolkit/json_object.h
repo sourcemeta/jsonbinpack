@@ -47,9 +47,6 @@ public:
   [[nodiscard]] auto size() const -> size_type;
   auto clear() -> void;
 
-  auto contains(key_type key) -> bool;
-  [[nodiscard]] auto contains(key_type key) const -> bool;
-
   auto erase(key_type key) -> size_type;
 
   auto begin() -> iterator;

@@ -42,22 +42,6 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::clear() -> void {
 }
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
-    -> bool {
-  this->parse_flat();
-  return this->data.find(key) != this->data.end();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::contains(
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key)
-    const -> bool {
-  this->assert_parsed_flat();
-  return this->data.find(key) != this->data.end();
-}
-
-template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::erase(
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::key_type key) ->
     typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
@@ -363,16 +347,6 @@ sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::size()
 
 template void
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::clear();
-
-template bool
-    sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
-        contains(typename sourcemeta::jsontoolkit::GenericObject<
-                 sourcemeta::jsontoolkit::JSON>::key_type);
-
-template bool
-    sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
-        contains(typename sourcemeta::jsontoolkit::GenericObject<
-                 sourcemeta::jsontoolkit::JSON>::key_type) const;
 
 template typename sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::size_type
