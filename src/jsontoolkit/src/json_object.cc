@@ -22,20 +22,6 @@ sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject(
     : Container{document, true, true} {}
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
-  this->parse_flat();
-  return this->data.size();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::size() const ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::size_type {
-  this->assert_parsed_flat();
-  return this->data.size();
-}
-
-template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::clear() -> void {
   this->parse_flat();
   return this->data.clear();
@@ -327,15 +313,6 @@ template sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::GenericObject();
 template sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::GenericObject(std::string_view);
-
-template typename sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::size_type
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::size();
-
-template typename sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::size_type
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::size()
-    const;
 
 template void
 sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::clear();

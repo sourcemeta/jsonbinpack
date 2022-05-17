@@ -474,11 +474,15 @@ auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->parse_flat();
 
+  if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
+    auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+    document.parse_flat();
+    return document.data.size();
+  }
+
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     return std::get<sourcemeta::jsontoolkit::Array>(this->data).size();
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
-    return std::get<sourcemeta::jsontoolkit::Object>(this->data).size();
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
     return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
   default:
@@ -489,11 +493,15 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
   this->assert_parsed_flat();
 
+  if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
+    auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+    document.assert_parsed_flat();
+    return document.data.size();
+  }
+
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     return std::get<sourcemeta::jsontoolkit::Array>(this->data).size();
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
-    return std::get<sourcemeta::jsontoolkit::Object>(this->data).size();
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
     return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
   default:

@@ -43,8 +43,6 @@ public:
   static const char token_key_delimiter = ':';
   static const char token_delimiter = ',';
 
-  auto size() -> size_type;
-  [[nodiscard]] auto size() const -> size_type;
   auto clear() -> void;
 
   auto begin() -> iterator;
