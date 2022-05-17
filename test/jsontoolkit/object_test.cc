@@ -183,8 +183,7 @@ TEST(Object, must_delete_one_existent_key) {
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));
-  const std::size_t count = document.erase("foo");
-  EXPECT_EQ(count, 1);
+  document.erase("foo");
   EXPECT_EQ(document.size(), 1);
   EXPECT_FALSE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));
@@ -196,8 +195,7 @@ TEST(Object, must_delete_one_non_existent_key) {
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));
-  const std::size_t count = document.erase("xxx");
-  EXPECT_EQ(count, 0);
+  document.erase("xxx");
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));

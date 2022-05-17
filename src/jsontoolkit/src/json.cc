@@ -464,10 +464,11 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
       std::get<sourcemeta::jsontoolkit::Array>(this->data).at(index));
 }
 
-auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key)
-    -> std::size_t {
+auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {
   this->parse_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).erase(key);
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  document.data.erase(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
