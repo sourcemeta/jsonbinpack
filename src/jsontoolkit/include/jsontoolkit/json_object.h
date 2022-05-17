@@ -50,10 +50,6 @@ public:
   auto contains(key_type key) -> bool;
   [[nodiscard]] auto contains(key_type key) const -> bool;
 
-  auto at(key_type key) & -> mapped_type &;
-  auto at(key_type key) && -> mapped_type;
-  [[nodiscard]] auto at(key_type key) const & -> const mapped_type &;
-
   auto insert_or_assign(const key_type &key, const mapped_type &value)
       -> std::pair<iterator, bool> {
     return this->data.insert_or_assign(key, value);

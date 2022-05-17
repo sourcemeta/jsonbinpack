@@ -690,18 +690,26 @@ auto sourcemeta::jsontoolkit::JSON::assign(
 
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
+  sourcemeta::jsontoolkit::Object &document =
+      std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
-  return std::move(
-      std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key));
+  sourcemeta::jsontoolkit::Object &document =
+      std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return std::move(document.data.at(key));
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
     sourcemeta::jsontoolkit::JSON & {
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
+  const sourcemeta::jsontoolkit::Object &document =
+      std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key);
 }
 
 // This operator needs to be defined on the same namespace as the class
