@@ -26,16 +26,33 @@ public:
   // Only to make the class default-constructible.
   // The resulting document is still invalid.
   JSON();
+
+  // Constructor
   ~JSON() override = default;
+  JSON(const char *document);
+  JSON(std::string_view document);
   JSON(const JSON &document);
   JSON(JSON &&document) noexcept;
+
+  // Assignment
   auto operator=(const JSON &document) -> JSON &;
   auto operator=(JSON &&document) noexcept -> JSON &;
 
-  // Accept string literals
-  JSON(const char *document);
+  // Object
+  auto assign(const std::string &key, bool) -> JSON &;
+  auto assign(const std::string &key, std::int64_t) -> JSON &;
+  auto assign(const std::string &key, std::nullptr_t) -> JSON &;
+  auto assign(const std::string &key, double) -> JSON &;
+  auto assign(const std::string &key, const std::string &) -> JSON &;
+  auto assign(const std::string &key, std::string &&) -> JSON &;
+  auto assign(const std::string &key, const JSON &) -> JSON &;
+  auto assign(const std::string &key, JSON &&) -> JSON &;
+  auto assign(const std::string &key, const std::vector<JSON> &) -> JSON &;
+  auto assign(const std::string &key, std::vector<JSON> &&) -> JSON &;
 
-  JSON(std::string_view document);
+  // Array
+  JSON(const std::vector<JSON> &);
+  JSON(std::vector<JSON> &&);
 
   auto operator==(const JSON &) const -> bool;
 
