@@ -230,11 +230,140 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
   return stream.str();
 }
 
-// Explicit instantiation
-
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_source();
 template std::string sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
 template std::string sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t) const;
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, bool value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
+                                           std::int64_t value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
+                                           std::nullptr_t value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, double value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
+                                           const std::string &value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
+                                           std::string &&value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key,
+                             sourcemeta::jsontoolkit::JSON{std::move(value)});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key, const sourcemeta::jsontoolkit::JSON &value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  this->set_parse_deep(!value.is_flat_parsed());
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, value);
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key, sourcemeta::jsontoolkit::JSON &&value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  this->set_parse_deep(!value.is_flat_parsed());
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, std::move(value));
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key,
+    const std::vector<sourcemeta::jsontoolkit::JSON> &value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  this->set_parse_deep(true);
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key, std::vector<sourcemeta::jsontoolkit::JSON> &&value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  this->set_parse_deep(true);
+  std::get<sourcemeta::jsontoolkit::Object>(this->data)
+      .data.insert_or_assign(key,
+                             sourcemeta::jsontoolkit::JSON{std::move(value)});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key);
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return std::move(document.data.at(key));
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
+    sourcemeta::jsontoolkit::JSON & {
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key);
+}
+
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.find(key) != document.data.end();
+}
+
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.find(key) != document.data.end();
+}
