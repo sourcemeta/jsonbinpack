@@ -52,6 +52,9 @@ public:
   auto at(const std::string &key) & -> JSON &;
   auto at(const std::string &key) && -> JSON;
   [[nodiscard]] auto at(const std::string &key) const & -> const JSON &;
+  auto contains(const std::string &key) -> bool;
+  [[nodiscard]] auto contains(const std::string &key) const -> bool;
+  auto erase(const std::string &key) -> void;
 
   // Array
   JSON(const std::vector<JSON> &);
@@ -94,10 +97,6 @@ public:
       -> const sourcemeta::jsontoolkit::Object &;
   auto is_object() -> bool;
   [[nodiscard]] auto is_object() const -> bool;
-  // TODO: We can also implement this for array?
-  auto contains(const std::string &key) -> bool;
-  [[nodiscard]] auto contains(const std::string &key) const -> bool;
-  auto erase(const std::string &key) -> std::size_t;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,

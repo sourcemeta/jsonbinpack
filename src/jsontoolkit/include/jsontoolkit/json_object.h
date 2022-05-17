@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 
+#include <algorithm> // std::for_each
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
 #include <map>         // std::map
@@ -13,8 +14,11 @@ template <typename Wrapper> class GenericArray;
 
 template <typename Wrapper> class GenericObject final : public Container {
 public:
-  GenericObject();
-  GenericObject(std::string_view document);
+  GenericObject()
+      : Container{std::string{GenericObject<Wrapper>::token_begin} +
+                      std::string{GenericObject<Wrapper>::token_end},
+                  true, true} {}
+  GenericObject(std::string_view document) : Container{document, true, true} {}
 
   using key_type = typename std::map<std::string_view, Wrapper>::key_type;
   using mapped_type = typename std::map<std::string_view, Wrapper>::mapped_type;
@@ -43,37 +47,40 @@ public:
   static const char token_key_delimiter = ':';
   static const char token_delimiter = ',';
 
-  auto size() -> size_type;
-  [[nodiscard]] auto size() const -> size_type;
-  auto clear() -> void;
-
-  auto contains(key_type key) -> bool;
-  [[nodiscard]] auto contains(key_type key) const -> bool;
-
-  auto at(key_type key) & -> mapped_type &;
-  auto at(key_type key) && -> mapped_type;
-  [[nodiscard]] auto at(key_type key) const & -> const mapped_type &;
-
-  auto insert_or_assign(const key_type &key, const mapped_type &value)
-      -> std::pair<iterator, bool> {
-    return this->data.insert_or_assign(key, value);
+  auto begin() -> iterator {
+    this->parse_flat();
+    return this->data.begin();
   }
 
-  auto insert_or_assign(key_type &&key, mapped_type &&value)
-      -> std::pair<iterator, bool> {
-    return this->data.insert_or_assign(std::move(key), std::move(value));
+  auto end() -> iterator {
+    this->parse_flat();
+    return this->data.end();
   }
 
-  auto erase(key_type key) -> size_type;
+  auto cbegin() -> const_iterator {
+    this->parse_flat();
+    return this->data.cbegin();
+  }
 
-  auto begin() -> iterator;
-  auto end() -> iterator;
-  auto cbegin() -> const_iterator;
-  auto cend() -> const_iterator;
-  [[nodiscard]] auto cbegin() const -> const_iterator;
-  [[nodiscard]] auto cend() const -> const_iterator;
+  auto cend() -> const_iterator {
+    this->parse_flat();
+    return this->data.cend();
+  }
 
-  auto operator==(const GenericObject<Wrapper> &) const -> bool;
+  [[nodiscard]] auto cbegin() const -> const_iterator {
+    this->assert_parsed_deep();
+    return this->data.cbegin();
+  }
+
+  [[nodiscard]] auto cend() const -> const_iterator {
+    this->assert_parsed_deep();
+    return this->data.cend();
+  }
+
+  auto operator==(const GenericObject<Wrapper> &value) const -> bool {
+    this->assert_parsed_deep();
+    return this->data == value.data;
+  }
 
   friend Wrapper;
   friend sourcemeta::jsontoolkit::GenericArray<Wrapper>;
@@ -84,7 +91,12 @@ protected:
 
 private:
   auto parse_source() -> void override;
-  auto parse_deep() -> void override;
+
+  auto parse_deep() -> void override {
+    std::for_each(this->data.begin(), this->data.end(),
+                  [](auto &p) { p.second.parse(); });
+  }
+
   std::map<std::string_view, Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit
