@@ -84,10 +84,6 @@ sourcemeta::jsontoolkit::JSON::JSON(
       data{std::in_place_type<sourcemeta::jsontoolkit::Array>,
            std::move(value)} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::Object &value)
-    : Container{value.source(), false, !value.is_flat_parsed()},
-      data{std::in_place_type<sourcemeta::jsontoolkit::Object>, value} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
     : Container{value.source(), false, !value.is_flat_parsed()},
       data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
@@ -258,18 +254,6 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean() const -> bool {
   return std::get<bool>(this->data);
 }
 
-auto sourcemeta::jsontoolkit::JSON::to_object()
-    -> sourcemeta::jsontoolkit::Object & {
-  this->parse_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_object() const
-    -> const sourcemeta::jsontoolkit::Object & {
-  this->assert_parsed_deep();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
-}
-
 auto sourcemeta::jsontoolkit::JSON::to_array()
     -> sourcemeta::jsontoolkit::Array & {
   this->parse_flat();
@@ -300,16 +284,6 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_null() const -> bool {
   this->assert_parsed_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
-  this->parse_flat();
-  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept

@@ -29,7 +29,10 @@ public:
 
   // Constructor
   ~JSON() override = default;
+  // TODO: We should never handle C strings. Remove this
   JSON(const char *document);
+  // TODO: The top-level JSON should never take a string_view
+  // but a true string. Only its sub-classes must do views.
   JSON(std::string_view document);
   JSON(const JSON &document);
   JSON(JSON &&document) noexcept;
@@ -55,6 +58,23 @@ public:
   auto contains(const std::string &key) -> bool;
   [[nodiscard]] auto contains(const std::string &key) const -> bool;
   auto erase(const std::string &key) -> void;
+  auto is_object() -> bool;
+  auto is_object(const std::string &key) -> bool;
+  [[nodiscard]] auto is_object() const -> bool;
+  [[nodiscard]] auto is_object(const std::string &key) const -> bool;
+  auto to_object() -> sourcemeta::jsontoolkit::Object &;
+  auto to_object(const std::string &key) -> sourcemeta::jsontoolkit::Object &;
+  [[nodiscard]] auto to_object() const
+      -> const sourcemeta::jsontoolkit::Object &;
+  [[nodiscard]] auto to_object(const std::string &key) const
+      -> const sourcemeta::jsontoolkit::Object &;
+
+  // Array
+  auto is_object(std::size_t index) -> bool;
+  [[nodiscard]] auto is_object(std::size_t index) const -> bool;
+  auto to_object(std::size_t index) -> sourcemeta::jsontoolkit::Object &;
+  [[nodiscard]] auto to_object(std::size_t index) const
+      -> const sourcemeta::jsontoolkit::Object &;
 
   // Array
   JSON(const std::vector<JSON> &);
@@ -89,14 +109,6 @@ public:
   auto empty() -> bool;
   [[nodiscard]] auto empty() const -> bool;
   auto clear() -> void;
-
-  // Object
-  JSON(sourcemeta::jsontoolkit::Object &value);
-  auto to_object() -> sourcemeta::jsontoolkit::Object &;
-  [[nodiscard]] auto to_object() const
-      -> const sourcemeta::jsontoolkit::Object &;
-  auto is_object() -> bool;
-  [[nodiscard]] auto is_object() const -> bool;
 
   // Array
   // TODO: Add constructors from compatible std types like vector, array, list,

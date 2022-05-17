@@ -295,7 +295,7 @@ TEST(Array, single_empty_object_element) {
   sourcemeta::jsontoolkit::JSON document{"[{}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document[0].is_object());
+  EXPECT_TRUE(document.is_object(0));
   EXPECT_EQ(document[0].size(), 0);
 }
 
@@ -303,7 +303,7 @@ TEST(Array, single_object_element_with_one_simple_key) {
   sourcemeta::jsontoolkit::JSON document{"[{\"foo\":1}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document[0].is_object());
+  EXPECT_TRUE(document.is_object(0));
   EXPECT_EQ(document[0].size(), 1);
   EXPECT_TRUE(document[0].at("foo").is_integer());
   EXPECT_EQ(document[0].at("foo").to_integer(), 1);
@@ -313,7 +313,7 @@ TEST(Array, single_object_element_with_two_simple_keys) {
   sourcemeta::jsontoolkit::JSON document{"[{\"foo\":1,\"bar\":2}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document[0].is_object());
+  EXPECT_TRUE(document.is_object(0));
   EXPECT_EQ(document[0].size(), 2);
   EXPECT_TRUE(document[0].at("foo").is_integer());
   EXPECT_EQ(document[0].at("foo").to_integer(), 1);
