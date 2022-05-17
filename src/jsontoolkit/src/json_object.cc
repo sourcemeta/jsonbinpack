@@ -367,3 +367,86 @@ auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
   document.assert_parsed_flat();
   return document.data.find(key) != document.data.end();
 }
+
+auto sourcemeta::jsontoolkit::JSON::to_object()
+    -> sourcemeta::jsontoolkit::Object & {
+  this->parse_flat();
+  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object() const
+    -> const sourcemeta::jsontoolkit::Object & {
+  this->assert_parsed_deep();
+  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key)
+    -> sourcemeta::jsontoolkit::Object & {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key) const
+    -> const sourcemeta::jsontoolkit::Object & {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(key).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index)
+    -> sourcemeta::jsontoolkit::Object & {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index) const
+    -> const sourcemeta::jsontoolkit::Object & {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
+  this->parse_flat();
+  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
+  this->assert_parsed_flat();
+  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).is_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).is_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).is_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) const -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(index).is_object();
+}

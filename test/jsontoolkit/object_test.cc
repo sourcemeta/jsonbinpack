@@ -325,7 +325,7 @@ TEST(Object, minified_nested_object) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_object());
+  EXPECT_TRUE(document.is_object("foo"));
   EXPECT_EQ(document.at("foo").size(), 1);
   EXPECT_TRUE(document.at("foo").contains("bar"));
 }
@@ -336,7 +336,7 @@ TEST(Object, empty_nested_object_with_new_line_before_end) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("x"));
-  EXPECT_TRUE(document.at("x").is_object());
+  EXPECT_TRUE(document.is_object("x"));
   EXPECT_EQ(document.at("x").size(), 0);
 }
 

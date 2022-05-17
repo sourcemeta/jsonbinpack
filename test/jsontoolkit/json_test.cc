@@ -271,7 +271,7 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(std::as_const(value).size(), 2);
 
   // Type and size
-  EXPECT_TRUE(value[0].is_object());
+  EXPECT_TRUE(value.is_object(0));
   EXPECT_EQ(value[0].size(), 8);
   EXPECT_EQ(std::as_const(value[0]).size(), 8);
 
@@ -306,7 +306,7 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(value[0].at("Country"), "US");
 
   // Type and size
-  EXPECT_TRUE(value[1].is_object());
+  EXPECT_TRUE(value.is_object(1));
   EXPECT_EQ(value[1].size(), 8);
   EXPECT_EQ(std::as_const(value[1]).size(), 8);
 
