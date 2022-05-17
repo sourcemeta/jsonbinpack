@@ -14,10 +14,10 @@ public:
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.is_object() && schema.contains("maxContains") &&
-           schema["maxContains"].is_integer() && schema.contains("maxItems") &&
-           schema["maxItems"].is_integer() &&
-           schema["maxContains"].to_integer() >=
-               schema["maxItems"].to_integer();
+           schema.at("maxContains").is_integer() &&
+           schema.contains("maxItems") && schema.at("maxItems").is_integer() &&
+           schema.at("maxContains").to_integer() >=
+               schema.at("maxItems").to_integer();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {

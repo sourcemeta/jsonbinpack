@@ -305,8 +305,8 @@ TEST(Array, single_object_element_with_one_simple_key) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document[0].is_object());
   EXPECT_EQ(document[0].size(), 1);
-  EXPECT_TRUE(document[0]["foo"].is_integer());
-  EXPECT_EQ(document[0]["foo"].to_integer(), 1);
+  EXPECT_TRUE(document[0].at("foo").is_integer());
+  EXPECT_EQ(document[0].at("foo").to_integer(), 1);
 }
 
 TEST(Array, single_object_element_with_two_simple_keys) {
@@ -315,10 +315,10 @@ TEST(Array, single_object_element_with_two_simple_keys) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document[0].is_object());
   EXPECT_EQ(document[0].size(), 2);
-  EXPECT_TRUE(document[0]["foo"].is_integer());
-  EXPECT_EQ(document[0]["foo"].to_integer(), 1);
-  EXPECT_TRUE(document[0]["bar"].is_integer());
-  EXPECT_EQ(document[0]["bar"].to_integer(), 2);
+  EXPECT_TRUE(document[0].at("foo").is_integer());
+  EXPECT_EQ(document[0].at("foo").to_integer(), 1);
+  EXPECT_TRUE(document[0].at("bar").is_integer());
+  EXPECT_EQ(document[0].at("bar").to_integer(), 2);
 }
 
 TEST(Array, equality_with_padding) {

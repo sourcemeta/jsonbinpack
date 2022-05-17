@@ -17,7 +17,7 @@ auto sourcemeta::jsontoolkit::Schema::is_schema(
   // are being loaded by a given schema.
   if (document.is_object() &&
       document.contains(sourcemeta::jsontoolkit::Schema::keyword_core_schema) &&
-      document[sourcemeta::jsontoolkit::Schema::keyword_core_schema]
+      document.at(sourcemeta::jsontoolkit::Schema::keyword_core_schema)
           .is_string()) {
     return true;
   }
@@ -39,9 +39,9 @@ auto sourcemeta::jsontoolkit::Schema::contains(const std::string &key) const
   return this->schema.contains(key);
 }
 
-auto sourcemeta::jsontoolkit::Schema::operator[](
+auto sourcemeta::jsontoolkit::Schema::at(
     const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON & {
-  return this->schema[key];
+  return this->schema.at(key);
 }
 
 auto sourcemeta::jsontoolkit::Schema::is_object() const -> bool {
