@@ -494,7 +494,8 @@ auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
   this->assert_parsed_flat();
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
-    auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+    const auto &document =
+        std::get<sourcemeta::jsontoolkit::Object>(this->data);
     document.assert_parsed_flat();
     return document.data.size();
   }

@@ -1,4 +1,3 @@
-#include <algorithm> // std::for_each
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_object.h>
@@ -6,26 +5,6 @@
 #include <sstream> // std::ostringstream
 
 #include "utils.h"
-
-template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject()
-    : Container{
-          std::string{
-              sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin} +
-              std::string{
-                  sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end},
-          true, true} {}
-
-template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericObject<Wrapper>::GenericObject(
-    std::string_view document)
-    : Container{document, true, true} {}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_deep() -> void {
-  std::for_each(this->data.begin(), this->data.end(),
-                [](auto &p) { p.second.parse(); });
-}
 
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
@@ -189,56 +168,6 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
 }
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::begin() ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::iterator {
-  this->parse_flat();
-  return this->data.begin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::end() ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::iterator {
-  this->parse_flat();
-  return this->data.end();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->parse_flat();
-  return this->data.cbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cbegin() const ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->assert_parsed_deep();
-  return this->data.cbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->parse_flat();
-  return this->data.cend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::cend() const ->
-    typename sourcemeta::jsontoolkit::GenericObject<Wrapper>::const_iterator {
-  this->assert_parsed_deep();
-  return this->data.cend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::operator==(
-    const sourcemeta::jsontoolkit::GenericObject<Wrapper> &value) const
-    -> bool {
-  this->assert_parsed_deep();
-  return this->data == value.data;
-}
-
-template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     std::size_t indent) -> std::string {
   this->parse();
@@ -303,45 +232,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
 
 // Explicit instantiation
 
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::GenericObject();
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::GenericObject(std::string_view);
-
-template void sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::parse_deep();
 template void sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::parse_source();
-
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::begin();
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::end();
-
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cbegin();
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cend();
-
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cbegin()
-    const;
-template sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::cend()
-    const;
-
-template bool
-sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>::
-operator==(
-    const sourcemeta::jsontoolkit::GenericObject<sourcemeta::jsontoolkit::JSON>
-        &) const;
-
 template std::string sourcemeta::jsontoolkit::GenericObject<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
 template std::string sourcemeta::jsontoolkit::GenericObject<
