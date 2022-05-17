@@ -49,6 +49,9 @@ public:
   auto assign(const std::string &key, JSON &&) -> JSON &;
   auto assign(const std::string &key, const std::vector<JSON> &) -> JSON &;
   auto assign(const std::string &key, std::vector<JSON> &&) -> JSON &;
+  auto at(const std::string &key) & -> JSON &;
+  auto at(const std::string &key) && -> JSON;
+  [[nodiscard]] auto at(const std::string &key) const & -> const JSON &;
 
   // Array
   JSON(const std::vector<JSON> &);
@@ -94,9 +97,6 @@ public:
   // TODO: We can also implement this for array?
   auto contains(const std::string &key) -> bool;
   [[nodiscard]] auto contains(const std::string &key) const -> bool;
-  auto operator[](const std::string &key) & -> JSON &;
-  [[nodiscard]] auto operator[](const std::string &key) const & -> const JSON &;
-  auto operator[](const std::string &key) && -> JSON;
   auto erase(const std::string &key) -> std::size_t;
 
   // Array

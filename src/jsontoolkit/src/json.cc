@@ -460,25 +460,6 @@ auto sourcemeta::jsontoolkit::JSON::operator[](
       std::get<sourcemeta::jsontoolkit::Array>(this->data).at(index));
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator[](
-    const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator[](
-    const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON & {
-  this->assert_parsed_deep();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator[](
-    const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
-  this->parse_flat();
-  return std::move(
-      std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key));
-}
-
 auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key)
     -> std::size_t {
   this->parse_flat();
@@ -705,6 +686,22 @@ auto sourcemeta::jsontoolkit::JSON::assign(
   std::get<sourcemeta::jsontoolkit::Object>(this->data)
       .insert_or_assign(key, sourcemeta::jsontoolkit::JSON{std::move(value)});
   return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
+  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
+  return std::move(
+      std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key));
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
+    sourcemeta::jsontoolkit::JSON & {
+  return std::get<sourcemeta::jsontoolkit::Object>(this->data).at(key);
 }
 
 // This operator needs to be defined on the same namespace as the class
