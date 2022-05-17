@@ -440,7 +440,7 @@ TEST(Object, key_copy_assignment_same_type_parsed) {
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
   value.parse();
-  document["foo"] = value;
+  document.assign("foo", value);
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -458,7 +458,7 @@ TEST(Object, key_move_assignment_same_type_parsed) {
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
   value.parse();
-  document["foo"] = std::move(value);
+  document.assign("foo", std::move(value));
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -476,7 +476,7 @@ TEST(Object, key_copy_assignment_different_type_parsed) {
 
   sourcemeta::jsontoolkit::JSON value{"1"};
   value.parse();
-  document["foo"] = value;
+  document.assign("foo", value);
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -494,7 +494,7 @@ TEST(Object, key_move_assignment_different_type_parsed) {
 
   sourcemeta::jsontoolkit::JSON value{"1"};
   value.parse();
-  document["foo"] = std::move(value);
+  document.assign("foo", std::move(value));
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -511,7 +511,7 @@ TEST(Object, key_copy_assignment_same_type_unparsed) {
   EXPECT_EQ(document["foo"], "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
-  document["foo"] = value;
+  document.assign("foo", value);
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -528,7 +528,7 @@ TEST(Object, key_move_assignment_same_type_unparsed) {
   EXPECT_EQ(document["foo"], "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
-  document["foo"] = std::move(value);
+  document.assign("foo", std::move(value));
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
