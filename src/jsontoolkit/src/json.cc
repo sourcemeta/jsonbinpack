@@ -519,11 +519,16 @@ auto sourcemeta::jsontoolkit::JSON::empty() const -> bool {
 
 auto sourcemeta::jsontoolkit::JSON::clear() -> void {
   this->parse_flat();
+
+  if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
+    auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+    document.parse_flat();
+    return document.data.clear();
+  }
+
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
     return std::get<sourcemeta::jsontoolkit::Array>(this->data).clear();
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
-    return std::get<sourcemeta::jsontoolkit::Object>(this->data).clear();
   default:
     throw std::logic_error("Data type is not a container");
   }
