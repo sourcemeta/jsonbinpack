@@ -127,13 +127,13 @@ TEST(JSON, at_boolean) {
   EXPECT_EQ(document.size(), 3);
   EXPECT_EQ(std::as_const(document).size(), 3);
 
-  EXPECT_TRUE(document[0].is_boolean());
-  EXPECT_TRUE(document[1].is_boolean());
-  EXPECT_TRUE(document[2].is_boolean());
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_TRUE(document.at(2).is_boolean());
 
-  EXPECT_EQ(document[0], true);
-  EXPECT_EQ(document[1], false);
-  EXPECT_EQ(document[2], true);
+  EXPECT_EQ(document.at(0), true);
+  EXPECT_EQ(document.at(1), false);
+  EXPECT_EQ(document.at(2), true);
 }
 
 TEST(JSON, boolean_array_iterator) {
@@ -209,7 +209,7 @@ TEST(JSON, rfc8259_example_1) {
   EXPECT_TRUE(value.at("Image").at("Title").is_string());
   EXPECT_TRUE(value.at("Image").at("Thumbnail").is_object());
   EXPECT_TRUE(value.at("Image").at("Animated").is_boolean());
-  EXPECT_TRUE(value.at("Image").at("IDs").is_array());
+  EXPECT_TRUE(value.at("Image").is_array("IDs"));
   EXPECT_EQ(value.at("Image").at("Width").to_integer(), 800);
   EXPECT_EQ(value.at("Image").at("Height").to_integer(), 600);
   EXPECT_EQ(value.at("Image").at("Title").to_string(), "View from 15th Floor");
@@ -230,14 +230,14 @@ TEST(JSON, rfc8259_example_1) {
 
   // Image.IDs array
   EXPECT_EQ(value.at("Image").at("IDs").size(), 4);
-  EXPECT_TRUE(value.at("Image").at("IDs")[0].is_integer());
-  EXPECT_TRUE(value.at("Image").at("IDs")[1].is_integer());
-  EXPECT_TRUE(value.at("Image").at("IDs")[2].is_integer());
-  EXPECT_TRUE(value.at("Image").at("IDs")[3].is_integer());
-  EXPECT_EQ(value.at("Image").at("IDs")[0].to_integer(), 116);
-  EXPECT_EQ(value.at("Image").at("IDs")[1].to_integer(), 943);
-  EXPECT_EQ(value.at("Image").at("IDs")[2].to_integer(), 234);
-  EXPECT_EQ(value.at("Image").at("IDs")[3].to_integer(), 38793);
+  EXPECT_TRUE(value.at("Image").at("IDs").at(0).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(1).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(2).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(3).is_integer());
+  EXPECT_EQ(value.at("Image").at("IDs").at(0).to_integer(), 116);
+  EXPECT_EQ(value.at("Image").at("IDs").at(1).to_integer(), 943);
+  EXPECT_EQ(value.at("Image").at("IDs").at(2).to_integer(), 234);
+  EXPECT_EQ(value.at("Image").at("IDs").at(3).to_integer(), 38793);
 }
 
 // https://datatracker.ietf.org/doc/html/rfc8259#section-13
@@ -272,73 +272,73 @@ TEST(JSON, rfc8259_example_2) {
 
   // Type and size
   EXPECT_TRUE(value.is_object(0));
-  EXPECT_EQ(value[0].size(), 8);
-  EXPECT_EQ(std::as_const(value[0]).size(), 8);
+  EXPECT_EQ(value.at(0).size(), 8);
+  EXPECT_EQ(std::as_const(value.at(0)).size(), 8);
 
   // Member keys
-  EXPECT_TRUE(value[0].contains("precision"));
-  EXPECT_TRUE(value[0].contains("Latitude"));
-  EXPECT_TRUE(value[0].contains("Longitude"));
-  EXPECT_TRUE(value[0].contains("Address"));
-  EXPECT_TRUE(value[0].contains("City"));
-  EXPECT_TRUE(value[0].contains("State"));
-  EXPECT_TRUE(value[0].contains("Zip"));
-  EXPECT_TRUE(value[0].contains("Country"));
+  EXPECT_TRUE(value.at(0).contains("precision"));
+  EXPECT_TRUE(value.at(0).contains("Latitude"));
+  EXPECT_TRUE(value.at(0).contains("Longitude"));
+  EXPECT_TRUE(value.at(0).contains("Address"));
+  EXPECT_TRUE(value.at(0).contains("City"));
+  EXPECT_TRUE(value.at(0).contains("State"));
+  EXPECT_TRUE(value.at(0).contains("Zip"));
+  EXPECT_TRUE(value.at(0).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value[0].at("precision").is_string());
-  EXPECT_TRUE(value[0].at("Latitude").is_real());
-  EXPECT_TRUE(value[0].at("Longitude").is_real());
-  EXPECT_TRUE(value[0].at("Address").is_string());
-  EXPECT_TRUE(value[0].at("City").is_string());
-  EXPECT_TRUE(value[0].at("State").is_string());
-  EXPECT_TRUE(value[0].at("Zip").is_string());
-  EXPECT_TRUE(value[0].at("Country").is_string());
+  EXPECT_TRUE(value.at(0).at("precision").is_string());
+  EXPECT_TRUE(value.at(0).at("Latitude").is_real());
+  EXPECT_TRUE(value.at(0).at("Longitude").is_real());
+  EXPECT_TRUE(value.at(0).at("Address").is_string());
+  EXPECT_TRUE(value.at(0).at("City").is_string());
+  EXPECT_TRUE(value.at(0).at("State").is_string());
+  EXPECT_TRUE(value.at(0).at("Zip").is_string());
+  EXPECT_TRUE(value.at(0).at("Country").is_string());
 
   // Member values
-  EXPECT_EQ(value[0].at("precision"), "zip");
-  EXPECT_EQ(value[0].at("Latitude"), 37.7668);
-  EXPECT_EQ(value[0].at("Longitude"), -122.3959);
-  EXPECT_EQ(value[0].at("Address"), "");
-  EXPECT_EQ(value[0].at("City"), "SAN FRANCISCO");
-  EXPECT_EQ(value[0].at("State"), "CA");
-  EXPECT_EQ(value[0].at("Zip"), "94107");
-  EXPECT_EQ(value[0].at("Country"), "US");
+  EXPECT_EQ(value.at(0).at("precision"), "zip");
+  EXPECT_EQ(value.at(0).at("Latitude"), 37.7668);
+  EXPECT_EQ(value.at(0).at("Longitude"), -122.3959);
+  EXPECT_EQ(value.at(0).at("Address"), "");
+  EXPECT_EQ(value.at(0).at("City"), "SAN FRANCISCO");
+  EXPECT_EQ(value.at(0).at("State"), "CA");
+  EXPECT_EQ(value.at(0).at("Zip"), "94107");
+  EXPECT_EQ(value.at(0).at("Country"), "US");
 
   // Type and size
   EXPECT_TRUE(value.is_object(1));
-  EXPECT_EQ(value[1].size(), 8);
-  EXPECT_EQ(std::as_const(value[1]).size(), 8);
+  EXPECT_EQ(value.at(1).size(), 8);
+  EXPECT_EQ(std::as_const(value.at(1)).size(), 8);
 
   // Member keys
-  EXPECT_TRUE(value[1].contains("precision"));
-  EXPECT_TRUE(value[1].contains("Latitude"));
-  EXPECT_TRUE(value[1].contains("Longitude"));
-  EXPECT_TRUE(value[1].contains("Address"));
-  EXPECT_TRUE(value[1].contains("City"));
-  EXPECT_TRUE(value[1].contains("State"));
-  EXPECT_TRUE(value[1].contains("Zip"));
-  EXPECT_TRUE(value[1].contains("Country"));
+  EXPECT_TRUE(value.at(1).contains("precision"));
+  EXPECT_TRUE(value.at(1).contains("Latitude"));
+  EXPECT_TRUE(value.at(1).contains("Longitude"));
+  EXPECT_TRUE(value.at(1).contains("Address"));
+  EXPECT_TRUE(value.at(1).contains("City"));
+  EXPECT_TRUE(value.at(1).contains("State"));
+  EXPECT_TRUE(value.at(1).contains("Zip"));
+  EXPECT_TRUE(value.at(1).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value[1].at("precision").is_string());
-  EXPECT_TRUE(value[1].at("Latitude").is_real());
-  EXPECT_TRUE(value[1].at("Longitude").is_real());
-  EXPECT_TRUE(value[1].at("Address").is_string());
-  EXPECT_TRUE(value[1].at("City").is_string());
-  EXPECT_TRUE(value[1].at("State").is_string());
-  EXPECT_TRUE(value[1].at("Zip").is_string());
-  EXPECT_TRUE(value[1].at("Country").is_string());
+  EXPECT_TRUE(value.at(1).at("precision").is_string());
+  EXPECT_TRUE(value.at(1).at("Latitude").is_real());
+  EXPECT_TRUE(value.at(1).at("Longitude").is_real());
+  EXPECT_TRUE(value.at(1).at("Address").is_string());
+  EXPECT_TRUE(value.at(1).at("City").is_string());
+  EXPECT_TRUE(value.at(1).at("State").is_string());
+  EXPECT_TRUE(value.at(1).at("Zip").is_string());
+  EXPECT_TRUE(value.at(1).at("Country").is_string());
 
   // Member values
-  EXPECT_EQ(value[1].at("precision"), "zip");
-  EXPECT_EQ(value[1].at("Latitude"), 37.371991);
-  EXPECT_EQ(value[1].at("Longitude"), -122.026020);
-  EXPECT_EQ(value[1].at("Address"), "");
-  EXPECT_EQ(value[1].at("City"), "SUNNYVALE");
-  EXPECT_EQ(value[1].at("State"), "CA");
-  EXPECT_EQ(value[1].at("Zip"), "94085");
-  EXPECT_EQ(value[1].at("Country"), "US");
+  EXPECT_EQ(value.at(1).at("precision"), "zip");
+  EXPECT_EQ(value.at(1).at("Latitude"), 37.371991);
+  EXPECT_EQ(value.at(1).at("Longitude"), -122.026020);
+  EXPECT_EQ(value.at(1).at("Address"), "");
+  EXPECT_EQ(value.at(1).at("City"), "SUNNYVALE");
+  EXPECT_EQ(value.at(1).at("State"), "CA");
+  EXPECT_EQ(value.at(1).at("Zip"), "94085");
+  EXPECT_EQ(value.at(1).at("Country"), "US");
 }
 
 TEST(JSON, array_key_copy_assignment_vector) {
@@ -346,7 +346,7 @@ TEST(JSON, array_key_copy_assignment_vector) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 0);
 
   sourcemeta::jsontoolkit::JSON first{"1"};
@@ -365,11 +365,11 @@ TEST(JSON, array_key_copy_assignment_vector) {
   document.assign("foo", list);
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 3);
-  EXPECT_EQ(document.at("foo")[0], static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at("foo")[1], static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at("foo")[2], static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at("foo").at(0), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at("foo").at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at("foo").at(2), static_cast<std::int64_t>(3));
 }
 
 TEST(JSON, modify_object_after_copy) {
@@ -409,24 +409,24 @@ TEST(JSON, modify_array_after_copy) {
   sourcemeta::jsontoolkit::JSON document{"[1,2,3]"};
   document.parse();
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document[0], static_cast<std::int64_t>(1));
-  EXPECT_EQ(document[1], static_cast<std::int64_t>(2));
-  EXPECT_EQ(document[2], static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
 
   // Make copy
   sourcemeta::jsontoolkit::JSON copy{document};
   EXPECT_EQ(copy.size(), 3);
-  EXPECT_EQ(copy[0], static_cast<std::int64_t>(1));
-  EXPECT_EQ(copy[1], static_cast<std::int64_t>(2));
-  EXPECT_EQ(copy[2], static_cast<std::int64_t>(3));
+  EXPECT_EQ(copy.at(0), static_cast<std::int64_t>(1));
+  EXPECT_EQ(copy.at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(copy.at(2), static_cast<std::int64_t>(3));
 
   // Modify copy
-  copy[1] = 5;
-  EXPECT_EQ(copy[1], static_cast<std::int64_t>(5));
+  copy.assign(1, static_cast<std::int64_t>(5));
+  EXPECT_EQ(copy.at(1), static_cast<std::int64_t>(5));
 
   // Original document must remain intact
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document[0], static_cast<std::int64_t>(1));
-  EXPECT_EQ(document[1], static_cast<std::int64_t>(2));
-  EXPECT_EQ(document[2], static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
 }
