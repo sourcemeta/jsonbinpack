@@ -92,3 +92,8 @@ auto sourcemeta::jsontoolkit::Schema::size(const std::string &key) const
     -> std::size_t {
   return this->schema.size(key);
 }
+
+auto sourcemeta::jsontoolkit::Schema::empty(const std::string &key) const
+    -> bool {
+  return this->schema.empty(key);
+}

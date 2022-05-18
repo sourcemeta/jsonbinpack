@@ -74,6 +74,8 @@ public:
   // Containers
   auto size() -> std::size_t;
   [[nodiscard]] auto size() const -> std::size_t;
+  auto empty() -> bool;
+  [[nodiscard]] auto empty() const -> bool;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -127,6 +129,8 @@ public:
   [[nodiscard]] auto to_real(const std::string &key) const -> double;
   auto size(const std::string &key) -> std::size_t;
   [[nodiscard]] auto size(const std::string &key) const -> std::size_t;
+  auto empty(const std::string &key) -> bool;
+  [[nodiscard]] auto empty(const std::string &key) const -> bool;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -169,6 +173,8 @@ public:
   [[nodiscard]] auto to_real(std::size_t index) const -> double;
   auto size(std::size_t index) -> std::size_t;
   [[nodiscard]] auto size(std::size_t index) const -> std::size_t;
+  auto empty(std::size_t index) -> bool;
+  [[nodiscard]] auto empty(std::size_t index) const -> bool;
 
   // String
   auto is_string() -> bool;
@@ -201,9 +207,6 @@ public:
   [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
 
   // Containers
-  auto empty() -> bool;
-  // TODO: Optionally take a key
-  [[nodiscard]] auto empty() const -> bool;
   auto clear() -> void;
 
   static const char token_space = ' ';

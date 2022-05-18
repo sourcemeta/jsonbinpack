@@ -604,3 +604,18 @@ auto sourcemeta::jsontoolkit::JSON::size(const std::string &key) const
   document.assert_parsed_flat();
   return document.data.at(key).size();
 }
+
+auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).empty();
+}
+
+auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).empty();
+}
