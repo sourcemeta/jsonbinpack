@@ -494,3 +494,17 @@ auto sourcemeta::jsontoolkit::JSON::size(std::size_t index) const
   document.assert_parsed_flat();
   return document.data.at(index).size();
 }
+
+auto sourcemeta::jsontoolkit::JSON::empty(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).empty();
+}
+
+auto sourcemeta::jsontoolkit::JSON::empty(std::size_t index) const -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(index).empty();
+}

@@ -14,7 +14,7 @@ public:
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            schema.is_object() && schema.contains("patternProperties") &&
-           schema.at("patternProperties").empty();
+           schema.empty("patternProperties");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
