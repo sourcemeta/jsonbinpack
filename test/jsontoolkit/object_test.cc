@@ -219,7 +219,7 @@ TEST(Object, string_value_with_comma) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar,baz");
 }
 
@@ -228,7 +228,7 @@ TEST(Object, string_value_with_escaped_quote) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar\"baz");
 }
 
@@ -237,7 +237,7 @@ TEST(Object, empty_string_key) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains(""));
-  EXPECT_TRUE(document.at("").is_string());
+  EXPECT_TRUE(document.is_string(""));
   EXPECT_EQ(document.at(""), "foo");
 }
 
@@ -246,7 +246,7 @@ TEST(Object, string_key_with_comma) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo,bar"));
-  EXPECT_TRUE(document.at("foo,bar").is_string());
+  EXPECT_TRUE(document.is_string("foo,bar"));
   EXPECT_EQ(document.at("foo,bar"), "baz");
 }
 
@@ -255,7 +255,7 @@ TEST(Object, string_key_with_space) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo bar"));
-  EXPECT_TRUE(document.at("foo bar").is_string());
+  EXPECT_TRUE(document.is_string("foo bar"));
   EXPECT_EQ(document.at("foo bar"), "baz");
 }
 
@@ -264,7 +264,7 @@ TEST(Object, string_value_with_stringified_object) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "{\"x\":1}");
 }
 
@@ -433,7 +433,7 @@ TEST(Object, key_copy_assignment_same_type_parsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
@@ -442,7 +442,7 @@ TEST(Object, key_copy_assignment_same_type_parsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "baz");
 }
 
@@ -451,7 +451,7 @@ TEST(Object, key_move_assignment_same_type_parsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
@@ -460,7 +460,7 @@ TEST(Object, key_move_assignment_same_type_parsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "baz");
 }
 
@@ -469,7 +469,7 @@ TEST(Object, key_copy_assignment_different_type_parsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"1"};
@@ -487,7 +487,7 @@ TEST(Object, key_move_assignment_different_type_parsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"1"};
@@ -505,7 +505,7 @@ TEST(Object, key_copy_assignment_same_type_unparsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
@@ -513,7 +513,7 @@ TEST(Object, key_copy_assignment_same_type_unparsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "baz");
 }
 
@@ -522,7 +522,7 @@ TEST(Object, key_move_assignment_same_type_unparsed) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "bar");
 
   sourcemeta::jsontoolkit::JSON value{"\"baz\""};
@@ -530,6 +530,6 @@ TEST(Object, key_move_assignment_same_type_unparsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_string());
+  EXPECT_TRUE(document.is_string("foo"));
   EXPECT_EQ(document.at("foo"), "baz");
 }

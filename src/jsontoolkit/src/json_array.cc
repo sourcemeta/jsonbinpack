@@ -390,3 +390,33 @@ auto sourcemeta::jsontoolkit::JSON::is_null(std::size_t index) const -> bool {
   document.assert_parsed_deep();
   return document.data.at(index).is_null();
 }
+
+auto sourcemeta::jsontoolkit::JSON::is_string(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).is_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_string(std::size_t index) const -> bool {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).is_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string(std::size_t index)
+    -> std::string {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).to_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string(std::size_t index) const
+    -> std::string {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).to_string();
+}

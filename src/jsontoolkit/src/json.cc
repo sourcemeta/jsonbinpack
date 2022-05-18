@@ -59,10 +59,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const double value)
                 false},
       data{std::in_place_type<double>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
-    : Container{value.source(), false, !value.is_flat_parsed()},
-      data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
-
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
@@ -158,11 +154,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
   return false;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
-    -> bool {
-  return this->operator==(std::string_view{value});
-}
-
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const sourcemeta::jsontoolkit::JSON &value) const -> bool {
   this->assert_parsed_deep();
@@ -184,28 +175,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(
   default:
     return this->data == value.data;
   }
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
-    -> bool {
-  this->assert_parsed_deep();
-
-  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
-    return false;
-  }
-
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
-    -> bool {
-  this->assert_parsed_deep();
-
-  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
-    return false;
-  }
-
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
@@ -262,28 +231,6 @@ auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
   this->set_parse_deep(true);
   this->data = sourcemeta::jsontoolkit::String{std::move(value)};
   return *this;
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
-  // In the case of strings, flat and deep parse are the same
-  this->parse();
-  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
-  // In the case of strings, flat and deep parse are the same
-  this->parse();
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
-  this->assert_parsed_deep();
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
 }
 
 auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {

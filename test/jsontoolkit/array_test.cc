@@ -223,32 +223,32 @@ TEST(Array, array_of_single_string) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.at(0).is_string());
-  EXPECT_EQ(document.at(0).to_string(), "foo");
+  EXPECT_TRUE(document.is_string(0));
+  EXPECT_EQ(document.to_string(0), "foo");
 }
 
 TEST(Array, comma_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo,bar\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.at(0).is_string());
-  EXPECT_EQ(document.at(0).to_string(), "foo,bar");
+  EXPECT_TRUE(document.is_string(0));
+  EXPECT_EQ(document.to_string(0), "foo,bar");
 }
 
 TEST(Array, booleanarray_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"[false,true]\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.at(0).is_string());
-  EXPECT_EQ(document.at(0).to_string(), "[false,true]");
+  EXPECT_TRUE(document.is_string(0));
+  EXPECT_EQ(document.to_string(0), "[false,true]");
 }
 
 TEST(Array, escaped_quote_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo\\\"bar\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.at(0).is_string());
-  EXPECT_EQ(document.at(0).to_string(), "foo\"bar");
+  EXPECT_TRUE(document.is_string(0));
+  EXPECT_EQ(document.to_string(0), "foo\"bar");
 }
 
 TEST(Array, single_positive_integer_element) {

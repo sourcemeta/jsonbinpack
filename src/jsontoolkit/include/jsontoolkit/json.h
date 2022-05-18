@@ -29,6 +29,8 @@ public:
 
   // Constructor
   ~JSON() override = default;
+  // TODO: How can we create a constructor that takes std::string
+  // without being ambiguous with the constructor that takes JSON string?
   // TODO: We should never handle C strings. Remove this
   JSON(const char *document);
   // TODO: The top-level JSON should never take a string_view
@@ -61,6 +63,9 @@ public:
   auto operator==(const JSON &) const -> bool;
   auto operator==(bool) const -> bool;
   auto operator==(std::nullptr_t) const -> bool;
+  auto operator==(const char *) const -> bool;
+  auto operator==(const std::string &) const -> bool;
+  auto operator==(std::string_view) const -> bool;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -100,6 +105,10 @@ public:
   [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
   auto is_null(const std::string &key) -> bool;
   [[nodiscard]] auto is_null(const std::string &key) const -> bool;
+  auto is_string(const std::string &key) -> bool;
+  [[nodiscard]] auto is_string(const std::string &key) const -> bool;
+  auto to_string(const std::string &key) -> std::string;
+  [[nodiscard]] auto to_string(const std::string &key) const -> std::string;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -128,6 +137,16 @@ public:
   [[nodiscard]] auto to_boolean(std::size_t index) const -> bool;
   auto is_null(std::size_t index) -> bool;
   [[nodiscard]] auto is_null(std::size_t index) const -> bool;
+  auto is_string(std::size_t index) -> bool;
+  [[nodiscard]] auto is_string(std::size_t index) const -> bool;
+  auto to_string(std::size_t index) -> std::string;
+  [[nodiscard]] auto to_string(std::size_t index) const -> std::string;
+
+  // String
+  auto is_string() -> bool;
+  [[nodiscard]] auto is_string() const -> bool;
+  auto to_string() -> std::string;
+  [[nodiscard]] auto to_string() const -> std::string;
 
   // Boolean
   auto is_boolean() -> bool;
@@ -165,18 +184,6 @@ public:
   [[nodiscard]] auto to_real() const -> double;
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
-
-  // String
-  // TODO: How can we create a constructor that takes std::string
-  // without being ambiguous with the constructor that takes JSON string?
-  JSON(sourcemeta::jsontoolkit::String &value);
-  auto is_string() -> bool;
-  [[nodiscard]] auto is_string() const -> bool;
-  auto to_string() -> std::string;
-  [[nodiscard]] auto to_string() const -> std::string;
-  auto operator==(const char *) const -> bool;
-  auto operator==(const std::string &) const -> bool;
-  auto operator==(std::string_view) const -> bool;
 
   static const char token_space = ' ';
   static const char token_new_line = '\n';
