@@ -10,82 +10,6 @@
 #include "utils.h"
 
 template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray()
-    : Container{
-          std::string{
-              sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin} +
-              std::string{
-                  sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end},
-          true, true} {}
-
-template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
-    std::string_view document)
-    : Container{document, true, true} {}
-
-template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
-    const std::vector<Wrapper> &elements)
-    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false, true},
-      data{elements} {}
-
-template <typename Wrapper>
-sourcemeta::jsontoolkit::GenericArray<Wrapper>::GenericArray(
-    std::vector<Wrapper> &&elements)
-    : Container{sourcemeta::jsontoolkit::utils::NO_SOURCE, false, true},
-      data{std::move(elements)} {}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
-    const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    & -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::reference {
-  this->parse_flat();
-  return this->data.at(index);
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
-    const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    const & -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_reference {
-  this->assert_parsed_deep();
-  return this->data.at(index);
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::at(
-    const sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type index)
-    && -> sourcemeta::jsontoolkit::GenericArray<Wrapper>::value_type {
-  this->parse_flat();
-  return std::move(this->data.at(index));
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type {
-  this->parse_flat();
-  return this->data.size();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::size() const ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::size_type {
-  this->assert_parsed_flat();
-  return this->data.size();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::clear() -> void {
-  this->parse_flat();
-  return this->data.clear();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_deep() -> void {
-  std::for_each(this->data.begin(), this->data.end(),
-                [](Wrapper &element) { element.parse(); });
-}
-
-template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
@@ -222,101 +146,6 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::parse_source() -> void {
 }
 
 template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::begin() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::iterator {
-  this->parse_flat();
-  return this->data.begin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::end() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::iterator {
-  this->parse_flat();
-  return this->data.end();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cbegin() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
-  this->parse_flat();
-  return this->data.cbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cend() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
-  this->parse_flat();
-  return this->data.cend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cbegin() const ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
-  this->assert_parsed_deep();
-  return this->data.cbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::cend() const ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::const_iterator {
-  this->assert_parsed_deep();
-  return this->data.cend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::rbegin() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::reverse_iterator {
-  this->parse_flat();
-  return this->data.rbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::rend() ->
-    typename sourcemeta::jsontoolkit::GenericArray<Wrapper>::reverse_iterator {
-  this->parse_flat();
-  return this->data.rend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crbegin() ->
-    typename sourcemeta::jsontoolkit::GenericArray<
-        Wrapper>::const_reverse_iterator {
-  this->parse_flat();
-  return this->data.crbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() ->
-    typename sourcemeta::jsontoolkit::GenericArray<
-        Wrapper>::const_reverse_iterator {
-  this->parse_flat();
-  return this->data.crend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crbegin() const ->
-    typename sourcemeta::jsontoolkit::GenericArray<
-        Wrapper>::const_reverse_iterator {
-  this->assert_parsed_deep();
-  return this->data.crbegin();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::crend() const ->
-    typename sourcemeta::jsontoolkit::GenericArray<
-        Wrapper>::const_reverse_iterator {
-  this->assert_parsed_deep();
-  return this->data.crend();
-}
-
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::operator==(
-    const sourcemeta::jsontoolkit::GenericArray<Wrapper> &value) const -> bool {
-  this->assert_parsed_deep();
-  return this->data == value.data;
-}
-
-template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
     std::size_t indent) -> std::string {
   this->parse();
@@ -371,105 +200,149 @@ auto sourcemeta::jsontoolkit::GenericArray<Wrapper>::stringify(
 
 // Explicit instantiation
 
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::GenericArray();
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::GenericArray(std::string_view);
-
-template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
-    GenericArray(const std::vector<sourcemeta::jsontoolkit::JSON> &);
-template sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
-    GenericArray(std::vector<sourcemeta::jsontoolkit::JSON> &&);
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::reference
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
-    const sourcemeta::jsontoolkit::GenericArray<
-        sourcemeta::jsontoolkit::JSON>::size_type) &;
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_reference
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
-    const sourcemeta::jsontoolkit::GenericArray<
-        sourcemeta::jsontoolkit::JSON>::size_type) const &;
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::value_type
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::at(
-    const sourcemeta::jsontoolkit::GenericArray<
-        sourcemeta::jsontoolkit::JSON>::size_type) &&;
-
-template typename sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::size_type
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size();
-
-template typename sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::size_type
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::size()
-    const;
-
-template void
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::clear();
-
-template void sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::parse_deep();
-
 template void sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::parse_source();
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::begin();
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::end();
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cbegin();
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cend();
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cbegin()
-    const;
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::cend()
-    const;
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::rbegin();
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::rend();
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin();
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend();
-
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crbegin()
-    const;
-template sourcemeta::jsontoolkit::GenericArray<
-    sourcemeta::jsontoolkit::JSON>::const_reverse_iterator
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::crend()
-    const;
-
-template bool
-sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>::
-operator==(
-    const sourcemeta::jsontoolkit::GenericArray<sourcemeta::jsontoolkit::JSON>
-        &) const;
 
 template std::string sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
 template std::string sourcemeta::jsontoolkit::GenericArray<
     sourcemeta::jsontoolkit::JSON>::stringify(std::size_t) const;
+
+sourcemeta::jsontoolkit::JSON::JSON(
+    const std::vector<sourcemeta::jsontoolkit::JSON> &value)
+    : Container{"", false, true},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Array>, value} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(
+    std::vector<sourcemeta::jsontoolkit::JSON> &&value) noexcept
+    : Container{"", false, true},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Array>,
+           std::move(value)} {}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index)
+    -> sourcemeta::jsontoolkit::Object & {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index) const
+    -> const sourcemeta::jsontoolkit::Object & {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).to_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).is_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) const -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(index).is_object();
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    std::size_t index) & -> sourcemeta::jsontoolkit::JSON & {
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index);
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(
+    std::size_t index) && -> sourcemeta::jsontoolkit::JSON {
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return std::move(document.data.at(index));
+}
+
+auto sourcemeta::jsontoolkit::JSON::at(std::size_t index) const & -> const
+    sourcemeta::jsontoolkit::JSON & {
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(index);
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(std::size_t index,
+                                           std::int64_t value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->parse_flat();
+  std::get<sourcemeta::jsontoolkit::Array>(this->data).data[index] =
+      sourcemeta::jsontoolkit::JSON{value};
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
+  this->parse_flat();
+  return std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_array() const -> bool {
+  this->assert_parsed_flat();
+  return std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_array(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).is_array();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_array(std::size_t index) const -> bool {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).is_array();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_array()
+    -> sourcemeta::jsontoolkit::Array & {
+  this->parse_flat();
+  return std::get<sourcemeta::jsontoolkit::Array>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_array() const
+    -> const sourcemeta::jsontoolkit::Array & {
+  this->assert_parsed_deep();
+  return std::get<sourcemeta::jsontoolkit::Array>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_array(std::size_t index)
+    -> sourcemeta::jsontoolkit::Array & {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).to_array();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_array(std::size_t index) const
+    -> const sourcemeta::jsontoolkit::Array & {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).to_array();
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::vector<sourcemeta::jsontoolkit::JSON> &value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_deep(true);
+  this->data = sourcemeta::jsontoolkit::Array{value};
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    std::vector<sourcemeta::jsontoolkit::JSON> &&value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->set_parse_deep(true);
+  this->data = sourcemeta::jsontoolkit::Array{std::move(value)};
+  return *this;
+}

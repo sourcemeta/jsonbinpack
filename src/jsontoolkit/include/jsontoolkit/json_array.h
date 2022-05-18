@@ -14,10 +14,18 @@ template <typename Wrapper> class GenericObject;
 
 template <typename Wrapper> class GenericArray final : public Container {
 public:
-  GenericArray();
-  GenericArray(std::string_view document);
-  GenericArray(const std::vector<Wrapper> &elements);
-  GenericArray(std::vector<Wrapper> &&elements);
+  GenericArray()
+      : Container{std::string{GenericArray<Wrapper>::token_begin} +
+                      std::string{GenericArray<Wrapper>::token_end},
+                  true, true} {}
+
+  GenericArray(std::string_view document) : Container{document, true, true} {}
+
+  GenericArray(const std::vector<Wrapper> &elements)
+      : Container{"", false, true}, data{elements} {}
+
+  GenericArray(std::vector<Wrapper> &&elements)
+      : Container{"", false, true}, data{std::move(elements)} {}
 
   using value_type = typename std::vector<Wrapper>::value_type;
   using allocator_type = typename std::vector<Wrapper>::allocator_type;
@@ -37,28 +45,70 @@ public:
   static const char token_end = ']';
   static const char token_delimiter = ',';
 
-  auto at(size_type index) & -> reference;
-  auto at(size_type index) && -> value_type;
-  [[nodiscard]] auto at(size_type index) const & -> const_reference;
+  auto begin() -> iterator {
+    this->parse_flat();
+    return this->data.begin();
+  }
 
-  auto size() -> size_type;
-  [[nodiscard]] auto size() const -> size_type;
-  auto clear() -> void;
+  auto end() -> iterator {
+    this->parse_flat();
+    return this->data.end();
+  }
 
-  auto begin() -> iterator;
-  auto end() -> iterator;
-  auto cbegin() -> const_iterator;
-  auto cend() -> const_iterator;
-  [[nodiscard]] auto cbegin() const -> const_iterator;
-  [[nodiscard]] auto cend() const -> const_iterator;
-  auto rbegin() -> reverse_iterator;
-  auto rend() -> reverse_iterator;
-  auto crbegin() -> const_reverse_iterator;
-  auto crend() -> const_reverse_iterator;
-  [[nodiscard]] auto crbegin() const -> const_reverse_iterator;
-  [[nodiscard]] auto crend() const -> const_reverse_iterator;
+  auto cbegin() -> const_iterator {
+    this->parse_flat();
+    return this->data.cbegin();
+  }
 
-  auto operator==(const GenericArray<Wrapper> &) const -> bool;
+  auto cend() -> const_iterator {
+    this->parse_flat();
+    return this->data.cend();
+  }
+
+  [[nodiscard]] auto cbegin() const -> const_iterator {
+    this->assert_parsed_deep();
+    return this->data.cbegin();
+  }
+
+  [[nodiscard]] auto cend() const -> const_iterator {
+    this->assert_parsed_deep();
+    return this->data.cend();
+  }
+
+  auto rbegin() -> reverse_iterator {
+    this->parse_flat();
+    return this->data.rbegin();
+  }
+
+  auto rend() -> reverse_iterator {
+    this->parse_flat();
+    return this->data.rend();
+  }
+
+  auto crbegin() -> const_reverse_iterator {
+    this->parse_flat();
+    return this->data.crbegin();
+  }
+
+  auto crend() -> const_reverse_iterator {
+    this->parse_flat();
+    return this->data.crend();
+  }
+
+  [[nodiscard]] auto crbegin() const -> const_reverse_iterator {
+    this->assert_parsed_deep();
+    return this->data.crbegin();
+  }
+
+  [[nodiscard]] auto crend() const -> const_reverse_iterator {
+    this->assert_parsed_deep();
+    return this->data.crend();
+  }
+
+  auto operator==(const GenericArray<Wrapper> &value) const -> bool {
+    this->assert_parsed_deep();
+    return this->data == value.data;
+  }
 
   friend Wrapper;
   friend sourcemeta::jsontoolkit::GenericObject<Wrapper>;
@@ -69,7 +119,11 @@ protected:
 
 private:
   auto parse_source() -> void override;
-  auto parse_deep() -> void override;
+  auto parse_deep() -> void override {
+    std::for_each(this->data.begin(), this->data.end(),
+                  [](Wrapper &element) { element.parse(); });
+  }
+
   std::vector<Wrapper> data;
 };
 } // namespace sourcemeta::jsontoolkit

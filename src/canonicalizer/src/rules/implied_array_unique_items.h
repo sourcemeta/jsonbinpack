@@ -17,11 +17,11 @@ public:
                                      schema.at("maxItems").to_integer() <= 1};
 
     const bool singular_by_const{schema.contains("const") &&
-                                 schema.at("const").is_array() &&
-                                 schema.at("const").to_array().size() <= 1};
+                                 schema.is_array("const") &&
+                                 schema.at("const").size() <= 1};
 
     const bool singular_by_enum{
-        schema.contains("enum") && schema.at("enum").is_array() &&
+        schema.contains("enum") && schema.is_array("enum") &&
         std::all_of(schema.at("enum").to_array().cbegin(),
                     schema.at("enum").to_array().cend(),
                     [](const sourcemeta::jsontoolkit::JSON &element) {

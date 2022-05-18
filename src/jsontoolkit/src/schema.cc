@@ -48,6 +48,11 @@ auto sourcemeta::jsontoolkit::Schema::is_object() const -> bool {
   return this->schema.is_object();
 }
 
+auto sourcemeta::jsontoolkit::Schema::is_array(const std::string &key) const
+    -> bool {
+  return this->schema.is_array(key);
+}
+
 auto sourcemeta::jsontoolkit::Schema::to_object() const
     -> const sourcemeta::jsontoolkit::Object & {
   return this->schema.to_object();

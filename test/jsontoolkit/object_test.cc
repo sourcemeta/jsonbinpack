@@ -206,12 +206,12 @@ TEST(Object, minified_one_array_element) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 2);
-  EXPECT_TRUE(document.at("foo")[0].is_boolean());
-  EXPECT_TRUE(document.at("foo")[1].is_boolean());
-  EXPECT_TRUE(document.at("foo")[0].to_boolean());
-  EXPECT_FALSE(document.at("foo")[1].to_boolean());
+  EXPECT_TRUE(document.at("foo").at(0).is_boolean());
+  EXPECT_TRUE(document.at("foo").at(1).is_boolean());
+  EXPECT_TRUE(document.at("foo").at(0).to_boolean());
+  EXPECT_FALSE(document.at("foo").at(1).to_boolean());
 }
 
 TEST(Object, string_value_with_comma) {
@@ -296,12 +296,12 @@ TEST(Object, one_array_element_with_space) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 2);
-  EXPECT_TRUE(document.at("foo")[0].is_boolean());
-  EXPECT_TRUE(document.at("foo")[1].is_boolean());
-  EXPECT_TRUE(document.at("foo")[0].to_boolean());
-  EXPECT_FALSE(document.at("foo")[1].to_boolean());
+  EXPECT_TRUE(document.at("foo").at(0).is_boolean());
+  EXPECT_TRUE(document.at("foo").at(1).is_boolean());
+  EXPECT_TRUE(document.at("foo").at(0).to_boolean());
+  EXPECT_FALSE(document.at("foo").at(1).to_boolean());
 }
 
 TEST(Object, nested_object_clear) {

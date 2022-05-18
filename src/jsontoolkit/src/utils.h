@@ -6,9 +6,6 @@
 
 namespace sourcemeta::jsontoolkit::utils {
 
-// A placeholder that represents an invalid JSON document.
-static constexpr std::string_view NO_SOURCE;
-
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character
 // tabulation (U+0009), line feed (U+000A), carriage return (U+000D), and space

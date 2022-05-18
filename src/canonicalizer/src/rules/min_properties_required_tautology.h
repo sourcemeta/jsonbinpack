@@ -16,7 +16,7 @@ public:
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.contains("minProperties") &&
            schema.at("minProperties").is_integer() &&
-           schema.contains("required") && schema.at("required").is_array() &&
+           schema.contains("required") && schema.is_array("required") &&
            static_cast<std::int64_t>(schema.at("required").size()) >
                schema.at("minProperties").to_integer();
   }
