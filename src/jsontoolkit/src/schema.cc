@@ -58,6 +58,11 @@ auto sourcemeta::jsontoolkit::Schema::is_boolean(const std::string &key) const
   return this->schema.is_boolean(key);
 }
 
+auto sourcemeta::jsontoolkit::Schema::is_integer(const std::string &key) const
+    -> bool {
+  return this->schema.is_integer(key);
+}
+
 auto sourcemeta::jsontoolkit::Schema::to_object() const
     -> const sourcemeta::jsontoolkit::Object & {
   return this->schema.to_object();
@@ -76,4 +81,14 @@ auto sourcemeta::jsontoolkit::Schema::to_array(const std::string &key) const
 auto sourcemeta::jsontoolkit::Schema::to_boolean(const std::string &key) const
     -> bool {
   return this->schema.to_boolean(key);
+}
+
+auto sourcemeta::jsontoolkit::Schema::to_integer(const std::string &key) const
+    -> std::int64_t {
+  return this->schema.to_integer(key);
+}
+
+auto sourcemeta::jsontoolkit::Schema::size(const std::string &key) const
+    -> std::size_t {
+  return this->schema.size(key);
 }

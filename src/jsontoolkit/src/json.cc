@@ -49,16 +49,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
 sourcemeta::jsontoolkit::JSON::JSON(std::string_view document)
     : Container{document, true, true} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false,
-                false},
-      data{std::in_place_type<std::int64_t>, value} {}
-
-sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : Container{sourcemeta::jsontoolkit::Number::stringify(value), false,
-                false},
-      data{std::in_place_type<double>, value} {}
-
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
@@ -119,39 +109,6 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   default:
     throw std::domain_error("Invalid document");
   }
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
-    -> bool {
-  if (std::holds_alternative<std::int64_t>(this->data)) {
-    return std::get<std::int64_t>(this->data) == value;
-  }
-
-  if (std::holds_alternative<double>(this->data)) {
-    double integral = 0.0;
-    const double fractional =
-        std::modf(std::get<double>(this->data), &integral);
-    return fractional == 0.0 && static_cast<std::int64_t>(integral) == value;
-  }
-
-  return false;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
-    -> bool {
-  this->assert_parsed_flat();
-  if (std::holds_alternative<double>(this->data)) {
-    return std::get<double>(this->data) == value;
-  }
-
-  if (std::holds_alternative<std::int64_t>(this->data)) {
-    double integral = 0.0;
-    const double fractional = std::modf(value, &integral);
-    return fractional == 0.0 && std::get<std::int64_t>(this->data) ==
-                                    static_cast<std::int64_t>(integral);
-  }
-
-  return false;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
@@ -255,12 +212,13 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
     return document.data.size();
   }
 
-  switch (this->data.index()) {
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
-  default:
-    throw std::logic_error("Data type has no size");
+  if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
+    auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+    document.parse_deep();
+    return document.data.size();
   }
+
+  throw std::logic_error("Data type has no size");
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
@@ -279,12 +237,14 @@ auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
     return document.data.size();
   }
 
-  switch (this->data.index()) {
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<sourcemeta::jsontoolkit::String>(this->data).size();
-  default:
-    throw std::logic_error("Data type has no size");
+  if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
+    const auto &document =
+        std::get<sourcemeta::jsontoolkit::String>(this->data);
+    document.assert_parsed_deep();
+    return document.data.size();
   }
+
+  throw std::logic_error("Data type has no size");
 }
 
 auto sourcemeta::jsontoolkit::JSON::empty() -> bool {
@@ -311,46 +271,6 @@ auto sourcemeta::jsontoolkit::JSON::clear() -> void {
   }
 
   throw std::logic_error("Data type is not a container");
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
-  this->parse_flat();
-  return std::holds_alternative<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_integer() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
-  this->parse_flat();
-  return std::holds_alternative<double>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_real() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<double>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
-  this->parse_flat();
-  return std::get<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_integer() const -> std::int64_t {
-  this->assert_parsed_flat();
-  return std::get<std::int64_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
-  this->parse_flat();
-  return std::get<double>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_real() const -> double {
-  this->assert_parsed_flat();
-  return std::get<double>(this->data);
 }
 
 // Because std::to_string tries too hard to imitate

@@ -207,7 +207,7 @@ TEST(Object, minified_one_array_element) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.is_array("foo"));
-  EXPECT_EQ(document.at("foo").size(), 2);
+  EXPECT_EQ(document.size("foo"), 2);
   EXPECT_TRUE(document.at("foo").is_boolean(0));
   EXPECT_TRUE(document.at("foo").is_boolean(1));
   EXPECT_TRUE(document.at("foo").to_boolean(0));
@@ -297,7 +297,7 @@ TEST(Object, one_array_element_with_space) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.is_array("foo"));
-  EXPECT_EQ(document.at("foo").size(), 2);
+  EXPECT_EQ(document.size("foo"), 2);
   EXPECT_TRUE(document.at("foo").is_boolean(0));
   EXPECT_TRUE(document.at("foo").is_boolean(1));
   EXPECT_TRUE(document.at("foo").to_boolean(0));
@@ -326,7 +326,7 @@ TEST(Object, minified_nested_object) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.is_object("foo"));
-  EXPECT_EQ(document.at("foo").size(), 1);
+  EXPECT_EQ(document.size("foo"), 1);
   EXPECT_TRUE(document.at("foo").contains("bar"));
 }
 
@@ -337,7 +337,7 @@ TEST(Object, empty_nested_object_with_new_line_before_end) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("x"));
   EXPECT_TRUE(document.is_object("x"));
-  EXPECT_EQ(document.at("x").size(), 0);
+  EXPECT_EQ(document.size("x"), 0);
 }
 
 TEST(Object, equality_with_padding) {
@@ -478,7 +478,7 @@ TEST(Object, key_copy_assignment_different_type_parsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_integer());
+  EXPECT_TRUE(document.is_integer("foo"));
   EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
 }
 
@@ -496,7 +496,7 @@ TEST(Object, key_move_assignment_different_type_parsed) {
 
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_integer());
+  EXPECT_TRUE(document.is_integer("foo"));
   EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
 }
 

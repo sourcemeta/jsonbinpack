@@ -527,3 +527,80 @@ auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key) const
   document.assert_parsed_deep();
   return document.data.at(key).to_string();
 }
+
+auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).is_integer();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).is_integer();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).is_real();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).is_real();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key)
+    -> std::int64_t {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).to_integer();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key) const
+    -> std::int64_t {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(key).to_integer();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) -> double {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).to_real();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) const
+    -> double {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(key).to_real();
+}
+
+auto sourcemeta::jsontoolkit::JSON::size(const std::string &key)
+    -> std::size_t {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).size();
+}
+
+auto sourcemeta::jsontoolkit::JSON::size(const std::string &key) const
+    -> std::size_t {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).size();
+}
