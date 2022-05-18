@@ -376,3 +376,17 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean(std::size_t index) const
   document.assert_parsed_deep();
   return document.data.at(index).to_boolean();
 }
+
+auto sourcemeta::jsontoolkit::JSON::is_null(std::size_t index) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  return document.data.at(index).is_null();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_null(std::size_t index) const -> bool {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(index).is_null();
+}
