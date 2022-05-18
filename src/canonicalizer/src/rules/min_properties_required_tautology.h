@@ -15,15 +15,15 @@ public:
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.contains("minProperties") &&
-           schema.at("minProperties").is_integer() &&
-           schema.contains("required") && schema.is_array("required") &&
-           static_cast<std::int64_t>(schema.at("required").size()) >
-               schema.at("minProperties").to_integer();
+           schema.is_integer("minProperties") && schema.contains("required") &&
+           schema.is_array("required") &&
+           static_cast<std::int64_t>(schema.size("required")) >
+               schema.to_integer("minProperties");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
     schema.assign("minProperties",
-                  static_cast<std::int64_t>(schema.at("required").size()));
+                  static_cast<std::int64_t>(schema.size("required")));
   }
 };
 

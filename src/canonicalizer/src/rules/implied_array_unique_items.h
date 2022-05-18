@@ -13,8 +13,8 @@ public:
   condition(const sourcemeta::jsontoolkit::Schema &schema) const
       -> bool override {
     const bool singular_by_max_items{schema.contains("maxItems") &&
-                                     schema.at("maxItems").is_integer() &&
-                                     schema.at("maxItems").to_integer() <= 1};
+                                     schema.is_integer("maxItems") &&
+                                     schema.to_integer("maxItems") <= 1};
 
     const bool singular_by_const{schema.contains("const") &&
                                  schema.is_array("const") &&

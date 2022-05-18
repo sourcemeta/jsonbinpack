@@ -29,18 +29,6 @@ auto sourcemeta::jsontoolkit::String::value() && -> std::string {
   return std::move(this->data);
 }
 
-auto sourcemeta::jsontoolkit::String::size() ->
-    typename sourcemeta::jsontoolkit::String::size_type {
-  this->parse();
-  return this->data.size();
-}
-
-auto sourcemeta::jsontoolkit::String::size() const ->
-    typename sourcemeta::jsontoolkit::String::size_type {
-  this->assert_parsed_deep();
-  return this->data.size();
-}
-
 // All code points may be placed within the quotation marks except for the code
 // points that must be escaped: quotation mark (U+0022), reverse solidus
 // (U+005C), and the control characters U+0000 to U+001F

@@ -42,6 +42,8 @@ public:
   JSON(std::vector<JSON> &&) noexcept;
   JSON(bool value);
   JSON(std::nullptr_t);
+  JSON(std::int64_t value);
+  JSON(double value);
 
   // Assignment
   auto operator=(const JSON &document) -> JSON &;
@@ -66,6 +68,12 @@ public:
   auto operator==(const char *) const -> bool;
   auto operator==(const std::string &) const -> bool;
   auto operator==(std::string_view) const -> bool;
+  auto operator==(std::int64_t) const -> bool;
+  auto operator==(double) const -> bool;
+
+  // Containers
+  auto size() -> std::size_t;
+  [[nodiscard]] auto size() const -> std::size_t;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -109,6 +117,16 @@ public:
   [[nodiscard]] auto is_string(const std::string &key) const -> bool;
   auto to_string(const std::string &key) -> std::string;
   [[nodiscard]] auto to_string(const std::string &key) const -> std::string;
+  auto is_integer(const std::string &key) -> bool;
+  [[nodiscard]] auto is_integer(const std::string &key) const -> bool;
+  auto is_real(const std::string &key) -> bool;
+  [[nodiscard]] auto is_real(const std::string &key) const -> bool;
+  auto to_integer(const std::string &key) -> std::int64_t;
+  [[nodiscard]] auto to_integer(const std::string &key) const -> std::int64_t;
+  auto to_real(const std::string &key) -> double;
+  [[nodiscard]] auto to_real(const std::string &key) const -> double;
+  auto size(const std::string &key) -> std::size_t;
+  [[nodiscard]] auto size(const std::string &key) const -> std::size_t;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -141,6 +159,16 @@ public:
   [[nodiscard]] auto is_string(std::size_t index) const -> bool;
   auto to_string(std::size_t index) -> std::string;
   [[nodiscard]] auto to_string(std::size_t index) const -> std::string;
+  auto is_integer(std::size_t index) -> bool;
+  [[nodiscard]] auto is_integer(std::size_t index) const -> bool;
+  auto is_real(std::size_t index) -> bool;
+  [[nodiscard]] auto is_real(std::size_t index) const -> bool;
+  auto to_integer(std::size_t index) -> std::int64_t;
+  [[nodiscard]] auto to_integer(std::size_t index) const -> std::int64_t;
+  auto to_real(std::size_t index) -> double;
+  [[nodiscard]] auto to_real(std::size_t index) const -> double;
+  auto size(std::size_t index) -> std::size_t;
+  [[nodiscard]] auto size(std::size_t index) const -> std::size_t;
 
   // String
   auto is_string() -> bool;
@@ -158,22 +186,7 @@ public:
   auto is_null() -> bool;
   [[nodiscard]] auto is_null() const -> bool;
 
-  // TODO: We probably want these functions to be thread-safe
-  auto stringify(bool pretty = false) -> std::string;
-  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
-
-  // Containers
-  auto size() -> std::size_t;
-  // TODO: Optionally take a key
-  [[nodiscard]] auto size() const -> std::size_t;
-  auto empty() -> bool;
-  // TODO: Optionally take a key
-  [[nodiscard]] auto empty() const -> bool;
-  auto clear() -> void;
-
   // Number
-  JSON(std::int64_t value);
-  JSON(double value);
   auto is_integer() -> bool;
   [[nodiscard]] auto is_integer() const -> bool;
   auto is_real() -> bool;
@@ -182,8 +195,16 @@ public:
   [[nodiscard]] auto to_integer() const -> std::int64_t;
   auto to_real() -> double;
   [[nodiscard]] auto to_real() const -> double;
-  auto operator==(std::int64_t) const -> bool;
-  auto operator==(double) const -> bool;
+
+  // TODO: We probably want these functions to be thread-safe
+  auto stringify(bool pretty = false) -> std::string;
+  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
+
+  // Containers
+  auto empty() -> bool;
+  // TODO: Optionally take a key
+  [[nodiscard]] auto empty() const -> bool;
+  auto clear() -> void;
 
   static const char token_space = ' ';
   static const char token_new_line = '\n';
