@@ -71,11 +71,16 @@ public:
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
 
+  // General
+  auto stringify(bool pretty = false) -> std::string;
+  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
+
   // Containers
   auto size() -> std::size_t;
   [[nodiscard]] auto size() const -> std::size_t;
   auto empty() -> bool;
   [[nodiscard]] auto empty() const -> bool;
+  auto clear() -> void;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -131,6 +136,7 @@ public:
   [[nodiscard]] auto size(const std::string &key) const -> std::size_t;
   auto empty(const std::string &key) -> bool;
   [[nodiscard]] auto empty(const std::string &key) const -> bool;
+  auto clear(const std::string &key) -> void;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -175,6 +181,7 @@ public:
   [[nodiscard]] auto size(std::size_t index) const -> std::size_t;
   auto empty(std::size_t index) -> bool;
   [[nodiscard]] auto empty(std::size_t index) const -> bool;
+  auto clear(std::size_t index) -> void;
 
   // String
   auto is_string() -> bool;
@@ -201,13 +208,6 @@ public:
   [[nodiscard]] auto to_integer() const -> std::int64_t;
   auto to_real() -> double;
   [[nodiscard]] auto to_real() const -> double;
-
-  // TODO: We probably want these functions to be thread-safe
-  auto stringify(bool pretty = false) -> std::string;
-  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
-
-  // Containers
-  auto clear() -> void;
 
   static const char token_space = ' ';
   static const char token_new_line = '\n';

@@ -508,3 +508,10 @@ auto sourcemeta::jsontoolkit::JSON::empty(std::size_t index) const -> bool {
   document.assert_parsed_flat();
   return document.data.at(index).empty();
 }
+
+auto sourcemeta::jsontoolkit::JSON::clear(std::size_t index) -> void {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+  document.parse_flat();
+  document.data.at(index).clear();
+}
