@@ -43,7 +43,10 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   return *this;
 }
 
-sourcemeta::jsontoolkit::JSON::JSON(const char *const document)
+sourcemeta::jsontoolkit::JSON::JSON(const char *document)
+    : Container{document, true, true} {}
+
+sourcemeta::jsontoolkit::JSON::JSON(const std::string &document)
     : Container{document, true, true} {}
 
 sourcemeta::jsontoolkit::JSON::JSON(std::string_view document)

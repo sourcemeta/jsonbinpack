@@ -23,27 +23,25 @@ using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
 using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
 class JSON : public Container {
 public:
-  // Only to make the class default-constructible.
-  // The resulting document is still invalid.
-  JSON();
-
   // Constructor
   ~JSON() override = default;
   // TODO: How can we create a constructor that takes std::string
   // without being ambiguous with the constructor that takes JSON string?
-  // TODO: We should never handle C strings. Remove this
-  JSON(const char *document);
-  // TODO: The top-level JSON should never take a string_view
-  // but a true string. Only its sub-classes must do views.
-  JSON(std::string_view document);
-  JSON(const JSON &document);
-  JSON(JSON &&document) noexcept;
+  JSON(const char *);
+  JSON(const std::string &);
+  JSON(const JSON &);
+  JSON(JSON &&) noexcept;
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
-  JSON(bool value);
+  JSON(bool);
   JSON(std::nullptr_t);
-  JSON(std::int64_t value);
-  JSON(double value);
+  JSON(std::int64_t);
+  JSON(double);
+  JSON(std::string_view);
+
+  // Only to make the class default-constructible.
+  // The resulting document is still invalid.
+  JSON();
 
   // Assignment
   auto operator=(const JSON &document) -> JSON &;
