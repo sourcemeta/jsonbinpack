@@ -59,10 +59,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const double value)
                 false},
       data{std::in_place_type<double>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{sourcemeta::jsontoolkit::Null::stringify(), false, false},
-      data{std::in_place_type<std::nullptr_t>, nullptr} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(sourcemeta::jsontoolkit::String &value)
     : Container{value.source(), false, !value.is_flat_parsed()},
       data{std::in_place_type<sourcemeta::jsontoolkit::String>, value} {}
@@ -162,12 +158,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
   return false;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
-    -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<std::nullptr_t>(this->data);
-}
-
 auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
     -> bool {
   return this->operator==(std::string_view{value});
@@ -216,23 +206,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
   }
 
   return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
-  this->parse_flat();
-  return std::holds_alternative<std::nullptr_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_null() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<std::nullptr_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
-  this->data = nullptr;
-  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(

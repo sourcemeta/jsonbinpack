@@ -39,6 +39,7 @@ public:
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
   JSON(bool value);
+  JSON(std::nullptr_t);
 
   // Assignment
   auto operator=(const JSON &document) -> JSON &;
@@ -59,6 +60,7 @@ public:
   // Comparison
   auto operator==(const JSON &) const -> bool;
   auto operator==(bool) const -> bool;
+  auto operator==(std::nullptr_t) const -> bool;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -96,6 +98,8 @@ public:
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
   auto to_boolean(const std::string &key) -> bool;
   [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
+  auto is_null(const std::string &key) -> bool;
+  [[nodiscard]] auto is_null(const std::string &key) const -> bool;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -122,6 +126,8 @@ public:
   [[nodiscard]] auto is_boolean(std::size_t index) const -> bool;
   auto to_boolean(std::size_t index) -> bool;
   [[nodiscard]] auto to_boolean(std::size_t index) const -> bool;
+  auto is_null(std::size_t index) -> bool;
+  [[nodiscard]] auto is_null(std::size_t index) const -> bool;
 
   // Boolean
   auto is_boolean() -> bool;
@@ -129,15 +135,13 @@ public:
   auto to_boolean() -> bool;
   [[nodiscard]] auto to_boolean() const -> bool;
 
+  // Null
+  auto is_null() -> bool;
+  [[nodiscard]] auto is_null() const -> bool;
+
   // TODO: We probably want these functions to be thread-safe
   auto stringify(bool pretty = false) -> std::string;
   [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
-
-  // Null
-  JSON(std::nullptr_t);
-  auto is_null() -> bool;
-  [[nodiscard]] auto is_null() const -> bool;
-  auto operator==(std::nullptr_t) const -> bool;
 
   // Containers
   auto size() -> std::size_t;
