@@ -93,8 +93,8 @@ TEST(Object, parse_deep_success) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_TRUE(document.at("foo").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_TRUE(document.to_boolean("foo"));
 }
 
 TEST(Object, parse_deep_failure) {
@@ -152,8 +152,8 @@ TEST(Object, minified_one_true_boolean_element) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_TRUE(document.at("foo").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_TRUE(document.to_boolean("foo"));
 }
 
 TEST(Object, minified_one_false_boolean_element) {
@@ -161,8 +161,8 @@ TEST(Object, minified_one_false_boolean_element) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_FALSE(document.at("foo").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_FALSE(document.to_boolean("foo"));
 }
 
 TEST(Object, minified_two_boolean_values) {
@@ -171,10 +171,10 @@ TEST(Object, minified_two_boolean_values) {
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_TRUE(document.at("foo").to_boolean());
-  EXPECT_TRUE(document.at("bar").is_boolean());
-  EXPECT_FALSE(document.at("bar").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_TRUE(document.to_boolean("foo"));
+  EXPECT_TRUE(document.is_boolean("bar"));
+  EXPECT_FALSE(document.to_boolean("bar"));
 }
 
 TEST(Object, must_delete_one_existent_key) {
@@ -208,10 +208,10 @@ TEST(Object, minified_one_array_element) {
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 2);
-  EXPECT_TRUE(document.at("foo").at(0).is_boolean());
-  EXPECT_TRUE(document.at("foo").at(1).is_boolean());
-  EXPECT_TRUE(document.at("foo").at(0).to_boolean());
-  EXPECT_FALSE(document.at("foo").at(1).to_boolean());
+  EXPECT_TRUE(document.at("foo").is_boolean(0));
+  EXPECT_TRUE(document.at("foo").is_boolean(1));
+  EXPECT_TRUE(document.at("foo").to_boolean(0));
+  EXPECT_FALSE(document.at("foo").to_boolean(1));
 }
 
 TEST(Object, string_value_with_comma) {
@@ -273,8 +273,8 @@ TEST(Object, one_true_boolean_element_with_space) {
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_TRUE(document.at("foo").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_TRUE(document.to_boolean("foo"));
 }
 
 TEST(Object, two_boolean_values_with_space) {
@@ -284,10 +284,10 @@ TEST(Object, two_boolean_values_with_space) {
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.contains("bar"));
-  EXPECT_TRUE(document.at("foo").is_boolean());
-  EXPECT_TRUE(document.at("foo").to_boolean());
-  EXPECT_TRUE(document.at("bar").is_boolean());
-  EXPECT_FALSE(document.at("bar").to_boolean());
+  EXPECT_TRUE(document.is_boolean("foo"));
+  EXPECT_TRUE(document.to_boolean("foo"));
+  EXPECT_TRUE(document.is_boolean("bar"));
+  EXPECT_FALSE(document.to_boolean("bar"));
 }
 
 TEST(Object, one_array_element_with_space) {
@@ -298,10 +298,10 @@ TEST(Object, one_array_element_with_space) {
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.is_array("foo"));
   EXPECT_EQ(document.at("foo").size(), 2);
-  EXPECT_TRUE(document.at("foo").at(0).is_boolean());
-  EXPECT_TRUE(document.at("foo").at(1).is_boolean());
-  EXPECT_TRUE(document.at("foo").at(0).to_boolean());
-  EXPECT_FALSE(document.at("foo").at(1).to_boolean());
+  EXPECT_TRUE(document.at("foo").is_boolean(0));
+  EXPECT_TRUE(document.at("foo").is_boolean(1));
+  EXPECT_TRUE(document.at("foo").to_boolean(0));
+  EXPECT_FALSE(document.at("foo").to_boolean(1));
 }
 
 TEST(Object, nested_object_clear) {

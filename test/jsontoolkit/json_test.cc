@@ -127,9 +127,9 @@ TEST(JSON, at_boolean) {
   EXPECT_EQ(document.size(), 3);
   EXPECT_EQ(std::as_const(document).size(), 3);
 
-  EXPECT_TRUE(document.at(0).is_boolean());
-  EXPECT_TRUE(document.at(1).is_boolean());
-  EXPECT_TRUE(document.at(2).is_boolean());
+  EXPECT_TRUE(document.is_boolean(0));
+  EXPECT_TRUE(document.is_boolean(1));
+  EXPECT_TRUE(document.is_boolean(2));
 
   EXPECT_EQ(document.at(0), true);
   EXPECT_EQ(document.at(1), false);
@@ -207,13 +207,13 @@ TEST(JSON, rfc8259_example_1) {
   EXPECT_TRUE(value.at("Image").at("Width").is_integer());
   EXPECT_TRUE(value.at("Image").at("Height").is_integer());
   EXPECT_TRUE(value.at("Image").at("Title").is_string());
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_object());
-  EXPECT_TRUE(value.at("Image").at("Animated").is_boolean());
+  EXPECT_TRUE(value.at("Image").is_object("Thumbnail"));
+  EXPECT_TRUE(value.at("Image").is_boolean("Animated"));
   EXPECT_TRUE(value.at("Image").is_array("IDs"));
   EXPECT_EQ(value.at("Image").at("Width").to_integer(), 800);
   EXPECT_EQ(value.at("Image").at("Height").to_integer(), 600);
   EXPECT_EQ(value.at("Image").at("Title").to_string(), "View from 15th Floor");
-  EXPECT_FALSE(value.at("Image").at("Animated").to_boolean());
+  EXPECT_FALSE(value.at("Image").to_boolean("Animated"));
 
   // Image.Thumbnail object
   EXPECT_EQ(value.at("Image").at("Thumbnail").size(), 3);

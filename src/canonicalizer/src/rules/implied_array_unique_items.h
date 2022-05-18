@@ -22,17 +22,16 @@ public:
 
     const bool singular_by_enum{
         schema.contains("enum") && schema.is_array("enum") &&
-        std::all_of(schema.at("enum").to_array().cbegin(),
-                    schema.at("enum").to_array().cend(),
+        std::all_of(schema.to_array("enum").cbegin(),
+                    schema.to_array("enum").cend(),
                     [](const sourcemeta::jsontoolkit::JSON &element) {
                       return !element.is_array() || element.size() <= 1;
                     })};
 
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.contains("uniqueItems") &&
-           schema.at("uniqueItems").is_boolean() &&
-           schema.at("uniqueItems").to_boolean() &&
+           schema.contains("uniqueItems") && schema.is_boolean("uniqueItems") &&
+           schema.to_boolean("uniqueItems") &&
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 

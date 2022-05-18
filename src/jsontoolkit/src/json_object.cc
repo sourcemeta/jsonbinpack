@@ -451,3 +451,33 @@ auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key) const
   document.assert_parsed_deep();
   return document.data.at(key).to_array();
 }
+
+auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).is_boolean();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).is_boolean();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).to_boolean();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) const
+    -> bool {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(key).to_boolean();
+}
