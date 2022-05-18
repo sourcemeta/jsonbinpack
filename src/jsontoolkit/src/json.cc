@@ -59,11 +59,6 @@ sourcemeta::jsontoolkit::JSON::JSON(const double value)
                 false},
       data{std::in_place_type<double>, value} {}
 
-sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false,
-                false},
-      data{std::in_place_type<bool>, value} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
     : Container{sourcemeta::jsontoolkit::Null::stringify(), false, false},
       data{std::in_place_type<std::nullptr_t>, nullptr} {}
@@ -132,11 +127,6 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   default:
     throw std::domain_error("Invalid document");
   }
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
-  return std::holds_alternative<bool>(this->data) &&
-         std::get<bool>(this->data) == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
@@ -228,26 +218,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
   return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
 }
 
-auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
-  this->parse_flat();
-  return std::get<bool>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::to_boolean() const -> bool {
-  this->assert_parsed_flat();
-  return std::get<bool>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
-  this->parse_flat();
-  return std::holds_alternative<bool>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::is_boolean() const -> bool {
-  this->assert_parsed_flat();
-  return std::holds_alternative<bool>(this->data);
-}
-
 auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
   this->parse_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
@@ -256,13 +226,6 @@ auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_null() const -> bool {
   this->assert_parsed_flat();
   return std::holds_alternative<std::nullptr_t>(this->data);
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
-  this->data = value;
-  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept

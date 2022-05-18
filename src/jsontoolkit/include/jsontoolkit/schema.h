@@ -22,7 +22,11 @@ public:
   [[nodiscard]] auto to_object() const
       -> const sourcemeta::jsontoolkit::Object &;
   [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array &;
+  [[nodiscard]] auto to_array(const std::string &key) const
+      -> const sourcemeta::jsontoolkit::Array &;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
+  [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
+  [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
 
   // https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.1.1
   inline static const std::string keyword_core_schema = "$schema";

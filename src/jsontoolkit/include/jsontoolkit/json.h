@@ -38,6 +38,7 @@ public:
   JSON(JSON &&document) noexcept;
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
+  JSON(bool value);
 
   // Assignment
   auto operator=(const JSON &document) -> JSON &;
@@ -54,6 +55,10 @@ public:
   auto operator=(const std::string &) &noexcept -> JSON &;
   auto operator=(std::string_view) &noexcept -> JSON &;
   auto operator=(std::string &&) &noexcept -> JSON &;
+
+  // Comparison
+  auto operator==(const JSON &) const -> bool;
+  auto operator==(bool) const -> bool;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -87,6 +92,10 @@ public:
   auto to_array(const std::string &key) -> sourcemeta::jsontoolkit::Array &;
   [[nodiscard]] auto to_array(const std::string &key) const
       -> const sourcemeta::jsontoolkit::Array &;
+  auto is_boolean(const std::string &key) -> bool;
+  [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
+  auto to_boolean(const std::string &key) -> bool;
+  [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -109,21 +118,20 @@ public:
   auto to_object(std::size_t index) -> sourcemeta::jsontoolkit::Object &;
   [[nodiscard]] auto to_object(std::size_t index) const
       -> const sourcemeta::jsontoolkit::Object &;
+  auto is_boolean(std::size_t index) -> bool;
+  [[nodiscard]] auto is_boolean(std::size_t index) const -> bool;
+  auto to_boolean(std::size_t index) -> bool;
+  [[nodiscard]] auto to_boolean(std::size_t index) const -> bool;
 
-  auto operator==(const JSON &) const -> bool;
+  // Boolean
+  auto is_boolean() -> bool;
+  [[nodiscard]] auto is_boolean() const -> bool;
+  auto to_boolean() -> bool;
+  [[nodiscard]] auto to_boolean() const -> bool;
 
   // TODO: We probably want these functions to be thread-safe
   auto stringify(bool pretty = false) -> std::string;
   [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
-
-  // Boolean
-  JSON(bool value);
-  auto to_boolean() -> bool;
-  [[nodiscard]] auto to_boolean() const -> bool;
-  auto is_boolean() -> bool;
-  [[nodiscard]] auto is_boolean() const -> bool;
-
-  auto operator==(bool) const -> bool;
 
   // Null
   JSON(std::nullptr_t);
