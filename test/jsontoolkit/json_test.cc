@@ -206,13 +206,13 @@ TEST(JSON, rfc8259_example_1) {
   EXPECT_TRUE(value.at("Image").contains("IDs"));
   EXPECT_TRUE(value.at("Image").at("Width").is_integer());
   EXPECT_TRUE(value.at("Image").at("Height").is_integer());
-  EXPECT_TRUE(value.at("Image").at("Title").is_string());
+  EXPECT_TRUE(value.at("Image").is_string("Title"));
   EXPECT_TRUE(value.at("Image").is_object("Thumbnail"));
   EXPECT_TRUE(value.at("Image").is_boolean("Animated"));
   EXPECT_TRUE(value.at("Image").is_array("IDs"));
   EXPECT_EQ(value.at("Image").at("Width").to_integer(), 800);
   EXPECT_EQ(value.at("Image").at("Height").to_integer(), 600);
-  EXPECT_EQ(value.at("Image").at("Title").to_string(), "View from 15th Floor");
+  EXPECT_EQ(value.at("Image").to_string("Title"), "View from 15th Floor");
   EXPECT_FALSE(value.at("Image").to_boolean("Animated"));
 
   // Image.Thumbnail object
@@ -220,10 +220,10 @@ TEST(JSON, rfc8259_example_1) {
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Url"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Height"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Width"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Url").is_string());
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_string("Url"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Height").is_integer());
   EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Width").is_integer());
-  EXPECT_EQ(value.at("Image").at("Thumbnail").at("Url").to_string(),
+  EXPECT_EQ(value.at("Image").at("Thumbnail").to_string("Url"),
             "http://www.example.com/image/481989943");
   EXPECT_EQ(value.at("Image").at("Thumbnail").at("Height").to_integer(), 125);
   EXPECT_EQ(value.at("Image").at("Thumbnail").at("Width").to_integer(), 100);
@@ -286,14 +286,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_TRUE(value.at(0).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value.at(0).at("precision").is_string());
+  EXPECT_TRUE(value.at(0).is_string("precision"));
   EXPECT_TRUE(value.at(0).at("Latitude").is_real());
   EXPECT_TRUE(value.at(0).at("Longitude").is_real());
-  EXPECT_TRUE(value.at(0).at("Address").is_string());
-  EXPECT_TRUE(value.at(0).at("City").is_string());
-  EXPECT_TRUE(value.at(0).at("State").is_string());
-  EXPECT_TRUE(value.at(0).at("Zip").is_string());
-  EXPECT_TRUE(value.at(0).at("Country").is_string());
+  EXPECT_TRUE(value.at(0).is_string("Address"));
+  EXPECT_TRUE(value.at(0).is_string("City"));
+  EXPECT_TRUE(value.at(0).is_string("State"));
+  EXPECT_TRUE(value.at(0).is_string("Zip"));
+  EXPECT_TRUE(value.at(0).is_string("Country"));
 
   // Member values
   EXPECT_EQ(value.at(0).at("precision"), "zip");
@@ -321,14 +321,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_TRUE(value.at(1).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value.at(1).at("precision").is_string());
+  EXPECT_TRUE(value.at(1).is_string("precision"));
   EXPECT_TRUE(value.at(1).at("Latitude").is_real());
   EXPECT_TRUE(value.at(1).at("Longitude").is_real());
-  EXPECT_TRUE(value.at(1).at("Address").is_string());
-  EXPECT_TRUE(value.at(1).at("City").is_string());
-  EXPECT_TRUE(value.at(1).at("State").is_string());
-  EXPECT_TRUE(value.at(1).at("Zip").is_string());
-  EXPECT_TRUE(value.at(1).at("Country").is_string());
+  EXPECT_TRUE(value.at(1).is_string("Address"));
+  EXPECT_TRUE(value.at(1).is_string("City"));
+  EXPECT_TRUE(value.at(1).is_string("State"));
+  EXPECT_TRUE(value.at(1).is_string("Zip"));
+  EXPECT_TRUE(value.at(1).is_string("Country"));
 
   // Member values
   EXPECT_EQ(value.at(1).at("precision"), "zip");

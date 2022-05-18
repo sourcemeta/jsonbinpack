@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <algorithm> // std::all_of
 #include <cctype>    // std::isxdigit
+#include <jsontoolkit/json.h>
 #include <jsontoolkit/json_string.h>
 #include <sstream> // std::ostringstream
 #include <utility> // std::move
@@ -285,4 +286,53 @@ auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
 auto sourcemeta::jsontoolkit::String::stringify() const -> std::string {
   this->assert_parsed_deep();
   return stringify_impl(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
+    -> bool {
+  return this->operator==(std::string_view{value});
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
+    -> bool {
+  this->assert_parsed_deep();
+
+  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
+    return false;
+  }
+
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
+    -> bool {
+  this->assert_parsed_deep();
+
+  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
+    return false;
+  }
+
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
+  // In the case of strings, flat and deep parse are the same
+  this->parse();
+  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
+  this->assert_parsed_flat();
+  return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
+  // In the case of strings, flat and deep parse are the same
+  this->parse();
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
+  this->assert_parsed_deep();
+  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
 }

@@ -496,3 +496,34 @@ auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) const
   document.assert_parsed_flat();
   return document.data.at(key).is_null();
 }
+
+auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) -> bool {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).is_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) const
+    -> bool {
+  this->assert_parsed_flat();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_flat();
+  return document.data.at(key).is_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key)
+    -> std::string {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).to_string();
+}
+
+auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key) const
+    -> std::string {
+  this->assert_parsed_deep();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.assert_parsed_deep();
+  return document.data.at(key).to_string();
+}
