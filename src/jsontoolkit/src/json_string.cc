@@ -14,21 +14,6 @@ sourcemeta::jsontoolkit::String::String()
 sourcemeta::jsontoolkit::String::String(std::string_view document)
     : Container{document, true, true} {}
 
-auto sourcemeta::jsontoolkit::String::value() & -> const std::string & {
-  this->parse();
-  return this->data;
-}
-
-auto sourcemeta::jsontoolkit::String::value() const & -> const std::string & {
-  this->assert_parsed_deep();
-  return this->data;
-}
-
-auto sourcemeta::jsontoolkit::String::value() && -> std::string {
-  this->parse();
-  return std::move(this->data);
-}
-
 // All code points may be placed within the quotation marks except for the code
 // points that must be escaped: quotation mark (U+0022), reverse solidus
 // (U+005C), and the control characters U+0000 to U+001F
@@ -214,36 +199,6 @@ auto sourcemeta::jsontoolkit::String::crend() const ->
   return this->data.crend();
 }
 
-auto sourcemeta::jsontoolkit::String::operator==(const std::string &value) const
-    -> bool {
-  this->assert_parsed_deep();
-  return this->data == value;
-}
-
-auto sourcemeta::jsontoolkit::String::operator==(std::string_view value) const
-    -> bool {
-  this->assert_parsed_deep();
-  return this->data == value;
-}
-
-auto sourcemeta::jsontoolkit::String::operator=(
-    const std::string &value) &noexcept -> sourcemeta::jsontoolkit::String & {
-  this->data = value;
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::String::operator=(
-    std::string_view value) &noexcept -> sourcemeta::jsontoolkit::String & {
-  this->data = value;
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::String::operator=(std::string &&value) &noexcept
-    -> sourcemeta::jsontoolkit::String & {
-  this->data = std::move(value);
-  return *this;
-}
-
 auto sourcemeta::jsontoolkit::String::operator==(
     const sourcemeta::jsontoolkit::String &value) const -> bool {
   this->assert_parsed_deep();
@@ -289,7 +244,9 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     return false;
   }
 
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
+  const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+  document.assert_parsed_deep();
+  return document.data == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
@@ -300,7 +257,9 @@ auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
     return false;
   }
 
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value() == value;
+  const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+  document.assert_parsed_deep();
+  return document.data == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
@@ -317,10 +276,14 @@ auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
 auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
   // In the case of strings, flat and deep parse are the same
   this->parse();
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
+  auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+  document.parse();
+  return document.data;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
   this->assert_parsed_deep();
-  return std::get<sourcemeta::jsontoolkit::String>(this->data).value();
+  const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+  document.assert_parsed_deep();
+  return document.data;
 }

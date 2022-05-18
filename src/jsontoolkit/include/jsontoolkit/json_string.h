@@ -13,11 +13,6 @@ public:
   String();
   String(std::string_view document);
 
-  // TODO: Remove these functions
-  auto value() & -> const std::string &;
-  [[nodiscard]] auto value() const & -> const std::string &;
-  auto value() && -> std::string;
-
   using traits_type = typename std::string::traits_type;
   using value_type = typename std::string::value_type;
   using allocator_type = typename std::string::allocator_type;
@@ -52,16 +47,6 @@ public:
   auto crend() -> const_reverse_iterator;
   [[nodiscard]] auto crbegin() const -> const_reverse_iterator;
   [[nodiscard]] auto crend() const -> const_reverse_iterator;
-
-  auto operator==(const std::string &) const -> bool;
-
-  // TODO: Remove this function
-  auto operator==(std::string_view) const -> bool;
-
-  // TODO: Remove these functions
-  auto operator=(const std::string &) &noexcept -> String &;
-  auto operator=(std::string_view) &noexcept -> String &;
-  auto operator=(std::string &&) &noexcept -> String &;
 
   auto operator==(const String &) const -> bool;
 
