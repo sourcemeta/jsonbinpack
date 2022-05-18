@@ -619,3 +619,10 @@ auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) const
   document.assert_parsed_flat();
   return document.data.at(key).empty();
 }
+
+auto sourcemeta::jsontoolkit::JSON::clear(const std::string &key) -> void {
+  this->parse_flat();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.parse_flat();
+  return document.data.at(key).clear();
+}
