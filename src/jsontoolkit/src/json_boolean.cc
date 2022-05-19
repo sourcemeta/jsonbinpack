@@ -24,39 +24,39 @@ auto sourcemeta::jsontoolkit::Boolean::parse(std::string_view document)
   throw std::domain_error("Invalid boolean document");
 }
 
+// If we set the boolean directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{sourcemeta::jsontoolkit::Boolean::stringify(value), false,
-                false},
-      data{std::in_place_type<bool>, value} {}
+    : Container{"", false, false}, data{std::in_place_type<bool>, value} {}
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
-  this->parse_flat();
+  this->parse();
   return std::holds_alternative<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() -> bool {
-  this->parse_flat();
+  this->parse();
   return std::get<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::get<bool>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const bool value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->assume_fully_parsed();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const bool value) const -> bool {
+  this->must_be_fully_parsed();
   return std::holds_alternative<bool>(this->data) &&
          std::get<bool>(this->data) == value;
 }

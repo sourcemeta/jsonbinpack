@@ -125,7 +125,6 @@ TEST(JSON, at_boolean) {
   sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(std::as_const(document).size(), 3);
 
   EXPECT_TRUE(document.is_boolean(0));
   EXPECT_TRUE(document.is_boolean(1));
@@ -134,6 +133,9 @@ TEST(JSON, at_boolean) {
   EXPECT_EQ(document.at(0), true);
   EXPECT_EQ(document.at(1), false);
   EXPECT_EQ(document.at(2), true);
+
+  document.parse();
+  EXPECT_EQ(std::as_const(document).size(), 3);
 }
 
 TEST(JSON, boolean_array_iterator) {
@@ -263,6 +265,8 @@ TEST(JSON, rfc8259_example_2) {
                                       "}\n"
                                       "]"};
 
+  value.parse();
+
   // Type and size
   EXPECT_TRUE(value.is_array());
   EXPECT_EQ(value.size(), 2);
@@ -306,6 +310,8 @@ TEST(JSON, rfc8259_example_2) {
   // Type and size
   EXPECT_TRUE(value.is_object(1));
   EXPECT_EQ(value.size(1), 8);
+  // .at() on object/arrays invalidates deep parsing
+  value.parse();
   EXPECT_EQ(std::as_const(value).size(1), 8);
 
   // Member keys

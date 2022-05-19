@@ -14,16 +14,16 @@ template <typename Wrapper> class GenericObject;
 
 template <typename Wrapper> class GenericArray final : public Container {
 public:
-  GenericArray()
-      : Container{std::string{GenericArray<Wrapper>::token_begin} +
-                      std::string{GenericArray<Wrapper>::token_end},
-                  true, true} {}
+  // By default, construct a fully-parsed empty array
+  GenericArray() : Container{"", false, false} {}
 
+  // A stringified JSON document. Not parsed at all
   GenericArray(std::string_view document) : Container{document, true, true} {}
 
+  // We don't know if the elements are parsed or not but we know this is
+  // a valid array.
   GenericArray(const std::vector<Wrapper> &elements)
       : Container{"", false, true}, data{elements} {}
-
   GenericArray(std::vector<Wrapper> &&elements)
       : Container{"", false, true}, data{std::move(elements)} {}
 
@@ -46,67 +46,75 @@ public:
   static const char token_delimiter = ',';
 
   auto begin() -> iterator {
-    this->parse_flat();
+    // We only need the overall structure
+    this->shallow_parse();
     return this->data.begin();
   }
 
   auto end() -> iterator {
-    this->parse_flat();
+    // We only need the overall structure
+    this->shallow_parse();
     return this->data.end();
   }
 
   auto cbegin() -> const_iterator {
-    this->parse_flat();
+    // This returns a const member, so it must be all parsed
+    this->parse();
     return this->data.cbegin();
   }
 
   auto cend() -> const_iterator {
-    this->parse_flat();
+    // This returns a const member, so it must be all parsed
+    this->parse();
     return this->data.cend();
   }
 
   [[nodiscard]] auto cbegin() const -> const_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.cbegin();
   }
 
   [[nodiscard]] auto cend() const -> const_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.cend();
   }
 
   auto rbegin() -> reverse_iterator {
-    this->parse_flat();
+    // We only need the overall structure
+    this->shallow_parse();
     return this->data.rbegin();
   }
 
   auto rend() -> reverse_iterator {
-    this->parse_flat();
+    // We only need the overall structure
+    this->shallow_parse();
     return this->data.rend();
   }
 
   auto crbegin() -> const_reverse_iterator {
-    this->parse_flat();
+    // This returns a const member, so it must be all parsed
+    this->parse();
     return this->data.crbegin();
   }
 
   auto crend() -> const_reverse_iterator {
-    this->parse_flat();
+    // This returns a const member, so it must be all parsed
+    this->parse();
     return this->data.crend();
   }
 
   [[nodiscard]] auto crbegin() const -> const_reverse_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.crbegin();
   }
 
   [[nodiscard]] auto crend() const -> const_reverse_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.crend();
   }
 
   auto operator==(const GenericArray<Wrapper> &value) const -> bool {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data == value.data;
   }
 

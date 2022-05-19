@@ -356,3 +356,9 @@ TEST(String, stringify_unicode_solidus) {
   EXPECT_EQ(document.stringify(), "\"/\"");
   EXPECT_EQ(std::as_const(document).stringify(), "\"/\"");
 }
+
+TEST(String, to_string_not_modify_result) {
+  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  document.to_string()[0] = 'x';
+  EXPECT_EQ(document.to_string(), "foo");
+}
