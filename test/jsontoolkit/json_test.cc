@@ -154,9 +154,7 @@ TEST(JSON, boolean_array_reverse_iterator) {
   sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
   std::vector<bool> result;
 
-  // TODO: Can we hide the Array type somehow?
-  for (sourcemeta::jsontoolkit::Array::reverse_iterator iterator =
-           value.to_array().rbegin();
+  for (auto iterator = value.to_array().rbegin();
        iterator != value.to_array().rend(); iterator++) {
     result.push_back(iterator->to_boolean());
   }

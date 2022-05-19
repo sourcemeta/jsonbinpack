@@ -285,8 +285,7 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
     -> sourcemeta::jsontoolkit::JSON & {
   this->parse_flat();
   std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key,
-                             sourcemeta::jsontoolkit::JSON{std::move(value)});
+      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
