@@ -131,15 +131,19 @@ auto sourcemeta::jsontoolkit::Number::parse(std::string_view input)
   return std::stod(std::string{document});
 }
 
+// If we set the integer directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
     : Container{"", false, false}, data{std::in_place_type<std::int64_t>,
                                         value} {}
 
+// If we set the double directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
     : Container{"", false, false}, data{std::in_place_type<double>, value} {}
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
     -> bool {
+  this->must_be_fully_parsed();
+
   if (std::holds_alternative<std::int64_t>(this->data)) {
     return std::get<std::int64_t>(this->data) == value;
   }
@@ -156,7 +160,8 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
+
   if (std::holds_alternative<double>(this->data)) {
     return std::get<double>(this->data) == value;
   }
@@ -172,41 +177,41 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const double value) const
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() -> bool {
-  this->parse_flat();
+  this->parse();
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real() -> bool {
-  this->parse_flat();
+  this->parse();
   return std::holds_alternative<double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() -> std::int64_t {
-  this->parse_flat();
+  this->parse();
   return std::get<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer() const -> std::int64_t {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::get<std::int64_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real() -> double {
-  this->parse_flat();
+  this->parse();
   return std::get<double>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real() const -> double {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::get<double>(this->data);
 }

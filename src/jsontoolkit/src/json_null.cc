@@ -15,29 +15,30 @@ auto sourcemeta::jsontoolkit::Null::parse(std::string_view document)
   throw std::domain_error("Invalid null document");
 }
 
+// If we set the null directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{sourcemeta::jsontoolkit::Null::stringify(), false, false},
-      data{std::in_place_type<std::nullptr_t>, nullptr} {}
+    : Container{"", false, false}, data{std::in_place_type<std::nullptr_t>,
+                                        nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null() -> bool {
-  this->parse_flat();
+  this->parse();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<std::nullptr_t>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::nullptr_t) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->assume_fully_parsed();
   this->data = nullptr;
   return *this;
 }

@@ -21,6 +21,9 @@ namespace sourcemeta::jsontoolkit {
 class JSON;
 using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
 using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
+// TODO: This class should probably not inherit from Container,
+// as its data class MUST be an owning string and not a view
+// Or maybe parameterize Container with a template?
 class JSON : public Container {
 public:
   // Constructor

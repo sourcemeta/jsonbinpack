@@ -21,18 +21,16 @@ protected:
   virtual auto parse_source() -> void = 0;
   virtual auto parse_deep() -> void = 0;
 
-  [[nodiscard]] auto is_flat_parsed() const -> bool;
-  [[nodiscard]] auto is_deep_parsed() const -> bool;
-
-  auto parse_flat() -> void;
   [[nodiscard]] auto source() const -> std::string_view;
   auto set_source(std::string_view) -> void;
 
-  auto set_parse_flat(bool) -> void;
-  auto set_parse_deep(bool) -> void;
-
-  auto assert_parsed_flat() const -> void;
-  auto assert_parsed_deep() const -> void;
+  auto must_be_fully_parsed() const -> void;
+  auto assume_fully_parsed() -> void;
+  auto shallow_parse() -> void;
+  auto assume_element_modification() -> void;
+  auto assume_unparsed() -> void;
+  [[nodiscard]] auto is_shallow_parsed() const -> bool;
+  [[nodiscard]] auto is_fully_parsed() const -> bool;
 
 private:
   std::string_view _source;

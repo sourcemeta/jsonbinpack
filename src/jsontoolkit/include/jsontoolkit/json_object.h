@@ -14,10 +14,10 @@ template <typename Wrapper> class GenericArray;
 
 template <typename Wrapper> class GenericObject final : public Container {
 public:
-  GenericObject()
-      : Container{std::string{GenericObject<Wrapper>::token_begin} +
-                      std::string{GenericObject<Wrapper>::token_end},
-                  true, true} {}
+  // By default, construct a fully-parsed empty object
+  GenericObject() : Container{"", false, false} {}
+
+  // A stringified JSON document. Not parsed at all
   GenericObject(std::string_view document) : Container{document, true, true} {}
 
   using key_type = typename std::map<std::string_view, Wrapper>::key_type;
@@ -48,37 +48,37 @@ public:
   static const char token_delimiter = ',';
 
   auto begin() -> iterator {
-    this->parse_flat();
+    this->shallow_parse();
     return this->data.begin();
   }
 
   auto end() -> iterator {
-    this->parse_flat();
+    this->shallow_parse();
     return this->data.end();
   }
 
   auto cbegin() -> const_iterator {
-    this->parse_flat();
+    this->parse();
     return this->data.cbegin();
   }
 
   auto cend() -> const_iterator {
-    this->parse_flat();
+    this->parse();
     return this->data.cend();
   }
 
   [[nodiscard]] auto cbegin() const -> const_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.cbegin();
   }
 
   [[nodiscard]] auto cend() const -> const_iterator {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data.cend();
   }
 
   auto operator==(const GenericObject<Wrapper> &value) const -> bool {
-    this->assert_parsed_deep();
+    this->must_be_fully_parsed();
     return this->data == value.data;
   }
 

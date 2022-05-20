@@ -6,11 +6,11 @@
 #include <sstream> // std::ostringstream
 #include <utility> // std::move
 
+// By default, construct a fully-parsed empty string
 sourcemeta::jsontoolkit::String::String()
-    : Container{std::string{sourcemeta::jsontoolkit::String::token_begin} +
-                    std::string{sourcemeta::jsontoolkit::String::token_end},
-                true, true} {}
+    : Container{"", false, false}, data{""} {}
 
+// A stringified JSON document. Not parsed at all
 sourcemeta::jsontoolkit::String::String(std::string_view document)
     : Container{document, true, true} {}
 
@@ -153,13 +153,13 @@ auto sourcemeta::jsontoolkit::String::cend() ->
 
 auto sourcemeta::jsontoolkit::String::cbegin() const ->
     typename sourcemeta::jsontoolkit::String::const_iterator {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return this->data.cbegin();
 }
 
 auto sourcemeta::jsontoolkit::String::cend() const ->
     typename sourcemeta::jsontoolkit::String::const_iterator {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return this->data.cend();
 }
 
@@ -189,19 +189,19 @@ auto sourcemeta::jsontoolkit::String::crend() ->
 
 auto sourcemeta::jsontoolkit::String::crbegin() const ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return this->data.crbegin();
 }
 
 auto sourcemeta::jsontoolkit::String::crend() const ->
     typename sourcemeta::jsontoolkit::String::const_reverse_iterator {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return this->data.crend();
 }
 
 auto sourcemeta::jsontoolkit::String::operator==(
     const sourcemeta::jsontoolkit::String &value) const -> bool {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return this->data == value.data;
 }
 
@@ -227,63 +227,63 @@ auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
 }
 
 auto sourcemeta::jsontoolkit::String::stringify() const -> std::string {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   return stringify_impl(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
     -> bool {
-  return this->operator==(std::string_view{value});
+  return this->operator==(std::string{value});
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
     -> bool {
-  this->assert_parsed_deep();
-
+  this->must_be_fully_parsed();
   if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     return false;
   }
 
   const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
-  document.assert_parsed_deep();
+  document.must_be_fully_parsed();
   return document.data == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
     -> bool {
-  this->assert_parsed_deep();
-
+  this->must_be_fully_parsed();
   if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     return false;
   }
 
   const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
-  document.assert_parsed_deep();
+  document.must_be_fully_parsed();
   return document.data == value;
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() -> bool {
-  // In the case of strings, flat and deep parse are the same
   this->parse();
+  // We don't need to bother to check whether the wrapped string class is parsed
+  // or not
   return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
 }
 
+// This function returns a copy, so there is no need to guard against modifies
 auto sourcemeta::jsontoolkit::JSON::to_string() -> std::string {
-  // In the case of strings, flat and deep parse are the same
   this->parse();
   auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
   document.parse();
   return document.data;
 }
 
+// This function returns a copy, so there is no need to guard against modifies
 auto sourcemeta::jsontoolkit::JSON::to_string() const -> std::string {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
-  document.assert_parsed_deep();
+  document.must_be_fully_parsed();
   return document.data;
 }

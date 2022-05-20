@@ -21,6 +21,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
   const sourcemeta::jsontoolkit::Schema schema{value};
   if (this->condition(schema)) {
     this->transform(value);
+    value.parse();
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
     const sourcemeta::jsontoolkit::Schema new_schema{value};

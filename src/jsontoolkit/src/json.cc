@@ -8,26 +8,31 @@
 #include <string>    // std::to_string
 #include <utility>   // std::in_place_type, std::move
 
+// Construct an unparsed document that fails to be parsed
 sourcemeta::jsontoolkit::JSON::JSON() : Container{"", true, true} {}
 
+// Literal copy
 sourcemeta::jsontoolkit::JSON::JSON(
     const sourcemeta::jsontoolkit::JSON &document)
-    : Container{document.source(), !document.is_flat_parsed(),
-                !document.is_deep_parsed()},
+    : Container{document.source(), !document.is_shallow_parsed(),
+                !document.is_fully_parsed()},
       data{document.data} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(
     sourcemeta::jsontoolkit::JSON &&document) noexcept
-    : Container{document.source(), !document.is_flat_parsed(),
-                !document.is_deep_parsed()},
+    : Container{document.source(), !document.is_shallow_parsed(),
+                !document.is_fully_parsed()},
       data{std::move(document.data)} {}
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const sourcemeta::jsontoolkit::JSON &document)
     -> sourcemeta::jsontoolkit::JSON & {
   this->set_source(document.source());
-  this->set_parse_flat(!document.is_flat_parsed());
-  this->set_parse_deep(!document.is_deep_parsed());
+  if (!document.is_shallow_parsed()) {
+    this->assume_unparsed();
+  } else if (!document.is_fully_parsed()) {
+    this->assume_element_modification();
+  }
+
   this->data = document.data;
   return *this;
 }
@@ -36,19 +41,22 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
     sourcemeta::jsontoolkit::JSON &&document) noexcept
     -> sourcemeta::jsontoolkit::JSON & {
   this->set_source(document.source());
-  this->set_parse_flat(!document.is_flat_parsed());
-  this->set_parse_deep(!document.is_deep_parsed());
+  if (!document.is_shallow_parsed()) {
+    this->assume_unparsed();
+  } else if (!document.is_fully_parsed()) {
+    this->assume_element_modification();
+  }
+
   this->data = std::move(document.data);
   document.data = nullptr;
   return *this;
 }
 
+// A stringified JSON document. Not parsed at all
 sourcemeta::jsontoolkit::JSON::JSON(const char *document)
     : Container{document, true, true} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &document)
     : Container{document, true, true} {}
-
 sourcemeta::jsontoolkit::JSON::JSON(std::string_view document)
     : Container{document, true, true} {}
 
@@ -116,108 +124,130 @@ auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
 
 auto sourcemeta::jsontoolkit::JSON::operator==(
     const sourcemeta::jsontoolkit::JSON &value) const -> bool {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
 
   if (this->data.index() != value.data.index()) {
     return false;
   }
 
-  switch (this->data.index()) {
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):
-    return std::get<sourcemeta::jsontoolkit::Array>(this->data) ==
-           std::get<sourcemeta::jsontoolkit::Array>(value.data);
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::object):
-    return std::get<sourcemeta::jsontoolkit::Object>(this->data) ==
-           std::get<sourcemeta::jsontoolkit::Object>(value.data);
-  case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::string):
-    return std::get<sourcemeta::jsontoolkit::String>(this->data) ==
-           std::get<sourcemeta::jsontoolkit::String>(value.data);
-  default:
-    return this->data == value.data;
+  if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
+    const auto &left = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+    const auto &right = std::get<sourcemeta::jsontoolkit::Object>(value.data);
+    left.must_be_fully_parsed();
+    right.must_be_fully_parsed();
+    return left == right;
   }
+
+  if (std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data)) {
+    const auto &left = std::get<sourcemeta::jsontoolkit::Array>(this->data);
+    const auto &right = std::get<sourcemeta::jsontoolkit::Array>(value.data);
+    left.must_be_fully_parsed();
+    right.must_be_fully_parsed();
+    return left == right;
+  }
+
+  if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
+    const auto &left = std::get<sourcemeta::jsontoolkit::String>(this->data);
+    const auto &right = std::get<sourcemeta::jsontoolkit::String>(value.data);
+    left.must_be_fully_parsed();
+    right.must_be_fully_parsed();
+    return left == right;
+  }
+
+  return this->data == value.data;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::int64_t value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const std::size_t value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const int value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = static_cast<std::int64_t>(value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_flat(false);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = value;
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_deep(true);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(
     const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_deep(true);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(std::string_view value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_deep(true);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = sourcemeta::jsontoolkit::String{value};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
     -> sourcemeta::jsontoolkit::JSON & {
-  this->set_parse_deep(true);
+  this->shallow_parse();
+  this->assume_element_modification();
   this->data = sourcemeta::jsontoolkit::String{std::move(value)};
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
   document.data.erase(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
-  this->parse_flat();
+  this->shallow_parse();
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
     auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-    document.parse_flat();
+    document.shallow_parse();
     return document.data.size();
   }
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data)) {
     auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
-    document.parse_flat();
+    document.shallow_parse();
     return document.data.size();
   }
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
-    document.parse_deep();
+    document.parse();
     return document.data.size();
   }
 
@@ -225,25 +255,25 @@ auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
 }
 
 auto sourcemeta::jsontoolkit::JSON::size() const -> std::size_t {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
     const auto &document =
         std::get<sourcemeta::jsontoolkit::Object>(this->data);
-    document.assert_parsed_flat();
+    document.must_be_fully_parsed();
     return document.data.size();
   }
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data)) {
     const auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
-    document.assert_parsed_flat();
+    document.must_be_fully_parsed();
     return document.data.size();
   }
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
     const auto &document =
         std::get<sourcemeta::jsontoolkit::String>(this->data);
-    document.assert_parsed_deep();
+    document.must_be_fully_parsed();
     return document.data.size();
   }
 
@@ -259,17 +289,21 @@ auto sourcemeta::jsontoolkit::JSON::empty() const -> bool {
 }
 
 auto sourcemeta::jsontoolkit::JSON::clear() -> void {
-  this->parse_flat();
+  this->shallow_parse();
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data)) {
     auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-    document.parse_flat();
+    document.shallow_parse();
+    this->assume_element_modification();
+    document.assume_element_modification();
     return document.data.clear();
   }
 
   if (std::holds_alternative<sourcemeta::jsontoolkit::Array>(this->data)) {
     auto &document = std::get<sourcemeta::jsontoolkit::Array>(this->data);
-    document.parse_flat();
+    document.shallow_parse();
+    this->assume_element_modification();
+    document.assume_element_modification();
     return document.data.clear();
   }
 
@@ -291,7 +325,7 @@ auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) -> std::string {
 
 auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
     -> std::string {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
 
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::boolean):
@@ -318,6 +352,7 @@ auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
 // This operator needs to be defined on the same namespace as the class
 namespace sourcemeta::jsontoolkit {
 auto operator<<(std::ostream &stream, const JSON &document) -> std::ostream & {
+  document.must_be_fully_parsed();
   // TODO: Start streaming as soon as possible.
   // With the current implementation, stringify() creates the string
   // and THEN starts piping it to the stream.

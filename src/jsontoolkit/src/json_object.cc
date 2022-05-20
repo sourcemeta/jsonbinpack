@@ -179,7 +179,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
 template <typename Wrapper>
 auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     std::size_t indent) const -> std::string {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   std::ostringstream stream;
   const bool pretty = indent > 0;
 
@@ -239,73 +239,95 @@ template std::string sourcemeta::jsontoolkit::GenericObject<
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, bool value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::int64_t value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::nullptr_t value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, double value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            const std::string &value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::string &&value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, const sourcemeta::jsontoolkit::JSON &value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  this->set_parse_deep(!value.is_flat_parsed());
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, value);
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, value);
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, sourcemeta::jsontoolkit::JSON &&value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  this->set_parse_deep(!value.is_flat_parsed());
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, std::move(value));
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, std::move(value));
   return *this;
 }
 
@@ -313,315 +335,370 @@ auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key,
     const std::vector<sourcemeta::jsontoolkit::JSON> &value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  this->set_parse_deep(true);
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, std::vector<sourcemeta::jsontoolkit::JSON> &&value)
     -> sourcemeta::jsontoolkit::JSON & {
-  this->parse_flat();
-  this->set_parse_deep(true);
-  std::get<sourcemeta::jsontoolkit::Object>(this->data)
-      .data.insert_or_assign(key,
-                             sourcemeta::jsontoolkit::JSON{std::move(value)});
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(
+      key, sourcemeta::jsontoolkit::JSON{std::move(value)});
   return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
   return document.data.at(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
   return std::move(document.data.at(key));
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
     sourcemeta::jsontoolkit::JSON & {
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key);
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument;
 }
 
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.find(key) != document.data.end();
 }
 
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
+  document.must_be_fully_parsed();
   return document.data.find(key) != document.data.end();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object()
     -> sourcemeta::jsontoolkit::Object & {
-  this->parse_flat();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  this->shallow_parse();
+  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  this->assume_element_modification();
+  return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object() const
     -> const sourcemeta::jsontoolkit::Object & {
-  this->assert_parsed_deep();
-  return std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  this->must_be_fully_parsed();
+  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  document.must_be_fully_parsed();
+  return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key)
     -> sourcemeta::jsontoolkit::Object & {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
   return document.data.at(key).to_object();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key) const
     -> const sourcemeta::jsontoolkit::Object & {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_object();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_object();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_object();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_object();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_object();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_array();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_array();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_array();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key)
     -> sourcemeta::jsontoolkit::Array & {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
   return document.data.at(key).to_array();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key) const
     -> const sourcemeta::jsontoolkit::Array & {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_array();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_array();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_boolean();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_boolean();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_boolean();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).to_boolean();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) const
     -> bool {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_boolean();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_boolean();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_null();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_null();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_null();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_string();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_string();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_string();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key)
     -> std::string {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).to_string();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key) const
     -> std::string {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_string();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_string();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_integer();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_integer();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_integer();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).is_real();
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).is_real();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.is_real();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key)
     -> std::int64_t {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).to_integer();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key) const
     -> std::int64_t {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_integer();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_integer();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) -> double {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).to_real();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) const
     -> double {
-  this->assert_parsed_deep();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_deep();
-  return document.data.at(key).to_real();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.to_real();
 }
 
 auto sourcemeta::jsontoolkit::JSON::size(const std::string &key)
     -> std::size_t {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).size();
 }
 
 auto sourcemeta::jsontoolkit::JSON::size(const std::string &key) const
     -> std::size_t {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).size();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.size();
 }
 
 auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) -> bool {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
   return document.data.at(key).empty();
 }
 
 auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) const
     -> bool {
-  this->assert_parsed_flat();
+  this->must_be_fully_parsed();
   const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.assert_parsed_flat();
-  return document.data.at(key).empty();
+  document.must_be_fully_parsed();
+  const auto &subdocument = document.data.at(key);
+  subdocument.must_be_fully_parsed();
+  return subdocument.empty();
 }
 
 auto sourcemeta::jsontoolkit::JSON::clear(const std::string &key) -> void {
-  this->parse_flat();
+  this->shallow_parse();
   auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
-  document.parse_flat();
+  document.shallow_parse();
+
+  // This element mutates a children, so we invalidate deep parsing
+  this->assume_element_modification();
+  document.assume_element_modification();
   return document.data.at(key).clear();
 }
