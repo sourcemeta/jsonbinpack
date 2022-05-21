@@ -2,16 +2,15 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_STRING_H_
 
 #include <jsontoolkit/json_container.h>
-#include <string>      // std::string
-#include <string_view> // std::string_view
+#include <string> // std::string
 
 namespace sourcemeta::jsontoolkit {
 // Forward declaration
 class JSON;
-class String final : public Container<std::string_view> {
+class String final : public Container<std::string> {
 public:
   String();
-  String(std::string_view document);
+  String(const std::string &document);
 
   using traits_type = typename std::string::traits_type;
   using value_type = typename std::string::value_type;

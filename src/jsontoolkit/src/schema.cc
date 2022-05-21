@@ -65,19 +65,19 @@ auto sourcemeta::jsontoolkit::Schema::is_integer(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::Schema::to_object() const
     -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                             std::string_view> & {
+                                             std::string> & {
   return this->schema.to_object();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array() const
     -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string_view> & {
+                                            std::string> & {
   return this->schema.to_array();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array(const std::string &key) const
     -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string_view> & {
+                                            std::string> & {
   return this->schema.to_array(key);
 }
 

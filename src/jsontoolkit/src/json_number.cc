@@ -20,7 +20,7 @@ auto sourcemeta::jsontoolkit::Number::stringify(const double value)
   return std::to_string(value);
 }
 
-auto sourcemeta::jsontoolkit::Number::parse(std::string_view input)
+auto sourcemeta::jsontoolkit::Number::parse(const std::string &input)
     -> std::variant<std::int64_t, double> {
 
   const std::string_view document{sourcemeta::jsontoolkit::utils::trim(input)};

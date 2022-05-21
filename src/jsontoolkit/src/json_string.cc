@@ -11,7 +11,7 @@ sourcemeta::jsontoolkit::String::String()
     : Container{std::string{""}, false, false}, data{""} {}
 
 // A stringified JSON document. Not parsed at all
-sourcemeta::jsontoolkit::String::String(std::string_view document)
+sourcemeta::jsontoolkit::String::String(const std::string &document)
     : Container{document, true, true} {}
 
 // All code points may be placed within the quotation marks except for the code
@@ -237,18 +237,6 @@ auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const
-    -> bool {
-  this->must_be_fully_parsed();
-  if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
-    return false;
-  }
-
-  const auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
-  document.must_be_fully_parsed();
-  return document.data == value;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator==(std::string_view value) const
     -> bool {
   this->must_be_fully_parsed();
   if (!std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {

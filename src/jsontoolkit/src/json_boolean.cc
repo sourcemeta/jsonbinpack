@@ -11,7 +11,7 @@ auto sourcemeta::jsontoolkit::Boolean::stringify(const bool value)
                    sourcemeta::jsontoolkit::Boolean::token_constant_false};
 }
 
-auto sourcemeta::jsontoolkit::Boolean::parse(std::string_view document)
+auto sourcemeta::jsontoolkit::Boolean::parse(const std::string &document)
     -> bool {
   if (document == sourcemeta::jsontoolkit::Boolean::token_constant_true) {
     return true;
@@ -26,8 +26,7 @@ auto sourcemeta::jsontoolkit::Boolean::parse(std::string_view document)
 
 // If we set the boolean directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{std::string{""}, false, false}, data{std::in_place_type<bool>,
-                                                     value} {}
+    : Container{"", false, false}, data{std::in_place_type<bool>, value} {}
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
   this->parse();

@@ -577,3 +577,18 @@ TEST(Object, new_key_move_assignment) {
   EXPECT_TRUE(document.is_string("bar"));
   EXPECT_EQ(document.at("bar"), "baz");
 }
+
+// TEST(Object, assign_literal_string) {
+// sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+// EXPECT_TRUE(document.is_object());
+// EXPECT_EQ(document.size(), 1);
+// EXPECT_TRUE(document.contains("foo"));
+// // TODO: Our APIs want a quoted "baz". Can we handle that transparently?
+// document.assign("bar", std::string{"baz"});
+// EXPECT_EQ(document.size(), 2);
+// EXPECT_TRUE(document.contains("foo"));
+// EXPECT_TRUE(document.contains("bar"));
+// document.parse();
+// EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
+// EXPECT_EQ(document.at("bar"), "baz");
+// }
