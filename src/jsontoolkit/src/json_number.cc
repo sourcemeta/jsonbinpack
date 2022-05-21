@@ -133,12 +133,13 @@ auto sourcemeta::jsontoolkit::Number::parse(std::string_view input)
 
 // If we set the integer directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const std::int64_t value)
-    : Container{"", false, false}, data{std::in_place_type<std::int64_t>,
-                                        value} {}
+    : Container{std::string{""}, false, false},
+      data{std::in_place_type<std::int64_t>, value} {}
 
 // If we set the double directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const double value)
-    : Container{"", false, false}, data{std::in_place_type<double>, value} {}
+    : Container{std::string{""}, false, false}, data{std::in_place_type<double>,
+                                                     value} {}
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::int64_t value) const
     -> bool {

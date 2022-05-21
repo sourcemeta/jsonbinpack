@@ -8,7 +8,7 @@
 
 // By default, construct a fully-parsed empty string
 sourcemeta::jsontoolkit::String::String()
-    : Container{"", false, false}, data{""} {}
+    : Container{std::string{""}, false, false}, data{""} {}
 
 // A stringified JSON document. Not parsed at all
 sourcemeta::jsontoolkit::String::String(std::string_view document)

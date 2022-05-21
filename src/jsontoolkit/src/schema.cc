@@ -17,8 +17,8 @@ auto sourcemeta::jsontoolkit::Schema::is_schema(
   // are being loaded by a given schema.
   if (document.is_object() &&
       document.contains(sourcemeta::jsontoolkit::Schema::keyword_core_schema) &&
-      document.at(sourcemeta::jsontoolkit::Schema::keyword_core_schema)
-          .is_string()) {
+      document.is_string(
+          sourcemeta::jsontoolkit::Schema::keyword_core_schema)) {
     return true;
   }
 
@@ -64,17 +64,20 @@ auto sourcemeta::jsontoolkit::Schema::is_integer(const std::string &key) const
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_object() const
-    -> const sourcemeta::jsontoolkit::Object & {
+    -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                             std::string_view> & {
   return this->schema.to_object();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array() const
-    -> const sourcemeta::jsontoolkit::Array & {
+    -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                            std::string_view> & {
   return this->schema.to_array();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array(const std::string &key) const
-    -> const sourcemeta::jsontoolkit::Array & {
+    -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                            std::string_view> & {
   return this->schema.to_array(key);
 }
 

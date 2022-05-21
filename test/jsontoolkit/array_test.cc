@@ -3,11 +3,6 @@
 #include <stdexcept> // std::domain_error
 #include <utility>   // std::as_const
 
-TEST(Array, nothrow_move_constructible) {
-  EXPECT_TRUE(std::is_nothrow_move_constructible<
-              sourcemeta::jsontoolkit::Array>::value);
-}
-
 TEST(Array, empty_array_string) {
   sourcemeta::jsontoolkit::JSON document{"[]"};
   EXPECT_TRUE(document.is_array());

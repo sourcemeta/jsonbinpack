@@ -4,28 +4,29 @@
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
-#include <string>      // std::string
-#include <string_view> // std::string_view
-#include <vector>      // std::vector
+#include <string> // std::string
+#include <vector> // std::vector
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
-template <typename Wrapper> class GenericObject;
+template <typename Wrapper, typename Source> class Object;
 
-template <typename Wrapper> class GenericArray final : public Container {
+template <typename Wrapper, typename Source>
+class Array final : public Container<Source> {
 public:
   // By default, construct a fully-parsed empty array
-  GenericArray() : Container{"", false, false} {}
+  Array() : Container<Source>{"", false, false} {}
 
   // A stringified JSON document. Not parsed at all
-  GenericArray(std::string_view document) : Container{document, true, true} {}
+  Array(Source document) : Container<Source>{document, true, true} {}
 
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
-  GenericArray(const std::vector<Wrapper> &elements)
-      : Container{"", false, true}, data{elements} {}
-  GenericArray(std::vector<Wrapper> &&elements)
-      : Container{"", false, true}, data{std::move(elements)} {}
+  Array(const std::vector<Wrapper> &elements)
+      : Container<Source>{std::string{""}, false, true}, data{elements} {}
+  Array(std::vector<Wrapper> &&elements)
+      : Container<Source>{std::string{""}, false, true}, data{std::move(
+                                                             elements)} {}
 
   using value_type = typename std::vector<Wrapper>::value_type;
   using allocator_type = typename std::vector<Wrapper>::allocator_type;
@@ -113,13 +114,13 @@ public:
     return this->data.crend();
   }
 
-  auto operator==(const GenericArray<Wrapper> &value) const -> bool {
+  auto operator==(const Array<Wrapper, Source> &value) const -> bool {
     this->must_be_fully_parsed();
     return this->data == value.data;
   }
 
   friend Wrapper;
-  friend sourcemeta::jsontoolkit::GenericObject<Wrapper>;
+  friend sourcemeta::jsontoolkit::Object<Wrapper, Source>;
 
 protected:
   auto stringify(std::size_t indent) -> std::string;

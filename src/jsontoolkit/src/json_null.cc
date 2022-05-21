@@ -17,8 +17,8 @@ auto sourcemeta::jsontoolkit::Null::parse(std::string_view document)
 
 // If we set the null directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const std::nullptr_t)
-    : Container{"", false, false}, data{std::in_place_type<std::nullptr_t>,
-                                        nullptr} {}
+    : Container{std::string{""}, false, false},
+      data{std::in_place_type<std::nullptr_t>, nullptr} {}
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::nullptr_t) const
     -> bool {
