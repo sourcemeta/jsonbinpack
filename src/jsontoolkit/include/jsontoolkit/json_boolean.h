@@ -9,7 +9,7 @@ namespace sourcemeta::jsontoolkit::Boolean {
 constexpr std::string_view token_constant_true{"true"};
 constexpr std::string_view token_constant_false{"false"};
 auto stringify(bool value) -> std::string;
-auto parse(std::string_view document) -> bool;
+auto parse(const std::string &document) -> bool;
 
 } // namespace sourcemeta::jsontoolkit::Boolean
 

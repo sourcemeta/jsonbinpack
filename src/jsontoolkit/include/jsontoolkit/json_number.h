@@ -32,7 +32,7 @@ const char token_number_seven = '\u0037';
 const char token_number_eight = '\u0038';
 const char token_number_nine = '\u0039';
 
-auto parse(std::string_view input) -> std::variant<std::int64_t, double>;
+auto parse(const std::string &input) -> std::variant<std::int64_t, double>;
 auto stringify(std::int64_t value) -> std::string;
 auto stringify(double value) -> std::string;
 

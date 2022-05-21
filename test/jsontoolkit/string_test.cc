@@ -2,7 +2,6 @@
 #include <jsontoolkit/json.h>
 #include <stdexcept>   // std::domain_error
 #include <string>      // std::string
-#include <string_view> // std::string_view
 #include <type_traits> // std::is_nothrow_move_constructible
 #include <utility>     // std::as_const
 
@@ -14,7 +13,7 @@ TEST(String, nothrow_move_constructible) {
 TEST(String, assignment_string_from_boolean) {
   sourcemeta::jsontoolkit::JSON document{"false"};
   EXPECT_FALSE(document.is_string());
-  document = std::string{"\"foo\""};
+  document = std::string{"foo"};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
 }
@@ -23,24 +22,7 @@ TEST(String, assignment_string_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
-  document = std::string{"\"bar\""};
-  EXPECT_TRUE(document.is_string());
-  EXPECT_EQ(document, "bar");
-}
-
-TEST(String, assignment_string_view_from_boolean) {
-  sourcemeta::jsontoolkit::JSON document{"false"};
-  EXPECT_FALSE(document.is_string());
-  document = std::string_view{"\"foo\""};
-  EXPECT_TRUE(document.is_string());
-  EXPECT_EQ(document, "foo");
-}
-
-TEST(String, assignment_string_view_from_string) {
-  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
-  EXPECT_TRUE(document.is_string());
-  EXPECT_EQ(document, "foo");
-  document = std::string_view{"\"bar\""};
+  document = std::string{"bar"};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "bar");
 }
@@ -48,7 +30,7 @@ TEST(String, assignment_string_view_from_string) {
 TEST(String, assignment_literal_from_boolean) {
   sourcemeta::jsontoolkit::JSON document{"false"};
   EXPECT_FALSE(document.is_string());
-  document = "\"foo\"";
+  document = "foo";
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
 }
@@ -57,7 +39,7 @@ TEST(String, assignment_literal_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
-  document = "\"bar\"";
+  document = "bar";
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "bar");
 }
@@ -69,7 +51,6 @@ TEST(String, empty_string) {
   EXPECT_EQ(document.to_string(), "");
   EXPECT_EQ(document, "");
   EXPECT_EQ(document, std::string{""});
-  EXPECT_EQ(document, std::string_view{""});
 }
 
 TEST(String, parse_deep_success) {
@@ -93,7 +74,6 @@ TEST(String, parse_non_empty) {
   EXPECT_EQ(document.to_string(), "foo");
   EXPECT_EQ(document, "foo");
   EXPECT_EQ(document, std::string{"foo"});
-  EXPECT_EQ(document, std::string_view{"foo"});
 }
 
 TEST(String, parse_padded) {

@@ -96,8 +96,8 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
 
       // Push the last element, if any, into the array
       if (level == 0 && element_start_index > 0) {
-        this->data.push_back(Wrapper(
-            document.substr(element_start_index, index - element_start_index)));
+        this->data.push_back(Wrapper(std::string{document.substr(
+            element_start_index, index - element_start_index)}));
         element_start_index = 0;
         element_cursor = 0;
         expecting_value = false;
@@ -114,8 +114,8 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
       sourcemeta::jsontoolkit::utils::ENSURE_PARSE(element_start_index != index,
                                                    "Invalid array value");
 
-      this->data.push_back(Wrapper(
-          document.substr(element_start_index, index - element_start_index)));
+      this->data.push_back(Wrapper(std::string{
+          document.substr(element_start_index, index - element_start_index)}));
       element_start_index = 0;
       element_cursor = index + 1;
       // We expect another value after a delimiter by definition
@@ -204,15 +204,14 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::stringify(
 // Explicit instantiation
 
 template void sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                             std::string_view>::parse_source();
+                                             std::string>::parse_source();
 
 template std::string
     sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                   std::string_view>::stringify(std::size_t);
+                                   std::string>::stringify(std::size_t);
 template std::string
     sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                   std::string_view>::stringify(std::size_t)
-        const;
+                                   std::string>::stringify(std::size_t) const;
 
 // We don't know if the elements are parsed or not but we know this is a valid
 // array.
@@ -220,22 +219,22 @@ sourcemeta::jsontoolkit::JSON::JSON(
     const std::vector<sourcemeta::jsontoolkit::JSON> &value)
     : Container{std::string{""}, false, true},
       data{std::in_place_type<sourcemeta::jsontoolkit::Array<
-               sourcemeta::jsontoolkit::JSON, std::string_view>>,
+               sourcemeta::jsontoolkit::JSON, std::string>>,
            value} {}
 sourcemeta::jsontoolkit::JSON::JSON(
     std::vector<sourcemeta::jsontoolkit::JSON> &&value) noexcept
     : Container{std::string{""}, false, true},
       data{std::in_place_type<sourcemeta::jsontoolkit::Array<
-               sourcemeta::jsontoolkit::JSON, std::string_view>>,
+               sourcemeta::jsontoolkit::JSON, std::string>>,
            std::move(value)} {}
 
 auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index)
     -> sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                       std::string_view> & {
+                                       std::string> & {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
 
   // This method returns a non-const reference, so clients
@@ -250,11 +249,11 @@ auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index)
 
 auto sourcemeta::jsontoolkit::JSON::to_object(std::size_t index) const
     -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                             std::string_view> & {
+                                             std::string> & {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -266,7 +265,7 @@ auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_object();
 }
@@ -275,7 +274,7 @@ auto sourcemeta::jsontoolkit::JSON::is_object(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -287,7 +286,7 @@ auto sourcemeta::jsontoolkit::JSON::at(
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   // This method returns a non-const reference, so clients
   // may be able to mutate the resulting object. Therefore,
@@ -302,7 +301,7 @@ auto sourcemeta::jsontoolkit::JSON::at(
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   // This method returns a non-const reference, so clients
   // may be able to mutate the resulting object. Therefore,
@@ -317,7 +316,7 @@ auto sourcemeta::jsontoolkit::JSON::at(std::size_t index) const & -> const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -330,7 +329,7 @@ auto sourcemeta::jsontoolkit::JSON::assign(std::size_t index,
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
 
   // Nested children modification invalidates deep parsing
@@ -344,20 +343,20 @@ auto sourcemeta::jsontoolkit::JSON::assign(std::size_t index,
 auto sourcemeta::jsontoolkit::JSON::is_array() -> bool {
   this->shallow_parse();
   return std::holds_alternative<sourcemeta::jsontoolkit::Array<
-      sourcemeta::jsontoolkit::JSON, std::string_view>>(this->data);
+      sourcemeta::jsontoolkit::JSON, std::string>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array() const -> bool {
   this->must_be_fully_parsed();
   return std::holds_alternative<sourcemeta::jsontoolkit::Array<
-      sourcemeta::jsontoolkit::JSON, std::string_view>>(this->data);
+      sourcemeta::jsontoolkit::JSON, std::string>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_array(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_array();
 }
@@ -366,7 +365,7 @@ auto sourcemeta::jsontoolkit::JSON::is_array(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -375,7 +374,7 @@ auto sourcemeta::jsontoolkit::JSON::is_array(std::size_t index) const -> bool {
 
 auto sourcemeta::jsontoolkit::JSON::to_array()
     -> sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                      std::string_view> & {
+                                      std::string> & {
   this->shallow_parse();
   // This method returns a non-const reference, so clients
   // may be able to mutate the resulting object. Therefore,
@@ -383,28 +382,28 @@ auto sourcemeta::jsontoolkit::JSON::to_array()
   this->assume_element_modification();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array() const
     -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string_view> & {
+                                            std::string> & {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array(std::size_t index)
     -> sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                      std::string_view> & {
+                                      std::string> & {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   // This method returns a non-const reference, so clients
   // may be able to mutate the resulting object. Therefore,
@@ -416,11 +415,11 @@ auto sourcemeta::jsontoolkit::JSON::to_array(std::size_t index)
 
 auto sourcemeta::jsontoolkit::JSON::to_array(std::size_t index) const
     -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string_view> & {
+                                            std::string> & {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -433,7 +432,7 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
   this->shallow_parse();
   this->assume_element_modification();
   this->data = sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>{value};
+                                              std::string>{value};
   return *this;
 }
 
@@ -442,9 +441,8 @@ auto sourcemeta::jsontoolkit::JSON::operator=(
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
   this->assume_element_modification();
-  this->data =
-      sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                     std::string_view>{std::move(value)};
+  this->data = sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                              std::string>{std::move(value)};
   return *this;
 }
 
@@ -452,7 +450,7 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_boolean();
 }
@@ -462,7 +460,7 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -473,7 +471,7 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).to_boolean();
 }
@@ -483,7 +481,7 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -494,7 +492,7 @@ auto sourcemeta::jsontoolkit::JSON::is_null(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_null();
 }
@@ -503,7 +501,7 @@ auto sourcemeta::jsontoolkit::JSON::is_null(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -514,7 +512,7 @@ auto sourcemeta::jsontoolkit::JSON::is_string(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_string();
 }
@@ -523,7 +521,7 @@ auto sourcemeta::jsontoolkit::JSON::is_string(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -535,7 +533,7 @@ auto sourcemeta::jsontoolkit::JSON::to_string(std::size_t index)
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).to_string();
 }
@@ -545,7 +543,7 @@ auto sourcemeta::jsontoolkit::JSON::to_string(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -556,7 +554,7 @@ auto sourcemeta::jsontoolkit::JSON::is_integer(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_integer();
 }
@@ -566,7 +564,7 @@ auto sourcemeta::jsontoolkit::JSON::is_integer(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -577,7 +575,7 @@ auto sourcemeta::jsontoolkit::JSON::is_real(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).is_real();
 }
@@ -586,7 +584,7 @@ auto sourcemeta::jsontoolkit::JSON::is_real(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -598,7 +596,7 @@ auto sourcemeta::jsontoolkit::JSON::to_integer(std::size_t index)
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).to_integer();
 }
@@ -608,7 +606,7 @@ auto sourcemeta::jsontoolkit::JSON::to_integer(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -619,7 +617,7 @@ auto sourcemeta::jsontoolkit::JSON::to_real(std::size_t index) -> double {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).to_real();
 }
@@ -628,7 +626,7 @@ auto sourcemeta::jsontoolkit::JSON::to_real(std::size_t index) const -> double {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -639,7 +637,7 @@ auto sourcemeta::jsontoolkit::JSON::size(std::size_t index) -> std::size_t {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).size();
 }
@@ -649,7 +647,7 @@ auto sourcemeta::jsontoolkit::JSON::size(std::size_t index) const
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -660,7 +658,7 @@ auto sourcemeta::jsontoolkit::JSON::empty(std::size_t index) -> bool {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
   return document.data.at(index).empty();
 }
@@ -669,7 +667,7 @@ auto sourcemeta::jsontoolkit::JSON::empty(std::size_t index) const -> bool {
   this->must_be_fully_parsed();
   const auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(index);
   subdocument.must_be_fully_parsed();
@@ -680,7 +678,7 @@ auto sourcemeta::jsontoolkit::JSON::clear(std::size_t index) -> void {
   this->shallow_parse();
   auto &document =
       std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string_view>>(this->data);
+                                              std::string>>(this->data);
   document.shallow_parse();
 
   // This element mutates a children, so we invalidate deep parsing

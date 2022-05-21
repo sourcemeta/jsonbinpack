@@ -9,13 +9,12 @@
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 
-#include <cstddef>     // std::nullptr_t
-#include <cstdint>     // std::int64_t
-#include <ostream>     // std::ostream
-#include <string>      // std::string
-#include <string_view> // std::string_view
-#include <variant>     // std::variant
-#include <vector>      // std::vector
+#include <cstddef> // std::nullptr_t
+#include <cstdint> // std::int64_t
+#include <ostream> // std::ostream
+#include <string>  // std::string
+#include <variant> // std::variant
+#include <vector>  // std::vector
 
 namespace sourcemeta::jsontoolkit {
 class JSON : public Container<std::string> {
@@ -34,7 +33,6 @@ public:
   JSON(std::nullptr_t);
   JSON(std::int64_t);
   JSON(double);
-  JSON(std::string_view);
 
   // Only to make the class default-constructible.
   // The resulting document is still invalid.
@@ -53,7 +51,6 @@ public:
   auto operator=(double) &noexcept -> JSON &;
   auto operator=(const char *) &noexcept -> JSON &;
   auto operator=(const std::string &) &noexcept -> JSON &;
-  auto operator=(std::string_view) &noexcept -> JSON &;
   auto operator=(std::string &&) &noexcept -> JSON &;
 
   // Comparison
@@ -62,7 +59,6 @@ public:
   auto operator==(std::nullptr_t) const -> bool;
   auto operator==(const char *) const -> bool;
   auto operator==(const std::string &) const -> bool;
-  auto operator==(std::string_view) const -> bool;
   auto operator==(std::int64_t) const -> bool;
   auto operator==(double) const -> bool;
 
@@ -98,19 +94,19 @@ public:
   auto is_object(const std::string &key) -> bool;
   [[nodiscard]] auto is_object() const -> bool;
   [[nodiscard]] auto is_object(const std::string &key) const -> bool;
-  auto to_object() -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+  auto to_object() -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   auto to_object(const std::string &key)
-      -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+      -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   [[nodiscard]] auto to_object() const
-      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   [[nodiscard]] auto to_object(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   auto is_array(const std::string &key) -> bool;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
   auto to_array(const std::string &key)
-      -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+      -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   [[nodiscard]] auto to_array(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   auto is_boolean(const std::string &key) -> bool;
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
   auto to_boolean(const std::string &key) -> bool;
@@ -146,19 +142,19 @@ public:
   [[nodiscard]] auto is_array() const -> bool;
   auto is_array(std::size_t index) -> bool;
   [[nodiscard]] auto is_array(std::size_t index) const -> bool;
-  auto to_array() -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+  auto to_array() -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   [[nodiscard]] auto to_array() const
-      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   auto to_array(std::size_t index)
-      -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+      -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   [[nodiscard]] auto to_array(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   auto is_object(std::size_t index) -> bool;
   [[nodiscard]] auto is_object(std::size_t index) const -> bool;
   auto to_object(std::size_t index)
-      -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+      -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   [[nodiscard]] auto to_object(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   auto is_boolean(std::size_t index) -> bool;
   [[nodiscard]] auto is_boolean(std::size_t index) const -> bool;
   auto to_boolean(std::size_t index) -> bool;
@@ -231,10 +227,9 @@ private:
     object = 5,
     string = 6
   };
-  // TODO: We want nested JSON instances to use string_view
   std::variant<bool, std::nullptr_t, std::int64_t, double,
-               sourcemeta::jsontoolkit::Array<JSON, std::string_view>,
-               sourcemeta::jsontoolkit::Object<JSON, std::string_view>,
+               sourcemeta::jsontoolkit::Array<JSON, std::string>,
+               sourcemeta::jsontoolkit::Object<JSON, std::string>,
                sourcemeta::jsontoolkit::String>
       data;
 };
