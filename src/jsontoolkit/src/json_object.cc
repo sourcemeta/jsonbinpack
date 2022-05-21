@@ -305,7 +305,11 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
-  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+
+  // TODO: Find a way to avoid stringifying
+  document.data.insert_or_assign(
+      key, sourcemeta::jsontoolkit::JSON{
+               sourcemeta::jsontoolkit::String::stringify(value)});
   return *this;
 }
 
@@ -319,7 +323,11 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
-  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+
+  // TODO: Find a way to avoid stringifying
+  document.data.insert_or_assign(
+      key, sourcemeta::jsontoolkit::JSON{
+               sourcemeta::jsontoolkit::String::stringify(value)});
   return *this;
 }
 

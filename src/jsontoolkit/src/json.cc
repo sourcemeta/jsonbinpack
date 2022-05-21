@@ -210,30 +210,6 @@ auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->shallow_parse();
-  this->assume_element_modification();
-  this->data = sourcemeta::jsontoolkit::String{value};
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
-  this->shallow_parse();
-  this->assume_element_modification();
-  this->data = sourcemeta::jsontoolkit::String{value};
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->shallow_parse();
-  this->assume_element_modification();
-  this->data = sourcemeta::jsontoolkit::String{std::move(value)};
-  return *this;
-}
-
 auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {
   this->shallow_parse();
   auto &document =

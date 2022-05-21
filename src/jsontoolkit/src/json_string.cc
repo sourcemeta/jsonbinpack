@@ -205,11 +205,12 @@ auto sourcemeta::jsontoolkit::String::operator==(
   return this->data == value.data;
 }
 
-static auto stringify_impl(const std::string &data) -> std::string {
+auto sourcemeta::jsontoolkit::String::stringify(const std::string &input)
+    -> std::string {
   std::ostringstream stream;
   stream << sourcemeta::jsontoolkit::String::token_begin;
 
-  for (const char character : data) {
+  for (const char character : input) {
     if (!is_character_allowed_in_json_string(character)) {
       stream << sourcemeta::jsontoolkit::String::token_escape;
     }
@@ -223,17 +224,50 @@ static auto stringify_impl(const std::string &data) -> std::string {
 
 auto sourcemeta::jsontoolkit::String::stringify() -> std::string {
   this->parse();
-  return stringify_impl(this->data);
+  return sourcemeta::jsontoolkit::String::stringify(this->data);
 }
 
 auto sourcemeta::jsontoolkit::String::stringify() const -> std::string {
   this->must_be_fully_parsed();
-  return stringify_impl(this->data);
+  return sourcemeta::jsontoolkit::String::stringify(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const char *const value) const
     -> bool {
   return this->operator==(std::string{value});
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(
+    const std::string &value) &noexcept -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
+  this->assume_element_modification();
+  sourcemeta::jsontoolkit::String new_value;
+  new_value.shallow_parse();
+  new_value.data = value;
+  this->data = sourcemeta::jsontoolkit::String{new_value};
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(std::string &&value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
+  this->assume_element_modification();
+  sourcemeta::jsontoolkit::String new_value;
+  new_value.shallow_parse();
+  new_value.data = std::move(value);
+  this->data = sourcemeta::jsontoolkit::String{new_value};
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::operator=(const char *const value) &noexcept
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
+  this->assume_element_modification();
+  sourcemeta::jsontoolkit::String new_value;
+  new_value.shallow_parse();
+  new_value.data = value;
+  this->data = sourcemeta::jsontoolkit::String{new_value};
+  return *this;
 }
 
 auto sourcemeta::jsontoolkit::JSON::operator==(const std::string &value) const

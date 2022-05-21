@@ -13,7 +13,7 @@ TEST(String, nothrow_move_constructible) {
 TEST(String, assignment_string_from_boolean) {
   sourcemeta::jsontoolkit::JSON document{"false"};
   EXPECT_FALSE(document.is_string());
-  document = std::string{"\"foo\""};
+  document = std::string{"foo"};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
 }
@@ -22,7 +22,7 @@ TEST(String, assignment_string_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
-  document = std::string{"\"bar\""};
+  document = std::string{"bar"};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "bar");
 }
@@ -30,7 +30,7 @@ TEST(String, assignment_string_from_string) {
 TEST(String, assignment_literal_from_boolean) {
   sourcemeta::jsontoolkit::JSON document{"false"};
   EXPECT_FALSE(document.is_string());
-  document = "\"foo\"";
+  document = "foo";
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
 }
@@ -39,7 +39,7 @@ TEST(String, assignment_literal_from_string) {
   sourcemeta::jsontoolkit::JSON document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "foo");
-  document = "\"bar\"";
+  document = "bar";
   EXPECT_TRUE(document.is_string());
   EXPECT_EQ(document, "bar");
 }

@@ -52,6 +52,7 @@ public:
   friend JSON;
 
 protected:
+  static auto stringify(const std::string &input) -> std::string;
   auto stringify() -> std::string;
   [[nodiscard]] auto stringify() const -> std::string;
 
