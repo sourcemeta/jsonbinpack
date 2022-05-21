@@ -18,13 +18,7 @@
 #include <vector>      // std::vector
 
 namespace sourcemeta::jsontoolkit {
-class JSON;
-using Array = sourcemeta::jsontoolkit::GenericArray<JSON>;
-using Object = sourcemeta::jsontoolkit::GenericObject<JSON>;
-// TODO: This class should probably not inherit from Container,
-// as its data class MUST be an owning string and not a view
-// Or maybe parameterize Container with a template?
-class JSON : public Container {
+class JSON : public Container<std::string> {
 public:
   // Constructor
   ~JSON() override = default;
@@ -104,17 +98,19 @@ public:
   auto is_object(const std::string &key) -> bool;
   [[nodiscard]] auto is_object() const -> bool;
   [[nodiscard]] auto is_object(const std::string &key) const -> bool;
-  auto to_object() -> sourcemeta::jsontoolkit::Object &;
-  auto to_object(const std::string &key) -> sourcemeta::jsontoolkit::Object &;
+  auto to_object() -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
+  auto to_object(const std::string &key)
+      -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
   [[nodiscard]] auto to_object() const
-      -> const sourcemeta::jsontoolkit::Object &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
   [[nodiscard]] auto to_object(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Object &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
   auto is_array(const std::string &key) -> bool;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
-  auto to_array(const std::string &key) -> sourcemeta::jsontoolkit::Array &;
+  auto to_array(const std::string &key)
+      -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
   [[nodiscard]] auto to_array(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Array &;
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
   auto is_boolean(const std::string &key) -> bool;
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
   auto to_boolean(const std::string &key) -> bool;
@@ -150,16 +146,19 @@ public:
   [[nodiscard]] auto is_array() const -> bool;
   auto is_array(std::size_t index) -> bool;
   [[nodiscard]] auto is_array(std::size_t index) const -> bool;
-  auto to_array() -> sourcemeta::jsontoolkit::Array &;
-  [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array &;
-  auto to_array(std::size_t index) -> sourcemeta::jsontoolkit::Array &;
+  auto to_array() -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+  [[nodiscard]] auto to_array() const
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
+  auto to_array(std::size_t index)
+      -> sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
   [[nodiscard]] auto to_array(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Array &;
+      -> const sourcemeta::jsontoolkit::Array<JSON, std::string_view> &;
   auto is_object(std::size_t index) -> bool;
   [[nodiscard]] auto is_object(std::size_t index) const -> bool;
-  auto to_object(std::size_t index) -> sourcemeta::jsontoolkit::Object &;
+  auto to_object(std::size_t index)
+      -> sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
   [[nodiscard]] auto to_object(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Object &;
+      -> const sourcemeta::jsontoolkit::Object<JSON, std::string_view> &;
   auto is_boolean(std::size_t index) -> bool;
   [[nodiscard]] auto is_boolean(std::size_t index) const -> bool;
   auto to_boolean(std::size_t index) -> bool;
@@ -232,8 +231,10 @@ private:
     object = 5,
     string = 6
   };
+  // TODO: We want nested JSON instances to use string_view
   std::variant<bool, std::nullptr_t, std::int64_t, double,
-               sourcemeta::jsontoolkit::Array, sourcemeta::jsontoolkit::Object,
+               sourcemeta::jsontoolkit::Array<JSON, std::string_view>,
+               sourcemeta::jsontoolkit::Object<JSON, std::string_view>,
                sourcemeta::jsontoolkit::String>
       data;
 };

@@ -26,7 +26,8 @@ auto sourcemeta::jsontoolkit::Boolean::parse(std::string_view document)
 
 // If we set the boolean directly, then the document is fully parsed
 sourcemeta::jsontoolkit::JSON::JSON(const bool value)
-    : Container{"", false, false}, data{std::in_place_type<bool>, value} {}
+    : Container{std::string{""}, false, false}, data{std::in_place_type<bool>,
+                                                     value} {}
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean() -> bool {
   this->parse();

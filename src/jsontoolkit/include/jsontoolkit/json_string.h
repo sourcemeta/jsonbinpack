@@ -8,7 +8,7 @@
 namespace sourcemeta::jsontoolkit {
 // Forward declaration
 class JSON;
-class String final : public Container {
+class String final : public Container<std::string_view> {
 public:
   String();
   String(std::string_view document);

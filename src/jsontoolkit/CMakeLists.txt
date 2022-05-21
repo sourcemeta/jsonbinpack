@@ -1,6 +1,5 @@
 add_library(sourcemeta_jsontoolkit
-  src/schema.cc
-  src/json.cc src/json_container.cc
+  src/schema.cc src/json.cc
   src/json_array.cc src/json_string.cc
   src/json_number.cc src/json_boolean.cc
   src/json_object.cc src/json_null.cc)

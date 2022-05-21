@@ -6,15 +6,15 @@
 
 #include "utils.h"
 
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
+template <typename Wrapper, typename Source>
+auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
   const std::string_view document{
       sourcemeta::jsontoolkit::utils::trim(this->source())};
   sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
       document.front() ==
-              sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin &&
+              sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_begin &&
           document.back() ==
-              sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end,
+              sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_end,
       "Invalid object");
 
   std::string_view::size_type key_start_index = 0;
@@ -32,10 +32,10 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
     const bool is_protected_section = array_level > 0 || is_string || level > 1;
 
     switch (character) {
-    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_begin:
+    case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
       array_level += 1;
       break;
-    case sourcemeta::jsontoolkit::GenericArray<Wrapper>::token_end:
+    case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
       array_level -= 1;
       break;
     case sourcemeta::jsontoolkit::String::token_begin:
@@ -63,10 +63,10 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       // We have a key and we are likely entering a string value
       is_string = !is_string;
       break;
-    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin:
+    case sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_begin:
       level += 1;
       break;
-    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end:
+    case sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_end:
       level -= 1;
       if (is_protected_section) {
         break;
@@ -97,7 +97,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
           !expecting_element_after_delimiter, "Trailing object comma");
       break;
-    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter:
+    case sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_delimiter:
       if (is_protected_section) {
         break;
       }
@@ -120,7 +120,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
 
       expecting_element_after_delimiter = true;
       break;
-    case sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter:
+    case sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_key_delimiter:
       if (is_protected_section) {
         break;
       }
@@ -167,23 +167,23 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::parse_source() -> void {
       array_level == 0 && !is_string && level == 0, "Unbalanced object");
 }
 
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
+template <typename Wrapper, typename Source>
+auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::stringify(
     std::size_t indent) -> std::string {
   this->parse();
-  return static_cast<const sourcemeta::jsontoolkit::GenericObject<Wrapper> *>(
+  return static_cast<const sourcemeta::jsontoolkit::Object<Wrapper, Source> *>(
              this)
       ->stringify(indent);
 }
 
-template <typename Wrapper>
-auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
+template <typename Wrapper, typename Source>
+auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::stringify(
     std::size_t indent) const -> std::string {
   this->must_be_fully_parsed();
   std::ostringstream stream;
   const bool pretty = indent > 0;
 
-  stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_begin;
+  stream << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_begin;
   if (pretty) {
     stream << sourcemeta::jsontoolkit::JSON::token_new_line;
   }
@@ -195,8 +195,8 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
     // TODO: We should use JSON string escaping logic here too
     stream << pair->first;
     stream << sourcemeta::jsontoolkit::String::token_end;
-    stream
-        << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_key_delimiter;
+    stream << sourcemeta::jsontoolkit::Object<Wrapper,
+                                              Source>::token_key_delimiter;
     if (pretty) {
       stream << sourcemeta::jsontoolkit::JSON::token_space;
     }
@@ -212,7 +212,7 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
 
     if (std::next(pair) != this->data.end()) {
       stream
-          << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_delimiter;
+          << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_delimiter;
       if (pretty) {
         stream << sourcemeta::jsontoolkit::JSON::token_new_line;
       }
@@ -226,21 +226,26 @@ auto sourcemeta::jsontoolkit::GenericObject<Wrapper>::stringify(
                           sourcemeta::jsontoolkit::JSON::token_space);
   }
 
-  stream << sourcemeta::jsontoolkit::GenericObject<Wrapper>::token_end;
+  stream << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_end;
   return stream.str();
 }
 
-template void sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::parse_source();
-template std::string sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::stringify(std::size_t);
-template std::string sourcemeta::jsontoolkit::GenericObject<
-    sourcemeta::jsontoolkit::JSON>::stringify(std::size_t) const;
+template void sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                              std::string_view>::parse_source();
+template std::string
+    sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                    std::string_view>::stringify(std::size_t);
+template std::string
+    sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                    std::string_view>::stringify(std::size_t)
+        const;
 
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, bool value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -252,7 +257,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::int64_t value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -264,7 +271,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::nullptr_t value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -275,7 +284,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, double value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -287,7 +298,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            const std::string &value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -299,7 +312,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key,
                                            std::string &&value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -311,7 +326,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, const sourcemeta::jsontoolkit::JSON &value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -323,7 +340,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, sourcemeta::jsontoolkit::JSON &&value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -336,7 +355,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(
     const std::vector<sourcemeta::jsontoolkit::JSON> &value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -348,7 +369,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, std::vector<sourcemeta::jsontoolkit::JSON> &&value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -360,7 +383,9 @@ auto sourcemeta::jsontoolkit::JSON::assign(
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) & -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -370,7 +395,9 @@ auto sourcemeta::jsontoolkit::JSON::at(
 auto sourcemeta::jsontoolkit::JSON::at(
     const std::string &key) && -> sourcemeta::jsontoolkit::JSON {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -380,7 +407,9 @@ auto sourcemeta::jsontoolkit::JSON::at(
 auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
     sourcemeta::jsontoolkit::JSON & {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -389,7 +418,9 @@ auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
 
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.find(key) != document.data.end();
 }
@@ -397,31 +428,42 @@ auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   return document.data.find(key) != document.data.end();
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object()
-    -> sourcemeta::jsontoolkit::Object & {
+    -> sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                       std::string_view> & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   this->assume_element_modification();
   return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object() const
-    -> const sourcemeta::jsontoolkit::Object & {
+    -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                             std::string_view> & {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   return document;
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key)
-    -> sourcemeta::jsontoolkit::Object & {
+    -> sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                       std::string_view> & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -429,9 +471,12 @@ auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key)
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key) const
-    -> const sourcemeta::jsontoolkit::Object & {
+    -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                             std::string_view> & {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -440,17 +485,21 @@ auto sourcemeta::jsontoolkit::JSON::to_object(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_object() -> bool {
   this->shallow_parse();
-  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
+  return std::holds_alternative<sourcemeta::jsontoolkit::Object<
+      sourcemeta::jsontoolkit::JSON, std::string_view>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object() const -> bool {
   this->must_be_fully_parsed();
-  return std::holds_alternative<sourcemeta::jsontoolkit::Object>(this->data);
+  return std::holds_alternative<sourcemeta::jsontoolkit::Object<
+      sourcemeta::jsontoolkit::JSON, std::string_view>>(this->data);
 }
 
 auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_object();
 }
@@ -458,7 +507,9 @@ auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -467,7 +518,9 @@ auto sourcemeta::jsontoolkit::JSON::is_object(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_array();
 }
@@ -475,7 +528,9 @@ auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -483,9 +538,12 @@ auto sourcemeta::jsontoolkit::JSON::is_array(const std::string &key) const
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key)
-    -> sourcemeta::jsontoolkit::Array & {
+    -> sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                      std::string_view> & {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
@@ -493,9 +551,12 @@ auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key)
 }
 
 auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key) const
-    -> const sourcemeta::jsontoolkit::Array & {
+    -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                            std::string_view> & {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -504,7 +565,9 @@ auto sourcemeta::jsontoolkit::JSON::to_array(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_boolean();
 }
@@ -512,7 +575,9 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -521,7 +586,9 @@ auto sourcemeta::jsontoolkit::JSON::is_boolean(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).to_boolean();
 }
@@ -529,7 +596,9 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -538,7 +607,9 @@ auto sourcemeta::jsontoolkit::JSON::to_boolean(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_null();
 }
@@ -546,7 +617,9 @@ auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -555,7 +628,9 @@ auto sourcemeta::jsontoolkit::JSON::is_null(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_string();
 }
@@ -563,7 +638,9 @@ auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -573,7 +650,9 @@ auto sourcemeta::jsontoolkit::JSON::is_string(const std::string &key) const
 auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key)
     -> std::string {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).to_string();
 }
@@ -581,7 +660,9 @@ auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key)
 auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key) const
     -> std::string {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -590,7 +671,9 @@ auto sourcemeta::jsontoolkit::JSON::to_string(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_integer();
 }
@@ -598,7 +681,9 @@ auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -607,7 +692,9 @@ auto sourcemeta::jsontoolkit::JSON::is_integer(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).is_real();
 }
@@ -615,7 +702,9 @@ auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -625,7 +714,9 @@ auto sourcemeta::jsontoolkit::JSON::is_real(const std::string &key) const
 auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key)
     -> std::int64_t {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).to_integer();
 }
@@ -633,7 +724,9 @@ auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key)
 auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key) const
     -> std::int64_t {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -642,7 +735,9 @@ auto sourcemeta::jsontoolkit::JSON::to_integer(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) -> double {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).to_real();
 }
@@ -650,7 +745,9 @@ auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) -> double {
 auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) const
     -> double {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -660,7 +757,9 @@ auto sourcemeta::jsontoolkit::JSON::to_real(const std::string &key) const
 auto sourcemeta::jsontoolkit::JSON::size(const std::string &key)
     -> std::size_t {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).size();
 }
@@ -668,7 +767,9 @@ auto sourcemeta::jsontoolkit::JSON::size(const std::string &key)
 auto sourcemeta::jsontoolkit::JSON::size(const std::string &key) const
     -> std::size_t {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -677,7 +778,9 @@ auto sourcemeta::jsontoolkit::JSON::size(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) -> bool {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
   return document.data.at(key).empty();
 }
@@ -685,7 +788,9 @@ auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) -> bool {
 auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) const
     -> bool {
   this->must_be_fully_parsed();
-  const auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.must_be_fully_parsed();
   const auto &subdocument = document.data.at(key);
   subdocument.must_be_fully_parsed();
@@ -694,7 +799,9 @@ auto sourcemeta::jsontoolkit::JSON::empty(const std::string &key) const
 
 auto sourcemeta::jsontoolkit::JSON::clear(const std::string &key) -> void {
   this->shallow_parse();
-  auto &document = std::get<sourcemeta::jsontoolkit::Object>(this->data);
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string_view>>(this->data);
   document.shallow_parse();
 
   // This element mutates a children, so we invalidate deep parsing
