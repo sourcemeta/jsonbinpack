@@ -5,6 +5,7 @@
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
 #include "rules/then_else_without_if.h"
+#include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
@@ -33,5 +34,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
           sourcemeta::jsonbinpack::canonicalizer::rules::ThenElseWithoutIf>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   EmptyPatternProperties>());
+  bundle.add(std::make_unique<
+             sourcemeta::jsonbinpack::canonicalizer::rules::TypeUnionAnyOf>());
   return bundle.apply(document);
 }
