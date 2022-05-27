@@ -58,6 +58,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - run: sudo apt-get install --yes doxygen
       - run: make html
       # Only deploy website from the master branch
       - if: github.ref == 'refs/heads/master'

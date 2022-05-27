@@ -25,4 +25,5 @@ html: \
 	build/www/index.html \
 	build/www/.nojekyll \
 	build/www/CNAME
+	doxygen
 .PHONY: html
