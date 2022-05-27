@@ -44,7 +44,7 @@ PROJECT_NUMBER         =
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = A space-efficient open-source binary JSON serialization format based on JSON Schema with both schema-driven and schema-less support.
+PROJECT_BRIEF          = "A space-efficient open-source binary JSON serialization format based on JSON Schema with both schema-driven and schema-less support."
 
 # With the PROJECT_LOGO tag one can specify a logo or an icon that is included
 # in the documentation. The maximum height of the logo should not exceed 55
