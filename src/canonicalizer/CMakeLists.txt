@@ -6,3 +6,4 @@ target_include_directories(sourcemeta_jsonbinpack_canonicalizer PRIVATE
 target_include_directories(sourcemeta_jsonbinpack_canonicalizer INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PRIVATE sourcemeta::jsontoolkit)
+target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta::assert)
