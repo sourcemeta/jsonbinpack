@@ -1,6 +1,6 @@
-#include <cassert> // assert
 #include <jsonbinpack/canonicalizer/rule.h>
 #include <jsontoolkit/schema.h>
+#include <sourcemeta/assert.h>
 #include <utility> // std::move
 
 sourcemeta::jsonbinpack::canonicalizer::Rule::Rule(std::string name)
@@ -25,7 +25,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
     const sourcemeta::jsontoolkit::Schema new_schema{value};
-    assert(!this->condition(new_schema));
+    sourcemeta::assert::CHECK(
+        !this->condition(new_schema),
+        "A rule condition must not hold after applying the rule");
     return true;
   }
 
