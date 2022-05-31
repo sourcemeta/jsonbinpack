@@ -377,3 +377,28 @@ TEST(Canonicalizer, type_union_anyof_2) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, implicit_type_union_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema"
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "null" },
+      { "type": "boolean" },
+      { "type": "object" },
+      { "type": "array" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "integer" }
+    ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
