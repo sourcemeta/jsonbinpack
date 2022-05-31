@@ -425,25 +425,6 @@ auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const
   return subdocument;
 }
 
-auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) -> bool {
-  this->shallow_parse();
-  auto &document =
-      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                               std::string>>(this->data);
-  document.shallow_parse();
-  return document.data.find(key) != document.data.end();
-}
-
-auto sourcemeta::jsontoolkit::JSON::contains(const std::string &key) const
-    -> bool {
-  this->must_be_fully_parsed();
-  const auto &document =
-      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                               std::string>>(this->data);
-  document.must_be_fully_parsed();
-  return document.data.find(key) != document.data.end();
-}
-
 auto sourcemeta::jsontoolkit::JSON::to_object()
     -> sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
                                        std::string> & {
