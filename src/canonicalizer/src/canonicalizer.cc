@@ -1,6 +1,7 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
+#include "rules/implicit_type_union.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
@@ -39,5 +40,8 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
                                   EmptyPatternProperties>());
   bundle.add(std::make_unique<
              sourcemeta::jsonbinpack::canonicalizer::rules::TypeUnionAnyOf>());
+  bundle.add(
+      std::make_unique<
+          sourcemeta::jsonbinpack::canonicalizer::rules::ImplicitTypeUnion>());
   return bundle.apply(document);
 }
