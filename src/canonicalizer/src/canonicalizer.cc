@@ -3,6 +3,7 @@
 #include "rules/if_without_then_else.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
+#include "rules/min_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
 #include "rules/then_else_without_if.h"
 #include "rules/type_union_anyof.h"
@@ -18,6 +19,8 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   MaxContainsWithoutContains>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  MinContainsWithoutContains>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   ContentSchemaWithoutContentMediaType>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
