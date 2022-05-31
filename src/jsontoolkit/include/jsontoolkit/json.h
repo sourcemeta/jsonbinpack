@@ -72,6 +72,8 @@ public:
   auto empty() -> bool;
   [[nodiscard]] auto empty() const -> bool;
   auto clear() -> void;
+  auto contains(const std::string &value) -> bool;
+  [[nodiscard]] auto contains(const std::string &value) const -> bool;
 
   // Object
   auto assign(const std::string &key, bool) -> JSON &;
@@ -87,8 +89,6 @@ public:
   auto at(const std::string &key) & -> JSON &;
   auto at(const std::string &key) && -> JSON;
   [[nodiscard]] auto at(const std::string &key) const & -> const JSON &;
-  auto contains(const std::string &key) -> bool;
-  [[nodiscard]] auto contains(const std::string &key) const -> bool;
   auto erase(const std::string &key) -> void;
   auto is_object() -> bool;
   auto is_object(const std::string &key) -> bool;

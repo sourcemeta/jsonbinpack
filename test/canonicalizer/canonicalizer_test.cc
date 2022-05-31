@@ -388,14 +388,33 @@ TEST(Canonicalizer, implicit_type_union_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "null" },
-      { "type": "boolean" },
-      { "type": "object" },
-      { "type": "array" },
-      { "type": "string" },
-      { "type": "number" },
-      { "type": "integer" }
+      { "multipleOf": 1, "type": "null" },
+      { "multipleOf": 1, "type": "boolean" },
+      { "multipleOf": 1, "type": "object" },
+      { "multipleOf": 1, "type": "array" },
+      { "multipleOf": 1, "type": "string" },
+      { "multipleOf": 1, "type": "number" },
+      { "multipleOf": 1, "type": "integer" }
     ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, implicit_unit_multiple_of_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer"
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1
   })JSON");
 
   document.parse();

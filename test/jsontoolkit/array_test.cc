@@ -354,3 +354,37 @@ TEST(Array, stringify_object_pretty) {
   EXPECT_EQ(std::as_const(document).stringify(true),
             "[\n  {\n    \"foo\": 1\n  }\n]");
 }
+
+TEST(Array, contains_string_key_true_unparsed) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  EXPECT_TRUE(document.contains("bar"));
+}
+
+TEST(Array, contains_string_key_true_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  document.parse();
+  EXPECT_TRUE(document.contains("bar"));
+}
+
+TEST(Array, contains_string_key_true_const) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  document.parse();
+  EXPECT_TRUE(std::as_const(document).contains("bar"));
+}
+
+TEST(Array, contains_string_key_false_unparsed) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  EXPECT_FALSE(document.contains("baz"));
+}
+
+TEST(Array, contains_string_key_false_parsed) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  document.parse();
+  EXPECT_FALSE(document.contains("baz"));
+}
+
+TEST(Array, contains_string_key_false_const) {
+  sourcemeta::jsontoolkit::JSON document{"[ \"foo\", \"bar\" ]"};
+  document.parse();
+  EXPECT_FALSE(std::as_const(document).contains("baz"));
+}

@@ -29,6 +29,7 @@ public:
       -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
                                               std::string> &;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
+  [[nodiscard]] auto is_string(const std::string &key) const -> bool;
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
   [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
   [[nodiscard]] auto is_integer(const std::string &key) const -> bool;

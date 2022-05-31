@@ -53,6 +53,11 @@ auto sourcemeta::jsontoolkit::Schema::is_array(const std::string &key) const
   return this->schema.is_array(key);
 }
 
+auto sourcemeta::jsontoolkit::Schema::is_string(const std::string &key) const
+    -> bool {
+  return this->schema.is_string(key);
+}
+
 auto sourcemeta::jsontoolkit::Schema::is_boolean(const std::string &key) const
     -> bool {
   return this->schema.is_boolean(key);

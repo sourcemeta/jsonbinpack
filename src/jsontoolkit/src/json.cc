@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <jsontoolkit/json.h>
 
+#include <algorithm>   // std::any_of
 #include <cmath>       // std::modf
 #include <iomanip>     // std::noshowpoint
 #include <sstream>     // std::ostringstream
@@ -357,6 +358,48 @@ auto sourcemeta::jsontoolkit::JSON::stringify(bool pretty) const
   default:
     throw std::domain_error("Invalid type");
   }
+}
+
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &value) -> bool {
+  this->shallow_parse();
+
+  if (this->is_object()) {
+    auto &document =
+        std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                                 std::string>>(this->data);
+    document.shallow_parse();
+    return document.data.find(value) != document.data.end();
+  }
+
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                              std::string>>(this->data);
+  document.shallow_parse();
+  return std::any_of(document.begin(), document.end(), [&](auto &element) {
+    // Because equality requires deep parsing
+    element.parse();
+    return element == value;
+  });
+}
+
+auto sourcemeta::jsontoolkit::JSON::contains(const std::string &value) const
+    -> bool {
+  this->must_be_fully_parsed();
+
+  if (this->is_object()) {
+    const auto &document =
+        std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                                 std::string>>(this->data);
+    document.must_be_fully_parsed();
+    return document.data.find(value) != document.data.end();
+  }
+
+  const auto &document =
+      std::get<sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+                                              std::string>>(this->data);
+  document.must_be_fully_parsed();
+  return std::any_of(document.cbegin(), document.cend(),
+                     [&](const auto &element) { return element == value; });
 }
 
 // This operator needs to be defined on the same namespace as the class

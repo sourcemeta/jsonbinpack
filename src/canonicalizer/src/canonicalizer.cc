@@ -2,6 +2,7 @@
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_type_union.h"
+#include "rules/implicit_unit_multiple_of.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
@@ -43,5 +44,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(
       std::make_unique<
           sourcemeta::jsonbinpack::canonicalizer::rules::ImplicitTypeUnion>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  ImplicitUnitMultipleOf>());
   return bundle.apply(document);
 }
