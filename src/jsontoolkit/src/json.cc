@@ -10,10 +10,6 @@
 #include <string_view> // std::string_view
 #include <utility>     // std::in_place_type, std::move
 
-// Construct an unparsed document that fails to be parsed
-sourcemeta::jsontoolkit::JSON::JSON()
-    : Container{std::string{""}, true, true} {}
-
 // Literal copy
 sourcemeta::jsontoolkit::JSON::JSON(
     const sourcemeta::jsontoolkit::JSON &document)

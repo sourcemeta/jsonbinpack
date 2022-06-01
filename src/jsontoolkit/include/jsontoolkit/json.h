@@ -36,7 +36,7 @@ public:
 
   // Only to make the class default-constructible.
   // The resulting document is still invalid.
-  JSON();
+  JSON() = default;
 
   // Assignment
   auto operator=(const JSON &document) -> JSON &;
