@@ -3,6 +3,7 @@
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_array_items.h"
 #include "rules/implicit_array_lower_bound.h"
+#include "rules/implicit_object_additional_properties.h"
 #include "rules/implicit_object_lower_bound.h"
 #include "rules/implicit_object_properties.h"
 #include "rules/implicit_object_required.h"
@@ -50,6 +51,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<ImplicitArrayItems>());
   bundle.add(std::make_unique<ImplicitObjectRequired>());
   bundle.add(std::make_unique<ImplicitObjectProperties>());
+  bundle.add(std::make_unique<ImplicitObjectAdditionalProperties>());
 
   return bundle.apply(document);
 }

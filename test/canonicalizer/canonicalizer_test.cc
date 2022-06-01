@@ -269,6 +269,7 @@ TEST(Canonicalizer, min_properties_required_tautology_1) {
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -292,6 +293,7 @@ TEST(Canonicalizer, min_properties_required_tautology_2) {
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -314,6 +316,7 @@ TEST(Canonicalizer, if_without_then_else_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -337,6 +340,7 @@ TEST(Canonicalizer, then_else_without_if_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -359,6 +363,7 @@ TEST(Canonicalizer, empty_pattern_properties_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -506,6 +511,7 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
+    "additionalProperties": {},
     "properties": {}
   })JSON");
 
