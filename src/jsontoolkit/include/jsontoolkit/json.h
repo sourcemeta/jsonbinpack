@@ -37,6 +37,12 @@ public:
   // The resulting document is still invalid.
   JSON() = default;
 
+  // Copy/move semantics
+  JSON(const JSON &) = default;
+  JSON(JSON &&) = default;
+  auto operator=(const JSON &) -> JSON & = default;
+  auto operator=(JSON &&) -> JSON & = default;
+
   // Assignment
   auto operator=(const std::vector<JSON> &) &noexcept -> JSON &;
   auto operator=(std::vector<JSON> &&) &noexcept -> JSON &;
