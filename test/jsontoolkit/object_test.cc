@@ -1,6 +1,7 @@
 #include <algorithm> // std::all_of
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <map>     // std::map
 #include <utility> // std::move
 
 TEST(Object, empty_object_string) {
@@ -605,4 +606,44 @@ TEST(Object, assign_literal_rvalue_string) {
   document.parse();
   EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
   EXPECT_EQ(document.at("bar"), "baz");
+}
+
+TEST(Object, map_copy_constructor) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.is_integer("foo"));
+  const std::map<std::string, sourcemeta::jsontoolkit::JSON> value{
+      {"bar", static_cast<std::int64_t>(5)}};
+  document.assign("xxx", value);
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.is_integer("foo"));
+  EXPECT_TRUE(document.contains("xxx"));
+  EXPECT_TRUE(document.is_object("xxx"));
+  EXPECT_EQ(document.size("xxx"), 1);
+  EXPECT_TRUE(document.at("xxx").contains("bar"));
+  EXPECT_TRUE(document.at("xxx").is_integer("bar"));
+  EXPECT_EQ(document.at("xxx").at("bar"), static_cast<std::int64_t>(5));
+}
+
+TEST(Object, map_move_constructor) {
+  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  EXPECT_TRUE(document.is_object());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.is_integer("foo"));
+  std::map<std::string, sourcemeta::jsontoolkit::JSON> value{
+      {"bar", static_cast<std::int64_t>(5)}};
+  document.assign("xxx", std::move(value));
+  EXPECT_EQ(document.size(), 2);
+  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.is_integer("foo"));
+  EXPECT_TRUE(document.contains("xxx"));
+  EXPECT_TRUE(document.is_object("xxx"));
+  EXPECT_EQ(document.size("xxx"), 1);
+  EXPECT_TRUE(document.at("xxx").contains("bar"));
+  EXPECT_TRUE(document.at("xxx").is_integer("bar"));
+  EXPECT_EQ(document.at("xxx").at("bar"), static_cast<std::int64_t>(5));
 }
