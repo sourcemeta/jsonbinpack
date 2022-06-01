@@ -299,7 +299,8 @@ TEST(Canonicalizer, if_without_then_else_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object"
+    "type": "object",
+    "minProperties": 0
   })JSON");
 
   document.parse();
@@ -319,7 +320,8 @@ TEST(Canonicalizer, then_else_without_if_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object"
+    "type": "object",
+    "minProperties": 0
   })JSON");
 
   document.parse();
@@ -338,7 +340,8 @@ TEST(Canonicalizer, empty_pattern_properties_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object"
+    "type": "object",
+    "minProperties": 0
   })JSON");
 
   document.parse();
@@ -464,6 +467,25 @@ TEST(Canonicalizer, implicit_string_lower_bound_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "minLength": 0
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, implicit_object_lower_bound_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object"
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "minProperties": 0
   })JSON");
 
   document.parse();
