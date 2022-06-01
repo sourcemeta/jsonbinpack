@@ -6,11 +6,6 @@
 #include <utility> // std::as_const
 #include <vector>  // std::vector
 
-TEST(JSON, nothrow_move_constructible) {
-  EXPECT_TRUE(
-      std::is_nothrow_move_constructible<sourcemeta::jsontoolkit::JSON>::value);
-}
-
 TEST(JSON, default_constructible_is_invalid) {
   EXPECT_TRUE(
       std::is_default_constructible<sourcemeta::jsontoolkit::JSON>::value);

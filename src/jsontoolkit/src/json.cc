@@ -10,47 +10,6 @@
 #include <string_view> // std::string_view
 #include <utility>     // std::in_place_type, std::move
 
-// Literal copy
-sourcemeta::jsontoolkit::JSON::JSON(
-    const sourcemeta::jsontoolkit::JSON &document)
-    : Container{document.source(), !document.is_shallow_parsed(),
-                !document.is_fully_parsed()},
-      data{document.data} {}
-sourcemeta::jsontoolkit::JSON::JSON(
-    sourcemeta::jsontoolkit::JSON &&document) noexcept
-    : Container{document.source(), !document.is_shallow_parsed(),
-                !document.is_fully_parsed()},
-      data{std::move(document.data)} {}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    const sourcemeta::jsontoolkit::JSON &document)
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->set_source(document.source());
-  if (!document.is_shallow_parsed()) {
-    this->assume_unparsed();
-  } else if (!document.is_fully_parsed()) {
-    this->assume_element_modification();
-  }
-
-  this->data = document.data;
-  return *this;
-}
-
-auto sourcemeta::jsontoolkit::JSON::operator=(
-    sourcemeta::jsontoolkit::JSON &&document) noexcept
-    -> sourcemeta::jsontoolkit::JSON & {
-  this->set_source(document.source());
-  if (!document.is_shallow_parsed()) {
-    this->assume_unparsed();
-  } else if (!document.is_fully_parsed()) {
-    this->assume_element_modification();
-  }
-
-  this->data = std::move(document.data);
-  document.data = nullptr;
-  return *this;
-}
-
 // A stringified JSON document. Not parsed at all
 sourcemeta::jsontoolkit::JSON::JSON(const char *document)
     : Container{document, true, true} {}

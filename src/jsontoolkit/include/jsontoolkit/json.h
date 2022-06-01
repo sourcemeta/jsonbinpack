@@ -25,8 +25,6 @@ public:
   // without being ambiguous with the constructor that takes JSON string?
   JSON(const char *);
   JSON(const std::string &);
-  JSON(const JSON &);
-  JSON(JSON &&) noexcept;
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
   JSON(bool);
@@ -39,8 +37,6 @@ public:
   JSON() = default;
 
   // Assignment
-  auto operator=(const JSON &document) -> JSON &;
-  auto operator=(JSON &&document) noexcept -> JSON &;
   auto operator=(const std::vector<JSON> &) &noexcept -> JSON &;
   auto operator=(std::vector<JSON> &&) &noexcept -> JSON &;
   auto operator=(bool) &noexcept -> JSON &;
