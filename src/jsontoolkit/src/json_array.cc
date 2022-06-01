@@ -308,7 +308,7 @@ auto sourcemeta::jsontoolkit::JSON::at(
   // we have to reset parse status at this point.
   this->assume_element_modification();
   document.assume_element_modification();
-  return std::move(document.data.at(index));
+  return document.data.at(index);
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(std::size_t index) const & -> const

@@ -410,7 +410,7 @@ auto sourcemeta::jsontoolkit::JSON::at(
   document.shallow_parse();
   this->assume_element_modification();
   document.assume_element_modification();
-  return std::move(document.data.at(key));
+  return document.data.at(key);
 }
 
 auto sourcemeta::jsontoolkit::JSON::at(const std::string &key) const & -> const

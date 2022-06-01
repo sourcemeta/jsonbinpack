@@ -17,7 +17,8 @@
 #include <vector>  // std::vector
 
 namespace sourcemeta::jsontoolkit {
-class JSON : public Container<std::string> {
+// Protected inheritance to avoid slicing
+class JSON : protected Container<std::string> {
 public:
   // Constructor
   ~JSON() override = default;
@@ -25,8 +26,6 @@ public:
   // without being ambiguous with the constructor that takes JSON string?
   JSON(const char *);
   JSON(const std::string &);
-  JSON(const JSON &);
-  JSON(JSON &&) noexcept;
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
   JSON(bool);
@@ -36,11 +35,15 @@ public:
 
   // Only to make the class default-constructible.
   // The resulting document is still invalid.
-  JSON();
+  JSON() = default;
+
+  // Copy/move semantics
+  JSON(const JSON &) = default;
+  JSON(JSON &&) = default;
+  auto operator=(const JSON &) -> JSON & = default;
+  auto operator=(JSON &&) -> JSON & = default;
 
   // Assignment
-  auto operator=(const JSON &document) -> JSON &;
-  auto operator=(JSON &&document) noexcept -> JSON &;
   auto operator=(const std::vector<JSON> &) &noexcept -> JSON &;
   auto operator=(std::vector<JSON> &&) &noexcept -> JSON &;
   auto operator=(bool) &noexcept -> JSON &;
@@ -65,6 +68,7 @@ public:
   // General
   auto stringify(bool pretty = false) -> std::string;
   [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
+  auto parse() -> void;
 
   // Containers
   auto size() -> std::size_t;

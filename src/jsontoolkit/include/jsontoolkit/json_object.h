@@ -11,14 +11,17 @@ namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
 template <typename Wrapper, typename String> class Array;
 
+// Protected inheritance to avoid slicing
 template <typename Wrapper, typename Source>
-class Object final : public Container<Source> {
+class Object final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty object
   Object() : Container<Source>{"", false, false} {}
 
   // A stringified JSON document. Not parsed at all
   Object(Source document) : Container<Source>{document, true, true} {}
+
+  auto parse() -> void { Container<Source>::parse(); }
 
   using key_type = typename std::map<Source, Wrapper>::key_type;
   using mapped_type = typename std::map<Source, Wrapper>::mapped_type;

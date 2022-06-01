@@ -9,6 +9,9 @@
 namespace sourcemeta::jsontoolkit {
 template <typename T> class Container {
 public:
+  // Construct an unparsed document that fails to be parsed
+  Container() = default;
+
   Container(const char *document, bool parse_flat, bool parse_deep)
       : _source{document}, must_parse_flat{parse_flat}, must_parse_deep{
                                                             parse_deep} {}
@@ -97,8 +100,8 @@ protected:
 
 private:
   T _source;
-  bool must_parse_flat;
-  bool must_parse_deep;
+  bool must_parse_flat{true};
+  bool must_parse_deep{true};
 };
 } // namespace sourcemeta::jsontoolkit
 

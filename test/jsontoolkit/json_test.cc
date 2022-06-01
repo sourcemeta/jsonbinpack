@@ -1,21 +1,32 @@
 #include <cstdint> // std::int64_t
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
-#include <stdexcept> // std::domain_error
-#include <type_traits> // std::is_nothrow_move_constructible, std::is_default_constructible
-#include <utility> // std::as_const
-#include <vector>  // std::vector
-
-TEST(JSON, nothrow_move_constructible) {
-  EXPECT_TRUE(
-      std::is_nothrow_move_constructible<sourcemeta::jsontoolkit::JSON>::value);
-}
+#include <stdexcept>   // std::domain_error
+#include <type_traits> // std::is_default_constructible
+#include <utility>     // std::as_const
+#include <vector>      // std::vector
 
 TEST(JSON, default_constructible_is_invalid) {
   EXPECT_TRUE(
       std::is_default_constructible<sourcemeta::jsontoolkit::JSON>::value);
   sourcemeta::jsontoolkit::JSON document;
   EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, proper_copy_equivalence_constructor) {
+  sourcemeta::jsontoolkit::JSON document{"[1,{\"foo\": 1.2},3]"};
+  document.parse();
+  sourcemeta::jsontoolkit::JSON copy{document};
+  copy.parse();
+  EXPECT_EQ(document, copy);
+}
+
+TEST(JSON, proper_copy_equivalence_assignment) {
+  sourcemeta::jsontoolkit::JSON document{"[1,{\"foo\": 1.2},3]"};
+  document.parse();
+  sourcemeta::jsontoolkit::JSON copy = document;
+  copy.parse();
+  EXPECT_EQ(document, copy);
 }
 
 TEST(JSON, set_boolean) {
