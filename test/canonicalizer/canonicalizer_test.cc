@@ -101,7 +101,8 @@ TEST(Canonicalizer, content_schema_without_content_media_type_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "string"
+    "type": "string",
+    "minLength": 0
   })JSON");
 
   document.parse();
@@ -444,6 +445,25 @@ TEST(Canonicalizer, implicit_array_lower_bound_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "minItems": 0
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, implicit_string_lower_bound_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string"
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string",
+    "minLength": 0
   })JSON");
 
   document.parse();

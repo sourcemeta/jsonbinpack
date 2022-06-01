@@ -2,6 +2,7 @@
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_array_lower_bound.h"
+#include "rules/implicit_string_lower_bound.h"
 #include "rules/implicit_type_union.h"
 #include "rules/implicit_unit_multiple_of.h"
 #include "rules/implied_array_unique_items.h"
@@ -43,6 +44,8 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
                                   EmptyPatternProperties>());
   bundle.add(std::make_unique<
              sourcemeta::jsonbinpack::canonicalizer::rules::TypeUnionAnyOf>());
+
+  // Implicits
   bundle.add(
       std::make_unique<
           sourcemeta::jsonbinpack::canonicalizer::rules::ImplicitTypeUnion>());
@@ -50,5 +53,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
                                   ImplicitUnitMultipleOf>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   ImplicitArrayLowerBound>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  ImplicitStringLowerBound>());
   return bundle.apply(document);
 }
