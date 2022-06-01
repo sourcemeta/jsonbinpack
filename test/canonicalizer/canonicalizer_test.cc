@@ -13,7 +13,8 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "array"
+    "type": "array",
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -35,7 +36,8 @@ TEST(Canonicalizer, max_contains_without_contains_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "contains": { "type": "string" },
-    "maxContains": 2
+    "maxContains": 2,
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -54,7 +56,8 @@ TEST(Canonicalizer, min_contains_without_contains_1) {
 
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "array"
+    "type": "array",
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -76,7 +79,8 @@ TEST(Canonicalizer, min_contains_without_contains_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "contains": { "type": "string" },
-    "minContains": 2
+    "minContains": 2,
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -120,7 +124,8 @@ TEST(Canonicalizer, unsatisfiable_max_contains_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "contains": { "type": "string" },
-    "maxItems": 2
+    "maxItems": 2,
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -141,7 +146,8 @@ TEST(Canonicalizer, implied_array_unique_items_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "maxItems": 1
+    "maxItems": 1,
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -162,7 +168,8 @@ TEST(Canonicalizer, implied_array_unique_items_2) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "const": [ 1 ]
+    "const": [ 1 ],
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -183,7 +190,8 @@ TEST(Canonicalizer, implied_array_unique_items_3) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "enum": [ [1] ]
+    "enum": [ [1] ],
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -204,7 +212,8 @@ TEST(Canonicalizer, implied_array_unique_items_4) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "enum": [ [1], [] ]
+    "enum": [ [1], [] ],
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -225,7 +234,8 @@ TEST(Canonicalizer, implied_array_unique_items_5) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "enum": [ [1], [], 2 ]
+    "enum": [ [1], [], 2 ],
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -415,6 +425,25 @@ TEST(Canonicalizer, implicit_unit_multiple_of_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, implicit_array_lower_bound_1) {
+  sourcemeta::jsontoolkit::JSON document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array"
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "minItems": 0
   })JSON");
 
   document.parse();

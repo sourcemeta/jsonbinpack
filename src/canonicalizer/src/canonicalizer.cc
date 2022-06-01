@@ -1,6 +1,7 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
+#include "rules/implicit_array_lower_bound.h"
 #include "rules/implicit_type_union.h"
 #include "rules/implicit_unit_multiple_of.h"
 #include "rules/implied_array_unique_items.h"
@@ -46,5 +47,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
           sourcemeta::jsonbinpack::canonicalizer::rules::ImplicitTypeUnion>());
   bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
                                   ImplicitUnitMultipleOf>());
+  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
+                                  ImplicitArrayLowerBound>());
   return bundle.apply(document);
 }
