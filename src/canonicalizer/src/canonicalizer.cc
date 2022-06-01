@@ -4,6 +4,7 @@
 #include "rules/implicit_array_items.h"
 #include "rules/implicit_array_lower_bound.h"
 #include "rules/implicit_object_lower_bound.h"
+#include "rules/implicit_object_properties.h"
 #include "rules/implicit_object_required.h"
 #include "rules/implicit_string_lower_bound.h"
 #include "rules/implicit_type_union.h"
@@ -48,6 +49,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<ImplicitObjectLowerBound>());
   bundle.add(std::make_unique<ImplicitArrayItems>());
   bundle.add(std::make_unique<ImplicitObjectRequired>());
+  bundle.add(std::make_unique<ImplicitObjectProperties>());
 
   return bundle.apply(document);
 }

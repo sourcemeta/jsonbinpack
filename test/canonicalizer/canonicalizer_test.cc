@@ -268,7 +268,8 @@ TEST(Canonicalizer, min_properties_required_tautology_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
-    "minProperties": 2
+    "minProperties": 2,
+    "properties": {}
   })JSON");
 
   document.parse();
@@ -290,7 +291,8 @@ TEST(Canonicalizer, min_properties_required_tautology_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
-    "minProperties": 2
+    "minProperties": 2,
+    "properties": {}
   })JSON");
 
   document.parse();
@@ -311,7 +313,8 @@ TEST(Canonicalizer, if_without_then_else_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": []
+    "required": [],
+    "properties": {}
   })JSON");
 
   document.parse();
@@ -333,7 +336,8 @@ TEST(Canonicalizer, then_else_without_if_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": []
+    "required": [],
+    "properties": {}
   })JSON");
 
   document.parse();
@@ -354,7 +358,8 @@ TEST(Canonicalizer, empty_pattern_properties_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": []
+    "required": [],
+    "properties": {}
   })JSON");
 
   document.parse();
@@ -500,7 +505,8 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": []
+    "required": [],
+    "properties": {}
   })JSON");
 
   document.parse();
