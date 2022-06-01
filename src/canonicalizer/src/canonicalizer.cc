@@ -1,6 +1,7 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
+#include "rules/implicit_array_items.h"
 #include "rules/implicit_array_lower_bound.h"
 #include "rules/implicit_object_lower_bound.h"
 #include "rules/implicit_string_lower_bound.h"
@@ -44,5 +45,6 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<ImplicitArrayLowerBound>());
   bundle.add(std::make_unique<ImplicitStringLowerBound>());
   bundle.add(std::make_unique<ImplicitObjectLowerBound>());
+  bundle.add(std::make_unique<ImplicitArrayItems>());
   return bundle.apply(document);
 }

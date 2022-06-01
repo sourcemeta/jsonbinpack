@@ -14,7 +14,8 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -37,7 +38,8 @@ TEST(Canonicalizer, max_contains_without_contains_2) {
     "type": "array",
     "contains": { "type": "string" },
     "maxContains": 2,
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -57,7 +59,8 @@ TEST(Canonicalizer, min_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -80,7 +83,8 @@ TEST(Canonicalizer, min_contains_without_contains_2) {
     "type": "array",
     "contains": { "type": "string" },
     "minContains": 2,
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -126,7 +130,8 @@ TEST(Canonicalizer, unsatisfiable_max_contains_1) {
     "type": "array",
     "contains": { "type": "string" },
     "maxItems": 2,
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -148,7 +153,8 @@ TEST(Canonicalizer, implied_array_unique_items_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "maxItems": 1,
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -170,7 +176,8 @@ TEST(Canonicalizer, implied_array_unique_items_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "const": [ 1 ],
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -192,7 +199,8 @@ TEST(Canonicalizer, implied_array_unique_items_3) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1] ],
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -214,7 +222,8 @@ TEST(Canonicalizer, implied_array_unique_items_4) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1], [] ],
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -236,7 +245,8 @@ TEST(Canonicalizer, implied_array_unique_items_5) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1], [], 2 ],
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
@@ -447,7 +457,8 @@ TEST(Canonicalizer, implicit_array_lower_bound_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0
+    "minItems": 0,
+    "items": true
   })JSON");
 
   document.parse();
