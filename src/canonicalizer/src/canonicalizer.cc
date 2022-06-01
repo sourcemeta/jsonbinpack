@@ -1,6 +1,13 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
+#include "rules/implicit_array_items.h"
+#include "rules/implicit_array_lower_bound.h"
+#include "rules/implicit_object_additional_properties.h"
+#include "rules/implicit_object_lower_bound.h"
+#include "rules/implicit_object_properties.h"
+#include "rules/implicit_object_required.h"
+#include "rules/implicit_string_lower_bound.h"
 #include "rules/implicit_type_union.h"
 #include "rules/implicit_unit_multiple_of.h"
 #include "rules/implied_array_unique_items.h"
@@ -18,33 +25,33 @@
 auto sourcemeta::jsonbinpack::canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON &document)
     -> sourcemeta::jsontoolkit::JSON & {
+  using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  MaxContainsWithoutContains>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  MinContainsWithoutContains>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  ContentSchemaWithoutContentMediaType>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  UnsatisfiableMaxContains>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  ImpliedArrayUniqueItems>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  MinPropertiesRequiredTautology>());
-  bundle.add(
-      std::make_unique<
-          sourcemeta::jsonbinpack::canonicalizer::rules::IfWithoutThenElse>());
-  bundle.add(
-      std::make_unique<
-          sourcemeta::jsonbinpack::canonicalizer::rules::ThenElseWithoutIf>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  EmptyPatternProperties>());
-  bundle.add(std::make_unique<
-             sourcemeta::jsonbinpack::canonicalizer::rules::TypeUnionAnyOf>());
-  bundle.add(
-      std::make_unique<
-          sourcemeta::jsonbinpack::canonicalizer::rules::ImplicitTypeUnion>());
-  bundle.add(std::make_unique<sourcemeta::jsonbinpack::canonicalizer::rules::
-                                  ImplicitUnitMultipleOf>());
+
+  // Superfluous
+  bundle.add(std::make_unique<ContentSchemaWithoutContentMediaType>());
+  bundle.add(std::make_unique<MaxContainsWithoutContains>());
+  bundle.add(std::make_unique<MinContainsWithoutContains>());
+  bundle.add(std::make_unique<UnsatisfiableMaxContains>());
+  bundle.add(std::make_unique<ImpliedArrayUniqueItems>());
+  bundle.add(std::make_unique<MinPropertiesRequiredTautology>());
+  bundle.add(std::make_unique<IfWithoutThenElse>());
+  bundle.add(std::make_unique<ThenElseWithoutIf>());
+  bundle.add(std::make_unique<EmptyPatternProperties>());
+
+  // Syntax sugar
+  bundle.add(std::make_unique<TypeUnionAnyOf>());
+
+  // Implicits
+  bundle.add(std::make_unique<ImplicitTypeUnion>());
+  bundle.add(std::make_unique<ImplicitUnitMultipleOf>());
+  bundle.add(std::make_unique<ImplicitArrayLowerBound>());
+  bundle.add(std::make_unique<ImplicitStringLowerBound>());
+  bundle.add(std::make_unique<ImplicitObjectLowerBound>());
+  bundle.add(std::make_unique<ImplicitArrayItems>());
+  bundle.add(std::make_unique<ImplicitObjectRequired>());
+  bundle.add(std::make_unique<ImplicitObjectProperties>());
+  bundle.add(std::make_unique<ImplicitObjectAdditionalProperties>());
+
   return bundle.apply(document);
 }

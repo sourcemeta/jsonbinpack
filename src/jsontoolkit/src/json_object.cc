@@ -241,6 +241,21 @@ template std::string
     sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
                                     std::string>::stringify(std::size_t) const;
 
+// We don't know if the elements are parsed or not but we know this is a valid
+// object.
+sourcemeta::jsontoolkit::JSON::JSON(
+    const std::map<std::string, sourcemeta::jsontoolkit::JSON> &value)
+    : Container{std::string{""}, false, true},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Object<
+               sourcemeta::jsontoolkit::JSON, std::string>>,
+           value} {}
+sourcemeta::jsontoolkit::JSON::JSON(
+    std::map<std::string, sourcemeta::jsontoolkit::JSON> &&value) noexcept
+    : Container{std::string{""}, false, true},
+      data{std::in_place_type<sourcemeta::jsontoolkit::Object<
+               sourcemeta::jsontoolkit::JSON, std::string>>,
+           std::move(value)} {}
+
 auto sourcemeta::jsontoolkit::JSON::assign(const std::string &key, bool value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
@@ -376,6 +391,37 @@ auto sourcemeta::jsontoolkit::JSON::assign(
 
 auto sourcemeta::jsontoolkit::JSON::assign(
     const std::string &key, std::vector<sourcemeta::jsontoolkit::JSON> &&value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string>>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(
+      key, sourcemeta::jsontoolkit::JSON{std::move(value)});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key,
+    const std::map<std::string, sourcemeta::jsontoolkit::JSON> &value)
+    -> sourcemeta::jsontoolkit::JSON & {
+  this->shallow_parse();
+  auto &document =
+      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+                                               std::string>>(this->data);
+  document.shallow_parse();
+  this->assume_element_modification();
+  document.assume_element_modification();
+  document.data.insert_or_assign(key, sourcemeta::jsontoolkit::JSON{value});
+  return *this;
+}
+
+auto sourcemeta::jsontoolkit::JSON::assign(
+    const std::string &key,
+    std::map<std::string, sourcemeta::jsontoolkit::JSON> &&value)
     -> sourcemeta::jsontoolkit::JSON & {
   this->shallow_parse();
   auto &document =

@@ -11,6 +11,7 @@
 
 #include <cstddef> // std::nullptr_t
 #include <cstdint> // std::int64_t
+#include <map>     // std::map
 #include <ostream> // std::ostream
 #include <string>  // std::string
 #include <variant> // std::variant
@@ -28,6 +29,8 @@ public:
   JSON(const std::string &);
   JSON(const std::vector<JSON> &);
   JSON(std::vector<JSON> &&) noexcept;
+  JSON(const std::map<std::string, JSON> &);
+  JSON(std::map<std::string, JSON> &&) noexcept;
   JSON(bool);
   JSON(std::nullptr_t);
   JSON(std::int64_t);
@@ -90,6 +93,9 @@ public:
   auto assign(const std::string &key, JSON &&) -> JSON &;
   auto assign(const std::string &key, const std::vector<JSON> &) -> JSON &;
   auto assign(const std::string &key, std::vector<JSON> &&) -> JSON &;
+  auto assign(const std::string &key, const std::map<std::string, JSON> &)
+      -> JSON &;
+  auto assign(const std::string &key, std::map<std::string, JSON> &&) -> JSON &;
   auto at(const std::string &key) & -> JSON &;
   auto at(const std::string &key) && -> JSON;
   [[nodiscard]] auto at(const std::string &key) const & -> const JSON &;

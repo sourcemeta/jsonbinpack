@@ -4,21 +4,21 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitUnitMultipleOf final
+class ImplicitObjectLowerBound final
     : public sourcemeta::jsonbinpack::canonicalizer::Rule {
 public:
-  ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};
+  ImplicitObjectLowerBound() : Rule("implicit_object_lower_bound"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Schema &schema) const
       -> bool override {
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.is_object() && schema.contains("type") &&
-           schema.at("type") == "integer" && !schema.contains("multipleOf");
+           schema.at("type") == "object" && !schema.contains("minProperties");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
-    schema.assign("multipleOf", static_cast<std::int64_t>(1));
+    schema.assign("minProperties", static_cast<std::int64_t>(0));
   }
 };
 

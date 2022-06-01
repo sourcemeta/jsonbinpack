@@ -21,6 +21,14 @@ public:
   // A stringified JSON document. Not parsed at all
   Object(Source document) : Container<Source>{document, true, true} {}
 
+  // We don't know if the elements are parsed or not but we know this is
+  // a valid array.
+  Object(const std::map<Source, Wrapper> &elements)
+      : Container<Source>{std::string{""}, false, true}, data{elements} {}
+  Object(std::map<Source, Wrapper> &&elements)
+      : Container<Source>{std::string{""}, false, true}, data{std::move(
+                                                             elements)} {}
+
   auto parse() -> void { Container<Source>::parse(); }
 
   using key_type = typename std::map<Source, Wrapper>::key_type;
