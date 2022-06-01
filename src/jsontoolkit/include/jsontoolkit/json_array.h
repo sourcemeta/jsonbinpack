@@ -11,8 +11,9 @@ namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
 template <typename Wrapper, typename Source> class Object;
 
+// Protected inheritance to avoid slicing
 template <typename Wrapper, typename Source>
-class Array final : public Container<Source> {
+class Array final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty array
   Array() : Container<Source>{"", false, false} {}
@@ -27,6 +28,8 @@ public:
   Array(std::vector<Wrapper> &&elements)
       : Container<Source>{std::string{""}, false, true}, data{std::move(
                                                              elements)} {}
+
+  auto parse() -> void { Container<Source>::parse(); }
 
   using value_type = typename std::vector<Wrapper>::value_type;
   using allocator_type = typename std::vector<Wrapper>::allocator_type;

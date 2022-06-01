@@ -7,10 +7,13 @@
 namespace sourcemeta::jsontoolkit {
 // Forward declaration
 class JSON;
-class String final : public Container<std::string> {
+// Protected inheritance to avoid slicing
+class String final : protected Container<std::string> {
 public:
   String();
   String(const std::string &document);
+
+  auto parse() -> void { Container<std::string>::parse(); }
 
   using traits_type = typename std::string::traits_type;
   using value_type = typename std::string::value_type;

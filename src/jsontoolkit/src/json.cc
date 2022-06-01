@@ -16,6 +16,10 @@ sourcemeta::jsontoolkit::JSON::JSON(const char *document)
 sourcemeta::jsontoolkit::JSON::JSON(const std::string &document)
     : Container{document, true, true} {}
 
+auto sourcemeta::jsontoolkit::JSON::parse() -> void {
+  sourcemeta::jsontoolkit::Container<std::string>::parse();
+}
+
 auto sourcemeta::jsontoolkit::JSON::parse_deep() -> void {
   switch (this->data.index()) {
   case static_cast<std::size_t>(sourcemeta::jsontoolkit::JSON::types::array):

@@ -17,7 +17,8 @@
 #include <vector>  // std::vector
 
 namespace sourcemeta::jsontoolkit {
-class JSON : public Container<std::string> {
+// Protected inheritance to avoid slicing
+class JSON : protected Container<std::string> {
 public:
   // Constructor
   ~JSON() override = default;
@@ -61,6 +62,7 @@ public:
   // General
   auto stringify(bool pretty = false) -> std::string;
   [[nodiscard]] auto stringify(bool pretty = false) const -> std::string;
+  auto parse() -> void;
 
   // Containers
   auto size() -> std::size_t;
