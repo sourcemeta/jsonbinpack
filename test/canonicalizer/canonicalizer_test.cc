@@ -388,13 +388,13 @@ TEST(Canonicalizer, implicit_type_union_1) {
   sourcemeta::jsontoolkit::JSON expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "multipleOf": 1, "type": "null" },
-      { "multipleOf": 1, "type": "boolean" },
-      { "multipleOf": 1, "type": "object" },
-      { "multipleOf": 1, "type": "array" },
-      { "multipleOf": 1, "type": "string" },
-      { "multipleOf": 1, "type": "number" },
-      { "multipleOf": 1, "type": "integer" }
+      { "type": "null" },
+      { "type": "boolean" },
+      { "type": "object" },
+      { "type": "array" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "integer" }
     ]
   })JSON");
 
