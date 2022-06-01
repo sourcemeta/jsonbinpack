@@ -16,6 +16,7 @@
 #include <jsontoolkit/json.h>
 #include <memory> // std::make_unique
 
+// TODO: Re-organize rule initializers based on their category
 auto sourcemeta::jsonbinpack::canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON &document)
     -> sourcemeta::jsontoolkit::JSON & {
