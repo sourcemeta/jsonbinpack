@@ -45,7 +45,7 @@ TEST(Array, parse_deep_success) {
   document.parse();
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_EQ(document.to_boolean(0), true);
+  EXPECT_EQ(document.at(0).to_boolean(), true);
 }
 
 TEST(Array, parse_deep_failure) {
@@ -78,22 +78,22 @@ TEST(Array, single_element) {
   sourcemeta::jsontoolkit::JSON document{"[true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_EQ(document.to_boolean(0), true);
+  EXPECT_EQ(document.at(0).to_boolean(), true);
 }
 
 TEST(Array, single_element_with_inner_space) {
   sourcemeta::jsontoolkit::JSON document{"[   true    ]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_EQ(document.to_boolean(0), true);
+  EXPECT_EQ(document.at(0).to_boolean(), true);
 }
 
 TEST(Array, two_elements_with_spacing) {
   sourcemeta::jsontoolkit::JSON document{"[   true  ,   false   ]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_EQ(document.to_boolean(0), true);
-  EXPECT_EQ(document.to_boolean(1), false);
+  EXPECT_EQ(document.at(0).to_boolean(), true);
+  EXPECT_EQ(document.at(1).to_boolean(), false);
 }
 
 TEST(Array, single_element_trailing_comma) {
@@ -145,40 +145,40 @@ TEST(Array, one_level_nested_array) {
   sourcemeta::jsontoolkit::JSON document{"[[true],false]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.is_array(0));
-  EXPECT_TRUE(document.is_boolean(1));
-  EXPECT_EQ(document.size(0), 1);
-  EXPECT_TRUE(document.at(0).is_boolean(0));
-  EXPECT_TRUE(document.at(0).to_boolean(0));
-  EXPECT_FALSE(document.to_boolean(1));
+  EXPECT_TRUE(document.at(0).is_array());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_EQ(document.at(0).size(), 1);
+  EXPECT_TRUE(document.at(0).at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).at(0).to_boolean());
+  EXPECT_FALSE(document.at(1).to_boolean());
 }
 
 TEST(Array, one_level_nested_array_with_padding) {
   sourcemeta::jsontoolkit::JSON document{"  [ [  true ]  ,  false  ]   "};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.is_array(0));
-  EXPECT_TRUE(document.is_boolean(1));
-  EXPECT_EQ(document.size(0), 1);
-  EXPECT_TRUE(document.at(0).is_boolean(0));
-  EXPECT_TRUE(document.at(0).to_boolean(0));
-  EXPECT_FALSE(document.to_boolean(1));
+  EXPECT_TRUE(document.at(0).is_array());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_EQ(document.at(0).size(), 1);
+  EXPECT_TRUE(document.at(0).at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).at(0).to_boolean());
+  EXPECT_FALSE(document.at(1).to_boolean());
 }
 
 TEST(Array, two_levels_nested_array) {
   sourcemeta::jsontoolkit::JSON document{"[true,[false,[true]]]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.is_boolean(0));
-  EXPECT_TRUE(document.to_boolean(0));
-  EXPECT_TRUE(document.is_array(1));
-  EXPECT_EQ(document.size(1), 2);
-  EXPECT_TRUE(document.at(1).is_boolean(0));
-  EXPECT_FALSE(document.at(1).to_boolean(0));
-  EXPECT_TRUE(document.at(1).is_array(1));
-  EXPECT_EQ(document.at(1).size(1), 1);
-  EXPECT_TRUE(document.at(1).at(1).is_boolean(0));
-  EXPECT_TRUE(document.at(1).at(1).to_boolean(0));
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).is_array());
+  EXPECT_EQ(document.at(1).size(), 2);
+  EXPECT_TRUE(document.at(1).at(0).is_boolean());
+  EXPECT_FALSE(document.at(1).at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).at(1).is_array());
+  EXPECT_EQ(document.at(1).at(1).size(), 1);
+  EXPECT_TRUE(document.at(1).at(1).at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).at(1).at(0).to_boolean());
 }
 
 TEST(Array, two_levels_nested_array_clear) {
@@ -202,118 +202,118 @@ TEST(Array, two_levels_nested_array_with_padding) {
       "  [  true , [  false  , [ true ]  ]  ] "};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.is_boolean(0));
-  EXPECT_TRUE(document.to_boolean(0));
-  EXPECT_TRUE(document.is_array(1));
-  EXPECT_EQ(document.size(1), 2);
-  EXPECT_TRUE(document.at(1).is_boolean(0));
-  EXPECT_FALSE(document.at(1).to_boolean(0));
-  EXPECT_TRUE(document.at(1).is_array(1));
-  EXPECT_EQ(document.at(1).size(1), 1);
-  EXPECT_TRUE(document.at(1).at(1).is_boolean(0));
-  EXPECT_TRUE(document.at(1).at(1).to_boolean(0));
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).is_array());
+  EXPECT_EQ(document.at(1).size(), 2);
+  EXPECT_TRUE(document.at(1).at(0).is_boolean());
+  EXPECT_FALSE(document.at(1).at(0).to_boolean());
+  EXPECT_TRUE(document.at(1).at(1).is_array());
+  EXPECT_EQ(document.at(1).at(1).size(), 1);
+  EXPECT_TRUE(document.at(1).at(1).at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).at(1).at(0).to_boolean());
 }
 
-TEST(Array, array_of_single_string) {
+TEST(Array, array_of_single0_string) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_string(0));
-  EXPECT_EQ(document.to_string(0), "foo");
+  EXPECT_TRUE(document.at(0).is_string());
+  EXPECT_EQ(document.at(0).to_string(), "foo");
 }
 
 TEST(Array, comma_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo,bar\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_string(0));
-  EXPECT_EQ(document.to_string(0), "foo,bar");
+  EXPECT_TRUE(document.at(0).is_string());
+  EXPECT_EQ(document.at(0).to_string(), "foo,bar");
 }
 
 TEST(Array, booleanarray_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"[false,true]\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_string(0));
-  EXPECT_EQ(document.to_string(0), "[false,true]");
+  EXPECT_TRUE(document.at(0).is_string());
+  EXPECT_EQ(document.at(0).to_string(), "[false,true]");
 }
 
 TEST(Array, escaped_quote_within_string_element) {
   sourcemeta::jsontoolkit::JSON document{"[\"foo\\\"bar\"]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_string(0));
-  EXPECT_EQ(document.to_string(0), "foo\"bar");
+  EXPECT_TRUE(document.at(0).is_string());
+  EXPECT_EQ(document.at(0).to_string(), "foo\"bar");
 }
 
 TEST(Array, single_positive_integer_element) {
   sourcemeta::jsontoolkit::JSON document{"[4]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_integer(0));
-  EXPECT_EQ(document.to_integer(0), 4);
+  EXPECT_TRUE(document.at(0).is_integer());
+  EXPECT_EQ(document.at(0).to_integer(), 4);
 }
 
 TEST(Array, single_negative_integer_element) {
   sourcemeta::jsontoolkit::JSON document{"[-4]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_integer(0));
-  EXPECT_EQ(document.to_integer(0), -4);
+  EXPECT_TRUE(document.at(0).is_integer());
+  EXPECT_EQ(document.at(0).to_integer(), -4);
 }
 
 TEST(Array, single_positive_real_number_element) {
   sourcemeta::jsontoolkit::JSON document{"[4.3]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_real(0));
-  EXPECT_EQ(document.to_real(0), 4.3);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), 4.3);
 }
 
 TEST(Array, single_negative_real_number_element) {
   sourcemeta::jsontoolkit::JSON document{"[-4.3]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_real(0));
-  EXPECT_EQ(document.to_real(0), -4.3);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), -4.3);
 }
 
 TEST(Array, single_exponential_number_element) {
   sourcemeta::jsontoolkit::JSON document{"[3e2]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_real(0));
-  EXPECT_EQ(document.to_real(0), 300.0);
+  EXPECT_TRUE(document.at(0).is_real());
+  EXPECT_EQ(document.at(0).to_real(), 300.0);
 }
 
 TEST(Array, single_empty_object_element) {
   sourcemeta::jsontoolkit::JSON document{"[{}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_object(0));
-  EXPECT_EQ(document.size(0), 0);
+  EXPECT_TRUE(document.at(0).is_object());
+  EXPECT_EQ(document.at(0).size(), 0);
 }
 
 TEST(Array, single_object_element_with_one_simple_key) {
   sourcemeta::jsontoolkit::JSON document{"[{\"foo\":1}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_object(0));
-  EXPECT_EQ(document.size(0), 1);
-  EXPECT_TRUE(document.at(0).is_integer("foo"));
-  EXPECT_EQ(document.at(0).to_integer("foo"), 1);
+  EXPECT_TRUE(document.at(0).is_object());
+  EXPECT_EQ(document.at(0).size(), 1);
+  EXPECT_TRUE(document.at(0).at("foo").is_integer());
+  EXPECT_EQ(document.at(0).at("foo").to_integer(), 1);
 }
 
 TEST(Array, single_object_element_with_two_simple_keys) {
   sourcemeta::jsontoolkit::JSON document{"[{\"foo\":1,\"bar\":2}]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.is_object(0));
-  EXPECT_EQ(document.size(0), 2);
-  EXPECT_TRUE(document.at(0).is_integer("foo"));
-  EXPECT_EQ(document.at(0).to_integer("foo"), 1);
-  EXPECT_TRUE(document.at(0).is_integer("bar"));
-  EXPECT_EQ(document.at(0).to_integer("bar"), 2);
+  EXPECT_TRUE(document.at(0).is_object());
+  EXPECT_EQ(document.at(0).size(), 2);
+  EXPECT_TRUE(document.at(0).at("foo").is_integer());
+  EXPECT_EQ(document.at(0).at("foo").to_integer(), 1);
+  EXPECT_TRUE(document.at(0).at("bar").is_integer());
+  EXPECT_EQ(document.at(0).at("bar").to_integer(), 2);
 }
 
 TEST(Array, equality_with_padding) {

@@ -170,17 +170,6 @@ auto sourcemeta::jsontoolkit::JSON::operator=(const double value) &noexcept
   return *this;
 }
 
-auto sourcemeta::jsontoolkit::JSON::erase(const std::string &key) -> void {
-  this->shallow_parse();
-  auto &document =
-      std::get<sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                               std::string>>(this->data);
-  document.shallow_parse();
-  this->assume_element_modification();
-  document.assume_element_modification();
-  document.data.erase(key);
-}
-
 auto sourcemeta::jsontoolkit::JSON::size() -> std::size_t {
   this->shallow_parse();
 

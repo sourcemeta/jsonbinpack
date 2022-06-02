@@ -23,7 +23,7 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
     schema.assign("minProperties",
-                  static_cast<std::int64_t>(schema.size("required")));
+                  static_cast<std::int64_t>(schema.at("required").size()));
   }
 };
 

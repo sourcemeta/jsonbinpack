@@ -96,50 +96,15 @@ public:
   auto assign(const std::string &key, const std::map<std::string, JSON> &)
       -> JSON &;
   auto assign(const std::string &key, std::map<std::string, JSON> &&) -> JSON &;
+  auto erase(const std::string &key) -> void;
   auto at(const std::string &key) & -> JSON &;
   auto at(const std::string &key) && -> JSON;
   [[nodiscard]] auto at(const std::string &key) const & -> const JSON &;
-  auto erase(const std::string &key) -> void;
   auto is_object() -> bool;
-  auto is_object(const std::string &key) -> bool;
   [[nodiscard]] auto is_object() const -> bool;
-  [[nodiscard]] auto is_object(const std::string &key) const -> bool;
   auto to_object() -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
-  auto to_object(const std::string &key)
-      -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
   [[nodiscard]] auto to_object() const
       -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
-  [[nodiscard]] auto to_object(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
-  auto is_array(const std::string &key) -> bool;
-  [[nodiscard]] auto is_array(const std::string &key) const -> bool;
-  auto to_array(const std::string &key)
-      -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
-  [[nodiscard]] auto to_array(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
-  auto is_boolean(const std::string &key) -> bool;
-  [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
-  auto to_boolean(const std::string &key) -> bool;
-  [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
-  auto is_null(const std::string &key) -> bool;
-  [[nodiscard]] auto is_null(const std::string &key) const -> bool;
-  auto is_string(const std::string &key) -> bool;
-  [[nodiscard]] auto is_string(const std::string &key) const -> bool;
-  auto to_string(const std::string &key) -> std::string;
-  [[nodiscard]] auto to_string(const std::string &key) const -> std::string;
-  auto is_integer(const std::string &key) -> bool;
-  [[nodiscard]] auto is_integer(const std::string &key) const -> bool;
-  auto is_real(const std::string &key) -> bool;
-  [[nodiscard]] auto is_real(const std::string &key) const -> bool;
-  auto to_integer(const std::string &key) -> std::int64_t;
-  [[nodiscard]] auto to_integer(const std::string &key) const -> std::int64_t;
-  auto to_real(const std::string &key) -> double;
-  [[nodiscard]] auto to_real(const std::string &key) const -> double;
-  auto size(const std::string &key) -> std::size_t;
-  [[nodiscard]] auto size(const std::string &key) const -> std::size_t;
-  auto empty(const std::string &key) -> bool;
-  [[nodiscard]] auto empty(const std::string &key) const -> bool;
-  auto clear(const std::string &key) -> void;
 
   // Array
   // TODO: Add more .assign() overloads for arrays
@@ -150,44 +115,9 @@ public:
   [[nodiscard]] auto at(std::size_t index) const & -> const JSON &;
   auto is_array() -> bool;
   [[nodiscard]] auto is_array() const -> bool;
-  auto is_array(std::size_t index) -> bool;
-  [[nodiscard]] auto is_array(std::size_t index) const -> bool;
   auto to_array() -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
   [[nodiscard]] auto to_array() const
       -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
-  auto to_array(std::size_t index)
-      -> sourcemeta::jsontoolkit::Array<JSON, std::string> &;
-  [[nodiscard]] auto to_array(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Array<JSON, std::string> &;
-  auto is_object(std::size_t index) -> bool;
-  [[nodiscard]] auto is_object(std::size_t index) const -> bool;
-  auto to_object(std::size_t index)
-      -> sourcemeta::jsontoolkit::Object<JSON, std::string> &;
-  [[nodiscard]] auto to_object(std::size_t index) const
-      -> const sourcemeta::jsontoolkit::Object<JSON, std::string> &;
-  auto is_boolean(std::size_t index) -> bool;
-  [[nodiscard]] auto is_boolean(std::size_t index) const -> bool;
-  auto to_boolean(std::size_t index) -> bool;
-  [[nodiscard]] auto to_boolean(std::size_t index) const -> bool;
-  auto is_null(std::size_t index) -> bool;
-  [[nodiscard]] auto is_null(std::size_t index) const -> bool;
-  auto is_string(std::size_t index) -> bool;
-  [[nodiscard]] auto is_string(std::size_t index) const -> bool;
-  auto to_string(std::size_t index) -> std::string;
-  [[nodiscard]] auto to_string(std::size_t index) const -> std::string;
-  auto is_integer(std::size_t index) -> bool;
-  [[nodiscard]] auto is_integer(std::size_t index) const -> bool;
-  auto is_real(std::size_t index) -> bool;
-  [[nodiscard]] auto is_real(std::size_t index) const -> bool;
-  auto to_integer(std::size_t index) -> std::int64_t;
-  [[nodiscard]] auto to_integer(std::size_t index) const -> std::int64_t;
-  auto to_real(std::size_t index) -> double;
-  [[nodiscard]] auto to_real(std::size_t index) const -> double;
-  auto size(std::size_t index) -> std::size_t;
-  [[nodiscard]] auto size(std::size_t index) const -> std::size_t;
-  auto empty(std::size_t index) -> bool;
-  [[nodiscard]] auto empty(std::size_t index) const -> bool;
-  auto clear(std::size_t index) -> void;
 
   // String
   auto is_string() -> bool;
