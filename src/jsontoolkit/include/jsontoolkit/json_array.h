@@ -126,7 +126,16 @@ public:
   friend sourcemeta::jsontoolkit::Object<Wrapper, Source>;
 
 protected:
-  auto stringify(std::size_t indent) -> std::string;
+  auto stringify(std::size_t indent) -> std::string {
+    // We need to fully parse before stringify
+    this->parse();
+    return static_cast<const sourcemeta::jsontoolkit::Array<Wrapper, Source> *>(
+               this)
+        ->stringify(indent);
+  }
+
+  // TODO: Move these stringify functions to JSON itself given this class is a
+  // friend
   [[nodiscard]] auto stringify(std::size_t indent) const -> std::string;
 
 private:

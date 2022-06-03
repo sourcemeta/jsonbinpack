@@ -10,8 +10,11 @@ class JSON;
 // Protected inheritance to avoid slicing
 class String final : protected Container<std::string> {
 public:
-  String();
-  String(const std::string &document);
+  // By default, construct a fully-parsed empty string
+  String() : Container{std::string{}, false, false} {}
+
+  // A stringified JSON document. Not parsed at all
+  String(const std::string &document) : Container{document, true, true} {}
 
   auto parse() -> void { Container<std::string>::parse(); }
 
@@ -37,30 +40,88 @@ public:
   static const char token_end = '\u0022';
   static const char token_escape = '\u005C';
 
-  auto begin() -> iterator;
-  auto end() -> iterator;
-  auto cbegin() -> const_iterator;
-  auto cend() -> const_iterator;
-  [[nodiscard]] auto cbegin() const -> const_iterator;
-  [[nodiscard]] auto cend() const -> const_iterator;
-  auto rbegin() -> reverse_iterator;
-  auto rend() -> reverse_iterator;
-  auto crbegin() -> const_reverse_iterator;
-  auto crend() -> const_reverse_iterator;
-  [[nodiscard]] auto crbegin() const -> const_reverse_iterator;
-  [[nodiscard]] auto crend() const -> const_reverse_iterator;
+  auto begin() -> iterator {
+    this->parse();
+    return this->data.begin();
+  }
 
-  auto operator==(const String &) const -> bool;
+  auto end() -> iterator {
+    this->parse();
+    return this->data.end();
+  }
+
+  auto cbegin() -> const_iterator {
+    this->parse();
+    return this->data.cbegin();
+  }
+
+  auto cend() -> const_iterator {
+    this->parse();
+    return this->data.cend();
+  }
+
+  [[nodiscard]] auto cbegin() const -> const_iterator {
+    this->must_be_fully_parsed();
+    return this->data.cbegin();
+  }
+
+  [[nodiscard]] auto cend() const -> const_iterator {
+    this->must_be_fully_parsed();
+    return this->data.cend();
+  }
+
+  auto rbegin() -> reverse_iterator {
+    this->parse();
+    return this->data.rbegin();
+  }
+
+  auto rend() -> reverse_iterator {
+    this->parse();
+    return this->data.rend();
+  }
+
+  auto crbegin() -> const_reverse_iterator {
+    this->parse();
+    return this->data.crbegin();
+  }
+
+  auto crend() -> const_reverse_iterator {
+    this->parse();
+    return this->data.crend();
+  }
+
+  [[nodiscard]] auto crbegin() const -> const_reverse_iterator {
+    this->must_be_fully_parsed();
+    return this->data.crbegin();
+  }
+
+  [[nodiscard]] auto crend() const -> const_reverse_iterator {
+    this->must_be_fully_parsed();
+    return this->data.crend();
+  }
+
+  auto operator==(const String &value) const -> bool {
+    this->must_be_fully_parsed();
+    return this->data == value.data;
+  }
 
   friend JSON;
 
 protected:
   static auto stringify(const std::string &input) -> std::string;
-  auto stringify() -> std::string;
-  [[nodiscard]] auto stringify() const -> std::string;
+
+  auto stringify() -> std::string {
+    this->parse();
+    return String::stringify(this->data);
+  }
+
+  [[nodiscard]] auto stringify() const -> std::string {
+    this->must_be_fully_parsed();
+    return String::stringify(this->data);
+  }
 
 private:
-  auto parse_source() -> void override;
+  auto parse_source() -> void override {}
   auto parse_deep() -> void override;
   std::string data;
 };
