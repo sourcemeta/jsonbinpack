@@ -24,10 +24,9 @@ public:
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
   Array(const std::vector<Wrapper> &elements)
-      : Container<Source>{std::string{""}, false, true}, data{elements} {}
+      : Container<Source>{Source{}, false, true}, data{elements} {}
   Array(std::vector<Wrapper> &&elements)
-      : Container<Source>{std::string{""}, false, true}, data{std::move(
-                                                             elements)} {}
+      : Container<Source>{Source{}, false, true}, data{std::move(elements)} {}
 
   auto parse() -> void { Container<Source>::parse(); }
 
@@ -203,10 +202,10 @@ private:
       is_protected_section = is_string || level > 1 || object_level > 0;
 
       switch (character) {
-      case sourcemeta::jsontoolkit::String::token_begin:
+      case sourcemeta::jsontoolkit::String<Source>::token_begin:
         // Don't do anything if this is a escaped quote
         if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String::token_escape) {
+            sourcemeta::jsontoolkit::String<Source>::token_escape) {
           break;
         }
 
@@ -220,7 +219,8 @@ private:
 
         is_string = !is_string;
         break;
-      case sourcemeta::jsontoolkit::Object<Wrapper, String>::token_begin:
+      case sourcemeta::jsontoolkit::Object<Wrapper,
+                                           String<Source>>::token_begin:
         object_level += 1;
         if (!is_protected_section) {
           element_start_index = index;
@@ -229,7 +229,7 @@ private:
         }
 
         break;
-      case sourcemeta::jsontoolkit::Object<Wrapper, String>::token_end:
+      case sourcemeta::jsontoolkit::Object<Wrapper, String<Source>>::token_end:
         object_level -= 1;
         break;
       case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
