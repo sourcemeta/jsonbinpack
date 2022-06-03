@@ -1,8 +1,7 @@
 add_library(sourcemeta_jsontoolkit
   src/schema.cc
-  src/json_array.cc src/json_string.cc
-  src/json_number.cc src/json_boolean.cc
-  src/json_object.cc src/json_null.cc)
+  src/json_string.cc src/json_number.cc
+  src/json_boolean.cc src/json_null.cc)
 add_library(sourcemeta::jsontoolkit ALIAS sourcemeta_jsontoolkit)
 target_link_libraries(sourcemeta_jsontoolkit PUBLIC sourcemeta::assert)
 target_include_directories(sourcemeta_jsontoolkit PRIVATE

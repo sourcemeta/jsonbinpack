@@ -745,11 +745,6 @@ public:
     return std::get<double>(this->data);
   }
 
-  static const char token_space = ' ';
-  static const char token_new_line = '\n';
-
-  static const std::size_t indentation = 2;
-
   friend auto operator<<(std::ostream &stream, const JSON<Source> &document)
       -> std::ostream & {
     document.must_be_fully_parsed();

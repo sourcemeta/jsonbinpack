@@ -4,8 +4,11 @@
 #include <algorithm> // std::for_each
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
-#include <map>    // std::map
-#include <string> // std::string
+#include <jsontoolkit/json_internal.h>
+#include <jsontoolkit/json_string.h>
+#include <map>     // std::map
+#include <sstream> // std::ostringstream
+#include <string>  // std::string
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
@@ -24,10 +27,9 @@ public:
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
   Object(const std::map<Source, Wrapper> &elements)
-      : Container<Source>{std::string{""}, false, true}, data{elements} {}
+      : Container<Source>{Source{}, false, true}, data{elements} {}
   Object(std::map<Source, Wrapper> &&elements)
-      : Container<Source>{std::string{""}, false, true}, data{std::move(
-                                                             elements)} {}
+      : Container<Source>{Source{}, false, true}, data{std::move(elements)} {}
 
   auto parse() -> void { Container<Source>::parse(); }
 
@@ -94,17 +96,224 @@ public:
 protected:
   auto stringify(std::size_t indent) -> std::string {
     this->parse();
-    return static_cast<
-               const sourcemeta::jsontoolkit::Object<Wrapper, Source> *>(this)
-        ->stringify(indent);
+    return static_cast<const Object<Wrapper, Source> *>(this)->stringify(
+        indent);
   }
 
-  // TODO: Move these stringify functions to JSON itself given this class is a
-  // friend
-  [[nodiscard]] auto stringify(std::size_t indent) const -> std::string;
+  [[nodiscard]] auto stringify(std::size_t indent) const -> std::string {
+    this->must_be_fully_parsed();
+    std::ostringstream stream;
+    const bool pretty = indent > 0;
+
+    stream << Object<Wrapper, Source>::token_begin;
+    if (pretty) {
+      stream << sourcemeta::jsontoolkit::internal::token_new_line;
+    }
+
+    for (auto pair = this->data.begin(); pair != this->data.end(); ++pair) {
+      stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
+                                indent,
+                            sourcemeta::jsontoolkit::internal::token_space);
+      stream << sourcemeta::jsontoolkit::String::token_begin;
+      // TODO: We should use JSON string escaping logic here too
+      stream << pair->first;
+      stream << sourcemeta::jsontoolkit::String::token_end;
+      stream << Object<Wrapper, Source>::token_key_delimiter;
+      if (pretty) {
+        stream << sourcemeta::jsontoolkit::internal::token_space;
+      }
+
+      if (pair->second.is_array()) {
+        stream << pair->second.to_array().stringify(pretty ? indent + 1
+                                                           : indent);
+      } else if (pair->second.is_object()) {
+        stream << pair->second.to_object().stringify(pretty ? indent + 1
+                                                            : indent);
+      } else {
+        stream << pair->second.stringify(pretty);
+      }
+
+      if (std::next(pair) != this->data.end()) {
+        stream << Object<Wrapper, Source>::token_delimiter;
+        if (pretty) {
+          stream << sourcemeta::jsontoolkit::internal::token_new_line;
+        }
+      }
+    }
+
+    if (pretty) {
+      stream << sourcemeta::jsontoolkit::internal::token_new_line;
+      stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
+                                (indent - 1),
+                            sourcemeta::jsontoolkit::internal::token_space);
+    }
+
+    stream << Object<Wrapper, Source>::token_end;
+    return stream.str();
+  }
 
 private:
-  auto parse_source() -> void override;
+  auto parse_source() -> void override {
+    const std::string_view document{
+        sourcemeta::jsontoolkit::internal::trim(this->source())};
+    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+        document.front() == Object<Wrapper, Source>::token_begin &&
+            document.back() == Object<Wrapper, Source>::token_end,
+        "Invalid object");
+
+    std::string_view::size_type key_start_index = 0;
+    std::string_view::size_type key_end_index = 0;
+    std::string_view::size_type value_start_index = 0;
+    std::string_view::size_type level = 1;
+    std::string_view::size_type array_level = 0;
+    bool is_string = false;
+    bool expecting_value_end = false;
+    bool expecting_element_after_delimiter = false;
+
+    for (std::string_view::size_type index = 1; index < document.size();
+         index++) {
+      std::string_view::const_reference character{document.at(index)};
+      const bool is_protected_section =
+          array_level > 0 || is_string || level > 1;
+
+      switch (character) {
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
+        array_level += 1;
+        break;
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
+        array_level -= 1;
+        break;
+      case sourcemeta::jsontoolkit::String::token_begin:
+        // Don't do anything if this is a escaped quote
+        if (document.at(index - 1) ==
+            sourcemeta::jsontoolkit::String::token_escape) {
+          break;
+        }
+
+        // We do not have a key
+        if (key_start_index == 0) {
+          key_start_index = index + 1;
+          key_end_index = 0;
+          is_string = true;
+          break;
+        }
+
+        // We have the beginning of a key already
+        if (key_end_index == 0) {
+          key_end_index = index;
+          is_string = false;
+          break;
+        }
+
+        // We have a key and we are likely entering a string value
+        is_string = !is_string;
+        break;
+      case Object<Wrapper, Source>::token_begin:
+        level += 1;
+        break;
+      case Object<Wrapper, Source>::token_end:
+        level -= 1;
+        if (is_protected_section) {
+          break;
+        }
+
+        // This means we found a key without a corresponding value
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            key_start_index == 0 || key_end_index == 0 ||
+                value_start_index != 0,
+            "Invalid object value");
+
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            value_start_index != index, "Invalid object value");
+
+        // We have a key and the start of the value, but the object ended
+        if (key_start_index != 0 && key_end_index != 0 &&
+            value_start_index != 0) {
+          this->data.insert(
+              {Source{document.substr(key_start_index,
+                                      key_end_index - key_start_index)},
+               Wrapper{Source{document.substr(value_start_index,
+                                              index - value_start_index)}}});
+          value_start_index = 0;
+          key_start_index = 0;
+          key_end_index = 0;
+          expecting_value_end = false;
+          expecting_element_after_delimiter = false;
+        }
+
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            !expecting_element_after_delimiter, "Trailing object comma");
+        break;
+      case Object<Wrapper, Source>::token_delimiter:
+        if (is_protected_section) {
+          break;
+        }
+
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(value_start_index != 0,
+                                                        "Invalid object value");
+
+        // We have a key and the start of the value, but we found a comma
+        if (key_start_index != 0 && key_end_index != 0 &&
+            value_start_index != 0) {
+          this->data.insert(
+              {Source{document.substr(key_start_index,
+                                      key_end_index - key_start_index)},
+               Wrapper{Source{document.substr(value_start_index,
+                                              index - value_start_index)}}});
+          value_start_index = 0;
+          key_start_index = 0;
+          key_end_index = 0;
+          expecting_value_end = false;
+        }
+
+        expecting_element_after_delimiter = true;
+        break;
+      case Object<Wrapper, Source>::token_key_delimiter:
+        if (is_protected_section) {
+          break;
+        }
+
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(value_start_index == 0,
+                                                        "Invalid object");
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            key_start_index != 0 && key_end_index != 0, "Invalid object key");
+
+        // We have a key, and what follows must be a value
+        value_start_index = index + 1;
+        expecting_value_end = true;
+        break;
+      default:
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            key_start_index != 0 ||
+                sourcemeta::jsontoolkit::internal::is_blank(character),
+            "Invalid object key");
+
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            key_start_index == 0 || key_end_index == 0 ||
+                sourcemeta::jsontoolkit::internal::is_blank(character) ||
+                value_start_index != 0,
+            "Invalid object");
+
+        if (value_start_index > 0 && expecting_value_end) {
+          if (sourcemeta::jsontoolkit::internal::is_blank(character) &&
+              !is_protected_section) {
+            // Only increment the start index if we find blank characters
+            // before the presence of a value
+            if (index - value_start_index <= 1) {
+              value_start_index = index + 1;
+            }
+          } else {
+            expecting_value_end = false;
+          }
+        }
+
+        break;
+      }
+    }
+
+    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+        array_level == 0 && !is_string && level == 0, "Unbalanced object");
+  }
 
   auto parse_deep() -> void override {
     std::for_each(this->data.begin(), this->data.end(),
