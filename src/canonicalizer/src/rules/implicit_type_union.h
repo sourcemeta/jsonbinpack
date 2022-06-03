@@ -44,18 +44,19 @@ public:
            !(has_applicator_vocabulary && is_object && schema.contains("else"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     // All possible JSON Schema types
     // See
     // https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.1
-    std::vector<sourcemeta::jsontoolkit::JSON> types{
-        sourcemeta::jsontoolkit::JSON{"\"null\""},
-        sourcemeta::jsontoolkit::JSON{"\"boolean\""},
-        sourcemeta::jsontoolkit::JSON{"\"object\""},
-        sourcemeta::jsontoolkit::JSON{"\"array\""},
-        sourcemeta::jsontoolkit::JSON{"\"string\""},
-        sourcemeta::jsontoolkit::JSON{"\"number\""},
-        sourcemeta::jsontoolkit::JSON{"\"integer\""}};
+    std::vector<sourcemeta::jsontoolkit::JSON<std::string>> types{
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"null\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"boolean\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"object\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"array\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"string\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"number\""},
+        sourcemeta::jsontoolkit::JSON<std::string>{"\"integer\""}};
 
     schema.assign("type", std::move(types));
   }

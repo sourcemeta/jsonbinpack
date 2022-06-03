@@ -4,8 +4,8 @@
 #include <utility>       // std::move
 
 auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
-    sourcemeta::jsontoolkit::JSON &document)
-    -> sourcemeta::jsontoolkit::JSON & {
+    sourcemeta::jsontoolkit::JSON<std::string> &document)
+    -> sourcemeta::jsontoolkit::JSON<std::string> & {
   std::unordered_set<std::string> processed_rules;
 
   // TODO: Also check here that we don't process the same rule twice

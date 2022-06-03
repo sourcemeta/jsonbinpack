@@ -18,7 +18,8 @@ public:
            !schema.contains("contentMediaType");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     schema.erase("contentSchema");
   }
 };

@@ -20,12 +20,13 @@ public:
   auto operator=(Rule &&) -> Rule & = delete;
 
   [[nodiscard]] auto name() const -> const std::string &;
-  auto apply(sourcemeta::jsontoolkit::JSON &value) -> bool;
+  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &value) -> bool;
 
 private:
   [[nodiscard]] virtual auto
   condition(const sourcemeta::jsontoolkit::Schema &schema) const -> bool = 0;
-  virtual auto transform(sourcemeta::jsontoolkit::JSON &value) -> void = 0;
+  virtual auto transform(sourcemeta::jsontoolkit::JSON<std::string> &value)
+      -> void = 0;
   const std::string _name;
 };
 } // namespace sourcemeta::jsonbinpack::canonicalizer

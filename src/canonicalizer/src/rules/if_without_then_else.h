@@ -17,7 +17,8 @@ public:
            !schema.contains("then") && !schema.contains("else");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     schema.erase("if");
   }
 };

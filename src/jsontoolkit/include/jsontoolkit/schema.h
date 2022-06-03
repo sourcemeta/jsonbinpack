@@ -12,22 +12,21 @@ namespace sourcemeta::jsontoolkit {
  */
 class Schema {
 public:
-  Schema(const sourcemeta::jsontoolkit::JSON &);
-  static auto is_schema(const sourcemeta::jsontoolkit::JSON &) -> bool;
+  Schema(const sourcemeta::jsontoolkit::JSON<std::string> &);
+  static auto is_schema(const sourcemeta::jsontoolkit::JSON<std::string> &)
+      -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
   [[nodiscard]] auto contains(const std::string &key) const -> bool;
-  [[nodiscard]] auto
-  at(const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON &;
+  [[nodiscard]] auto at(const std::string &key) const & -> const
+      sourcemeta::jsontoolkit::JSON<std::string> &;
   [[nodiscard]] auto is_object() const -> bool;
-  [[nodiscard]] auto to_object() const
-      -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                               std::string> &;
-  [[nodiscard]] auto to_array() const
-      -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string> &;
+  [[nodiscard]] auto to_object() const -> const sourcemeta::jsontoolkit::Object<
+      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
+  [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array<
+      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
   [[nodiscard]] auto to_array(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                              std::string> &;
+      -> const sourcemeta::jsontoolkit::Array<
+          sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
   [[nodiscard]] auto is_string(const std::string &key) const -> bool;
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
@@ -41,7 +40,7 @@ public:
   inline static const std::string keyword_core_schema = "$schema";
 
 private:
-  const sourcemeta::jsontoolkit::JSON &schema;
+  const sourcemeta::jsontoolkit::JSON<std::string> &schema;
 };
 } // namespace sourcemeta::jsontoolkit
 

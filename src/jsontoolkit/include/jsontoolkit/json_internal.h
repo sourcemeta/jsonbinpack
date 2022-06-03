@@ -1,10 +1,10 @@
-#ifndef SOURCEMETA_JSONTOOLKIT_UTILS_H_
-#define SOURCEMETA_JSONTOOLKIT_UTILS_H_
+#ifndef SOURCEMETA_JSONTOOLKIT_JSON_INTERNAL_H_
+#define SOURCEMETA_JSONTOOLKIT_JSON_INTERNAL_H_
 
 #include <stdexcept>   // std::domain_error
 #include <string_view> // std::string_view
 
-namespace sourcemeta::jsontoolkit::utils {
+namespace sourcemeta::jsontoolkit::internal {
 
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character
@@ -37,6 +37,6 @@ constexpr inline auto ENSURE_PARSE(const bool condition,
   }
 }
 
-} // namespace sourcemeta::jsontoolkit::utils
+} // namespace sourcemeta::jsontoolkit::internal
 
 #endif

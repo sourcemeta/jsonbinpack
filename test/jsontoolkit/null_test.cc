@@ -3,13 +3,13 @@
 #include <stdexcept> // std::domain_error
 
 TEST(Null, nullptr) {
-  sourcemeta::jsontoolkit::JSON document{nullptr};
+  sourcemeta::jsontoolkit::JSON<std::string> document{nullptr};
   EXPECT_TRUE(document.is_null());
   EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, set_null) {
-  sourcemeta::jsontoolkit::JSON document{true};
+  sourcemeta::jsontoolkit::JSON<std::string> document{true};
   EXPECT_FALSE(document.is_null());
   EXPECT_EQ(document, true);
   document = nullptr;
@@ -18,43 +18,43 @@ TEST(Null, set_null) {
 }
 
 TEST(Null, valid) {
-  sourcemeta::jsontoolkit::JSON document{"null"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"null"};
   EXPECT_TRUE(document.is_null());
   EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, valid_with_padding) {
-  sourcemeta::jsontoolkit::JSON document{"   null   "};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"   null   "};
   EXPECT_TRUE(document.is_null());
   EXPECT_EQ(document, nullptr);
 }
 
 TEST(Null, more_than_needed) {
-  sourcemeta::jsontoolkit::JSON document{"nulll"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"nulll"};
   EXPECT_THROW(document.is_null(), std::domain_error);
 }
 
 TEST(Null, incomplete_1) {
-  sourcemeta::jsontoolkit::JSON document{"nul"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"nul"};
   EXPECT_THROW(document.is_null(), std::domain_error);
 }
 
 TEST(Null, incomplete_2) {
-  sourcemeta::jsontoolkit::JSON document{"nu"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"nu"};
   EXPECT_THROW(document.is_null(), std::domain_error);
 }
 
 TEST(Null, incomplete_3) {
-  sourcemeta::jsontoolkit::JSON document{"n"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"n"};
   EXPECT_THROW(document.is_null(), std::domain_error);
 }
 
 TEST(Null, equality_with_literal) {
-  sourcemeta::jsontoolkit::JSON left{nullptr};
+  sourcemeta::jsontoolkit::JSON<std::string> left{nullptr};
   left.parse();
-  sourcemeta::jsontoolkit::JSON right{nullptr};
+  sourcemeta::jsontoolkit::JSON<std::string> right{nullptr};
   right.parse();
-  sourcemeta::jsontoolkit::JSON extra{false};
+  sourcemeta::jsontoolkit::JSON<std::string> extra{false};
   extra.parse();
   EXPECT_EQ(left, right);
   EXPECT_FALSE(left == extra);
@@ -62,11 +62,11 @@ TEST(Null, equality_with_literal) {
 }
 
 TEST(Null, equality_with_padding) {
-  sourcemeta::jsontoolkit::JSON left{"null"};
+  sourcemeta::jsontoolkit::JSON<std::string> left{"null"};
   left.parse();
-  sourcemeta::jsontoolkit::JSON right{"  null  "};
+  sourcemeta::jsontoolkit::JSON<std::string> right{"  null  "};
   right.parse();
-  sourcemeta::jsontoolkit::JSON extra{"false"};
+  sourcemeta::jsontoolkit::JSON<std::string> extra{"false"};
   extra.parse();
   EXPECT_EQ(left, right);
   EXPECT_FALSE(left == extra);
@@ -74,7 +74,7 @@ TEST(Null, equality_with_padding) {
 }
 
 TEST(Null, stringify) {
-  sourcemeta::jsontoolkit::JSON document{nullptr};
+  sourcemeta::jsontoolkit::JSON<std::string> document{nullptr};
   const std::string result{document.stringify()};
   EXPECT_EQ(result, "null");
 }

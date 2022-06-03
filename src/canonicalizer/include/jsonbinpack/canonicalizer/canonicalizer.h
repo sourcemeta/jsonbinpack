@@ -4,8 +4,8 @@
 #include <jsontoolkit/json.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer {
-auto apply(sourcemeta::jsontoolkit::JSON &document)
-    -> sourcemeta::jsontoolkit::JSON &;
+auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document)
+    -> sourcemeta::jsontoolkit::JSON<std::string> &;
 } // namespace sourcemeta::jsonbinpack::canonicalizer
 
 #endif

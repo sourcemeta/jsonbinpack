@@ -19,7 +19,8 @@ public:
            schema.to_integer("maxContains") >= schema.to_integer("maxItems");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     schema.erase("maxContains");
   }
 };

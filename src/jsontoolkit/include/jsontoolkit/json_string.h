@@ -6,7 +6,7 @@
 
 namespace sourcemeta::jsontoolkit {
 // Forward declaration
-class JSON;
+template <typename Source> class JSON;
 // Protected inheritance to avoid slicing
 class String final : protected Container<std::string> {
 public:
@@ -105,7 +105,7 @@ public:
     return this->data == value.data;
   }
 
-  friend JSON;
+  friend JSON<std::string>;
 
 protected:
   static auto stringify(const std::string &input) -> std::string;

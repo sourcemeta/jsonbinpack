@@ -21,17 +21,19 @@ public:
            schema.is_array("type");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
-    std::vector<sourcemeta::jsontoolkit::JSON> disjunctors;
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
+    std::vector<sourcemeta::jsontoolkit::JSON<std::string>> disjunctors;
     for (const auto &type : schema.at("type").to_array()) {
-      sourcemeta::jsontoolkit::JSON disjunctor{schema};
+      sourcemeta::jsontoolkit::JSON<std::string> disjunctor{schema};
       disjunctor.erase("$schema");
       disjunctor.assign("type", type);
       disjunctors.push_back(std::move(disjunctor));
     }
 
     if (schema.contains("$schema")) {
-      sourcemeta::jsontoolkit::JSON metaschema{schema.at("$schema")};
+      sourcemeta::jsontoolkit::JSON<std::string> metaschema{
+          schema.at("$schema")};
       schema.clear();
       schema.assign("$schema", std::move(metaschema));
     } else {

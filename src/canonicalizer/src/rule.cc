@@ -12,7 +12,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::name() const
 }
 
 auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
-    sourcemeta::jsontoolkit::JSON &value) -> bool {
+    sourcemeta::jsontoolkit::JSON<std::string> &value) -> bool {
 
   // A rule cannot be applied to a non-parsed JSON value given
   // that the condition operates on a constant document
