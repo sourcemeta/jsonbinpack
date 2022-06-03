@@ -7,7 +7,7 @@
 
 TEST(String, nothrow_move_constructible) {
   EXPECT_TRUE(std::is_nothrow_move_constructible<
-              sourcemeta::jsontoolkit::String>::value);
+              sourcemeta::jsontoolkit::String<std::string>>::value);
 }
 
 TEST(String, assignment_string_from_boolean) {

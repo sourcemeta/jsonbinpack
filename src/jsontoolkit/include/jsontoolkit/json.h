@@ -152,7 +152,7 @@ public:
   auto operator=(const Source &value) &noexcept -> JSON<Source> & {
     this->shallow_parse();
     this->assume_element_modification();
-    sourcemeta::jsontoolkit::String new_value;
+    sourcemeta::jsontoolkit::String<Source> new_value;
     new_value.shallow_parse();
     new_value.data = value;
     this->data = new_value;
@@ -162,7 +162,7 @@ public:
   auto operator=(Source &&value) &noexcept -> JSON<Source> & {
     this->shallow_parse();
     this->assume_element_modification();
-    sourcemeta::jsontoolkit::String new_value;
+    sourcemeta::jsontoolkit::String<Source> new_value;
     new_value.shallow_parse();
     new_value.data = std::move(value);
     this->data = std::move(new_value);
@@ -193,9 +193,12 @@ public:
       return left == right;
     }
 
-    if (std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data)) {
-      const auto &left = std::get<sourcemeta::jsontoolkit::String>(this->data);
-      const auto &right = std::get<sourcemeta::jsontoolkit::String>(value.data);
+    if (std::holds_alternative<sourcemeta::jsontoolkit::String<Source>>(
+            this->data)) {
+      const auto &left =
+          std::get<sourcemeta::jsontoolkit::String<Source>>(this->data);
+      const auto &right =
+          std::get<sourcemeta::jsontoolkit::String<Source>>(value.data);
       left.must_be_fully_parsed();
       right.must_be_fully_parsed();
       return left == right;
@@ -274,7 +277,8 @@ public:
     case static_cast<std::size_t>(JSON<Source>::types::real):
       return double_to_string(std::get<double>(this->data));
     case static_cast<std::size_t>(JSON<Source>::types::string):
-      return std::get<sourcemeta::jsontoolkit::String>(this->data).stringify();
+      return std::get<sourcemeta::jsontoolkit::String<Source>>(this->data)
+          .stringify();
     case static_cast<std::size_t>(JSON<Source>::types::array):
       return std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
                  this->data)
@@ -310,7 +314,8 @@ public:
     }
 
     if (this->is_string()) {
-      auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+      auto &document =
+          std::get<sourcemeta::jsontoolkit::String<Source>>(this->data);
       document.parse();
       return document.data.size();
     }
@@ -335,7 +340,7 @@ public:
 
     if (this->is_string()) {
       const auto &document =
-          std::get<sourcemeta::jsontoolkit::String>(this->data);
+          std::get<sourcemeta::jsontoolkit::String<Source>>(this->data);
       document.must_be_fully_parsed();
       return document.data.size();
     }
@@ -449,16 +454,16 @@ public:
 
   auto assign(const Source &key, const std::string &value) -> JSON<Source> & {
     // TODO: Find a way to avoid stringifying
-    return this->assign(key,
-                        sourcemeta::jsontoolkit::JSON<Source>{
-                            sourcemeta::jsontoolkit::String::stringify(value)});
+    return this->assign(
+        key, sourcemeta::jsontoolkit::JSON<Source>{
+                 sourcemeta::jsontoolkit::String<Source>::stringify(value)});
   }
 
   auto assign(const Source &key, std::string &&value) -> JSON<Source> & {
     // TODO: Find a way to avoid stringifying
-    return this->assign(key,
-                        sourcemeta::jsontoolkit::JSON<Source>{
-                            sourcemeta::jsontoolkit::String::stringify(value)});
+    return this->assign(
+        key, sourcemeta::jsontoolkit::JSON<Source>{
+                 sourcemeta::jsontoolkit::String<Source>::stringify(value)});
   }
 
   auto assign(const Source &key, const std::vector<JSON<Source>> &value)
@@ -647,18 +652,21 @@ public:
     this->parse();
     // We don't need to bother to check whether the wrapped string class is
     // parsed or not
-    return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
+    return std::holds_alternative<sourcemeta::jsontoolkit::String<Source>>(
+        this->data);
   }
 
   [[nodiscard]] auto is_string() const -> bool {
     this->must_be_fully_parsed();
-    return std::holds_alternative<sourcemeta::jsontoolkit::String>(this->data);
+    return std::holds_alternative<sourcemeta::jsontoolkit::String<Source>>(
+        this->data);
   }
 
   // This function returns a copy, so there is no need to guard against modifies
   auto to_string() -> Source {
     this->parse();
-    auto &document = std::get<sourcemeta::jsontoolkit::String>(this->data);
+    auto &document =
+        std::get<sourcemeta::jsontoolkit::String<Source>>(this->data);
     document.parse();
     return document.data;
   }
@@ -667,7 +675,7 @@ public:
   [[nodiscard]] auto to_string() const -> Source {
     this->must_be_fully_parsed();
     const auto &document =
-        std::get<sourcemeta::jsontoolkit::String>(this->data);
+        std::get<sourcemeta::jsontoolkit::String<Source>>(this->data);
     document.must_be_fully_parsed();
     return document.data;
   }
@@ -773,16 +781,16 @@ private:
                                         Source>::token_begin:
       this->data =
           sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<Source>,
-                                         Source>{std::string{document}};
+                                         Source>{Source{document}};
       break;
     case sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
                                          Source>::token_begin:
       this->data =
           sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
-                                          Source>{std::string{document}};
+                                          Source>{Source{document}};
       break;
-    case sourcemeta::jsontoolkit::String::token_begin:
-      this->data = sourcemeta::jsontoolkit::String{std::string{document}};
+    case sourcemeta::jsontoolkit::String<Source>::token_begin:
+      this->data = sourcemeta::jsontoolkit::String<Source>{Source{document}};
       break;
     case sourcemeta::jsontoolkit::Number::token_minus_sign:
     case sourcemeta::jsontoolkit::Number::token_number_zero:
@@ -828,7 +836,7 @@ private:
           .parse();
       break;
     case static_cast<std::size_t>(JSON<Source>::types::string):
-      std::get<sourcemeta::jsontoolkit::String>(this->data).parse();
+      std::get<sourcemeta::jsontoolkit::String<Source>>(this->data).parse();
       break;
     default:
       break;
@@ -848,7 +856,7 @@ private:
   std::variant<bool, std::nullptr_t, std::int64_t, double,
                sourcemeta::jsontoolkit::Array<JSON<Source>, Source>,
                sourcemeta::jsontoolkit::Object<JSON<Source>, Source>,
-               sourcemeta::jsontoolkit::String>
+               sourcemeta::jsontoolkit::String<Source>>
       data;
 };
 } // namespace sourcemeta::jsontoolkit

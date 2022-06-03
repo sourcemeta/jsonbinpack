@@ -12,7 +12,7 @@
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
-template <typename Wrapper, typename String> class Array;
+template <typename Wrapper, typename Source> class Array;
 
 // Protected inheritance to avoid slicing
 template <typename Wrapper, typename Source>
@@ -114,10 +114,10 @@ protected:
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
                                 indent,
                             sourcemeta::jsontoolkit::internal::token_space);
-      stream << sourcemeta::jsontoolkit::String::token_begin;
+      stream << sourcemeta::jsontoolkit::String<Source>::token_begin;
       // TODO: We should use JSON string escaping logic here too
       stream << pair->first;
-      stream << sourcemeta::jsontoolkit::String::token_end;
+      stream << sourcemeta::jsontoolkit::String<Source>::token_end;
       stream << Object<Wrapper, Source>::token_key_delimiter;
       if (pretty) {
         stream << sourcemeta::jsontoolkit::internal::token_space;
@@ -183,10 +183,10 @@ private:
       case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
         array_level -= 1;
         break;
-      case sourcemeta::jsontoolkit::String::token_begin:
+      case sourcemeta::jsontoolkit::String<Source>::token_begin:
         // Don't do anything if this is a escaped quote
         if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String::token_escape) {
+            sourcemeta::jsontoolkit::String<Source>::token_escape) {
           break;
         }
 
