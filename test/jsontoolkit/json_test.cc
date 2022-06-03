@@ -137,9 +137,9 @@ TEST(JSON, at_boolean) {
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
-  EXPECT_TRUE(document.is_boolean(0));
-  EXPECT_TRUE(document.is_boolean(1));
-  EXPECT_TRUE(document.is_boolean(2));
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_TRUE(document.at(2).is_boolean());
 
   EXPECT_EQ(document.at(0), true);
   EXPECT_EQ(document.at(1), false);
@@ -208,47 +208,47 @@ TEST(JSON, rfc8259_example_1) {
 
   // Image object
   EXPECT_TRUE(value.at("Image").is_object());
-  EXPECT_EQ(value.size("Image"), 6);
+  EXPECT_EQ(value.at("Image").size(), 6);
   EXPECT_TRUE(value.at("Image").contains("Width"));
   EXPECT_TRUE(value.at("Image").contains("Height"));
   EXPECT_TRUE(value.at("Image").contains("Title"));
   EXPECT_TRUE(value.at("Image").contains("Thumbnail"));
   EXPECT_TRUE(value.at("Image").contains("Animated"));
   EXPECT_TRUE(value.at("Image").contains("IDs"));
-  EXPECT_TRUE(value.at("Image").is_integer("Width"));
-  EXPECT_TRUE(value.at("Image").is_integer("Height"));
-  EXPECT_TRUE(value.at("Image").is_string("Title"));
-  EXPECT_TRUE(value.at("Image").is_object("Thumbnail"));
-  EXPECT_TRUE(value.at("Image").is_boolean("Animated"));
-  EXPECT_TRUE(value.at("Image").is_array("IDs"));
-  EXPECT_EQ(value.at("Image").to_integer("Width"), 800);
-  EXPECT_EQ(value.at("Image").to_integer("Height"), 600);
-  EXPECT_EQ(value.at("Image").to_string("Title"), "View from 15th Floor");
-  EXPECT_FALSE(value.at("Image").to_boolean("Animated"));
+  EXPECT_TRUE(value.at("Image").at("Width").is_integer());
+  EXPECT_TRUE(value.at("Image").at("Height").is_integer());
+  EXPECT_TRUE(value.at("Image").at("Title").is_string());
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_object());
+  EXPECT_TRUE(value.at("Image").at("Animated").is_boolean());
+  EXPECT_TRUE(value.at("Image").at("IDs").is_array());
+  EXPECT_EQ(value.at("Image").at("Width").to_integer(), 800);
+  EXPECT_EQ(value.at("Image").at("Height").to_integer(), 600);
+  EXPECT_EQ(value.at("Image").at("Title").to_string(), "View from 15th Floor");
+  EXPECT_FALSE(value.at("Image").at("Animated").to_boolean());
 
   // Image.Thumbnail object
-  EXPECT_EQ(value.at("Image").size("Thumbnail"), 3);
+  EXPECT_EQ(value.at("Image").at("Thumbnail").size(), 3);
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Url"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Height"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Width"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_string("Url"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_integer("Height"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").is_integer("Width"));
-  EXPECT_EQ(value.at("Image").at("Thumbnail").to_string("Url"),
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Url").is_string());
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Height").is_integer());
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Width").is_integer());
+  EXPECT_EQ(value.at("Image").at("Thumbnail").at("Url").to_string(),
             "http://www.example.com/image/481989943");
-  EXPECT_EQ(value.at("Image").at("Thumbnail").to_integer("Height"), 125);
-  EXPECT_EQ(value.at("Image").at("Thumbnail").to_integer("Width"), 100);
+  EXPECT_EQ(value.at("Image").at("Thumbnail").at("Height").to_integer(), 125);
+  EXPECT_EQ(value.at("Image").at("Thumbnail").at("Width").to_integer(), 100);
 
   // Image.IDs array
-  EXPECT_EQ(value.at("Image").size("IDs"), 4);
-  EXPECT_TRUE(value.at("Image").at("IDs").is_integer(0));
-  EXPECT_TRUE(value.at("Image").at("IDs").is_integer(1));
-  EXPECT_TRUE(value.at("Image").at("IDs").is_integer(2));
-  EXPECT_TRUE(value.at("Image").at("IDs").is_integer(3));
-  EXPECT_EQ(value.at("Image").at("IDs").to_integer(0), 116);
-  EXPECT_EQ(value.at("Image").at("IDs").to_integer(1), 943);
-  EXPECT_EQ(value.at("Image").at("IDs").to_integer(2), 234);
-  EXPECT_EQ(value.at("Image").at("IDs").to_integer(3), 38793);
+  EXPECT_EQ(value.at("Image").at("IDs").size(), 4);
+  EXPECT_TRUE(value.at("Image").at("IDs").at(0).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(1).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(2).is_integer());
+  EXPECT_TRUE(value.at("Image").at("IDs").at(3).is_integer());
+  EXPECT_EQ(value.at("Image").at("IDs").at(0).to_integer(), 116);
+  EXPECT_EQ(value.at("Image").at("IDs").at(1).to_integer(), 943);
+  EXPECT_EQ(value.at("Image").at("IDs").at(2).to_integer(), 234);
+  EXPECT_EQ(value.at("Image").at("IDs").at(3).to_integer(), 38793);
 }
 
 // https://datatracker.ietf.org/doc/html/rfc8259#section-13
@@ -284,9 +284,10 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(std::as_const(value).size(), 2);
 
   // Type and size
-  EXPECT_TRUE(value.is_object(0));
-  EXPECT_EQ(value.size(0), 8);
-  EXPECT_EQ(std::as_const(value).size(0), 8);
+  EXPECT_TRUE(value.at(0).is_object());
+  EXPECT_EQ(value.at(0).size(), 8);
+  value.parse();
+  EXPECT_EQ(std::as_const(value).at(0).size(), 8);
 
   // Member keys
   EXPECT_TRUE(value.at(0).contains("precision"));
@@ -299,14 +300,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_TRUE(value.at(0).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value.at(0).is_string("precision"));
-  EXPECT_TRUE(value.at(0).is_real("Latitude"));
-  EXPECT_TRUE(value.at(0).is_real("Longitude"));
-  EXPECT_TRUE(value.at(0).is_string("Address"));
-  EXPECT_TRUE(value.at(0).is_string("City"));
-  EXPECT_TRUE(value.at(0).is_string("State"));
-  EXPECT_TRUE(value.at(0).is_string("Zip"));
-  EXPECT_TRUE(value.at(0).is_string("Country"));
+  EXPECT_TRUE(value.at(0).at("precision").is_string());
+  EXPECT_TRUE(value.at(0).at("Latitude").is_real());
+  EXPECT_TRUE(value.at(0).at("Longitude").is_real());
+  EXPECT_TRUE(value.at(0).at("Address").is_string());
+  EXPECT_TRUE(value.at(0).at("City").is_string());
+  EXPECT_TRUE(value.at(0).at("State").is_string());
+  EXPECT_TRUE(value.at(0).at("Zip").is_string());
+  EXPECT_TRUE(value.at(0).at("Country").is_string());
 
   // Member values
   EXPECT_EQ(value.at(0).at("precision"), "zip");
@@ -319,11 +320,11 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(value.at(0).at("Country"), "US");
 
   // Type and size
-  EXPECT_TRUE(value.is_object(1));
-  EXPECT_EQ(value.size(1), 8);
+  EXPECT_TRUE(value.at(1).is_object());
+  EXPECT_EQ(value.at(1).size(), 8);
   // .at() on object/arrays invalidates deep parsing
   value.parse();
-  EXPECT_EQ(std::as_const(value).size(1), 8);
+  EXPECT_EQ(std::as_const(value).at(1).size(), 8);
 
   // Member keys
   EXPECT_TRUE(value.at(1).contains("precision"));
@@ -336,14 +337,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_TRUE(value.at(1).contains("Country"));
 
   // Member types
-  EXPECT_TRUE(value.at(1).is_string("precision"));
-  EXPECT_TRUE(value.at(1).is_real("Latitude"));
-  EXPECT_TRUE(value.at(1).is_real("Longitude"));
-  EXPECT_TRUE(value.at(1).is_string("Address"));
-  EXPECT_TRUE(value.at(1).is_string("City"));
-  EXPECT_TRUE(value.at(1).is_string("State"));
-  EXPECT_TRUE(value.at(1).is_string("Zip"));
-  EXPECT_TRUE(value.at(1).is_string("Country"));
+  EXPECT_TRUE(value.at(1).at("precision").is_string());
+  EXPECT_TRUE(value.at(1).at("Latitude").is_real());
+  EXPECT_TRUE(value.at(1).at("Longitude").is_real());
+  EXPECT_TRUE(value.at(1).at("Address").is_string());
+  EXPECT_TRUE(value.at(1).at("City").is_string());
+  EXPECT_TRUE(value.at(1).at("State").is_string());
+  EXPECT_TRUE(value.at(1).at("Zip").is_string());
+  EXPECT_TRUE(value.at(1).at("Country").is_string());
 
   // Member values
   EXPECT_EQ(value.at(1).at("precision"), "zip");
@@ -361,8 +362,8 @@ TEST(JSON, array_key_copy_assignment_vector) {
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.is_array("foo"));
-  EXPECT_EQ(document.size("foo"), 0);
+  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_EQ(document.at("foo").size(), 0);
 
   sourcemeta::jsontoolkit::JSON first{"1"};
   sourcemeta::jsontoolkit::JSON second{"2"};
@@ -380,8 +381,8 @@ TEST(JSON, array_key_copy_assignment_vector) {
   document.assign("foo", list);
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
-  EXPECT_TRUE(document.is_array("foo"));
-  EXPECT_EQ(document.size("foo"), 3);
+  EXPECT_TRUE(document.at("foo").is_array());
+  EXPECT_EQ(document.at("foo").size(), 3);
   EXPECT_EQ(document.at("foo").at(0), static_cast<std::int64_t>(1));
   EXPECT_EQ(document.at("foo").at(1), static_cast<std::int64_t>(2));
   EXPECT_EQ(document.at("foo").at(2), static_cast<std::int64_t>(3));

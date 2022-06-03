@@ -17,8 +17,8 @@ auto sourcemeta::jsontoolkit::Schema::is_schema(
   // are being loaded by a given schema.
   if (document.is_object() &&
       document.contains(sourcemeta::jsontoolkit::Schema::keyword_core_schema) &&
-      document.is_string(
-          sourcemeta::jsontoolkit::Schema::keyword_core_schema)) {
+      document.at(sourcemeta::jsontoolkit::Schema::keyword_core_schema)
+          .is_string()) {
     return true;
   }
 
@@ -50,22 +50,22 @@ auto sourcemeta::jsontoolkit::Schema::is_object() const -> bool {
 
 auto sourcemeta::jsontoolkit::Schema::is_array(const std::string &key) const
     -> bool {
-  return this->schema.is_array(key);
+  return this->schema.at(key).is_array();
 }
 
 auto sourcemeta::jsontoolkit::Schema::is_string(const std::string &key) const
     -> bool {
-  return this->schema.is_string(key);
+  return this->schema.at(key).is_string();
 }
 
 auto sourcemeta::jsontoolkit::Schema::is_boolean(const std::string &key) const
     -> bool {
-  return this->schema.is_boolean(key);
+  return this->schema.at(key).is_boolean();
 }
 
 auto sourcemeta::jsontoolkit::Schema::is_integer(const std::string &key) const
     -> bool {
-  return this->schema.is_integer(key);
+  return this->schema.at(key).is_integer();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_object() const
@@ -83,25 +83,25 @@ auto sourcemeta::jsontoolkit::Schema::to_array() const
 auto sourcemeta::jsontoolkit::Schema::to_array(const std::string &key) const
     -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
                                             std::string> & {
-  return this->schema.to_array(key);
+  return this->schema.at(key).to_array();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_boolean(const std::string &key) const
     -> bool {
-  return this->schema.to_boolean(key);
+  return this->schema.at(key).to_boolean();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_integer(const std::string &key) const
     -> std::int64_t {
-  return this->schema.to_integer(key);
+  return this->schema.at(key).to_integer();
 }
 
 auto sourcemeta::jsontoolkit::Schema::size(const std::string &key) const
     -> std::size_t {
-  return this->schema.size(key);
+  return this->schema.at(key).size();
 }
 
 auto sourcemeta::jsontoolkit::Schema::empty(const std::string &key) const
     -> bool {
-  return this->schema.empty(key);
+  return this->schema.at(key).empty();
 }

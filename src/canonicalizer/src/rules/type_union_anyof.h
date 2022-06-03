@@ -23,7 +23,7 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
     std::vector<sourcemeta::jsontoolkit::JSON> disjunctors;
-    for (const auto &type : schema.to_array("type")) {
+    for (const auto &type : schema.at("type").to_array()) {
       sourcemeta::jsontoolkit::JSON disjunctor{schema};
       disjunctor.erase("$schema");
       disjunctor.assign("type", type);
