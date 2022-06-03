@@ -1,5 +1,5 @@
-#include "utils.h"
 #include <jsontoolkit/json.h>
+#include <jsontoolkit/json_internal.h>
 
 #include <algorithm>   // std::any_of
 #include <cmath>       // std::modf
@@ -12,7 +12,7 @@
 
 auto sourcemeta::jsontoolkit::JSON::parse_source() -> void {
   const std::string_view document =
-      sourcemeta::jsontoolkit::utils::trim(this->source());
+      sourcemeta::jsontoolkit::internal::trim(this->source());
   std::variant<std::int64_t, double> number_result;
 
   switch (document.front()) {
