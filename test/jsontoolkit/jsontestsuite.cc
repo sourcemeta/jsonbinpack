@@ -31,7 +31,7 @@ public:
 
   void TestBody() override {
     std::string raw_document{read_file(this->test_path)};
-    sourcemeta::jsontoolkit::JSON document{raw_document};
+    sourcemeta::jsontoolkit::JSON<std::string> document{raw_document};
     if (this->type == JSONTestType::Accept) {
       document.parse();
       SUCCEED();

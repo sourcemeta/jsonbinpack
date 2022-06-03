@@ -1,7 +1,7 @@
-#include "utils.h"
 #include <algorithm> // std::all_of
 #include <cctype>    // std::isxdigit
 #include <jsontoolkit/json.h>
+#include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_string.h>
 #include <sstream> // std::ostringstream
 #include <utility> // std::move
@@ -24,8 +24,8 @@ static constexpr auto is_character_allowed_in_json_string(const char character)
 
 auto sourcemeta::jsontoolkit::String::parse_deep() -> void {
   const std::string_view document{
-      sourcemeta::jsontoolkit::utils::trim(this->source())};
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::trim(this->source())};
+  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       document.size() > 1 &&
           document.front() == sourcemeta::jsontoolkit::String::token_begin &&
           document.back() == sourcemeta::jsontoolkit::String::token_end,
@@ -84,13 +84,13 @@ auto sourcemeta::jsontoolkit::String::parse_deep() -> void {
         // "\" + "u" + hex + hex + hex + hex
         const std::size_t UNICODE_CODE_POINT_LENGTH = 6;
         // Out of bounds
-        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             index + UNICODE_CODE_POINT_LENGTH <= string_data.size(),
             "Invalid unicode code point");
 
         const std::string_view code_point{
             string_data.substr(index + 2, UNICODE_CODE_POINT_LENGTH - 2)};
-        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             std::all_of(
                 code_point.cbegin(), code_point.cend(),
                 [](const char element) { return std::isxdigit(element); }),
@@ -107,7 +107,7 @@ auto sourcemeta::jsontoolkit::String::parse_deep() -> void {
       }
     }
 
-    sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         is_character_allowed_in_json_string(character),
         "Invalid unescaped character in string");
 

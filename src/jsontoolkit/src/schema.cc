@@ -2,7 +2,7 @@
 #include <stdexcept> // std::invalid_argument, std::logic_error
 
 sourcemeta::jsontoolkit::Schema::Schema(
-    const sourcemeta::jsontoolkit::JSON &document)
+    const sourcemeta::jsontoolkit::JSON<std::string> &document)
     : schema{document} {
   if (!sourcemeta::jsontoolkit::Schema::is_schema(this->schema)) {
     throw std::invalid_argument("Invalid schema");
@@ -10,7 +10,7 @@ sourcemeta::jsontoolkit::Schema::Schema(
 }
 
 auto sourcemeta::jsontoolkit::Schema::is_schema(
-    const sourcemeta::jsontoolkit::JSON &document) -> bool {
+    const sourcemeta::jsontoolkit::JSON<std::string> &document) -> bool {
   // A schema object MUST include a "$schema" attribute.
   // We don't want to play the game of attempting to guess
   // what version of the specification and vocabularies
@@ -39,8 +39,8 @@ auto sourcemeta::jsontoolkit::Schema::contains(const std::string &key) const
   return this->schema.contains(key);
 }
 
-auto sourcemeta::jsontoolkit::Schema::at(
-    const std::string &key) const & -> const sourcemeta::jsontoolkit::JSON & {
+auto sourcemeta::jsontoolkit::Schema::at(const std::string &key)
+    const & -> const sourcemeta::jsontoolkit::JSON<std::string> & {
   return this->schema.at(key);
 }
 
@@ -69,20 +69,20 @@ auto sourcemeta::jsontoolkit::Schema::is_integer(const std::string &key) const
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_object() const
-    -> const sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                             std::string> & {
+    -> const sourcemeta::jsontoolkit::Object<
+        sourcemeta::jsontoolkit::JSON<std::string>, std::string> & {
   return this->schema.to_object();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array() const
-    -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string> & {
+    -> const sourcemeta::jsontoolkit::Array<
+        sourcemeta::jsontoolkit::JSON<std::string>, std::string> & {
   return this->schema.to_array();
 }
 
 auto sourcemeta::jsontoolkit::Schema::to_array(const std::string &key) const
-    -> const sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                            std::string> & {
+    -> const sourcemeta::jsontoolkit::Array<
+        sourcemeta::jsontoolkit::JSON<std::string>, std::string> & {
   return this->schema.at(key).to_array();
 }
 

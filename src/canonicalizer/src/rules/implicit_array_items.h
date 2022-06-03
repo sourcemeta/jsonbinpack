@@ -17,7 +17,8 @@ public:
            schema.at("type") == "array" && !schema.contains("items");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     schema.assign("items", true);
   }
 };

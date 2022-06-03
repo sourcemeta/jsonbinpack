@@ -7,30 +7,30 @@
 #include <vector>      // std::vector
 
 TEST(JSON, default_constructible_is_invalid) {
-  EXPECT_TRUE(
-      std::is_default_constructible<sourcemeta::jsontoolkit::JSON>::value);
-  sourcemeta::jsontoolkit::JSON document;
+  EXPECT_TRUE(std::is_default_constructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  sourcemeta::jsontoolkit::JSON<std::string> document;
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, proper_copy_equivalence_constructor) {
-  sourcemeta::jsontoolkit::JSON document{"[1,{\"foo\": 1.2},3]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[1,{\"foo\": 1.2},3]"};
   document.parse();
-  sourcemeta::jsontoolkit::JSON copy{document};
+  sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   copy.parse();
   EXPECT_EQ(document, copy);
 }
 
 TEST(JSON, proper_copy_equivalence_assignment) {
-  sourcemeta::jsontoolkit::JSON document{"[1,{\"foo\": 1.2},3]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[1,{\"foo\": 1.2},3]"};
   document.parse();
-  sourcemeta::jsontoolkit::JSON copy = document;
+  sourcemeta::jsontoolkit::JSON<std::string> copy = document;
   copy.parse();
   EXPECT_EQ(document, copy);
 }
 
 TEST(JSON, set_boolean) {
-  sourcemeta::jsontoolkit::JSON document{false};
+  sourcemeta::jsontoolkit::JSON<std::string> document{false};
   EXPECT_TRUE(document.is_boolean());
   EXPECT_EQ(document, false);
   document = true;
@@ -42,98 +42,99 @@ TEST(JSON, set_boolean) {
 }
 
 TEST(JSON, bool_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"true"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"true"};
   document.parse();
   EXPECT_EQ(document, true);
 }
 
 TEST(JSON, bool_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"tru"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"tru"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, int_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"4"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"4"};
   document.parse();
   EXPECT_EQ(document, static_cast<std::int64_t>(4));
 }
 
 TEST(JSON, int_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"32,2"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"32,2"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, real_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"3.14"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"3.14"};
   document.parse();
   EXPECT_EQ(document, 3.14);
 }
 
 TEST(JSON, real_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"32.2.2"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"32.2.2"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, null_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"null"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"null"};
   document.parse();
   EXPECT_EQ(document, nullptr);
 }
 
 TEST(JSON, null_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"nul"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"nul"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(json, string_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
   document.parse();
   EXPECT_EQ(document, "foo");
 }
 
 TEST(JSON, string_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"\"foo"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, array_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[true,false,true]"};
   document.parse();
   EXPECT_EQ(document.size(), 3);
   EXPECT_EQ(std::as_const(document).size(), 3);
 }
 
 TEST(JSON, array_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"[true,fals,true]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[true,fals,true]"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, object_deep_parse) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":2}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":2}"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_EQ(std::as_const(document).size(), 1);
 }
 
 TEST(JSON, object_deep_parse_failure) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":tru}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":tru}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(JSON, not_bool_equality_string) {
-  sourcemeta::jsontoolkit::JSON document{"\"foo\""};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
   EXPECT_FALSE(document.is_boolean());
   EXPECT_FALSE(document == true);
 }
 
 TEST(JSON, not_bool_equality_int) {
-  sourcemeta::jsontoolkit::JSON document{static_cast<std::int64_t>(6)};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      static_cast<std::int64_t>(6)};
   EXPECT_FALSE(document.is_boolean());
   EXPECT_FALSE(document == true);
 }
 
 TEST(JSON, at_boolean) {
-  sourcemeta::jsontoolkit::JSON document{"[true,false,true]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
@@ -150,10 +151,10 @@ TEST(JSON, at_boolean) {
 }
 
 TEST(JSON, boolean_array_iterator) {
-  sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"[true,false,false]"};
   std::vector<bool> result;
 
-  for (sourcemeta::jsontoolkit::JSON &element : value.to_array()) {
+  for (sourcemeta::jsontoolkit::JSON<std::string> &element : value.to_array()) {
     result.push_back(element.to_boolean());
   }
 
@@ -164,7 +165,7 @@ TEST(JSON, boolean_array_iterator) {
 }
 
 TEST(JSON, boolean_array_reverse_iterator) {
-  sourcemeta::jsontoolkit::JSON value{"[true,false,false]"};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"[true,false,false]"};
   std::vector<bool> result;
 
   for (auto iterator = value.to_array().rbegin();
@@ -179,13 +180,13 @@ TEST(JSON, boolean_array_reverse_iterator) {
 }
 
 TEST(JSON, array_padded_parse) {
-  sourcemeta::jsontoolkit::JSON value{"  [true,false,false]  "};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"  [true,false,false]  "};
   EXPECT_TRUE(value.is_array());
 }
 
 // https://datatracker.ietf.org/doc/html/rfc8259#section-13
 TEST(JSON, rfc8259_example_1) {
-  sourcemeta::jsontoolkit::JSON value{
+  sourcemeta::jsontoolkit::JSON<std::string> value{
       "{\n"
       "\"Image\": {\n"
       "\"Width\":  800,\n"
@@ -253,28 +254,29 @@ TEST(JSON, rfc8259_example_1) {
 
 // https://datatracker.ietf.org/doc/html/rfc8259#section-13
 TEST(JSON, rfc8259_example_2) {
-  sourcemeta::jsontoolkit::JSON value{"[\n"
-                                      "{\n"
-                                      "\"precision\": \"zip\",\n"
-                                      "\"Latitude\":  37.7668,\n"
-                                      "\"Longitude\": -122.3959,\n"
-                                      "\"Address\":   \"\",\n"
-                                      "\"City\":      \"SAN FRANCISCO\",\n"
-                                      "\"State\":     \"CA\",\n"
-                                      "\"Zip\":       \"94107\",\n"
-                                      "\"Country\":   \"US\"\n"
-                                      "},\n"
-                                      "{\n"
-                                      "\"precision\": \"zip\",\n"
-                                      "\"Latitude\":  37.371991,\n"
-                                      "\"Longitude\": -122.026020,\n"
-                                      "\"Address\":   \"\",\n"
-                                      "\"City\":      \"SUNNYVALE\",\n"
-                                      "\"State\":     \"CA\",\n"
-                                      "\"Zip\":       \"94085\",\n"
-                                      "\"Country\":   \"US\"\n"
-                                      "}\n"
-                                      "]"};
+  sourcemeta::jsontoolkit::JSON<std::string> value{
+      "[\n"
+      "{\n"
+      "\"precision\": \"zip\",\n"
+      "\"Latitude\":  37.7668,\n"
+      "\"Longitude\": -122.3959,\n"
+      "\"Address\":   \"\",\n"
+      "\"City\":      \"SAN FRANCISCO\",\n"
+      "\"State\":     \"CA\",\n"
+      "\"Zip\":       \"94107\",\n"
+      "\"Country\":   \"US\"\n"
+      "},\n"
+      "{\n"
+      "\"precision\": \"zip\",\n"
+      "\"Latitude\":  37.371991,\n"
+      "\"Longitude\": -122.026020,\n"
+      "\"Address\":   \"\",\n"
+      "\"City\":      \"SUNNYVALE\",\n"
+      "\"State\":     \"CA\",\n"
+      "\"Zip\":       \"94085\",\n"
+      "\"Country\":   \"US\"\n"
+      "}\n"
+      "]"};
 
   value.parse();
 
@@ -358,22 +360,22 @@ TEST(JSON, rfc8259_example_2) {
 }
 
 TEST(JSON, array_key_copy_assignment_vector) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": [] }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [] }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_array());
   EXPECT_EQ(document.at("foo").size(), 0);
 
-  sourcemeta::jsontoolkit::JSON first{"1"};
-  sourcemeta::jsontoolkit::JSON second{"2"};
-  sourcemeta::jsontoolkit::JSON third{"3"};
+  sourcemeta::jsontoolkit::JSON<std::string> first{"1"};
+  sourcemeta::jsontoolkit::JSON<std::string> second{"2"};
+  sourcemeta::jsontoolkit::JSON<std::string> third{"3"};
 
   first.parse();
   second.parse();
   third.parse();
 
-  std::vector<sourcemeta::jsontoolkit::JSON> list;
+  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> list;
   list.push_back(first);
   list.push_back(second);
   list.push_back(third);
@@ -390,7 +392,7 @@ TEST(JSON, array_key_copy_assignment_vector) {
 
 TEST(JSON, modify_object_after_copy) {
   // Original document
-  sourcemeta::jsontoolkit::JSON document{"{ \"x\": 1, \"y\": 2 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"x\": 1, \"y\": 2 }"};
   document.parse();
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("x"));
@@ -399,7 +401,7 @@ TEST(JSON, modify_object_after_copy) {
   EXPECT_EQ(document.at("y"), static_cast<std::int64_t>(2));
 
   // Make copy
-  sourcemeta::jsontoolkit::JSON copy{document};
+  sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   EXPECT_EQ(copy.size(), 2);
   EXPECT_TRUE(copy.contains("x"));
   EXPECT_TRUE(copy.contains("y"));
@@ -422,7 +424,7 @@ TEST(JSON, modify_object_after_copy) {
 
 TEST(JSON, modify_array_after_copy) {
   // Original document
-  sourcemeta::jsontoolkit::JSON document{"[1,2,3]"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[1,2,3]"};
   document.parse();
   EXPECT_EQ(document.size(), 3);
   EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
@@ -430,7 +432,7 @@ TEST(JSON, modify_array_after_copy) {
   EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
 
   // Make copy
-  sourcemeta::jsontoolkit::JSON copy{document};
+  sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   EXPECT_EQ(copy.size(), 3);
   EXPECT_EQ(copy.at(0), static_cast<std::int64_t>(1));
   EXPECT_EQ(copy.at(1), static_cast<std::int64_t>(2));

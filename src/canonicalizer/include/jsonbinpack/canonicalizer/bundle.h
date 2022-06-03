@@ -12,8 +12,8 @@ public:
   Bundle() = default;
   auto add(std::unique_ptr<sourcemeta::jsonbinpack::canonicalizer::Rule> &&rule)
       -> void;
-  auto apply(sourcemeta::jsontoolkit::JSON &document)
-      -> sourcemeta::jsontoolkit::JSON &;
+  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document)
+      -> sourcemeta::jsontoolkit::JSON<std::string> &;
 
 private:
   std::vector<std::unique_ptr<sourcemeta::jsonbinpack::canonicalizer::Rule>>

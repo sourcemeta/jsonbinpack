@@ -5,91 +5,91 @@
 #include <utility> // std::move
 
 TEST(Object, empty_object_string) {
-  sourcemeta::jsontoolkit::JSON document{"{}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 0);
 }
 
 TEST(Object, blank_object_string) {
-  sourcemeta::jsontoolkit::JSON document{"{    }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{    }"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 0);
 }
 
 TEST(Object, blank_object_string_empty) {
-  sourcemeta::jsontoolkit::JSON document{"{    }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{    }"};
   EXPECT_TRUE(document.is_object());
   EXPECT_TRUE(document.empty());
 }
 
 TEST(Object, non_blank_object_string_not_empty) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":1}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_FALSE(document.empty());
 }
 
 TEST(Object, empty_object_missing_left_curly) {
-  sourcemeta::jsontoolkit::JSON document{"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, empty_object_missing_right_curly) {
-  sourcemeta::jsontoolkit::JSON document{"{"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, integer_key) {
-  sourcemeta::jsontoolkit::JSON document{"{1:false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{1:false}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, colon_but_no_key) {
-  sourcemeta::jsontoolkit::JSON document{"{:false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{:false}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, colon_but_no_key_with_space) {
-  sourcemeta::jsontoolkit::JSON document{"{  :  false  }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{  :  false  }"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, colon_but_no_value) {
-  sourcemeta::jsontoolkit::JSON document{"{\"x\":}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"x\":}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, colon_but_no_value_with_space) {
-  sourcemeta::jsontoolkit::JSON document{"{   \"x\"   :   }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{   \"x\"   :   }"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, missing_key_left_quote) {
-  sourcemeta::jsontoolkit::JSON document{"{foo\":true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{foo\":true}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, missing_key_right_quote) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo:true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo:true}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, missing_key_both_quotes) {
-  sourcemeta::jsontoolkit::JSON document{"{foo:true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{foo:true}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, missing_colon) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\" true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\" true}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, multiple_colons) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\"::true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\"::true}"};
   EXPECT_THROW(document.size(), std::domain_error);
 }
 
 TEST(Object, parse_deep_success) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":true}"};
   document.parse();
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
@@ -99,57 +99,59 @@ TEST(Object, parse_deep_success) {
 }
 
 TEST(Object, parse_deep_failure) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":true"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, parse_deep_failure_member) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":tru}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":tru}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, key_without_value) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\"}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, key_without_value_after_valid_key) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,\"bar\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\": 1,\"bar\"}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, trailing_comma_after_element) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,\"bar\":0,}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\": 1,\"bar\":0,}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, trailing_comma) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\": 1,}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, trailing_comma_with_spacing) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1  ,   } "};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\": 1  ,   } "};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, trailing_comma_with_left_spacing) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1  ,}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\": 1  ,}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, multiple_commas) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1,,,,,}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\": 1,,,,,}"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, multiple_commas_with_spacing) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\": 1 ,  ,  , , }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\": 1 ,  ,  , , }"};
   EXPECT_THROW(document.parse(), std::domain_error);
 }
 
 TEST(Object, minified_one_true_boolean_element) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":true}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -158,7 +160,7 @@ TEST(Object, minified_one_true_boolean_element) {
 }
 
 TEST(Object, minified_one_false_boolean_element) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":false}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -167,7 +169,8 @@ TEST(Object, minified_one_false_boolean_element) {
 }
 
 TEST(Object, minified_two_boolean_values) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true,\"bar\":false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":true,\"bar\":false}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
@@ -179,7 +182,8 @@ TEST(Object, minified_two_boolean_values) {
 }
 
 TEST(Object, must_delete_one_existent_key) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true,\"bar\":false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":true,\"bar\":false}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
@@ -191,7 +195,8 @@ TEST(Object, must_delete_one_existent_key) {
 }
 
 TEST(Object, must_delete_one_non_existent_key) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":true,\"bar\":false}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":true,\"bar\":false}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.contains("foo"));
@@ -203,7 +208,7 @@ TEST(Object, must_delete_one_non_existent_key) {
 }
 
 TEST(Object, minified_one_array_element) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":[true,false]}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":[true,false]}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -216,7 +221,7 @@ TEST(Object, minified_one_array_element) {
 }
 
 TEST(Object, string_value_with_comma) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"bar,baz\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":\"bar,baz\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -225,7 +230,8 @@ TEST(Object, string_value_with_comma) {
 }
 
 TEST(Object, string_value_with_escaped_quote) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"bar\\\"baz\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":\"bar\\\"baz\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -234,7 +240,7 @@ TEST(Object, string_value_with_escaped_quote) {
 }
 
 TEST(Object, empty_string_key) {
-  sourcemeta::jsontoolkit::JSON document{"{\"\":\"foo\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"\":\"foo\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains(""));
@@ -243,7 +249,7 @@ TEST(Object, empty_string_key) {
 }
 
 TEST(Object, string_key_with_comma) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo,bar\":\"baz\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo,bar\":\"baz\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo,bar"));
@@ -252,7 +258,7 @@ TEST(Object, string_key_with_comma) {
 }
 
 TEST(Object, string_key_with_space) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo bar\":\"baz\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo bar\":\"baz\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo bar"));
@@ -261,7 +267,8 @@ TEST(Object, string_key_with_space) {
 }
 
 TEST(Object, string_value_with_stringified_object) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":\"{\\\"x\\\":1}\"}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":\"{\\\"x\\\":1}\"}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -270,7 +277,8 @@ TEST(Object, string_value_with_stringified_object) {
 }
 
 TEST(Object, one_true_boolean_element_with_space) {
-  sourcemeta::jsontoolkit::JSON document{"    {   \"foo\"   :   true  }    "};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "    {   \"foo\"   :   true  }    "};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -279,7 +287,7 @@ TEST(Object, one_true_boolean_element_with_space) {
 }
 
 TEST(Object, two_boolean_values_with_space) {
-  sourcemeta::jsontoolkit::JSON document{
+  sourcemeta::jsontoolkit::JSON<std::string> document{
       "{   \"foo\"  :   true    ,     \"bar\"   :   false}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 2);
@@ -292,7 +300,7 @@ TEST(Object, two_boolean_values_with_space) {
 }
 
 TEST(Object, one_array_element_with_space) {
-  sourcemeta::jsontoolkit::JSON document{
+  sourcemeta::jsontoolkit::JSON<std::string> document{
       "{   \"foo\"   :  [  true  ,  false   ]   }"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
@@ -306,7 +314,8 @@ TEST(Object, one_array_element_with_space) {
 }
 
 TEST(Object, nested_object_clear) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":{\"bar\":true}}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   document.clear();
@@ -315,14 +324,16 @@ TEST(Object, nested_object_clear) {
 }
 
 TEST(Object, nested_object_clear_non_parsed) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":{\"bar\":true}}"};
   document.clear();
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 0);
 }
 
 TEST(Object, minified_nested_object) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":{\"bar\":true}}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{\"foo\":{\"bar\":true}}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -332,7 +343,7 @@ TEST(Object, minified_nested_object) {
 }
 
 TEST(Object, empty_nested_object_with_new_line_before_end) {
-  sourcemeta::jsontoolkit::JSON document("{\"x\":{}\n}");
+  sourcemeta::jsontoolkit::JSON<std::string> document("{\"x\":{}\n}");
   document.parse();
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
@@ -342,11 +353,11 @@ TEST(Object, empty_nested_object_with_new_line_before_end) {
 }
 
 TEST(Object, equality_with_padding) {
-  sourcemeta::jsontoolkit::JSON left{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> left{"{\"foo\":1}"};
   left.parse();
-  sourcemeta::jsontoolkit::JSON right{"  { \"foo\"   : 1 } "};
+  sourcemeta::jsontoolkit::JSON<std::string> right{"  { \"foo\"   : 1 } "};
   right.parse();
-  sourcemeta::jsontoolkit::JSON extra{" { \"fo\":1 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> extra{" { \"fo\":1 }"};
   extra.parse();
   EXPECT_EQ(left, right);
   EXPECT_FALSE(left == extra);
@@ -354,13 +365,14 @@ TEST(Object, equality_with_padding) {
 }
 
 TEST(Object, stringify_single_scalar_no_space) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
   const std::string result{document.stringify()};
   EXPECT_EQ(result, "{\"foo\":1}");
 }
 
 TEST(Object, stringify_scalars_no_space) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": true }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{ \"foo\": 1, \"bar\": true }"};
   const std::string result{document.stringify()};
   // Because order is irrelevant
   const bool matches = result == "{\"foo\":1,\"bar\":true}" ||
@@ -369,13 +381,14 @@ TEST(Object, stringify_scalars_no_space) {
 }
 
 TEST(Object, stringify_single_scalar_pretty) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
   const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "{\n  \"foo\": 1\n}");
 }
 
 TEST(Object, stringify_scalars_pretty) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": true }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{ \"foo\": 1, \"bar\": true }"};
   const std::string result{document.stringify(true)};
   // Because order is irrelevant
   const bool matches = result == "{\n  \"foo\": 1,\n  \"bar\": true\n}" ||
@@ -384,25 +397,27 @@ TEST(Object, stringify_scalars_pretty) {
 }
 
 TEST(Object, stringify_single_array_no_space) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": [1,2] }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [1,2] }"};
   const std::string result{document.stringify()};
   EXPECT_EQ(result, "{\"foo\":[1,2]}");
 }
 
 TEST(Object, stringify_single_array_pretty) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": [1,2] }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [1,2] }"};
   const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "{\n  \"foo\": [\n    1,\n    2\n  ]\n}");
 }
 
 TEST(Object, stringify_single_object_pretty) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": {\"bar\":1} }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{ \"foo\": {\"bar\":1} }"};
   const std::string result{document.stringify(true)};
   EXPECT_EQ(result, "{\n  \"foo\": {\n    \"bar\": 1\n  }\n}");
 }
 
 TEST(Object, const_all_of_true) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": 2 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{ \"foo\": 1, \"bar\": 2 }"};
   document.parse();
   const bool result =
       std::all_of(document.to_object().cbegin(), document.to_object().cend(),
@@ -411,7 +426,8 @@ TEST(Object, const_all_of_true) {
 }
 
 TEST(Object, const_all_of_false) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": 1, \"bar\": \"2\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{
+      "{ \"foo\": 1, \"bar\": \"2\" }"};
   document.parse();
   const bool result =
       std::all_of(document.to_object().cbegin(), document.to_object().cend(),
@@ -420,9 +436,10 @@ TEST(Object, const_all_of_false) {
 }
 
 TEST(Object, const_all_of_on_const_instance) {
-  sourcemeta::jsontoolkit::JSON source{"{ \"foo\": 1, \"bar\": 2 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> source{
+      "{ \"foo\": 1, \"bar\": 2 }"};
   source.parse();
-  const sourcemeta::jsontoolkit::JSON document{std::move(source)};
+  const sourcemeta::jsontoolkit::JSON<std::string> document{std::move(source)};
   const bool result =
       std::all_of(document.to_object().cbegin(), document.to_object().cend(),
                   [](auto pair) { return pair.second.is_integer(); });
@@ -430,14 +447,14 @@ TEST(Object, const_all_of_on_const_instance) {
 }
 
 TEST(Object, key_copy_assignment_same_type_parsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"\"baz\""};
   value.parse();
   document.assign("foo", value);
 
@@ -448,14 +465,14 @@ TEST(Object, key_copy_assignment_same_type_parsed) {
 }
 
 TEST(Object, key_move_assignment_same_type_parsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"\"baz\""};
   value.parse();
   document.assign("foo", std::move(value));
 
@@ -466,14 +483,14 @@ TEST(Object, key_move_assignment_same_type_parsed) {
 }
 
 TEST(Object, key_copy_assignment_different_type_parsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"1"};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"1"};
   value.parse();
   document.assign("foo", value);
 
@@ -484,14 +501,14 @@ TEST(Object, key_copy_assignment_different_type_parsed) {
 }
 
 TEST(Object, key_move_assignment_different_type_parsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"1"};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"1"};
   value.parse();
   document.assign("foo", std::move(value));
 
@@ -502,14 +519,14 @@ TEST(Object, key_move_assignment_different_type_parsed) {
 }
 
 TEST(Object, key_copy_assignment_same_type_unparsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"\"baz\""};
   document.assign("foo", value);
 
   EXPECT_EQ(document.size(), 1);
@@ -519,14 +536,14 @@ TEST(Object, key_copy_assignment_same_type_unparsed) {
 }
 
 TEST(Object, key_move_assignment_same_type_unparsed) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> value{"\"baz\""};
   document.assign("foo", std::move(value));
 
   EXPECT_EQ(document.size(), 1);
@@ -536,14 +553,14 @@ TEST(Object, key_move_assignment_same_type_unparsed) {
 }
 
 TEST(Object, new_key_copy_assignment) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON new_value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> new_value{"\"baz\""};
   document.assign("bar", new_value);
 
   EXPECT_EQ(document.size(), 2);
@@ -558,14 +575,14 @@ TEST(Object, new_key_copy_assignment) {
 }
 
 TEST(Object, new_key_move_assignment) {
-  sourcemeta::jsontoolkit::JSON document{"{ \"foo\": \"bar\" }"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": \"bar\" }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_string());
   EXPECT_EQ(document.at("foo"), "bar");
 
-  sourcemeta::jsontoolkit::JSON new_value{"\"baz\""};
+  sourcemeta::jsontoolkit::JSON<std::string> new_value{"\"baz\""};
   document.assign("bar", std::move(new_value));
 
   EXPECT_EQ(document.size(), 2);
@@ -580,7 +597,7 @@ TEST(Object, new_key_move_assignment) {
 }
 
 TEST(Object, assign_literal_lvalue_string) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":1}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -595,7 +612,7 @@ TEST(Object, assign_literal_lvalue_string) {
 }
 
 TEST(Object, assign_literal_rvalue_string) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":1}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
@@ -609,12 +626,12 @@ TEST(Object, assign_literal_rvalue_string) {
 }
 
 TEST(Object, map_copy_constructor) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":1}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
-  const std::map<std::string, sourcemeta::jsontoolkit::JSON> value{
+  const std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>> value{
       {"bar", static_cast<std::int64_t>(5)}};
   document.assign("xxx", value);
   EXPECT_EQ(document.size(), 2);
@@ -629,12 +646,12 @@ TEST(Object, map_copy_constructor) {
 }
 
 TEST(Object, map_move_constructor) {
-  sourcemeta::jsontoolkit::JSON document{"{\"foo\":1}"};
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{\"foo\":1}"};
   EXPECT_TRUE(document.is_object());
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.contains("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
-  std::map<std::string, sourcemeta::jsontoolkit::JSON> value{
+  std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>> value{
       {"bar", static_cast<std::int64_t>(5)}};
   document.assign("xxx", std::move(value));
   EXPECT_EQ(document.size(), 2);

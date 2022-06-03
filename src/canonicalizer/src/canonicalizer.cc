@@ -23,8 +23,8 @@
 #include <memory> // std::make_unique
 
 auto sourcemeta::jsonbinpack::canonicalizer::apply(
-    sourcemeta::jsontoolkit::JSON &document)
-    -> sourcemeta::jsontoolkit::JSON & {
+    sourcemeta::jsontoolkit::JSON<std::string> &document)
+    -> sourcemeta::jsontoolkit::JSON<std::string> & {
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
 

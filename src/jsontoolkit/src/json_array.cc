@@ -1,6 +1,7 @@
 #include <algorithm> // std::for_each
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 #include <sstream>     // std::ostringstream
@@ -8,13 +9,11 @@
 #include <string_view> // std::string_view
 #include <utility>     // std::move
 
-#include "utils.h"
-
 template <typename Wrapper, typename Source>
 auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
   const std::string_view document{
-      sourcemeta::jsontoolkit::utils::trim(this->source())};
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::trim(this->source())};
+  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       document.front() ==
               sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin &&
           document.back() ==
@@ -43,8 +42,8 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
       }
 
       if (!is_protected_section) {
-        sourcemeta::jsontoolkit::utils::ENSURE_PARSE(element_start_index == 0,
-                                                     "Invalid start of string");
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            element_start_index == 0, "Invalid start of string");
         element_start_index = index;
         element_cursor = index;
         expecting_value = false;
@@ -65,11 +64,11 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
       object_level -= 1;
       break;
     case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(index == 0 || level != 0,
-                                                   "Invalid start of array");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(index == 0 || level != 0,
+                                                      "Invalid start of array");
       level += 1;
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           is_protected_section || element_start_index == 0 ||
               element_start_index >= index,
           "Unexpected start of array");
@@ -87,7 +86,7 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
       break;
     case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
       level -= 1;
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           level != 0 || !expecting_value, "Invalid end of array");
 
       if (is_protected_section) {
@@ -109,10 +108,10 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
         break;
       }
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           element_start_index != 0, "No array value before delimiter");
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(element_start_index != index,
-                                                   "Invalid array value");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          element_start_index != index, "Invalid array value");
 
       this->data.push_back(Wrapper(std::string{
           document.substr(element_start_index, index - element_start_index)}));
@@ -130,7 +129,7 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
       if (element_cursor == 0) {
         element_cursor = index;
       } else if (element_cursor > 0 && element_start_index == 0) {
-        if (sourcemeta::jsontoolkit::utils::is_blank(character)) {
+        if (sourcemeta::jsontoolkit::internal::is_blank(character)) {
           element_cursor = index + 1;
         } else {
           element_start_index = element_cursor;
@@ -142,7 +141,7 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::parse_source() -> void {
     }
   }
 
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       level == 0 && !is_protected_section, "Unbalanced array");
 }
 
@@ -155,13 +154,14 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::stringify(
 
   stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin;
   if (pretty) {
-    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+    stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
   }
 
   for (auto element = this->data.begin(); element != this->data.end();
        ++element) {
-    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation * indent,
-                          sourcemeta::jsontoolkit::JSON::token_space);
+    stream << std::string(sourcemeta::jsontoolkit::JSON<Source>::indentation *
+                              indent,
+                          sourcemeta::jsontoolkit::JSON<Source>::token_space);
 
     if (element->is_array()) {
       stream << element->to_array().stringify(pretty ? indent + 1 : indent);
@@ -175,16 +175,16 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::stringify(
       stream
           << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_delimiter;
       if (pretty) {
-        stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+        stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
       }
     }
   }
 
   if (pretty) {
-    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
-    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation *
+    stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
+    stream << std::string(sourcemeta::jsontoolkit::JSON<Source>::indentation *
                               (indent - 1),
-                          sourcemeta::jsontoolkit::JSON::token_space);
+                          sourcemeta::jsontoolkit::JSON<Source>::token_space);
   }
 
   stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end;
@@ -193,8 +193,9 @@ auto sourcemeta::jsontoolkit::Array<Wrapper, Source>::stringify(
 
 // Explicit instantiation
 
-template void sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
-                                             std::string>::parse_source();
+template void
+sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<std::string>,
+                               std::string>::parse_source();
 template std::string
-    sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON,
+    sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<std::string>,
                                    std::string>::stringify(std::size_t) const;

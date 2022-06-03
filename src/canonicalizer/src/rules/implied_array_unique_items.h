@@ -22,11 +22,11 @@ public:
 
     const bool singular_by_enum{
         schema.contains("enum") && schema.is_array("enum") &&
-        std::all_of(schema.to_array("enum").cbegin(),
-                    schema.to_array("enum").cend(),
-                    [](const sourcemeta::jsontoolkit::JSON &element) {
-                      return !element.is_array() || element.size() <= 1;
-                    })};
+        std::all_of(
+            schema.to_array("enum").cbegin(), schema.to_array("enum").cend(),
+            [](const sourcemeta::jsontoolkit::JSON<std::string> &element) {
+              return !element.is_array() || element.size() <= 1;
+            })};
 
     return schema.has_vocabulary(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
@@ -35,7 +35,8 @@ public:
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
     schema.erase("uniqueItems");
   }
 };

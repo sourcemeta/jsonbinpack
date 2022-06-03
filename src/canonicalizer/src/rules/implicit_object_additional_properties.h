@@ -22,8 +22,9 @@ public:
            !schema.contains("additionalProperties");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &schema) -> void override {
-    std::map<std::string, sourcemeta::jsontoolkit::JSON>
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+      -> void override {
+    std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>>
         additional_properties{};
     schema.assign("additionalProperties", std::move(additional_properties));
   }

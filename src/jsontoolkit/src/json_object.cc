@@ -1,16 +1,15 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/json_array.h>
+#include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
 #include <sstream> // std::ostringstream
 
-#include "utils.h"
-
 template <typename Wrapper, typename Source>
 auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
   const std::string_view document{
-      sourcemeta::jsontoolkit::utils::trim(this->source())};
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::trim(this->source())};
+  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       document.front() ==
               sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_begin &&
           document.back() ==
@@ -73,12 +72,12 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
       }
 
       // This means we found a key without a corresponding value
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           key_start_index == 0 || key_end_index == 0 || value_start_index != 0,
           "Invalid object value");
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index != index,
-                                                   "Invalid object value");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          value_start_index != index, "Invalid object value");
 
       // We have a key and the start of the value, but the object ended
       if (key_start_index != 0 && key_end_index != 0 &&
@@ -95,7 +94,7 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
         expecting_element_after_delimiter = false;
       }
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           !expecting_element_after_delimiter, "Trailing object comma");
       break;
     case sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_delimiter:
@@ -103,8 +102,8 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
         break;
       }
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index != 0,
-                                                   "Invalid object value");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(value_start_index != 0,
+                                                      "Invalid object value");
 
       // We have a key and the start of the value, but we found a comma
       if (key_start_index != 0 && key_end_index != 0 &&
@@ -127,9 +126,9 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
         break;
       }
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(value_start_index == 0,
-                                                   "Invalid object");
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(value_start_index == 0,
+                                                      "Invalid object");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           key_start_index != 0 && key_end_index != 0, "Invalid object key");
 
       // We have a key, and what follows must be a value
@@ -137,19 +136,19 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
       expecting_value_end = true;
       break;
     default:
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           key_start_index != 0 ||
-              sourcemeta::jsontoolkit::utils::is_blank(character),
+              sourcemeta::jsontoolkit::internal::is_blank(character),
           "Invalid object key");
 
-      sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           key_start_index == 0 || key_end_index == 0 ||
-              sourcemeta::jsontoolkit::utils::is_blank(character) ||
+              sourcemeta::jsontoolkit::internal::is_blank(character) ||
               value_start_index != 0,
           "Invalid object");
 
       if (value_start_index > 0 && expecting_value_end) {
-        if (sourcemeta::jsontoolkit::utils::is_blank(character) &&
+        if (sourcemeta::jsontoolkit::internal::is_blank(character) &&
             !is_protected_section) {
           // Only increment the start index if we find blank characters
           // before the presence of a value
@@ -165,7 +164,7 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::parse_source() -> void {
     }
   }
 
-  sourcemeta::jsontoolkit::utils::ENSURE_PARSE(
+  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       array_level == 0 && !is_string && level == 0, "Unbalanced object");
 }
 
@@ -178,12 +177,13 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::stringify(
 
   stream << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_begin;
   if (pretty) {
-    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+    stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
   }
 
   for (auto pair = this->data.begin(); pair != this->data.end(); ++pair) {
-    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation * indent,
-                          sourcemeta::jsontoolkit::JSON::token_space);
+    stream << std::string(sourcemeta::jsontoolkit::JSON<Source>::indentation *
+                              indent,
+                          sourcemeta::jsontoolkit::JSON<Source>::token_space);
     stream << sourcemeta::jsontoolkit::String::token_begin;
     // TODO: We should use JSON string escaping logic here too
     stream << pair->first;
@@ -191,7 +191,7 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::stringify(
     stream << sourcemeta::jsontoolkit::Object<Wrapper,
                                               Source>::token_key_delimiter;
     if (pretty) {
-      stream << sourcemeta::jsontoolkit::JSON::token_space;
+      stream << sourcemeta::jsontoolkit::JSON<Source>::token_space;
     }
 
     if (pair->second.is_array()) {
@@ -207,24 +207,25 @@ auto sourcemeta::jsontoolkit::Object<Wrapper, Source>::stringify(
       stream
           << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_delimiter;
       if (pretty) {
-        stream << sourcemeta::jsontoolkit::JSON::token_new_line;
+        stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
       }
     }
   }
 
   if (pretty) {
-    stream << sourcemeta::jsontoolkit::JSON::token_new_line;
-    stream << std::string(sourcemeta::jsontoolkit::JSON::indentation *
+    stream << sourcemeta::jsontoolkit::JSON<Source>::token_new_line;
+    stream << std::string(sourcemeta::jsontoolkit::JSON<Source>::indentation *
                               (indent - 1),
-                          sourcemeta::jsontoolkit::JSON::token_space);
+                          sourcemeta::jsontoolkit::JSON<Source>::token_space);
   }
 
   stream << sourcemeta::jsontoolkit::Object<Wrapper, Source>::token_end;
   return stream.str();
 }
 
-template void sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
-                                              std::string>::parse_source();
+template void
+sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<std::string>,
+                                std::string>::parse_source();
 template std::string
-    sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON,
+    sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<std::string>,
                                     std::string>::stringify(std::size_t) const;
