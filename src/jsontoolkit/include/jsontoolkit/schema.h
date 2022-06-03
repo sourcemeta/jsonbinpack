@@ -21,12 +21,15 @@ public:
       sourcemeta::jsontoolkit::JSON<std::string> &;
   [[nodiscard]] auto is_object() const -> bool;
   [[nodiscard]] auto to_object() const -> const sourcemeta::jsontoolkit::Object<
-      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
+      sourcemeta::jsontoolkit::JSON<std::string>, std::string,
+      std::allocator<sourcemeta::jsontoolkit::JSON<std::string>>> &;
   [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array<
-      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
+      sourcemeta::jsontoolkit::JSON<std::string>, std::string,
+      std::allocator<sourcemeta::jsontoolkit::JSON<std::string>>> &;
   [[nodiscard]] auto to_array(const std::string &key) const
       -> const sourcemeta::jsontoolkit::Array<
-          sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
+          sourcemeta::jsontoolkit::JSON<std::string>, std::string,
+          std::allocator<sourcemeta::jsontoolkit::JSON<std::string>>> &;
   [[nodiscard]] auto is_array(const std::string &key) const -> bool;
   [[nodiscard]] auto is_string(const std::string &key) const -> bool;
   [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;

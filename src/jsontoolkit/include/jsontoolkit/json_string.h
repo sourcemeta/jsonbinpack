@@ -13,13 +13,14 @@ namespace sourcemeta::jsontoolkit {
 // Forward declaration
 template <typename Source> class JSON;
 // Protected inheritance to avoid slicing
-template <typename Source> class String final : protected Container<Source> {
+template <typename Source, typename Allocator>
+class String final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty string
-  String<Source>() : Container<Source>{Source{}, false, false} {}
+  String<Source, Allocator>() : Container<Source>{Source{}, false, false} {}
 
   // A stringified JSON document. Not parsed at all
-  String<Source>(const Source &document)
+  String<Source, Allocator>(const Source &document)
       : Container<Source>{document, true, true} {}
 
   auto parse() -> void { Container<Source>::parse(); }
@@ -105,7 +106,7 @@ public:
     return this->data.crend();
   }
 
-  auto operator==(const String<Source> &value) const -> bool {
+  auto operator==(const String<Source, Allocator> &value) const -> bool {
     this->must_be_fully_parsed();
     return this->data == value.data;
   }
@@ -115,28 +116,28 @@ public:
 protected:
   static auto stringify(const std::string &input) -> std::string {
     std::ostringstream stream;
-    stream << String<Source>::token_begin;
+    stream << String<Source, Allocator>::token_begin;
 
     for (const char character : input) {
       if (!is_character_allowed_in_json_string(character)) {
-        stream << String<Source>::token_escape;
+        stream << String<Source, Allocator>::token_escape;
       }
 
       stream << character;
     }
 
-    stream << String<Source>::token_end;
+    stream << String<Source, Allocator>::token_end;
     return stream.str();
   }
 
   auto stringify() -> std::string {
     this->parse();
-    return String<Source>::stringify(this->data);
+    return String<Source, Allocator>::stringify(this->data);
   }
 
   [[nodiscard]] auto stringify() const -> std::string {
     this->must_be_fully_parsed();
-    return String<Source>::stringify(std::string{this->data});
+    return String<Source, Allocator>::stringify(std::string{this->data});
   }
 
 private:
@@ -148,8 +149,8 @@ private:
   static constexpr auto
   is_character_allowed_in_json_string(const char character) -> bool {
     switch (character) {
-    case String<Source>::token_begin:
-    case String<Source>::token_escape:
+    case String<Source, Allocator>::token_begin:
+    case String<Source, Allocator>::token_escape:
       return false;
     default:
       return character < '\u0000' || character > '\u001F';
@@ -163,8 +164,8 @@ private:
         sourcemeta::jsontoolkit::internal::trim(this->source())};
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         document.size() > 1 &&
-            document.front() == String<Source>::token_begin &&
-            document.back() == String<Source>::token_end,
+            document.front() == String<Source, Allocator>::token_begin &&
+            document.back() == String<Source, Allocator>::token_end,
         "Invalid string");
 
     std::ostringstream value;
@@ -186,12 +187,12 @@ private:
       // \t represents the character tabulation character (U+0009).
       // See
       // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-      if (character == String<Source>::token_escape &&
+      if (character == String<Source, Allocator>::token_escape &&
           index < string_data.size() - 1) {
         std::string_view::const_reference next{string_data.at(index + 1)};
         switch (next) {
         case '\u0022':
-        case String<Source>::token_escape:
+        case String<Source, Allocator>::token_escape:
         case '\u002F':
           value << next;
           index += 1;

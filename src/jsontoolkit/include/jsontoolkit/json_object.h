@@ -12,23 +12,25 @@
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
-template <typename Wrapper, typename Source> class Array;
+template <typename Wrapper, typename Source, typename Allocator> class Array;
 
 // Protected inheritance to avoid slicing
-template <typename Wrapper, typename Source>
+template <typename Wrapper, typename Source, typename Allocator>
 class Object final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty object
-  Object() : Container<Source>{Source{}, false, false} {}
+  Object<Wrapper, Source, Allocator>()
+      : Container<Source>{Source{}, false, false} {}
 
   // A stringified JSON document. Not parsed at all
-  Object(Source document) : Container<Source>{document, true, true} {}
+  Object<Wrapper, Source, Allocator>(Source document)
+      : Container<Source>{document, true, true} {}
 
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
-  Object(const std::map<Source, Wrapper> &elements)
+  Object<Wrapper, Source, Allocator>(const std::map<Source, Wrapper> &elements)
       : Container<Source>{Source{}, false, true}, data{elements} {}
-  Object(std::map<Source, Wrapper> &&elements)
+  Object<Wrapper, Source, Allocator>(std::map<Source, Wrapper> &&elements)
       : Container<Source>{Source{}, false, true}, data{std::move(elements)} {}
 
   auto parse() -> void { Container<Source>::parse(); }
@@ -85,19 +87,20 @@ public:
     return this->data.cend();
   }
 
-  auto operator==(const Object<Wrapper, Source> &value) const -> bool {
+  auto operator==(const Object<Wrapper, Source, Allocator> &value) const
+      -> bool {
     this->must_be_fully_parsed();
     return this->data == value.data;
   }
 
   friend Wrapper;
-  friend sourcemeta::jsontoolkit::Array<Wrapper, Source>;
+  friend sourcemeta::jsontoolkit::Array<Wrapper, Source, Allocator>;
 
 protected:
   auto stringify(std::size_t indent) -> std::string {
     this->parse();
-    return static_cast<const Object<Wrapper, Source> *>(this)->stringify(
-        indent);
+    return static_cast<const Object<Wrapper, Source, Allocator> *>(this)
+        ->stringify(indent);
   }
 
   [[nodiscard]] auto stringify(std::size_t indent) const -> std::string {
@@ -105,7 +108,7 @@ protected:
     std::ostringstream stream;
     const bool pretty = indent > 0;
 
-    stream << Object<Wrapper, Source>::token_begin;
+    stream << Object<Wrapper, Source, Allocator>::token_begin;
     if (pretty) {
       stream << sourcemeta::jsontoolkit::internal::token_new_line;
     }
@@ -114,11 +117,11 @@ protected:
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
                                 indent,
                             sourcemeta::jsontoolkit::internal::token_space);
-      stream << sourcemeta::jsontoolkit::String<Source>::token_begin;
+      stream << sourcemeta::jsontoolkit::String<Source, Allocator>::token_begin;
       // TODO: We should use JSON string escaping logic here too
       stream << pair->first;
-      stream << sourcemeta::jsontoolkit::String<Source>::token_end;
-      stream << Object<Wrapper, Source>::token_key_delimiter;
+      stream << sourcemeta::jsontoolkit::String<Source, Allocator>::token_end;
+      stream << Object<Wrapper, Source, Allocator>::token_key_delimiter;
       if (pretty) {
         stream << sourcemeta::jsontoolkit::internal::token_space;
       }
@@ -134,7 +137,7 @@ protected:
       }
 
       if (std::next(pair) != this->data.end()) {
-        stream << Object<Wrapper, Source>::token_delimiter;
+        stream << Object<Wrapper, Source, Allocator>::token_delimiter;
         if (pretty) {
           stream << sourcemeta::jsontoolkit::internal::token_new_line;
         }
@@ -148,7 +151,7 @@ protected:
                             sourcemeta::jsontoolkit::internal::token_space);
     }
 
-    stream << Object<Wrapper, Source>::token_end;
+    stream << Object<Wrapper, Source, Allocator>::token_end;
     return stream.str();
   }
 
@@ -157,8 +160,8 @@ private:
     const std::string_view document{
         sourcemeta::jsontoolkit::internal::trim(this->source())};
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-        document.front() == Object<Wrapper, Source>::token_begin &&
-            document.back() == Object<Wrapper, Source>::token_end,
+        document.front() == Object<Wrapper, Source, Allocator>::token_begin &&
+            document.back() == Object<Wrapper, Source, Allocator>::token_end,
         "Invalid object");
 
     std::string_view::size_type key_start_index = 0;
@@ -177,16 +180,18 @@ private:
           array_level > 0 || is_string || level > 1;
 
       switch (character) {
-      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                          Allocator>::token_begin:
         array_level += 1;
         break;
-      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                          Allocator>::token_end:
         array_level -= 1;
         break;
-      case sourcemeta::jsontoolkit::String<Source>::token_begin:
+      case sourcemeta::jsontoolkit::String<Source, Allocator>::token_begin:
         // Don't do anything if this is a escaped quote
         if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String<Source>::token_escape) {
+            sourcemeta::jsontoolkit::String<Source, Allocator>::token_escape) {
           break;
         }
 
@@ -208,10 +213,10 @@ private:
         // We have a key and we are likely entering a string value
         is_string = !is_string;
         break;
-      case Object<Wrapper, Source>::token_begin:
+      case Object<Wrapper, Source, Allocator>::token_begin:
         level += 1;
         break;
-      case Object<Wrapper, Source>::token_end:
+      case Object<Wrapper, Source, Allocator>::token_end:
         level -= 1;
         if (is_protected_section) {
           break;
@@ -244,7 +249,7 @@ private:
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             !expecting_element_after_delimiter, "Trailing object comma");
         break;
-      case Object<Wrapper, Source>::token_delimiter:
+      case Object<Wrapper, Source, Allocator>::token_delimiter:
         if (is_protected_section) {
           break;
         }
@@ -268,7 +273,7 @@ private:
 
         expecting_element_after_delimiter = true;
         break;
-      case Object<Wrapper, Source>::token_key_delimiter:
+      case Object<Wrapper, Source, Allocator>::token_key_delimiter:
         if (is_protected_section) {
           break;
         }

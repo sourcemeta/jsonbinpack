@@ -1,14 +1,8 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
-#include <stdexcept>   // std::domain_error
-#include <string>      // std::string
-#include <type_traits> // std::is_nothrow_move_constructible
-#include <utility>     // std::as_const
-
-TEST(String, nothrow_move_constructible) {
-  EXPECT_TRUE(std::is_nothrow_move_constructible<
-              sourcemeta::jsontoolkit::String<std::string>>::value);
-}
+#include <stdexcept> // std::domain_error
+#include <string>    // std::string
+#include <utility>   // std::as_const
 
 TEST(String, assignment_string_from_boolean) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"false"};

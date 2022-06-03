@@ -9,23 +9,25 @@
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
-template <typename Wrapper, typename Source> class Object;
+template <typename Wrapper, typename Source, typename Allocator> class Object;
 
 // Protected inheritance to avoid slicing
-template <typename Wrapper, typename Source>
+template <typename Wrapper, typename Source, typename Allocator>
 class Array final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty array
-  Array() : Container<Source>{Source{}, false, false} {}
+  Array<Wrapper, Source, Allocator>()
+      : Container<Source>{Source{}, false, false} {}
 
   // A stringified JSON document. Not parsed at all
-  Array(Source document) : Container<Source>{document, true, true} {}
+  Array<Wrapper, Source, Allocator>(Source document)
+      : Container<Source>{document, true, true} {}
 
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
-  Array(const std::vector<Wrapper> &elements)
+  Array<Wrapper, Source, Allocator>(const std::vector<Wrapper> &elements)
       : Container<Source>{Source{}, false, true}, data{elements} {}
-  Array(std::vector<Wrapper> &&elements)
+  Array<Wrapper, Source, Allocator>(std::vector<Wrapper> &&elements)
       : Container<Source>{Source{}, false, true}, data{std::move(elements)} {}
 
   auto parse() -> void { Container<Source>::parse(); }
@@ -116,20 +118,21 @@ public:
     return this->data.crend();
   }
 
-  auto operator==(const Array<Wrapper, Source> &value) const -> bool {
+  auto operator==(const Array<Wrapper, Source, Allocator> &value) const
+      -> bool {
     this->must_be_fully_parsed();
     return this->data == value.data;
   }
 
   friend Wrapper;
-  friend sourcemeta::jsontoolkit::Object<Wrapper, Source>;
+  friend sourcemeta::jsontoolkit::Object<Wrapper, Source, Allocator>;
 
 protected:
   auto stringify(std::size_t indent) -> std::string {
     // We need to fully parse before stringify
     this->parse();
-    return static_cast<const sourcemeta::jsontoolkit::Array<Wrapper, Source> *>(
-               this)
+    return static_cast<const sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                                            Allocator> *>(this)
         ->stringify(indent);
   }
 
@@ -138,7 +141,8 @@ protected:
     std::ostringstream stream;
     const bool pretty = indent > 0;
 
-    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin;
+    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                             Allocator>::token_begin;
     if (pretty) {
       stream << sourcemeta::jsontoolkit::internal::token_new_line;
     }
@@ -158,8 +162,8 @@ protected:
       }
 
       if (std::next(element) != this->data.end()) {
-        stream
-            << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_delimiter;
+        stream << sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                                 Allocator>::token_delimiter;
         if (pretty) {
           stream << sourcemeta::jsontoolkit::internal::token_new_line;
         }
@@ -173,7 +177,8 @@ protected:
                             sourcemeta::jsontoolkit::internal::token_space);
     }
 
-    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end;
+    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                             Allocator>::token_end;
     return stream.str();
   }
 
@@ -183,9 +188,11 @@ private:
         sourcemeta::jsontoolkit::internal::trim(this->source())};
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         document.front() ==
-                sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin &&
+                sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                               Allocator>::token_begin &&
             document.back() ==
-                sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end,
+                sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                               Allocator>::token_end,
         "Invalid array");
 
     const std::string_view::size_type size{document.size()};
@@ -202,10 +209,10 @@ private:
       is_protected_section = is_string || level > 1 || object_level > 0;
 
       switch (character) {
-      case sourcemeta::jsontoolkit::String<Source>::token_begin:
+      case sourcemeta::jsontoolkit::String<Source, Allocator>::token_begin:
         // Don't do anything if this is a escaped quote
         if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String<Source>::token_escape) {
+            sourcemeta::jsontoolkit::String<Source, Allocator>::token_escape) {
           break;
         }
 
@@ -219,8 +226,8 @@ private:
 
         is_string = !is_string;
         break;
-      case sourcemeta::jsontoolkit::Object<Wrapper,
-                                           String<Source>>::token_begin:
+      case sourcemeta::jsontoolkit::Object<Wrapper, String<Source, Allocator>,
+                                           Allocator>::token_begin:
         object_level += 1;
         if (!is_protected_section) {
           element_start_index = index;
@@ -229,10 +236,12 @@ private:
         }
 
         break;
-      case sourcemeta::jsontoolkit::Object<Wrapper, String<Source>>::token_end:
+      case sourcemeta::jsontoolkit::Object<Wrapper, String<Source, Allocator>,
+                                           Allocator>::token_end:
         object_level -= 1;
         break;
-      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin:
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                          Allocator>::token_begin:
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             index == 0 || level != 0, "Invalid start of array");
         level += 1;
@@ -253,7 +262,8 @@ private:
         }
 
         break;
-      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end:
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                          Allocator>::token_end:
         level -= 1;
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             level != 0 || !expecting_value, "Invalid end of array");
@@ -272,7 +282,8 @@ private:
         }
 
         break;
-      case sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_delimiter:
+      case sourcemeta::jsontoolkit::Array<Wrapper, Source,
+                                          Allocator>::token_delimiter:
         if (is_protected_section) {
           break;
         }
