@@ -16,7 +16,7 @@ template <typename Wrapper, typename Source>
 class Array final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty array
-  Array() : Container<Source>{"", false, false} {}
+  Array() : Container<Source>{Source{}, false, false} {}
 
   // A stringified JSON document. Not parsed at all
   Array(Source document) : Container<Source>{document, true, true} {}
