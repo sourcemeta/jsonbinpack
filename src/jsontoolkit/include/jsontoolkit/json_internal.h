@@ -6,6 +6,11 @@
 
 namespace sourcemeta::jsontoolkit::internal {
 
+const char token_space = ' ';
+const char token_new_line = '\n';
+
+const std::size_t indentation = 2;
+
 // Insignificant whitespace is allowed before or after any token. Whitespace is
 // any sequence of one or more of the following code points: character
 // tabulation (U+0009), line feed (U+000A), carriage return (U+000D), and space
