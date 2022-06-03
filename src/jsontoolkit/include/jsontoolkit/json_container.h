@@ -53,8 +53,6 @@ protected:
     return this->_source;
   }
 
-  inline auto set_source(T new_source) -> void { this->_source = new_source; }
-
   inline auto must_be_fully_parsed() const -> void {
     if (this->must_parse_flat || this->must_parse_deep) {
       throw std::logic_error(
