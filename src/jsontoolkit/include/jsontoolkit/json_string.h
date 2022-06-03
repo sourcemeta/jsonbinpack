@@ -26,7 +26,6 @@ public:
 
   using traits_type = typename Source::traits_type;
   using value_type = typename Source::value_type;
-  using allocator_type = typename Source::allocator_type;
   using size_type = typename Source::size_type;
   using difference_type = typename Source::difference_type;
   using reference = typename Source::reference;
@@ -137,7 +136,7 @@ protected:
 
   [[nodiscard]] auto stringify() const -> std::string {
     this->must_be_fully_parsed();
-    return String<Source>::stringify(this->data);
+    return String<Source>::stringify(std::string{this->data});
   }
 
 private:

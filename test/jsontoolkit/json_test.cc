@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 #include <stdexcept>   // std::domain_error
+#include <string_view> // std::string_view
 #include <type_traits> // std::is_default_constructible
 #include <utility>     // std::as_const
 #include <vector>      // std::vector
@@ -135,6 +136,23 @@ TEST(JSON, not_bool_equality_int) {
 
 TEST(JSON, at_boolean) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[true,false,true]"};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 3);
+
+  EXPECT_TRUE(document.at(0).is_boolean());
+  EXPECT_TRUE(document.at(1).is_boolean());
+  EXPECT_TRUE(document.at(2).is_boolean());
+
+  EXPECT_EQ(document.at(0), true);
+  EXPECT_EQ(document.at(1), false);
+  EXPECT_EQ(document.at(2), true);
+
+  document.parse();
+  EXPECT_EQ(std::as_const(document).size(), 3);
+}
+
+TEST(JSON, at_boolean_string_view) {
+  sourcemeta::jsontoolkit::JSON<std::string_view> document{"[true,false,true]"};
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
 
