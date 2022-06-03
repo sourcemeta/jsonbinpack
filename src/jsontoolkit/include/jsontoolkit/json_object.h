@@ -19,7 +19,7 @@ template <typename Wrapper, typename Source>
 class Object final : protected Container<Source> {
 public:
   // By default, construct a fully-parsed empty object
-  Object() : Container<Source>{"", false, false} {}
+  Object() : Container<Source>{Source{}, false, false} {}
 
   // A stringified JSON document. Not parsed at all
   Object(Source document) : Container<Source>{document, true, true} {}

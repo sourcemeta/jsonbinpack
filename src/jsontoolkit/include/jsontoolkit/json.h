@@ -65,8 +65,9 @@ public:
 
   // If we set the boolean directly, then the document is fully parsed
   JSON<Source>(bool value)
-      : Container<Source>{"", false, false}, data{std::in_place_type<bool>,
-                                                  value} {}
+      : Container<Source>{Source{}, false, false}, data{
+                                                       std::in_place_type<bool>,
+                                                       value} {}
 
   // If we set the null directly, then the document is fully parsed
   JSON<Source>(std::nullptr_t)
