@@ -1,4 +1,5 @@
 #include <jsonbinpack/canonicalizer/bundle.h>
+#include <memory> // std::unique_ptr
 #include <sourcemeta/assert.h>
 #include <string>        // std::string
 #include <unordered_set> // std::unordered_set
@@ -9,25 +10,28 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     -> sourcemeta::jsontoolkit::JSON<std::string> & {
   std::unordered_set<std::string> processed_rules;
 
-  for (auto const &rule_pointer : this->rules) {
-    sourcemeta::assert::CHECK(processed_rules.find(rule_pointer->name()) ==
-                                  processed_rules.end(),
-                              "Rules must only be processed once");
+  // Avoid recursion to not blow up the stack even on highly complex schemas
+  while (true) {
+    auto matches = processed_rules.size();
 
-    const bool was_transformed{rule_pointer->apply(document)};
-    if (was_transformed) {
-      processed_rules.insert(rule_pointer->name());
+    for (auto const &rule_pointer : this->rules) {
+      const bool was_transformed{rule_pointer->apply(document)};
+      if (was_transformed) {
+        sourcemeta::assert::CHECK(processed_rules.find(rule_pointer->name()) ==
+                                      processed_rules.end(),
+                                  "Rules must only be processed once");
+        processed_rules.insert(rule_pointer->name());
+      }
+    }
+
+    if (matches < processed_rules.size()) {
+      continue;
+    } else {
+      break;
     }
   }
 
-  if (processed_rules.empty()) {
-    return document;
-  }
-
-  // Keep going until no more transformations are possible
-  // TODO: Can we support this operation without
-  // recursion in order to not risk stack overflows
-  return this->apply(document);
+  return document;
 }
 
 auto sourcemeta::jsonbinpack::canonicalizer::Bundle::add(
