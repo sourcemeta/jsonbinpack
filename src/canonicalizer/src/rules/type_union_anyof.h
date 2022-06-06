@@ -23,7 +23,7 @@ public:
            schema.at("type").is_array();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     std::vector<sourcemeta::jsontoolkit::JSON<std::string>> disjunctors;
     for (const auto &type : schema.at("type").to_array()) {

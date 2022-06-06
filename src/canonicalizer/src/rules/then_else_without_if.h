@@ -18,7 +18,7 @@ public:
            schema.contains("else") && !schema.contains("if");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.erase("then");
     schema.erase("else");

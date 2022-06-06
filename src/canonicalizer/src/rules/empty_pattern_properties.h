@@ -18,7 +18,7 @@ public:
            schema.at("patternProperties").empty();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.erase("patternProperties");
   }

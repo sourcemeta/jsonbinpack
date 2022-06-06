@@ -40,7 +40,7 @@ public:
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.erase("uniqueItems");
   }

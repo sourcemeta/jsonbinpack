@@ -18,7 +18,7 @@ public:
            schema.at("type") == "object" && !schema.contains("minProperties");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.assign("minProperties", static_cast<std::int64_t>(0));
   }

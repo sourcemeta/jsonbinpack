@@ -76,7 +76,7 @@ public:
     return true;
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     // All possible JSON Schema types
     // See

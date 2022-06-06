@@ -10,11 +10,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
 
   // TODO: Also check here that we don't process the same rule twice
   for (auto const &rule_pointer : this->rules) {
-    sourcemeta::jsonbinpack::canonicalizer::Rule *const rule{
-        rule_pointer.get()};
-    const bool was_transformed{rule->apply(document)};
+    const bool was_transformed{rule_pointer->apply(document)};
     if (was_transformed) {
-      processed_rules.insert(rule->name());
+      processed_rules.insert(rule_pointer->name());
     }
   }
 
