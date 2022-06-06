@@ -34,6 +34,10 @@ auto sourcemeta::jsontoolkit::Schema::has_vocabulary(
   return (this->schema.is_object() || this->schema.is_array()) && !uri.empty();
 }
 
+auto sourcemeta::jsontoolkit::Schema::is_boolean() const -> bool {
+  return this->schema.is_boolean();
+}
+
 auto sourcemeta::jsontoolkit::Schema::contains(const std::string &key) const
     -> bool {
   return this->schema.contains(key);
