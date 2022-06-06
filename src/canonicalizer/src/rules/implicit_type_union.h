@@ -25,27 +25,55 @@ public:
             schema, "https://json-schema.org/draft/2020-12/vocab/applicator");
     const bool is_object = schema.is_object();
 
-    return !(has_core_vocabulary && is_object && schema.contains("$ref")) &&
-           !(has_core_vocabulary && is_object &&
-             schema.contains("$dynamicRef")) &&
-           !(has_validation_vocabulary && is_object &&
-             schema.contains("type")) &&
-           !(has_validation_vocabulary && is_object &&
-             schema.contains("const")) &&
-           !(has_validation_vocabulary && is_object &&
-             schema.contains("enum")) &&
-           !(has_applicator_vocabulary && is_object &&
-             schema.contains("anyOf")) &&
-           !(has_applicator_vocabulary && is_object &&
-             schema.contains("allOf")) &&
-           !(has_applicator_vocabulary && is_object &&
-             schema.contains("oneOf")) &&
-           !(has_applicator_vocabulary && is_object &&
-             schema.contains("not")) &&
-           !(has_applicator_vocabulary && is_object && schema.contains("if")) &&
-           !(has_applicator_vocabulary && is_object &&
-             schema.contains("then")) &&
-           !(has_applicator_vocabulary && is_object && schema.contains("else"));
+    if (has_core_vocabulary && is_object && schema.contains("$ref")) {
+      return false;
+    }
+
+    if (has_core_vocabulary && is_object && schema.contains("$dynamicRef")) {
+      return false;
+    }
+
+    if (has_validation_vocabulary && is_object && schema.contains("type")) {
+      return false;
+    }
+
+    if (has_validation_vocabulary && is_object && schema.contains("const")) {
+      return false;
+    }
+
+    if (has_validation_vocabulary && is_object && schema.contains("enum")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("anyOf")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("allOf")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("oneOf")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("not")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("if")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("then")) {
+      return false;
+    }
+
+    if (has_applicator_vocabulary && is_object && schema.contains("else")) {
+      return false;
+    }
+
+    return true;
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)

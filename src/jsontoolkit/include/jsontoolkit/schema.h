@@ -26,7 +26,7 @@ auto is_schema(const sourcemeta::jsontoolkit::JSON<T> &document) -> bool {
 template <typename T>
 auto has_vocabulary(const sourcemeta::jsontoolkit::JSON<T> &document,
                     const std::string &uri) -> bool {
-  return sourcemeta::jsontoolkit::schema::is_schema(document) && !uri.empty();
+  return (document.is_object() || document.is_boolean()) && !uri.empty();
 }
 } // namespace sourcemeta::jsontoolkit::schema
 

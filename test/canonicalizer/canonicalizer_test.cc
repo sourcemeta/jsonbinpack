@@ -519,3 +519,33 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, boolean_schema_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document("true");
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "anyOf": [
+      { "type": "null" },
+      { "type": "boolean" },
+      { "type": "object" },
+      { "type": "array" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "integer" }
+    ]
+  })JSON");
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, boolean_schema_2) {
+  sourcemeta::jsontoolkit::JSON<std::string> document("false");
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "not": {}
+  })JSON");
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
