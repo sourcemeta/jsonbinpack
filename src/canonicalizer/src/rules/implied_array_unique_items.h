@@ -10,30 +10,33 @@ class ImpliedArrayUniqueItems final
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    const bool singular_by_max_items{
-        schema.is_object() && schema.contains("maxItems") &&
-        schema.is_integer("maxItems") && schema.to_integer("maxItems") <= 1};
+    const bool singular_by_max_items{schema.is_object() &&
+                                     schema.contains("maxItems") &&
+                                     schema.at("maxItems").is_integer() &&
+                                     schema.at("maxItems").to_integer() <= 1};
 
     const bool singular_by_const{
         schema.is_object() && schema.contains("const") &&
-        schema.is_array("const") && schema.at("const").size() <= 1};
+        schema.at("const").is_array() && schema.at("const").size() <= 1};
 
     const bool singular_by_enum{
         schema.is_object() && schema.contains("enum") &&
-        schema.is_array("enum") &&
+        schema.at("enum").is_array() &&
         std::all_of(
-            schema.to_array("enum").cbegin(), schema.to_array("enum").cend(),
+            schema.at("enum").to_array().cbegin(),
+            schema.at("enum").to_array().cend(),
             [](const sourcemeta::jsontoolkit::JSON<std::string> &element) {
               return !element.is_array() || element.size() <= 1;
             })};
 
-    return schema.has_vocabulary(
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.is_object() && schema.contains("uniqueItems") &&
-           schema.is_boolean("uniqueItems") &&
-           schema.to_boolean("uniqueItems") &&
+           schema.at("uniqueItems").is_boolean() &&
+           schema.at("uniqueItems").to_boolean() &&
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 

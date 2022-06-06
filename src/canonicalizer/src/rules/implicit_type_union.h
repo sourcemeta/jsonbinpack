@@ -11,14 +11,18 @@ class ImplicitTypeUnion final
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    const bool has_core_vocabulary = schema.has_vocabulary(
-        "https://json-schema.org/draft/2020-12/vocab/core");
-    const bool has_validation_vocabulary = schema.has_vocabulary(
-        "https://json-schema.org/draft/2020-12/vocab/validation");
-    const bool has_applicator_vocabulary = schema.has_vocabulary(
-        "https://json-schema.org/draft/2020-12/vocab/applicator");
+    const bool has_core_vocabulary =
+        sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+            schema, "https://json-schema.org/draft/2020-12/vocab/core");
+
+    const bool has_validation_vocabulary =
+        sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+            schema, "https://json-schema.org/draft/2020-12/vocab/validation");
+    const bool has_applicator_vocabulary =
+        sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+            schema, "https://json-schema.org/draft/2020-12/vocab/applicator");
     const bool is_object = schema.is_object();
 
     return !(has_core_vocabulary && is_object && schema.contains("$ref")) &&

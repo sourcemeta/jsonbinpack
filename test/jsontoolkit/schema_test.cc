@@ -9,8 +9,7 @@ TEST(Schema, is_schema_true_object) {
   })JSON");
 
   document.parse();
-  EXPECT_TRUE(sourcemeta::jsontoolkit::Schema::is_schema(document));
-  sourcemeta::jsontoolkit::Schema schema{document};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::schema::is_schema(document));
 }
 
 TEST(Schema, is_schema_false_object) {
@@ -19,31 +18,25 @@ TEST(Schema, is_schema_false_object) {
   })JSON");
 
   document.parse();
-  EXPECT_FALSE(sourcemeta::jsontoolkit::Schema::is_schema(document));
-  EXPECT_THROW(sourcemeta::jsontoolkit::Schema{document},
-               std::invalid_argument);
+  EXPECT_FALSE(sourcemeta::jsontoolkit::schema::is_schema(document));
 }
 
 TEST(Schema, is_schema_true_boolean_true) {
   sourcemeta::jsontoolkit::JSON<std::string> document("true");
   document.parse();
-  EXPECT_TRUE(sourcemeta::jsontoolkit::Schema::is_schema(document));
-  sourcemeta::jsontoolkit::Schema schema{document};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::schema::is_schema(document));
 }
 
 TEST(Schema, is_schema_true_boolean_false) {
   sourcemeta::jsontoolkit::JSON<std::string> document("false");
   document.parse();
-  EXPECT_TRUE(sourcemeta::jsontoolkit::Schema::is_schema(document));
-  sourcemeta::jsontoolkit::Schema schema{document};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::schema::is_schema(document));
 }
 
 TEST(Schema, is_schema_false_array) {
   sourcemeta::jsontoolkit::JSON<std::string> document("[]");
   document.parse();
-  EXPECT_FALSE(sourcemeta::jsontoolkit::Schema::is_schema(document));
-  EXPECT_THROW(sourcemeta::jsontoolkit::Schema{document},
-               std::invalid_argument);
+  EXPECT_FALSE(sourcemeta::jsontoolkit::schema::is_schema(document));
 }
 
 TEST(Schema, default_2020_12_has_vocabulary_core) {
@@ -53,9 +46,8 @@ TEST(Schema, default_2020_12_has_vocabulary_core) {
   })JSON");
 
   document.parse();
-  sourcemeta::jsontoolkit::Schema schema{document};
-  EXPECT_TRUE(schema.has_vocabulary(
-      "https://json-schema.org/draft/2020-12/vocab/core"));
+  EXPECT_TRUE(sourcemeta::jsontoolkit::schema::has_vocabulary(
+      document, "https://json-schema.org/draft/2020-12/vocab/core"));
 }
 
 TEST(Schema, is_schema_not_parsed) {
@@ -63,7 +55,6 @@ TEST(Schema, is_schema_not_parsed) {
     "type": "object"
   })JSON");
 
-  EXPECT_THROW(sourcemeta::jsontoolkit::Schema::is_schema(document),
+  EXPECT_THROW(sourcemeta::jsontoolkit::schema::is_schema(document),
                std::logic_error);
-  EXPECT_THROW(sourcemeta::jsontoolkit::Schema{document}, std::logic_error);
 }

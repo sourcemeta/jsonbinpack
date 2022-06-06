@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_RULE_H_
 
 #include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
 #include <string> // std::string
 
 namespace sourcemeta::jsonbinpack::canonicalizer {
@@ -24,7 +23,8 @@ public:
 
 private:
   [[nodiscard]] virtual auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const -> bool = 0;
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
+      -> bool = 0;
   virtual auto transform(sourcemeta::jsontoolkit::JSON<std::string> &value)
       -> void = 0;
   const std::string _name;

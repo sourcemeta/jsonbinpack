@@ -17,14 +17,23 @@
 #include "rules/then_else_without_if.h"
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
+
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
+#include <jsontoolkit/schema.h>
+#include <sourcemeta/assert.h>
+
 #include <memory> // std::make_unique
 
 auto sourcemeta::jsonbinpack::canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON<std::string> &document)
     -> sourcemeta::jsontoolkit::JSON<std::string> & {
+  document.parse();
+  sourcemeta::assert::CHECK(
+      sourcemeta::jsontoolkit::schema::is_schema(document),
+      "The input document must be a valid schema");
+
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
 
