@@ -16,6 +16,7 @@ public:
   static auto is_schema(const sourcemeta::jsontoolkit::JSON<std::string> &)
       -> bool;
   [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
+  [[nodiscard]] auto is_boolean() const -> bool;
   [[nodiscard]] auto contains(const std::string &key) const -> bool;
   [[nodiscard]] auto at(const std::string &key) const & -> const
       sourcemeta::jsontoolkit::JSON<std::string> &;
