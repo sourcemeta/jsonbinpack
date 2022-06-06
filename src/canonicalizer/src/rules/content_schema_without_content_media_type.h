@@ -10,10 +10,10 @@ public:
   ContentSchemaWithoutContentMediaType()
       : Rule("content_schema_without_content_media_type"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    return schema.has_vocabulary(
-               "https://json-schema.org/draft/2020-12/vocab/content") &&
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema, "https://json-schema.org/draft/2020-12/vocab/content") &&
            schema.is_object() && schema.contains("contentSchema") &&
            !schema.contains("contentMediaType");
   }

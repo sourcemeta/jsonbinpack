@@ -11,14 +11,16 @@ class TypeUnionAnyOf final
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    return schema.has_vocabulary(
-               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           schema.has_vocabulary(
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
+           sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema,
+               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            schema.is_object() && schema.contains("type") &&
-           schema.is_array("type");
+           schema.at("type").is_array();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)

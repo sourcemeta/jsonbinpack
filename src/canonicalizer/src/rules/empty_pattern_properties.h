@@ -9,12 +9,13 @@ class EmptyPatternProperties final
 public:
   EmptyPatternProperties() : Rule("empty_pattern_properties"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    return schema.has_vocabulary(
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema,
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            schema.is_object() && schema.contains("patternProperties") &&
-           schema.empty("patternProperties");
+           schema.at("patternProperties").empty();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)

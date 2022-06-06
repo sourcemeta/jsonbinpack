@@ -9,14 +9,16 @@ class UnsatisfiableMaxContains final
 public:
   UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Schema &schema) const
+  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    return schema.has_vocabulary(
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.is_object() && schema.contains("maxContains") &&
-           schema.is_integer("maxContains") && schema.contains("maxItems") &&
-           schema.is_integer("maxItems") &&
-           schema.to_integer("maxContains") >= schema.to_integer("maxItems");
+           schema.at("maxContains").is_integer() &&
+           schema.contains("maxItems") && schema.at("maxItems").is_integer() &&
+           schema.at("maxContains").to_integer() >=
+               schema.at("maxItems").to_integer();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)

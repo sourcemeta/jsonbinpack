@@ -2,47 +2,32 @@
 #define SOURCEMETA_JSONTOOLKIT_SCHEMA_H_
 
 #include <jsontoolkit/json.h>
-#include <memory> // std::shared_ptr
 #include <string> // std::string
 
-namespace sourcemeta::jsontoolkit {
-/*
- * We model a JSON Schema document as containing a read-only JSON
- * (as schemas are expected to carry an "$id" and be immutable).
- */
-class Schema {
-public:
-  Schema(const sourcemeta::jsontoolkit::JSON<std::string> &);
-  static auto is_schema(const sourcemeta::jsontoolkit::JSON<std::string> &)
-      -> bool;
-  [[nodiscard]] auto has_vocabulary(const std::string &) const -> bool;
-  [[nodiscard]] auto is_boolean() const -> bool;
-  [[nodiscard]] auto contains(const std::string &key) const -> bool;
-  [[nodiscard]] auto at(const std::string &key) const & -> const
-      sourcemeta::jsontoolkit::JSON<std::string> &;
-  [[nodiscard]] auto is_object() const -> bool;
-  [[nodiscard]] auto to_object() const -> const sourcemeta::jsontoolkit::Object<
-      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
-  [[nodiscard]] auto to_array() const -> const sourcemeta::jsontoolkit::Array<
-      sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
-  [[nodiscard]] auto to_array(const std::string &key) const
-      -> const sourcemeta::jsontoolkit::Array<
-          sourcemeta::jsontoolkit::JSON<std::string>, std::string> &;
-  [[nodiscard]] auto is_array(const std::string &key) const -> bool;
-  [[nodiscard]] auto is_string(const std::string &key) const -> bool;
-  [[nodiscard]] auto is_boolean(const std::string &key) const -> bool;
-  [[nodiscard]] auto to_boolean(const std::string &key) const -> bool;
-  [[nodiscard]] auto is_integer(const std::string &key) const -> bool;
-  [[nodiscard]] auto to_integer(const std::string &key) const -> std::int64_t;
-  [[nodiscard]] auto size(const std::string &key) const -> std::size_t;
-  [[nodiscard]] auto empty(const std::string &key) const -> bool;
+namespace sourcemeta::jsontoolkit::schema {
+template <typename T>
+auto is_schema(const sourcemeta::jsontoolkit::JSON<T> &document) -> bool {
+  // A schema object MUST include a "$schema" attribute.
+  // We don't want to play the game of attempting to guess
+  // what version of the specification and vocabularies
+  // are being loaded by a given schema.
+  if (document.is_object() && document.contains("$schema") &&
+      document.at("$schema").is_string()) {
+    return true;
+  }
 
-  // https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.1.1
-  inline static const std::string keyword_core_schema = "$schema";
+  return document.is_boolean();
+}
 
-private:
-  const sourcemeta::jsontoolkit::JSON<std::string> &schema;
-};
-} // namespace sourcemeta::jsontoolkit
+// TODO: Properly implement this function. For now, its just a stub
+// that will always return true given a non-empty string.
+// Later, it should check the meta-schema, check which vocabularies
+// it includes, etc.
+template <typename T>
+auto has_vocabulary(const sourcemeta::jsontoolkit::JSON<T> &document,
+                    const std::string &uri) -> bool {
+  return sourcemeta::jsontoolkit::schema::is_schema(document) && !uri.empty();
+}
+} // namespace sourcemeta::jsontoolkit::schema
 
 #endif

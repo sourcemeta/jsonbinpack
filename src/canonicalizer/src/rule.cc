@@ -1,5 +1,4 @@
 #include <jsonbinpack/canonicalizer/rule.h>
-#include <jsontoolkit/schema.h>
 #include <sourcemeta/assert.h>
 #include <utility> // std::move
 
@@ -18,15 +17,13 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
   // that the condition operates on a constant document
   value.parse();
 
-  const sourcemeta::jsontoolkit::Schema schema{value};
-  if (this->condition(schema)) {
+  if (this->condition(value)) {
     this->transform(value);
     value.parse();
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
-    const sourcemeta::jsontoolkit::Schema new_schema{value};
     sourcemeta::assert::CHECK(
-        !this->condition(new_schema),
+        !this->condition(value),
         "A rule condition must not hold after applying the rule");
     return true;
   }
