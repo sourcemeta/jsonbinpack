@@ -1,4 +1,5 @@
 #include <jsonbinpack/canonicalizer/bundle.h>
+#include <sourcemeta/assert.h>
 #include <string>        // std::string
 #include <unordered_set> // std::unordered_set
 #include <utility>       // std::move
@@ -8,8 +9,11 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     -> sourcemeta::jsontoolkit::JSON<std::string> & {
   std::unordered_set<std::string> processed_rules;
 
-  // TODO: Also check here that we don't process the same rule twice
   for (auto const &rule_pointer : this->rules) {
+    sourcemeta::assert::CHECK(processed_rules.find(rule_pointer->name()) ==
+                                  processed_rules.end(),
+                              "Rules must only be processed once");
+
     const bool was_transformed{rule_pointer->apply(document)};
     if (was_transformed) {
       processed_rules.insert(rule_pointer->name());
