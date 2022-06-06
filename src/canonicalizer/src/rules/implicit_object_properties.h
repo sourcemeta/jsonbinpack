@@ -22,7 +22,7 @@ public:
            schema.at("type") == "object" && !schema.contains("properties");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>>
         properties{};

@@ -18,7 +18,7 @@ public:
            schema.at("type") == "object" && !schema.contains("required");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     std::vector<sourcemeta::jsontoolkit::JSON<std::string>> required{};
     schema.assign("required", std::move(required));

@@ -18,7 +18,7 @@ public:
            schema.at("type") == "integer" && !schema.contains("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.assign("multipleOf", static_cast<std::int64_t>(1));
   }

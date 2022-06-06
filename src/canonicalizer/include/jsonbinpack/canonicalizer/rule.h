@@ -19,13 +19,14 @@ public:
   auto operator=(Rule &&) -> Rule & = delete;
 
   [[nodiscard]] auto name() const -> const std::string &;
-  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &value) -> bool;
+  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &value) const -> bool;
 
 private:
   [[nodiscard]] virtual auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool = 0;
-  virtual auto transform(sourcemeta::jsontoolkit::JSON<std::string> &value)
+  virtual auto
+  transform(sourcemeta::jsontoolkit::JSON<std::string> &value) const
       -> void = 0;
   const std::string _name;
 };

@@ -13,7 +13,7 @@ public:
     return schema.is_boolean();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     sourcemeta::jsontoolkit::JSON<std::string> result{
         std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>>{}};

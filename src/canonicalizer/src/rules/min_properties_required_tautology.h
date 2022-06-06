@@ -22,7 +22,7 @@ public:
                schema.at("minProperties").to_integer();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema)
+  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     schema.assign("minProperties",
                   static_cast<std::int64_t>(schema.at("required").size()));
