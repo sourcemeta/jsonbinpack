@@ -90,9 +90,9 @@ public:
 
   // Copy/move semantics
   JSON<Source>(const JSON<Source> &) = default;
-  JSON<Source>(JSON<Source> &&) = default;
+  JSON<Source>(JSON<Source> &&) noexcept = default;
   auto operator=(const JSON<Source> &) -> JSON<Source> & = default;
-  auto operator=(JSON<Source> &&) -> JSON<Source> & = default;
+  auto operator=(JSON<Source> &&) noexcept -> JSON<Source> & = default;
 
   auto operator=(const std::vector<JSON<Source>> &value) &noexcept
       -> JSON<Source> & {
@@ -132,11 +132,13 @@ public:
   }
 
   auto operator=(std::size_t value) &noexcept -> JSON<Source> & {
-    return this->operator=(static_cast<std::int64_t>(value));
+    this->operator=(static_cast<std::int64_t>(value));
+    return *this;
   }
 
   auto operator=(int value) &noexcept -> JSON<Source> & {
-    return this->operator=(static_cast<std::int64_t>(value));
+    this->operator=(static_cast<std::int64_t>(value));
+    return *this;
   }
 
   auto operator=(double value) &noexcept -> JSON<Source> & {
@@ -147,7 +149,8 @@ public:
   }
 
   auto operator=(const char *value) &noexcept -> JSON<Source> & {
-    return this->operator=(Source{value});
+    this->operator=(Source{value});
+    return *this;
   }
 
   auto operator=(const Source &value) &noexcept -> JSON<Source> & {

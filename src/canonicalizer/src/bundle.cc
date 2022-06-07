@@ -64,9 +64,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
 
     if (matches < processed_rules.size()) {
       continue;
-    } else {
-      break;
     }
+
+    break;
   }
 
   // (2) Canonicalize its sub-schemas
