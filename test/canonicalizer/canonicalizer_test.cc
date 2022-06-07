@@ -14,8 +14,7 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -36,10 +35,12 @@ TEST(Canonicalizer, max_contains_without_contains_2) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "contains": { "type": "string" },
+    "contains": {
+      "type": "string",
+      "minLength": 0
+    },
     "maxContains": 2,
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -59,8 +60,7 @@ TEST(Canonicalizer, min_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -81,10 +81,12 @@ TEST(Canonicalizer, min_contains_without_contains_2) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "contains": { "type": "string" },
+    "contains": {
+      "type": "string",
+      "minLength": 0
+    },
     "minContains": 2,
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -128,10 +130,12 @@ TEST(Canonicalizer, unsatisfiable_max_contains_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "contains": { "type": "string" },
+    "contains": {
+      "type": "string",
+      "minLength": 0
+    },
     "maxItems": 2,
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -153,8 +157,7 @@ TEST(Canonicalizer, implied_array_unique_items_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "maxItems": 1,
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -176,8 +179,7 @@ TEST(Canonicalizer, implied_array_unique_items_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "const": [ 1 ],
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -199,8 +201,7 @@ TEST(Canonicalizer, implied_array_unique_items_3) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1] ],
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -222,8 +223,7 @@ TEST(Canonicalizer, implied_array_unique_items_4) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1], [] ],
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -245,8 +245,7 @@ TEST(Canonicalizer, implied_array_unique_items_5) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
     "enum": [ [1], [], 2 ],
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -269,7 +268,6 @@ TEST(Canonicalizer, min_properties_required_tautology_1) {
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -293,7 +291,6 @@ TEST(Canonicalizer, min_properties_required_tautology_2) {
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -316,7 +313,6 @@ TEST(Canonicalizer, if_without_then_else_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -340,7 +336,6 @@ TEST(Canonicalizer, then_else_without_if_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -363,7 +358,6 @@ TEST(Canonicalizer, empty_pattern_properties_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -383,8 +377,16 @@ TEST(Canonicalizer, type_union_anyof_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "object" },
-      { "type": "array" }
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": []
+      },
+      {
+        "type": "array",
+        "minItems": 0
+      }
     ]
   })JSON");
 
@@ -405,9 +407,60 @@ TEST(Canonicalizer, type_union_anyof_2) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "object", "maxProperties": 3 },
-      { "type": "array", "maxProperties": 3 }
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": [],
+        "maxProperties": 3
+      },
+      {
+        "type": "array",
+        "minItems": 0,
+        "maxProperties": 3
+      }
     ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, type_union_anyof_3) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "foo": {
+        "type": [ "object", "array" ]
+      }
+    }
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "minProperties": 0,
+    "required": [],
+    "properties": {
+      "foo": {
+        "anyOf": [
+          {
+            "type": "object",
+            "minProperties": 0,
+            "properties": {},
+            "required": []
+          },
+          {
+            "type": "array",
+            "minItems": 0
+          }
+        ]
+      }
+    }
   })JSON");
 
   document.parse();
@@ -427,11 +480,27 @@ TEST(Canonicalizer, implicit_type_union_1) {
     "anyOf": [
       { "type": "null" },
       { "type": "boolean" },
-      { "type": "object" },
-      { "type": "array" },
-      { "type": "string" },
-      { "type": "number" },
-      { "type": "integer" }
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": []
+      },
+      {
+        "type": "array",
+        "minItems": 0
+      },
+      {
+        "type": "string",
+        "minLength": 0
+      },
+      {
+        "type": "number"
+      },
+      {
+        "type": "integer",
+        "multipleOf": 1
+      }
     ]
   })JSON");
 
@@ -470,8 +539,7 @@ TEST(Canonicalizer, implicit_array_lower_bound_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "minItems": 0,
-    "items": true
+    "minItems": 0
   })JSON");
 
   document.parse();
@@ -511,7 +579,6 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
     "type": "object",
     "minProperties": 0,
     "required": [],
-    "additionalProperties": {},
     "properties": {}
   })JSON");
 
@@ -527,11 +594,27 @@ TEST(Canonicalizer, boolean_schema_1) {
     "anyOf": [
       { "type": "null" },
       { "type": "boolean" },
-      { "type": "object" },
-      { "type": "array" },
-      { "type": "string" },
-      { "type": "number" },
-      { "type": "integer" }
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": []
+      },
+      {
+        "type": "array",
+        "minItems": 0
+      },
+      {
+        "type": "string",
+        "minLength": 0
+      },
+      {
+        "type": "number"
+      },
+      {
+        "type": "integer",
+        "multipleOf": 1
+      }
     ]
   })JSON");
   document.parse();
@@ -543,7 +626,33 @@ TEST(Canonicalizer, boolean_schema_2) {
   sourcemeta::jsontoolkit::JSON<std::string> document("false");
   sourcemeta::jsonbinpack::canonicalizer::apply(document);
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
-    "not": {}
+    "not": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "minProperties": 0,
+          "properties": {},
+          "required": []
+        },
+        {
+          "type": "array",
+          "minItems": 0
+        },
+        {
+          "type": "string",
+          "minLength": 0
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "integer",
+          "multipleOf": 1
+        }
+      ]
+    }
   })JSON");
   document.parse();
   expected.parse();
