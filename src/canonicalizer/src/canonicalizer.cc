@@ -1,3 +1,4 @@
+#include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
@@ -50,6 +51,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   // Syntax sugar
   bundle.add(std::make_unique<TypeUnionAnyOf>());
   bundle.add(std::make_unique<BooleanSchema>());
+  bundle.add(std::make_unique<BooleanAsEnum>());
 
   // Implicits
   bundle.add(std::make_unique<ImplicitTypeUnion>());

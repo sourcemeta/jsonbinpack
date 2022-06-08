@@ -479,7 +479,7 @@ TEST(Canonicalizer, implicit_type_union_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "null" },
-      { "type": "boolean" },
+      { "enum": [ false, true ] },
       {
         "type": "object",
         "minProperties": 0,
@@ -593,7 +593,7 @@ TEST(Canonicalizer, boolean_schema_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "anyOf": [
       { "type": "null" },
-      { "type": "boolean" },
+      { "enum": [ false, true ] },
       {
         "type": "object",
         "minProperties": 0,
@@ -629,7 +629,7 @@ TEST(Canonicalizer, boolean_schema_2) {
     "not": {
       "anyOf": [
         { "type": "null" },
-        { "type": "boolean" },
+        { "enum": [ false, true ] },
         {
           "type": "object",
           "minProperties": 0,
