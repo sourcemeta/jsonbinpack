@@ -178,7 +178,7 @@ TEST(Canonicalizer, implied_array_unique_items_2) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
-    "const": [ 1 ],
+    "enum": [ [ 1 ] ],
     "minItems": 0
   })JSON");
 
@@ -478,7 +478,7 @@ TEST(Canonicalizer, implicit_type_union_1) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "const": null },
+      { "enum": [ null ] },
       { "enum": [ false, true ] },
       {
         "type": "object",
@@ -592,7 +592,7 @@ TEST(Canonicalizer, boolean_schema_1) {
   sourcemeta::jsonbinpack::canonicalizer::apply(document);
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "anyOf": [
-      { "const": null },
+      { "enum": [ null ] },
       { "enum": [ false, true ] },
       {
         "type": "object",
@@ -628,7 +628,7 @@ TEST(Canonicalizer, boolean_schema_2) {
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "not": {
       "anyOf": [
-        { "const": null },
+        { "enum": [ null ] },
         { "enum": [ false, true ] },
         {
           "type": "object",
