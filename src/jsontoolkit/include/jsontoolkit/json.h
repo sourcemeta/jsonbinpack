@@ -176,6 +176,7 @@ public:
   // Comparison
   auto operator==(const JSON<Source> &value) const -> bool {
     this->must_be_fully_parsed();
+    value.must_be_fully_parsed();
 
     if (this->data.index() != value.data.index()) {
       return false;
