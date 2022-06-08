@@ -1,5 +1,6 @@
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
+#include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/if_without_then_else.h"
@@ -54,6 +55,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<BooleanSchema>());
   bundle.add(std::make_unique<BooleanAsEnum>());
   bundle.add(std::make_unique<NullAsConst>());
+  bundle.add(std::make_unique<ConstAsEnum>());
 
   // Implicits
   bundle.add(std::make_unique<ImplicitTypeUnion>());
