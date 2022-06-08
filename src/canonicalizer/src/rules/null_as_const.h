@@ -2,14 +2,11 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
-#include <vector> // std::vector
-
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class BooleanAsEnum final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class NullAsConst final : public sourcemeta::jsonbinpack::canonicalizer::Rule {
 public:
-  BooleanAsEnum() : Rule("boolean_as_enum"){};
+  NullAsConst() : Rule("null_as_const"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
@@ -17,14 +14,12 @@ public:
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            schema.is_object() && schema.contains("type") &&
-           schema.at("type") == "boolean" && !schema.contains("enum");
+           schema.at("type") == "null";
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign(
-        "enum",
-        std::vector<sourcemeta::jsontoolkit::JSON<std::string>>{false, true});
+    schema.assign("const", sourcemeta::jsontoolkit::JSON<std::string>{nullptr});
     schema.erase("type");
   }
 };

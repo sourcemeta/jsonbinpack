@@ -14,6 +14,7 @@
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
+#include "rules/null_as_const.h"
 #include "rules/then_else_without_if.h"
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
@@ -52,6 +53,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<TypeUnionAnyOf>());
   bundle.add(std::make_unique<BooleanSchema>());
   bundle.add(std::make_unique<BooleanAsEnum>());
+  bundle.add(std::make_unique<NullAsConst>());
 
   // Implicits
   bundle.add(std::make_unique<ImplicitTypeUnion>());
