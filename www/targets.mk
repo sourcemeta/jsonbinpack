@@ -25,5 +25,6 @@ html: \
 	build/www/index.html \
 	build/www/.nojekyll \
 	build/www/CNAME
-	doxygen
+	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --build --preset $(PRESET) --target doxygen
 .PHONY: html
