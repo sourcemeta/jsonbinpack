@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(jsonbinpack VERSION 0.0.1 LANGUAGES CXX)
+project("JSON BinPack" VERSION 0.0.1 LANGUAGES CXX
+  DESCRIPTION "\
+A space-efficient open-source binary JSON serialization \
+format based on JSON Schema with \
+both schema-driven and schema-less support.")
 
 # Only allow Debug and Release builds
 # Adapted from Professional CMake (https://crascit.com/professional-cmake/)
@@ -65,6 +69,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   file(GLOB_RECURSE JSONBINPACK_CXX_SOURCE_FILES src/*.cc src/*.h test/*.cc test/*.h)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-format.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-tidy.cmake)
+  include(${PROJECT_SOURCE_DIR}/cmake/doxygen.cmake)
 
   # TODO: Define packaging
 endif()
