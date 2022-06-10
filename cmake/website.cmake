@@ -1,0 +1,18 @@
+find_program(SASSC_BIN NAMES sassc)
+if(SASSC_BIN)
+  add_custom_command(
+    OUTPUT ${JSONBINPACK_WEBSITE_OUT}
+    VERBATIM
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${JSONBINPACK_WEBSITE_OUT})
+  set_property(SOURCE ${JSONBINPACK_WEBSITE_OUT} PROPERTY GENERATED TRUE)
+
+  add_custom_command(
+    OUTPUT ${JSONBINPACK_WEBSITE_OUT}/style.min.css
+    VERBATIM
+    COMMAND ${SASSC_BIN} --style compressed
+      ${JSONBINPACK_WEBSITE_SRC}/main.scss ${JSONBINPACK_WEBSITE_OUT}/style.min.css
+    DEPENDS ${JSONBINPACK_WEBSITE_OUT} ${JSONBINPACK_WEBSITE_SRC}/main.scss
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+  set_property(SOURCE ${JSONBINPACK_WEBSITE_OUT}/style.min.css PROPERTY GENERATED TRUE)
+  add_custom_target(website DEPENDS ${JSONBINPACK_WEBSITE_OUT}/style.min.css)
+endif()
