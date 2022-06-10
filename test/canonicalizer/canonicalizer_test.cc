@@ -658,3 +658,221 @@ TEST(Canonicalizer, boolean_schema_2) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_2) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5.1
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6.1
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_3) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5,
+    "minimum": 7
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 7
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_4) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5.1,
+    "minimum": 7
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 7
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_5) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5,
+    "minimum": 7.2
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 7.2
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_6) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5.1,
+    "minimum": 7.2
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 7.2
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_7) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5,
+    "minimum": 4
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_8) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5.1,
+    "minimum": 4
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6.1
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_9) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5,
+    "minimum": 4.8
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, exclusive_minimum_to_minimum_10) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "exclusiveMinimum": 5.2,
+    "minimum": 4.8
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 1,
+    "minimum": 6.2
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
