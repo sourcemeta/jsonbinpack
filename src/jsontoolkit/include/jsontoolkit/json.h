@@ -247,6 +247,10 @@ public:
     return false;
   }
 
+  auto operator==(int value) const -> bool {
+    return this->operator==(static_cast<std::int64_t>(value));
+  }
+
   auto operator==(double value) const -> bool {
     this->must_be_fully_parsed();
 
