@@ -3,6 +3,7 @@
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
+#include "rules/exclusive_maximum_to_maximum.h"
 #include "rules/exclusive_minimum_to_minimum.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_array_lower_bound.h"
@@ -58,6 +59,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<NullAsConst>());
   bundle.add(std::make_unique<ConstAsEnum>());
   bundle.add(std::make_unique<ExclusiveMinimumToMinimum>());
+  bundle.add(std::make_unique<ExclusiveMaximumToMaximum>());
 
   // Implicits
   bundle.add(std::make_unique<ImplicitTypeUnion>());
