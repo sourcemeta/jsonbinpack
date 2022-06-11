@@ -2,6 +2,7 @@
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/empty_array_as_const.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/empty_string_as_const.h"
 #include "rules/equal_numeric_bounds_as_const.h"
@@ -75,6 +76,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   // Simplification
   bundle.add(std::make_unique<EqualNumericBoundsAsConst>());
   bundle.add(std::make_unique<EmptyStringAsConst>());
+  bundle.add(std::make_unique<EmptyArrayAsConst>());
 
   return bundle.apply(document);
 }
