@@ -3,6 +3,7 @@
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/empty_pattern_properties.h"
+#include "rules/equal_numeric_bounds_as_const.h"
 #include "rules/exclusive_maximum_to_maximum.h"
 #include "rules/exclusive_minimum_to_minimum.h"
 #include "rules/if_without_then_else.h"
@@ -69,6 +70,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<ImplicitObjectLowerBound>());
   bundle.add(std::make_unique<ImplicitObjectRequired>());
   bundle.add(std::make_unique<ImplicitObjectProperties>());
+
+  // Simplification
+  bundle.add(std::make_unique<EqualNumericBoundsAsConst>());
 
   return bundle.apply(document);
 }
