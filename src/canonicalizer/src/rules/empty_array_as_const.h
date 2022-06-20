@@ -16,8 +16,8 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("type") &&
-           schema.at("type") == "array" && schema.contains("maxItems") &&
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type") == "array" && schema.defines("maxItems") &&
            schema.at("maxItems").is_integer() && schema.at("maxItems") == 0;
   }
 

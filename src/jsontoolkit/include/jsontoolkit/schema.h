@@ -11,7 +11,7 @@ auto is_schema(const sourcemeta::jsontoolkit::JSON<T> &document) -> bool {
   // We don't want to play the game of attempting to guess
   // what version of the specification and vocabularies
   // are being loaded by a given schema.
-  if (document.is_object() && document.contains("$schema") &&
+  if (document.is_object() && document.defines("$schema") &&
       document.at("$schema").is_string()) {
     return true;
   }

@@ -223,17 +223,17 @@ TEST(JSON, rfc8259_example_1) {
   // Top level object
   EXPECT_TRUE(value.is_object());
   EXPECT_EQ(value.size(), 1);
-  EXPECT_TRUE(value.contains("Image"));
+  EXPECT_TRUE(value.defines("Image"));
 
   // Image object
   EXPECT_TRUE(value.at("Image").is_object());
   EXPECT_EQ(value.at("Image").size(), 6);
-  EXPECT_TRUE(value.at("Image").contains("Width"));
-  EXPECT_TRUE(value.at("Image").contains("Height"));
-  EXPECT_TRUE(value.at("Image").contains("Title"));
-  EXPECT_TRUE(value.at("Image").contains("Thumbnail"));
-  EXPECT_TRUE(value.at("Image").contains("Animated"));
-  EXPECT_TRUE(value.at("Image").contains("IDs"));
+  EXPECT_TRUE(value.at("Image").defines("Width"));
+  EXPECT_TRUE(value.at("Image").defines("Height"));
+  EXPECT_TRUE(value.at("Image").defines("Title"));
+  EXPECT_TRUE(value.at("Image").defines("Thumbnail"));
+  EXPECT_TRUE(value.at("Image").defines("Animated"));
+  EXPECT_TRUE(value.at("Image").defines("IDs"));
   EXPECT_TRUE(value.at("Image").at("Width").is_integer());
   EXPECT_TRUE(value.at("Image").at("Height").is_integer());
   EXPECT_TRUE(value.at("Image").at("Title").is_string());
@@ -247,9 +247,9 @@ TEST(JSON, rfc8259_example_1) {
 
   // Image.Thumbnail object
   EXPECT_EQ(value.at("Image").at("Thumbnail").size(), 3);
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Url"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Height"));
-  EXPECT_TRUE(value.at("Image").at("Thumbnail").contains("Width"));
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").defines("Url"));
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").defines("Height"));
+  EXPECT_TRUE(value.at("Image").at("Thumbnail").defines("Width"));
   EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Url").is_string());
   EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Height").is_integer());
   EXPECT_TRUE(value.at("Image").at("Thumbnail").at("Width").is_integer());
@@ -310,14 +310,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(std::as_const(value).at(0).size(), 8);
 
   // Member keys
-  EXPECT_TRUE(value.at(0).contains("precision"));
-  EXPECT_TRUE(value.at(0).contains("Latitude"));
-  EXPECT_TRUE(value.at(0).contains("Longitude"));
-  EXPECT_TRUE(value.at(0).contains("Address"));
-  EXPECT_TRUE(value.at(0).contains("City"));
-  EXPECT_TRUE(value.at(0).contains("State"));
-  EXPECT_TRUE(value.at(0).contains("Zip"));
-  EXPECT_TRUE(value.at(0).contains("Country"));
+  EXPECT_TRUE(value.at(0).defines("precision"));
+  EXPECT_TRUE(value.at(0).defines("Latitude"));
+  EXPECT_TRUE(value.at(0).defines("Longitude"));
+  EXPECT_TRUE(value.at(0).defines("Address"));
+  EXPECT_TRUE(value.at(0).defines("City"));
+  EXPECT_TRUE(value.at(0).defines("State"));
+  EXPECT_TRUE(value.at(0).defines("Zip"));
+  EXPECT_TRUE(value.at(0).defines("Country"));
 
   // Member types
   EXPECT_TRUE(value.at(0).at("precision").is_string());
@@ -347,14 +347,14 @@ TEST(JSON, rfc8259_example_2) {
   EXPECT_EQ(std::as_const(value).at(1).size(), 8);
 
   // Member keys
-  EXPECT_TRUE(value.at(1).contains("precision"));
-  EXPECT_TRUE(value.at(1).contains("Latitude"));
-  EXPECT_TRUE(value.at(1).contains("Longitude"));
-  EXPECT_TRUE(value.at(1).contains("Address"));
-  EXPECT_TRUE(value.at(1).contains("City"));
-  EXPECT_TRUE(value.at(1).contains("State"));
-  EXPECT_TRUE(value.at(1).contains("Zip"));
-  EXPECT_TRUE(value.at(1).contains("Country"));
+  EXPECT_TRUE(value.at(1).defines("precision"));
+  EXPECT_TRUE(value.at(1).defines("Latitude"));
+  EXPECT_TRUE(value.at(1).defines("Longitude"));
+  EXPECT_TRUE(value.at(1).defines("Address"));
+  EXPECT_TRUE(value.at(1).defines("City"));
+  EXPECT_TRUE(value.at(1).defines("State"));
+  EXPECT_TRUE(value.at(1).defines("Zip"));
+  EXPECT_TRUE(value.at(1).defines("Country"));
 
   // Member types
   EXPECT_TRUE(value.at(1).at("precision").is_string());
@@ -381,7 +381,7 @@ TEST(JSON, array_key_copy_assignment_vector) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [] }"};
   document.parse();
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_array());
   EXPECT_EQ(document.at("foo").size(), 0);
 
@@ -400,7 +400,7 @@ TEST(JSON, array_key_copy_assignment_vector) {
 
   document.assign("foo", list);
   EXPECT_EQ(document.size(), 1);
-  EXPECT_TRUE(document.contains("foo"));
+  EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_array());
   EXPECT_EQ(document.at("foo").size(), 3);
   EXPECT_EQ(document.at("foo").at(0), static_cast<std::int64_t>(1));
@@ -413,29 +413,29 @@ TEST(JSON, modify_object_after_copy) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"x\": 1, \"y\": 2 }"};
   document.parse();
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.contains("x"));
-  EXPECT_TRUE(document.contains("y"));
+  EXPECT_TRUE(document.defines("x"));
+  EXPECT_TRUE(document.defines("y"));
   EXPECT_EQ(document.at("x"), static_cast<std::int64_t>(1));
   EXPECT_EQ(document.at("y"), static_cast<std::int64_t>(2));
 
   // Make copy
   sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   EXPECT_EQ(copy.size(), 2);
-  EXPECT_TRUE(copy.contains("x"));
-  EXPECT_TRUE(copy.contains("y"));
+  EXPECT_TRUE(copy.defines("x"));
+  EXPECT_TRUE(copy.defines("y"));
   EXPECT_EQ(copy.at("x"), static_cast<std::int64_t>(1));
   EXPECT_EQ(copy.at("y"), static_cast<std::int64_t>(2));
 
   // Modify copy
   copy.erase("x");
   EXPECT_EQ(copy.size(), 1);
-  EXPECT_TRUE(copy.contains("y"));
+  EXPECT_TRUE(copy.defines("y"));
   EXPECT_EQ(copy.at("y"), static_cast<std::int64_t>(2));
 
   // Original document must remain intact
   EXPECT_EQ(document.size(), 2);
-  EXPECT_TRUE(document.contains("x"));
-  EXPECT_TRUE(document.contains("y"));
+  EXPECT_TRUE(document.defines("x"));
+  EXPECT_TRUE(document.defines("y"));
   EXPECT_EQ(document.at("x"), static_cast<std::int64_t>(1));
   EXPECT_EQ(document.at("y"), static_cast<std::int64_t>(2));
 }

@@ -19,7 +19,7 @@ public:
            sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           schema.is_object() && schema.contains("type") &&
+           schema.is_object() && schema.defines("type") &&
            schema.at("type").is_array();
   }
 
@@ -33,7 +33,7 @@ public:
       disjunctors.push_back(std::move(disjunctor));
     }
 
-    if (schema.contains("$schema")) {
+    if (schema.defines("$schema")) {
       sourcemeta::jsontoolkit::JSON<std::string> metaschema{
           schema.at("$schema")};
       schema.clear();

@@ -15,7 +15,7 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("const");
+           schema.is_object() && schema.defines("const");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const

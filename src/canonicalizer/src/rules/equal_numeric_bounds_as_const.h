@@ -14,10 +14,10 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("minimum") &&
+           schema.is_object() && schema.defines("minimum") &&
            (schema.at("minimum").is_integer() ||
             schema.at("minimum").is_real()) &&
-           schema.contains("maximum") &&
+           schema.defines("maximum") &&
            (schema.at("maximum").is_integer() ||
             schema.at("maximum").is_real());
   }
