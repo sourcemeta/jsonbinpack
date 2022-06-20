@@ -3,6 +3,7 @@
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/dependent_required_tautology.h"
+#include "rules/duplicate_allof_branches.h"
 #include "rules/empty_array_as_const.h"
 #include "rules/empty_dependent_required.h"
 #include "rules/empty_object_as_const.h"
@@ -83,6 +84,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<EmptyArrayAsConst>());
   bundle.add(std::make_unique<EmptyObjectAsConst>());
   bundle.add(std::make_unique<DependentRequiredTautology>());
+  bundle.add(std::make_unique<DuplicateAllOfBranches>());
 
   return bundle.apply(document);
 }
