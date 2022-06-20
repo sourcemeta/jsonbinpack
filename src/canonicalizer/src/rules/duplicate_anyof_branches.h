@@ -1,9 +1,7 @@
 #include <jsonbinpack/canonicalizer/rule.h>
+#include <jsontoolkit/algorithm.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
-
-#include <algorithm> // std::copy_if
-#include <iterator>  // std::next, std::make_move_iterator
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
@@ -21,35 +19,14 @@ public:
       return false;
     }
 
-    // We can't use std::unique given JSON documents
-    // cannot be "sorted" in any deterministic manner.
-    const auto &branches = schema.at("anyOf").to_array();
-    for (auto iterator = branches.cbegin(); iterator != branches.cend();
-         ++iterator) {
-      for (auto subiterator = std::next(iterator, 1);
-           subiterator != branches.cend(); ++subiterator) {
-        if (subiterator != iterator && *subiterator == *iterator) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    sourcemeta::jsontoolkit::JSON<std::string> copy = schema.at("anyOf");
+    sourcemeta::jsontoolkit::unique(copy);
+    return schema.at("anyOf").size() > copy.size();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    std::vector<sourcemeta::jsontoolkit::JSON<std::string>> new_branches{};
-    auto &branches = schema.at("anyOf").to_array();
-    std::copy_if(std::make_move_iterator(std::begin(branches)),
-                 std::make_move_iterator(std::end(branches)),
-                 std::back_inserter(new_branches), [&](const auto &branch) {
-                   return std::find(std::begin(new_branches),
-                                    std::end(new_branches),
-                                    branch) == std::end(new_branches);
-                 });
-
-    schema.assign("anyOf", new_branches);
+    sourcemeta::jsontoolkit::unique(schema.at("anyOf"));
   }
 };
 
