@@ -2,7 +2,9 @@
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/dependent_required_tautology.h"
 #include "rules/empty_array_as_const.h"
+#include "rules/empty_dependent_required.h"
 #include "rules/empty_object_as_const.h"
 #include "rules/empty_pattern_properties.h"
 #include "rules/empty_string_as_const.h"
@@ -64,6 +66,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<ConstAsEnum>());
   bundle.add(std::make_unique<ExclusiveMinimumToMinimum>());
   bundle.add(std::make_unique<ExclusiveMaximumToMaximum>());
+  bundle.add(std::make_unique<EmptyDependentRequired>());
 
   // Implicits
   bundle.add(std::make_unique<ImplicitTypeUnion>());
@@ -79,6 +82,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<EmptyStringAsConst>());
   bundle.add(std::make_unique<EmptyArrayAsConst>());
   bundle.add(std::make_unique<EmptyObjectAsConst>());
+  bundle.add(std::make_unique<DependentRequiredTautology>());
 
   return bundle.apply(document);
 }
