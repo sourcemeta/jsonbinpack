@@ -1361,3 +1361,112 @@ TEST(Canonicalizer, duplicate_allof_branches_4) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, duplicate_anyof_branches_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "number" }
+    ]
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      {
+        "type": "string",
+        "minLength": 0
+      }
+    ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, duplicate_anyof_branches_2) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "string" }
+    ]
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      {
+        "type": "string",
+        "minLength": 0
+      }
+    ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, duplicate_anyof_branches_3) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "string" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "number" }
+    ]
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      {
+        "type": "string",
+        "minLength": 0
+      }
+    ]
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, duplicate_anyof_branches_4) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": []
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": []
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
