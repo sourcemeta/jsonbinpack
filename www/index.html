@@ -16,6 +16,19 @@
     <link rel="manifest" href="manifest.webmanifest">
 
     <link href="style.min.css" rel="stylesheet">
+
+    <script>
+      if (!sessionStorage.getItem("_swa") && document.referrer.indexOf(location.protocol + "//" + location.host) !== 0) {
+        fetch("https://counter.dev/track?" + new URLSearchParams({
+          referrer: document.referrer,
+          screen: screen.width + "x" + screen.height,
+          user: "jviotti",
+          utcoffset: "-4"
+        }));
+      }
+
+      sessionStorage.setItem("_swa", "1");
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-expand navbar-light bg-light border-bottom">
