@@ -588,6 +588,24 @@ public:
     return *this;
   }
 
+  auto push_back(const JSON<Source> &value) -> void {
+    auto &document = std::get<sourcemeta::jsontoolkit::Array<
+        sourcemeta::jsontoolkit::JSON<Source>, Source>>(this->data);
+    document.shallow_parse();
+    this->assume_element_modification();
+    document.assume_element_modification();
+    document.data.push_back(value);
+  }
+
+  auto push_back(JSON<Source> &&value) -> void {
+    auto &document = std::get<sourcemeta::jsontoolkit::Array<
+        sourcemeta::jsontoolkit::JSON<Source>, Source>>(this->data);
+    document.shallow_parse();
+    this->assume_element_modification();
+    document.assume_element_modification();
+    document.data.push_back(std::move(value));
+  }
+
   auto at(std::size_t index) & -> JSON<Source> & {
     this->shallow_parse();
     auto &document = std::get<sourcemeta::jsontoolkit::Array<
