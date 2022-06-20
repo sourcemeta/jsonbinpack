@@ -382,7 +382,7 @@ public:
     throw std::logic_error("Data type is not a container");
   }
 
-  auto contains(const Source &value) -> bool {
+  auto contains(const JSON<Source> &value) -> bool {
     this->shallow_parse();
     auto &document =
         std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
@@ -395,7 +395,7 @@ public:
     });
   }
 
-  [[nodiscard]] auto contains(const Source &value) const -> bool {
+  [[nodiscard]] auto contains(const JSON<Source> &value) const -> bool {
     this->must_be_fully_parsed();
     const auto &document =
         std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
