@@ -14,7 +14,7 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           schema.is_object() && schema.contains("patternProperties") &&
+           schema.is_object() && schema.defines("patternProperties") &&
            schema.at("patternProperties").empty();
   }
 

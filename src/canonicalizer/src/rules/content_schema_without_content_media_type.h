@@ -14,8 +14,8 @@ public:
       -> bool override {
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, "https://json-schema.org/draft/2020-12/vocab/content") &&
-           schema.is_object() && schema.contains("contentSchema") &&
-           !schema.contains("contentMediaType");
+           schema.is_object() && schema.defines("contentSchema") &&
+           !schema.defines("contentMediaType");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const

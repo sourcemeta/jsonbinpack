@@ -384,15 +384,6 @@ public:
 
   auto contains(const Source &value) -> bool {
     this->shallow_parse();
-
-    if (this->is_object()) {
-      auto &document =
-          std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
-              this->data);
-      document.shallow_parse();
-      return document.data.find(value) != document.data.end();
-    }
-
     auto &document =
         std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
             this->data);
@@ -406,21 +397,30 @@ public:
 
   [[nodiscard]] auto contains(const Source &value) const -> bool {
     this->must_be_fully_parsed();
-
-    if (this->is_object()) {
-      const auto &document =
-          std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
-              this->data);
-      document.must_be_fully_parsed();
-      return document.data.find(value) != document.data.end();
-    }
-
     const auto &document =
         std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
             this->data);
     document.must_be_fully_parsed();
     return std::any_of(document.cbegin(), document.cend(),
                        [&](const auto &element) { return element == value; });
+  }
+
+  auto defines(const Source &value) -> bool {
+    this->shallow_parse();
+    auto &document =
+        std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
+            this->data);
+    document.shallow_parse();
+    return document.data.find(value) != document.data.end();
+  }
+
+  [[nodiscard]] auto defines(const Source &value) const -> bool {
+    this->must_be_fully_parsed();
+    const auto &document =
+        std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
+            this->data);
+    document.must_be_fully_parsed();
+    return document.data.find(value) != document.data.end();
   }
 
   auto assign(const Source &key, const JSON<Source> &value) -> JSON<Source> & {

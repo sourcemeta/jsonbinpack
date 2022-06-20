@@ -25,51 +25,51 @@ public:
             schema, "https://json-schema.org/draft/2020-12/vocab/applicator");
     const bool is_object = schema.is_object();
 
-    if (has_core_vocabulary && is_object && schema.contains("$ref")) {
+    if (has_core_vocabulary && is_object && schema.defines("$ref")) {
       return false;
     }
 
-    if (has_core_vocabulary && is_object && schema.contains("$dynamicRef")) {
+    if (has_core_vocabulary && is_object && schema.defines("$dynamicRef")) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.contains("type")) {
+    if (has_validation_vocabulary && is_object && schema.defines("type")) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.contains("const")) {
+    if (has_validation_vocabulary && is_object && schema.defines("const")) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.contains("enum")) {
+    if (has_validation_vocabulary && is_object && schema.defines("enum")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("anyOf")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("anyOf")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("allOf")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("allOf")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("oneOf")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("oneOf")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("not")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("not")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("if")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("if")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("then")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("then")) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.contains("else")) {
+    if (has_applicator_vocabulary && is_object && schema.defines("else")) {
       return false;
     }
 

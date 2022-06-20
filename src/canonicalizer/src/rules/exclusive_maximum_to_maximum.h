@@ -16,7 +16,7 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("exclusiveMaximum") &&
+           schema.is_object() && schema.defines("exclusiveMaximum") &&
            (schema.at("exclusiveMaximum").is_integer() ||
             schema.at("exclusiveMaximum").is_real());
   }
@@ -26,7 +26,7 @@ public:
     if (schema.at("exclusiveMaximum").is_integer()) {
       const std::int64_t maximum =
           schema.at("exclusiveMaximum").to_integer() - 1;
-      if (!schema.contains("maximum") ||
+      if (!schema.defines("maximum") ||
           (schema.at("maximum").is_real() &&
 
            static_cast<long double>(schema.at("maximum").to_real()) >
@@ -38,7 +38,7 @@ public:
       }
     } else {
       const double maximum = schema.at("exclusiveMaximum").to_real() - 1.0;
-      if (!schema.contains("maximum") ||
+      if (!schema.defines("maximum") ||
           (schema.at("maximum").is_integer() &&
            schema.at("maximum").to_integer() >
                static_cast<long double>(maximum))) {

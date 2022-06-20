@@ -13,16 +13,16 @@ public:
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
     const bool singular_by_max_items{schema.is_object() &&
-                                     schema.contains("maxItems") &&
+                                     schema.defines("maxItems") &&
                                      schema.at("maxItems").is_integer() &&
                                      schema.at("maxItems").to_integer() <= 1};
 
     const bool singular_by_const{
-        schema.is_object() && schema.contains("const") &&
+        schema.is_object() && schema.defines("const") &&
         schema.at("const").is_array() && schema.at("const").size() <= 1};
 
     const bool singular_by_enum{
-        schema.is_object() && schema.contains("enum") &&
+        schema.is_object() && schema.defines("enum") &&
         schema.at("enum").is_array() &&
         std::all_of(
             schema.at("enum").to_array().cbegin(),
@@ -34,7 +34,7 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("uniqueItems") &&
+           schema.is_object() && schema.defines("uniqueItems") &&
            schema.at("uniqueItems").is_boolean() &&
            schema.at("uniqueItems").to_boolean() &&
            (singular_by_max_items || singular_by_const || singular_by_enum);

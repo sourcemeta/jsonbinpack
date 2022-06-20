@@ -14,8 +14,8 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           schema.is_object() && schema.contains("if") &&
-           !schema.contains("then") && !schema.contains("else");
+           schema.is_object() && schema.defines("if") &&
+           !schema.defines("then") && !schema.defines("else");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const

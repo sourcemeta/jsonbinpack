@@ -76,7 +76,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     document.parse();
     if (!sourcemeta::jsontoolkit::schema::has_vocabulary(
             document, std::get<0>(applicator)) ||
-        !document.contains(keyword)) {
+        !document.defines(keyword)) {
       continue;
     }
 

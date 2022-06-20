@@ -16,7 +16,7 @@ public:
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema,
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.contains("exclusiveMinimum") &&
+           schema.is_object() && schema.defines("exclusiveMinimum") &&
            (schema.at("exclusiveMinimum").is_integer() ||
             schema.at("exclusiveMinimum").is_real());
   }
@@ -26,7 +26,7 @@ public:
     if (schema.at("exclusiveMinimum").is_integer()) {
       const std::int64_t minimum =
           schema.at("exclusiveMinimum").to_integer() + 1;
-      if (!schema.contains("minimum") ||
+      if (!schema.defines("minimum") ||
           (schema.at("minimum").is_real() &&
            static_cast<long double>(schema.at("minimum").to_real()) <
                minimum)) {
@@ -37,7 +37,7 @@ public:
       }
     } else {
       const double minimum = schema.at("exclusiveMinimum").to_real() + 1.0;
-      if (!schema.contains("minimum") ||
+      if (!schema.defines("minimum") ||
           (schema.at("minimum").is_integer() &&
            schema.at("minimum").to_integer() <
                static_cast<long double>(minimum))) {
