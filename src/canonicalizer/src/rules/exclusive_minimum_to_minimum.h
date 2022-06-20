@@ -28,7 +28,8 @@ public:
           schema.at("exclusiveMinimum").to_integer() + 1;
       if (!schema.contains("minimum") ||
           (schema.at("minimum").is_real() &&
-           schema.at("minimum").to_real() < minimum)) {
+           static_cast<long double>(schema.at("minimum").to_real()) <
+               minimum)) {
         schema.assign("minimum", minimum);
       } else if (schema.at("minimum").is_integer()) {
         schema.assign("minimum",
@@ -38,7 +39,8 @@ public:
       const double minimum = schema.at("exclusiveMinimum").to_real() + 1.0;
       if (!schema.contains("minimum") ||
           (schema.at("minimum").is_integer() &&
-           schema.at("minimum").to_integer() < minimum)) {
+           schema.at("minimum").to_integer() <
+               static_cast<long double>(minimum))) {
         schema.assign("minimum", minimum);
       } else if (schema.at("minimum").is_real()) {
         schema.assign("minimum",

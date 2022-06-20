@@ -7,7 +7,7 @@ build/www: | build
 	$(MKDIR) $@
 build/www/%: www/% | build/www
 	$(INSTALL) -m 0664 $< $@
-html: \
+html: node_modules \
 	build/www/apple-touch-icon.png \
 	build/www/benchmark-deck.png \
 	build/www/example.png \
