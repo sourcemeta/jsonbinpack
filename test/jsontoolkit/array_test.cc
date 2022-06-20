@@ -360,34 +360,46 @@ TEST(Array, stringify_object_pretty) {
 
 TEST(Array, contains_string_key_true_unparsed) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
-  EXPECT_TRUE(document.contains("bar"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"bar\""};
+  element.parse();
+  EXPECT_TRUE(document.contains(element));
 }
 
 TEST(Array, contains_string_key_true_parsed) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
   document.parse();
-  EXPECT_TRUE(document.contains("bar"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"bar\""};
+  element.parse();
+  EXPECT_TRUE(document.contains(element));
 }
 
 TEST(Array, contains_string_key_true_const) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
   document.parse();
-  EXPECT_TRUE(std::as_const(document).contains("bar"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"bar\""};
+  element.parse();
+  EXPECT_TRUE(std::as_const(document).contains(element));
 }
 
 TEST(Array, contains_string_key_false_unparsed) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
-  EXPECT_FALSE(document.contains("baz"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"baz\""};
+  element.parse();
+  EXPECT_FALSE(document.contains(element));
 }
 
 TEST(Array, contains_string_key_false_parsed) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
   document.parse();
-  EXPECT_FALSE(document.contains("baz"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"baz\""};
+  element.parse();
+  EXPECT_FALSE(document.contains(element));
 }
 
 TEST(Array, contains_string_key_false_const) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ \"foo\", \"bar\" ]"};
   document.parse();
-  EXPECT_FALSE(std::as_const(document).contains("baz"));
+  sourcemeta::jsontoolkit::JSON<std::string> element{"\"baz\""};
+  element.parse();
+  EXPECT_FALSE(std::as_const(document).contains(element));
 }
