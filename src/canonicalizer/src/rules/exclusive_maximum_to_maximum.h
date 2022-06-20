@@ -28,7 +28,9 @@ public:
           schema.at("exclusiveMaximum").to_integer() - 1;
       if (!schema.contains("maximum") ||
           (schema.at("maximum").is_real() &&
-           schema.at("maximum").to_real() > maximum)) {
+
+           static_cast<long double>(schema.at("maximum").to_real()) >
+               maximum)) {
         schema.assign("maximum", maximum);
       } else if (schema.at("maximum").is_integer()) {
         schema.assign("maximum",
@@ -38,7 +40,8 @@ public:
       const double maximum = schema.at("exclusiveMaximum").to_real() - 1.0;
       if (!schema.contains("maximum") ||
           (schema.at("maximum").is_integer() &&
-           schema.at("maximum").to_integer() > maximum)) {
+           schema.at("maximum").to_integer() >
+               static_cast<long double>(maximum))) {
         schema.assign("maximum", maximum);
       } else if (schema.at("maximum").is_real()) {
         schema.assign("maximum",

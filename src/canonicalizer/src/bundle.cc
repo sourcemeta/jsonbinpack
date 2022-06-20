@@ -71,7 +71,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
 
   // (2) Canonicalize its sub-schemas
   for (const auto &applicator : APPLICATORS) {
-    const std::string keyword{std::get<1>(applicator)};
+    const std::string &keyword{std::get<1>(applicator)};
     // has_vocabulary() expects a parsed document
     document.parse();
     if (!sourcemeta::jsontoolkit::schema::has_vocabulary(
