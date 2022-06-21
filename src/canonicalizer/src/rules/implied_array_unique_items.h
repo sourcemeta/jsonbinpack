@@ -12,37 +12,40 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    const bool singular_by_max_items{schema.is_object() &&
-                                     schema.defines("maxItems") &&
-                                     schema.at("maxItems").is_integer() &&
-                                     schema.at("maxItems").to_integer() <= 1};
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    const bool singular_by_max_items{
+        schema.is_object() && schema.defines(keywords::validation::maxItems) &&
+        schema.at(keywords::validation::maxItems).is_integer() &&
+        schema.at(keywords::validation::maxItems).to_integer() <= 1};
 
     const bool singular_by_const{
-        schema.is_object() && schema.defines("const") &&
-        schema.at("const").is_array() && schema.at("const").size() <= 1};
+        schema.is_object() && schema.defines(keywords::validation::_const) &&
+        schema.at(keywords::validation::_const).is_array() &&
+        schema.at(keywords::validation::_const).size() <= 1};
 
     const bool singular_by_enum{
-        schema.is_object() && schema.defines("enum") &&
-        schema.at("enum").is_array() &&
+        schema.is_object() && schema.defines(keywords::validation::_enum) &&
+        schema.at(keywords::validation::_enum).is_array() &&
         std::all_of(
-            schema.at("enum").to_array().cbegin(),
-            schema.at("enum").to_array().cend(),
+            schema.at(keywords::validation::_enum).to_array().cbegin(),
+            schema.at(keywords::validation::_enum).to_array().cend(),
             [](const sourcemeta::jsontoolkit::JSON<std::string> &element) {
               return !element.is_array() || element.size() <= 1;
             })};
 
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("uniqueItems") &&
-           schema.at("uniqueItems").is_boolean() &&
-           schema.at("uniqueItems").to_boolean() &&
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::uniqueItems) &&
+           schema.at(keywords::validation::uniqueItems).is_boolean() &&
+           schema.at(keywords::validation::uniqueItems).to_boolean() &&
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.erase("uniqueItems");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.erase(keywords::validation::uniqueItems);
   }
 };
 

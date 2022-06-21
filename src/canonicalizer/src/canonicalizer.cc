@@ -1,3 +1,9 @@
+#include <jsonbinpack/canonicalizer/bundle.h>
+#include <jsonbinpack/canonicalizer/canonicalizer.h>
+#include <jsontoolkit/json.h>
+#include <jsontoolkit/schema.h>
+#include <sourcemeta/assert.h>
+
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
@@ -29,12 +35,6 @@
 #include "rules/then_else_without_if.h"
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
-
-#include <jsonbinpack/canonicalizer/bundle.h>
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-#include <sourcemeta/assert.h>
 
 #include <memory> // std::make_unique
 

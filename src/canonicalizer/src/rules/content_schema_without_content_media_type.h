@@ -12,15 +12,18 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema, "https://json-schema.org/draft/2020-12/vocab/content") &&
-           schema.is_object() && schema.defines("contentSchema") &&
-           !schema.defines("contentMediaType");
+               schema, vocabularies::content) &&
+           schema.is_object() &&
+           schema.defines(keywords::content::contentSchema) &&
+           !schema.defines(keywords::content::contentMediaType);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.erase("contentSchema");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.erase(keywords::content::contentSchema);
   }
 };
 

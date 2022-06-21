@@ -12,18 +12,19 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("const");
+               schema, vocabularies::validation) &&
+           schema.is_object() && schema.defines(keywords::validation::_const);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("enum",
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::_enum,
                   std::vector<sourcemeta::jsontoolkit::JSON<std::string>>{
-                      schema.at("const")});
-    schema.erase("const");
+                      schema.at(keywords::validation::_const)});
+    schema.erase(keywords::validation::_const);
   }
 };
 

@@ -15,34 +15,37 @@ enum class ApplicatorType { Value, Array, Object };
 
 // For readability
 using Type = sourcemeta::jsonbinpack::canonicalizer::ApplicatorType;
-// TODO: Move these definitions to schema.h and use it in all places from there
-static const std::string VOCABULARY_CORE{
-    "https://json-schema.org/draft/2020-12/vocab/core"};
-static const std::string VOCABULARY_APPLICATOR{
-    "https://json-schema.org/draft/2020-12/vocab/applicator"};
-static const std::string VOCABULARY_CONTENT{
-    "https://json-schema.org/draft/2020-12/vocab/content"};
+using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
 
 static const std::vector<std::tuple<std::string, std::string, Type>>
-    APPLICATORS{{VOCABULARY_CORE, "$defs", Type::Object},
-                {VOCABULARY_CONTENT, "contentSchema", Type::Value},
-                {VOCABULARY_APPLICATOR, "dependentSchemas", Type::Object},
-                {VOCABULARY_APPLICATOR, "properties", Type::Object},
-                {VOCABULARY_APPLICATOR, "patternProperties", Type::Object},
-                {VOCABULARY_APPLICATOR, "prefixItems", Type::Array},
-                {VOCABULARY_APPLICATOR, "allOf", Type::Array},
-                {VOCABULARY_APPLICATOR, "anyOf", Type::Array},
-                {VOCABULARY_APPLICATOR, "oneOf", Type::Array},
-                {VOCABULARY_APPLICATOR, "items", Type::Value},
-                {VOCABULARY_APPLICATOR, "additionalProperties", Type::Value},
-                {VOCABULARY_APPLICATOR, "unevaluatedItems", Type::Value},
-                {VOCABULARY_APPLICATOR, "contains", Type::Value},
-                {VOCABULARY_APPLICATOR, "unevaluatedProperties", Type::Value},
-                {VOCABULARY_APPLICATOR, "propertyNames", Type::Value},
-                {VOCABULARY_APPLICATOR, "not", Type::Value},
-                {VOCABULARY_APPLICATOR, "if", Type::Value},
-                {VOCABULARY_APPLICATOR, "then", Type::Value},
-                {VOCABULARY_APPLICATOR, "else", Type::Value}};
+    APPLICATORS{
+        {vocabularies::core, keywords::core::defs, Type::Object},
+        {vocabularies::content, keywords::content::contentSchema, Type::Value},
+        {vocabularies::unevaluated, keywords::unevaluated::unevaluatedItems,
+         Type::Value},
+        {vocabularies::unevaluated,
+         keywords::unevaluated::unevaluatedProperties, Type::Value},
+        {vocabularies::applicator, keywords::applicator::dependentSchemas,
+         Type::Object},
+        {vocabularies::applicator, keywords::applicator::properties,
+         Type::Object},
+        {vocabularies::applicator, keywords::applicator::patternProperties,
+         Type::Object},
+        {vocabularies::applicator, keywords::applicator::prefixItems,
+         Type::Array},
+        {vocabularies::applicator, keywords::applicator::allOf, Type::Array},
+        {vocabularies::applicator, keywords::applicator::anyOf, Type::Array},
+        {vocabularies::applicator, keywords::applicator::oneOf, Type::Array},
+        {vocabularies::applicator, keywords::applicator::items, Type::Value},
+        {vocabularies::applicator, keywords::applicator::additionalProperties,
+         Type::Value},
+        {vocabularies::applicator, keywords::applicator::contains, Type::Value},
+        {vocabularies::applicator, keywords::applicator::propertyNames,
+         Type::Value},
+        {vocabularies::applicator, keywords::applicator::_not, Type::Value},
+        {vocabularies::applicator, keywords::applicator::_if, Type::Value},
+        {vocabularies::applicator, keywords::applicator::then, Type::Value},
+        {vocabularies::applicator, keywords::applicator::_else, Type::Value}};
 
 auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     sourcemeta::jsontoolkit::JSON<std::string> &document)

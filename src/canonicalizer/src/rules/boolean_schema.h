@@ -15,11 +15,12 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     sourcemeta::jsontoolkit::JSON<std::string> result{
         std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>>{}};
     if (!schema.to_boolean()) {
       result.assign(
-          "not",
+          keywords::applicator::_not,
           std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>>{});
     }
 

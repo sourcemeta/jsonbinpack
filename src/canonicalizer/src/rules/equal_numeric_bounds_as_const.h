@@ -11,22 +11,25 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("minimum") &&
-           (schema.at("minimum").is_integer() ||
-            schema.at("minimum").is_real()) &&
-           schema.defines("maximum") &&
-           (schema.at("maximum").is_integer() ||
-            schema.at("maximum").is_real());
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::minimum) &&
+           (schema.at(keywords::validation::minimum).is_integer() ||
+            schema.at(keywords::validation::minimum).is_real()) &&
+           schema.defines(keywords::validation::maximum) &&
+           (schema.at(keywords::validation::maximum).is_integer() ||
+            schema.at(keywords::validation::maximum).is_real());
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("const", schema.at("minimum"));
-    schema.erase("minimum");
-    schema.erase("maximum");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::_const,
+                  schema.at(keywords::validation::minimum));
+    schema.erase(keywords::validation::minimum);
+    schema.erase(keywords::validation::maximum);
   }
 };
 

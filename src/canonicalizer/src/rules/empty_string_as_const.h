@@ -13,18 +13,21 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("type") &&
-           schema.at("type") == "string" && schema.defines("maxLength") &&
-           schema.at("maxLength").is_integer() && schema.at("maxLength") == 0;
+               schema, vocabularies::validation) &&
+           schema.is_object() && schema.defines(keywords::validation::type) &&
+           schema.at(keywords::validation::type) == "string" &&
+           schema.defines(keywords::validation::maxLength) &&
+           schema.at(keywords::validation::maxLength).is_integer() &&
+           schema.at(keywords::validation::maxLength) == 0;
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("const", std::string{});
-    schema.erase("maxLength");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::_const, std::string{});
+    schema.erase(keywords::validation::maxLength);
   }
 };
 

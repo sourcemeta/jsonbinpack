@@ -12,20 +12,25 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("minProperties") &&
-           schema.at("minProperties").is_integer() &&
-           schema.defines("required") && schema.at("required").is_array() &&
-           static_cast<std::int64_t>(schema.at("required").size()) >
-               schema.at("minProperties").to_integer();
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::minProperties) &&
+           schema.at(keywords::validation::minProperties).is_integer() &&
+           schema.defines(keywords::validation::required) &&
+           schema.at(keywords::validation::required).is_array() &&
+           static_cast<std::int64_t>(
+               schema.at(keywords::validation::required).size()) >
+               schema.at(keywords::validation::minProperties).to_integer();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("minProperties",
-                  static_cast<std::int64_t>(schema.at("required").size()));
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::minProperties,
+                  static_cast<std::int64_t>(
+                      schema.at(keywords::validation::required).size()));
   }
 };
 

@@ -11,17 +11,19 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           schema.is_object() && schema.defines("then") &&
-           schema.defines("else") && !schema.defines("if");
+               schema, vocabularies::applicator) &&
+           schema.is_object() && schema.defines(keywords::applicator::then) &&
+           schema.defines(keywords::applicator::_else) &&
+           !schema.defines(keywords::applicator::_if);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.erase("then");
-    schema.erase("else");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.erase(keywords::applicator::then);
+    schema.erase(keywords::applicator::_else);
   }
 };
 
