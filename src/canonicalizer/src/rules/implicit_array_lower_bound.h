@@ -11,16 +11,18 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("type") &&
-           schema.at("type") == "array" && !schema.defines("minItems");
+               schema, vocabularies::validation) &&
+           schema.is_object() && schema.defines(keywords::validation::type) &&
+           schema.at(keywords::validation::type) == "array" &&
+           !schema.defines(keywords::validation::minItems);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("minItems", static_cast<std::int64_t>(0));
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::minItems, static_cast<std::int64_t>(0));
   }
 };
 

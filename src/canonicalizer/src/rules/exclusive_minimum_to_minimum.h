@@ -13,42 +13,49 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("exclusiveMinimum") &&
-           (schema.at("exclusiveMinimum").is_integer() ||
-            schema.at("exclusiveMinimum").is_real());
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::exclusiveMinimum) &&
+           (schema.at(keywords::validation::exclusiveMinimum).is_integer() ||
+            schema.at(keywords::validation::exclusiveMinimum).is_real());
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    if (schema.at("exclusiveMinimum").is_integer()) {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    if (schema.at(keywords::validation::exclusiveMinimum).is_integer()) {
       const std::int64_t minimum =
-          schema.at("exclusiveMinimum").to_integer() + 1;
-      if (!schema.defines("minimum") ||
-          (schema.at("minimum").is_real() &&
-           static_cast<long double>(schema.at("minimum").to_real()) <
-               minimum)) {
-        schema.assign("minimum", minimum);
-      } else if (schema.at("minimum").is_integer()) {
-        schema.assign("minimum",
-                      std::max(schema.at("minimum").to_integer(), minimum));
+          schema.at(keywords::validation::exclusiveMinimum).to_integer() + 1;
+      if (!schema.defines(keywords::validation::minimum) ||
+          (schema.at(keywords::validation::minimum).is_real() &&
+           static_cast<long double>(
+               schema.at(keywords::validation::minimum).to_real()) < minimum)) {
+        schema.assign(keywords::validation::minimum, minimum);
+      } else if (schema.at(keywords::validation::minimum).is_integer()) {
+        schema.assign(
+            keywords::validation::minimum,
+            std::max(schema.at(keywords::validation::minimum).to_integer(),
+                     minimum));
       }
     } else {
-      const double minimum = schema.at("exclusiveMinimum").to_real() + 1.0;
-      if (!schema.defines("minimum") ||
-          (schema.at("minimum").is_integer() &&
-           schema.at("minimum").to_integer() <
+      const double minimum =
+          schema.at(keywords::validation::exclusiveMinimum).to_real() + 1.0;
+      if (!schema.defines(keywords::validation::minimum) ||
+          (schema.at(keywords::validation::minimum).is_integer() &&
+           schema.at(keywords::validation::minimum).to_integer() <
                static_cast<long double>(minimum))) {
-        schema.assign("minimum", minimum);
-      } else if (schema.at("minimum").is_real()) {
-        schema.assign("minimum",
-                      std::max(schema.at("minimum").to_real(), minimum));
+        schema.assign(keywords::validation::minimum, minimum);
+      } else if (schema.at(keywords::validation::minimum).is_real()) {
+        schema.assign(
+            keywords::validation::minimum,
+            std::max(schema.at(keywords::validation::minimum).to_real(),
+                     minimum));
       }
     }
 
-    schema.erase("exclusiveMinimum");
+    schema.erase(keywords::validation::exclusiveMinimum);
   }
 };
 

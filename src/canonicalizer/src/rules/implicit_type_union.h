@@ -13,63 +13,76 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     const bool has_core_vocabulary =
         sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-            schema, "https://json-schema.org/draft/2020-12/vocab/core");
+            schema, vocabularies::core);
 
     const bool has_validation_vocabulary =
         sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-            schema, "https://json-schema.org/draft/2020-12/vocab/validation");
+            schema, vocabularies::validation);
     const bool has_applicator_vocabulary =
         sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-            schema, "https://json-schema.org/draft/2020-12/vocab/applicator");
+            schema, vocabularies::applicator);
     const bool is_object = schema.is_object();
 
-    if (has_core_vocabulary && is_object && schema.defines("$ref")) {
+    if (has_core_vocabulary && is_object &&
+        schema.defines(keywords::core::ref)) {
       return false;
     }
 
-    if (has_core_vocabulary && is_object && schema.defines("$dynamicRef")) {
+    if (has_core_vocabulary && is_object &&
+        schema.defines(keywords::core::dynamicRef)) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.defines("type")) {
+    if (has_validation_vocabulary && is_object &&
+        schema.defines(keywords::validation::type)) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.defines("const")) {
+    if (has_validation_vocabulary && is_object &&
+        schema.defines(keywords::validation::_const)) {
       return false;
     }
 
-    if (has_validation_vocabulary && is_object && schema.defines("enum")) {
+    if (has_validation_vocabulary && is_object &&
+        schema.defines(keywords::validation::_enum)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("anyOf")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::anyOf)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("allOf")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::allOf)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("oneOf")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::oneOf)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("not")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::_not)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("if")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::_if)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("then")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::then)) {
       return false;
     }
 
-    if (has_applicator_vocabulary && is_object && schema.defines("else")) {
+    if (has_applicator_vocabulary && is_object &&
+        schema.defines(keywords::applicator::_else)) {
       return false;
     }
 
@@ -78,6 +91,7 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     // All possible JSON Schema types
     // See
     // https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.1
@@ -90,7 +104,7 @@ public:
         sourcemeta::jsontoolkit::JSON<std::string>{"\"number\""},
         sourcemeta::jsontoolkit::JSON<std::string>{"\"integer\""}};
 
-    schema.assign("type", std::move(types));
+    schema.assign(keywords::validation::type, std::move(types));
   }
 };
 

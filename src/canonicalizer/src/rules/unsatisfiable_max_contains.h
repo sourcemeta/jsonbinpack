@@ -11,19 +11,22 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("maxContains") &&
-           schema.at("maxContains").is_integer() &&
-           schema.defines("maxItems") && schema.at("maxItems").is_integer() &&
-           schema.at("maxContains").to_integer() >=
-               schema.at("maxItems").to_integer();
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::maxContains) &&
+           schema.at(keywords::validation::maxContains).is_integer() &&
+           schema.defines(keywords::validation::maxItems) &&
+           schema.at(keywords::validation::maxItems).is_integer() &&
+           schema.at(keywords::validation::maxContains).to_integer() >=
+               schema.at(keywords::validation::maxItems).to_integer();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.erase("maxContains");
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.erase(keywords::validation::maxContains);
   }
 };
 

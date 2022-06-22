@@ -13,43 +13,50 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("exclusiveMaximum") &&
-           (schema.at("exclusiveMaximum").is_integer() ||
-            schema.at("exclusiveMaximum").is_real());
+               schema, vocabularies::validation) &&
+           schema.is_object() &&
+           schema.defines(keywords::validation::exclusiveMaximum) &&
+           (schema.at(keywords::validation::exclusiveMaximum).is_integer() ||
+            schema.at(keywords::validation::exclusiveMaximum).is_real());
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    if (schema.at("exclusiveMaximum").is_integer()) {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    if (schema.at(keywords::validation::exclusiveMaximum).is_integer()) {
       const std::int64_t maximum =
-          schema.at("exclusiveMaximum").to_integer() - 1;
-      if (!schema.defines("maximum") ||
-          (schema.at("maximum").is_real() &&
+          schema.at(keywords::validation::exclusiveMaximum).to_integer() - 1;
+      if (!schema.defines(keywords::validation::maximum) ||
+          (schema.at(keywords::validation::maximum).is_real() &&
 
-           static_cast<long double>(schema.at("maximum").to_real()) >
-               maximum)) {
-        schema.assign("maximum", maximum);
-      } else if (schema.at("maximum").is_integer()) {
-        schema.assign("maximum",
-                      std::min(schema.at("maximum").to_integer(), maximum));
+           static_cast<long double>(
+               schema.at(keywords::validation::maximum).to_real()) > maximum)) {
+        schema.assign(keywords::validation::maximum, maximum);
+      } else if (schema.at(keywords::validation::maximum).is_integer()) {
+        schema.assign(
+            keywords::validation::maximum,
+            std::min(schema.at(keywords::validation::maximum).to_integer(),
+                     maximum));
       }
     } else {
-      const double maximum = schema.at("exclusiveMaximum").to_real() - 1.0;
-      if (!schema.defines("maximum") ||
-          (schema.at("maximum").is_integer() &&
-           schema.at("maximum").to_integer() >
+      const double maximum =
+          schema.at(keywords::validation::exclusiveMaximum).to_real() - 1.0;
+      if (!schema.defines(keywords::validation::maximum) ||
+          (schema.at(keywords::validation::maximum).is_integer() &&
+           schema.at(keywords::validation::maximum).to_integer() >
                static_cast<long double>(maximum))) {
-        schema.assign("maximum", maximum);
-      } else if (schema.at("maximum").is_real()) {
-        schema.assign("maximum",
-                      std::min(schema.at("maximum").to_real(), maximum));
+        schema.assign(keywords::validation::maximum, maximum);
+      } else if (schema.at(keywords::validation::maximum).is_real()) {
+        schema.assign(
+            keywords::validation::maximum,
+            std::min(schema.at(keywords::validation::maximum).to_real(),
+                     maximum));
       }
     }
 
-    schema.erase("exclusiveMaximum");
+    schema.erase(keywords::validation::exclusiveMaximum);
   }
 };
 

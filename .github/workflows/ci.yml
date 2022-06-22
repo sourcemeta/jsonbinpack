@@ -11,15 +11,15 @@ jobs:
   # Only run clang-tidy on GNU/Linux as a separate jobs
   # given how expensive clang-tidy this, even more on
   # other platforms.
-  clang-tidy:
-    runs-on: ubuntu-20.04
-    if: github.ref != 'refs/heads/master'
-    steps:
-      - uses: actions/checkout@v2
-      - run: sudo apt-get install --yes clang-tidy
-      - run: cmake --version
-      - run: cmake --preset release --log-context
-      - run: cmake --build --preset release --target clang_tidy
+  # clang-tidy:
+    # runs-on: ubuntu-20.04
+    # if: github.ref != 'refs/heads/master'
+    # steps:
+      # - uses: actions/checkout@v2
+      # - run: sudo apt-get install --yes clang-tidy
+      # - run: cmake --version
+      # - run: cmake --preset release --log-context
+      # - run: cmake --build --preset release --target clang_tidy
 
   test:
     strategy:

@@ -13,19 +13,22 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema,
-               "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.is_object() && schema.defines("type") &&
-           schema.at("type") == "array" && schema.defines("maxItems") &&
-           schema.at("maxItems").is_integer() && schema.at("maxItems") == 0;
+               schema, vocabularies::validation) &&
+           schema.is_object() && schema.defines(keywords::validation::type) &&
+           schema.at(keywords::validation::type) == "array" &&
+           schema.defines(keywords::validation::maxItems) &&
+           schema.at(keywords::validation::maxItems).is_integer() &&
+           schema.at(keywords::validation::maxItems) == 0;
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    schema.assign("const",
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    schema.assign(keywords::validation::_const,
                   std::vector<sourcemeta::jsontoolkit::JSON<std::string>>{});
-    schema.erase("maxItems");
+    schema.erase(keywords::validation::maxItems);
   }
 };
 

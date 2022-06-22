@@ -12,21 +12,24 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    if (!sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-            schema, "https://json-schema.org/draft/2020-12/vocab/applicator") ||
-        !schema.is_object() || !schema.defines("anyOf") ||
-        !schema.at("anyOf").is_array()) {
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    if (!sourcemeta::jsontoolkit::schema::has_vocabulary(
+            schema, vocabularies::applicator) ||
+        !schema.is_object() || !schema.defines(keywords::applicator::anyOf) ||
+        !schema.at(keywords::applicator::anyOf).is_array()) {
       return false;
     }
 
-    sourcemeta::jsontoolkit::JSON<std::string> copy = schema.at("anyOf");
+    sourcemeta::jsontoolkit::JSON<std::string> copy =
+        schema.at(keywords::applicator::anyOf);
     sourcemeta::jsontoolkit::unique(copy);
-    return schema.at("anyOf").size() > copy.size();
+    return schema.at(keywords::applicator::anyOf).size() > copy.size();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
-    sourcemeta::jsontoolkit::unique(schema.at("anyOf"));
+    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+    sourcemeta::jsontoolkit::unique(schema.at(keywords::applicator::anyOf));
   }
 };
 
