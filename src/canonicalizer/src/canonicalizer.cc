@@ -10,6 +10,7 @@
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/dependent_required_tautology.h"
 #include "rules/drop_non_numeric_keywords.h"
+#include "rules/drop_non_string_keywords.h"
 #include "rules/duplicate_allof_branches.h"
 #include "rules/duplicate_anyof_branches.h"
 #include "rules/empty_array_as_const.h"
@@ -91,6 +92,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
 
   // Heterogeneous
   bundle.add(std::make_unique<DropNonNumericKeywords>());
+  bundle.add(std::make_unique<DropNonStringKeywords>());
 
   return bundle.apply(document);
 }

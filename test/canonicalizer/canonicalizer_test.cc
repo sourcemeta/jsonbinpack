@@ -1515,3 +1515,26 @@ TEST(Canonicalizer, drop_non_numeric_keywords_2) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, drop_non_string_keywords_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string",
+    "maxLength": 4,
+    "maxItems": 3,
+    "properties": {}
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string",
+    "maxLength": 4,
+    "minLength": 0
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
