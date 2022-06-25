@@ -28,21 +28,21 @@ public:
     std::vector<sourcemeta::jsontoolkit::JSON<std::string>> disjunctors;
     for (const auto &type : schema.at(keywords::validation::type).to_array()) {
       sourcemeta::jsontoolkit::JSON<std::string> disjunctor{schema};
-      disjunctor.erase("$schema");
+      disjunctor.erase(keywords::core::schema);
       disjunctor.assign(keywords::validation::type, type);
       disjunctors.push_back(std::move(disjunctor));
     }
 
-    if (schema.defines("$schema")) {
+    if (schema.defines(keywords::core::schema)) {
       sourcemeta::jsontoolkit::JSON<std::string> metaschema{
-          schema.at("$schema")};
+          schema.at(keywords::core::schema)};
       schema.clear();
-      schema.assign("$schema", std::move(metaschema));
+      schema.assign(keywords::core::schema, std::move(metaschema));
     } else {
       schema.clear();
     }
 
-    schema.assign("anyOf", std::move(disjunctors));
+    schema.assign(keywords::applicator::anyOf, std::move(disjunctors));
   }
 };
 

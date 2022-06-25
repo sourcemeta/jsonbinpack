@@ -19,8 +19,8 @@ public:
       return false;
     }
 
-    sourcemeta::jsontoolkit::JSON<std::string> copy =
-        schema.at(keywords::applicator::allOf);
+    sourcemeta::jsontoolkit::JSON<std::string> copy{
+        schema.at(keywords::applicator::allOf)};
     unique(copy);
     return schema.at(keywords::applicator::allOf).size() > copy.size();
   }

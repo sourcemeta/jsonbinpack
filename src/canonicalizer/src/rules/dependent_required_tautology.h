@@ -26,7 +26,7 @@ public:
            std::any_of(
                schema.at(keywords::validation::required).to_array().cbegin(),
                schema.at(keywords::validation::required).to_array().cend(),
-               [&](const auto &element) {
+               [&schema](const auto &element) {
                  return element.is_string() &&
                         schema.at(keywords::validation::dependentRequired)
                             .defines(element.to_string()) &&
