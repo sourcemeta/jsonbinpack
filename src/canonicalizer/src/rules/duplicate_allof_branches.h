@@ -1,5 +1,4 @@
 #include <jsonbinpack/canonicalizer/rule.h>
-#include <jsontoolkit/algorithm.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
@@ -22,14 +21,14 @@ public:
 
     sourcemeta::jsontoolkit::JSON<std::string> copy =
         schema.at(keywords::applicator::allOf);
-    sourcemeta::jsontoolkit::unique(copy);
+    unique(copy);
     return schema.at(keywords::applicator::allOf).size() > copy.size();
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-    sourcemeta::jsontoolkit::unique(schema.at(keywords::applicator::allOf));
+    unique(schema.at(keywords::applicator::allOf));
   }
 };
 
