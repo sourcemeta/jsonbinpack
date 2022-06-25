@@ -9,6 +9,7 @@
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/dependent_required_tautology.h"
+#include "rules/drop_non_numeric_keywords.h"
 #include "rules/duplicate_allof_branches.h"
 #include "rules/duplicate_anyof_branches.h"
 #include "rules/empty_array_as_const.h"
@@ -87,6 +88,9 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<DependentRequiredTautology>());
   bundle.add(std::make_unique<DuplicateAllOfBranches>());
   bundle.add(std::make_unique<DuplicateAnyOfBranches>());
+
+  // Heterogeneous
+  bundle.add(std::make_unique<DropNonNumericKeywords>());
 
   return bundle.apply(document);
 }

@@ -1470,3 +1470,48 @@ TEST(Canonicalizer, duplicate_anyof_branches_4) {
   expected.parse();
   EXPECT_EQ(expected, document);
 }
+
+TEST(Canonicalizer, drop_non_numeric_keywords_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "number",
+    "maximum": 4,
+    "maxItems": 3,
+    "properties": {}
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "number",
+    "maximum": 4
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, drop_non_numeric_keywords_2) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "maximum": 4,
+    "maxItems": 3,
+    "properties": {}
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "maximum": 4,
+    "multipleOf": 1
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
