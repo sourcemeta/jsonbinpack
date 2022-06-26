@@ -5,22 +5,18 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonNumericKeywords final
+class DropNonStringKeywords final
     : public sourcemeta::jsonbinpack::canonicalizer::Rule {
 public:
-  DropNonNumericKeywords() : Rule("drop_non_numeric_keywords"){};
+  DropNonStringKeywords() : Rule("drop_non_string_keywords"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
     if (!sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
             schema, vocabularies::validation) ||
         !schema.is_object() || !schema.defines(keywords::validation::type) ||
-        !schema.at(keywords::validation::type).is_string()) {
-      return false;
-    }
-
-    if (schema.at(keywords::validation::type).to_string() != "number" &&
-        schema.at(keywords::validation::type).to_string() != "integer") {
+        !schema.at(keywords::validation::type).is_string() ||
+        schema.at(keywords::validation::type).to_string() != "string") {
       return false;
     }
 
@@ -29,13 +25,7 @@ public:
            defines_any_keyword_from_set(schema, vocabularies::unevaluated,
                                         BLACKLIST_UNEVALUATED) ||
            defines_any_keyword_from_set(schema, vocabularies::validation,
-                                        BLACKLIST_VALIDATION) ||
-           defines_any_keyword_from_set(schema, vocabularies::format_annotation,
-                                        BLACKLIST_FORMAT_ANNOTATION) ||
-           defines_any_keyword_from_set(schema, vocabularies::format_assertion,
-                                        BLACKLIST_FORMAT_ASSERTION) ||
-           defines_any_keyword_from_set(schema, vocabularies::content,
-                                        BLACKLIST_CONTENT);
+                                        BLACKLIST_VALIDATION);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
@@ -48,12 +38,6 @@ public:
     copy_extra_keywords(schema, vocabularies::unevaluated,
                         BLACKLIST_UNEVALUATED, inserter);
     copy_extra_keywords(schema, vocabularies::validation, BLACKLIST_VALIDATION,
-                        inserter);
-    copy_extra_keywords(schema, vocabularies::format_annotation,
-                        BLACKLIST_FORMAT_ANNOTATION, inserter);
-    copy_extra_keywords(schema, vocabularies::format_annotation,
-                        BLACKLIST_FORMAT_ASSERTION, inserter);
-    copy_extra_keywords(schema, vocabularies::content, BLACKLIST_CONTENT,
                         inserter);
     for (const auto &keyword : keywords_to_remove) {
       schema.erase(keyword);
@@ -76,9 +60,10 @@ private:
       keywords::unevaluated::unevaluatedProperties};
 
   const std::set<std::string> BLACKLIST_VALIDATION{
-      keywords::validation::minLength,
-      keywords::validation::maxLength,
-      keywords::validation::pattern,
+      keywords::validation::minimum,
+      keywords::validation::exclusiveMinimum,
+      keywords::validation::maximum,
+      keywords::validation::exclusiveMaximum,
       keywords::validation::minItems,
       keywords::validation::maxItems,
       keywords::validation::uniqueItems,
@@ -88,15 +73,5 @@ private:
       keywords::validation::maxProperties,
       keywords::validation::dependentRequired,
       keywords::validation::required};
-
-  const std::set<std::string> BLACKLIST_FORMAT_ANNOTATION{
-      keywords::format_annotation::format};
-
-  const std::set<std::string> BLACKLIST_FORMAT_ASSERTION{
-      keywords::format_assertion::format};
-
-  const std::set<std::string> BLACKLIST_CONTENT{
-      keywords::content::contentEncoding, keywords::content::contentMediaType,
-      keywords::content::contentSchema};
 };
 } // namespace sourcemeta::jsonbinpack::canonicalizer::rules
