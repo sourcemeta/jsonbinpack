@@ -9,6 +9,7 @@
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
 #include "rules/dependent_required_tautology.h"
+#include "rules/drop_non_array_keywords.h"
 #include "rules/drop_non_numeric_keywords.h"
 #include "rules/drop_non_object_keywords.h"
 #include "rules/drop_non_string_keywords.h"
@@ -95,6 +96,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<DropNonNumericKeywords>());
   bundle.add(std::make_unique<DropNonStringKeywords>());
   bundle.add(std::make_unique<DropNonObjectKeywords>());
+  bundle.add(std::make_unique<DropNonArrayKeywords>());
 
   return bundle.apply(document);
 }

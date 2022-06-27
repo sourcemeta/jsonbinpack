@@ -36,14 +36,17 @@ const std::string anchor{"$anchor"};
 const std::string dynamicAnchor{"$dynamicAnchor"};
 } // namespace core
 namespace applicator {
+// Array
 const std::string prefixItems{"prefixItems"};
 const std::string items{"items"};
 const std::string contains{"contains"};
+// Object
 const std::string additionalProperties{"additionalProperties"};
 const std::string properties{"properties"};
 const std::string patternProperties{"patternProperties"};
 const std::string dependentSchemas{"dependentSchemas"};
 const std::string propertyNames{"propertyNames"};
+// Any
 const std::string allOf{"allOf"};
 const std::string anyOf{"anyOf"};
 const std::string oneOf{"oneOf"};
@@ -53,26 +56,33 @@ const std::string then{"then"};
 const std::string _else{"else"};
 } // namespace applicator
 namespace unevaluated {
+// Array
 const std::string unevaluatedItems{"unevaluatedItems"};
+// Object
 const std::string unevaluatedProperties{"unevaluatedProperties"};
 } // namespace unevaluated
 namespace validation {
+// Any
 const std::string type{"type"};
 const std::string _const{"const"};
 const std::string _enum{"enum"};
+// Number
 const std::string minimum{"minimum"};
 const std::string exclusiveMinimum{"exclusiveMinimum"};
 const std::string maximum{"maximum"};
 const std::string exclusiveMaximum{"exclusiveMaximum"};
 const std::string multipleOf{"multipleOf"};
+// String
 const std::string minLength{"minLength"};
 const std::string maxLength{"maxLength"};
 const std::string pattern{"pattern"};
+// Array
 const std::string minItems{"minItems"};
 const std::string maxItems{"maxItems"};
 const std::string uniqueItems{"uniqueItems"};
 const std::string minContains{"minContains"};
 const std::string maxContains{"maxContains"};
+// Object
 const std::string minProperties{"minProperties"};
 const std::string maxProperties{"maxProperties"};
 const std::string dependentRequired{"dependentRequired"};
