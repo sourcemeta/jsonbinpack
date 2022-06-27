@@ -3,6 +3,8 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
+#include <algorithm> // std::all_of
+
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
 class DropNonNullKeywords final
@@ -12,21 +14,27 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema, vocabularies::validation) &&
-           schema.is_object() &&
+    if (!sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+            schema, vocabularies::validation) ||
+        !schema.is_object()) {
+      return false;
+    }
 
-           // If the type is set to "null" explicitly
-           ((schema.defines(keywords::validation::type) &&
-             schema.at(keywords::validation::type).is_string() &&
-             schema.at(keywords::validation::type).to_string() == "null") ||
+    // If the type is set to "null" explicitly
+    const bool is_null_type =
+        schema.defines(keywords::validation::type) &&
+        schema.at(keywords::validation::type).is_string() &&
+        schema.at(keywords::validation::type).to_string() == "null";
 
-            // If there is an enum with a single "null" item
-            (schema.defines(keywords::validation::_enum) &&
-             schema.at(keywords::validation::_enum).is_array() &&
-             schema.at(keywords::validation::_enum).size() == 1 &&
-             schema.at(keywords::validation::_enum).at(0).is_null())) &&
+    // If the type can only be "null" due to "enum"
+    const bool is_implicit_null =
+        schema.defines(keywords::validation::_enum) &&
+        schema.at(keywords::validation::_enum).is_array() &&
+        std::all_of(schema.at(keywords::validation::_enum).to_array().cbegin(),
+                    schema.at(keywords::validation::_enum).to_array().cend(),
+                    [](const auto &element) { return element.is_null(); });
 
+    return (is_null_type || is_implicit_null) &&
            (defines_any_keyword_from_set(schema, vocabularies::applicator,
                                          BLACKLIST_APPLICATOR) ||
             defines_any_keyword_from_set(schema, vocabularies::unevaluated,
