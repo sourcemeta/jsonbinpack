@@ -7,10 +7,10 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonNullKeywords final
+class DropNonBooleanKeywords final
     : public sourcemeta::jsonbinpack::canonicalizer::Rule {
 public:
-  DropNonNullKeywords() : Rule("drop_non_null_keywords"){};
+  DropNonBooleanKeywords() : Rule("drop_non_boolean_keywords"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
@@ -20,21 +20,21 @@ public:
       return false;
     }
 
-    // If the "type" is set to "null" explicitly
-    const bool is_null_type =
+    // If the "type" is set to "boolean" explicitly
+    const bool is_boolean_type =
         schema.defines(keywords::validation::type) &&
         schema.at(keywords::validation::type).is_string() &&
-        schema.at(keywords::validation::type).to_string() == "null";
+        schema.at(keywords::validation::type).to_string() == "boolean";
 
-    // If the "type" can only be "null" due to "enum"
-    const bool is_implicit_null =
+    // If the "type" can only be "boolean" due to "enum"
+    const bool is_implicit_boolean =
         schema.defines(keywords::validation::_enum) &&
         schema.at(keywords::validation::_enum).is_array() &&
         std::all_of(schema.at(keywords::validation::_enum).to_array().cbegin(),
                     schema.at(keywords::validation::_enum).to_array().cend(),
-                    [](const auto &element) { return element.is_null(); });
+                    [](const auto &element) { return element.is_boolean(); });
 
-    return (is_null_type || is_implicit_null) &&
+    return (is_boolean_type || is_implicit_boolean) &&
            (defines_any_keyword_from_set(schema, vocabularies::applicator,
                                          BLACKLIST_APPLICATOR) ||
             defines_any_keyword_from_set(schema, vocabularies::unevaluated,
