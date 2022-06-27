@@ -12,20 +12,17 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
-    if (!sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-            schema, vocabularies::validation) ||
-        !schema.is_object() || !schema.defines(keywords::validation::type) ||
-        !schema.at(keywords::validation::type).is_string() ||
-        schema.at(keywords::validation::type).to_string() != "string") {
-      return false;
-    }
-
-    return defines_any_keyword_from_set(schema, vocabularies::applicator,
-                                        BLACKLIST_APPLICATOR) ||
-           defines_any_keyword_from_set(schema, vocabularies::unevaluated,
-                                        BLACKLIST_UNEVALUATED) ||
-           defines_any_keyword_from_set(schema, vocabularies::validation,
-                                        BLACKLIST_VALIDATION);
+    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+               schema, vocabularies::validation) &&
+           schema.is_object() && schema.defines(keywords::validation::type) &&
+           schema.at(keywords::validation::type).is_string() &&
+           schema.at(keywords::validation::type).to_string() == "string" &&
+           (defines_any_keyword_from_set(schema, vocabularies::applicator,
+                                         BLACKLIST_APPLICATOR) ||
+            defines_any_keyword_from_set(schema, vocabularies::unevaluated,
+                                         BLACKLIST_UNEVALUATED) ||
+            defines_any_keyword_from_set(schema, vocabularies::validation,
+                                         BLACKLIST_VALIDATION));
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
@@ -64,6 +61,7 @@ private:
       keywords::validation::exclusiveMinimum,
       keywords::validation::maximum,
       keywords::validation::exclusiveMaximum,
+      keywords::validation::multipleOf,
       keywords::validation::minItems,
       keywords::validation::maxItems,
       keywords::validation::uniqueItems,
