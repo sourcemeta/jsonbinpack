@@ -416,8 +416,7 @@ TEST(Canonicalizer, type_union_anyof_2) {
       },
       {
         "type": "array",
-        "minItems": 0,
-        "maxProperties": 3
+        "minItems": 0
       }
     ]
   })JSON");
@@ -1556,6 +1555,28 @@ TEST(Canonicalizer, drop_non_object_keywords_1) {
     "minProperties": 0,
     "properties": {},
     "required": []
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
+}
+
+TEST(Canonicalizer, drop_non_array_keywords_1) {
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "maxItems": 4,
+    "maxLength": 3
+  })JSON");
+
+  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "maxItems": 4,
+    "minItems": 0
   })JSON");
 
   document.parse();
