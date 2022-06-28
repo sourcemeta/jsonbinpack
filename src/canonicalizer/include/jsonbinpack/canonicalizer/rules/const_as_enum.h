@@ -6,7 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ConstAsEnum final : public sourcemeta::alterschema::Rule {
+class ConstAsEnum final : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ConstAsEnum() : Rule("const_as_enum"){};
   [[nodiscard]] auto

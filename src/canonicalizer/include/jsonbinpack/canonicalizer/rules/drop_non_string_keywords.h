@@ -5,7 +5,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonStringKeywords final : public sourcemeta::alterschema::Rule {
+class DropNonStringKeywords final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DropNonStringKeywords() : Rule("drop_non_string_keywords"){};
   [[nodiscard]] auto

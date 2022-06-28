@@ -110,6 +110,7 @@ auto sourcemeta::alterschema::Bundle::apply(
 }
 
 auto sourcemeta::alterschema::Bundle::add(
-    std::unique_ptr<sourcemeta::alterschema::Rule> &&rule) -> void {
+    std::unique_ptr<sourcemeta::alterschema::Rule<std::string>> &&rule)
+    -> void {
   this->rules.push_back(std::move(rule));
 }

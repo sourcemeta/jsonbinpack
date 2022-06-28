@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
+class UnsatisfiableMaxContains final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};
   [[nodiscard]] auto

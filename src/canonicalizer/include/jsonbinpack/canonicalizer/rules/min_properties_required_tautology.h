@@ -5,7 +5,7 @@
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
 class MinPropertiesRequiredTautology final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   MinPropertiesRequiredTautology()
       : Rule("min_properties_required_tautology"){};

@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
+class EqualNumericBoundsAsConst final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const"){};
   [[nodiscard]] auto

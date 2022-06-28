@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
+class EmptyPatternProperties final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   EmptyPatternProperties() : Rule("empty_pattern_properties"){};
   [[nodiscard]] auto

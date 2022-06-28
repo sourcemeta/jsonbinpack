@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class IfWithoutThenElse final : public sourcemeta::alterschema::Rule {
+class IfWithoutThenElse final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   IfWithoutThenElse() : Rule("if_without_then_else"){};
   [[nodiscard]] auto

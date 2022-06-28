@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectLowerBound final : public sourcemeta::alterschema::Rule {
+class ImplicitObjectLowerBound final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitObjectLowerBound() : Rule("implicit_object_lower_bound"){};
   [[nodiscard]] auto

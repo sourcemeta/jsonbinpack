@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
+class MaxContainsWithoutContains final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   MaxContainsWithoutContains() : Rule("max_contains_without_contains"){};
   [[nodiscard]] auto

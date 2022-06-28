@@ -10,12 +10,14 @@ namespace sourcemeta::alterschema {
 class Bundle {
 public:
   Bundle() = default;
-  auto add(std::unique_ptr<sourcemeta::alterschema::Rule> &&rule) -> void;
+  auto add(std::unique_ptr<sourcemeta::alterschema::Rule<std::string>> &&rule)
+      -> void;
   // TODO: Take proper JSON templates
   auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document) -> void;
 
 private:
-  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule>> rules;
+  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule<std::string>>>
+      rules;
 };
 } // namespace sourcemeta::alterschema
 

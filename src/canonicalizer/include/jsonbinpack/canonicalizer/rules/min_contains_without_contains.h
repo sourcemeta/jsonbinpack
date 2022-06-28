@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class MinContainsWithoutContains final : public sourcemeta::alterschema::Rule {
+class MinContainsWithoutContains final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   MinContainsWithoutContains() : Rule("min_contains_without_contains"){};
   [[nodiscard]] auto

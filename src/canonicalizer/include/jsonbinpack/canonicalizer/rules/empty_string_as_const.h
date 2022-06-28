@@ -6,7 +6,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyStringAsConst final : public sourcemeta::alterschema::Rule {
+class EmptyStringAsConst final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   EmptyStringAsConst() : Rule("empty_string_as_const"){};
   [[nodiscard]] auto

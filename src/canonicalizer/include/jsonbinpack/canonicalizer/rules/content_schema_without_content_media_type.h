@@ -5,7 +5,7 @@
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
 class ContentSchemaWithoutContentMediaType final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ContentSchemaWithoutContentMediaType()
       : Rule("content_schema_without_content_media_type"){};
