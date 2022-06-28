@@ -1,5 +1,5 @@
 #include <jsonbinpack/canonicalizer/rule.h>
-#include <sourcemeta/assert.h>
+#include <stdexcept>
 #include <utility> // std::move
 
 sourcemeta::jsonbinpack::canonicalizer::Rule::Rule(std::string name)
@@ -20,11 +20,14 @@ auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
   if (this->condition(value)) {
     this->transform(value);
     value.parse();
+
     // The condition must always be false after applying the
     // transformation in order to avoid infinite loops
-    sourcemeta::assert::CHECK(
-        !this->condition(value),
-        "A rule condition must not hold after applying the rule");
+    if (this->condition(value)) {
+      throw std::runtime_error(
+          "A rule condition must not hold after applying the rule");
+    }
+
     return true;
   }
 

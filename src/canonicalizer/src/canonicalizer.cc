@@ -1,8 +1,8 @@
+#include <cassert>
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
-#include <sourcemeta/assert.h>
 
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
@@ -48,9 +48,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON<std::string> &document)
     -> sourcemeta::jsontoolkit::JSON<std::string> & {
   document.parse();
-  sourcemeta::assert::CHECK(
-      sourcemeta::jsontoolkit::schema::is_schema(document),
-      "The input document must be a valid schema");
+  assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
   sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
