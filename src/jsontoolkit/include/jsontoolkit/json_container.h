@@ -1,8 +1,8 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_CONTAINER_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_CONTAINER_H_
 
-#include <sourcemeta/assert.h>
-#include <stdexcept>   // std::logic_error
+#include <cassert>     // assert
+#include <stdexcept>   // std::runtime_error
 #include <string>      // std::string
 #include <string_view> // std::string_view
 
@@ -29,9 +29,8 @@ public:
   auto operator=(Container &&) noexcept -> Container & = default;
 
   auto parse() -> void {
-    sourcemeta::assert::CHECK(
-        !(this->must_parse_flat && !this->must_parse_deep),
-        "It is invalid to have to deep-parse without having to flat-parse");
+    // It is invalid to have to deep-parse without having to flat-parse
+    assert(!(this->must_parse_flat && !this->must_parse_deep));
 
     // Deep parsing implies flat parsing
     this->shallow_parse();
@@ -55,7 +54,7 @@ protected:
 
   inline auto must_be_fully_parsed() const -> void {
     if (this->must_parse_flat || this->must_parse_deep) {
-      throw std::logic_error(
+      throw std::runtime_error(
           "The JSON document must be fully-parsed at this point");
     }
   }
@@ -75,9 +74,10 @@ protected:
   }
 
   inline auto assume_element_modification() -> void {
-    sourcemeta::assert::CHECK(
-        !this->must_parse_flat,
-        "Cannot assume modification before the object is flat parsed");
+    if (this->must_parse_flat) {
+      throw std::runtime_error(
+          "Cannot assume modification before the object is flat parsed");
+    }
 
     this->must_parse_deep = true;
   }
