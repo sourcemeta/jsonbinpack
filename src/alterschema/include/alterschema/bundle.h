@@ -8,6 +8,7 @@
 
 #include <cassert>       // assert
 #include <memory>        // std::unique_ptr
+#include <set>           // std::set
 #include <stdexcept>     // std::runtime_error
 #include <string>        // std::string
 #include <unordered_set> // std::unordered_set
@@ -22,7 +23,7 @@ public:
 
   auto add(std::unique_ptr<sourcemeta::alterschema::Rule<Source>> &&rule)
       -> void {
-    this->rules.push_back(std::move(rule));
+    this->rules.insert(std::move(rule));
   }
 
   auto
@@ -87,7 +88,7 @@ public:
   }
 
 private:
-  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule<Source>>> rules;
+  std::set<std::unique_ptr<sourcemeta::alterschema::Rule<Source>>> rules;
 };
 } // namespace sourcemeta::alterschema
 
