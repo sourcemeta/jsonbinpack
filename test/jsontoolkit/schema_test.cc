@@ -56,5 +56,5 @@ TEST(Schema, is_schema_not_parsed) {
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsontoolkit::schema::is_schema(document),
-               std::logic_error);
+               std::runtime_error);
 }
