@@ -6,7 +6,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
+class ImplicitTypeUnion final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto

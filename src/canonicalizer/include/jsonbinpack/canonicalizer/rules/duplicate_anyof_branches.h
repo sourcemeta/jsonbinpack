@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
+class DuplicateAnyOfBranches final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches"){};
   [[nodiscard]] auto

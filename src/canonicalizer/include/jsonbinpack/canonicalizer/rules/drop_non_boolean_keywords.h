@@ -7,7 +7,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonBooleanKeywords final : public sourcemeta::alterschema::Rule {
+class DropNonBooleanKeywords final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DropNonBooleanKeywords() : Rule("drop_non_boolean_keywords"){};
   [[nodiscard]] auto

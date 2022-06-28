@@ -6,7 +6,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
+class ExclusiveMaximumToMaximum final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum"){};
   [[nodiscard]] auto

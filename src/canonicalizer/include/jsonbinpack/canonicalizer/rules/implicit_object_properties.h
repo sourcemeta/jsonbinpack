@@ -5,7 +5,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
+class ImplicitObjectProperties final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitObjectProperties() : Rule("implicit_object_properties"){};
   [[nodiscard]] auto

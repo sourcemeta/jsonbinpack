@@ -4,7 +4,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class NullAsConst final : public sourcemeta::alterschema::Rule {
+class NullAsConst final : public sourcemeta::alterschema::Rule<std::string> {
 public:
   NullAsConst() : Rule("null_as_const"){};
   [[nodiscard]] auto

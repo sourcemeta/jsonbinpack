@@ -5,7 +5,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImpliedArrayUniqueItems final : public sourcemeta::alterschema::Rule {
+class ImpliedArrayUniqueItems final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto

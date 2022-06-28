@@ -6,9 +6,10 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
+class BooleanAsEnum final : public sourcemeta::alterschema::Rule<std::string> {
 public:
   BooleanAsEnum() : Rule("boolean_as_enum"){};
+
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {

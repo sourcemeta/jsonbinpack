@@ -6,7 +6,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
+class ExclusiveMinimumToMinimum final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum"){};
   [[nodiscard]] auto

@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
+class EmptyDependentRequired final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   EmptyDependentRequired() : Rule("empty_dependent_required"){};
   [[nodiscard]] auto

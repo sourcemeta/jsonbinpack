@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
+class ImplicitObjectRequired final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitObjectRequired() : Rule("implicit_object_required"){};
   [[nodiscard]] auto

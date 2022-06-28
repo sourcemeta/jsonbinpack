@@ -6,7 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
+class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule<std::string> {
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};
   [[nodiscard]] auto

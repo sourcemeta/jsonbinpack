@@ -4,7 +4,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
+class ImplicitUnitMultipleOf final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};
   [[nodiscard]] auto

@@ -8,7 +8,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
+class DependentRequiredTautology final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DependentRequiredTautology() : Rule("dependent_required_tautology"){};
   [[nodiscard]] auto

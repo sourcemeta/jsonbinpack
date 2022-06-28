@@ -3,7 +3,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class BooleanSchema final : public sourcemeta::alterschema::Rule {
+class BooleanSchema final : public sourcemeta::alterschema::Rule<std::string> {
 public:
   BooleanSchema() : Rule("boolean_schema"){};
   [[nodiscard]] auto

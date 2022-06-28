@@ -46,6 +46,8 @@
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
 
+#include "applicators.h"
+
 namespace sourcemeta::jsonbinpack {
 
 template <typename Source>
@@ -54,7 +56,7 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
-  sourcemeta::alterschema::Bundle bundle;
+  sourcemeta::alterschema::Bundle<Source> bundle;
 
   // Superfluous
   bundle.add(std::make_unique<ContentSchemaWithoutContentMediaType>());
@@ -103,7 +105,7 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   bundle.add(std::make_unique<DropNonNullKeywords>());
   bundle.add(std::make_unique<DropNonBooleanKeywords>());
 
-  bundle.apply(document);
+  bundle.apply(sourcemeta::jsonbinpack::canonicalizer::applicators, document);
 }
 
 } // namespace sourcemeta::jsonbinpack

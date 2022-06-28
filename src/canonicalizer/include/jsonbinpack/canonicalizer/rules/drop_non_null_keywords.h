@@ -7,7 +7,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonNullKeywords final : public sourcemeta::alterschema::Rule {
+class DropNonNullKeywords final
+    : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DropNonNullKeywords() : Rule("drop_non_null_keywords"){};
   [[nodiscard]] auto
