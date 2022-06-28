@@ -48,8 +48,8 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-// TODO: Use templated JSON here
-auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document) -> void {
+template <typename Source>
+auto apply(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   document.parse();
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
