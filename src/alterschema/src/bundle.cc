@@ -49,8 +49,7 @@ static const std::vector<std::tuple<std::string, std::string, Type>>
         {vocabularies::applicator, keywords::applicator::_else, Type::Value}};
 
 auto sourcemeta::alterschema::Bundle::apply(
-    sourcemeta::jsontoolkit::JSON<std::string> &document)
-    -> sourcemeta::jsontoolkit::JSON<std::string> & {
+    sourcemeta::jsontoolkit::JSON<std::string> &document) -> void {
   // (1) Canonicalize the current schema object
   // Avoid recursion to not blow up the stack even on highly complex schemas
   std::unordered_set<std::string> processed_rules;
@@ -108,8 +107,6 @@ auto sourcemeta::alterschema::Bundle::apply(
       break;
     }
   }
-
-  return document;
 }
 
 auto sourcemeta::alterschema::Bundle::add(

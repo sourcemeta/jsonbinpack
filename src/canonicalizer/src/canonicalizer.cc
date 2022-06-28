@@ -45,8 +45,7 @@
 #include <memory> // std::make_unique
 
 auto sourcemeta::jsonbinpack::canonicalizer::apply(
-    sourcemeta::jsontoolkit::JSON<std::string> &document)
-    -> sourcemeta::jsontoolkit::JSON<std::string> & {
+    sourcemeta::jsontoolkit::JSON<std::string> &document) -> void {
   document.parse();
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
@@ -100,5 +99,5 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   bundle.add(std::make_unique<DropNonNullKeywords>());
   bundle.add(std::make_unique<DropNonBooleanKeywords>());
 
-  return bundle.apply(document);
+  bundle.apply(document);
 }

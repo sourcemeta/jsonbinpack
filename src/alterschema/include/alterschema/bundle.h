@@ -12,8 +12,7 @@ public:
   Bundle() = default;
   auto add(std::unique_ptr<sourcemeta::alterschema::Rule> &&rule) -> void;
   // TODO: Take proper JSON templates
-  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document)
-      -> sourcemeta::jsontoolkit::JSON<std::string> &;
+  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document) -> void;
 
 private:
   std::vector<std::unique_ptr<sourcemeta::alterschema::Rule>> rules;
