@@ -1,8 +1,9 @@
 #include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsontoolkit/schema.h>
-#include <sourcemeta/assert.h>
 
+#include <cassert>       // assert
 #include <memory>        // std::unique_ptr
+#include <stdexcept>     // std::runtime_error
 #include <string>        // std::string
 #include <tuple>         // std::tuple
 #include <unordered_set> // std::unordered_set
@@ -58,9 +59,11 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     for (auto const &rule_pointer : this->rules) {
       const bool was_transformed{rule_pointer->apply(document)};
       if (was_transformed) {
-        sourcemeta::assert::CHECK(processed_rules.find(rule_pointer->name()) ==
-                                      processed_rules.end(),
-                                  "Rules must only be processed once");
+        if (processed_rules.find(rule_pointer->name()) !=
+            processed_rules.end()) {
+          throw std::runtime_error("Rules must only be processed once");
+        }
+
         processed_rules.insert(rule_pointer->name());
       }
     }
@@ -88,20 +91,20 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
       apply(document.at(keyword));
       break;
     case sourcemeta::jsonbinpack::canonicalizer::ApplicatorType::Array:
-      sourcemeta::assert::CHECK(document.at(keyword).is_array(),
-                                "Keyword must be an array");
+      assert(document.at(keyword).is_array());
       for (auto &element : document.at(keyword).to_array()) {
         apply(element);
       }
       break;
     case sourcemeta::jsonbinpack::canonicalizer::ApplicatorType::Object:
-      sourcemeta::assert::CHECK(document.at(keyword).is_object(),
-                                "Keyword must be an object");
+      assert(document.at(keyword).is_object());
       for (auto &pair : document.at(keyword).to_object()) {
         apply(pair.second);
       }
       break;
     default:
+      // Not reached
+      assert(false);
       break;
     }
   }
