@@ -1,7 +1,7 @@
 #ifndef SOURCEMETA_ALTERSCHEMA_BUNDLE_H_
 #define SOURCEMETA_ALTERSCHEMA_BUNDLE_H_
 
-#include <alterschema/applicator_type.h>
+#include <alterschema/applicator.h>
 #include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
@@ -10,12 +10,12 @@
 #include <memory>        // std::unique_ptr
 #include <stdexcept>     // std::runtime_error
 #include <string>        // std::string
-#include <tuple>         // std::tuple
 #include <unordered_set> // std::unordered_set
 #include <utility>       // std::move
 #include <vector>        // std::vector
 
 namespace sourcemeta::alterschema {
+
 template <typename Source> class Bundle {
 public:
   Bundle() = default;
@@ -26,9 +26,7 @@ public:
   }
 
   auto
-  apply(const std::vector<std::tuple<std::string, std::string,
-                                     sourcemeta::alterschema::ApplicatorType>>
-            &applicators,
+  apply(const std::vector<sourcemeta::alterschema::Applicator> &applicators,
         sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
     // (1) Canonicalize the current schema object
     // Avoid recursion to not blow up the stack even on highly complex schemas
@@ -56,28 +54,27 @@ public:
 
     // (2) Canonicalize its sub-schemas
     for (const auto &applicator : applicators) {
-      const std::string &keyword{std::get<1>(applicator)};
       // has_vocabulary() expects a parsed document
       document.parse();
       if (!sourcemeta::jsontoolkit::schema::has_vocabulary(
-              document, std::get<0>(applicator)) ||
-          !document.defines(keyword)) {
+              document, applicator.vocabulary) ||
+          !document.defines(applicator.keyword)) {
         continue;
       }
 
-      switch (std::get<2>(applicator)) {
+      switch (applicator.type) {
       case sourcemeta::alterschema::ApplicatorType::Value:
-        apply(applicators, document.at(keyword));
+        apply(applicators, document.at(applicator.keyword));
         break;
       case sourcemeta::alterschema::ApplicatorType::Array:
-        assert(document.at(keyword).is_array());
-        for (auto &element : document.at(keyword).to_array()) {
+        assert(document.at(applicator.keyword).is_array());
+        for (auto &element : document.at(applicator.keyword).to_array()) {
           apply(applicators, element);
         }
         break;
       case sourcemeta::alterschema::ApplicatorType::Object:
-        assert(document.at(keyword).is_object());
-        for (auto &pair : document.at(keyword).to_object()) {
+        assert(document.at(applicator.keyword).is_object());
+        for (auto &pair : document.at(applicator.keyword).to_object()) {
           apply(applicators, pair.second);
         }
         break;

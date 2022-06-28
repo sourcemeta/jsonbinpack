@@ -1,10 +1,9 @@
 #ifndef SOURCEMETA_JSONBINPACK_CANONICALIZER_APPLICATORS_H_
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_APPLICATORS_H_
 
-#include <alterschema/applicator_type.h>
+#include <alterschema/applicator.h>
 #include <jsontoolkit/schema.h>
 
-#include <tuple>  // std::tuple
 #include <vector> // std::vector
 
 namespace sourcemeta::jsonbinpack::canonicalizer {
@@ -13,7 +12,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 using Type = sourcemeta::alterschema::ApplicatorType;
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
 
-const std::vector<std::tuple<std::string, std::string, Type>> applicators{
+const std::vector<sourcemeta::alterschema::Applicator> applicators{
     {vocabularies::core, keywords::core::defs, Type::Object},
     {vocabularies::content, keywords::content::contentSchema, Type::Value},
     {vocabularies::unevaluated, keywords::unevaluated::unevaluatedItems,
