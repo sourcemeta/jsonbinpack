@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class MaxContainsWithoutContains final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MaxContainsWithoutContains() : Rule("max_contains_without_contains"){};
   [[nodiscard]] auto

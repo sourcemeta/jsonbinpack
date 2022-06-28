@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
@@ -6,8 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ExclusiveMaximumToMaximum final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum"){};
   [[nodiscard]] auto

@@ -1,10 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class NullAsConst final : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
   NullAsConst() : Rule("null_as_const"){};
   [[nodiscard]] auto

@@ -1,12 +1,11 @@
 #include "utils.h"
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonNumericKeywords final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class DropNonNumericKeywords final : public sourcemeta::alterschema::Rule {
 public:
   DropNonNumericKeywords() : Rule("drop_non_numeric_keywords"){};
   [[nodiscard]] auto

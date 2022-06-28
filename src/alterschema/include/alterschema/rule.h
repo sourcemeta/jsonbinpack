@@ -1,10 +1,10 @@
-#ifndef SOURCEMETA_JSONBINPACK_CANONICALIZER_RULE_H_
-#define SOURCEMETA_JSONBINPACK_CANONICALIZER_RULE_H_
+#ifndef SOURCEMETA_ALTERSCHEMA_RULE_H_
+#define SOURCEMETA_ALTERSCHEMA_RULE_H_
 
 #include <jsontoolkit/json.h>
 #include <string> // std::string
 
-namespace sourcemeta::jsonbinpack::canonicalizer {
+namespace sourcemeta::alterschema {
 class Rule {
 public:
   Rule(std::string name);
@@ -30,6 +30,6 @@ private:
       -> void = 0;
   const std::string _name;
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer
+} // namespace sourcemeta::alterschema
 
 #endif

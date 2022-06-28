@@ -1,11 +1,11 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
 class MinPropertiesRequiredTautology final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+    : public sourcemeta::alterschema::Rule {
 public:
   MinPropertiesRequiredTautology()
       : Rule("min_properties_required_tautology"){};

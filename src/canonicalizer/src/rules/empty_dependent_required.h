@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyDependentRequired final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
 public:
   EmptyDependentRequired() : Rule("empty_dependent_required"){};
   [[nodiscard]] auto

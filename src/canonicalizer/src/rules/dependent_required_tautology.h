@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
@@ -8,8 +8,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class DependentRequiredTautology final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
 public:
   DependentRequiredTautology() : Rule("dependent_required_tautology"){};
   [[nodiscard]] auto

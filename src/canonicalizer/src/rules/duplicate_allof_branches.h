@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class DuplicateAllOfBranches final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class DuplicateAllOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAllOfBranches() : Rule("duplicate_allof_branches"){};
   [[nodiscard]] auto

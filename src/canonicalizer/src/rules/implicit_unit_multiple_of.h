@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitUnitMultipleOf final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};
   [[nodiscard]] auto

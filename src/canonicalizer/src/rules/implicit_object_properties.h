@@ -1,12 +1,11 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 #include <map> // std::map
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectProperties final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectProperties() : Rule("implicit_object_properties"){};
   [[nodiscard]] auto

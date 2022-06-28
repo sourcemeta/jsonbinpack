@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class MinContainsWithoutContains final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class MinContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MinContainsWithoutContains() : Rule("min_contains_without_contains"){};
   [[nodiscard]] auto

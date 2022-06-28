@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectLowerBound final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImplicitObjectLowerBound final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectLowerBound() : Rule("implicit_object_lower_bound"){};
   [[nodiscard]] auto

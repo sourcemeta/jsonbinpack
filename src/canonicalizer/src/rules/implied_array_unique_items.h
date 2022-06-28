@@ -1,12 +1,11 @@
 #include <algorithm> // std::all_of
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImpliedArrayUniqueItems final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImpliedArrayUniqueItems final : public sourcemeta::alterschema::Rule {
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto

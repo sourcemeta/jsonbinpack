@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
@@ -6,8 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyArrayAsConst final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class EmptyArrayAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EmptyArrayAsConst() : Rule("empty_array_as_const"){};
   [[nodiscard]] auto

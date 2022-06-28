@@ -1,10 +1,9 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class BooleanSchema final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
   BooleanSchema() : Rule("boolean_schema"){};
   [[nodiscard]] auto

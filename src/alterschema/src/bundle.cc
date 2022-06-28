@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/bundle.h>
+#include <alterschema/bundle.h>
 #include <jsontoolkit/schema.h>
 
 #include <cassert>       // assert
@@ -10,12 +10,12 @@
 #include <utility>       // std::move
 #include <vector>        // std::vector
 
-namespace sourcemeta::jsonbinpack::canonicalizer {
+namespace sourcemeta::alterschema {
 enum class ApplicatorType { Value, Array, Object };
 }
 
 // For readability
-using Type = sourcemeta::jsonbinpack::canonicalizer::ApplicatorType;
+using Type = sourcemeta::alterschema::ApplicatorType;
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
 
 static const std::vector<std::tuple<std::string, std::string, Type>>
@@ -48,7 +48,7 @@ static const std::vector<std::tuple<std::string, std::string, Type>>
         {vocabularies::applicator, keywords::applicator::then, Type::Value},
         {vocabularies::applicator, keywords::applicator::_else, Type::Value}};
 
-auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
+auto sourcemeta::alterschema::Bundle::apply(
     sourcemeta::jsontoolkit::JSON<std::string> &document)
     -> sourcemeta::jsontoolkit::JSON<std::string> & {
   // (1) Canonicalize the current schema object
@@ -87,16 +87,16 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
     }
 
     switch (std::get<2>(applicator)) {
-    case sourcemeta::jsonbinpack::canonicalizer::ApplicatorType::Value:
+    case sourcemeta::alterschema::ApplicatorType::Value:
       apply(document.at(keyword));
       break;
-    case sourcemeta::jsonbinpack::canonicalizer::ApplicatorType::Array:
+    case sourcemeta::alterschema::ApplicatorType::Array:
       assert(document.at(keyword).is_array());
       for (auto &element : document.at(keyword).to_array()) {
         apply(element);
       }
       break;
-    case sourcemeta::jsonbinpack::canonicalizer::ApplicatorType::Object:
+    case sourcemeta::alterschema::ApplicatorType::Object:
       assert(document.at(keyword).is_object());
       for (auto &pair : document.at(keyword).to_object()) {
         apply(pair.second);
@@ -112,8 +112,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::Bundle::apply(
   return document;
 }
 
-auto sourcemeta::jsonbinpack::canonicalizer::Bundle::add(
-    std::unique_ptr<sourcemeta::jsonbinpack::canonicalizer::Rule> &&rule)
-    -> void {
+auto sourcemeta::alterschema::Bundle::add(
+    std::unique_ptr<sourcemeta::alterschema::Rule> &&rule) -> void {
   this->rules.push_back(std::move(rule));
 }

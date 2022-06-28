@@ -1,16 +1,15 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <stdexcept>
 #include <utility> // std::move
 
-sourcemeta::jsonbinpack::canonicalizer::Rule::Rule(std::string name)
+sourcemeta::alterschema::Rule::Rule(std::string name)
     : _name{std::move(name)} {}
 
-auto sourcemeta::jsonbinpack::canonicalizer::Rule::name() const
-    -> const std::string & {
+auto sourcemeta::alterschema::Rule::name() const -> const std::string & {
   return this->_name;
 }
 
-auto sourcemeta::jsonbinpack::canonicalizer::Rule::apply(
+auto sourcemeta::alterschema::Rule::apply(
     sourcemeta::jsontoolkit::JSON<std::string> &value) const -> bool {
 
   // A rule cannot be applied to a non-parsed JSON value given

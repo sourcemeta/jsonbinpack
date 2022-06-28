@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 #include <utility> // std::move
@@ -6,8 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitTypeUnion final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto

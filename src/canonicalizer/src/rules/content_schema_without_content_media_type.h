@@ -1,11 +1,11 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
 class ContentSchemaWithoutContentMediaType final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+    : public sourcemeta::alterschema::Rule {
 public:
   ContentSchemaWithoutContentMediaType()
       : Rule("content_schema_without_content_media_type"){};

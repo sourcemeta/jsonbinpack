@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ImplicitObjectRequired final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectRequired() : Rule("implicit_object_required"){};
   [[nodiscard]] auto

@@ -1,5 +1,5 @@
+#include <alterschema/bundle.h>
 #include <cassert>
-#include <jsonbinpack/canonicalizer/bundle.h>
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
@@ -51,7 +51,7 @@ auto sourcemeta::jsonbinpack::canonicalizer::apply(
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
-  sourcemeta::jsonbinpack::canonicalizer::Bundle bundle;
+  sourcemeta::alterschema::Bundle bundle;
 
   // Superfluous
   bundle.add(std::make_unique<ContentSchemaWithoutContentMediaType>());

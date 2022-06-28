@@ -1,4 +1,4 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 #include <utility> // std::move
@@ -6,8 +6,7 @@
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class TypeUnionAnyOf final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};
   [[nodiscard]] auto

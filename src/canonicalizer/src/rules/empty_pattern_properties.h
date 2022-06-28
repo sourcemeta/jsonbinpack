@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class EmptyPatternProperties final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
 public:
   EmptyPatternProperties() : Rule("empty_pattern_properties"){};
   [[nodiscard]] auto

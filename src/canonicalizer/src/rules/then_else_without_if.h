@@ -1,11 +1,10 @@
-#include <jsonbinpack/canonicalizer/rule.h>
+#include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
-class ThenElseWithoutIf final
-    : public sourcemeta::jsonbinpack::canonicalizer::Rule {
+class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
 public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};
   [[nodiscard]] auto
