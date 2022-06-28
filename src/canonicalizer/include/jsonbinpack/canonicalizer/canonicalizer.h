@@ -46,10 +46,10 @@
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
 
-namespace sourcemeta::jsonbinpack::canonicalizer {
+namespace sourcemeta::jsonbinpack {
 
 template <typename Source>
-auto apply(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
+auto canonicalize(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   document.parse();
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
@@ -106,6 +106,6 @@ auto apply(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   bundle.apply(document);
 }
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer
+} // namespace sourcemeta::jsonbinpack
 
 #endif

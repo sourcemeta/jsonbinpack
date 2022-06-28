@@ -9,7 +9,7 @@ TEST(Canonicalizer, max_contains_without_contains_1) {
     "maxContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -30,7 +30,7 @@ TEST(Canonicalizer, max_contains_without_contains_2) {
     "maxContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -55,7 +55,7 @@ TEST(Canonicalizer, min_contains_without_contains_1) {
     "minContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -76,7 +76,7 @@ TEST(Canonicalizer, min_contains_without_contains_2) {
     "minContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -103,7 +103,7 @@ TEST(Canonicalizer, content_schema_without_content_media_type_1) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -125,7 +125,7 @@ TEST(Canonicalizer, unsatisfiable_max_contains_1) {
     "maxItems": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -151,7 +151,7 @@ TEST(Canonicalizer, implied_array_unique_items_1) {
     "maxItems": 1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -173,7 +173,7 @@ TEST(Canonicalizer, implied_array_unique_items_2) {
     "const": [ 1 ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -195,7 +195,7 @@ TEST(Canonicalizer, implied_array_unique_items_3) {
     "enum": [ [1] ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -217,7 +217,7 @@ TEST(Canonicalizer, implied_array_unique_items_4) {
     "enum": [ [1], [] ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -239,7 +239,7 @@ TEST(Canonicalizer, implied_array_unique_items_5) {
     "enum": [ [1], [], 2 ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -261,7 +261,7 @@ TEST(Canonicalizer, min_properties_required_tautology_1) {
     "minProperties": 1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -284,7 +284,7 @@ TEST(Canonicalizer, min_properties_required_tautology_2) {
     "minProperties": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -306,7 +306,7 @@ TEST(Canonicalizer, if_without_then_else_1) {
     "if": { "minProperties": 2 }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -329,7 +329,7 @@ TEST(Canonicalizer, then_else_without_if_1) {
     "else": { "minProperties": 3 }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -351,7 +351,7 @@ TEST(Canonicalizer, empty_pattern_properties_1) {
     "patternProperties": {}
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -372,7 +372,7 @@ TEST(Canonicalizer, type_union_anyof_1) {
     "type": [ "object", "array" ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -402,7 +402,7 @@ TEST(Canonicalizer, type_union_anyof_2) {
     "maxProperties": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -437,7 +437,7 @@ TEST(Canonicalizer, type_union_anyof_3) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -472,7 +472,7 @@ TEST(Canonicalizer, implicit_type_union_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -514,7 +514,7 @@ TEST(Canonicalizer, implicit_unit_multiple_of_1) {
     "type": "integer"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -533,7 +533,7 @@ TEST(Canonicalizer, implicit_array_lower_bound_1) {
     "type": "array"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -552,7 +552,7 @@ TEST(Canonicalizer, implicit_string_lower_bound_1) {
     "type": "string"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -571,7 +571,7 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
     "type": "object"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -588,7 +588,7 @@ TEST(Canonicalizer, implicit_object_lower_bound_1) {
 
 TEST(Canonicalizer, boolean_schema_1) {
   sourcemeta::jsontoolkit::JSON<std::string> document("true");
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "anyOf": [
       { "enum": [ null ] },
@@ -623,7 +623,7 @@ TEST(Canonicalizer, boolean_schema_1) {
 
 TEST(Canonicalizer, boolean_schema_2) {
   sourcemeta::jsontoolkit::JSON<std::string> document("false");
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "not": {
       "anyOf": [
@@ -665,7 +665,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_1) {
     "exclusiveMinimum": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -686,7 +686,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_2) {
     "exclusiveMinimum": 5.1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -708,7 +708,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_3) {
     "minimum": 7
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -730,7 +730,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_4) {
     "minimum": 7
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -752,7 +752,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_5) {
     "minimum": 7.2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -774,7 +774,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_6) {
     "minimum": 7.2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -796,7 +796,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_7) {
     "minimum": 4
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -818,7 +818,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_8) {
     "minimum": 4
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -840,7 +840,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_9) {
     "minimum": 4.8
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -862,7 +862,7 @@ TEST(Canonicalizer, exclusive_minimum_to_minimum_10) {
     "minimum": 4.8
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -883,7 +883,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_1) {
     "exclusiveMaximum": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -904,7 +904,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_2) {
     "exclusiveMaximum": 5.1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -926,7 +926,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_3) {
     "maximum": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -948,7 +948,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_4) {
     "maximum": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -970,7 +970,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_5) {
     "maximum": 3.2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -992,7 +992,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_6) {
     "maximum": 3.2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1014,7 +1014,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_7) {
     "maximum": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1036,7 +1036,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_8) {
     "maximum": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1058,7 +1058,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_9) {
     "maximum": 5.1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1080,7 +1080,7 @@ TEST(Canonicalizer, exclusive_maximum_to_maximum_10) {
     "maximum": 5.1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1102,7 +1102,7 @@ TEST(Canonicalizer, equal_numeric_bounds_as_const_1) {
     "minimum": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1124,7 +1124,7 @@ TEST(Canonicalizer, equal_numeric_bounds_as_const_2) {
     "minimum": 5.2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1144,7 +1144,7 @@ TEST(Canonicalizer, empty_string_as_const_1) {
     "maxLength": 0
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1165,7 +1165,7 @@ TEST(Canonicalizer, empty_array_as_const_1) {
     "maxItems": 0
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1186,7 +1186,7 @@ TEST(Canonicalizer, empty_object_as_const_1) {
     "maxProperties": 0
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1212,7 +1212,7 @@ TEST(Canonicalizer, dependent_required_tautology_1) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1237,7 +1237,7 @@ TEST(Canonicalizer, dependent_required_tautology_2) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1262,7 +1262,7 @@ TEST(Canonicalizer, duplicate_allof_branches_1) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1290,7 +1290,7 @@ TEST(Canonicalizer, duplicate_allof_branches_2) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1325,7 +1325,7 @@ TEST(Canonicalizer, duplicate_allof_branches_3) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1349,7 +1349,7 @@ TEST(Canonicalizer, duplicate_allof_branches_4) {
     "allOf": []
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1371,7 +1371,7 @@ TEST(Canonicalizer, duplicate_anyof_branches_1) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1399,7 +1399,7 @@ TEST(Canonicalizer, duplicate_anyof_branches_2) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1434,7 +1434,7 @@ TEST(Canonicalizer, duplicate_anyof_branches_3) {
     ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1458,7 +1458,7 @@ TEST(Canonicalizer, duplicate_anyof_branches_4) {
     "anyOf": []
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1479,7 +1479,7 @@ TEST(Canonicalizer, drop_non_numeric_keywords_1) {
     "properties": {}
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1501,7 +1501,7 @@ TEST(Canonicalizer, drop_non_numeric_keywords_2) {
     "properties": {}
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1524,7 +1524,7 @@ TEST(Canonicalizer, drop_non_string_keywords_1) {
     "properties": {}
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1546,7 +1546,7 @@ TEST(Canonicalizer, drop_non_object_keywords_1) {
     "maxItems": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1570,7 +1570,7 @@ TEST(Canonicalizer, drop_non_array_keywords_1) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1592,7 +1592,7 @@ TEST(Canonicalizer, drop_non_null_keywords_1) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1612,7 +1612,7 @@ TEST(Canonicalizer, drop_non_null_keywords_2) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1632,7 +1632,7 @@ TEST(Canonicalizer, drop_non_boolean_keywords_1) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1652,7 +1652,7 @@ TEST(Canonicalizer, drop_non_boolean_keywords_2) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalizer::apply(document);
+  sourcemeta::jsonbinpack::canonicalize(document);
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
