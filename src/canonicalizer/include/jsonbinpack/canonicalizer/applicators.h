@@ -1,5 +1,5 @@
-#ifndef SOURCEMETA_ALTERSCHEMA_APPLICATORS_H_
-#define SOURCEMETA_ALTERSCHEMA_APPLICATORS_H_
+#ifndef SOURCEMETA_JSONBINPACK_CANONICALIZER_APPLICATORS_H_
+#define SOURCEMETA_JSONBINPACK_CANONICALIZER_APPLICATORS_H_
 
 #include <alterschema/applicator_type.h>
 #include <jsontoolkit/schema.h>
@@ -7,7 +7,7 @@
 #include <tuple>  // std::tuple
 #include <vector> // std::vector
 
-namespace sourcemeta::alterschema {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 // For readability
 using Type = sourcemeta::alterschema::ApplicatorType;
@@ -40,6 +40,6 @@ const std::vector<std::tuple<std::string, std::string, Type>> applicators{
     {vocabularies::applicator, keywords::applicator::then, Type::Value},
     {vocabularies::applicator, keywords::applicator::_else, Type::Value}};
 
-} // namespace sourcemeta::alterschema
+} // namespace sourcemeta::jsonbinpack::canonicalizer
 
 #endif

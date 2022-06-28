@@ -2,7 +2,6 @@
 #define SOURCEMETA_ALTERSCHEMA_BUNDLE_H_
 
 #include <alterschema/applicator_type.h>
-#include <alterschema/applicators.h>
 #include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
@@ -11,6 +10,7 @@
 #include <memory>        // std::unique_ptr
 #include <stdexcept>     // std::runtime_error
 #include <string>        // std::string
+#include <tuple>         // std::tuple
 #include <unordered_set> // std::unordered_set
 #include <utility>       // std::move
 #include <vector>        // std::vector
@@ -25,7 +25,11 @@ public:
     this->rules.push_back(std::move(rule));
   }
 
-  auto apply(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
+  auto
+  apply(const std::vector<std::tuple<std::string, std::string,
+                                     sourcemeta::alterschema::ApplicatorType>>
+            &applicators,
+        sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
     // (1) Canonicalize the current schema object
     // Avoid recursion to not blow up the stack even on highly complex schemas
     std::unordered_set<std::string> processed_rules;
@@ -51,7 +55,7 @@ public:
     }
 
     // (2) Canonicalize its sub-schemas
-    for (const auto &applicator : sourcemeta::alterschema::applicators) {
+    for (const auto &applicator : applicators) {
       const std::string &keyword{std::get<1>(applicator)};
       // has_vocabulary() expects a parsed document
       document.parse();
@@ -63,18 +67,18 @@ public:
 
       switch (std::get<2>(applicator)) {
       case sourcemeta::alterschema::ApplicatorType::Value:
-        apply(document.at(keyword));
+        apply(applicators, document.at(keyword));
         break;
       case sourcemeta::alterschema::ApplicatorType::Array:
         assert(document.at(keyword).is_array());
         for (auto &element : document.at(keyword).to_array()) {
-          apply(element);
+          apply(applicators, element);
         }
         break;
       case sourcemeta::alterschema::ApplicatorType::Object:
         assert(document.at(keyword).is_object());
         for (auto &pair : document.at(keyword).to_object()) {
-          apply(pair.second);
+          apply(applicators, pair.second);
         }
         break;
       default:
