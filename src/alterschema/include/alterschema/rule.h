@@ -28,21 +28,21 @@ public:
     // that the condition operates on a constant document
     value.parse();
 
-    if (this->condition(value)) {
-      this->transform(value);
-      value.parse();
-
-      // The condition must always be false after applying the
-      // transformation in order to avoid infinite loops
-      if (this->condition(value)) {
-        throw std::runtime_error(
-            "A rule condition must not hold after applying the rule");
-      }
-
-      return true;
+    if (!this->condition(value)) {
+      return false;
     }
 
-    return false;
+    this->transform(value);
+    value.parse();
+
+    // The condition must always be false after applying the
+    // transformation in order to avoid infinite loops
+    if (this->condition(value)) {
+      throw std::runtime_error(
+          "A rule condition must not hold after applying the rule");
+    }
+
+    return true;
   }
 
 private:
