@@ -54,7 +54,7 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   assert(sourcemeta::jsontoolkit::schema::is_schema(document));
 
   using namespace sourcemeta::jsonbinpack::canonicalizer::rules;
-  sourcemeta::alterschema::Bundle bundle;
+  sourcemeta::alterschema::Bundle<Source> bundle;
 
   // Superfluous
   bundle.add(std::make_unique<ContentSchemaWithoutContentMediaType>());

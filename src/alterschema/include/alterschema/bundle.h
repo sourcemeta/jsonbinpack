@@ -16,17 +16,16 @@
 #include <vector>        // std::vector
 
 namespace sourcemeta::alterschema {
-class Bundle {
+template <typename Source> class Bundle {
 public:
   Bundle() = default;
 
-  auto add(std::unique_ptr<sourcemeta::alterschema::Rule<std::string>> &&rule)
+  auto add(std::unique_ptr<sourcemeta::alterschema::Rule<Source>> &&rule)
       -> void {
     this->rules.push_back(std::move(rule));
   }
 
-  // TODO: Take proper JSON templates
-  auto apply(sourcemeta::jsontoolkit::JSON<std::string> &document) -> void {
+  auto apply(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
     // (1) Canonicalize the current schema object
     // Avoid recursion to not blow up the stack even on highly complex schemas
     std::unordered_set<std::string> processed_rules;
@@ -87,8 +86,7 @@ public:
   }
 
 private:
-  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule<std::string>>>
-      rules;
+  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule<Source>>> rules;
 };
 } // namespace sourcemeta::alterschema
 
