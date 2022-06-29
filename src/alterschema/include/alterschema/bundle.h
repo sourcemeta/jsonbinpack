@@ -43,7 +43,7 @@ public:
         const bool was_transformed{pair.second->apply(document)};
         if (was_transformed) {
           if (processed_rules.find(pair.second->name()) !=
-              processed_rules.end()) {
+              std::end(processed_rules)) {
             throw std::runtime_error("Rules must only be processed once");
           }
 
