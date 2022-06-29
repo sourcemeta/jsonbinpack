@@ -82,6 +82,13 @@ TEST(Bundle, alter_nested_document_with_applicators) {
         "foo": "bar",
         "bar": "baz",
         "qux": "xxx"
+      },
+      {
+        "value": {
+          "foo": "bar",
+          "bar": "baz",
+          "qux": "xxx"
+        }
       }
     ],
     "foo": "bar",
@@ -112,7 +119,14 @@ TEST(Bundle, alter_nested_document_with_applicators) {
 
   sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
     "array": [
-      { "qux": "xxx" }
+      {
+        "qux": "xxx"
+      },
+      {
+        "value": {
+          "qux": "xxx"
+        }
+      }
     ],
     "value": {
       "qux": "xxx"
