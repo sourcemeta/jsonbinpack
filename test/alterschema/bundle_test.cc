@@ -16,6 +16,8 @@ TEST(Bundle, can_add_a_rule) {
 
 TEST(Bundle, can_add_multiple_rules) {
   sourcemeta::alterschema::Bundle<std::string> bundle;
+  // TODO: Can we turn this into bundle.add<ExampleRule1>() to avoid
+  // std::make_unique?
   bundle.add(std::make_unique<ExampleRule1<std::string>>());
   EXPECT_NO_THROW(
       { bundle.add(std::make_unique<ExampleRule2<std::string>>()); });
@@ -67,4 +69,65 @@ TEST(Bundle, throw_on_rules_called_twice) {
   })JSON");
 
   EXPECT_THROW(bundle.apply({}, document), std::runtime_error);
+}
+
+TEST(Bundle, alter_nested_document_with_applicators) {
+  sourcemeta::alterschema::Bundle<std::string> bundle;
+  bundle.add(std::make_unique<ExampleRule1<std::string>>());
+  bundle.add(std::make_unique<ExampleRule2<std::string>>());
+
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "array": [
+      {
+        "foo": "bar",
+        "bar": "baz",
+        "qux": "xxx"
+      }
+    ],
+    "foo": "bar",
+    "value": {
+      "foo": "bar",
+      "bar": "baz",
+      "qux": "xxx"
+    },
+    "object": {
+      "first": {
+        "foo": "bar",
+        "bar": "baz",
+        "qux": "xxx"
+      },
+      "second": {
+        "foo": "bar",
+        "bar": "baz",
+        "qux": "xxx"
+      }
+    }
+  })JSON");
+
+  bundle.apply(
+      {{"test", "array", sourcemeta::alterschema::ApplicatorType::Array},
+       {"test", "object", sourcemeta::alterschema::ApplicatorType::Object},
+       {"test", "value", sourcemeta::alterschema::ApplicatorType::Value}},
+      document);
+
+  sourcemeta::jsontoolkit::JSON<std::string> expected(R"JSON({
+    "array": [
+      { "qux": "xxx" }
+    ],
+    "value": {
+      "qux": "xxx"
+    },
+    "object": {
+      "first": {
+        "qux": "xxx"
+      },
+      "second": {
+        "qux": "xxx"
+      }
+    }
+  })JSON");
+
+  document.parse();
+  expected.parse();
+  EXPECT_EQ(expected, document);
 }
