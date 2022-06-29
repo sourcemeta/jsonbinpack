@@ -19,3 +19,10 @@ TEST(Bundle, cannot_add_multiple_instances_of_same_rule) {
   EXPECT_THROW(bundle.add(std::make_unique<ExampleRule1<std::string>>()),
                std::logic_error);
 }
+
+TEST(Bundle, cannot_add_multiple_rules_with_same_name) {
+  sourcemeta::alterschema::Bundle<std::string> bundle;
+  bundle.add(std::make_unique<ExampleRule1<std::string>>());
+  EXPECT_THROW(bundle.add(std::make_unique<ExampleRule1Extra<std::string>>()),
+               std::logic_error);
+}

@@ -22,6 +22,26 @@ public:
 };
 
 template <typename Source>
+class ExampleRule1Extra final : public sourcemeta::alterschema::Rule<Source> {
+public:
+  // This sample rule is a different class than ExampleRule1 but with its same
+  // name
+  ExampleRule1Extra()
+      : sourcemeta::alterschema::Rule<Source>("example_rule_1"){};
+
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON<Source> &schema) const
+      -> bool override {
+    return schema.defines("xxx");
+  }
+
+  auto transform(sourcemeta::jsontoolkit::JSON<Source> &schema) const
+      -> void override {
+    schema.erase("xxx");
+  }
+};
+
+template <typename Source>
 class ExampleRule2 final : public sourcemeta::alterschema::Rule<Source> {
 public:
   ExampleRule2() : sourcemeta::alterschema::Rule<Source>("example_rule_2"){};
