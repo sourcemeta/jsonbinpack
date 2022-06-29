@@ -1,8 +1,14 @@
 #include "version.h"
-#include <iostream>
+#include <exception> // std::exception
+#include <iostream>  // std::cout, std::cerr
 
 auto main() -> int {
-  std::cout << "JSON BinPack" << std::endl;
-  std::cout << sourcemeta::jsonbinpack::VERSION << std::endl;
-  return 0;
+  try {
+    std::cout << "JSON BinPack" << std::endl;
+    std::cout << sourcemeta::jsonbinpack::VERSION << std::endl;
+    return 0;
+  } catch (const std::exception &error) {
+    std::cerr << "Error: " << error.what() << "\n";
+    return 1;
+  }
 }
