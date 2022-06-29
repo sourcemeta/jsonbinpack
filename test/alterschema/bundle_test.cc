@@ -13,6 +13,13 @@ TEST(Bundle, can_add_a_rule) {
       { bundle.add(std::make_unique<ExampleRule1<std::string>>()); });
 }
 
+TEST(Bundle, can_add_multiple_rules) {
+  sourcemeta::alterschema::Bundle<std::string> bundle;
+  bundle.add(std::make_unique<ExampleRule1<std::string>>());
+  EXPECT_NO_THROW(
+      { bundle.add(std::make_unique<ExampleRule2<std::string>>()); });
+}
+
 TEST(Bundle, cannot_add_multiple_instances_of_same_rule) {
   sourcemeta::alterschema::Bundle<std::string> bundle;
   bundle.add(std::make_unique<ExampleRule1<std::string>>());
