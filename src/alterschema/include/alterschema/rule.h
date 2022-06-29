@@ -21,6 +21,14 @@ public:
   auto operator=(const Rule &) -> Rule & = delete;
   auto operator=(Rule &&) -> Rule & = delete;
 
+  auto operator==(const Rule<Source> &other) const -> bool {
+    return this->name() == other.name();
+  }
+
+  inline auto operator!=(const Rule<Source> &other) const -> bool {
+    return !this->operator==(other);
+  }
+
   [[nodiscard]] auto name() const -> const std::string & { return this->_name; }
 
   auto apply(sourcemeta::jsontoolkit::JSON<Source> &value) const -> bool {

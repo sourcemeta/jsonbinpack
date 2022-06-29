@@ -7,8 +7,9 @@
 #include <jsontoolkit/schema.h>
 
 #include <cassert>       // assert
+#include <map>           // std::map
 #include <memory>        // std::unique_ptr
-#include <stdexcept>     // std::runtime_error
+#include <stdexcept>     // std::runtime_error, std::logic_error
 #include <string>        // std::string
 #include <unordered_set> // std::unordered_set
 #include <utility>       // std::move
@@ -22,7 +23,12 @@ public:
 
   auto add(std::unique_ptr<sourcemeta::alterschema::Rule<Source>> &&rule)
       -> void {
-    this->rules.push_back(std::move(rule));
+    const std::string &name = rule->name();
+    if (this->rules.find(name) != std::end(this->rules)) {
+      throw std::logic_error("Rule already defined in bundle");
+    }
+
+    this->rules.insert({name, std::move(rule)});
   }
 
   auto
@@ -33,15 +39,15 @@ public:
     std::unordered_set<std::string> processed_rules;
     while (true) {
       auto matches = processed_rules.size();
-      for (auto const &rule_pointer : this->rules) {
-        const bool was_transformed{rule_pointer->apply(document)};
+      for (auto const &pair : this->rules) {
+        const bool was_transformed{pair.second->apply(document)};
         if (was_transformed) {
-          if (processed_rules.find(rule_pointer->name()) !=
-              processed_rules.end()) {
+          if (processed_rules.find(pair.second->name()) !=
+              std::end(processed_rules)) {
             throw std::runtime_error("Rules must only be processed once");
           }
 
-          processed_rules.insert(rule_pointer->name());
+          processed_rules.insert(pair.second->name());
         }
       }
 
@@ -87,7 +93,8 @@ public:
   }
 
 private:
-  std::vector<std::unique_ptr<sourcemeta::alterschema::Rule<Source>>> rules;
+  std::map<std::string, std::unique_ptr<sourcemeta::alterschema::Rule<Source>>>
+      rules;
 };
 } // namespace sourcemeta::alterschema
 
