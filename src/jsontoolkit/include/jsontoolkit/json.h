@@ -559,6 +559,8 @@ public:
         std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
             this->data);
     this->assume_element_modification();
+    document.shallow_parse();
+    document.assume_element_modification();
     return document;
   }
 
@@ -662,6 +664,8 @@ public:
     this->assume_element_modification();
     auto &document = std::get<sourcemeta::jsontoolkit::Array<
         sourcemeta::jsontoolkit::JSON<Source>, Source>>(this->data);
+    document.shallow_parse();
+    document.assume_element_modification();
     return document;
   }
 

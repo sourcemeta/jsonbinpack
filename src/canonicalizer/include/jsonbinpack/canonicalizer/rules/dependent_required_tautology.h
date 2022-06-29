@@ -49,11 +49,11 @@ public:
         continue;
       }
 
-      const auto &dependent_requires =
+      auto &dependent_requires =
           schema.at(keywords::validation::dependentRequired)
               .at(element.to_string())
               .to_array();
-      std::copy(dependent_requires.cbegin(), dependent_requires.cend(),
+      std::copy(dependent_requires.begin(), dependent_requires.end(),
                 std::back_inserter(new_requires));
       schema.at(keywords::validation::dependentRequired)
           .erase(element.to_string());
