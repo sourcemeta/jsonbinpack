@@ -7,10 +7,16 @@ add_custom_command(
 set_property(SOURCE ${JSONBINPACK_WEBSITE_OUT} PROPERTY GENERATED TRUE)
 
 if(SASSC_BIN)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(JSONBINPACK_SASSC_STYLE expanded)
+  else()
+    set(JSONBINPACK_SASSC_STYLE compressed)
+  endif()
+
   add_custom_command(
     OUTPUT ${JSONBINPACK_WEBSITE_OUT}/style.min.css
     VERBATIM
-    COMMAND ${SASSC_BIN} --style compressed
+    COMMAND ${SASSC_BIN} --style ${JSONBINPACK_SASSC_STYLE}
       ${JSONBINPACK_WEBSITE_SRC}/main.scss ${JSONBINPACK_WEBSITE_OUT}/style.min.css
     DEPENDS ${JSONBINPACK_WEBSITE_OUT} ${JSONBINPACK_WEBSITE_SRC}/main.scss
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

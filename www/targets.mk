@@ -3,24 +3,26 @@ INSTALL ?= install
 
 build:
 	$(MKDIR) $@
-build/www: | build
+build/$(PRESET): | build
 	$(MKDIR) $@
-build/www/%: www/% | build/www
+build/$(PRESET)/www: | build/$(PRESET)
+	$(MKDIR) $@
+build/$(PRESET)/www/%: www/% | build/$(PRESET)/www
 	$(INSTALL) -m 0664 $< $@
 html: node_modules \
-	build/www/apple-touch-icon.png \
-	build/www/benchmark-deck.png \
-	build/www/example.png \
-	build/www/favicon.ico \
-	build/www/hybrid.png \
-	build/www/icon-192x192.png \
-	build/www/icon-512x512.png \
-	build/www/icon.svg \
-	build/www/jsonschema.png \
-	build/www/manifest.webmanifest \
-	build/www/index.html \
-	build/www/.nojekyll \
-	build/www/CNAME
+	build/$(PRESET)/www/apple-touch-icon.png \
+	build/$(PRESET)/www/benchmark-deck.png \
+	build/$(PRESET)/www/example.png \
+	build/$(PRESET)/www/favicon.ico \
+	build/$(PRESET)/www/hybrid.png \
+	build/$(PRESET)/www/icon-192x192.png \
+	build/$(PRESET)/www/icon-512x512.png \
+	build/$(PRESET)/www/icon.svg \
+	build/$(PRESET)/www/jsonschema.png \
+	build/$(PRESET)/www/manifest.webmanifest \
+	build/$(PRESET)/www/index.html \
+	build/$(PRESET)/www/.nojekyll \
+	build/$(PRESET)/www/CNAME
 	$(CMAKE) --build --preset $(PRESET) --target website
 	$(CMAKE) --build --preset $(PRESET) --target doxygen
 .PHONY: html
