@@ -30,7 +30,6 @@ public:
           schema.at(keywords::validation::exclusiveMaximum).to_integer() - 1;
       if (!schema.defines(keywords::validation::maximum) ||
           (schema.at(keywords::validation::maximum).is_real() &&
-
            static_cast<long double>(
                schema.at(keywords::validation::maximum).to_real()) > maximum)) {
         schema.assign(keywords::validation::maximum, maximum);
