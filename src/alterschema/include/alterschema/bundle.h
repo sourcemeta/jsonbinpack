@@ -8,7 +8,7 @@
 
 #include <cassert>       // assert
 #include <map>           // std::map
-#include <memory>        // std::unique_ptr
+#include <memory>        // std::unique_ptr, std::make_unique
 #include <stdexcept>     // std::runtime_error, std::logic_error
 #include <string>        // std::string
 #include <unordered_set> // std::unordered_set
@@ -21,8 +21,8 @@ template <typename Source> class Bundle {
 public:
   Bundle() = default;
 
-  auto add(std::unique_ptr<sourcemeta::alterschema::Rule<Source>> &&rule)
-      -> void {
+  template <typename T> auto add() -> void {
+    auto rule = std::make_unique<T>();
     const std::string &name = rule->name();
     if (this->rules.find(name) != std::end(this->rules)) {
       throw std::logic_error("Rule already defined in bundle");
