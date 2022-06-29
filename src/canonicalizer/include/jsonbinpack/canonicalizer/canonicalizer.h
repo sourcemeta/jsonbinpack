@@ -6,7 +6,6 @@
 #include <jsontoolkit/schema.h>
 
 #include <cassert> // assert
-#include <memory>  // std::make_unique
 
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
@@ -59,51 +58,51 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON<Source> &document) -> void {
   sourcemeta::alterschema::Bundle<Source> bundle;
 
   // Superfluous
-  bundle.add(std::make_unique<ContentSchemaWithoutContentMediaType>());
-  bundle.add(std::make_unique<MaxContainsWithoutContains>());
-  bundle.add(std::make_unique<MinContainsWithoutContains>());
-  bundle.add(std::make_unique<UnsatisfiableMaxContains>());
-  bundle.add(std::make_unique<ImpliedArrayUniqueItems>());
-  bundle.add(std::make_unique<MinPropertiesRequiredTautology>());
-  bundle.add(std::make_unique<IfWithoutThenElse>());
-  bundle.add(std::make_unique<ThenElseWithoutIf>());
-  bundle.add(std::make_unique<EmptyPatternProperties>());
+  bundle.template add<ContentSchemaWithoutContentMediaType>();
+  bundle.template add<MaxContainsWithoutContains>();
+  bundle.template add<MinContainsWithoutContains>();
+  bundle.template add<UnsatisfiableMaxContains>();
+  bundle.template add<ImpliedArrayUniqueItems>();
+  bundle.template add<MinPropertiesRequiredTautology>();
+  bundle.template add<IfWithoutThenElse>();
+  bundle.template add<ThenElseWithoutIf>();
+  bundle.template add<EmptyPatternProperties>();
 
   // Syntax sugar
-  bundle.add(std::make_unique<TypeUnionAnyOf>());
-  bundle.add(std::make_unique<BooleanSchema>());
-  bundle.add(std::make_unique<BooleanAsEnum>());
-  bundle.add(std::make_unique<NullAsConst>());
-  bundle.add(std::make_unique<ConstAsEnum>());
-  bundle.add(std::make_unique<ExclusiveMinimumToMinimum>());
-  bundle.add(std::make_unique<ExclusiveMaximumToMaximum>());
-  bundle.add(std::make_unique<EmptyDependentRequired>());
+  bundle.template add<TypeUnionAnyOf>();
+  bundle.template add<BooleanSchema>();
+  bundle.template add<BooleanAsEnum>();
+  bundle.template add<NullAsConst>();
+  bundle.template add<ConstAsEnum>();
+  bundle.template add<ExclusiveMinimumToMinimum>();
+  bundle.template add<ExclusiveMaximumToMaximum>();
+  bundle.template add<EmptyDependentRequired>();
 
   // Implicits
-  bundle.add(std::make_unique<ImplicitTypeUnion>());
-  bundle.add(std::make_unique<ImplicitUnitMultipleOf>());
-  bundle.add(std::make_unique<ImplicitArrayLowerBound>());
-  bundle.add(std::make_unique<ImplicitStringLowerBound>());
-  bundle.add(std::make_unique<ImplicitObjectLowerBound>());
-  bundle.add(std::make_unique<ImplicitObjectRequired>());
-  bundle.add(std::make_unique<ImplicitObjectProperties>());
+  bundle.template add<ImplicitTypeUnion>();
+  bundle.template add<ImplicitUnitMultipleOf>();
+  bundle.template add<ImplicitArrayLowerBound>();
+  bundle.template add<ImplicitStringLowerBound>();
+  bundle.template add<ImplicitObjectLowerBound>();
+  bundle.template add<ImplicitObjectRequired>();
+  bundle.template add<ImplicitObjectProperties>();
 
   // Simplification
-  bundle.add(std::make_unique<EqualNumericBoundsAsConst>());
-  bundle.add(std::make_unique<EmptyStringAsConst>());
-  bundle.add(std::make_unique<EmptyArrayAsConst>());
-  bundle.add(std::make_unique<EmptyObjectAsConst>());
-  bundle.add(std::make_unique<DependentRequiredTautology>());
-  bundle.add(std::make_unique<DuplicateAllOfBranches>());
-  bundle.add(std::make_unique<DuplicateAnyOfBranches>());
+  bundle.template add<EqualNumericBoundsAsConst>();
+  bundle.template add<EmptyStringAsConst>();
+  bundle.template add<EmptyArrayAsConst>();
+  bundle.template add<EmptyObjectAsConst>();
+  bundle.template add<DependentRequiredTautology>();
+  bundle.template add<DuplicateAllOfBranches>();
+  bundle.template add<DuplicateAnyOfBranches>();
 
   // Heterogeneous
-  bundle.add(std::make_unique<DropNonNumericKeywords>());
-  bundle.add(std::make_unique<DropNonStringKeywords>());
-  bundle.add(std::make_unique<DropNonObjectKeywords>());
-  bundle.add(std::make_unique<DropNonArrayKeywords>());
-  bundle.add(std::make_unique<DropNonNullKeywords>());
-  bundle.add(std::make_unique<DropNonBooleanKeywords>());
+  bundle.template add<DropNonNumericKeywords>();
+  bundle.template add<DropNonStringKeywords>();
+  bundle.template add<DropNonObjectKeywords>();
+  bundle.template add<DropNonArrayKeywords>();
+  bundle.template add<DropNonNullKeywords>();
+  bundle.template add<DropNonBooleanKeywords>();
 
   bundle.apply(sourcemeta::jsonbinpack::canonicalizer::applicators, document);
 }
