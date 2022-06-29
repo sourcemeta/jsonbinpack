@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <memory>    // std::make_unique
-#include <stdexcept> // std::logic_error
+#include <stdexcept> // std::logic_error, std::runtime_error
 #include <string>    // std::string
 
 #include "sample_rules.h"
@@ -55,4 +55,16 @@ TEST(Bundle, alter_flat_document_no_applicators) {
   document.parse();
   expected.parse();
   EXPECT_EQ(expected, document);
+}
+
+TEST(Bundle, throw_on_rules_called_twice) {
+  sourcemeta::alterschema::Bundle<std::string> bundle;
+  bundle.add(std::make_unique<ExampleRule1<std::string>>());
+  bundle.add(std::make_unique<ExampleRule3<std::string>>());
+
+  sourcemeta::jsontoolkit::JSON<std::string> document(R"JSON({
+    "foo": "bar"
+  })JSON");
+
+  EXPECT_THROW(bundle.apply({}, document), std::runtime_error);
 }

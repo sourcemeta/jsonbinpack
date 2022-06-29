@@ -58,4 +58,21 @@ public:
   }
 };
 
+template <typename Source>
+class ExampleRule3 final : public sourcemeta::alterschema::Rule<Source> {
+public:
+  ExampleRule3() : sourcemeta::alterschema::Rule<Source>("example_rule_3"){};
+
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON<Source> &schema) const
+      -> bool override {
+    return schema.empty();
+  }
+
+  auto transform(sourcemeta::jsontoolkit::JSON<Source> &schema) const
+      -> void override {
+    schema.assign("foo", true);
+  }
+};
+
 #endif
