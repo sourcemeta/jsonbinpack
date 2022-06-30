@@ -685,3 +685,21 @@ TEST(Number, stringify_negative_real) {
   const std::string result{document.stringify()};
   EXPECT_EQ(result, "-5.4");
 }
+
+// JSON has no distinction between integers and reals
+TEST(Number, json_integer_json_real_equal) {
+  sourcemeta::jsontoolkit::JSON<std::string> left{"1"};
+  sourcemeta::jsontoolkit::JSON<std::string> right{"1.0"};
+  left.parse();
+  right.parse();
+  EXPECT_EQ(left, right);
+}
+
+// JSON has no distinction between integers and reals
+TEST(Number, json_real_json_integer_equal) {
+  sourcemeta::jsontoolkit::JSON<std::string> left{"1.0"};
+  sourcemeta::jsontoolkit::JSON<std::string> right{"1"};
+  left.parse();
+  right.parse();
+  EXPECT_EQ(left, right);
+}

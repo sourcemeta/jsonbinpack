@@ -178,7 +178,21 @@ public:
     this->must_be_fully_parsed();
     value.must_be_fully_parsed();
 
-    if (this->data.index() != value.data.index()) {
+    const std::size_t data_index{this->data.index()};
+    const std::size_t value_index{value.data.index()};
+    if (data_index != value_index) {
+      // Comparing a real number and an integer involves
+      // promoting the integer to a real number and then
+      // performing the comparison, given that JSON doesn't
+      // make a distinction between a real and an integer.
+      if (data_index == static_cast<std::size_t>(types::integer) &&
+          value_index == static_cast<std::size_t>(types::real)) {
+        return static_cast<double>(this->to_integer()) == value.to_real();
+      } else if (data_index == static_cast<std::size_t>(types::real) &&
+                 value_index == static_cast<std::size_t>(types::integer)) {
+        return static_cast<double>(value.to_integer()) == this->to_real();
+      }
+
       return false;
     }
 
