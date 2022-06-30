@@ -1,0 +1,59 @@
+[
+  {
+    "title": "content_schema_without_content_media_type_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "contentSchema": {
+        "type": "object"
+      }
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "minLength": 0
+    }
+  },
+  {
+    "title": "implicit_string_lower_bound_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string"
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "minLength": 0
+    }
+  },
+  {
+    "title": "empty_string_as_const_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "maxLength": 0
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "enum": [ "" ],
+      "minLength": 0
+    }
+  },
+  {
+    "title": "drop_non_string_keywords_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "maxLength": 4,
+      "maxItems": 3,
+      "properties": {}
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "string",
+      "maxLength": 4,
+      "minLength": 0
+    }
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "title": "max_contains_without_contains_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "maxContains": 2
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "minItems": 0
+    }
+  },
+  {
+    "title": "max_contains_without_contains_2",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": { "type": "string" },
+      "maxContains": 2
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": {
+        "type": "string",
+        "minLength": 0
+      },
+      "maxContains": 2,
+      "minItems": 0
+    }
+  },
+  {
+    "title": "min_contains_without_contains_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "minContains": 2
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "minItems": 0
+    }
+  },
+  {
+    "title": "min_contains_without_contains_2",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": { "type": "string" },
+      "minContains": 2
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": {
+        "type": "string",
+        "minLength": 0
+      },
+      "minContains": 2,
+      "minItems": 0
+    }
+  },
+  {
+    "title": "unsatisfiable_max_contains_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": { "type": "string" },
+      "maxContains": 3,
+      "maxItems": 2
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "contains": {
+        "type": "string",
+        "minLength": 0
+      },
+      "maxItems": 2,
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implied_array_unique_items_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 1
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "maxItems": 1,
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implied_array_unique_items_2",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "uniqueItems": true,
+      "const": [ 1 ]
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "enum": [ [ 1 ] ],
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implied_array_unique_items_3",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "uniqueItems": true,
+      "enum": [ [1] ]
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "enum": [ [1] ],
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implied_array_unique_items_4",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "uniqueItems": true,
+      "enum": [ [1], [] ]
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "enum": [ [1], [] ],
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implied_array_unique_items_5",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "uniqueItems": true,
+      "enum": [ [1], [], 2 ]
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "enum": [ [1], [], 2 ],
+      "minItems": 0
+    }
+  },
+  {
+    "title": "implicit_array_lower_bound_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array"
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "minItems": 0
+    }
+  },
+  {
+    "title": "empty_array_as_const_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "maxItems": 0
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "enum": [ [] ],
+      "minItems": 0
+    }
+  },
+  {
+    "title": "drop_non_array_keywords_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "maxItems": 4,
+      "maxLength": 3
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "array",
+      "maxItems": 4,
+      "minItems": 0
+    }
+  }
+]

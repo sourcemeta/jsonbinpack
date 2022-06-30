@@ -1,0 +1,28 @@
+[
+  {
+    "title": "drop_non_boolean_keywords_1",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "boolean",
+      "maxItems": 4,
+      "maxLength": 3
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "enum": [ false, true ]
+    }
+  },
+  {
+    "title": "drop_non_boolean_keywords_2",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "enum": [ true, false, true ],
+      "maxItems": 4,
+      "maxLength": 3
+    },
+    "expected": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "enum": [ true, false, true ]
+    }
+  }
+]
