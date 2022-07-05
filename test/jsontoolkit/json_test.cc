@@ -8,10 +8,41 @@
 #include <vector>      // std::vector
 
 TEST(JSON, default_constructible_is_invalid) {
-  EXPECT_TRUE(std::is_default_constructible<
-              sourcemeta::jsontoolkit::JSON<std::string>>::value);
   sourcemeta::jsontoolkit::JSON<std::string> document;
   EXPECT_THROW(document.parse(), std::domain_error);
+}
+
+TEST(JSON, general_traits) {
+  EXPECT_TRUE(
+      std::is_constructible<sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_default_constructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(
+      std::is_destructible<sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_nothrow_destructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+}
+
+TEST(JSON, copy_traits) {
+  EXPECT_TRUE(std::is_copy_assignable<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_copy_constructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_FALSE(std::is_nothrow_copy_assignable<
+               sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_FALSE(std::is_nothrow_copy_constructible<
+               sourcemeta::jsontoolkit::JSON<std::string>>::value);
+}
+
+TEST(JSON, move_traits) {
+  EXPECT_TRUE(std::is_move_assignable<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_move_constructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_nothrow_move_assignable<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
+  EXPECT_TRUE(std::is_nothrow_move_constructible<
+              sourcemeta::jsontoolkit::JSON<std::string>>::value);
 }
 
 TEST(JSON, proper_copy_equivalence_constructor) {
