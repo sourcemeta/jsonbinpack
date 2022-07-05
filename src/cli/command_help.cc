@@ -9,7 +9,7 @@ static const char *USAGE_DETAILS = R"EOF(
 )EOF";
 
 auto sourcemeta::jsonbinpack::cli::help(const std::string &program) -> int {
-  std::cerr << "Usage: " << program << " <command> [arguments...]\n";
-  std::cerr << USAGE_DETAILS;
+  std::clog << "Usage: " << program << " <command> [arguments...]\n";
+  std::clog << USAGE_DETAILS;
   return 0;
 }
