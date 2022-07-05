@@ -18,18 +18,6 @@ TEST(Bundle, can_add_multiple_rules) {
   EXPECT_NO_THROW({ bundle.add<ExampleRule2<std::string>>(); });
 }
 
-TEST(Bundle, cannot_add_multiple_instances_of_same_rule) {
-  sourcemeta::alterschema::Bundle<std::string> bundle;
-  bundle.add<ExampleRule1<std::string>>();
-  EXPECT_THROW(bundle.add<ExampleRule1<std::string>>(), std::logic_error);
-}
-
-TEST(Bundle, cannot_add_multiple_rules_with_same_name) {
-  sourcemeta::alterschema::Bundle<std::string> bundle;
-  bundle.add<ExampleRule1<std::string>>();
-  EXPECT_THROW(bundle.add<ExampleRule1Extra<std::string>>(), std::logic_error);
-}
-
 TEST(Bundle, alter_flat_document_no_applicators) {
   sourcemeta::alterschema::Bundle<std::string> bundle;
   bundle.add<ExampleRule1<std::string>>();

@@ -24,10 +24,8 @@ public:
   template <typename T> auto add() -> void {
     auto rule = std::make_unique<T>();
     const std::string &name = rule->name();
-    if (this->rules.find(name) != std::end(this->rules)) {
-      throw std::logic_error("Rule already defined in bundle");
-    }
-
+    // Rules must only be defined once
+    assert(this->rules.find(name) == std::end(this->rules));
     this->rules.insert({name, std::move(rule)});
   }
 
