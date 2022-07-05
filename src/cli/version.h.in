@@ -3,7 +3,7 @@
 
 namespace sourcemeta {
   namespace jsonbinpack {
-    const char * const VERSION = "@jsonbinpack_VERSION@";
+    const char * const VERSION = "@CMAKE_PROJECT_VERSION@";
   }
 }
 

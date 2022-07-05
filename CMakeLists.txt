@@ -67,6 +67,7 @@ endif()
 # Only for top-level builds
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   file(GLOB_RECURSE JSONBINPACK_CXX_SOURCE_FILES src/*.cc src/*.h test/*.cc test/*.h)
+  file(GLOB_RECURSE JSONBINPACK_SH_SOURCE_FILES test/*.sh scripts/*.sh)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
   set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
   set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
@@ -74,6 +75,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-tidy.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/doxygen.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/website.cmake)
+  include(${PROJECT_SOURCE_DIR}/cmake/shellcheck.cmake)
 
   # TODO: Define packaging
 endif()
