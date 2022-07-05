@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
 #include <map>     // std::map
+#include <sstream> // std::ostringstream
 #include <utility> // std::move
 
 TEST(Object, empty_object_string) {
@@ -366,53 +367,60 @@ TEST(Object, equality_with_padding) {
 
 TEST(Object, stringify_single_scalar_no_space) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "{\"foo\":1}");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "{\"foo\":1}");
 }
 
 TEST(Object, stringify_scalars_no_space) {
   sourcemeta::jsontoolkit::JSON<std::string> document{
       "{ \"foo\": 1, \"bar\": true }"};
-  const std::string result{document.stringify()};
+  std::ostringstream stream;
+  stream << document;
   // Because order is irrelevant
-  const bool matches = result == "{\"foo\":1,\"bar\":true}" ||
-                       result == "{\"bar\":true,\"foo\":1}";
+  const bool matches = stream.str() == "{\"foo\":1,\"bar\":true}" ||
+                       stream.str() == "{\"bar\":true,\"foo\":1}";
   EXPECT_TRUE(matches);
 }
 
 TEST(Object, stringify_single_scalar_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "{\n  \"foo\": 1\n}");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "{\n  \"foo\": 1\n}");
 }
 
 TEST(Object, stringify_scalars_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{
       "{ \"foo\": 1, \"bar\": true }"};
-  const std::string result{document.stringify(true)};
+  std::ostringstream stream;
+  stream << document.pretty();
   // Because order is irrelevant
-  const bool matches = result == "{\n  \"foo\": 1,\n  \"bar\": true\n}" ||
-                       result == "{\n  \"bar\": true,\n  \"foo\": 1\n}";
+  const bool matches = stream.str() == "{\n  \"foo\": 1,\n  \"bar\": true\n}" ||
+                       stream.str() == "{\n  \"bar\": true,\n  \"foo\": 1\n}";
   EXPECT_TRUE(matches);
 }
 
 TEST(Object, stringify_single_array_no_space) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [1,2] }"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "{\"foo\":[1,2]}");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "{\"foo\":[1,2]}");
 }
 
 TEST(Object, stringify_single_array_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": [1,2] }"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "{\n  \"foo\": [\n    1,\n    2\n  ]\n}");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "{\n  \"foo\": [\n    1,\n    2\n  ]\n}");
 }
 
 TEST(Object, stringify_single_object_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{
       "{ \"foo\": {\"bar\":1} }"};
-  const std::string result{document.stringify(true)};
-  EXPECT_EQ(result, "{\n  \"foo\": {\n    \"bar\": 1\n  }\n}");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "{\n  \"foo\": {\n    \"bar\": 1\n  }\n}");
 }
 
 TEST(Object, const_all_of_true) {

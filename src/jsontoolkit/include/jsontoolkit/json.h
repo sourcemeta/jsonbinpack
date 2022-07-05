@@ -282,39 +282,6 @@ public:
     return false;
   }
 
-  auto stringify(bool pretty = false) -> std::string {
-    this->parse();
-    return static_cast<const JSON<Source> *>(this)->stringify(pretty);
-  }
-
-  [[nodiscard]] auto stringify(bool pretty = false) const -> std::string {
-    this->must_be_fully_parsed();
-
-    switch (this->data.index()) {
-    case static_cast<std::size_t>(JSON<Source>::types::boolean):
-      return std::get<bool>(this->data) ? "true" : "false";
-    case static_cast<std::size_t>(JSON<Source>::types::null):
-      return "null";
-    case static_cast<std::size_t>(JSON<Source>::types::integer):
-      return std::to_string(std::get<std::int64_t>(this->data));
-    case static_cast<std::size_t>(JSON<Source>::types::real):
-      return double_to_string(std::get<double>(this->data));
-    case static_cast<std::size_t>(JSON<Source>::types::string):
-      return std::get<sourcemeta::jsontoolkit::String<Source>>(this->data)
-          .stringify();
-    case static_cast<std::size_t>(JSON<Source>::types::array):
-      return std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
-                 this->data)
-          .stringify(pretty ? 1 : 0);
-    case static_cast<std::size_t>(JSON<Source>::types::object):
-      return std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
-                 this->data)
-          .stringify(pretty ? 1 : 0);
-    default:
-      throw std::domain_error("Invalid type");
-    }
-  }
-
   auto parse() -> void { Container<Source>::parse(); }
 
   auto size() -> std::size_t {
@@ -477,16 +444,10 @@ public:
 
   auto assign(const Source &key, const std::string &value) -> JSON<Source> & {
     // TODO: Find a way to avoid stringifying
-    return this->assign(
-        key, sourcemeta::jsontoolkit::JSON<Source>{
-                 sourcemeta::jsontoolkit::String<Source>::stringify(value)});
-  }
-
-  auto assign(const Source &key, std::string &&value) -> JSON<Source> & {
-    // TODO: Find a way to avoid stringifying
-    return this->assign(
-        key, sourcemeta::jsontoolkit::JSON<Source>{
-                 sourcemeta::jsontoolkit::String<Source>::stringify(value)});
+    std::ostringstream stream;
+    sourcemeta::jsontoolkit::String<Source>::stringify(stream, value);
+    return this->assign(key,
+                        sourcemeta::jsontoolkit::JSON<Source>{stream.str()});
   }
 
   auto assign(const Source &key, const std::vector<JSON<Source>> &value)
@@ -798,24 +759,77 @@ public:
     return std::get<double>(this->data);
   }
 
+  // This only lasts for a single stream
+  // TODO: Can we use std::as_const here to de-duplicate the logic?
+  auto pretty() noexcept -> JSON<Source> & {
+    this->stringify_as_pretty = true;
+    return *this;
+  }
+  auto pretty() const noexcept -> const JSON<Source> & {
+    this->stringify_as_pretty = true;
+    return *this;
+  }
+
+  friend auto operator<<(std::ostream &stream, JSON<Source> &document)
+      -> std::ostream & {
+    document.parse();
+    return stream << std::as_const(document);
+  }
+
   friend auto operator<<(std::ostream &stream, const JSON<Source> &document)
       -> std::ostream & {
-    document.must_be_fully_parsed();
-    // TODO: Start streaming as soon as possible.
-    // With the current implementation, stringify() creates the string
-    // and THEN starts piping it to the stream.
-    return stream << document.stringify();
+    const bool level = document.stringify_as_pretty ? 1 : 0;
+    document.stringify_as_pretty = false;
+    return document.stringify(stream, level);
+  }
+
+protected:
+  auto stringify(std::ostream &stream, const std::size_t level)
+      -> std::ostream & override {
+    this->parse();
+    return std::as_const(*this).stringify(stream, level);
+  }
+
+  auto stringify(std::ostream &stream, const std::size_t level) const
+      -> std::ostream & override {
+    this->must_be_fully_parsed();
+    switch (this->data.index()) {
+    case static_cast<std::size_t>(JSON<Source>::types::boolean):
+      stream << (std::get<bool>(this->data) ? "true" : "false");
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::null):
+      stream << "null";
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::integer):
+      stream << std::to_string(std::get<std::int64_t>(this->data));
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::real):
+      // Because std::to_string tries too hard to imitate
+      // sprintf and leaves trailing zeroes.
+      stream << std::noshowpoint << std::get<double>(this->data)
+             << std::showpoint;
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::string):
+      std::get<sourcemeta::jsontoolkit::String<Source>>(this->data)
+          .stringify(stream, 0);
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::array):
+      std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(this->data)
+          .stringify(stream, level);
+      break;
+    case static_cast<std::size_t>(JSON<Source>::types::object):
+      std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
+          this->data)
+          .stringify(stream, level);
+      break;
+    default:
+      throw std::domain_error("Invalid type");
+    }
+
+    return stream;
   }
 
 private:
-  // Because std::to_string tries too hard to imitate
-  // sprintf and leaves trailing zeroes.
-  static auto double_to_string(double value) -> std::string {
-    std::ostringstream stream;
-    stream << std::noshowpoint << value;
-    return stream.str();
-  }
-
   auto parse_source() -> void override {
     const std::string_view document =
         sourcemeta::jsontoolkit::internal::trim(this->source());
@@ -903,6 +917,9 @@ private:
                sourcemeta::jsontoolkit::Object<JSON<Source>, Source>,
                sourcemeta::jsontoolkit::String<Source>>
       data;
+
+  // TODO: Replace this mutable flag with a proper "pretty" iomanip
+  mutable bool stringify_as_pretty = false;
 };
 } // namespace sourcemeta::jsontoolkit
 

@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_CONTAINER_H_
 
 #include <cassert>     // assert
+#include <ostream>     // std::ostream
 #include <stdexcept>   // std::runtime_error
 #include <string>      // std::string
 #include <string_view> // std::string_view
@@ -44,9 +45,13 @@ public:
   }
 
 protected:
-  // Child classes are expected to override parse_source().
+  // Child classes are expected to override these methods
   virtual auto parse_source() -> void = 0;
   virtual auto parse_deep() -> void = 0;
+  virtual auto stringify(std::ostream &stream, const std::size_t level)
+      -> std::ostream & = 0;
+  virtual auto stringify(std::ostream &stream, const std::size_t level) const
+      -> std::ostream & = 0;
 
   [[nodiscard]] inline auto source() const -> const T & {
     return this->_source;

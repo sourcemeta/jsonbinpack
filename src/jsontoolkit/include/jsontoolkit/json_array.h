@@ -4,8 +4,9 @@
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
-#include <string> // std::string
-#include <vector> // std::vector
+#include <ostream> // std::ostream
+#include <string>  // std::string
+#include <vector>  // std::vector
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency
@@ -125,20 +126,18 @@ public:
   friend sourcemeta::jsontoolkit::Object<Wrapper, Source>;
 
 protected:
-  auto stringify(std::size_t indent) -> std::string {
-    // We need to fully parse before stringify
+  auto stringify(std::ostream &stream, const std::size_t level)
+      -> std::ostream & override {
     this->parse();
-    return static_cast<const sourcemeta::jsontoolkit::Array<Wrapper, Source> *>(
-               this)
-        ->stringify(indent);
+    return std::as_const(*this).stringify(stream, level);
   }
 
-  [[nodiscard]] auto stringify(std::size_t indent) const -> std::string {
+  auto stringify(std::ostream &stream, const std::size_t level) const
+      -> std::ostream & override {
     this->must_be_fully_parsed();
-    std::ostringstream stream;
-    const bool pretty = indent > 0;
+    const bool pretty = level > 0;
 
-    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin;
+    stream << Array<Wrapper, Source>::token_begin;
     if (pretty) {
       stream << sourcemeta::jsontoolkit::internal::token_new_line;
     }
@@ -146,20 +145,21 @@ protected:
     for (auto element = this->data.begin(); element != this->data.end();
          ++element) {
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
-                                indent,
+                                level,
                             sourcemeta::jsontoolkit::internal::token_space);
 
       if (element->is_array()) {
-        stream << element->to_array().stringify(pretty ? indent + 1 : indent);
+        element->to_array().stringify(stream, pretty ? level + 1 : level);
       } else if (element->is_object()) {
-        stream << element->to_object().stringify(pretty ? indent + 1 : indent);
+        element->to_object().stringify(stream, pretty ? level + 1 : level);
+      } else if (pretty) {
+        stream << element->pretty();
       } else {
-        stream << element->stringify(pretty);
+        stream << *element;
       }
 
       if (std::next(element) != this->data.end()) {
-        stream
-            << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_delimiter;
+        stream << Array<Wrapper, Source>::token_delimiter;
         if (pretty) {
           stream << sourcemeta::jsontoolkit::internal::token_new_line;
         }
@@ -169,12 +169,12 @@ protected:
     if (pretty) {
       stream << sourcemeta::jsontoolkit::internal::token_new_line;
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
-                                (indent - 1),
+                                (level - 1),
                             sourcemeta::jsontoolkit::internal::token_space);
     }
 
-    stream << sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end;
-    return stream.str();
+    stream << Array<Wrapper, Source>::token_end;
+    return stream;
   }
 
 private:

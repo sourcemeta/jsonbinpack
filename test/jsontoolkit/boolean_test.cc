@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 
 TEST(Boolean, true_bool) {
@@ -137,12 +138,14 @@ TEST(Boolean, true_equality_with_padding) {
 
 TEST(Boolean, stringify_false) {
   sourcemeta::jsontoolkit::JSON<std::string> document{false};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "false");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "false");
 }
 
 TEST(Boolean, stringify_true) {
   sourcemeta::jsontoolkit::JSON<std::string> document{true};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "true");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "true");
 }

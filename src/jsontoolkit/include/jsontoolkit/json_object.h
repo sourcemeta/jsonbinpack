@@ -7,6 +7,7 @@
 #include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_string.h>
 #include <map>     // std::map
+#include <ostream> // std::ostream
 #include <sstream> // std::ostringstream
 #include <string>  // std::string
 
@@ -94,16 +95,16 @@ public:
   friend sourcemeta::jsontoolkit::Array<Wrapper, Source>;
 
 protected:
-  auto stringify(std::size_t indent) -> std::string {
+  auto stringify(std::ostream &stream, const std::size_t level)
+      -> std::ostream & override {
     this->parse();
-    return static_cast<const Object<Wrapper, Source> *>(this)->stringify(
-        indent);
+    return std::as_const(*this).stringify(stream, level);
   }
 
-  [[nodiscard]] auto stringify(std::size_t indent) const -> std::string {
+  auto stringify(std::ostream &stream, const std::size_t level) const
+      -> std::ostream & override {
     this->must_be_fully_parsed();
-    std::ostringstream stream;
-    const bool pretty = indent > 0;
+    const bool pretty = level > 0;
 
     stream << Object<Wrapper, Source>::token_begin;
     if (pretty) {
@@ -112,7 +113,7 @@ protected:
 
     for (auto pair = this->data.begin(); pair != this->data.end(); ++pair) {
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
-                                indent,
+                                level,
                             sourcemeta::jsontoolkit::internal::token_space);
       stream << sourcemeta::jsontoolkit::String<Source>::token_begin;
       // TODO: We should use JSON string escaping logic here too
@@ -124,13 +125,13 @@ protected:
       }
 
       if (pair->second.is_array()) {
-        stream << pair->second.to_array().stringify(pretty ? indent + 1
-                                                           : indent);
+        pair->second.to_array().stringify(stream, pretty ? level + 1 : level);
       } else if (pair->second.is_object()) {
-        stream << pair->second.to_object().stringify(pretty ? indent + 1
-                                                            : indent);
+        pair->second.to_object().stringify(stream, pretty ? level + 1 : level);
+      } else if (pretty) {
+        stream << pair->second.pretty();
       } else {
-        stream << pair->second.stringify(pretty);
+        stream << pair->second;
       }
 
       if (std::next(pair) != this->data.end()) {
@@ -144,12 +145,12 @@ protected:
     if (pretty) {
       stream << sourcemeta::jsontoolkit::internal::token_new_line;
       stream << std::string(sourcemeta::jsontoolkit::internal::indentation *
-                                (indent - 1),
+                                (level - 1),
                             sourcemeta::jsontoolkit::internal::token_space);
     }
 
     stream << Object<Wrapper, Source>::token_end;
-    return stream.str();
+    return stream;
   }
 
 private:

@@ -5,6 +5,7 @@
 #include <cctype>    // std::isxdigit
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_internal.h>
+#include <ostream> // std::ostream
 #include <sstream> // std::ostringstream
 #include <string>  // std::string
 #include <utility> // std::move
@@ -113,8 +114,9 @@ public:
   friend JSON<Source>;
 
 protected:
-  static auto stringify(const std::string &input) -> std::string {
-    std::ostringstream stream;
+  // TODO: Get rid of this function. Use operator<< directly
+  static auto stringify(std::ostream &stream, const Source &input)
+      -> std::ostream & {
     stream << String<Source>::token_begin;
 
     for (const char character : input) {
@@ -126,17 +128,19 @@ protected:
     }
 
     stream << String<Source>::token_end;
-    return stream.str();
+    return stream;
   }
 
-  auto stringify() -> std::string {
+  auto stringify(std::ostream &stream, const std::size_t)
+      -> std::ostream & override {
     this->parse();
-    return String<Source>::stringify(this->data);
+    return String<Source>::stringify(stream, this->data);
   }
 
-  [[nodiscard]] auto stringify() const -> std::string {
+  auto stringify(std::ostream &stream, const std::size_t) const
+      -> std::ostream & override {
     this->must_be_fully_parsed();
-    return String<Source>::stringify(std::string{this->data});
+    return String<Source>::stringify(stream, this->data);
   }
 
 private:
