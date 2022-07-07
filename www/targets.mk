@@ -21,6 +21,7 @@ html: node_modules \
 	build/$(PRESET)/www/jsonschema.png \
 	build/$(PRESET)/www/manifest.webmanifest \
 	build/$(PRESET)/www/index.html \
+	build/$(PRESET)/www/404.html \
 	build/$(PRESET)/www/.nojekyll \
 	build/$(PRESET)/www/CNAME
 	$(CMAKE) --build --preset $(PRESET) --target website
