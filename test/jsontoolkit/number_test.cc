@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <sstream> // std::ostringstream
 
 TEST(Number, set_negative_integer) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"true"};
@@ -658,32 +659,37 @@ TEST(Number, real_equality_with_padding) {
 
 TEST(Number, stringify_positive_integer) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"54"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "54");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "54");
 }
 
 TEST(Number, stringify_negative_integer) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"-54"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "-54");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "-54");
 }
 
 TEST(Number, stringify_zero) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"0"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "0");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "0");
 }
 
 TEST(Number, stringify_positive_real) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"5.4"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "5.4");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "5.4");
 }
 
 TEST(Number, stringify_negative_real) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"-5.4"};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "-5.4");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "-5.4");
 }
 
 // JSON has no distinction between integers and reals

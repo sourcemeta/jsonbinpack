@@ -537,3 +537,13 @@ TEST(JSON, push_back_json_move) {
   EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
   EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
 }
+
+TEST(JSON, stringify_pretty_lasts_once) {
+  sourcemeta::jsontoolkit::JSON<std::string> document{"[ 1, 2, 3 ]"};
+  std::ostringstream first;
+  std::ostringstream second;
+  first << document.pretty();
+  second << document;
+  EXPECT_EQ(first.str(), "[\n  1,\n  2,\n  3\n]");
+  EXPECT_EQ(second.str(), "[1,2,3]");
+}

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 #include <utility>   // std::as_const
 
@@ -333,29 +334,42 @@ TEST(Array, equality_with_padding) {
 
 TEST(Array, stringify_scalars_no_space) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ 1, 2, 3 ]"};
-  EXPECT_EQ(document.stringify(), "[1,2,3]");
-  EXPECT_EQ(std::as_const(document).stringify(), "[1,2,3]");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "[1,2,3]");
+  std::ostringstream cstream;
+  cstream << std::as_const(document);
+  EXPECT_EQ(cstream.str(), "[1,2,3]");
 }
 
 TEST(Array, stringify_scalars_space_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ 1, 2, 3 ]"};
-  EXPECT_EQ(document.stringify(true), "[\n  1,\n  2,\n  3\n]");
-  EXPECT_EQ(std::as_const(document).stringify(true), "[\n  1,\n  2,\n  3\n]");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "[\n  1,\n  2,\n  3\n]");
+  std::ostringstream cstream;
+  cstream << std::as_const(document).pretty();
+  EXPECT_EQ(cstream.str(), "[\n  1,\n  2,\n  3\n]");
 }
 
 TEST(Array, stringify_array_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ 1, [2,3], 4 ]"};
-  EXPECT_EQ(document.stringify(true),
-            "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
-  EXPECT_EQ(std::as_const(document).stringify(true),
-            "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
+  std::ostringstream cstream;
+  cstream << std::as_const(document).pretty();
+  EXPECT_EQ(cstream.str(), "[\n  1,\n  [\n    2,\n    3\n  ],\n  4\n]");
 }
 
 TEST(Array, stringify_object_pretty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[ { \"foo\": 1 } ]"};
-  EXPECT_EQ(document.stringify(true), "[\n  {\n    \"foo\": 1\n  }\n]");
-  EXPECT_EQ(std::as_const(document).stringify(true),
-            "[\n  {\n    \"foo\": 1\n  }\n]");
+  std::ostringstream stream;
+  stream << document.pretty();
+  EXPECT_EQ(stream.str(), "[\n  {\n    \"foo\": 1\n  }\n]");
+  std::ostringstream cstream;
+  cstream << std::as_const(document).pretty();
+  EXPECT_EQ(cstream.str(), "[\n  {\n    \"foo\": 1\n  }\n]");
 }
 
 TEST(Array, contains_string_key_true_unparsed) {

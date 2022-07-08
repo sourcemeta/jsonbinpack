@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <sstream>     // std::ostringstream
 #include <stdexcept>   // std::domain_error
 #include <string>      // std::string
 #include <type_traits> // std::is_nothrow_move_constructible
@@ -315,26 +316,42 @@ TEST(String, equality_with_padding) {
 
 TEST(String, stringify_empty) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"\"\""};
-  EXPECT_EQ(document.stringify(), "\"\"");
-  EXPECT_EQ(std::as_const(document).stringify(), "\"\"");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "\"\"");
+  std::ostringstream cstream;
+  cstream << std::as_const(document);
+  EXPECT_EQ(cstream.str(), "\"\"");
 }
 
 TEST(String, stringify_short_string) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
-  EXPECT_EQ(document.stringify(), "\"foo\"");
-  EXPECT_EQ(std::as_const(document).stringify(), "\"foo\"");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "\"foo\"");
+  std::ostringstream cstream;
+  cstream << std::as_const(document);
+  EXPECT_EQ(cstream.str(), "\"foo\"");
 }
 
 TEST(String, stringify_quote) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"\"\\\"\""};
-  EXPECT_EQ(document.stringify(), "\"\\\"\"");
-  EXPECT_EQ(std::as_const(document).stringify(), "\"\\\"\"");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "\"\\\"\"");
+  std::ostringstream cstream;
+  cstream << std::as_const(document);
+  EXPECT_EQ(cstream.str(), "\"\\\"\"");
 }
 
 TEST(String, stringify_unicode_solidus) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"\"\\u002F\""};
-  EXPECT_EQ(document.stringify(), "\"/\"");
-  EXPECT_EQ(std::as_const(document).stringify(), "\"/\"");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "\"/\"");
+  std::ostringstream cstream;
+  cstream << std::as_const(document);
+  EXPECT_EQ(cstream.str(), "\"/\"");
 }
 
 TEST(String, to_string_not_modify_result) {

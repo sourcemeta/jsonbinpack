@@ -26,6 +26,6 @@ auto sourcemeta::jsonbinpack::cli::canonicalize(const std::string &schema_path)
   const std::string raw_schema{read_file(schema_path)};
   sourcemeta::jsontoolkit::JSON<std::string> schema{raw_schema};
   sourcemeta::jsonbinpack::canonicalize(schema);
-  std::cout << schema.stringify(true) << "\n";
+  std::cout << schema.pretty() << "\n";
   return 0;
 }

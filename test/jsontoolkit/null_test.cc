@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+#include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 
 TEST(Null, nullptr) {
@@ -75,6 +76,7 @@ TEST(Null, equality_with_padding) {
 
 TEST(Null, stringify) {
   sourcemeta::jsontoolkit::JSON<std::string> document{nullptr};
-  const std::string result{document.stringify()};
-  EXPECT_EQ(result, "null");
+  std::ostringstream stream;
+  stream << document;
+  EXPECT_EQ(stream.str(), "null");
 }
