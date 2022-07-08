@@ -19,16 +19,18 @@ public:
       return false;
     }
 
-    sourcemeta::jsontoolkit::JSON<std::string> copy{
-        schema.at(keywords::applicator::anyOf)};
-    unique(copy);
-    return schema.at(keywords::applicator::anyOf).size() > copy.size();
+    auto copy{schema.at(keywords::applicator::anyOf).to_array()};
+    std::sort(std::begin(copy), std::end(copy));
+    return std::unique(std::begin(copy), std::end(copy)) != std::end(copy);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-    unique(schema.at(keywords::applicator::anyOf));
+    auto &array = schema.at(keywords::applicator::anyOf).to_array();
+    std::sort(std::begin(array), std::end(array));
+    auto last = std::unique(std::begin(array), std::end(array));
+    schema.at(keywords::applicator::anyOf).erase(last, std::end(array));
   }
 };
 

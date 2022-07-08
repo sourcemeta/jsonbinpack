@@ -583,6 +583,17 @@ public:
     document.data.push_back(std::move(value));
   }
 
+  auto
+  erase(typename sourcemeta::jsontoolkit::Array<JSON<Source>, Source>::iterator
+            first,
+        typename sourcemeta::jsontoolkit::Array<JSON<Source>, Source>::iterator
+            last) ->
+      typename sourcemeta::jsontoolkit::Array<JSON<Source>, Source>::iterator {
+    return std::get<sourcemeta::jsontoolkit::Array<
+        sourcemeta::jsontoolkit::JSON<Source>, Source>>(this->data)
+        .data.erase(first, last);
+  }
+
   auto at(std::size_t index) & -> JSON<Source> & {
     this->shallow_parse();
     auto &document = std::get<sourcemeta::jsontoolkit::Array<
@@ -781,6 +792,46 @@ public:
     const bool level = document.stringify_as_pretty ? 1 : 0;
     document.stringify_as_pretty = false;
     return document.stringify(stream, level);
+  }
+
+  // To support algorithms that require sorting
+  auto operator<(const JSON<Source> &other) const -> bool {
+    this->must_be_fully_parsed();
+    other.must_be_fully_parsed();
+
+    const auto this_index = this->data.index();
+    const auto other_index = other.data.index();
+
+    if (this_index == other_index) {
+      switch (this->data.index()) {
+      case static_cast<std::size_t>(JSON<Source>::types::boolean):
+        return std::get<bool>(this->data) < std::get<bool>(other.data);
+      case static_cast<std::size_t>(JSON<Source>::types::null):
+        return false;
+      case static_cast<std::size_t>(JSON<Source>::types::integer):
+        return std::get<std::int64_t>(this->data) <
+               std::get<std::int64_t>(other.data);
+      case static_cast<std::size_t>(JSON<Source>::types::real):
+        return std::get<double>(this->data) < std::get<double>(other.data);
+      case static_cast<std::size_t>(JSON<Source>::types::string):
+        return std::get<sourcemeta::jsontoolkit::String<Source>>(this->data) <
+               std::get<sourcemeta::jsontoolkit::String<Source>>(other.data);
+      case static_cast<std::size_t>(JSON<Source>::types::array):
+        return std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
+                   this->data) <
+               std::get<sourcemeta::jsontoolkit::Array<JSON<Source>, Source>>(
+                   other.data);
+      case static_cast<std::size_t>(JSON<Source>::types::object):
+        return std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
+                   this->data) <
+               std::get<sourcemeta::jsontoolkit::Object<JSON<Source>, Source>>(
+                   other.data);
+      default:
+        throw std::domain_error("Invalid type");
+      }
+    }
+
+    return this_index < other_index;
   }
 
 protected:

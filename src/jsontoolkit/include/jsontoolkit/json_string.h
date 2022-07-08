@@ -113,6 +113,11 @@ public:
 
   friend JSON<Source>;
 
+  // To support algorithms that require sorting
+  auto operator<(const String<Source> &other) const -> bool {
+    return this->data < other.data;
+  }
+
 protected:
   // TODO: Get rid of this function. Use operator<< directly
   static auto stringify(std::ostream &stream, const Source &input)
