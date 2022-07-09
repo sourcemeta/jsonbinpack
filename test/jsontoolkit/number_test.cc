@@ -55,8 +55,8 @@ TEST(Number, string_integer_zero) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), 0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(0));
-  EXPECT_EQ(document, static_cast<double>(0));
+  EXPECT_EQ(document, 0);
+  EXPECT_EQ(document, 0.0);
 }
 
 TEST(Number, string_integer_positive_single_digit_integer) {
@@ -64,8 +64,8 @@ TEST(Number, string_integer_positive_single_digit_integer) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), 3);
-  EXPECT_EQ(document, static_cast<std::int64_t>(3));
-  EXPECT_EQ(document, static_cast<double>(3));
+  EXPECT_EQ(document, 3);
+  EXPECT_EQ(document, 3.0);
 }
 
 TEST(Number, string_integer_negative_single_digit_integer) {
@@ -73,8 +73,8 @@ TEST(Number, string_integer_negative_single_digit_integer) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), -3);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-3));
-  EXPECT_EQ(document, static_cast<double>(-3));
+  EXPECT_EQ(document, -3);
+  EXPECT_EQ(document, -3.0);
 }
 
 TEST(Number, string_integer_positive_long_integer) {
@@ -82,8 +82,8 @@ TEST(Number, string_integer_positive_long_integer) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), 12345);
-  EXPECT_EQ(document, static_cast<std::int64_t>(12345));
-  EXPECT_EQ(document, static_cast<double>(12345));
+  EXPECT_EQ(document, 12345);
+  EXPECT_EQ(document, 12345.0);
 }
 
 TEST(Number, string_integer_negative_long_integer) {
@@ -91,8 +91,8 @@ TEST(Number, string_integer_negative_long_integer) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), -12345);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-12345));
-  EXPECT_EQ(document, static_cast<double>(-12345));
+  EXPECT_EQ(document, -12345);
+  EXPECT_EQ(document, -12345.0);
 }
 
 TEST(Number, string_integer_minus_zero) {
@@ -100,8 +100,8 @@ TEST(Number, string_integer_minus_zero) {
   EXPECT_TRUE(document.is_integer());
   EXPECT_FALSE(document.is_real());
   EXPECT_EQ(document.to_integer(), 0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(0));
-  EXPECT_EQ(document, static_cast<double>(0));
+  EXPECT_EQ(document, 0);
+  EXPECT_EQ(document, 0.0);
 }
 
 TEST(Number, invalid_string_integer_trailing_minus) {
@@ -180,8 +180,8 @@ TEST(Number, trailing_zero_positive) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1.5);
   EXPECT_EQ(document, 1.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(2));
+  EXPECT_FALSE(document == 1);
+  EXPECT_FALSE(document == 2);
 }
 
 TEST(Number, trailing_zero_negative) {
@@ -190,8 +190,8 @@ TEST(Number, trailing_zero_negative) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1.5);
   EXPECT_EQ(document, -1.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-2));
+  EXPECT_FALSE(document == -1);
+  EXPECT_FALSE(document == -2);
 }
 
 TEST(Number, single_left_digit_positive_real) {
@@ -200,8 +200,8 @@ TEST(Number, single_left_digit_positive_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1.5);
   EXPECT_EQ(document, 1.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(2));
+  EXPECT_FALSE(document == 1);
+  EXPECT_FALSE(document == 2);
 }
 
 TEST(Number, single_left_digit_negative_real) {
@@ -210,8 +210,8 @@ TEST(Number, single_left_digit_negative_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1.5);
   EXPECT_EQ(document, -1.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-2));
+  EXPECT_FALSE(document == -1);
+  EXPECT_FALSE(document == -2);
 }
 
 TEST(Number, leading_decimal_zero) {
@@ -220,8 +220,8 @@ TEST(Number, leading_decimal_zero) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1.0005);
   EXPECT_EQ(document, 1.0005);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(2));
+  EXPECT_FALSE(document == 1);
+  EXPECT_FALSE(document == 2);
 }
 
 TEST(Number, multi_left_digit_positive_real) {
@@ -230,8 +230,8 @@ TEST(Number, multi_left_digit_positive_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1234.5);
   EXPECT_EQ(document, 1234.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1234));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1235));
+  EXPECT_FALSE(document == 1234);
+  EXPECT_FALSE(document == 1235);
 }
 
 TEST(Number, multi_left_digit_negative_real) {
@@ -240,8 +240,8 @@ TEST(Number, multi_left_digit_negative_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1234.5);
   EXPECT_EQ(document, -1234.5);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1235));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1234));
+  EXPECT_FALSE(document == -1235);
+  EXPECT_FALSE(document == -1234);
 }
 
 TEST(Number, long_positive_real) {
@@ -250,8 +250,8 @@ TEST(Number, long_positive_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1234.56789);
   EXPECT_EQ(document, 1234.56789);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1234));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1235));
+  EXPECT_FALSE(document == 1234);
+  EXPECT_FALSE(document == 1235);
 }
 
 TEST(Number, long_negative_real) {
@@ -260,8 +260,8 @@ TEST(Number, long_negative_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1234.56789);
   EXPECT_EQ(document, -1234.56789);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1235));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(-1234));
+  EXPECT_FALSE(document == -1235);
+  EXPECT_FALSE(document == -1234);
 }
 
 TEST(Number, multiple_sibling_periods) {
@@ -280,7 +280,7 @@ TEST(Number, single_digit_positive_real_integer) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1.0);
   EXPECT_EQ(document, 1.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(1));
+  EXPECT_EQ(document, 1);
 }
 
 TEST(Number, single_digit_positive_real_integer_trailing_zero) {
@@ -289,7 +289,7 @@ TEST(Number, single_digit_positive_real_integer_trailing_zero) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), 1.0);
   EXPECT_EQ(document, 1.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(1));
+  EXPECT_EQ(document, 1);
 }
 
 TEST(Number, single_digit_negative_real_integer) {
@@ -298,7 +298,7 @@ TEST(Number, single_digit_negative_real_integer) {
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1.0);
   EXPECT_EQ(document, -1.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-1));
+  EXPECT_EQ(document, -1);
 }
 
 TEST(Number, single_digit_negative_real_integer_trailing_zero) {
@@ -306,7 +306,7 @@ TEST(Number, single_digit_negative_real_integer_trailing_zero) {
   EXPECT_FALSE(document.is_integer());
   EXPECT_TRUE(document.is_real());
   EXPECT_EQ(document.to_real(), -1.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-1));
+  EXPECT_EQ(document, -1);
 }
 
 TEST(Number, string_integer_with_plus) {
@@ -466,8 +466,8 @@ TEST(Number, exponential_notation_plus_after_e) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 300.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(300));
-  EXPECT_EQ(document, static_cast<double>(300));
+  EXPECT_EQ(document, 300);
+  EXPECT_EQ(document, 300.0);
 }
 
 // From https://en.wikipedia.org/wiki/Scientific_notation
@@ -477,8 +477,8 @@ TEST(Number, exponential_notation_integer_1_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 2.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(2));
-  EXPECT_EQ(document, static_cast<double>(2));
+  EXPECT_EQ(document, 2);
+  EXPECT_EQ(document, 2.0);
 }
 
 TEST(Number, exponential_notation_integer_2_upper) {
@@ -486,8 +486,8 @@ TEST(Number, exponential_notation_integer_2_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 300.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(300));
-  EXPECT_EQ(document, static_cast<double>(300));
+  EXPECT_EQ(document, 300);
+  EXPECT_EQ(document, 300.0);
 }
 
 TEST(Number, exponential_notation_integer_3_upper) {
@@ -495,8 +495,8 @@ TEST(Number, exponential_notation_integer_3_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 4321.768);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(4321));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(4322));
+  EXPECT_FALSE(document == 4321);
+  EXPECT_FALSE(document == 4322);
 }
 
 TEST(Number, exponential_notation_integer_4_upper) {
@@ -504,7 +504,7 @@ TEST(Number, exponential_notation_integer_4_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), -53000);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-53000));
+  EXPECT_EQ(document, -53000);
 }
 
 TEST(Number, exponential_notation_integer_5_upper) {
@@ -512,7 +512,7 @@ TEST(Number, exponential_notation_integer_5_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 6720000000);
-  EXPECT_EQ(document, static_cast<std::int64_t>(6720000000));
+  EXPECT_EQ(document, 6720000000);
 }
 
 TEST(Number, exponential_notation_integer_6_upper) {
@@ -520,8 +520,8 @@ TEST(Number, exponential_notation_integer_6_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 0.2);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(0));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
+  EXPECT_FALSE(document == 0);
+  EXPECT_FALSE(document == 1);
 }
 
 TEST(Number, exponential_notation_integer_7_upper) {
@@ -529,7 +529,7 @@ TEST(Number, exponential_notation_integer_7_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 987);
-  EXPECT_EQ(document, static_cast<std::int64_t>(987));
+  EXPECT_EQ(document, 987);
 }
 
 TEST(Number, exponential_notation_integer_8_upper) {
@@ -537,8 +537,8 @@ TEST(Number, exponential_notation_integer_8_upper) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 0.00000000751);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(0));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
+  EXPECT_FALSE(document == 0);
+  EXPECT_FALSE(document == 1);
 }
 
 TEST(Number, exponential_notation_integer_1_lower) {
@@ -546,7 +546,7 @@ TEST(Number, exponential_notation_integer_1_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 2.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(2));
+  EXPECT_EQ(document, 2);
 }
 
 TEST(Number, exponential_notation_integer_2_lower) {
@@ -554,7 +554,7 @@ TEST(Number, exponential_notation_integer_2_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 300.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(300));
+  EXPECT_EQ(document, 300);
 }
 
 TEST(Number, exponential_notation_integer_3_lower) {
@@ -562,8 +562,8 @@ TEST(Number, exponential_notation_integer_3_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 4321.768);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(4321));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(4322));
+  EXPECT_FALSE(document == 4321);
+  EXPECT_FALSE(document == 4322);
 }
 
 TEST(Number, exponential_notation_integer_4_lower) {
@@ -571,7 +571,7 @@ TEST(Number, exponential_notation_integer_4_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), -53000);
-  EXPECT_EQ(document, static_cast<std::int64_t>(-53000));
+  EXPECT_EQ(document, -53000);
 }
 
 TEST(Number, exponential_notation_integer_5_lower) {
@@ -579,7 +579,7 @@ TEST(Number, exponential_notation_integer_5_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 6720000000);
-  EXPECT_EQ(document, static_cast<std::int64_t>(6720000000));
+  EXPECT_EQ(document, 6720000000);
 }
 
 TEST(Number, exponential_notation_integer_6_lower) {
@@ -587,8 +587,8 @@ TEST(Number, exponential_notation_integer_6_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 0.2);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(0));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
+  EXPECT_FALSE(document == 0);
+  EXPECT_FALSE(document == 1);
 }
 
 TEST(Number, exponential_notation_integer_7_lower) {
@@ -596,7 +596,7 @@ TEST(Number, exponential_notation_integer_7_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 987);
-  EXPECT_EQ(document, static_cast<std::int64_t>(987));
+  EXPECT_EQ(document, 987);
 }
 
 TEST(Number, exponential_notation_integer_8_lower) {
@@ -604,8 +604,8 @@ TEST(Number, exponential_notation_integer_8_lower) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 0.00000000751);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(0));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
+  EXPECT_FALSE(document == 0);
+  EXPECT_FALSE(document == 1);
 }
 
 TEST(Number, exponential_notation_integer_1_real) {
@@ -613,7 +613,7 @@ TEST(Number, exponential_notation_integer_1_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 2.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(2));
+  EXPECT_EQ(document, 2);
 }
 
 TEST(Number, exponential_notation_integer_2_real) {
@@ -621,7 +621,7 @@ TEST(Number, exponential_notation_integer_2_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 300.0);
-  EXPECT_EQ(document, static_cast<std::int64_t>(300));
+  EXPECT_EQ(document, 300);
 }
 
 TEST(Number, exponential_notation_integer_3_real) {
@@ -629,8 +629,8 @@ TEST(Number, exponential_notation_integer_3_real) {
   EXPECT_TRUE(document.is_real());
   EXPECT_FALSE(document.is_integer());
   EXPECT_EQ(document.to_real(), 0.2);
-  EXPECT_FALSE(document == static_cast<std::int64_t>(0));
-  EXPECT_FALSE(document == static_cast<std::int64_t>(1));
+  EXPECT_FALSE(document == 0);
+  EXPECT_FALSE(document == 1);
 }
 
 TEST(Number, integer_equality_with_padding) {

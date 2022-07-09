@@ -87,7 +87,7 @@ TEST(JSON, bool_deep_parse_failure) {
 TEST(JSON, int_deep_parse) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"4"};
   document.parse();
-  EXPECT_EQ(document, static_cast<std::int64_t>(4));
+  EXPECT_EQ(document, 4);
 }
 
 TEST(JSON, int_deep_parse_failure) {
@@ -159,8 +159,7 @@ TEST(JSON, not_bool_equality_string) {
 }
 
 TEST(JSON, not_bool_equality_int) {
-  sourcemeta::jsontoolkit::JSON<std::string> document{
-      static_cast<std::int64_t>(6)};
+  sourcemeta::jsontoolkit::JSON<std::string> document{6};
   EXPECT_FALSE(document.is_boolean());
   EXPECT_FALSE(document == true);
 }
@@ -434,9 +433,9 @@ TEST(JSON, array_key_copy_assignment_vector) {
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_array());
   EXPECT_EQ(document.at("foo").size(), 3);
-  EXPECT_EQ(document.at("foo").at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at("foo").at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at("foo").at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at("foo").at(0), 1);
+  EXPECT_EQ(document.at("foo").at(1), 2);
+  EXPECT_EQ(document.at("foo").at(2), 3);
 }
 
 TEST(JSON, modify_object_after_copy) {
@@ -446,29 +445,29 @@ TEST(JSON, modify_object_after_copy) {
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.defines("x"));
   EXPECT_TRUE(document.defines("y"));
-  EXPECT_EQ(document.at("x"), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at("y"), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at("x"), 1);
+  EXPECT_EQ(document.at("y"), 2);
 
   // Make copy
   sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   EXPECT_EQ(copy.size(), 2);
   EXPECT_TRUE(copy.defines("x"));
   EXPECT_TRUE(copy.defines("y"));
-  EXPECT_EQ(copy.at("x"), static_cast<std::int64_t>(1));
-  EXPECT_EQ(copy.at("y"), static_cast<std::int64_t>(2));
+  EXPECT_EQ(copy.at("x"), 1);
+  EXPECT_EQ(copy.at("y"), 2);
 
   // Modify copy
   copy.erase("x");
   EXPECT_EQ(copy.size(), 1);
   EXPECT_TRUE(copy.defines("y"));
-  EXPECT_EQ(copy.at("y"), static_cast<std::int64_t>(2));
+  EXPECT_EQ(copy.at("y"), 2);
 
   // Original document must remain intact
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.defines("x"));
   EXPECT_TRUE(document.defines("y"));
-  EXPECT_EQ(document.at("x"), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at("y"), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at("x"), 1);
+  EXPECT_EQ(document.at("y"), 2);
 }
 
 TEST(JSON, modify_array_after_copy) {
@@ -476,26 +475,26 @@ TEST(JSON, modify_array_after_copy) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"[1,2,3]"};
   document.parse();
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
+  EXPECT_EQ(document.at(2), 3);
 
   // Make copy
   sourcemeta::jsontoolkit::JSON<std::string> copy{document};
   EXPECT_EQ(copy.size(), 3);
-  EXPECT_EQ(copy.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(copy.at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(copy.at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(copy.at(0), 1);
+  EXPECT_EQ(copy.at(1), 2);
+  EXPECT_EQ(copy.at(2), 3);
 
   // Modify copy
-  copy.assign(1, static_cast<std::int64_t>(5));
-  EXPECT_EQ(copy.at(1), static_cast<std::int64_t>(5));
+  copy.assign(1, 5);
+  EXPECT_EQ(copy.at(1), 5);
 
   // Original document must remain intact
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
+  EXPECT_EQ(document.at(2), 3);
 }
 
 TEST(JSON, push_back_json_copy) {
@@ -503,19 +502,18 @@ TEST(JSON, push_back_json_copy) {
   document.parse();
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
 
-  const sourcemeta::jsontoolkit::JSON<std::string> element{
-      static_cast<std::int64_t>(3)};
+  const sourcemeta::jsontoolkit::JSON<std::string> element{3};
   document.push_back(element);
   document.parse();
 
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
+  EXPECT_EQ(document.at(2), 3);
 }
 
 TEST(JSON, push_back_json_move) {
@@ -523,19 +521,18 @@ TEST(JSON, push_back_json_move) {
   document.parse();
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 2);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
 
-  sourcemeta::jsontoolkit::JSON<std::string> element{
-      static_cast<std::int64_t>(3)};
+  sourcemeta::jsontoolkit::JSON<std::string> element{3};
   document.push_back(std::move(element));
   document.parse();
 
   EXPECT_TRUE(document.is_array());
   EXPECT_EQ(document.size(), 3);
-  EXPECT_EQ(document.at(0), static_cast<std::int64_t>(1));
-  EXPECT_EQ(document.at(1), static_cast<std::int64_t>(2));
-  EXPECT_EQ(document.at(2), static_cast<std::int64_t>(3));
+  EXPECT_EQ(document.at(0), 1);
+  EXPECT_EQ(document.at(1), 2);
+  EXPECT_EQ(document.at(2), 3);
 }
 
 TEST(JSON, stringify_pretty_lasts_once) {
