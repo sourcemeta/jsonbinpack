@@ -505,7 +505,7 @@ TEST(Object, key_copy_assignment_different_type_parsed) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
-  EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at("foo"), 1);
 }
 
 TEST(Object, key_move_assignment_different_type_parsed) {
@@ -523,7 +523,7 @@ TEST(Object, key_move_assignment_different_type_parsed) {
   EXPECT_EQ(document.size(), 1);
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
-  EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at("foo"), 1);
 }
 
 TEST(Object, key_copy_assignment_same_type_unparsed) {
@@ -615,7 +615,7 @@ TEST(Object, assign_literal_lvalue_string) {
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.defines("bar"));
   document.parse();
-  EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at("foo"), 1);
   EXPECT_EQ(document.at("bar"), "baz");
 }
 
@@ -629,7 +629,7 @@ TEST(Object, assign_literal_rvalue_string) {
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.defines("bar"));
   document.parse();
-  EXPECT_EQ(document.at("foo"), static_cast<std::int64_t>(1));
+  EXPECT_EQ(document.at("foo"), 1);
   EXPECT_EQ(document.at("bar"), "baz");
 }
 
@@ -640,7 +640,7 @@ TEST(Object, map_copy_constructor) {
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
   const std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>> value{
-      {"bar", static_cast<std::int64_t>(5)}};
+      {"bar", 5}};
   document.assign("xxx", value);
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.defines("foo"));
@@ -650,7 +650,7 @@ TEST(Object, map_copy_constructor) {
   EXPECT_EQ(document.at("xxx").size(), 1);
   EXPECT_TRUE(document.at("xxx").defines("bar"));
   EXPECT_TRUE(document.at("xxx").at("bar").is_integer());
-  EXPECT_EQ(document.at("xxx").at("bar"), static_cast<std::int64_t>(5));
+  EXPECT_EQ(document.at("xxx").at("bar"), 5);
 }
 
 TEST(Object, map_move_constructor) {
@@ -660,7 +660,7 @@ TEST(Object, map_move_constructor) {
   EXPECT_TRUE(document.defines("foo"));
   EXPECT_TRUE(document.at("foo").is_integer());
   std::map<std::string, sourcemeta::jsontoolkit::JSON<std::string>> value{
-      {"bar", static_cast<std::int64_t>(5)}};
+      {"bar", 5}};
   document.assign("xxx", std::move(value));
   EXPECT_EQ(document.size(), 2);
   EXPECT_TRUE(document.defines("foo"));
@@ -670,5 +670,5 @@ TEST(Object, map_move_constructor) {
   EXPECT_EQ(document.at("xxx").size(), 1);
   EXPECT_TRUE(document.at("xxx").defines("bar"));
   EXPECT_TRUE(document.at("xxx").at("bar").is_integer());
-  EXPECT_EQ(document.at("xxx").at("bar"), static_cast<std::int64_t>(5));
+  EXPECT_EQ(document.at("xxx").at("bar"), 5);
 }

@@ -78,6 +78,7 @@ public:
   JSON<Source>(std::int64_t value)
       : Container<Source>{Source{}, false, false},
         data{std::in_place_type<std::int64_t>, value} {}
+  JSON<Source>(int value) : JSON<Source>(static_cast<std::int64_t>(value)) {}
 
   // If we set the double directly, then the document is fully parsed
   JSON<Source>(double value)
@@ -262,6 +263,10 @@ public:
   }
 
   auto operator==(int value) const -> bool {
+    return this->operator==(static_cast<std::int64_t>(value));
+  }
+
+  auto operator==(long value) const -> bool {
     return this->operator==(static_cast<std::int64_t>(value));
   }
 
