@@ -20,3 +20,9 @@ add_test(NAME jsonbinpack.cli_canonicalize_file
   COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/runner.sh"
   "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
   canonicalize "${CMAKE_CURRENT_SOURCE_DIR}/schema.json")
+
+add_test(NAME jsonbinpack.cli_canonicalize_stdin
+  COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/runner_stdin.sh"
+  "${CMAKE_CURRENT_SOURCE_DIR}/schema.json"
+  "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
+  canonicalize)

@@ -36,6 +36,10 @@ static auto cli_main(const std::string &program, const std::string &command,
   }
 
   if (command == "canonicalize") {
+    if (arguments.empty()) {
+      return sourcemeta::jsonbinpack::cli::canonicalize();
+    }
+
     assert_arguments(command, arguments, 1);
     return sourcemeta::jsonbinpack::cli::canonicalize(arguments.at(0));
   }
