@@ -3,9 +3,13 @@
 
 static const char *USAGE_DETAILS = R"EOF(
    version                     Print version information and quit.
+
    help                        Print this help information and quit.
-   canonicalize <schema.json>  Canonicalize a given JSON Schema definition
-                               and print the result to stdout.
+
+   canonicalize [schema.json]  Canonicalize a given JSON Schema definition
+                               and print the result to stdout. If a path to
+                               a schema is not provided, the schema will
+                               be read from standard input.
 )EOF";
 
 auto sourcemeta::jsonbinpack::cli::help(const std::string &program) -> int {
