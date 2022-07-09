@@ -2,6 +2,8 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
+#include <algorithm>
+
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 
 class DuplicateAllOfBranches final
@@ -19,16 +21,18 @@ public:
       return false;
     }
 
-    sourcemeta::jsontoolkit::JSON<std::string> copy{
-        schema.at(keywords::applicator::allOf)};
-    unique(copy);
-    return schema.at(keywords::applicator::allOf).size() > copy.size();
+    auto copy{schema.at(keywords::applicator::allOf).to_array()};
+    std::sort(std::begin(copy), std::end(copy));
+    return std::unique(std::begin(copy), std::end(copy)) != std::end(copy);
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> void override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-    unique(schema.at(keywords::applicator::allOf));
+    auto &array = schema.at(keywords::applicator::allOf).to_array();
+    std::sort(std::begin(array), std::end(array));
+    auto last = std::unique(std::begin(array), std::end(array));
+    schema.at(keywords::applicator::allOf).erase(last, std::end(array));
   }
 };
 

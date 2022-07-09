@@ -125,6 +125,11 @@ public:
   friend Wrapper;
   friend sourcemeta::jsontoolkit::Object<Wrapper, Source>;
 
+  // To support algorithms that require sorting
+  auto operator<(const Array<Wrapper, Source> &other) const -> bool {
+    return this->data < other.data;
+  }
+
 protected:
   auto stringify(std::ostream &stream, const std::size_t level)
       -> std::ostream & override {
