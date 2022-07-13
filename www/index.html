@@ -1,168 +1,108 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="referrer" content="no-referrer">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+---
+layout: base
+---
 
-    <title>JSON BinPack</title>
-    <link rel="canonical" href="https://www.jsonbinpack.org">
-    <meta name="description" content="A space-efficient open-source binary JSON serialization format based on JSON Schema">
-
-    <link rel="icon" href="favicon.ico" sizes="any">
-    <link rel="icon" href="icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="manifest.webmanifest">
-
-    <link href="style.min.css" rel="stylesheet">
-
-    <script defer data-domain="jsonbinpack.org" src="https://plausible.io/js/script.outbound-links.js"></script>
-    <script>
-      window.plausible = window.plausible || function() {
-        (window.plausible.q = window.plausible.q || []).push(arguments);
-      };
-    </script>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand navbar-light bg-light border-bottom">
-      <div class="container">
-        <a class="navbar-brand flex-grow-1" href="https://www.jsonbinpack.org">
-          <img src="icon.svg" alt="JSON BinPack logo" width="50" height="50">
-        </a>
-        <div class="navbar-collapse flex-grow-0">
-          <div class="navbar-nav align-items-center">
-            <a class="nav-link ms-2" href="https://github.com/jviotti/jsonbinpack/discussions">Discussions</a>
-            <a class="nav-link ms-2" href="https://github.com/jviotti/jsonbinpack/tree/main/docs/encoder">Docs</a>
-            <a class="nav-link ms-2" href="https://github.com/jviotti/jsonbinpack/issues">Issues</a>
-            <a class="nav-link ms-2" href="https://github.com/jviotti/jsonbinpack">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <div class="px-4 mt-5 mb-lg-5 text-center">
-      <h1 class="display-1 fw-bold mb-0">JSON BinPack</h1>
-      <h2 class="display-6 mb-4">Binary JSON for the <u>Internet of Things</u></h2>
-      <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">An open-source binary JSON serialization format based on JSON Schema with a strong focus on space-efficiency. Transmitting smaller payloads <b>reduces operational costs</b> and <b>increases user experience</b>.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-          <a href="https://www.npmjs.com/package/jsonbinpack" class="btn text-white btn-primary btn-lg px-4 me-sm-3">Try the alpha</a>
-          <a href="https://github.com/jviotti/jsonbinpack" class="btn text-white btn-secondary btn-lg px-4 me-sm-3">View on GitHub</a>
-        </div>
-      </div>
-      <div>
-        <div class="container">
-          <img src="example.png" class="img-fluid mb-4" alt="JSON, JSON Schema and JSON BinPack buffer example" height="550">
-        </div>
-      </div>
+<div class="px-4 mt-5 mb-lg-5 text-center">
+  <h1 class="display-1 fw-bold mb-0">JSON BinPack</h1>
+  <h2 class="display-6 mb-4">Binary JSON for the <u>Internet of Things</u></h2>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">An open-source binary JSON serialization format based on JSON Schema with a strong focus on space-efficiency. Transmitting smaller payloads <b>reduces operational costs</b> and <b>increases user experience</b>.</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+      <a href="https://www.npmjs.com/package/jsonbinpack" class="btn text-white btn-primary btn-lg px-4 me-sm-3">Try the alpha</a>
+      <a href="{{ site.repository }}" class="btn text-white btn-secondary btn-lg px-4 me-sm-3">View on GitHub</a>
     </div>
-
-    <div class="container px-4 mt-lg-5 pt-5">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <h2 class="display-6 fw-bold">Highly Space-efficient</h2>
-          <p class="lead">A reproducible <a class="text-secondary" href="https://benchmark.sourcemeta.com">benchmark study</a> has proven JSON BinPack to be space-efficient in comparison to 12 alternative binary serialization formats in every considered case. Additionally, JSON BinPack typically provides higher average size reduction than general purpose compressors such as GZIP, LZMA and LZ4 with the highest compression levels.</p>
-          <a class="fw-bold text-decoration-none" href="https://benchmark.sourcemeta.com">Take a look at the benchmark</a>
-        </div>
-        <div class="col-lg-6">
-          <img src="benchmark-deck.png" class="img-fluid my-4 my-lg-0" alt="Example of benchmark plots" loading="lazy">
-        </div>
-      </div>
+  </div>
+  <div>
+    <div class="container">
+      <img src="{{ site.url }}/assets/images/example.png" class="img-fluid mb-4" alt="JSON, JSON Schema and JSON BinPack buffer example" height="550">
     </div>
+  </div>
+</div>
 
-    <div class="container px-4 mt-lg-5 pt-5">
-      <div class="row align-items-center flex-lg-row-reverse">
-        <div class="col-lg-6">
-          <h2 class="display-6 fw-bold">Based on JSON Schema</h2>
-          <p class="lead">JSON BinPack adopts the industry-standard schema language for JSON documents. Re-use the same schemas you already have in your <a class="text-secondary" href="https://www.openapis.org">OpenAPI</a>, <a class="text-secondary" href="https://www.asyncapi.com">AsyncAPI</a>, <a class="text-secondary" href="https://raml.org">RAML</a> or other specifications. No need to learn more domain-specific schema languages or attempt to translate between them.</p>
-          <a href="https://json-schema.org" class="fw-bold text-decoration-none">Learn more about JSON Schema</a>
-        </div>
-        <div class="col-lg-6 pe-lg-5">
-          <img src="jsonschema.png" class="img-fluid my-4 my-lg-0" alt="Logs of specifications using JSON Schema" loading="lazy">
-        </div>
-      </div>
+<div class="container px-4 mt-lg-5 pt-5">
+  <div class="row align-items-center">
+    <div class="col-lg-6">
+      <h2 class="display-6 fw-bold">Highly Space-efficient</h2>
+      <p class="lead">A reproducible <a class="text-secondary" href="https://benchmark.sourcemeta.com">benchmark study</a> has proven JSON BinPack to be space-efficient in comparison to 12 alternative binary serialization formats in every considered case. Additionally, JSON BinPack typically provides higher average size reduction than general purpose compressors such as GZIP, LZMA and LZ4 with the highest compression levels.</p>
+      <a class="fw-bold text-decoration-none" href="https://benchmark.sourcemeta.com">Take a look at the benchmark</a>
     </div>
-
-    <div class="container px-4 mt-lg-5 py-5">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <h2 class="display-6 fw-bold">Optional Schema</h2>
-          <p class="lead">JSON BinPack is a hybrid serialization format that runs in both schema-driven and schema-less modes. JSON BinPack allows you to be as loose or specific as your use case demands, <b>even within the same document</b>, without having to use different serialization technologies.</p>
-          <a class="fw-bold text-decoration-none" href="https://github.com/jviotti/jsonbinpack/blob/main/docs/architecture.markdown">Read more about the architecture of JSON BinPack</a>
-        </div>
-        <div class="col-lg-6">
-          <img src="hybrid.png" class="img-fluid my-4 my-lg-0" alt="Illustration of JSON Schema as a hybrid serialization format" loading="lazy">
-        </div>
-      </div>
+    <div class="col-lg-6">
+      <img src="{{ site.url }}/assets/images/benchmark-deck.png" class="img-fluid my-4 my-lg-0" alt="Example of benchmark plots" loading="lazy">
     </div>
+  </div>
+</div>
 
-    <div class="bg-light border my-3 mt-0 my-lg-5 py-5">
-      <div class="container px-4">
-        <h2 class="fw-bold">Frequently Asked Questions</h2>
-        <h4 class="mt-4 fw-light">How does JSON BinPack compare to compression formats like GZIP?</h4>
-        <p>Our <a href="https://benchmark.sourcemeta.com">reproducible benchmark study</a> shows that the semantic information provided by detailed schema definitions enables a serialization format such as JSON BinPack to often outperform general-purpose compressors configured with even their highest supported compression levels, specially for small and medium-sized JSON documents. For large JSON documents, you can experiment combining JSON BinPack with a compression format to potentially achieve greater space-efficiency.</p>
-
-        <h4 class="mt-4 fw-light">JSON BinPack is space-efficient, but what about runtime-efficiency?</h4>
-        <p>When transmitting data over the Internet, time is the bottleneck, making computation essentially free in comparison. JSON BinPack particularly excels at improving network performance when transmitting data through unreliable and low-bandwidth connections on mobile and IoT systems.</p>
-        <p>If your use-case demands runtime-efficiency or zero-copy serialization, such as in the case of intra-service or inter-process communication, we suggest you consider alternative serialization formats such as <a href="https://google.github.io/flatbuffers/">FlatBuffers</a> and <a href="https://capnproto.org">Cap'n Proto</a>.</p>
-
-        <h4 class="mt-4 fw-light">How does JSON BinPack handle unknown fields?</h4>
-        <p>JSON BinPack serializes any instance that matches its JSON Schema definition. JSON Schema is an expressive constrain-based language that permits schema-writers to be as strict or loose on defining data as they wish. As a consequence of adopting JSON Schema, JSON BinPack elegantly supports encoding free-form data and unknown fields as long as the corresponding JSON Schema definition successfully validates the data.</p>
-        <p>However, deserializing data that does not match the given JSON Schema definition is undefined behavior and will likely result in an exception being thrown.</p>
-
-        <div class="mt-lg-5 pt-3 text-center">
-          <p class="fst-italic mb-0">Do you have further questions or feedback? Don't hesitate in reaching out on <a href="https://github.com/jviotti/jsonbinpack/discussions">GitHub Discussions</a>!</p>
-        </div>
-      </div>
+<div class="container px-4 mt-lg-5 pt-5">
+  <div class="row align-items-center flex-lg-row-reverse">
+    <div class="col-lg-6">
+      <h2 class="display-6 fw-bold">Based on JSON Schema</h2>
+      <p class="lead">JSON BinPack adopts the industry-standard schema language for JSON documents. Re-use the same schemas you already have in your <a class="text-secondary" href="https://www.openapis.org">OpenAPI</a>, <a class="text-secondary" href="https://www.asyncapi.com">AsyncAPI</a>, <a class="text-secondary" href="https://raml.org">RAML</a> or other specifications. No need to learn more domain-specific schema languages or attempt to translate between them.</p>
+      <a href="https://json-schema.org" class="fw-bold text-decoration-none">Learn more about JSON Schema</a>
     </div>
-
-    <div class="container px-4 py-4">
-      <h2 class="fw-bold mb-4">Research</h2>
-      <p>JSON BinPack is the result of extensive binary serialization research at the Department of Computer Science of <a class="text-secondary" href="https://www.cs.ox.ac.uk">University of Oxford</a>. The project is led by <a class="text-secondary" href="https://www.jviotti.com">Juan Cruz Viotti</a>, a computer scientist with first-hand exposure at the problem of space-efficient network communication in the context of IoT and APIs, under the supervision of Mital Kinderkhedia.</p>
-      <table class="table table-borderless">
-        <tbody>
-          <tr>
-            <th class="ps-0" scope="row">2022</th>
-            <td><a href="https://www.jviotti.com/assets/dissertation.pdf">JSON BinPack: A space-efficient schema-driven and schema-less binary serialization specification based on JSON Schema</a></td>
-            <td class="pe-0"><span class="badge bg-success">Dissertation</span></td>
-          </tr>
-          <tr>
-            <th class="ps-0" scope="row">2022</th>
-            <td><a href="https://github.com/sourcemeta/json-taxonomy">A formal taxonomy to classify JSON documents based on their size, content, structure and redundancy criteria</a></td>
-            <td class="pe-0"><span class="badge bg-info">Project</span></td>
-          </tr>
-          <tr>
-            <th class="ps-0" scope="row">2022</th>
-            <td><a href="https://arxiv.org/abs/2201.03051">A benchmark of JSON-compatible binary serialization specifications</a></td>
-            <td class="pe-0"><span class="badge bg-primary">Paper</span></td>
-          </tr>
-          <tr>
-            <th class="ps-0" scope="row">2022</th>
-            <td><a href="https://arxiv.org/abs/2201.02089">A survey of JSON-compatible binary serialization specifications</a></td>
-            <td class="pe-0"><span class="badge bg-primary">Paper</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-lg-6 pe-lg-5">
+      <img src="{{ site.url }}/assets/images/jsonschema.png" class="img-fluid my-4 my-lg-0" alt="Logs of specifications using JSON Schema" loading="lazy">
     </div>
+  </div>
+</div>
 
-    <div class="container px-4 mt-2 mt-lg-5">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <a href="https://www.jsonbinpack.org" class="col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-          <img src="icon.svg" alt="JSON BinPack logo" width="40" height="40">
-        </a>
-
-        <ul class="col-12 col-md-6 nav justify-content-center justify-content-md-end">
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/jviotti/jsonbinpack">GitHub</a></li>
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/jviotti/jsonbinpack/discussions">Discussions</a></li>
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/jviotti/jsonbinpack/tree/main/docs/encoder">Docs</a></li>
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/jviotti/jsonbinpack/issues">Issues</a></li>
-        </ul>
-      </footer>
+<div class="container px-4 mt-lg-5 py-5">
+  <div class="row align-items-center">
+    <div class="col-lg-6">
+      <h2 class="display-6 fw-bold">Optional Schema</h2>
+      <p class="lead">JSON BinPack is a hybrid serialization format that runs in both schema-driven and schema-less modes. JSON BinPack allows you to be as loose or specific as your use case demands, <b>even within the same document</b>, without having to use different serialization technologies.</p>
+      <a class="fw-bold text-decoration-none" href="https://github.com/jviotti/jsonbinpack/blob/main/docs/architecture.markdown">Read more about the architecture of JSON BinPack</a>
     </div>
-  </body>
-</html>
+    <div class="col-lg-6">
+      <img src="{{ site.url }}/assets/images/hybrid.png" class="img-fluid my-4 my-lg-0" alt="Illustration of JSON Schema as a hybrid serialization format" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<div class="bg-light border my-3 mt-0 my-lg-5 py-5">
+  <div class="container px-4">
+    <h2 class="fw-bold">Frequently Asked Questions</h2>
+    <h4 class="mt-4 fw-light">How does JSON BinPack compare to compression formats like GZIP?</h4>
+    <p>Our <a href="https://benchmark.sourcemeta.com">reproducible benchmark study</a> shows that the semantic information provided by detailed schema definitions enables a serialization format such as JSON BinPack to often outperform general-purpose compressors configured with even their highest supported compression levels, specially for small and medium-sized JSON documents. For large JSON documents, you can experiment combining JSON BinPack with a compression format to potentially achieve greater space-efficiency.</p>
+
+    <h4 class="mt-4 fw-light">JSON BinPack is space-efficient, but what about runtime-efficiency?</h4>
+    <p>When transmitting data over the Internet, time is the bottleneck, making computation essentially free in comparison. JSON BinPack particularly excels at improving network performance when transmitting data through unreliable and low-bandwidth connections on mobile and IoT systems.</p>
+    <p>If your use-case demands runtime-efficiency or zero-copy serialization, such as in the case of intra-service or inter-process communication, we suggest you consider alternative serialization formats such as <a href="https://google.github.io/flatbuffers/">FlatBuffers</a> and <a href="https://capnproto.org">Cap'n Proto</a>.</p>
+
+    <h4 class="mt-4 fw-light">How does JSON BinPack handle unknown fields?</h4>
+    <p>JSON BinPack serializes any instance that matches its JSON Schema definition. JSON Schema is an expressive constrain-based language that permits schema-writers to be as strict or loose on defining data as they wish. As a consequence of adopting JSON Schema, JSON BinPack elegantly supports encoding free-form data and unknown fields as long as the corresponding JSON Schema definition successfully validates the data.</p>
+    <p>However, deserializing data that does not match the given JSON Schema definition is undefined behavior and will likely result in an exception being thrown.</p>
+
+    <div class="mt-lg-5 pt-3 text-center">
+      <p class="fst-italic mb-0">Do you have further questions or feedback? Don't hesitate in reaching out on <a href="{{ site.repository }}/discussions">GitHub Discussions</a>!</p>
+    </div>
+  </div>
+</div>
+
+<div class="container px-4 py-4">
+  <h2 class="fw-bold mb-4">Research</h2>
+  <p>JSON BinPack is the result of extensive binary serialization research at the Department of Computer Science of <a class="text-secondary" href="https://www.cs.ox.ac.uk">University of Oxford</a>. The project is led by <a class="text-secondary" href="https://www.jviotti.com">Juan Cruz Viotti</a>, a computer scientist with first-hand exposure at the problem of space-efficient network communication in the context of IoT and APIs, under the supervision of Mital Kinderkhedia.</p>
+  <table class="table table-borderless">
+    <tbody>
+      <tr>
+        <th class="ps-0" scope="row">2022</th>
+        <td><a href="https://www.jviotti.com/assets/dissertation.pdf">JSON BinPack: A space-efficient schema-driven and schema-less binary serialization specification based on JSON Schema</a></td>
+        <td class="pe-0"><span class="badge bg-success">Dissertation</span></td>
+      </tr>
+      <tr>
+        <th class="ps-0" scope="row">2022</th>
+        <td><a href="https://github.com/sourcemeta/json-taxonomy">A formal taxonomy to classify JSON documents based on their size, content, structure and redundancy criteria</a></td>
+        <td class="pe-0"><span class="badge bg-info">Project</span></td>
+      </tr>
+      <tr>
+        <th class="ps-0" scope="row">2022</th>
+        <td><a href="https://arxiv.org/abs/2201.03051">A benchmark of JSON-compatible binary serialization specifications</a></td>
+        <td class="pe-0"><span class="badge bg-primary">Paper</span></td>
+      </tr>
+      <tr>
+        <th class="ps-0" scope="row">2022</th>
+        <td><a href="https://arxiv.org/abs/2201.02089">A survey of JSON-compatible binary serialization specifications</a></td>
+        <td class="pe-0"><span class="badge bg-primary">Paper</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

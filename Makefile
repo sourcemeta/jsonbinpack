@@ -3,16 +3,17 @@ include vendor/vendorpull/targets.mk
 
 CMAKE ?= cmake
 CTEST ?= ctest
-NPM ?= npm
+BUNDLE ?= bundle
 
 PRESET ?= debug
+.PHONY: all
 all:
 	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET)
 	$(CTEST) --preset $(PRESET)
-.PHONY: all
 
+.PHONY: test
 CASE ?=
 ifdef CASE
 test:
@@ -27,8 +28,8 @@ test:
 	$(CMAKE) --build --preset $(PRESET)
 	$(CTEST) --preset $(PRESET) --verbose
 endif
-.PHONY: test
 
+.PHONY: debug
 ifdef CASE
 debug: scripts/lldb.sh
 	$(CMAKE) --preset $(PRESET) --log-context
@@ -39,13 +40,13 @@ debug:
 	@echo "Missing CASE option" 1>&2
 	exit 1
 endif
-.PHONY: debug
 
-clean:
-	$(CMAKE) -E rm -R -f build
 .PHONY: clean
+clean:
+	$(CMAKE) -E rm -R -f build .bundle .sass-cache
 
-node_modules: package.json package-lock.json
-	$(NPM) ci
-
-include www/targets.mk
+.PHONY: jekyll
+jekyll:
+	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --build --preset $(PRESET) --target bundler
+	$(BUNDLE) exec jekyll serve --source www --destination build/$(PRESET)/www --watch --incremental --trace

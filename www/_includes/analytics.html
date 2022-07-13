@@ -1,0 +1,9 @@
+<script defer data-domain="{{ site.plausible.domain }}" src="https://plausible.io/js/script.outbound-links.js"></script>
+<script>
+  window.plausible = window.plausible || function() {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+</script>
+{% if page.url == "/404.html" %}
+<script>plausible("404", { props: { path: document.location.pathname } });</script>
+{% endif %}

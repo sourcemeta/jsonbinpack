@@ -1,0 +1,62 @@
+---
+sitemap: false
+---
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1040px,
+  xxl: 1140px
+);
+
+$blue: #28C;
+
+$body-color: #808488;
+$headings-color: #1a1a1a;
+$navbar-padding-y: 10px;
+
+// Configuration
+@import "../vendor/bootstrap/scss/functions";
+@import "../vendor/bootstrap/scss/variables";
+@import "../vendor/bootstrap/scss/mixins";
+@import "../vendor/bootstrap/scss/utilities";
+
+// Layout & components
+@import "../vendor/bootstrap/scss/root";
+@import "../vendor/bootstrap/scss/reboot";
+@import "../vendor/bootstrap/scss/type";
+@import "../vendor/bootstrap/scss/images";
+@import "../vendor/bootstrap/scss/containers";
+@import "../vendor/bootstrap/scss/grid";
+@import "../vendor/bootstrap/scss/tables";
+@import "../vendor/bootstrap/scss/forms";
+@import "../vendor/bootstrap/scss/buttons";
+// @import "../vendor/bootstrap/scss/transitions";
+// @import "../vendor/bootstrap/scss/dropdown";
+// @import "../vendor/bootstrap/scss/button-group";
+@import "../vendor/bootstrap/scss/nav";
+@import "../vendor/bootstrap/scss/navbar";
+// @import "../vendor/bootstrap/scss/card";
+// @import "../vendor/bootstrap/scss/accordion";
+// @import "../vendor/bootstrap/scss/breadcrumb";
+// @import "../vendor/bootstrap/scss/pagination";
+@import "../vendor/bootstrap/scss/badge";
+// @import "../vendor/bootstrap/scss/alert";
+// @import "../vendor/bootstrap/scss/progress";
+// @import "../vendor/bootstrap/scss/list-group";
+// @import "../vendor/bootstrap/scss/close";
+// @import "../vendor/bootstrap/scss/toasts";
+// @import "../vendor/bootstrap/scss/modal";
+// @import "../vendor/bootstrap/scss/tooltip";
+// @import "../vendor/bootstrap/scss/popover";
+// @import "../vendor/bootstrap/scss/carousel";
+// @import "../vendor/bootstrap/scss/spinners";
+// @import "../vendor/bootstrap/scss/offcanvas";
+// @import "../vendor/bootstrap/scss/placeholders";
+
+// Helpers
+@import "../vendor/bootstrap/scss/helpers";
+
+// Utilities
+@import "../vendor/bootstrap/scss/utilities/api";
