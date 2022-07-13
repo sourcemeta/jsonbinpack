@@ -5,6 +5,10 @@ baseurl: ""
 url: "https://www.jsonbinpack.org"
 repository: https://github.com/jviotti/jsonbinpack
 markdown: kramdown
+collections:
+  docs:
+    output: true
+    permalink: /docs/:path
 sass:
   style: :compressed
   sass_dir: .
