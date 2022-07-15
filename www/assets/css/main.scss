@@ -11,6 +11,7 @@ $container-max-widths: (
 );
 
 $blue: #28C;
+$zindex-offcanvas: 2000;
 
 $body-color: #808488;
 $headings-color: #1a1a1a;
@@ -32,7 +33,7 @@ $navbar-padding-y: 10px;
 @import "../vendor/bootstrap/scss/tables";
 @import "../vendor/bootstrap/scss/forms";
 @import "../vendor/bootstrap/scss/buttons";
-// @import "../vendor/bootstrap/scss/transitions";
+@import "../vendor/bootstrap/scss/transitions";
 // @import "../vendor/bootstrap/scss/dropdown";
 // @import "../vendor/bootstrap/scss/button-group";
 @import "../vendor/bootstrap/scss/nav";
@@ -44,15 +45,15 @@ $navbar-padding-y: 10px;
 @import "../vendor/bootstrap/scss/badge";
 // @import "../vendor/bootstrap/scss/alert";
 // @import "../vendor/bootstrap/scss/progress";
-// @import "../vendor/bootstrap/scss/list-group";
-// @import "../vendor/bootstrap/scss/close";
+@import "../vendor/bootstrap/scss/list-group";
+@import "../vendor/bootstrap/scss/close";
 // @import "../vendor/bootstrap/scss/toasts";
-// @import "../vendor/bootstrap/scss/modal";
+@import "../vendor/bootstrap/scss/modal";
 // @import "../vendor/bootstrap/scss/tooltip";
 // @import "../vendor/bootstrap/scss/popover";
 // @import "../vendor/bootstrap/scss/carousel";
 // @import "../vendor/bootstrap/scss/spinners";
-// @import "../vendor/bootstrap/scss/offcanvas";
+@import "../vendor/bootstrap/scss/offcanvas";
 // @import "../vendor/bootstrap/scss/placeholders";
 
 // Helpers
@@ -60,3 +61,11 @@ $navbar-padding-y: 10px;
 
 // Utilities
 @import "../vendor/bootstrap/scss/utilities/api";
+
+img {
+  @extend .mw-100;
+}
+
+.sidebar {
+  max-width: 270px !important;
+}
