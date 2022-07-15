@@ -73,8 +73,9 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-format.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/clang-tidy.cmake)
+  include(${PROJECT_SOURCE_DIR}/cmake/bundler.cmake)
+  include(${PROJECT_SOURCE_DIR}/cmake/jekyll.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/doxygen.cmake)
-  include(${PROJECT_SOURCE_DIR}/cmake/website.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/shellcheck.cmake)
 
   # TODO: Define packaging

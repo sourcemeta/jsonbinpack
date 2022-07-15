@@ -1,0 +1,26 @@
+name: Website
+on:
+  - push
+
+# Do not run multiple jobs for the same branch
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get install --yes doxygen bundler
+      - run: cmake --version
+      - run: cmake --preset release --log-context
+      - run: cmake --build --preset release --target bundler
+      - run: cmake --build --preset release --target jekyll
+      - run: cmake --build --preset release --target doxygen
+      # Only deploy website from the master branch
+      - if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/release/www
