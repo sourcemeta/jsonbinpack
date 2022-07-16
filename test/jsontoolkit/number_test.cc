@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
-#include <sstream> // std::ostringstream
+#include <sstream> // std::ostringstream, std::istringstream
 
 TEST(Number, set_negative_integer) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"true"};

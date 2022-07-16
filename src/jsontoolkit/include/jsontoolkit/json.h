@@ -17,7 +17,7 @@
 #include <iomanip>     // std::noshowpoint
 #include <map>         // std::map
 #include <ostream>     // std::ostream
-#include <sstream>     // std::ostringstream
+#include <sstream>     // std::ostringstream, std::istringstream
 #include <stdexcept>   // std::domain_error, std::logic_error
 #include <string>      // std::string
 #include <string_view> // std::string_view
@@ -890,6 +890,7 @@ private:
     const std::string_view document =
         sourcemeta::jsontoolkit::internal::trim(this->source());
     std::variant<std::int64_t, double> number_result;
+    std::istringstream stream{std::string{document}};
 
     switch (document.front()) {
     case sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<Source>,
@@ -918,8 +919,7 @@ private:
     case sourcemeta::jsontoolkit::Number::token_number_seven:
     case sourcemeta::jsontoolkit::Number::token_number_eight:
     case sourcemeta::jsontoolkit::Number::token_number_nine:
-      number_result =
-          sourcemeta::jsontoolkit::Number::parse(std::string{document});
+      number_result = sourcemeta::jsontoolkit::Number::parse(stream);
       if (std::holds_alternative<std::int64_t>(number_result)) {
         this->data = std::get<std::int64_t>(number_result);
       } else {

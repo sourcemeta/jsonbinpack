@@ -1,12 +1,7 @@
-#include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_number.h>
+#include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 #include <string>    // std::stol, std::stod
-
-static constexpr auto is_digit(const char character) -> bool {
-  return character >= sourcemeta::jsontoolkit::Number::token_number_zero &&
-         character <= sourcemeta::jsontoolkit::Number::token_number_nine;
-}
 
 auto sourcemeta::jsontoolkit::Number::stringify(const std::int64_t value)
     -> std::string {
@@ -18,37 +13,61 @@ auto sourcemeta::jsontoolkit::Number::stringify(const double value)
   return std::to_string(value);
 }
 
-auto sourcemeta::jsontoolkit::Number::parse(const std::string &input)
+static constexpr auto is_digit(const char character) -> bool {
+  return character == sourcemeta::jsontoolkit::Number::token_number_zero ||
+         character == sourcemeta::jsontoolkit::Number::token_number_one ||
+         character == sourcemeta::jsontoolkit::Number::token_number_two ||
+         character == sourcemeta::jsontoolkit::Number::token_number_three ||
+         character == sourcemeta::jsontoolkit::Number::token_number_four ||
+         character == sourcemeta::jsontoolkit::Number::token_number_five ||
+         character == sourcemeta::jsontoolkit::Number::token_number_six ||
+         character == sourcemeta::jsontoolkit::Number::token_number_seven ||
+         character == sourcemeta::jsontoolkit::Number::token_number_eight ||
+         character == sourcemeta::jsontoolkit::Number::token_number_nine;
+}
+
+auto sourcemeta::jsontoolkit::Number::parse(std::istream &input)
     -> std::variant<std::int64_t, double> {
+  sourcemeta::jsontoolkit::internal::flush_whitespace(input);
 
-  const std::string_view document{
-      sourcemeta::jsontoolkit::internal::trim(input)};
-
-  /*
-   * Validate the input number and decide whether it is an integer or a double
-   */
-
-  // A JSON number starts with a digit or the minus sign
-  std::string_view::const_reference front{document.front()};
-  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-      front == sourcemeta::jsontoolkit::Number::token_minus_sign ||
-          is_digit(front),
-      "Invalid number");
-
-  // A JSON number ends with a digit
-  sourcemeta::jsontoolkit::internal::ENSURE_PARSE(is_digit(document.back()),
-                                                  "Invalid number");
-
-  const std::string_view::size_type size{document.size()};
+  char previous = EOF;
+  std::size_t index{0};
+  std::size_t exponential_index{0};
+  std::size_t first_non_zero_index{0};
+  std::size_t first_whitespace_index{0};
+  bool positive = true;
   bool integer = true;
   bool expect_decimal_point = false;
-  std::string_view::size_type exponential_index{0};
-  std::string_view::size_type first_non_zero_index{0};
-  for (std::string_view::size_type index = 0; index < size - 1; index++) {
-    std::string_view::const_reference previous{document[index - 1]};
 
-    switch (document[index]) {
+  // TODO: Right now we just validate the input, pipe
+  // it into a string stream, and then parse it all
+  // at once. Can we do the parsing alongside the validation?
+  std::ostringstream output{};
+
+  while (!input.eof()) {
+    const char character = static_cast<char>(input.get());
+    const auto next = input.peek();
+
+    switch (character) {
+    case sourcemeta::jsontoolkit::internal::token_tabulation:
+    case sourcemeta::jsontoolkit::internal::token_line_feed:
+    case sourcemeta::jsontoolkit::internal::token_carriage_return:
+    case sourcemeta::jsontoolkit::internal::token_space:
+      if (first_whitespace_index == 0) {
+        first_whitespace_index = index;
+      }
+
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(is_digit(previous),
+                                                      "Invalid end of number");
+      index++;
+      break;
     case sourcemeta::jsontoolkit::Number::token_decimal_point:
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
+                                                      "Invalid end of number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          index > 0, "Invalid start of number");
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           integer &&
               previous != sourcemeta::jsontoolkit::Number::token_minus_sign,
@@ -60,40 +79,70 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string &input)
 
       expect_decimal_point = false;
       integer = false;
+      previous = character;
+      output << character;
+      index++;
       break;
     case sourcemeta::jsontoolkit::Number::token_exponent_upper:
     case sourcemeta::jsontoolkit::Number::token_exponent_lower:
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
+                                                      "Invalid end of number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          index > 0, "Invalid start of number");
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           is_digit(previous) && exponential_index == 0,
           "Invalid exponential number");
       exponential_index = index;
       integer = false;
+      previous = character;
+      output << character;
+      index++;
       break;
-    case sourcemeta::jsontoolkit::Number::token_minus_sign:
     case sourcemeta::jsontoolkit::Number::token_plus_sign:
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
+                                                      "Invalid end of number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          index > 0, "Invalid start of number");
+    case sourcemeta::jsontoolkit::Number::token_minus_sign:
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
+                                                      "Invalid end of number");
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           index == 0 ||
               previous ==
                   sourcemeta::jsontoolkit::Number::token_exponent_upper ||
               previous == sourcemeta::jsontoolkit::Number::token_exponent_lower,
           "Invalid sign");
+      if (index == 0) {
+        positive = false;
+      }
+
+      previous = character;
+      output << character;
+      index++;
       break;
     case sourcemeta::jsontoolkit::Number::token_number_zero:
-      if (index == 0 && size > 1) {
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      if (index == 0) {
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-            document[index + 1] ==
-                    sourcemeta::jsontoolkit::Number::token_decimal_point ||
-                document[index + 1] ==
-                    sourcemeta::jsontoolkit::Number::token_exponent_upper ||
-                document[index + 1] ==
-                    sourcemeta::jsontoolkit::Number::token_exponent_lower,
+            next == EOF ||
+                next == sourcemeta::jsontoolkit::Number::token_decimal_point ||
+                next == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
+                next == sourcemeta::jsontoolkit::Number::token_exponent_lower,
             "Invalid leading zero");
-      } else if (index == 1 &&
-                 document.front() ==
-                     sourcemeta::jsontoolkit::Number::token_minus_sign) {
+      } else if (index == 1 && !positive && next != EOF) {
         expect_decimal_point = true;
       }
 
+      previous = character;
+      output << character;
+      index++;
       break;
     case sourcemeta::jsontoolkit::Number::token_number_one:
     case sourcemeta::jsontoolkit::Number::token_number_two:
@@ -104,28 +153,27 @@ auto sourcemeta::jsontoolkit::Number::parse(const std::string &input)
     case sourcemeta::jsontoolkit::Number::token_number_seven:
     case sourcemeta::jsontoolkit::Number::token_number_eight:
     case sourcemeta::jsontoolkit::Number::token_number_nine:
-      if (first_non_zero_index == 0) {
+      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+          first_whitespace_index == 0, "Invalid number");
+      if (first_non_zero_index == 0 && next != EOF) {
         first_non_zero_index = index;
       }
 
+      previous = character;
+      output << character;
+      index++;
       break;
     default:
       throw std::domain_error("Invalid number");
-      break;
     }
   }
 
   sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
       !expect_decimal_point && first_non_zero_index <= 2, "Invalid number");
 
-  /*
-   * Convert the value accordingly
-   */
-
-  // TODO: Can we avoid converting to std::string?
   if (integer) {
-    return std::stol(std::string{document});
+    return std::stol(output.str());
   }
 
-  return std::stod(std::string{document});
+  return std::stod(output.str());
 }
