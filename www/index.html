@@ -23,8 +23,8 @@ layout: base
   <div class="row align-items-center">
     <div class="col-lg-6">
       <h2 class="display-6 fw-bold">Highly Space-efficient</h2>
-      <p class="lead">A reproducible <a class="text-secondary" href="https://benchmark.sourcemeta.com">benchmark study</a> has proven JSON BinPack to be space-efficient in comparison to 12 alternative binary serialization formats in every considered case. Additionally, JSON BinPack typically provides higher average size reduction than general purpose compressors such as GZIP, LZMA and LZ4 with the highest compression levels.</p>
-      <a class="fw-bold text-decoration-none" href="https://benchmark.sourcemeta.com">Take a look at the benchmark</a>
+      <p class="lead">A reproducible <a class="text-secondary" href="https://benchmark.sourcemeta.com?utm_source=jsonbinpack">benchmark study</a> has proven JSON BinPack to be space-efficient in comparison to 12 alternative binary serialization formats in every considered case. Additionally, JSON BinPack typically provides higher average size reduction than general purpose compressors such as GZIP, LZMA and LZ4 with the highest compression levels.</p>
+      <a class="fw-bold text-decoration-none" href="https://benchmark.sourcemeta.com?utm_source=jsonbinpack">Take a look at the benchmark</a>
     </div>
     <div class="col-lg-6">
       <img src="{{ site.url }}/assets/images/benchmark-deck.png" class="img-fluid my-4 my-lg-0" alt="Example of benchmark plots" loading="lazy">
@@ -62,7 +62,7 @@ layout: base
   <div class="container px-4">
     <h2 class="fw-bold">Frequently Asked Questions</h2>
     <h4 class="mt-4 fw-light">How does JSON BinPack compare to compression formats like GZIP?</h4>
-    <p>Our <a href="https://benchmark.sourcemeta.com">reproducible benchmark study</a> shows that the semantic information provided by detailed schema definitions enables a serialization format such as JSON BinPack to often outperform general-purpose compressors configured with even their highest supported compression levels, specially for small and medium-sized JSON documents. For large JSON documents, you can experiment combining JSON BinPack with a compression format to potentially achieve greater space-efficiency.</p>
+    <p>Our <a href="https://benchmark.sourcemeta.com?utm_source=jsonbinpack">reproducible benchmark study</a> shows that the semantic information provided by detailed schema definitions enables a serialization format such as JSON BinPack to often outperform general-purpose compressors configured with even their highest supported compression levels, specially for small and medium-sized JSON documents. For large JSON documents, you can experiment combining JSON BinPack with a compression format to potentially achieve greater space-efficiency.</p>
 
     <h4 class="mt-4 fw-light">JSON BinPack is space-efficient, but what about runtime-efficiency?</h4>
     <p>When transmitting data over the Internet, time is the bottleneck, making computation essentially free in comparison. JSON BinPack particularly excels at improving network performance when transmitting data through unreliable and low-bandwidth connections on mobile and IoT systems.</p>
@@ -73,14 +73,14 @@ layout: base
     <p>However, deserializing data that does not match the given JSON Schema definition is undefined behavior and will likely result in an exception being thrown.</p>
 
     <div class="mt-lg-5 pt-3 text-center">
-      <p class="fst-italic mb-0">Do you have further questions or feedback? Don't hesitate in reaching out on <a href="{{ site.repository }}/discussions">GitHub Discussions</a>!</p>
+      <p class="fst-italic mb-0">Do you have further questions or feedback? Don't hesitate in reaching out on <a href="{{ site.repository }}/discussions?utm_source=jsonbinpack">GitHub Discussions</a>!</p>
     </div>
   </div>
 </div>
 
 <div class="container px-4 py-4">
   <h2 class="fw-bold mb-4">Research</h2>
-  <p>JSON BinPack is the result of extensive binary serialization research at the Department of Computer Science of <a class="text-secondary" href="https://www.cs.ox.ac.uk">University of Oxford</a>. The project is led by <a class="text-secondary" href="https://www.jviotti.com">Juan Cruz Viotti</a>, a computer scientist with first-hand exposure at the problem of space-efficient network communication in the context of IoT and APIs, under the supervision of Mital Kinderkhedia.</p>
+  <p>JSON BinPack is the result of extensive binary serialization research at the Department of Computer Science of <a class="text-secondary" href="https://www.cs.ox.ac.uk">University of Oxford</a>. The project is led by <a class="text-secondary" href="https://www.jviotti.com?utm_source=jsonbinpack">Juan Cruz Viotti</a>, a computer scientist with first-hand exposure at the problem of space-efficient network communication in the context of IoT and APIs, under the supervision of Mital Kinderkhedia.</p>
   <table class="table table-borderless">
     <tbody>
       <tr>
@@ -90,7 +90,7 @@ layout: base
       </tr>
       <tr>
         <th class="ps-0" scope="row">2022</th>
-        <td><a href="https://github.com/sourcemeta/json-taxonomy">A formal taxonomy to classify JSON documents based on their size, content, structure and redundancy criteria</a></td>
+        <td><a href="https://github.com/sourcemeta/json-taxonomy?utm_source=jsonbinpack">A formal taxonomy to classify JSON documents based on their size, content, structure and redundancy criteria</a></td>
         <td class="pe-0"><span class="badge bg-info">Project</span></td>
       </tr>
       <tr>
