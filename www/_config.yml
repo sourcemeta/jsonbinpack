@@ -16,3 +16,11 @@ plausible:
   domain: jsonbinpack.org
 twitter:
   url: https://twitter.com/sourcemeta
+
+sendinblue:
+  form:
+    email:
+      id: EMAIL
+    optin:
+      id: OPT_IN
+    action: "https://da18022d.sibforms.com/serve/MUIEAHu4VPI_MnP4bwvlnO27StjQXiqIdIg5KGMXssM2E6UB9XtOkK8bTddkkmgyfdW3yt9j8rJbDboThJGYRInIivstyFAFEcwfVbad9MSBzRAGPX9Iz4rxhsuqfNQucdlaU34uqIJlSwCJhxAtT9yVqyoFXuDB8nbS4hGi1sZeMgcaWIVCQjwH85S70gX-Vvu5A7N3LSZ9W-PE"
