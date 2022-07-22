@@ -928,7 +928,7 @@ private:
 
       break;
     case sourcemeta::jsontoolkit::Null::token_constant.front():
-      this->data = sourcemeta::jsontoolkit::Null::parse(std::string{document});
+      this->data = sourcemeta::jsontoolkit::Null::parse(stream);
       break;
     case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
     case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
