@@ -11,6 +11,9 @@ Documentation
 Refer to the project website for documentation:
 [https://www.jsonbinpack.org](https://www.jsonbinpack.org).
 
+Do you have any questions? Open a ticket on [GitHub
+Discussions](https://github.com/sourcemeta/jsonbinpack/discussions)!
+
 Building JSON BinPack
 ---------------------
 
