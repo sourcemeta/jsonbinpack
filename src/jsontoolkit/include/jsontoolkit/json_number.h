@@ -1,9 +1,8 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_NUMBER_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_NUMBER_H_
 
-#include <cstdint> // std::int64_t
-#include <istream> // std::istream
-#include <jsontoolkit/json_internal.h>
+#include <cstdint>     // std::int64_t
+#include <istream>     // std::istream
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
