@@ -932,7 +932,7 @@ private:
       break;
     case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
     case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
-      *this = sourcemeta::jsontoolkit::Boolean::parse(std::string{document});
+      this->data = sourcemeta::jsontoolkit::Boolean::parse(stream);
       break;
     default:
       throw std::domain_error("Invalid document");
