@@ -4,14 +4,17 @@
 #include <stdexcept> // std::domain_error
 #include <string>    // std::stol, std::stod
 
-auto sourcemeta::jsontoolkit::Number::stringify(const std::int64_t value)
-    -> std::string {
-  return std::to_string(value);
+auto sourcemeta::jsontoolkit::Number::stringify(std::ostream &output,
+                                                const std::int64_t value)
+    -> void {
+  output << std::to_string(value);
 }
 
-auto sourcemeta::jsontoolkit::Number::stringify(const double value)
-    -> std::string {
-  return std::to_string(value);
+auto sourcemeta::jsontoolkit::Number::stringify(std::ostream &output,
+                                                const double value) -> void {
+  // Because std::to_string tries too hard to imitate
+  // sprintf and leaves trailing zeroes.
+  output << std::noshowpoint << value << std::showpoint;
 }
 
 static constexpr auto is_digit(const char character) -> bool {

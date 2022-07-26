@@ -2,14 +2,13 @@
 #include <jsontoolkit/json_internal.h>
 #include <stdexcept> // std::domain_error
 
-// TODO: Stringify to an std::ostream
-auto sourcemeta::jsontoolkit::Boolean::stringify(const bool value)
-    -> std::string {
-  return value
-             ? std::
-                   string{sourcemeta::jsontoolkit::Boolean::token_constant_true}
-             : std::string{
-                   sourcemeta::jsontoolkit::Boolean::token_constant_false};
+auto sourcemeta::jsontoolkit::Boolean::stringify(std::ostream &output,
+                                                 const bool value) -> void {
+  if (value) {
+    output << sourcemeta::jsontoolkit::Boolean::token_constant_true;
+  } else {
+    output << sourcemeta::jsontoolkit::Boolean::token_constant_false;
+  }
 }
 
 auto sourcemeta::jsontoolkit::Boolean::parse(std::istream &input) -> bool {
