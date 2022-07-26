@@ -165,23 +165,35 @@ private:
     }
   }
 
-  auto parse_source(std::istream &) -> void override {}
-
-  auto parse_source() -> void override {
-    const std::string_view document{
-        sourcemeta::jsontoolkit::internal::trim(this->source())};
-    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-        document.size() > 1 &&
-            document.front() == String<Source>::token_begin &&
-            document.back() == String<Source>::token_end,
-        "Invalid string");
-
+  auto parse_source(std::istream &input) -> void override {
+    sourcemeta::jsontoolkit::internal::flush_whitespace(input);
+    bool opened = false;
+    bool closed = false;
     std::ostringstream value;
-    // Strip the quotes
-    const std::string_view string_data{document.substr(1, document.size() - 2)};
-    for (std::string_view::size_type index = 0; index < string_data.size();
-         index++) {
-      std::string_view::const_reference character{string_data.at(index)};
+
+    while (!input.eof()) {
+      const char character = static_cast<char>(input.get());
+      const auto next = input.peek();
+
+      if (!opened) {
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            next != EOF, "Invalid end of string");
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            character == String<Source>::token_begin,
+            "Invalid start of string");
+        opened = true;
+        continue;
+      }
+
+      if (closed) {
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            sourcemeta::jsontoolkit::internal::is_blank(character),
+            "Invalid end of string");
+        continue;
+      } else if (character == String<Source>::token_end) {
+        closed = true;
+        continue;
+      }
 
       // There are two-character escape sequence representations of some
       // characters.
@@ -195,59 +207,57 @@ private:
       // \t represents the character tabulation character (U+0009).
       // See
       // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-      if (character == String<Source>::token_escape &&
-          index < string_data.size() - 1) {
-        std::string_view::const_reference next{string_data.at(index + 1)};
+      if (character == String<Source>::token_escape && next != EOF) {
         switch (next) {
         case '\u0022':
         case String<Source>::token_escape:
         case '\u002F':
-          value << next;
-          index += 1;
+          value << static_cast<char>(next);
+          input.ignore(1);
           continue;
         case 'b':
           value << '\b';
-          index += 1;
+          input.ignore(1);
           continue;
         case 'f':
           value << '\f';
-          index += 1;
+          input.ignore(1);
           continue;
         case 'n':
           value << '\n';
-          index += 1;
+          input.ignore(1);
           continue;
         case 'r':
           value << '\r';
-          index += 1;
+          input.ignore(1);
           continue;
         case 't':
           value << '\t';
-          index += 1;
+          input.ignore(1);
           continue;
         case 'u':
           // "\" + "u" + hex + hex + hex + hex
-          const std::size_t UNICODE_CODE_POINT_LENGTH = 6;
-          // Out of bounds
+          const auto unicode_prefix = input.get();
           sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-              index + UNICODE_CODE_POINT_LENGTH <= string_data.size(),
+              unicode_prefix == 'u', "Invalid unicode code point");
+          const auto unicode_1 = input.get();
+          const auto unicode_2 = input.get();
+          const auto unicode_3 = input.get();
+          const auto unicode_4 = input.get();
+          sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+              std::isxdigit(unicode_1) && std::isxdigit(unicode_2) &&
+                  std::isxdigit(unicode_3) && std::isxdigit(unicode_4),
               "Invalid unicode code point");
 
-          const std::string_view code_point{
-              string_data.substr(index + 2, UNICODE_CODE_POINT_LENGTH - 2)};
-          sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-              std::all_of(
-                  code_point.cbegin(), code_point.cend(),
-                  [](const char element) { return std::isxdigit(element); }),
-              "Invalid unicode code point");
+          const std::string code_point{
+              std::string{static_cast<char>(unicode_1)} +
+              static_cast<char>(unicode_2) + static_cast<char>(unicode_3) +
+              static_cast<char>(unicode_4)};
 
           // We don't need to perform any further validation here.
           // According to ECMA 404, \u can be followed by "any"
           // sequence of 4 hexadecimal digits.
-          const char new_character = static_cast<char>(
-              std::stoul(std::string{code_point}, nullptr, 16));
-          value << new_character;
-          index += UNICODE_CODE_POINT_LENGTH - 1;
+          value << static_cast<char>(std::stoul(code_point, nullptr, 16));
           continue;
         }
       }
@@ -259,7 +269,15 @@ private:
       value << character;
     }
 
+    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(closed,
+                                                    "Invalid end of string");
     this->data = std::move(value).str();
+  }
+
+  // TODO: Delete this function
+  auto parse_source() -> void override {
+    std::istringstream stream{std::string{this->source()}};
+    this->parse_source(stream);
   }
 
   auto parse_deep() -> void override {}
