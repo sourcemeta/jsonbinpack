@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
+#include <istream> // std::istream
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
@@ -183,6 +184,8 @@ protected:
   }
 
 private:
+  auto parse_source(std::istream &) -> void override {}
+
   auto parse_source() -> void override {
     const std::string_view document{
         sourcemeta::jsontoolkit::internal::trim(this->source())};

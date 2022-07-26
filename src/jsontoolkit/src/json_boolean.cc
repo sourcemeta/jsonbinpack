@@ -42,7 +42,8 @@ auto sourcemeta::jsontoolkit::Boolean::parse(std::istream &input) -> bool {
             character) {
           throw std::domain_error("Invalid truthy boolean");
         }
-      } else if (character != EOF) {
+      } else if (character != EOF &&
+                 !sourcemeta::jsontoolkit::internal::is_blank(character)) {
         throw std::domain_error("Invalid end of truthy boolean");
       }
     } else {
@@ -51,7 +52,8 @@ auto sourcemeta::jsontoolkit::Boolean::parse(std::istream &input) -> bool {
             character) {
           throw std::domain_error("Invalid falsy boolean");
         }
-      } else if (character != EOF) {
+      } else if (character != EOF &&
+                 !sourcemeta::jsontoolkit::internal::is_blank(character)) {
         throw std::domain_error("Invalid end of falsy boolean");
       }
     }

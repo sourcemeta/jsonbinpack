@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONTOOLKIT_JSON_CONTAINER_H_
 
 #include <cassert>     // assert
+#include <istream>     // std::istream
 #include <ostream>     // std::ostream
 #include <stdexcept>   // std::runtime_error
 #include <string>      // std::string
@@ -46,6 +47,8 @@ public:
 
 protected:
   // Child classes are expected to override these methods
+  virtual auto parse_source(std::istream &input) -> void = 0;
+  // TODO: Remove this function. Only rely on the istream variant
   virtual auto parse_source() -> void = 0;
   virtual auto parse_deep() -> void = 0;
   virtual auto stringify(std::ostream &stream, const std::size_t level)
@@ -74,6 +77,7 @@ protected:
       return;
     }
 
+    // TODO: Parse an std::istream of the source here
     this->parse_source();
     this->must_parse_flat = false;
   }
