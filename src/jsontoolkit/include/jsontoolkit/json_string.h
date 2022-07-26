@@ -165,9 +165,7 @@ private:
     }
   }
 
-  auto parse_source() -> void override {}
-
-  auto parse_deep() -> void override {
+  auto parse_source() -> void override {
     const std::string_view document{
         sourcemeta::jsontoolkit::internal::trim(this->source())};
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
@@ -261,6 +259,8 @@ private:
 
     this->data = std::move(value).str();
   }
+
+  auto parse_deep() -> void override {}
 
   Source data;
 };
