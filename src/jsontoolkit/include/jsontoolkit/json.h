@@ -15,6 +15,7 @@
 #include <cstddef>     // std::nullptr_t
 #include <cstdint>     // std::int64_t
 #include <iomanip>     // std::noshowpoint
+#include <istream>     // std::istream
 #include <map>         // std::map
 #include <ostream>     // std::ostream
 #include <sstream>     // std::ostringstream, std::istringstream
@@ -886,27 +887,33 @@ protected:
   }
 
 private:
-  auto parse_source() -> void override {
-    const std::string_view document =
-        sourcemeta::jsontoolkit::internal::trim(this->source());
+  auto parse_source(std::istream &input) -> void override {
+    sourcemeta::jsontoolkit::internal::flush_whitespace(input);
     std::variant<std::int64_t, double> number_result;
-    std::istringstream stream{std::string{document}};
-
-    switch (document.front()) {
+    switch (input.peek()) {
     case sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<Source>,
                                         Source>::token_begin:
+      // TODO: Pass the istream instead once this data type supports
+      // stream-based parsing
       this->data =
           sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<Source>,
-                                         Source>{Source{document}};
+                                         Source>{
+              Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
       break;
     case sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
                                          Source>::token_begin:
+      // TODO: Pass the istream instead once this data type supports
+      // stream-based parsing
       this->data =
           sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
-                                          Source>{Source{document}};
+                                          Source>{
+              Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
       break;
     case sourcemeta::jsontoolkit::String<Source>::token_begin:
-      this->data = sourcemeta::jsontoolkit::String<Source>{Source{document}};
+      // TODO: Pass the istream instead once this data type supports
+      // stream-based parsing
+      this->data = sourcemeta::jsontoolkit::String<Source>{
+          Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
       break;
     case sourcemeta::jsontoolkit::Number::token_minus_sign:
     case sourcemeta::jsontoolkit::Number::token_number_zero:
@@ -919,7 +926,7 @@ private:
     case sourcemeta::jsontoolkit::Number::token_number_seven:
     case sourcemeta::jsontoolkit::Number::token_number_eight:
     case sourcemeta::jsontoolkit::Number::token_number_nine:
-      number_result = sourcemeta::jsontoolkit::Number::parse(stream);
+      number_result = sourcemeta::jsontoolkit::Number::parse(input);
       if (std::holds_alternative<std::int64_t>(number_result)) {
         this->data = std::get<std::int64_t>(number_result);
       } else {
@@ -928,15 +935,22 @@ private:
 
       break;
     case sourcemeta::jsontoolkit::Null::token_constant.front():
-      this->data = sourcemeta::jsontoolkit::Null::parse(stream);
+      this->data = sourcemeta::jsontoolkit::Null::parse(input);
       break;
     case sourcemeta::jsontoolkit::Boolean::token_constant_true.front():
     case sourcemeta::jsontoolkit::Boolean::token_constant_false.front():
-      this->data = sourcemeta::jsontoolkit::Boolean::parse(stream);
+      this->data = sourcemeta::jsontoolkit::Boolean::parse(input);
       break;
     default:
       throw std::domain_error("Invalid document");
     }
+  }
+
+  // TODO: Remove this function once we have parse_source(std::istream &)
+  // everywhere
+  auto parse_source() -> void override {
+    std::istringstream stream{std::string{this->source()}};
+    this->parse_source(stream);
   }
 
   auto parse_deep() -> void override {

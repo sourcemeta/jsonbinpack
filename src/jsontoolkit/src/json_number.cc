@@ -136,6 +136,8 @@ auto sourcemeta::jsontoolkit::Number::parse(std::istream &input)
       if (index == 0) {
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             next == EOF ||
+                sourcemeta::jsontoolkit::internal::is_blank(
+                    static_cast<char>(next)) ||
                 next == sourcemeta::jsontoolkit::Number::token_decimal_point ||
                 next == sourcemeta::jsontoolkit::Number::token_exponent_upper ||
                 next == sourcemeta::jsontoolkit::Number::token_exponent_lower,

@@ -165,6 +165,8 @@ private:
     }
   }
 
+  auto parse_source(std::istream &) -> void override {}
+
   auto parse_source() -> void override {
     const std::string_view document{
         sourcemeta::jsontoolkit::internal::trim(this->source())};

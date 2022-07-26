@@ -20,7 +20,8 @@ auto sourcemeta::jsontoolkit::Null::parse(std::istream &input)
           character) {
         throw std::domain_error("Invalid null");
       }
-    } else if (character != EOF) {
+    } else if (character != EOF &&
+               !sourcemeta::jsontoolkit::internal::is_blank(character)) {
       throw std::domain_error("Invalid end of null");
     }
 
