@@ -2,8 +2,8 @@
 #include <jsontoolkit/json_null.h>
 #include <stdexcept> // std::domain_error
 
-auto sourcemeta::jsontoolkit::Null::stringify() -> std::string {
-  return std::string{sourcemeta::jsontoolkit::Null::token_constant};
+auto sourcemeta::jsontoolkit::Null::stringify(std::ostream &output) -> void {
+  output << sourcemeta::jsontoolkit::Null::token_constant;
 }
 
 auto sourcemeta::jsontoolkit::Null::parse(std::istream &input)

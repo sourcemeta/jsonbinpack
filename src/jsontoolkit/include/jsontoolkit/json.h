@@ -851,19 +851,19 @@ protected:
     this->must_be_fully_parsed();
     switch (this->data.index()) {
     case static_cast<std::size_t>(JSON<Source>::types::boolean):
-      stream << (std::get<bool>(this->data) ? "true" : "false");
+      sourcemeta::jsontoolkit::Boolean::stringify(stream,
+                                                  std::get<bool>(this->data));
       break;
     case static_cast<std::size_t>(JSON<Source>::types::null):
-      stream << "null";
+      sourcemeta::jsontoolkit::Null::stringify(stream);
       break;
     case static_cast<std::size_t>(JSON<Source>::types::integer):
-      stream << std::to_string(std::get<std::int64_t>(this->data));
+      sourcemeta::jsontoolkit::Number::stringify(
+          stream, std::get<std::int64_t>(this->data));
       break;
     case static_cast<std::size_t>(JSON<Source>::types::real):
-      // Because std::to_string tries too hard to imitate
-      // sprintf and leaves trailing zeroes.
-      stream << std::noshowpoint << std::get<double>(this->data)
-             << std::showpoint;
+      sourcemeta::jsontoolkit::Number::stringify(stream,
+                                                 std::get<double>(this->data));
       break;
     case static_cast<std::size_t>(JSON<Source>::types::string):
       std::get<sourcemeta::jsontoolkit::String<Source>>(this->data)

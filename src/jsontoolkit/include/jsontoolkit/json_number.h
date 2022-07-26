@@ -3,6 +3,7 @@
 
 #include <cstdint>     // std::int64_t
 #include <istream>     // std::istream
+#include <ostream>     // std::ostream
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <variant>     // std::variant
@@ -34,8 +35,8 @@ const char token_number_eight = '\u0038';
 const char token_number_nine = '\u0039';
 
 auto parse(std::istream &input) -> std::variant<std::int64_t, double>;
-auto stringify(std::int64_t value) -> std::string;
-auto stringify(double value) -> std::string;
+auto stringify(std::ostream &output, std::int64_t value) -> void;
+auto stringify(std::ostream &output, double value) -> void;
 
 } // namespace sourcemeta::jsontoolkit::Number
 
