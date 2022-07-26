@@ -1,6 +1,8 @@
 #include <jsontoolkit/json_boolean.h>
+#include <jsontoolkit/json_internal.h>
 #include <stdexcept> // std::domain_error
 
+// TODO: Stringify to an std::ostream
 auto sourcemeta::jsontoolkit::Boolean::stringify(const bool value)
     -> std::string {
   return value
@@ -10,15 +12,53 @@ auto sourcemeta::jsontoolkit::Boolean::stringify(const bool value)
                    sourcemeta::jsontoolkit::Boolean::token_constant_false};
 }
 
-auto sourcemeta::jsontoolkit::Boolean::parse(const std::string &document)
-    -> bool {
-  if (document == sourcemeta::jsontoolkit::Boolean::token_constant_true) {
-    return true;
+auto sourcemeta::jsontoolkit::Boolean::parse(std::istream &input) -> bool {
+  const auto size_false =
+      sourcemeta::jsontoolkit::Boolean::token_constant_false.size();
+  const auto size_true =
+      sourcemeta::jsontoolkit::Boolean::token_constant_true.size();
+
+  sourcemeta::jsontoolkit::internal::flush_whitespace(input);
+
+  std::size_t index{0};
+  bool result = false;
+
+  while (!input.eof()) {
+    const char character = static_cast<char>(input.get());
+
+    if (index == 0) {
+      if (character ==
+          sourcemeta::jsontoolkit::Boolean::token_constant_false.front()) {
+        result = false;
+      } else if (character ==
+                 sourcemeta::jsontoolkit::Boolean::token_constant_true
+                     .front()) {
+        result = true;
+      } else {
+        throw std::domain_error("Invalid boolean");
+      }
+    } else if (result) {
+      if (index < size_true) {
+        if (sourcemeta::jsontoolkit::Boolean::token_constant_true.at(index) !=
+            character) {
+          throw std::domain_error("Invalid truthy boolean");
+        }
+      } else if (character != EOF) {
+        throw std::domain_error("Invalid end of truthy boolean");
+      }
+    } else {
+      if (index < size_false) {
+        if (sourcemeta::jsontoolkit::Boolean::token_constant_false.at(index) !=
+            character) {
+          throw std::domain_error("Invalid falsy boolean");
+        }
+      } else if (character != EOF) {
+        throw std::domain_error("Invalid end of falsy boolean");
+      }
+    }
+
+    index++;
   }
 
-  if (document == sourcemeta::jsontoolkit::Boolean::token_constant_false) {
-    return false;
-  }
-
-  throw std::domain_error("Invalid boolean document");
+  return result;
 }
