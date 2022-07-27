@@ -49,4 +49,5 @@ clean:
 jekyll:
 	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target bundler
-	$(BUNDLE) exec jekyll serve --source www --destination build/$(PRESET)/www --watch --incremental --trace
+	$(BUNDLE) exec jekyll serve --watch --incremental --trace \
+		--source www --destination build/$(PRESET)/www
