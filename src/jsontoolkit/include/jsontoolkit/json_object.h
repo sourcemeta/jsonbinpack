@@ -160,16 +160,11 @@ protected:
   }
 
 private:
-  auto parse_source(std::istream &) -> void override {}
-
-  auto parse_source() -> void override {
-    const std::string_view document{
-        sourcemeta::jsontoolkit::internal::trim(this->source())};
-    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-        document.front() == Object<Wrapper, Source>::token_begin &&
-            document.back() == Object<Wrapper, Source>::token_end,
-        "Invalid object");
-
+  auto parse_source(std::istream &input) -> void override {
+    const std::size_t ignored =
+        sourcemeta::jsontoolkit::internal::flush_whitespace(input);
+    char previous = EOF;
+    std::size_t index{0};
     std::string_view::size_type key_start_index = 0;
     std::string_view::size_type key_end_index = 0;
     std::string_view::size_type value_start_index = 0;
@@ -178,11 +173,22 @@ private:
     bool is_string = false;
     bool expecting_value_end = false;
     bool expecting_element_after_delimiter = false;
+    bool ended = false;
     std::map<Source, Wrapper> result{};
 
-    for (std::string_view::size_type index = 1; index < document.size();
-         index++) {
-      std::string_view::const_reference character{document.at(index)};
+    const auto front = input.get();
+    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+        front == Object<Wrapper, Source>::token_begin,
+        "Invalid start of object");
+    previous = static_cast<char>(front);
+    index += 1;
+
+    while (!input.eof()) {
+      const char character = static_cast<char>(input.get());
+      if (character == EOF) {
+        break;
+      }
+
       const bool is_protected_section =
           array_level > 0 || is_string || level > 1;
 
@@ -195,8 +201,7 @@ private:
         break;
       case sourcemeta::jsontoolkit::String<Source>::token_begin:
         // Don't do anything if this is a escaped quote
-        if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String<Source>::token_escape) {
+        if (previous == sourcemeta::jsontoolkit::String<Source>::token_escape) {
           break;
         }
 
@@ -223,6 +228,11 @@ private:
         break;
       case Object<Wrapper, Source>::token_end:
         level -= 1;
+
+        if (level == 0) {
+          ended = true;
+        }
+
         if (is_protected_section) {
           break;
         }
@@ -239,10 +249,11 @@ private:
         // We have a key and the start of the value, but the object ended
         if (key_start_index != 0 && key_end_index != 0 &&
             value_start_index != 0) {
-          result.insert({Source{document.substr(
-                             key_start_index, key_end_index - key_start_index)},
-                         Wrapper{Source{document.substr(
-                             value_start_index, index - value_start_index)}}});
+          result.insert(
+              {Source{this->source().substr(ignored + key_start_index,
+                                            key_end_index - key_start_index)},
+               Wrapper{Source{this->source().substr(
+                   ignored + value_start_index, index - value_start_index)}}});
           value_start_index = 0;
           key_start_index = 0;
           key_end_index = 0;
@@ -264,10 +275,11 @@ private:
         // We have a key and the start of the value, but we found a comma
         if (key_start_index != 0 && key_end_index != 0 &&
             value_start_index != 0) {
-          result.insert({Source{document.substr(
-                             key_start_index, key_end_index - key_start_index)},
-                         Wrapper{Source{document.substr(
-                             value_start_index, index - value_start_index)}}});
+          result.insert(
+              {Source{this->source().substr(ignored + key_start_index,
+                                            key_end_index - key_start_index)},
+               Wrapper{Source{this->source().substr(
+                   ignored + value_start_index, index - value_start_index)}}});
           value_start_index = 0;
           key_start_index = 0;
           key_end_index = 0;
@@ -291,6 +303,12 @@ private:
         expecting_value_end = true;
         break;
       default:
+        if (ended && character != EOF) {
+          sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+              sourcemeta::jsontoolkit::internal::is_blank(character),
+              "Invalid end of object");
+        }
+
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             key_start_index != 0 ||
                 sourcemeta::jsontoolkit::internal::is_blank(character),
@@ -317,6 +335,9 @@ private:
 
         break;
       }
+
+      previous = character;
+      index++;
     }
 
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(

@@ -274,12 +274,6 @@ private:
     this->data = std::move(value).str();
   }
 
-  // TODO: Delete this function
-  auto parse_source() -> void override {
-    std::istringstream stream{std::string{this->source()}};
-    this->parse_source(stream);
-  }
-
   auto parse_deep() -> void override {}
 
   Source data;

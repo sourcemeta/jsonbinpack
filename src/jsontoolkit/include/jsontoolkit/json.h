@@ -905,8 +905,7 @@ private:
       // stream-based parsing
       this->data =
           sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
-                                          Source>{
-              Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
+                                          Source>{Source{this->source()}};
       break;
     case sourcemeta::jsontoolkit::String<Source>::token_begin:
       // TODO: Pass the istream instead once this data type supports
@@ -943,13 +942,6 @@ private:
     default:
       throw std::domain_error("Invalid document");
     }
-  }
-
-  // TODO: Remove this function once we have parse_source(std::istream &)
-  // everywhere
-  auto parse_source() -> void override {
-    std::istringstream stream{std::string{this->source()}};
-    this->parse_source(stream);
   }
 
   auto parse_deep() -> void override {
