@@ -52,7 +52,6 @@ endif()
 # Testing
 if(JSONBINPACK_TESTS)
   enable_testing()
-  include(CTest)
   set(BUILD_GMOCK OFF)
   set(INSTALL_GTEST OFF)
   include(GoogleTest)

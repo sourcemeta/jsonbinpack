@@ -53,7 +53,4 @@ jobs:
       - run: cmake --build --preset release --target shellcheck
       - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release
-      - if: github.ref == 'refs/heads/master'
-        run: ctest --test-dir build/release --dashboard Continuous
-      - if: github.ref != 'refs/heads/master'
-        run: ctest --test-dir build/release --dashboard Experimental
+      - run: ctest --preset release
