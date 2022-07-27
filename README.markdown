@@ -46,3 +46,5 @@ ctest --preset <preset>
 
 Once the project has been built, the JSON BinPack command-line tool can be
 found at `build/<preset>/src/cli/jsonbinpack`.
+
+Find our CDash dashboard [here](https://my.cdash.org/index.php?project=JSON+BinPack).
