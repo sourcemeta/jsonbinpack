@@ -4,6 +4,7 @@
 #include <cassert>     // assert
 #include <istream>     // std::istream
 #include <ostream>     // std::ostream
+#include <sstream>     // std::istringstream
 #include <stdexcept>   // std::runtime_error
 #include <string>      // std::string
 #include <string_view> // std::string_view
@@ -48,8 +49,6 @@ public:
 protected:
   // Child classes are expected to override these methods
   virtual auto parse_source(std::istream &input) -> void = 0;
-  // TODO: Remove this function. Only rely on the istream variant
-  virtual auto parse_source() -> void = 0;
   virtual auto parse_deep() -> void = 0;
   virtual auto stringify(std::ostream &stream, const std::size_t level)
       -> std::ostream & = 0;
@@ -77,8 +76,8 @@ protected:
       return;
     }
 
-    // TODO: Parse an std::istream of the source here
-    this->parse_source();
+    std::istringstream stream{std::string{this->source()}};
+    this->parse_source(stream);
     this->must_parse_flat = false;
   }
 
