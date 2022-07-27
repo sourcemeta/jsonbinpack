@@ -68,10 +68,9 @@ JSON BinPack implements a diverse set of encodings that are space-efficient in
 different scenarios. The *Encoder* component consists of a set of parameterized
 serialization and deserialization procedures targetting data types given
 different sets of contrains.  The set of serialization and deserialization
-procedures defined in the *Encoder* component are bounded by the JSON
-\cite{ECMA-404} data model. However, the set of serialization and
-deserialization procedures are agnostic to the schema language used to validate
-and describe the input data.
+procedures defined in the *Encoder* component are bounded by the JSON data
+model. However, the set of serialization and deserialization procedures are
+agnostic to the schema language used to validate and describe the input data.
 
 ![JSON BinPack C4 Encoder Diagram]({{ site.url }}/assets/images/c4-jsonbinpack-encoder.png)
 
