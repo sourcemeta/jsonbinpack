@@ -912,8 +912,8 @@ private:
     case sourcemeta::jsontoolkit::String<Source>::token_begin:
       // TODO: Pass the istream instead once this data type supports
       // stream-based parsing
-      this->data = sourcemeta::jsontoolkit::String<Source>{
-          Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
+      this->data =
+          sourcemeta::jsontoolkit::String<Source>{Source{this->source()}};
       break;
     case sourcemeta::jsontoolkit::Number::token_minus_sign:
     case sourcemeta::jsontoolkit::Number::token_number_zero:
