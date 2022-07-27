@@ -897,8 +897,7 @@ private:
       // stream-based parsing
       this->data =
           sourcemeta::jsontoolkit::Array<sourcemeta::jsontoolkit::JSON<Source>,
-                                         Source>{
-              Source{sourcemeta::jsontoolkit::internal::trim(this->source())}};
+                                         Source>{Source{this->source()}};
       break;
     case sourcemeta::jsontoolkit::Object<sourcemeta::jsontoolkit::JSON<Source>,
                                          Source>::token_begin:

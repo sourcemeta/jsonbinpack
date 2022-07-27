@@ -184,19 +184,11 @@ protected:
   }
 
 private:
-  auto parse_source(std::istream &) -> void override {}
-
-  auto parse_source() -> void override {
-    const std::string_view document{
-        sourcemeta::jsontoolkit::internal::trim(this->source())};
-    sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-        document.front() ==
-                sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin &&
-            document.back() ==
-                sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_end,
-        "Invalid array");
-
-    const std::string_view::size_type size{document.size()};
+  auto parse_source(std::istream &input) -> void override {
+    const std::size_t ignored =
+        sourcemeta::jsontoolkit::internal::flush_whitespace(input);
+    char previous = EOF;
+    std::size_t index{0};
     std::string_view::size_type element_start_index = 0;
     std::string_view::size_type element_cursor = 0;
     std::string_view::size_type level = 0;
@@ -204,16 +196,23 @@ private:
     bool is_string = false;
     bool expecting_value = false;
     bool is_protected_section = false;
+    bool ended = false;
 
-    for (std::string_view::size_type index = 0; index < size; index++) {
-      std::string_view::const_reference character{document.at(index)};
+    while (!input.eof()) {
+      const char character = static_cast<char>(input.get());
       is_protected_section = is_string || level > 1 || object_level > 0;
+
+      if (index == 0) {
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            character ==
+                sourcemeta::jsontoolkit::Array<Wrapper, Source>::token_begin,
+            "Invalid array");
+      }
 
       switch (character) {
       case sourcemeta::jsontoolkit::String<Source>::token_begin:
         // Don't do anything if this is a escaped quote
-        if (document.at(index - 1) ==
-            sourcemeta::jsontoolkit::String<Source>::token_escape) {
+        if (previous == sourcemeta::jsontoolkit::String<Source>::token_escape) {
           break;
         }
 
@@ -272,11 +271,15 @@ private:
 
         // Push the last element, if any, into the array
         if (level == 0 && element_start_index > 0) {
-          this->data.push_back(Wrapper(Source{document.substr(
-              element_start_index, index - element_start_index)}));
+          this->data.push_back(Wrapper(Source{this->source().substr(
+              ignored + element_start_index, index - element_start_index)}));
           element_start_index = 0;
           element_cursor = 0;
           expecting_value = false;
+        }
+
+        if (level == 0) {
+          ended = true;
         }
 
         break;
@@ -289,9 +292,8 @@ private:
             element_start_index != 0, "No array value before delimiter");
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             element_start_index != index, "Invalid array value");
-
-        this->data.push_back(Wrapper(Source{document.substr(
-            element_start_index, index - element_start_index)}));
+        this->data.push_back(Wrapper(Source{this->source().substr(
+            ignored + element_start_index, index - element_start_index)}));
         element_start_index = 0;
         element_cursor = index + 1;
         // We expect another value after a delimiter by definition
@@ -302,8 +304,12 @@ private:
           break;
         }
 
-        // Handle whitespace between array items
-        if (element_cursor == 0) {
+        if (ended && character != EOF) {
+          sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+              sourcemeta::jsontoolkit::internal::is_blank(character),
+              "Invalid end of array");
+          // Handle whitespace between array items
+        } else if (element_cursor == 0) {
           element_cursor = index;
         } else if (element_cursor > 0 && element_start_index == 0) {
           if (sourcemeta::jsontoolkit::internal::is_blank(character)) {
@@ -316,10 +322,19 @@ private:
 
         break;
       }
+
+      previous = character;
+      index++;
     }
 
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         level == 0 && !is_protected_section, "Unbalanced array");
+  }
+
+  // TODO: Delete this function
+  auto parse_source() -> void override {
+    std::istringstream stream{std::string{this->source()}};
+    this->parse_source(stream);
   }
 
   auto parse_deep() -> void override {
