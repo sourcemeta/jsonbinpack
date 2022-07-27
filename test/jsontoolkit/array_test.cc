@@ -89,6 +89,13 @@ TEST(Array, single_element_with_inner_space) {
   EXPECT_EQ(document.at(0).to_boolean(), true);
 }
 
+TEST(Array, single_element_with_padding) {
+  sourcemeta::jsontoolkit::JSON<std::string> document{"   [ true ]   "};
+  EXPECT_TRUE(document.is_array());
+  EXPECT_EQ(document.size(), 1);
+  EXPECT_EQ(document.at(0).to_boolean(), true);
+}
+
 TEST(Array, two_elements_with_spacing) {
   sourcemeta::jsontoolkit::JSON<std::string> document{
       "[   true  ,   false   ]"};

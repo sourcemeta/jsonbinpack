@@ -18,7 +18,8 @@ const char token_line_feed = '\u000A';
 const char token_carriage_return = '\u000D';
 const char token_space = '\u0020';
 
-constexpr auto flush_whitespace(std::istream &input) -> void {
+constexpr auto flush_whitespace(std::istream &input) -> std::size_t {
+  std::size_t ignored{0};
   while (!input.eof()) {
     switch (input.peek()) {
     case sourcemeta::jsontoolkit::internal::token_tabulation:
@@ -26,11 +27,14 @@ constexpr auto flush_whitespace(std::istream &input) -> void {
     case sourcemeta::jsontoolkit::internal::token_carriage_return:
     case sourcemeta::jsontoolkit::internal::token_space:
       input.ignore(1);
+      ignored++;
       continue;
     default:
-      return;
+      return ignored;
     }
   }
+
+  return ignored;
 }
 
 // Insignificant whitespace is allowed before or after any token. Whitespace is
