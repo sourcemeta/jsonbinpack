@@ -178,6 +178,7 @@ private:
     bool is_string = false;
     bool expecting_value_end = false;
     bool expecting_element_after_delimiter = false;
+    std::map<Source, Wrapper> result{};
 
     for (std::string_view::size_type index = 1; index < document.size();
          index++) {
@@ -238,11 +239,10 @@ private:
         // We have a key and the start of the value, but the object ended
         if (key_start_index != 0 && key_end_index != 0 &&
             value_start_index != 0) {
-          this->data.insert(
-              {Source{document.substr(key_start_index,
-                                      key_end_index - key_start_index)},
-               Wrapper{Source{document.substr(value_start_index,
-                                              index - value_start_index)}}});
+          result.insert({Source{document.substr(
+                             key_start_index, key_end_index - key_start_index)},
+                         Wrapper{Source{document.substr(
+                             value_start_index, index - value_start_index)}}});
           value_start_index = 0;
           key_start_index = 0;
           key_end_index = 0;
@@ -264,11 +264,10 @@ private:
         // We have a key and the start of the value, but we found a comma
         if (key_start_index != 0 && key_end_index != 0 &&
             value_start_index != 0) {
-          this->data.insert(
-              {Source{document.substr(key_start_index,
-                                      key_end_index - key_start_index)},
-               Wrapper{Source{document.substr(value_start_index,
-                                              index - value_start_index)}}});
+          result.insert({Source{document.substr(
+                             key_start_index, key_end_index - key_start_index)},
+                         Wrapper{Source{document.substr(
+                             value_start_index, index - value_start_index)}}});
           value_start_index = 0;
           key_start_index = 0;
           key_end_index = 0;
@@ -322,6 +321,11 @@ private:
 
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         array_level == 0 && !is_string && level == 0, "Unbalanced object");
+
+    // Assign the result at the very end to prevent
+    // this class from getting into an inconsistent
+    // state if parsing fails half-way through.
+    this->data = std::move(result);
   }
 
   auto parse_deep() -> void override {

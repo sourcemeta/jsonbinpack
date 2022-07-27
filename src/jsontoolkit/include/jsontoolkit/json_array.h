@@ -197,6 +197,7 @@ private:
     bool expecting_value = false;
     bool is_protected_section = false;
     bool ended = false;
+    std::vector<Wrapper> result{};
 
     while (!input.eof()) {
       const char character = static_cast<char>(input.get());
@@ -271,7 +272,7 @@ private:
 
         // Push the last element, if any, into the array
         if (level == 0 && element_start_index > 0) {
-          this->data.push_back(Wrapper(Source{this->source().substr(
+          result.push_back(Wrapper(Source{this->source().substr(
               ignored + element_start_index, index - element_start_index)}));
           element_start_index = 0;
           element_cursor = 0;
@@ -292,7 +293,7 @@ private:
             element_start_index != 0, "No array value before delimiter");
         sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
             element_start_index != index, "Invalid array value");
-        this->data.push_back(Wrapper(Source{this->source().substr(
+        result.push_back(Wrapper(Source{this->source().substr(
             ignored + element_start_index, index - element_start_index)}));
         element_start_index = 0;
         element_cursor = index + 1;
@@ -329,6 +330,11 @@ private:
 
     sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
         level == 0 && !is_protected_section, "Unbalanced array");
+
+    // Assign the result at the very end to prevent
+    // this class from getting into an inconsistent
+    // state if parsing fails half-way through.
+    this->data = std::move(result);
   }
 
   // TODO: Delete this function
