@@ -11,7 +11,8 @@ jobs:
       - run: cmake --version
       - run: cmake --preset release --log-context
       - run: cmake --build --preset release --target bundler
-      - run: cmake --build --preset release --target jekyll
+      # Jekyll is often flaky on GitHub Actions
+      - run: ./scripts/retry.sh cmake --build --preset release --target jekyll
       - run: cmake --build --preset release --target doxygen
       # Only deploy website from the master branch
       - if: github.ref == 'refs/heads/master'
