@@ -1,0 +1,8 @@
+add_executable(sourcemeta_jsonbinpack_encoder_unit
+  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  zigzag_test.cc)
+add_executable(sourcemeta::jsonbinpack::encoder_unit ALIAS sourcemeta_jsonbinpack_encoder_unit)
+target_link_libraries(sourcemeta_jsonbinpack_encoder_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_encoder_unit PRIVATE sourcemeta::jsonbinpack::encoder)
+target_link_libraries(sourcemeta_jsonbinpack_encoder_unit PRIVATE sourcemeta::jsontoolkit)
+gtest_discover_tests(sourcemeta_jsonbinpack_encoder_unit)
