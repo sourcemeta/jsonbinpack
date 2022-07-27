@@ -107,7 +107,7 @@ layout: base
 
 <div class="bg-light border my-3 mt-0 my-lg-5 py-5">
   <div class="container px-4">
-    <h2 class="fw-bold">Frequently Asked Questions</h2>
+    <h2 class="fw-bold" id="faq">Frequently Asked Questions</h2>
     <h4 class="mt-4 fw-light">How does JSON BinPack compare to compression formats like GZIP?</h4>
     <p>Our <a href="https://benchmark.sourcemeta.com?utm_source=jsonbinpack">reproducible benchmark study</a> shows that the semantic information provided by detailed schema definitions enables a serialization format such as JSON BinPack to often outperform general-purpose compressors configured with even their highest supported compression levels, specially for small and medium-sized JSON documents. For large JSON documents, you can experiment combining JSON BinPack with a compression format to potentially achieve greater space-efficiency.</p>
 
@@ -126,7 +126,7 @@ layout: base
 </div>
 
 <div class="container px-4 py-4">
-  <h2 class="fw-bold mb-4">Research</h2>
+  <h2 class="fw-bold mb-4" id="research">Research</h2>
   <p>JSON BinPack is the result of extensive binary serialization research at the Department of Computer Science of <a class="text-secondary" href="https://www.cs.ox.ac.uk">University of Oxford</a>. The project is led by <a class="text-secondary" href="https://www.jviotti.com?utm_source=jsonbinpack">Juan Cruz Viotti</a>, a computer scientist with first-hand exposure at the problem of space-efficient network communication in the context of IoT and APIs, under the supervision of Mital Kinderkhedia.</p>
   <table class="table table-borderless">
     <tbody>
