@@ -1,0 +1,5 @@
+add_library(sourcemeta_jsonbinpack_decoder INTERFACE)
+add_library(sourcemeta::jsonbinpack::decoder ALIAS sourcemeta_jsonbinpack_decoder)
+target_include_directories(sourcemeta_jsonbinpack_decoder INTERFACE
+  "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(sourcemeta_jsonbinpack_decoder INTERFACE sourcemeta::jsontoolkit)
