@@ -70,3 +70,32 @@ img {
 .sidebar {
   max-width: 270px !important;
 }
+
+article table {
+  @extend .table;
+  @extend .table-striped;
+  @extend .table-sm;
+}
+
+// Monospace headers are not highlighted
+article {
+  h1 > code,
+  h2 > code,
+  h3 > code,
+  h4 > code,
+  h5 > code,
+  h6 > code {
+    @extend .text-dark;
+  }
+}
+
+.language-plaintext > .highlight {
+  @extend .bg-light;
+  @extend .border;
+  @extend .px-3;
+  @extend .py-2;
+}
+
+.language-plaintext .highlight {
+  @extend .mb-0;
+}
