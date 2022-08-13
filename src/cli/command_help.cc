@@ -10,6 +10,11 @@ static const char *USAGE_DETAILS = R"EOF(
                                and print the result to stdout. If a path to
                                a schema is not provided, the schema will
                                be read from standard input.
+
+   compile [schema.json]       Compile a given JSON Schema definition
+                               into an encoding schema and print the result to
+                               stdout. If a path to a schema is not provided,
+                               the schema will be read from standard input.
 )EOF";
 
 auto sourcemeta::jsonbinpack::cli::help(const std::string &program) -> int {

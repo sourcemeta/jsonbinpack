@@ -5,6 +5,8 @@
 
 namespace sourcemeta::jsontoolkit::schema::draft2020_12 {
 
+const std::string metaschema{"https://json-schema.org/draft/2020-12/schema"};
+
 namespace vocabularies {
 const std::string core{"https://json-schema.org/draft/2020-12/vocab/core"};
 const std::string applicator{

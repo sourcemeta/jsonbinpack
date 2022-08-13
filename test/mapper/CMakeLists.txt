@@ -1,0 +1,8 @@
+add_executable(sourcemeta_jsonbinpack_mapper_unit mapper_test.cc)
+add_executable(sourcemeta::jsonbinpack::mapper_unit ALIAS sourcemeta_jsonbinpack_mapper_unit)
+target_compile_definitions(sourcemeta_jsonbinpack_mapper_unit
+  PRIVATE TEST_BASE_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta::jsonbinpack::mapper)
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta::jsontoolkit)
+gtest_discover_tests(sourcemeta_jsonbinpack_mapper_unit)
