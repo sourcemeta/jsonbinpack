@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <jsonbinpack/encoder/utils/zigzag.h>
+#include <jsonbinpack/encoder/utils/zigzag_encoder.h>
 #include <jsontoolkit/json.h>
 
 TEST(Encoder, zigzag_int_0_0) {
