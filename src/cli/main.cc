@@ -44,6 +44,15 @@ static auto cli_main(const std::string &program, const std::string &command,
     return sourcemeta::jsonbinpack::cli::canonicalize(arguments.at(0));
   }
 
+  if (command == "compile") {
+    if (arguments.empty()) {
+      return sourcemeta::jsonbinpack::cli::compile();
+    }
+
+    assert_arguments(command, arguments, 1);
+    return sourcemeta::jsonbinpack::cli::compile(arguments.at(0));
+  }
+
   std::cerr << "Unknown command: " << command << "\n";
   return 1;
 }
