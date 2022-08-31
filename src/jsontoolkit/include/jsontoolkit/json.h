@@ -267,9 +267,11 @@ public:
     return this->operator==(static_cast<std::int64_t>(value));
   }
 
+#if defined(__APPLE__)
   auto operator==(long value) const -> bool {
     return this->operator==(static_cast<std::int64_t>(value));
   }
+#endif
 
   auto operator==(double value) const -> bool {
     this->must_be_fully_parsed();

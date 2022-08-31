@@ -27,14 +27,14 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       options.multiplier == 1 || options.multiplier == -1
           ? options.minimum
           : static_cast<std::int64_t>(
-                std::ceil(options.minimum /
+                std::ceil(static_cast<double>(options.minimum) /
                           static_cast<double>(std::abs(options.multiplier))))};
 #ifndef NDEBUG
   const std::int64_t enum_maximum{
       options.multiplier == 1 || options.multiplier == -1
           ? options.maximum
           : static_cast<std::int64_t>(
-                std::floor(options.maximum /
+                std::floor(static_cast<double>(options.maximum) /
                            static_cast<double>(std::abs(options.multiplier))))};
 #endif
   assert(enum_maximum - enum_minimum <=
