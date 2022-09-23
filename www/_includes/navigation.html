@@ -27,7 +27,11 @@
       <div class="navbar-nav align-items-center">
         <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.repository }}/discussions">Discussions</a>
         <a class="nav-link ms-2 d-none d-md-inline-block" href="{% link _docs/architecture.markdown %}">Docs</a>
+        {% if page.title %}
+        <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.url }}#research">Research</a>
+        {% else %}
         <a class="nav-link ms-2 d-none d-md-inline-block" href="#research">Research</a>
+        {% endif %}
 
         <a class="nav-link ms-2" href="{{ site.repository }}">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
