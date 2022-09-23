@@ -23,24 +23,22 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
   assert(options.minimum <= value);
   assert(value <= options.maximum);
   assert(value % options.multiplier == 0);
+  const std::int64_t multiplier = std::abs(options.multiplier);
   const std::int64_t enum_minimum{
-      options.multiplier == 1 || options.multiplier == -1
-          ? options.minimum
-          : static_cast<std::int64_t>(
-                std::ceil(static_cast<double>(options.minimum) /
-                          static_cast<double>(std::abs(options.multiplier))))};
+      multiplier == 1 ? options.minimum
+                      : static_cast<std::int64_t>(
+                            std::ceil(static_cast<double>(options.minimum) /
+                                      static_cast<double>(multiplier)))};
 #ifndef NDEBUG
   const std::int64_t enum_maximum{
-      options.multiplier == 1 || options.multiplier == -1
-          ? options.maximum
-          : static_cast<std::int64_t>(
-                std::floor(static_cast<double>(options.maximum) /
-                           static_cast<double>(std::abs(options.multiplier))))};
+      multiplier == 1 ? options.maximum
+                      : static_cast<std::int64_t>(
+                            std::floor(static_cast<double>(options.maximum) /
+                                       static_cast<double>(multiplier)))};
 #endif
   assert(enum_maximum - enum_minimum <=
          std::numeric_limits<std::uint8_t>::max());
-  stream.put(static_cast<std::int8_t>((value / std::abs(options.multiplier)) -
-                                      enum_minimum));
+  stream.put(static_cast<std::int8_t>((value / multiplier) - enum_minimum));
   return stream;
 }
 
