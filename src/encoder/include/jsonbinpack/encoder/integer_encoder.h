@@ -1,6 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODER_INTEGER_H_
 #define SOURCEMETA_JSONBINPACK_ENCODER_INTEGER_H_
 
+#include "utils/varint_encoder.h"
+
 #include <jsonbinpack/options/number.h>
 #include <jsontoolkit/json.h>
 
@@ -40,6 +42,27 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
          std::numeric_limits<std::uint8_t>::max());
   stream.put(static_cast<std::int8_t>((value / multiplier) - enum_minimum));
   return stream;
+}
+
+template <typename Source, typename CharT, typename Traits>
+auto FLOOR_MULTIPLE_ENUM_VARINT(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document.is_integer());
+  const std::int64_t value{document.to_integer()};
+  assert(options.minimum <= value);
+  assert(value % options.multiplier == 0);
+  const std::int64_t multiplier = std::abs(options.multiplier);
+  if (multiplier == 1) {
+    return utils::varint_encode(stream, value - options.minimum);
+  }
+
+  return utils::varint_encode(
+      stream, (value / multiplier) - static_cast<std::int64_t>(std::ceil(
+                                         static_cast<double>(options.minimum) /
+                                         static_cast<double>(multiplier))));
 }
 
 } // namespace sourcemeta::jsonbinpack::encoder

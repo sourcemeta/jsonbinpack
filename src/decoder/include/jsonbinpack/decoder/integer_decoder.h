@@ -1,6 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_DECODER_INTEGER_H_
 #define SOURCEMETA_JSONBINPACK_DECODER_INTEGER_H_
 
+#include "utils/varint_decoder.h"
+
 #include <jsonbinpack/options/number.h>
 #include <jsontoolkit/json.h>
 
@@ -24,6 +26,20 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       multiplier};
   return {(static_cast<std::uint8_t>(byte) * multiplier) +
           closest_minimum_multiple};
+}
+
+template <typename Source, typename CharT, typename Traits>
+auto FLOOR_MULTIPLE_ENUM_VARINT(
+    std::basic_istream<CharT, Traits> &stream,
+    const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
+    -> sourcemeta::jsontoolkit::JSON<Source> {
+  const std::int64_t multiplier{std::abs(options.multiplier)};
+  const std::int64_t closest_minimum_multiple{
+      static_cast<std::int64_t>(
+          std::ceil(options.minimum / static_cast<double>(multiplier))) *
+      multiplier};
+  const std::int64_t value{utils::varint_decode<std::int64_t>(stream)};
+  return {(value * multiplier) + closest_minimum_multiple};
 }
 
 } // namespace sourcemeta::jsonbinpack::decoder
