@@ -12,6 +12,11 @@ struct BoundedMultiplierOptions {
   std::int64_t multiplier;
 };
 
+struct FloorMultiplierOptions {
+  std::int64_t minimum;
+  std::int64_t multiplier;
+};
+
 } // namespace sourcemeta::jsonbinpack::options
 
 #endif

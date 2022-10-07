@@ -77,6 +77,18 @@ article table {
   @extend .table-sm;
 }
 
+// More spacing before article headers
+article {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @extend .mt-4;
+  }
+}
+
 // Monospace headers are not highlighted
 article {
   h1 > code,

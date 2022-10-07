@@ -74,3 +74,48 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_minus_5) {
   BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(stream, document, {1, 19, -5});
   EXPECT_BYTES(stream, {0x00});
 }
+
+TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{-3};
+  document.parse();
+  OutputByteStream stream{};
+  FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {-10, 1});
+  EXPECT_BYTES(stream, {0x07});
+}
+
+TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{5};
+  document.parse();
+  OutputByteStream stream{};
+  FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {2, 1});
+  EXPECT_BYTES(stream, {0x03});
+}
+
+TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {5, 5});
+  EXPECT_BYTES(stream, {0x01});
+}
+
+TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {2, 5});
+  EXPECT_BYTES(stream, {0x01});
+}
+
+TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{1000};
+  document.parse();
+  OutputByteStream stream{};
+  FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {-2, 4});
+  EXPECT_BYTES(stream, {0xfa, 0x01});
+}
