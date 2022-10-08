@@ -200,3 +200,36 @@ TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_minus_5) {
   expected.parse();
   EXPECT_EQ(result, expected);
 }
+
+TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0xdf, 0x89, 0x03};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ARBITRARY_MULTIPLE_ZIGZAG_VARINT<std::string>(stream, {1})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{-25200};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x04};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ARBITRARY_MULTIPLE_ZIGZAG_VARINT<std::string>(stream, {5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{10};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_minus_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x04};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ARBITRARY_MULTIPLE_ZIGZAG_VARINT<std::string>(stream, {-5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{10};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}

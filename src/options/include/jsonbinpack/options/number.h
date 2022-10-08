@@ -22,6 +22,10 @@ struct RoofMultiplierOptions {
   std::int64_t multiplier;
 };
 
+struct MultiplierOptions {
+  std::int64_t multiplier;
+};
+
 } // namespace sourcemeta::jsonbinpack::options
 
 #endif

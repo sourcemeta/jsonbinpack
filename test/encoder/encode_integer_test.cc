@@ -173,3 +173,30 @@ TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_minus_5) {
   ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {15, -5});
   EXPECT_BYTES(stream, {0x01});
 }
+
+TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{-25200};
+  document.parse();
+  OutputByteStream stream{};
+  ARBITRARY_MULTIPLE_ZIGZAG_VARINT(stream, document, {1});
+  EXPECT_BYTES(stream, {0xdf, 0x89, 0x03});
+}
+
+TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  ARBITRARY_MULTIPLE_ZIGZAG_VARINT(stream, document, {5});
+  EXPECT_BYTES(stream, {0x04});
+}
+
+TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_minus_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  ARBITRARY_MULTIPLE_ZIGZAG_VARINT(stream, document, {-5});
+  EXPECT_BYTES(stream, {0x04});
+}
