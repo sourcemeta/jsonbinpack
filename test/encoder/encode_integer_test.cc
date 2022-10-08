@@ -119,3 +119,57 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
   FLOOR_MULTIPLE_ENUM_VARINT(stream, document, {-2, 4});
   EXPECT_BYTES(stream, {0xfa, 0x01});
 }
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{-3};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {-2, 1});
+  EXPECT_BYTES(stream, {0x01});
+}
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{8};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {10, 1});
+  EXPECT_BYTES(stream, {0x02});
+}
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_15_minus_5_minus_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{-15};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {-5, -5});
+  EXPECT_BYTES(stream, {0x02});
+}
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{5};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {16, 5});
+  EXPECT_BYTES(stream, {0x02});
+}
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {15, 5});
+  EXPECT_BYTES(stream, {0x01});
+}
+
+TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_minus_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{10};
+  document.parse();
+  OutputByteStream stream{};
+  ROOF_MULTIPLE_MIRROR_ENUM_VARINT(stream, document, {15, -5});
+  EXPECT_BYTES(stream, {0x01});
+}

@@ -70,3 +70,36 @@ unsigned integer 250:
 | 0xfa | 0x01 |
 +------+------+
 ```
+
+`ROOF_MULTIPLE_MIRROR_ENUM_VARINT`
+----------------------------------
+
+The encoding consists of the floor of `maximum` divided by the absolute
+`multiplier`, minus the integer value divided by the absolute `multiplier`,
+encoded as a Base-128 64-bit Little Endian variable-length unsigned integer.
+
+### Options
+
+| Option       | Type  | Description                 |
+|--------------|-------|-----------------------------|
+| `maximum`    | `int` | The inclusive maximum value |
+| `multiplier` | `int` | The multiplier value        |
+
+### Conditions
+
+| Condition                 | Description                                               |
+|---------------------------|-----------------------------------------------------------|
+| `value <= maximum`        | The input value must be less than or equal to the maximum |
+| `value % multiplier == 0` | The input value must be divisible by the multiplier       |
+
+### Examples
+
+Given the input value 5, where the maximum is 16 and the multiplier is 5, the
+encoding results in the Base-128 64-bit Little Endian variable-length unsigned
+integer 2:
+
+```
++------+
+| 0x02 |
++------+
+```
