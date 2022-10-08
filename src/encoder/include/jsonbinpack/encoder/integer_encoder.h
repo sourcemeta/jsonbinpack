@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_ENCODER_INTEGER_H_
 
 #include "utils/varint_encoder.h"
+#include "utils/zigzag_encoder.h"
 
 #include <jsonbinpack/options/number.h>
 #include <jsontoolkit/json.h>
@@ -85,6 +86,19 @@ auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
                    std::floor(static_cast<double>(options.maximum) /
                               static_cast<double>(multiplier))) -
                (value / multiplier)));
+}
+
+template <typename Source, typename CharT, typename Traits>
+auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::MultiplierOptions &options)
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document.is_integer());
+  const std::int64_t value{document.to_integer()};
+  assert(value % options.multiplier == 0);
+  const std::int64_t multiplier = std::abs(options.multiplier);
+  return utils::varint_encode(stream, utils::zigzag_encode(value / multiplier));
 }
 
 } // namespace sourcemeta::jsonbinpack::encoder
