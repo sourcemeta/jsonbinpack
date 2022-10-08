@@ -17,6 +17,11 @@ struct FloorMultiplierOptions {
   std::int64_t multiplier;
 };
 
+struct RoofMultiplierOptions {
+  std::int64_t maximum;
+  std::int64_t multiplier;
+};
+
 } // namespace sourcemeta::jsonbinpack::options
 
 #endif

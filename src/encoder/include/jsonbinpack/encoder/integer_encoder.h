@@ -65,6 +65,28 @@ auto FLOOR_MULTIPLE_ENUM_VARINT(
                                          static_cast<double>(multiplier))));
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document.is_integer());
+  const std::int64_t value{document.to_integer()};
+  assert(value <= options.maximum);
+  assert(value % options.multiplier == 0);
+  const std::int64_t multiplier = std::abs(options.multiplier);
+  if (multiplier == 1) {
+    return utils::varint_encode(stream, options.maximum - value);
+  }
+
+  return utils::varint_encode(
+      stream, (static_cast<std::int64_t>(
+                   std::floor(static_cast<double>(options.maximum) /
+                              static_cast<double>(multiplier))) -
+               (value / multiplier)));
+}
+
 } // namespace sourcemeta::jsonbinpack::encoder
 
 #endif

@@ -42,6 +42,20 @@ auto FLOOR_MULTIPLE_ENUM_VARINT(
   return {(value * multiplier) + closest_minimum_multiple};
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
+    std::basic_istream<CharT, Traits> &stream,
+    const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
+    -> sourcemeta::jsontoolkit::JSON<Source> {
+  const std::int64_t multiplier{std::abs(options.multiplier)};
+  const std::int64_t closest_maximum_multiple{
+      static_cast<std::int64_t>(
+          std::ceil(options.maximum / static_cast<double>(-multiplier))) *
+      -multiplier};
+  const std::int64_t value{utils::varint_decode<std::int64_t>(stream)};
+  return {-1 * (value * multiplier) + closest_maximum_multiple};
+}
+
 } // namespace sourcemeta::jsonbinpack::decoder
 
 #endif

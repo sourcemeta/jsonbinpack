@@ -134,3 +134,69 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
   expected.parse();
   EXPECT_EQ(result, expected);
 }
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x01};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {-2, 1})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{-3};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x02};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {10, 1})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{8};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_15_minus_5_minus_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x02};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {-5, -5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{-15};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x02};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {16, 5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{5};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x01};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {15, 5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{10};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_minus_5) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{0x01};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      ROOF_MULTIPLE_MIRROR_ENUM_VARINT<std::string>(stream, {15, -5})};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{10};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
