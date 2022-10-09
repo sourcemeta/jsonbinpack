@@ -1,10 +1,11 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ARRAY_H_
 
-#include <istream> // std::istream
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_object.h>
 #include <jsontoolkit/json_string.h>
+
+#include <istream> // std::istream
 #include <ostream> // std::ostream
 #include <string>  // std::string
 #include <vector>  // std::vector

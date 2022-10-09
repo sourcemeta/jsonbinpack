@@ -1,7 +1,8 @@
-#include <algorithm> // std::all_of
 #include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
+
+#include <algorithm> // std::all_of
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 

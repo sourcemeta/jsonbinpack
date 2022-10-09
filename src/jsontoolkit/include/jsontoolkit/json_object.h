@@ -1,16 +1,17 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_OBJECT_H_
 
-#include <algorithm> // std::for_each
-#include <istream>   // std::istream
 #include <jsontoolkit/json_array.h>
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_string.h>
-#include <map>     // std::map
-#include <ostream> // std::ostream
-#include <sstream> // std::ostringstream
-#include <string>  // std::string
+
+#include <algorithm> // std::for_each
+#include <istream>   // std::istream
+#include <map>       // std::map
+#include <ostream>   // std::ostream
+#include <sstream>   // std::ostringstream
+#include <string>    // std::string
 
 namespace sourcemeta::jsontoolkit {
 // Forward definition to avoid circular dependency

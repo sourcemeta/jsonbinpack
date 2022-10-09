@@ -1,7 +1,8 @@
 #include "decode_utils.h"
-#include <gtest/gtest.h>
 #include <jsonbinpack/decoder/utils/varint_decoder.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 
 TEST(Decoder, varint_0x01) {
   using namespace sourcemeta::jsonbinpack::decoder::utils;

@@ -1,6 +1,7 @@
+#include <jsontoolkit/json.h>
+
 #include <cstdint> // std::int64_t
 #include <gtest/gtest.h>
-#include <jsontoolkit/json.h>
 #include <stdexcept>   // std::domain_error
 #include <string_view> // std::string_view
 #include <type_traits> // std::is_default_constructible

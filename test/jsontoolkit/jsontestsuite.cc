@@ -1,7 +1,8 @@
+#include <jsontoolkit/json.h>
+
 #include <filesystem> // std::filesystem::path, std::filesystem::directory_entry
 #include <fstream>    // std::ifstream
 #include <gtest/gtest.h>
-#include <jsontoolkit/json.h>
 #include <stdexcept> // std::domain_error
 #include <string>    // std::string
 #include <utility>   // std::move

@@ -1,6 +1,7 @@
+#include <jsontoolkit/json.h>
+
 #include <algorithm> // std::all_of
 #include <gtest/gtest.h>
-#include <jsontoolkit/json.h>
 #include <map>     // std::map
 #include <sstream> // std::ostringstream
 #include <utility> // std::move

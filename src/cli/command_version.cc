@@ -1,5 +1,6 @@
 #include "commands.h"
 #include "version.h"
+
 #include <iostream> // std::cout
 
 auto sourcemeta::jsonbinpack::cli::version() -> int {

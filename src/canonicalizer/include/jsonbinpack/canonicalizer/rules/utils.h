@@ -1,12 +1,12 @@
 #ifndef SOURCEMETA_JSONBINPACK_CANONICALIZER_RULES_UTILS_H_
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_RULES_UTILS_H_
 
+#include <jsontoolkit/json.h>
+#include <jsontoolkit/schema.h>
+
 #include <algorithm> // std::any_of, std::copy_if
 #include <set>       // std::set
 #include <string>    // std::string
-
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {
 

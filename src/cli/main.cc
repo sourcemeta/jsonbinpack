@@ -1,4 +1,5 @@
 #include "commands.h"
+
 #include <algorithm> // std::min
 #include <exception> // std::exception
 #include <iostream>  // std::cerr

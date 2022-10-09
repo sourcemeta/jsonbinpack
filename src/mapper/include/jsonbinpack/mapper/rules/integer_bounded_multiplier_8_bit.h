@@ -1,8 +1,9 @@
 #include <alterschema/rule.h>
-#include <cstdint> // std::uint8_t
 #include <jsonbinpack/mapper/states/integer.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
+
+#include <cstdint>  // std::uint8_t
 #include <limits>   // std::numeric_limits
 #include <optional> // std::optional
 

@@ -1,6 +1,7 @@
-#include <gtest/gtest.h>
 #include <jsonbinpack/encoder/utils/zigzag_encoder.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 
 TEST(Encoder, zigzag_int_0_0) {
   const int value = 0;

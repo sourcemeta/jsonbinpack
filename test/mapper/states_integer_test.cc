@@ -1,6 +1,7 @@
-#include <gtest/gtest.h>
 #include <jsonbinpack/mapper/states/integer.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 #include <string>
 
 TEST(MapperStates, unbounded_infinity) {

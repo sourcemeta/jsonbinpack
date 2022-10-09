@@ -1,7 +1,8 @@
 #include "encode_utils.h"
-#include <gtest/gtest.h>
 #include <jsonbinpack/encoder/utils/varint_encoder.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 
 TEST(Encoder, varint_1) {
   using namespace sourcemeta::jsonbinpack::encoder::utils;
