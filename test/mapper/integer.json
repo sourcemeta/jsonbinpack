@@ -136,5 +136,34 @@
         "multiplier": 5
       }
     }
+  },
+  {
+    "title": "unbounded",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer"
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+      "options": {
+        "multiplier": 1
+      }
+    }
+  },
+  {
+    "title": "unbounded_multiplier",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "multipleOf": 5
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+      "options": {
+        "multiplier": 5
+      }
+    }
   }
 ]
