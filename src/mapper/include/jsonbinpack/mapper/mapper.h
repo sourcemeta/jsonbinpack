@@ -12,6 +12,8 @@
 #include "rules/integer_bounded_greater_than_8_bit.h"
 #include "rules/integer_bounded_multiplier_8_bit.h"
 #include "rules/integer_bounded_multiplier_greater_than_8_bit.h"
+#include "rules/integer_lower_bound.h"
+#include "rules/integer_lower_bound_multiplier.h"
 
 namespace sourcemeta::jsonbinpack {
 
@@ -36,6 +38,8 @@ auto map(const sourcemeta::jsontoolkit::JSON<Source> &document)
   bundle.template add<IntegerBoundedMultiplier8Bit>();
   bundle.template add<IntegerBoundedGreaterThan8Bit>();
   bundle.template add<IntegerBoundedMultiplierGreaterThan8Bit>();
+  bundle.template add<IntegerLowerBound>();
+  bundle.template add<IntegerLowerBoundMultiplier>();
 
   bundle.apply({}, result);
   return result;
