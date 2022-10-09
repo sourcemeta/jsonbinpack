@@ -9,6 +9,7 @@
 #include <cassert> // assert
 
 #include "rules/integer_bounded_8_bit.h"
+#include "rules/integer_bounded_greater_than_8_bit.h"
 #include "rules/integer_bounded_multiplier_8_bit.h"
 
 namespace sourcemeta::jsonbinpack {
@@ -32,6 +33,7 @@ auto map(const sourcemeta::jsontoolkit::JSON<Source> &document)
   // Integers
   bundle.template add<IntegerBounded8Bit>();
   bundle.template add<IntegerBoundedMultiplier8Bit>();
+  bundle.template add<IntegerBoundedGreaterThan8Bit>();
 
   bundle.apply({}, result);
   return result;
