@@ -1,4 +1,5 @@
 #include <alterschema/rule.h>
+#include <jsonbinpack/mapper/format.h>
 #include <jsonbinpack/mapper/states/integer.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
@@ -19,7 +20,8 @@ public:
   condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
       -> bool override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-    if (!sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
+    if (schema.defines(format::encoding) ||
+        !sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
             schema, vocabularies::validation) ||
         !schema.defines(keywords::validation::type) ||
         !(schema.at(keywords::validation::type) == "integer") ||

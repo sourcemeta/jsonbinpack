@@ -14,6 +14,8 @@
 #include "rules/integer_bounded_multiplier_greater_than_8_bit.h"
 #include "rules/integer_lower_bound.h"
 #include "rules/integer_lower_bound_multiplier.h"
+#include "rules/integer_unbound.h"
+#include "rules/integer_unbound_multiplier.h"
 #include "rules/integer_upper_bound.h"
 #include "rules/integer_upper_bound_multiplier.h"
 
@@ -44,6 +46,8 @@ auto map(const sourcemeta::jsontoolkit::JSON<Source> &document)
   bundle.template add<IntegerLowerBoundMultiplier>();
   bundle.template add<IntegerUpperBound>();
   bundle.template add<IntegerUpperBoundMultiplier>();
+  bundle.template add<IntegerUnbound>();
+  bundle.template add<IntegerUnboundMultiplier>();
 
   bundle.apply({}, result);
   return result;
