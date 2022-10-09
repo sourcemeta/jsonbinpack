@@ -70,5 +70,38 @@
         "multiplier": 5
       }
     }
+  },
+  {
+    "title": "minimum",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "minimum": 0
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+      "options": {
+        "minimum": 0,
+        "multiplier": 1
+      }
+    }
+  },
+  {
+    "title": "minimum_multiplier",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "minimum": 0,
+      "multipleOf": 5
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+      "options": {
+        "minimum": 0,
+        "multiplier": 5
+      }
+    }
   }
 ]
