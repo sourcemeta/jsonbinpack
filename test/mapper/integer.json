@@ -103,5 +103,38 @@
         "multiplier": 5
       }
     }
+  },
+  {
+    "title": "maximum",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "maximum": 100
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+      "options": {
+        "maximum": 100,
+        "multiplier": 1
+      }
+    }
+  },
+  {
+    "title": "maximum_multiplier",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "maximum": 100,
+      "multipleOf": 5
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+      "options": {
+        "maximum": 100,
+        "multiplier": 5
+      }
+    }
   }
 ]
