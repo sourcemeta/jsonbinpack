@@ -52,5 +52,23 @@
         "multiplier": 1
       }
     }
+  },
+  {
+    "title": "maximum_minimum_multiplier_greater_than_8_bit",
+    "document": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "integer",
+      "minimum": -100,
+      "maximum": 10000,
+      "multipleOf": 5
+    },
+    "expected": {
+      "type": "integer",
+      "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+      "options": {
+        "minimum": -100,
+        "multiplier": 5
+      }
+    }
   }
 ]
