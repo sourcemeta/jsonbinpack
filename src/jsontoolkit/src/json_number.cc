@@ -1,5 +1,6 @@
 #include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_number.h>
+
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 #include <string>    // std::stol, std::stod

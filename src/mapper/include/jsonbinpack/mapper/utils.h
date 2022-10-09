@@ -1,11 +1,12 @@
 #ifndef SOURCEMETA_JSONBINPACK_MAPPER_UTILS_H_
 #define SOURCEMETA_JSONBINPACK_MAPPER_UTILS_H_
 
-#include <cassert> // assert
 #include <jsonbinpack/mapper/format.h>
 #include <jsontoolkit/json.h>
-#include <map>    // std::map
-#include <string> // std::string
+
+#include <cassert> // assert
+#include <map>     // std::map
+#include <string>  // std::string
 
 namespace sourcemeta::jsonbinpack::mapper {
 

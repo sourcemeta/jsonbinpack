@@ -1,6 +1,7 @@
 #include <alterschema/rule.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
+
 #include <map> // std::map
 
 namespace sourcemeta::jsonbinpack::canonicalizer::rules {

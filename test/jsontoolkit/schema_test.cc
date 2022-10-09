@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include <jsontoolkit/schema.h>
+
+#include <gtest/gtest.h>
 #include <stdexcept> // std::invalid_argument
 
 TEST(Schema, is_schema_true_object) {

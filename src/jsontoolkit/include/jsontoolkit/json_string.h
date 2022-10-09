@@ -1,14 +1,15 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_STRING_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_STRING_H_
 
-#include <algorithm> // std::all_of
-#include <cctype>    // std::isxdigit
 #include <jsontoolkit/json_container.h>
 #include <jsontoolkit/json_internal.h>
-#include <ostream> // std::ostream
-#include <sstream> // std::ostringstream
-#include <string>  // std::string
-#include <utility> // std::move
+
+#include <algorithm> // std::all_of
+#include <cctype>    // std::isxdigit
+#include <ostream>   // std::ostream
+#include <sstream>   // std::ostringstream
+#include <string>    // std::string
+#include <utility>   // std::move
 
 namespace sourcemeta::jsontoolkit {
 // Forward declaration

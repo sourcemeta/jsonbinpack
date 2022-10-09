@@ -1,5 +1,6 @@
 #include <jsontoolkit/json_internal.h>
 #include <jsontoolkit/json_null.h>
+
 #include <stdexcept> // std::domain_error
 
 auto sourcemeta::jsontoolkit::Null::stringify(std::ostream &output) -> void {

@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 #include <sstream> // std::ostringstream, std::istringstream
 
 TEST(Number, set_negative_integer) {

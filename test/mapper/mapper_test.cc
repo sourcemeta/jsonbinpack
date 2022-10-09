@@ -1,11 +1,11 @@
-#include <gtest/gtest.h>
 #include <jsonbinpack/mapper/mapper.h>
 #include <jsontoolkit/json.h>
 
 #include <cassert>    // assert
 #include <filesystem> // std::filesystem::path
 #include <fstream>    // std::ifstream
-#include <string>     // std::string
+#include <gtest/gtest.h>
+#include <string> // std::string
 
 // Heavily inspired by https://stackoverflow.com/a/116220
 static auto read_file(const std::filesystem::path path) -> std::string {

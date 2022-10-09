@@ -1,5 +1,6 @@
 #include <jsontoolkit/json_boolean.h>
 #include <jsontoolkit/json_internal.h>
+
 #include <stdexcept> // std::domain_error
 
 auto sourcemeta::jsontoolkit::Boolean::stringify(std::ostream &output,

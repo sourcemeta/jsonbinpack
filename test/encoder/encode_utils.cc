@@ -1,4 +1,5 @@
 #include "encode_utils.h"
+
 #include <algorithm>     // std::transform
 #include <gtest/gtest.h> // EXPECT_EQ
 #include <iterator>      // std::back_inserter

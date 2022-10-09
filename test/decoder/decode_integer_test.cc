@@ -1,7 +1,8 @@
 #include "decode_utils.h"
-#include <gtest/gtest.h>
 #include <jsonbinpack/decoder/integer_decoder.h>
 #include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
 
 TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
   using namespace sourcemeta::jsonbinpack::decoder;

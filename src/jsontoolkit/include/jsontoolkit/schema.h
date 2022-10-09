@@ -3,6 +3,7 @@
 
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/jsonschema/drafts/2020-12.h>
+
 #include <string> // std::string
 
 namespace sourcemeta::jsontoolkit::schema {

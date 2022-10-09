@@ -1,4 +1,5 @@
 #include "commands.h"
+
 #include <iostream> // std::cerr
 
 static const char *USAGE_DETAILS = R"EOF(
