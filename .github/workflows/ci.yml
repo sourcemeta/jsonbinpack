@@ -47,7 +47,6 @@ jobs:
         run: sudo apt-get install --yes clang-format shellcheck
 
       - uses: actions/checkout@v2
-      - run: shellcheck scripts/*.sh
       - run: cmake --version
       - run: cmake --preset release --log-context
       - run: cmake --build --preset release --target shellcheck
