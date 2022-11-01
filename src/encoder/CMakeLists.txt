@@ -2,6 +2,7 @@ add_library(sourcemeta_jsonbinpack_encoder INTERFACE
   include/jsonbinpack/encoder/utils/real.h
   include/jsonbinpack/encoder/utils/varint_encoder.h
   include/jsonbinpack/encoder/utils/zigzag_encoder.h
+  include/jsonbinpack/encoder/enum_encoder.h
   include/jsonbinpack/encoder/integer_encoder.h
   include/jsonbinpack/encoder/number_encoder.h)
 add_library(sourcemeta::jsonbinpack::encoder ALIAS sourcemeta_jsonbinpack_encoder)
