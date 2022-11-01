@@ -6,9 +6,11 @@ CTEST ?= ctest
 BUNDLE ?= bundle
 
 PRESET ?= debug
+GENERATOR ?= Ninja Multi-Config
+
 .PHONY: all
 all:
-	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET)
 	$(CTEST) --preset $(PRESET)

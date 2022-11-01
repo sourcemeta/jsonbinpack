@@ -4,7 +4,7 @@
     {
       "name": "release",
       "displayName": "Release",
-      "binaryDir": "build/release",
+      "binaryDir": "build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_EXPORT_COMPILE_COMMANDS": true
@@ -13,7 +13,7 @@
     {
       "name": "debug",
       "displayName": "Debug",
-      "binaryDir": "build/debug",
+      "binaryDir": "build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": true
