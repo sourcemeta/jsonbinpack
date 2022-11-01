@@ -111,3 +111,7 @@ article {
 .language-plaintext .highlight {
   @extend .mb-0;
 }
+
+.highlighter-rouge {
+  margin-bottom: $paragraph-margin-bottom;
+}
