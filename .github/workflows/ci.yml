@@ -38,17 +38,17 @@ jobs:
     steps:
       - name: Install dependencies (macOS)
         if: runner.os == 'macos'
-        run: brew install cmake clang-format shellcheck
+        run: brew install cmake clang-format shellcheck ninja
         env:
           HOMEBREW_NO_ANALYTICS: 1
           HOMEBREW_NO_AUTO_UPDATE: 1
       - name: Install dependencies (GNU/Linux)
         if: runner.os == 'linux'
-        run: sudo apt-get install --yes clang-format shellcheck
+        run: sudo apt-get install --yes clang-format shellcheck ninja-build
 
       - uses: actions/checkout@v2
       - run: cmake --version
-      - run: cmake --preset release --log-context
+      - run: cmake --preset release --log-context -G "Ninja Multi-Config"
       - run: cmake --build --preset release --target shellcheck
       - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release
