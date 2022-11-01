@@ -5,4 +5,6 @@ if(BUNDLE_BIN)
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
     VERBATIM
     COMMAND "${BUNDLE_BIN}" install --path "${JSONBINPACK_BUNDLER_PATH}")
+else()
+  message(WARNING "Could not find `bundler` in the system")
 endif()

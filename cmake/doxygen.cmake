@@ -7,4 +7,6 @@ if(DOXYGEN_FOUND)
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     VERBATIM
     COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_OUT}")
+else()
+  message(WARNING "Could not find `doxygen` in the system")
 endif()
