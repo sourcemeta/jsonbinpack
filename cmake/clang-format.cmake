@@ -12,4 +12,6 @@ if(CLANG_FORMAT_BIN)
     COMMAND "${CLANG_FORMAT_BIN}" --style=file
     --dry-run -Werror
     -i ${JSONBINPACK_CXX_SOURCE_FILES})
+else()
+  message(WARNING "Could not find `clang-format` in the system")
 endif()

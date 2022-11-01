@@ -5,4 +5,6 @@ if(CLANG_TIDY_BIN)
     VERBATIM
     COMMAND "${CLANG_TIDY_BIN}" "-p=${CMAKE_BINARY_DIR}"
     ${JSONBINPACK_CXX_SOURCE_FILES})
+else()
+  message(WARNING "Could not find `clang-tidy` in the system")
 endif()
