@@ -1,5 +1,5 @@
 add_executable(sourcemeta_jsonbinpack_mapper_unit mapper_test.cc states_integer_test.cc)
-set_source_files_properties(mapper_test.cc PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/integer.json)
+set_source_files_properties(mapper_test.cc PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/integer.json")
 add_executable(sourcemeta::jsonbinpack::mapper_unit ALIAS sourcemeta_jsonbinpack_mapper_unit)
 target_compile_definitions(sourcemeta_jsonbinpack_mapper_unit
   PRIVATE TEST_BASE_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}")
