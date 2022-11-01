@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 project("JSON BinPack" VERSION 0.0.1 LANGUAGES CXX
   DESCRIPTION "\
 A space-efficient open-source binary JSON serialization \
@@ -72,7 +72,7 @@ if(JSONBINPACK_TESTS)
 endif()
 
 # Only for top-level builds
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if(PROJECT_IS_TOP_LEVEL)
   file(GLOB_RECURSE JSONBINPACK_CXX_SOURCE_FILES src/*.cc src/*.h test/*.cc test/*.h)
   file(GLOB_RECURSE JSONBINPACK_SH_SOURCE_FILES test/*.sh scripts/*.sh)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
