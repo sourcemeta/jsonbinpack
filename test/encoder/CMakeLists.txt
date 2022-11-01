@@ -3,7 +3,7 @@ add_executable(sourcemeta_jsonbinpack_encoder_unit
   encode_zigzag_test.cc encode_varint_test.cc
   encode_integer_test.cc encode_number_test.cc
   encode_real_utils_test.cc
-  encode_utils.cc)
+  encode_utils.h encode_utils.cc)
 add_executable(sourcemeta::jsonbinpack::encoder_unit ALIAS sourcemeta_jsonbinpack_encoder_unit)
 target_link_libraries(sourcemeta_jsonbinpack_encoder_unit PRIVATE gtest)
 target_link_libraries(sourcemeta_jsonbinpack_encoder_unit PRIVATE sourcemeta::jsonbinpack::encoder)
