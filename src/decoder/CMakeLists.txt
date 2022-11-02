@@ -1,6 +1,7 @@
 add_library(sourcemeta_jsonbinpack_decoder INTERFACE
   include/jsonbinpack/decoder/utils/varint_decoder.h
   include/jsonbinpack/decoder/utils/zigzag_decoder.h
+  include/jsonbinpack/decoder/enum_decoder.h
   include/jsonbinpack/decoder/integer_decoder.h
   include/jsonbinpack/decoder/number_decoder.h)
 add_library(sourcemeta::jsonbinpack::decoder ALIAS sourcemeta_jsonbinpack_decoder)
