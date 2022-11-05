@@ -42,3 +42,34 @@ encoding results in the unsigned 8 bit integer 0:
 | 0x00 |
 +------+
 ```
+
+`LARGE_CHOICE_INDEX`
+--------------------
+
+The encoding consists of an index to the enumeration choices encoded as a
+Base-128 64-bit Little Endian variable-length unsigned integer.
+
+### Options
+
+| Option    | Type    | Description              |
+|-----------|---------|--------------------------|
+| `choices` | `any[]` | The set of choice values |
+
+### Conditions
+
+| Condition                | Description                                            |
+|--------------------------|--------------------------------------------------------|
+| `len(choices) > 0`       | The choices array must not be empty                    |
+| `value in choices`       | The input value must be included in the set of choices |
+
+### Examples
+
+Given an enumeration with 1000 members and an input value that equals the 300th
+enumeration value, the encoding results in the Base-128 64-bit Little Endian
+variable-length unsigned integer 300:
+
+```
++------+------+
+| 0xac | 0x02 |
++------+------+
+```
