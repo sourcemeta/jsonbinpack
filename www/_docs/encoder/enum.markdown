@@ -73,3 +73,38 @@ variable-length unsigned integer 300:
 | 0xac | 0x02 |
 +------+------+
 ```
+
+`TOP_LEVEL_BYTE_CHOICE_INDEX`
+-----------------------------
+
+If the input value corresponds to the index 0 to the enumeration choices, the
+encoding stores no data. Otherwise, the encoding consists of an index to the
+enumeration choices minus 1 encoded as an 8-bit fixed-length unsigned integer.
+
+### Options
+
+| Option    | Type    | Description              |
+|-----------|---------|--------------------------|
+| `choices` | `any[]` | The set of choice values |
+
+### Conditions
+
+| Condition                | Description                                            |
+|--------------------------|--------------------------------------------------------|
+| `len(choices) > 0`       | The choices array must not be empty                    |
+| `len(choices) <  2 ** 8` | The number of choices must be representable in 8 bits  |
+| `value in choices`       | The input value must be included in the set of choices |
+
+### Examples
+
+Given an enumeration `[ "foo", "bar", "baz" ]` and an input value `"bar"`, the
+encoding results in the unsigned 8 bit integer 0:
+
+```
++------+
+| 0x00 |
++------+
+```
+
+Given an enumeration `[ "foo", "bar", "baz" ]` and an input value `"foo"`, the
+value is not encoded.
