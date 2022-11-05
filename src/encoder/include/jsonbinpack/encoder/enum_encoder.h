@@ -64,6 +64,37 @@ auto LARGE_CHOICE_INDEX(
       {0, 1});
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto TOP_LEVEL_BYTE_CHOICE_INDEX(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::EnumOptions<Source> &options)
+    -> std::basic_ostream<CharT, Traits> & {
+  const auto size{options.choices.size()};
+  assert(size > 0);
+  assert(size <= std::numeric_limits<std::uint8_t>::max());
+  const std::int64_t maximum{static_cast<std::int64_t>(size)};
+
+  // Determine enum index
+  const auto iterator{std::find_if(
+      std::cbegin(options.choices), std::cend(options.choices),
+      [&document](auto const &choice) { return choice == document; })};
+  assert(iterator != std::cend(options.choices));
+  const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
+  assert(cursor >= 0);
+  assert(cursor < maximum);
+
+  // This encoding encodes the first option of the enum as "no data"
+  if (cursor == 0) {
+    return stream;
+  }
+
+  return BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      stream,
+      sourcemeta::jsontoolkit::JSON<Source>{static_cast<std::int64_t>(cursor)},
+      {1, maximum, 1});
+}
+
 } // namespace sourcemeta::jsonbinpack::encoder
 
 #endif
