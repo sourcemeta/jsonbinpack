@@ -1,6 +1,7 @@
 #include "commands.h"
 
 #include <algorithm> // std::min
+#include <cstdlib>   // EXIT_FAILURE
 #include <exception> // std::exception
 #include <iostream>  // std::cerr
 #include <sstream>   // std::ostringstream
@@ -25,7 +26,7 @@ static auto cli_main(const std::string &program, const std::string &command,
                      const std::vector<std::string> &arguments) -> int {
   if (command.empty()) {
     sourcemeta::jsonbinpack::cli::help(program);
-    return 1;
+    return EXIT_FAILURE;
   }
 
   if (command == "help") {
@@ -55,7 +56,7 @@ static auto cli_main(const std::string &program, const std::string &command,
   }
 
   std::cerr << "Unknown command: " << command << "\n";
-  return 1;
+  return EXIT_FAILURE;
 }
 
 auto main(int argc, char *argv[]) -> int {
@@ -68,6 +69,6 @@ auto main(int argc, char *argv[]) -> int {
     return cli_main(program, command, arguments);
   } catch (const std::exception &error) {
     std::cerr << "Error: " << error.what() << "\n";
-    return 1;
+    return EXIT_FAILURE;
   }
 }
