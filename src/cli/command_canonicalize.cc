@@ -3,6 +3,7 @@
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
+#include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
 #include <iostream>   // std::cout
 #include <sstream>    // std::ostringstream
@@ -12,7 +13,7 @@ static auto canonicalize_document_from_string(const std::string document)
   sourcemeta::jsontoolkit::JSON<std::string> schema{document};
   sourcemeta::jsonbinpack::canonicalize(schema);
   std::cout << schema.pretty() << "\n";
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 auto sourcemeta::jsonbinpack::cli::canonicalize(
