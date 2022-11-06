@@ -95,6 +95,21 @@ auto TOP_LEVEL_BYTE_CHOICE_INDEX(
       {1, maximum, 1});
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto CONST_NONE(
+    std::basic_ostream<CharT, Traits> &stream,
+#ifndef NDEBUG
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::StaticOptions<Source> &options)
+#else
+    const sourcemeta::jsontoolkit::JSON<Source> &,
+    const sourcemeta::jsonbinpack::options::StaticOptions<Source> &)
+#endif
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document == options.value);
+  return stream;
+}
+
 } // namespace sourcemeta::jsonbinpack::encoder
 
 #endif

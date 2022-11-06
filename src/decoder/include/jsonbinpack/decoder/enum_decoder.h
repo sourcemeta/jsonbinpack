@@ -60,6 +60,14 @@ auto TOP_LEVEL_BYTE_CHOICE_INDEX(
   return {options.choices.at(static_cast<std::size_t>(index.to_integer()))};
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto CONST_NONE(
+    std::basic_istream<CharT, Traits> &,
+    const sourcemeta::jsonbinpack::options::StaticOptions<Source> &options)
+    -> sourcemeta::jsontoolkit::JSON<Source> {
+  return options.value;
+}
+
 } // namespace sourcemeta::jsonbinpack::decoder
 
 #endif
