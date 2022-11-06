@@ -267,3 +267,21 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
   EXPECT_BYTES(stream, {0x02});
 }
+
+TEST(Encoder, CONST_NONE_scalar) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{1};
+  document.parse();
+  OutputByteStream stream{};
+  CONST_NONE(stream, document, {document});
+  EXPECT_BYTES(stream, {});
+}
+
+TEST(Encoder, CONST_NONE_complex) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
+  document.parse();
+  OutputByteStream stream{};
+  CONST_NONE(stream, document, {document});
+  EXPECT_BYTES(stream, {});
+}

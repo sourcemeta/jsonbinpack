@@ -299,3 +299,25 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   expected.parse();
   EXPECT_EQ(result, expected);
 }
+
+TEST(Decoder, CONST_NONE_scalar) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{1};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      CONST_NONE<std::string>(stream, {expected})};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, CONST_NONE_complex) {
+  using namespace sourcemeta::jsonbinpack::decoder;
+  InputByteStream stream{};
+  sourcemeta::jsontoolkit::JSON<std::string> expected{"{ \"foo\": 1 }"};
+  sourcemeta::jsontoolkit::JSON<std::string> result{
+      CONST_NONE<std::string>(stream, {expected})};
+  result.parse();
+  expected.parse();
+  EXPECT_EQ(result, expected);
+}
