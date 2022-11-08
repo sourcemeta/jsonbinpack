@@ -37,6 +37,13 @@ TEST(String, assignment_literal_from_boolean) {
   EXPECT_EQ(document, "foo");
 }
 
+TEST(String, assignment_literal_from_default) {
+  sourcemeta::jsontoolkit::JSON<std::string> document;
+  document = "foo";
+  EXPECT_TRUE(document.is_string());
+  EXPECT_EQ(document, "foo");
+}
+
 TEST(String, assignment_literal_from_string) {
   sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
   EXPECT_TRUE(document.is_string());
