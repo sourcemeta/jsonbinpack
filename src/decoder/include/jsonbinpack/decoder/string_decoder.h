@@ -2,8 +2,11 @@
 #define SOURCEMETA_JSONBINPACK_DECODER_STRING_H_
 
 #include <jsonbinpack/decoder/string_decoder.h>
+#include <jsonbinpack/options/number.h>
 #include <jsonbinpack/options/string.h>
 #include <jsontoolkit/json.h>
+
+#include "utils/varint_decoder.h"
 
 #include <cassert> // assert
 #include <istream> // std::basic_istream
@@ -38,6 +41,33 @@ auto UTF8_STRING_NO_LENGTH(
   sourcemeta::jsontoolkit::JSON<Source> document{"\"\""};
   document = result;
   return std::move(document);
+}
+
+template <typename Source, typename CharT, typename Traits>
+auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
+    std::basic_istream<CharT, Traits> &stream,
+    const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options)
+    -> sourcemeta::jsontoolkit::JSON<Source> {
+  const std::uint64_t marker{utils::varint_decode<std::uint64_t>(stream)};
+  const bool is_shared{marker == 0};
+  const auto size{
+      (marker == 0 ? utils::varint_decode<std::uint64_t>(stream) : marker) +
+      options.minimum - 1};
+  const auto current_offset{stream.tellg()};
+
+  if (is_shared) {
+    const typename Traits::pos_type relative_offset{
+        utils::varint_decode<std::int64_t>(stream)};
+    stream.seekg(current_offset - relative_offset);
+  }
+
+  const auto result{
+      UTF8_STRING_NO_LENGTH<Source, CharT, Traits>(stream, {size})};
+  if (is_shared) {
+    stream.seekg(current_offset);
+  }
+
+  return result;
 }
 
 } // namespace sourcemeta::jsonbinpack::decoder
