@@ -3,8 +3,9 @@
 JSON BinPack is an open-source binary JSON serialization format with a **strong
 focus on space efficiency**. It supports schema-driven and schema-less modes to
 encode any [JSON](https://www.json.org) document given a matching [JSON Schema
-2020-12](http://json-schema.org) definition. It was awarded the Tony Hoare
-prize for best examination in 2022 by the University of Oxford.
+2020-12](http://json-schema.org) definition. It was awarded two Tony Hoare
+prizes for best dissertation by examination in 2022 by the University of
+Oxford.
 
 ***
 
