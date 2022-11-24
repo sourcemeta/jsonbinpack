@@ -1,5 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_encoder_unit
   "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  context_test.cc
   encode_zigzag_test.cc encode_varint_test.cc
   encode_integer_test.cc encode_number_test.cc
   encode_enum_test.cc encode_real_utils_test.cc

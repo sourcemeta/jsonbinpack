@@ -12,6 +12,10 @@ struct BoundedMultiplierOptions {
   std::int64_t multiplier;
 };
 
+struct UnsignedFloorOptions {
+  std::uint64_t minimum;
+};
+
 struct FloorMultiplierOptions {
   std::int64_t minimum;
   std::int64_t multiplier;
