@@ -115,3 +115,9 @@ article {
 .highlighter-rouge {
   margin-bottom: $paragraph-margin-bottom;
 }
+
+// https://stackoverflow.com/a/43615091/1641422
+td.shrink, th.shrink {
+  width: 0.1%;
+  white-space: nowrap;
+}
