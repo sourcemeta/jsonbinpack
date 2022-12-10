@@ -1,3 +1,5 @@
+# See https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   add_compile_options(
     -Wall
@@ -79,4 +81,12 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     -Wno-non-virtual-dtor
     -Wno-overloaded-virtual
     -Winvalid-offsetof)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  # See https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category
+  add_compile_options(
+    /options:strict
+    /W4
+    /WX
+    /WL
+    /sdl)
 endif()

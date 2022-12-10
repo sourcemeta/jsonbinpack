@@ -4,6 +4,7 @@
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::domain_error
 #include <string>    // std::stol, std::stod
+#include <utility>   // std::in_place_type
 
 auto sourcemeta::jsontoolkit::Number::stringify(std::ostream &output,
                                                 const std::int64_t value)
@@ -178,8 +179,10 @@ auto sourcemeta::jsontoolkit::Number::parse(std::istream &input)
       !expect_decimal_point && first_non_zero_index <= 2, "Invalid number");
 
   if (integer) {
-    return std::stol(output.str());
+    return std::variant<std::int64_t, double>{std::in_place_type<std::int64_t>,
+                                              std::stol(output.str())};
   }
 
-  return std::stod(output.str());
+  return std::variant<std::int64_t, double>{std::in_place_type<double>,
+                                            std::stod(output.str())};
 }
