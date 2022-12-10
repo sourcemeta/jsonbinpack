@@ -68,6 +68,37 @@ auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
   }
 }
 
+template <typename Source, typename CharT, typename Traits>
+auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document,
+    const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options,
+    sourcemeta::jsonbinpack::encoder::Context<
+        Source, typename std::basic_ostream<CharT, Traits>::pos_type> &context)
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document.is_string());
+  const Source value{document.to_string()};
+  const auto size{value.size()};
+  assert(size <= options.maximum);
+  const bool is_shared{context.has(value)};
+
+  // (1) Write 0x00 if shared, else do nothing
+  if (is_shared) {
+    stream.put(0);
+  }
+
+  // (2) Write length of the string + 1 (so it will never be zero)
+  utils::varint_encode(stream, options.maximum - size + 1);
+
+  // (3) Write relative offset if shared, else write plain string
+  if (is_shared) {
+    return utils::varint_encode(stream, stream.tellp() - context.offset(value));
+  } else {
+    context.record(document.to_string(), stream.tellp());
+    return UTF8_STRING_NO_LENGTH(stream, document, {size});
+  }
+}
+
 } // namespace sourcemeta::jsonbinpack::encoder
 
 #endif
