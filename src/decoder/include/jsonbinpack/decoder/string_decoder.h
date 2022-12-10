@@ -11,7 +11,6 @@
 #include <cassert> // assert
 #include <istream> // std::basic_istream
 #include <string>  // std::basic_string
-#include <utility> // std::move
 
 namespace sourcemeta::jsonbinpack::decoder {
 
@@ -40,7 +39,7 @@ auto UTF8_STRING_NO_LENGTH(
   // represents a JSON string.
   sourcemeta::jsontoolkit::JSON<Source> document{"\"\""};
   document = result;
-  return std::move(document);
+  return document;
 }
 
 template <typename Source, typename CharT, typename Traits>

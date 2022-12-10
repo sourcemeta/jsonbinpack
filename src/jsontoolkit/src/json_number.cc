@@ -106,17 +106,16 @@ auto sourcemeta::jsontoolkit::Number::parse(std::istream &input)
       index++;
       break;
     case sourcemeta::jsontoolkit::Number::token_plus_sign:
-      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-          first_whitespace_index == 0, "Invalid number");
-      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
-                                                      "Invalid end of number");
-      sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
-          index > 0, "Invalid start of number");
     case sourcemeta::jsontoolkit::Number::token_minus_sign:
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           first_whitespace_index == 0, "Invalid number");
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(next != EOF,
                                                       "Invalid end of number");
+      if (character == sourcemeta::jsontoolkit::Number::token_plus_sign) {
+        sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
+            index > 0, "Invalid start of number");
+      }
+
       sourcemeta::jsontoolkit::internal::ENSURE_PARSE(
           index == 0 ||
               previous ==

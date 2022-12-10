@@ -27,19 +27,19 @@ public:
   explicit MapperTest(
       const sourcemeta::jsontoolkit::JSON<std::string> &document,
       const sourcemeta::jsontoolkit::JSON<std::string> &expected)
-      : document{document}, expected{expected} {}
+      : document_{document}, expected_{expected} {}
 
   void TestBody() override {
     sourcemeta::jsontoolkit::JSON<std::string> result{
-        sourcemeta::jsonbinpack::map(this->document)};
+        sourcemeta::jsonbinpack::map(this->document_)};
     result.parse();
-    this->expected.parse();
-    EXPECT_EQ(this->expected, result);
+    this->expected_.parse();
+    EXPECT_EQ(this->expected_, result);
   }
 
 private:
-  sourcemeta::jsontoolkit::JSON<std::string> document;
-  sourcemeta::jsontoolkit::JSON<std::string> expected;
+  sourcemeta::jsontoolkit::JSON<std::string> document_;
+  sourcemeta::jsontoolkit::JSON<std::string> expected_;
 };
 
 int main(int argc, char **argv) {

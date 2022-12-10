@@ -27,18 +27,18 @@ public:
   explicit CanonicalizerTest(
       const sourcemeta::jsontoolkit::JSON<std::string> &document,
       const sourcemeta::jsontoolkit::JSON<std::string> &expected)
-      : document{document}, expected{expected} {}
+      : document_{document}, expected_{expected} {}
 
   void TestBody() override {
-    sourcemeta::jsonbinpack::canonicalize(this->document);
-    this->document.parse();
-    this->expected.parse();
-    EXPECT_EQ(this->expected, this->document);
+    sourcemeta::jsonbinpack::canonicalize(this->document_);
+    this->document_.parse();
+    this->expected_.parse();
+    EXPECT_EQ(this->expected_, this->document_);
   }
 
 private:
-  sourcemeta::jsontoolkit::JSON<std::string> document;
-  sourcemeta::jsontoolkit::JSON<std::string> expected;
+  sourcemeta::jsontoolkit::JSON<std::string> document_;
+  sourcemeta::jsontoolkit::JSON<std::string> expected_;
 };
 
 int main(int argc, char **argv) {
