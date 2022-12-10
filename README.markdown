@@ -28,7 +28,9 @@ Building JSON BinPack
 ---------------------
 
 JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
-build system. JSON BinPack provides a set of CMake
+build system. It is expected to compile on LLVM and GCC on macOS and GNU/Linux.
+
+JSON BinPack provides a set of CMake
 [presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html) to
 configure, build and test the project.
 
