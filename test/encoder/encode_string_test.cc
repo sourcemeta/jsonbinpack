@@ -65,3 +65,41 @@ TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(stream, document, {5}, context);
   EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f, 0x00, 0x03, 0x05});
 }
+
+TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
+  document.parse();
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::encoder::Context<std::string,
+                                            typename OutputByteStream::pos_type>
+      context;
+  BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(stream, document, {3, 5}, context);
+  EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f});
+}
+
+TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
+  document.parse();
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::encoder::Context<std::string,
+                                            typename OutputByteStream::pos_type>
+      context;
+  BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(stream, document, {3, 3}, context);
+  EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f});
+}
+
+TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"foo\""};
+  document.parse();
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::encoder::Context<std::string,
+                                            typename OutputByteStream::pos_type>
+      context;
+  BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(stream, document, {0, 6}, context);
+  EXPECT_TRUE(context.has("foo"));
+  BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(stream, document, {3, 100}, context);
+  EXPECT_BYTES(stream, {0x04, 0x66, 0x6f, 0x6f, 0x00, 0x01, 0x05});
+}

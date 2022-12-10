@@ -20,6 +20,11 @@ struct UnsignedRoofOptions {
   std::uint64_t maximum;
 };
 
+struct UnsignedBoundedOptions {
+  std::uint64_t minimum;
+  std::uint64_t maximum;
+};
+
 struct FloorMultiplierOptions {
   std::int64_t minimum;
   std::int64_t multiplier;
