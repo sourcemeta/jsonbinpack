@@ -22,8 +22,8 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
   assert(!stream.eof());
   const std::int64_t multiplier{std::abs(options.multiplier)};
   const std::int64_t closest_minimum_multiple{
-      static_cast<std::int64_t>(
-          std::ceil(options.minimum / static_cast<double>(multiplier))) *
+      static_cast<std::int64_t>(std::ceil(static_cast<double>(options.minimum) /
+                                          static_cast<double>(multiplier))) *
       multiplier};
   return {(static_cast<std::uint8_t>(byte) * multiplier) +
           closest_minimum_multiple};
@@ -36,8 +36,8 @@ auto FLOOR_MULTIPLE_ENUM_VARINT(
     -> sourcemeta::jsontoolkit::JSON<Source> {
   const std::int64_t multiplier{std::abs(options.multiplier)};
   const std::int64_t closest_minimum_multiple{
-      static_cast<std::int64_t>(
-          std::ceil(options.minimum / static_cast<double>(multiplier))) *
+      static_cast<std::int64_t>(std::ceil(static_cast<double>(options.minimum) /
+                                          static_cast<double>(multiplier))) *
       multiplier};
   const std::int64_t value{utils::varint_decode<std::int64_t>(stream)};
   return {(value * multiplier) + closest_minimum_multiple};
@@ -50,8 +50,8 @@ auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
     -> sourcemeta::jsontoolkit::JSON<Source> {
   const std::int64_t multiplier{std::abs(options.multiplier)};
   const std::int64_t closest_maximum_multiple{
-      static_cast<std::int64_t>(
-          std::ceil(options.maximum / static_cast<double>(-multiplier))) *
+      static_cast<std::int64_t>(std::ceil(static_cast<double>(options.maximum) /
+                                          static_cast<double>(-multiplier))) *
       -multiplier};
   const std::int64_t value{utils::varint_decode<std::int64_t>(stream)};
   return {-1 * (value * multiplier) + closest_maximum_multiple};

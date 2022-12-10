@@ -18,7 +18,7 @@ const char token_line_feed = '\u000A';
 const char token_carriage_return = '\u000D';
 const char token_space = '\u0020';
 
-constexpr auto flush_whitespace(std::istream &input) -> std::size_t {
+inline auto flush_whitespace(std::istream &input) -> std::size_t {
   std::size_t ignored{0};
   while (!input.eof()) {
     switch (input.peek()) {
