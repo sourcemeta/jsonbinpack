@@ -27,9 +27,13 @@ public:
   // We don't know if the elements are parsed or not but we know this is
   // a valid array.
   Array(const std::vector<Wrapper> &elements)
-      : Container<Source>{Source{}, false, true}, data{elements} {}
+      : Container<Source>{Source{}, false, true} {
+    this->data = elements;
+  }
   Array(std::vector<Wrapper> &&elements)
-      : Container<Source>{Source{}, false, true}, data{std::move(elements)} {}
+      : Container<Source>{Source{}, false, true} {
+    this->data = std::move(elements);
+  }
 
   auto parse() -> void { Container<Source>::parse(); }
 
