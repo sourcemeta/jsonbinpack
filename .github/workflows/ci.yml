@@ -22,6 +22,7 @@ jobs:
 
   test:
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - os: macos-11
