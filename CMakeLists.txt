@@ -16,17 +16,7 @@ elseif(NOT CMAKE_BUILD_TYPE IN_LIST BUILD_TYPES)
   message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-# Global options
-add_compile_options(
-  -Wall
-  -Wextra
-  -Werror
-  -Wpedantic
-  -Wshadow
-  -Wdouble-promotion
-  -Wconversion
-  -Wunused-parameter
-)
+include(cmake/warnings.cmake)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
