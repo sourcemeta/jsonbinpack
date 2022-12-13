@@ -188,3 +188,41 @@ may result in:
 +------+------+------+------+------+------+------+
          f      o      o                    6 - 1
 ```
+
+`RFC3339_DATE_INTEGER_TRIPLET`
+------------------------------
+
+The encoding consists of an implementation of
+[RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) date expressions as
+the sequence of 3 integers: the year as a 16-bit fixed-length Little Endian
+unsigned integer, the month as an 8-bit fixed-length unsigned integer, and the
+day as an 8-bit fixed-length unsigned integer.
+
+#### Options
+
+None
+
+#### Conditions
+
+| Condition            | Description                                                 |
+|----------------------|-------------------------------------------------------------|
+| `len(value) == 10`   | The input string consists of 10 characters                  |
+| `value[0:4] >= 0`    | The year is greater than or equal to 0                      |
+| `value[0:4] <= 9999` | The year is less than or equal to 9999 as stated by RFC3339 |
+| `value[4] == '-'`    | The year and the month are divided by a hyphen              |
+| `value[5:7] >= 1`    | The month is greater than or equal to 1                     |
+| `value[5:7] <= 12`   | The month is less than or equal to 12                       |
+| `value[7] == '-'`    | The month and the day are divided by a hyphen               |
+| `value[8:10] >= 1`   | The day is greater than or equal to 1                       |
+| `value[8:10] <= 31`  | The day is less than or equal to 31                         |
+
+#### Examples
+
+Given the input string `2014-10-01`, the encoding results in:
+
+```
++------+------+------+------+
+| 0xde | 0x07 | 0x0a | 0x01 |
++------+------+------+------+
+  year   ...    month  day
+```

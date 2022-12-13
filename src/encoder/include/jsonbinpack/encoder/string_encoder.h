@@ -9,10 +9,10 @@
 #include "utils/varint_encoder.h"
 
 #include <cassert> // assert
-#include <cstdint> // std::int8_t, std::uint8_t
+#include <cstdint> // std::int8_t, std::uint8_t, std::uint16_t
 #include <limits>  // std::numeric_limits
 #include <ostream> // std::basic_ostream
-#include <string>  // std::basic_string
+#include <string>  // std::basic_string, std::stoul
 
 namespace sourcemeta::jsonbinpack::encoder {
 
@@ -133,6 +133,34 @@ auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
     context.record(document.to_string(), stream.tellp());
     return UTF8_STRING_NO_LENGTH(stream, document, {size});
   }
+}
+
+template <typename Source, typename CharT, typename Traits>
+auto RFC3339_DATE_INTEGER_TRIPLET(
+    std::basic_ostream<CharT, Traits> &stream,
+    const sourcemeta::jsontoolkit::JSON<Source> &document)
+    -> std::basic_ostream<CharT, Traits> & {
+  assert(document.is_string());
+  const Source &value{document.to_string()};
+  assert(value.size() == 10);
+
+  // As according to RFC3339: Internet Protocols MUST
+  // generate four digit years in dates.
+  const std::uint16_t year{
+      static_cast<std::uint16_t>(std::stoul(value.substr(0, 4)))};
+  const std::uint8_t month{
+      static_cast<std::uint8_t>(std::stoul(value.substr(5, 2)))};
+  const std::uint8_t day{
+      static_cast<std::uint8_t>(std::stoul(value.substr(8, 2)))};
+  assert(month >= 1 && month <= 12);
+  assert(day >= 1 && day <= 31);
+
+  // We will be able to use char8_t on C++20
+  // See https://en.cppreference.com/w/cpp/keyword/char8_t
+  stream.write(reinterpret_cast<const char *>(&year), sizeof year);
+  stream.put(static_cast<std::int8_t>(month));
+  stream.put(static_cast<std::int8_t>(day));
+  return stream;
 }
 
 } // namespace sourcemeta::jsonbinpack::encoder
