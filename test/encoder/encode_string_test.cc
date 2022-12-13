@@ -103,3 +103,12 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(stream, document, {3, 100}, context);
   EXPECT_BYTES(stream, {0x04, 0x66, 0x6f, 0x6f, 0x00, 0x01, 0x05});
 }
+
+TEST(Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
+  using namespace sourcemeta::jsonbinpack::encoder;
+  sourcemeta::jsontoolkit::JSON<std::string> document{"\"2014-10-01\""};
+  document.parse();
+  OutputByteStream stream{};
+  RFC3339_DATE_INTEGER_TRIPLET(stream, document);
+  EXPECT_BYTES(stream, {0xde, 0x07, 0x0a, 0x01});
+}
