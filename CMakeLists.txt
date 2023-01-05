@@ -19,7 +19,7 @@ endif()
 include(cmake/warnings.cmake)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -31,17 +31,22 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
 
+# JSON Toolkit
+set(JSONTOOLKIT_BACKEND "rapidjson" CACHE STRING "Set JSON backend")
+set(JSONTOOLKIT_BACKEND_PATH "${PROJECT_SOURCE_DIR}/vendor/rapidjson" CACHE STRING "Use vendored backend")
+add_subdirectory(vendor/jsontoolkit)
+
 # Sources
-add_subdirectory(src/jsontoolkit)
 add_subdirectory(src/alterschema)
 add_subdirectory(src/canonicalizer)
 add_subdirectory(src/options)
+add_subdirectory(src/encoding)
 add_subdirectory(src/encoder)
 add_subdirectory(src/decoder)
 add_subdirectory(src/mapper)
-if(JSONBINPACK_CLI)
-  add_subdirectory(src/cli)
-endif()
+# if(JSONBINPACK_CLI)
+  # add_subdirectory(src/cli)
+# endif()
 
 # Testing
 if(JSONBINPACK_TESTS)
@@ -50,15 +55,15 @@ if(JSONBINPACK_TESTS)
   set(INSTALL_GTEST OFF CACHE BOOL "disable installation")
   include(GoogleTest)
   add_subdirectory(vendor/googletest)
-  add_subdirectory(test/jsontoolkit)
   add_subdirectory(test/alterschema)
   add_subdirectory(test/canonicalizer)
+  add_subdirectory(test/encoding)
   add_subdirectory(test/encoder)
   add_subdirectory(test/decoder)
   add_subdirectory(test/mapper)
-  if(JSONBINPACK_CLI)
-    add_subdirectory(test/cli)
-  endif()
+  # if(JSONBINPACK_CLI)
+    # add_subdirectory(test/cli)
+  # endif()
 endif()
 
 # Only for top-level builds

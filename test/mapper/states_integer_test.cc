@@ -1,197 +1,230 @@
-#include <jsonbinpack/mapper/states/integer.h>
+#include <jsonbinpack/mapper/states.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 #include <string>
+#include <unordered_map>
+#include <vector>
+
+static std::unordered_map<std::string, bool> test_vocabularies{
+    {"https://json-schema.org/draft/2020-12/vocab/core", true},
+    {"https://json-schema.org/draft/2020-12/vocab/applicator", true},
+    {"https://json-schema.org/draft/2020-12/vocab/unevaluated", true},
+    {"https://json-schema.org/draft/2020-12/vocab/validation", true},
+    {"https://json-schema.org/draft/2020-12/vocab/meta-data", true},
+    {"https://json-schema.org/draft/2020-12/vocab/format-annotation", true},
+    {"https://json-schema.org/draft/2020-12/vocab/content", true}};
 
 TEST(MapperStates, unbounded_infinity) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer"
-  })JSON");
-  schema.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
   EXPECT_FALSE(states.has_value());
-  EXPECT_EQ(states, std::nullopt);
 }
 
 TEST(MapperStates, only_minimum) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "minimum": 3
-  })JSON");
-  schema.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
   EXPECT_FALSE(states.has_value());
-  EXPECT_EQ(states, std::nullopt);
 }
 
 TEST(MapperStates, only_maximum) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "maximum": 3
-  })JSON");
-  schema.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
   EXPECT_FALSE(states.has_value());
-  EXPECT_EQ(states, std::nullopt);
 }
 
 TEST(MapperStates, bounded_positive) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "maximum": 5,
     "minimum": 3
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[3,4,5]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), 4);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 5);
 }
 
 TEST(MapperStates, bounded_negative) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "maximum": -8,
     "minimum": -10
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[-10,-9,-8]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), -10);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), -9);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), -8);
 }
 
 TEST(MapperStates, bounded_negative_positive) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "minimum": -3,
     "maximum": 2
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[-3,-2,-1,0,1,2]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 6);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), -3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), -2);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), -1);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(3)), 0);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(4)), 1);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(5)), 2);
 }
 
 TEST(MapperStates, bounded_equal) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "minimum": 3,
     "maximum": 3
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[3]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 1);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 3);
 }
 
 TEST(MapperStates, bounded_impossible) {
   // This is technically a valid JSON Schema that no instance can match against
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "minimum": 4,
     "maximum": 3
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_TRUE(states->empty());
 }
 
 TEST(MapperStates, bounded_positive_with_matching_positive_multiplier) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "multipleOf": 2,
     "maximum": 6,
     "minimum": 2
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[2,4,6]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 2);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), 4);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 6);
 }
 
 TEST(MapperStates, bounded_positive_with_matching_negative_multiplier) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "multipleOf": -2,
     "maximum": 6,
     "minimum": 2
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[2,4,6]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 2);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), 4);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 6);
 }
 
 TEST(MapperStates, bounded_positive_with_non_matching_positive_multiplier) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "multipleOf": 3,
     "maximum": 7,
     "minimum": 2
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[3,6]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_EQ(states->size(), 2);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 3);
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), 6);
 }
 
 TEST(MapperStates, bounded_positive_with_impossible_multiplier) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "multipleOf": 8,
     "maximum": 3,
     "minimum": 1
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  EXPECT_TRUE(states->is_array());
-  EXPECT_EQ(states, expected);
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
+  EXPECT_TRUE(states.has_value());
+  EXPECT_TRUE(states->empty());
 }
 
 TEST(MapperStates, bounded_with_real_multiplier) {
-  sourcemeta::jsontoolkit::JSON<std::string> schema(R"JSON({
+  const sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
     "multipleOf": 1.1,
     "maximum": 3,
     "minimum": 1
-  })JSON");
-  schema.parse();
-  sourcemeta::jsontoolkit::JSON<std::string> expected("[]");
-  expected.parse();
-  std::optional<sourcemeta::jsontoolkit::JSON<std::string>> states{
-      sourcemeta::jsonbinpack::mapper::states::integer(schema)};
-  // Not supported for now
+  })JSON")};
+
+  const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
+      sourcemeta::jsonbinpack::mapper::states::integer(schema,
+                                                       test_vocabularies)};
   EXPECT_FALSE(states.has_value());
-  EXPECT_EQ(states, std::nullopt);
 }

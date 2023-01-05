@@ -1,287 +1,246 @@
 #include "encode_utils.h"
-#include <jsonbinpack/encoder/enum_encoder.h>
+#include <jsonbinpack/encoder/encoder.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
-#include <vector> // std::vector
+#include <utility> // std::move
+#include <vector>  // std::vector
 
 TEST(Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x00});
 }
 
 TEST(Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x02});
 }
 
 TEST(Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"\"bar\""};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("bar")};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
-      "\"foo\"", "\"bar\"", "\"bar\""};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from("foo"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
   OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
-  sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
-  sourcemeta::jsontoolkit::JSON<std::string> choice3("[ 1, 2, 3 ]");
-  sourcemeta::jsontoolkit::JSON<std::string> choice4("{ \"foo\": 1 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice5("{ \"bar\": 1 }");
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{}"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"bar\": 1 }"));
 
-  choice1.parse();
-  choice2.parse();
-  choice3.parse();
-  choice4.parse();
-  choice5.parse();
-
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices;
-  choices.push_back(choice1);
-  choices.push_back(choice2);
-  choices.push_back(choice3);
-  choices.push_back(choice4);
-  choices.push_back(choice5);
-
-  BYTE_CHOICE_INDEX(stream, document, {choices});
+  encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x03});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x00});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x02});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"\"bar\""};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("bar")};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
-      "\"foo\"", "\"bar\"", "\"bar\""};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from("foo"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
   OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
-  sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
-  sourcemeta::jsontoolkit::JSON<std::string> choice3("[ 1, 2, 3 ]");
-  sourcemeta::jsontoolkit::JSON<std::string> choice4("{ \"foo\": 1 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice5("{ \"bar\": 1 }");
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{}"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"bar\": 1 }"));
 
-  choice1.parse();
-  choice2.parse();
-  choice3.parse();
-  choice4.parse();
-  choice5.parse();
-
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices;
-  choices.push_back(choice1);
-  choices.push_back(choice2);
-  choices.push_back(choice3);
-  choices.push_back(choice4);
-  choices.push_back(choice5);
-
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x03});
 }
 
 TEST(Encoder, LARGE_CHOICE_INDEX_enum_250) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{250};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(250)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices;
-
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
   for (std::int64_t x = 0; x < 255; x++) {
-    sourcemeta::jsontoolkit::JSON<std::string> choice{x};
-    choice.parse();
-    choices.push_back(choice);
+    choices.push_back(sourcemeta::jsontoolkit::from(x));
   }
 
-  LARGE_CHOICE_INDEX(stream, document, {choices});
+  encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0xfa, 0x01});
 }
 
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {});
 }
 
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x00});
 }
 
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(0));
+  choices.push_back(sourcemeta::jsontoolkit::from(1));
+  encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"\"bar\""};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("bar")};
   OutputByteStream stream{};
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
-      "\"foo\"", "\"bar\"", "\"bar\""};
-  choices.at(0).parse();
-  choices.at(1).parse();
-  choices.at(2).parse();
-  TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from("foo"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  choices.push_back(sourcemeta::jsontoolkit::from("bar"));
+  encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x00});
 }
 
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
   OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
-  sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
-  sourcemeta::jsontoolkit::JSON<std::string> choice3("[ 1, 2, 3 ]");
-  sourcemeta::jsontoolkit::JSON<std::string> choice4("{ \"foo\": 1 }");
-  sourcemeta::jsontoolkit::JSON<std::string> choice5("{ \"bar\": 1 }");
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{}"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::jsontoolkit::parse("{ \"bar\": 1 }"));
 
-  choice1.parse();
-  choice2.parse();
-  choice3.parse();
-  choice4.parse();
-  choice5.parse();
-
-  std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices;
-  choices.push_back(choice1);
-  choices.push_back(choice2);
-  choices.push_back(choice3);
-  choices.push_back(choice4);
-  choices.push_back(choice5);
-
-  TOP_LEVEL_BYTE_CHOICE_INDEX(stream, document, {choices});
+  encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_BYTES(stream, {0x02});
 }
 
 TEST(Encoder, CONST_NONE_scalar) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{1};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(1)};
   OutputByteStream stream{};
-  CONST_NONE(stream, document, {document});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.CONST_NONE(document, {sourcemeta::jsontoolkit::from(document)});
   EXPECT_BYTES(stream, {});
 }
 
 TEST(Encoder, CONST_NONE_complex) {
-  using namespace sourcemeta::jsonbinpack::encoder;
-  sourcemeta::jsontoolkit::JSON<std::string> document{"{ \"foo\": 1 }"};
-  document.parse();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
   OutputByteStream stream{};
-  CONST_NONE(stream, document, {document});
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.CONST_NONE(document, {sourcemeta::jsontoolkit::from(document)});
   EXPECT_BYTES(stream, {});
 }

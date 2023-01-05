@@ -1,0 +1,10 @@
+DEPENDENCIES
+Makefile
+README.markdown
+contrib
+test
+vendor
+www
+.editorconfig
+.ackrc
+.gitattributes

@@ -1,0 +1,50 @@
+#ifndef SOURCEMETA_JSONBINPACK_ENCODER_REAL_H_
+#define SOURCEMETA_JSONBINPACK_ENCODER_REAL_H_
+
+#include <cmath>       // std::modf, std::floor
+#include <type_traits> // std::enable_if_t, std::is_integral_v
+
+namespace sourcemeta::jsonbinpack::encoder {
+
+// IEEE764 floating-point encoding is not precise. Some real numbers
+// cannot be represented directly and thus approximations must be
+// used. Here, we abuse those imprecision characteristics for
+// space-efficiency by performing rounding on a very, very low
+// threshold.
+template <typename Real>
+constexpr auto correct_ieee764(const Real value) -> Real {
+  const Real IEEE764_CORRECTION_THRESHOLD{0.000000001};
+  const Real base{std::floor(value)};
+  const Real next{base + 1};
+  if (next - value <= IEEE764_CORRECTION_THRESHOLD) {
+    return next;
+  } else if (value - base <= IEEE764_CORRECTION_THRESHOLD) {
+    return base;
+  } else {
+    return value;
+  }
+}
+
+template <typename Integer, typename Real,
+          typename = std::enable_if_t<std::is_integral_v<Integer>>>
+constexpr auto real_digits(Real value, std::uint64_t *point_position)
+    -> Integer {
+  Real integral;
+  std::uint64_t shifts{0};
+
+  Real result = std::modf(value, &integral);
+  while (result != 0.0) {
+    value *= 10;
+    shifts += 1;
+    result = std::modf(correct_ieee764(value), &integral);
+  }
+
+  // This is the point position from right to left
+  *point_position = shifts;
+
+  return static_cast<Integer>(std::floor(integral));
+}
+
+} // namespace sourcemeta::jsonbinpack::encoder
+
+#endif
