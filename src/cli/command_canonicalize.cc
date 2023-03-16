@@ -1,37 +1,34 @@
 #include "commands.h"
-#include "utils.h"
+#include "resolver.h"
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
-#include <iostream>   // std::cout
-#include <sstream>    // std::ostringstream
+#include <fstream>    // std::ifstream
+#include <ios>        // std::ios_base
+#include <iostream>   // std::cin, std::cout, std::endl;
 
-static auto canonicalize_document_from_string(const std::string document)
+static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
     -> int {
-  sourcemeta::jsontoolkit::JSON<std::string> schema{document};
-  sourcemeta::jsonbinpack::canonicalize(schema);
-  std::cout << schema.pretty() << "\n";
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{
+      sourcemeta::jsonbinpack::cli::Resolver{}};
+  canonicalizer.apply(schema);
+  sourcemeta::jsontoolkit::prettify(schema, std::cout);
+  std::cout << std::endl;
   return EXIT_SUCCESS;
 }
 
 auto sourcemeta::jsonbinpack::cli::canonicalize(
     const std::filesystem::path &schema_path) -> int {
-  // TODO: If JSON could be initialized from an istream, then we could
-  // pipe an istream of the file into JSON directly rather than converting
-  // the entire input document into an std::string first.
-  const std::string raw_schema{
-      sourcemeta::jsonbinpack::cli::utils::read_file(schema_path)};
-  return canonicalize_document_from_string(raw_schema);
+  std::ifstream stream{schema_path};
+  stream.exceptions(std::ios_base::badbit);
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(stream)};
+  return canonicalize_from_json(schema);
 }
 
 auto sourcemeta::jsonbinpack::cli::canonicalize() -> int {
-  std::string line;
-  std::ostringstream stream;
-  while (std::getline(std::cin, line)) {
-    stream << line << "\n";
-  }
-
-  return canonicalize_document_from_string(stream.str());
+  sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(std::cin)};
+  return canonicalize_from_json(schema);
 }
