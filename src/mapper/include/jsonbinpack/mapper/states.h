@@ -2,8 +2,10 @@
 #define SOURCEMETA_JSONBINPACK_MAPPER_STATES_H_
 
 #include <jsontoolkit/json.h>
+
 #include <optional>      // std::optional
 #include <unordered_map> // std::unordered_map
+#include <vector>        // std::vector
 
 namespace sourcemeta::jsonbinpack::mapper::states {
 
