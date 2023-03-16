@@ -14,8 +14,8 @@ jobs:
       # Jekyll is often flaky on GitHub Actions
       - run: ./scripts/retry.sh cmake --build --preset release --target jekyll
       - run: cmake --build --preset release --target doxygen
-      # Only deploy website from the master branch
-      - if: github.ref == 'refs/heads/master'
+      # Only deploy website from the main branch
+      - if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

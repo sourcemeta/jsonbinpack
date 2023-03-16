@@ -12,7 +12,7 @@ jobs:
   # other platforms.
   # clang-tidy:
     # runs-on: ubuntu-20.04
-    # if: github.ref != 'refs/heads/master'
+    # if: github.ref != 'refs/heads/main'
     # steps:
       # - uses: actions/checkout@v2
       # - run: sudo apt-get install --yes clang-tidy
