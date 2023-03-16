@@ -1,9 +1,10 @@
-add_executable(sourcemeta_jsonbinpack_mapper_unit mapper_test.cc states_integer_test.cc)
-set_source_files_properties(mapper_test.cc PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/integer.json")
-add_executable(sourcemeta::jsonbinpack::mapper_unit ALIAS sourcemeta_jsonbinpack_mapper_unit)
-target_compile_definitions(sourcemeta_jsonbinpack_mapper_unit
-  PRIVATE TEST_BASE_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}")
+add_executable(sourcemeta_jsonbinpack_mapper_unit
+  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  resolver.h
+  mapper_test.cc
+  mapper_integer_test.cc
+  states_integer_test.cc)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE gtest)
-target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta::jsonbinpack::mapper)
-target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta::jsontoolkit)
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsonbinpack_mapper)
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsontoolkit_json)
 gtest_discover_tests(sourcemeta_jsonbinpack_mapper_unit)

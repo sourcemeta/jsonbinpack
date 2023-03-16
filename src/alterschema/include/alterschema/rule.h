@@ -3,14 +3,14 @@
 
 #include <jsontoolkit/json.h>
 
-#include <stdexcept> // std:runtime_error
-#include <string>    // std::string
-#include <utility>   // std::move
+#include <string>        // std::string
+#include <unordered_map> // std::unordered_map
+#include <utility>       // std::move
 
 namespace sourcemeta::alterschema {
-template <typename Source> class Rule {
+class Rule {
 public:
-  Rule(std::string name) : _name{std::move(name)} {}
+  Rule(std::string name) : name_{std::move(name)} {}
 
   // Necessary to wrap rules on smart pointers
   virtual ~Rule() = default;
@@ -21,45 +21,24 @@ public:
   auto operator=(const Rule &) -> Rule & = delete;
   auto operator=(Rule &&) -> Rule & = delete;
 
-  auto operator==(const Rule<Source> &other) const -> bool {
-    return this->name() == other.name();
-  }
-
-  inline auto operator!=(const Rule<Source> &other) const -> bool {
-    return !this->operator==(other);
-  }
-
-  [[nodiscard]] auto name() const -> const std::string & { return this->_name; }
-
-  auto apply(sourcemeta::jsontoolkit::JSON<Source> &value) const -> bool {
-    // A rule cannot be applied to a non-parsed JSON value given
-    // that the condition operates on a constant document
-    value.parse();
-
-    if (!this->condition(value)) {
-      return false;
-    }
-
-    this->transform(value);
-    value.parse();
-
-    // The condition must always be false after applying the
-    // transformation in order to avoid infinite loops
-    if (this->condition(value)) {
-      throw std::runtime_error(
-          "A rule condition must not hold after applying the rule");
-    }
-
-    return true;
-  }
+  auto operator==(const Rule &other) const -> bool;
+  auto operator!=(const Rule &other) const -> bool;
+  [[nodiscard]] auto name() const -> const std::string &;
+  auto apply(sourcemeta::jsontoolkit::JSON &document,
+             sourcemeta::jsontoolkit::Value &value, const std::string &dialect,
+             const std::unordered_map<std::string, bool> &vocabularies) const
+      -> bool;
 
 private:
   [[nodiscard]] virtual auto
-  condition(const sourcemeta::jsontoolkit::JSON<Source> &schema) const
+  condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool = 0;
-  virtual auto transform(sourcemeta::jsontoolkit::JSON<Source> &value) const
+  virtual auto transform(sourcemeta::jsontoolkit::JSON &document,
+                         sourcemeta::jsontoolkit::Value &value) const
       -> void = 0;
-  const std::string _name;
+  const std::string name_;
 };
 } // namespace sourcemeta::alterschema
 

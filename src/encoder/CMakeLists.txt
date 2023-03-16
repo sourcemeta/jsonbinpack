@@ -1,14 +1,11 @@
-add_library(sourcemeta_jsonbinpack_encoder INTERFACE
-  include/jsonbinpack/encoder/utils/real.h
-  include/jsonbinpack/encoder/utils/varint_encoder.h
-  include/jsonbinpack/encoder/utils/zigzag_encoder.h
-  include/jsonbinpack/encoder/context.h
-  include/jsonbinpack/encoder/enum_encoder.h
-  include/jsonbinpack/encoder/integer_encoder.h
-  include/jsonbinpack/encoder/number_encoder.h
-  include/jsonbinpack/encoder/string_encoder.h)
-add_library(sourcemeta::jsonbinpack::encoder ALIAS sourcemeta_jsonbinpack_encoder)
-target_include_directories(sourcemeta_jsonbinpack_encoder INTERFACE
+add_library(sourcemeta_jsonbinpack_encoder
+  include/jsonbinpack/encoder/varint.h
+  include/jsonbinpack/encoder/zigzag.h
+  include/jsonbinpack/encoder/real.h
+  include/jsonbinpack/encoder/basic_encoder.h
+  include/jsonbinpack/encoder/encoder.h
+  include/jsonbinpack/encoder/context.h context.cc)
+target_include_directories(sourcemeta_jsonbinpack_encoder PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta::jsontoolkit)
-target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta::jsonbinpack::options)
+target_link_libraries(sourcemeta_jsonbinpack_encoder PUBLIC sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_jsonbinpack_encoder PUBLIC sourcemeta_jsonbinpack_options)

@@ -6,6 +6,9 @@
 
 namespace sourcemeta::jsonbinpack::options {
 
+// TODO: Multiplier must be an unsigned integer
+// TODO: Revise docs too after this change
+
 struct BoundedMultiplierOptions {
   std::int64_t minimum;
   std::int64_t maximum;

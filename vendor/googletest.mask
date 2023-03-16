@@ -1,4 +1,4 @@
-./googletest/test
-./googlemock/test
-./docs
-./ci
+googletest/test
+googlemock/test
+docs
+ci

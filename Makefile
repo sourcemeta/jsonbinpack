@@ -1,4 +1,3 @@
-include vendor/vendorpull/targets.mk
 .DEFAULT_GOAL = all
 
 CMAKE ?= cmake

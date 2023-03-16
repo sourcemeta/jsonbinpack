@@ -1,8 +1,8 @@
-add_library(sourcemeta_alterschema INTERFACE
-  include/alterschema/applicator.h
+add_library(sourcemeta_alterschema
   include/alterschema/bundle.h
-  include/alterschema/rule.h)
-add_library(sourcemeta::alterschema ALIAS sourcemeta_alterschema)
-target_include_directories(sourcemeta_alterschema INTERFACE
+  include/alterschema/rule.h
+  bundle.cc rule.cc)
+target_include_directories(sourcemeta_alterschema PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(sourcemeta_alterschema INTERFACE sourcemeta::jsontoolkit)
+target_link_libraries(sourcemeta_alterschema PUBLIC sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_alterschema PUBLIC sourcemeta_jsontoolkit_jsonschema)
