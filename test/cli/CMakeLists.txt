@@ -1,4 +1,4 @@
-set(JSONBINPACK_CLI_PATH $<TARGET_FILE:sourcemeta::jsonbinpack_cli>)
+set(JSONBINPACK_CLI_PATH $<TARGET_FILE:sourcemeta_jsonbinpack_cli>)
 
 add_test(NAME jsonbinpack.cli_version
   COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/runner.sh"
