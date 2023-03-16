@@ -1,5 +1,6 @@
 #include <alterschema/bundle.h>
 
+#include <optional>      // std::optional
 #include <stdexcept>     // std::runtime_error
 #include <unordered_set> // std::unordered_set
 
@@ -11,6 +12,11 @@ auto sourcemeta::alterschema::Bundle::apply(
 
   const std::optional<std::string> metaschema{
       sourcemeta::jsontoolkit::metaschema(value)};
+  if (!metaschema.has_value()) {
+    throw std::runtime_error(
+        "Could not determine the metaschema of the given schema");
+  }
+
   const std::optional<std::string> dialect{
       sourcemeta::jsontoolkit::dialect(value, this->resolver_).get()};
   if (!dialect.has_value()) {
@@ -20,14 +26,14 @@ auto sourcemeta::alterschema::Bundle::apply(
 
   const std::unordered_map<std::string, bool> vocabularies{
       sourcemeta::jsontoolkit::vocabularies(document, this->resolver_).get()};
-  return apply_subschema(document, value, metaschema, dialect.value(),
+  return apply_subschema(document, value, metaschema.value(), dialect.value(),
                          vocabularies);
 }
 
 auto sourcemeta::alterschema::Bundle::apply_subschema(
     sourcemeta::jsontoolkit::JSON &document,
-    sourcemeta::jsontoolkit::Value &value,
-    const std::optional<std::string> &metaschema, const std::string &dialect,
+    sourcemeta::jsontoolkit::Value &value, const std::string &metaschema,
+    const std::string &dialect,
     const std::unordered_map<std::string, bool> &vocabularies) const -> void {
   // (1) Canonicalize the current schema object
   // Avoid recursion to not blow up the stack even on highly complex schemas

@@ -8,7 +8,6 @@
 #include <cassert>       // assert
 #include <map>           // std::map
 #include <memory>        // std::unique_ptr, std::make_unique
-#include <optional>      // std::optional
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 #include <utility>       // std::move
@@ -41,10 +40,8 @@ public:
 private:
   auto apply_subschema(
       sourcemeta::jsontoolkit::JSON &document,
-      sourcemeta::jsontoolkit::Value &value,
-      // TODO: metaschema should not be optional, otherwise
-      // we can't realistically obtain any vocabularies
-      const std::optional<std::string> &metaschema, const std::string &dialect,
+      sourcemeta::jsontoolkit::Value &value, const std::string &metaschema,
+      const std::string &dialect,
       const std::unordered_map<std::string, bool> &vocabularies) const -> void;
   sourcemeta::jsontoolkit::schema_walker_t walker_;
   sourcemeta::jsontoolkit::schema_resolver_t resolver_;
