@@ -106,46 +106,43 @@ public:
   auto BYTE_CHOICE_INDEX(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
-    const auto size{options.choices.size()};
-    assert(size > 0);
-    assert(this->is_byte(size));
-    const std::int64_t maximum{static_cast<std::int64_t>(size)};
+    assert(options.choices.size() > 0);
+    assert(this->is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
         [&document](auto const &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(cursor, 0, maximum));
+    assert(this->is_within(cursor, 0,
+                           static_cast<std::int64_t>(options.choices.size())));
     this->put_byte(cursor);
   }
 
   auto LARGE_CHOICE_INDEX(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
-    const auto size{options.choices.size()};
-    assert(size > 0);
+    assert(options.choices.size() > 0);
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
         [&document](auto const &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(cursor, 0, size - 1));
+    assert(this->is_within(cursor, 0, options.choices.size() - 1));
     this->put_varint(cursor);
   }
 
   auto TOP_LEVEL_BYTE_CHOICE_INDEX(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
-    const auto size{options.choices.size()};
-    assert(size > 0);
-    assert(this->is_byte(size));
-    const std::int64_t maximum{static_cast<std::int64_t>(size)};
+    assert(options.choices.size() > 0);
+    assert(this->is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
         [&document](auto const &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(cursor, 0, maximum - 1));
+    assert(this->is_within(
+        cursor, 0, static_cast<std::int64_t>(options.choices.size()) - 1));
     // This encoding encodes the first option of the enum as "no data"
     if (cursor > 0) {
       this->put_byte(cursor - 1);
