@@ -2,14 +2,16 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class ThenElseWithoutIf final
     : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
+  condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
@@ -27,4 +29,4 @@ public:
   }
 };
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer

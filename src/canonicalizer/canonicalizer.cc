@@ -5,7 +5,9 @@
 // To be used by the rules below
 #include <alterschema/rule.h>
 
-#include "rules/validation/boolean_as_enum.h"
+// Boolean
+#include "rules/boolean_as_enum.h"
+#include "rules/boolean_schema.h"
 
 sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
     const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
@@ -14,6 +16,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
 
   // Integers
   this->bundle.template add<BooleanAsEnum>();
+  this->bundle.template add<BooleanSchema>();
 }
 
 auto sourcemeta::jsonbinpack::Canonicalizer::apply(
