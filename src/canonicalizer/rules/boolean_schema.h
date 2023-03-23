@@ -1,4 +1,4 @@
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
@@ -6,7 +6,8 @@ public:
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::unordered_map<std::string, bool> &) const
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     return sourcemeta::jsontoolkit::is_boolean(schema);
   }
@@ -22,4 +23,4 @@ public:
   }
 };
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -4,14 +4,16 @@
 
 #include <algorithm> // std::all_of
 
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class ImpliedArrayUniqueItems final
     : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
+  condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     const bool singular_by_max_items{
@@ -50,4 +52,4 @@ public:
   }
 };
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer

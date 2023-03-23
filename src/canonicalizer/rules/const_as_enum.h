@@ -1,4 +1,4 @@
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
@@ -6,6 +6,7 @@ public:
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     return vocabularies.contains(
@@ -24,4 +25,4 @@ public:
   }
 };
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -3,14 +3,16 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/schema.h>
 
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
 class DropNonArrayKeywords final
     : public sourcemeta::alterschema::Rule<std::string> {
 public:
   DropNonArrayKeywords() : Rule("drop_non_array_keywords"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
+  condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
@@ -87,4 +89,4 @@ private:
       keywords::content::contentEncoding, keywords::content::contentMediaType,
       keywords::content::contentSchema};
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer

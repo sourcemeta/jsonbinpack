@@ -8,7 +8,7 @@
 // A shared instance for the tests
 static Resolver resolver{};
 
-TEST(CanonicalizerValidation, type_boolean) {
+TEST(CanonicalizerBoolean, type_boolean) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

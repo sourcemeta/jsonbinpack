@@ -5,14 +5,16 @@
 #include <utility> // std::move
 #include <vector>  // std::vector
 
-namespace sourcemeta::jsonbinpack::canonicalizer::rules {
+namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class ImplicitTypeUnion final
     : public sourcemeta::alterschema::Rule<std::string> {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::JSON<std::string> &schema) const
+  condition(const sourcemeta::jsontoolkit::Value &schema,
+            const std::string &dialect,
+            const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
     using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     const bool has_core_vocabulary =
@@ -109,4 +111,4 @@ public:
   }
 };
 
-} // namespace sourcemeta::jsonbinpack::canonicalizer::rules
+} // namespace sourcemeta::jsonbinpack::canonicalizer
