@@ -1,12 +1,6 @@
-#include "utils.h"
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
-using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
-class DropNonNumericKeywords final
-    : public sourcemeta::alterschema::Rule<std::string> {
+
+class DropNonNumericKeywords final : public sourcemeta::alterschema::Rule {
 public:
   DropNonNumericKeywords() : Rule("drop_non_numeric_keywords"){};
   [[nodiscard]] auto
@@ -40,8 +34,8 @@ public:
                                         BLACKLIST_CONTENT);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     std::set<std::string> keywords_to_remove{};
     auto inserter =
         std::inserter(keywords_to_remove, keywords_to_remove.begin());

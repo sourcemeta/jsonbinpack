@@ -1,13 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
-#include <algorithm> // std::all_of
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class ImpliedArrayUniqueItems final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class ImpliedArrayUniqueItems final : public sourcemeta::alterschema::Rule {
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto
@@ -15,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     const bool singular_by_max_items{
         schema.is_object() && schema.defines(keywords::validation::maxItems) &&
         schema.at(keywords::validation::maxItems).is_integer() &&
@@ -45,9 +37,8 @@ public:
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     schema.erase(keywords::validation::uniqueItems);
   }
 };

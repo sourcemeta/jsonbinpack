@@ -1,11 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class DuplicateAnyOfBranches final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches"){};
   [[nodiscard]] auto
@@ -13,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     if (!sourcemeta::jsontoolkit::schema::has_vocabulary(
             schema, vocabularies::applicator) ||
         !schema.is_object() || !schema.defines(keywords::applicator::anyOf) ||
@@ -26,9 +20,8 @@ public:
     return std::unique(std::begin(copy), std::end(copy)) != std::end(copy);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto &array = schema.at(keywords::applicator::anyOf).to_array();
     std::sort(std::begin(array), std::end(array));
     auto last = std::unique(std::begin(array), std::end(array));

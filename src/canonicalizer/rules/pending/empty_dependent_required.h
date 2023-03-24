@@ -1,11 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class EmptyDependentRequired final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
 public:
   EmptyDependentRequired() : Rule("empty_dependent_required"){};
   [[nodiscard]] auto
@@ -13,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
            schema.is_object() &&
@@ -21,9 +15,8 @@ public:
            schema.at(keywords::validation::dependentRequired).empty();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     schema.erase(keywords::validation::dependentRequired);
   }
 };
