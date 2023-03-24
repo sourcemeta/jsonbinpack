@@ -13,6 +13,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/equal_numeric_bounds_as_const.h
   rules/if_without_then_else.h
   rules/implicit_array_lower_bound.h
+  rules/implicit_object_lower_bound.h
   rules/max_contains_without_contains.h
   rules/min_contains_without_contains.h
   rules/null_as_const.h
