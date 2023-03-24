@@ -2,7 +2,7 @@ add_executable(sourcemeta_jsonbinpack_canonicalizer_unit
   "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   resolver.h
   canonicalizer_test.cc
-  boolean_test.cc)
+  2020_12_boolean_test.cc)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE gtest)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE sourcemeta_jsonbinpack_canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE sourcemeta_jsontoolkit_json)
