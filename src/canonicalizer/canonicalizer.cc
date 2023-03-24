@@ -11,6 +11,7 @@
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
+#include "rules/content_schema_without_content_media_type.h"
 #include "rules/drop_non_boolean_keywords_applicator.h"
 #include "rules/drop_non_boolean_keywords_content.h"
 #include "rules/drop_non_boolean_keywords_format.h"
@@ -26,6 +27,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<BooleanAsEnum>();
   this->bundle.template add<BooleanSchema>();
   this->bundle.template add<ConstAsEnum>();
+  this->bundle.template add<ContentSchemaWithoutContentMediaType>();
   this->bundle.template add<DropNonBooleanKeywordsApplicator>();
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsContent>();
