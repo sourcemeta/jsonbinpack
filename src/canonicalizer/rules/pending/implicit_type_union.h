@@ -1,14 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
-#include <utility> // std::move
-#include <vector>  // std::vector
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class ImplicitTypeUnion final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto
@@ -16,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     const bool has_core_vocabulary =
         sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
             schema, vocabularies::core);
@@ -92,9 +83,8 @@ public:
     return true;
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     // All possible JSON Schema types
     // See
     // https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.1

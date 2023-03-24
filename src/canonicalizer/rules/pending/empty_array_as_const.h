@@ -1,13 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
-#include <vector> // std::vector
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class EmptyArrayAsConst final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class EmptyArrayAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EmptyArrayAsConst() : Rule("empty_array_as_const"){};
   [[nodiscard]] auto
@@ -15,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
            schema.is_object() && schema.defines(keywords::validation::type) &&
@@ -25,9 +17,8 @@ public:
            schema.at(keywords::validation::maxItems) == 0;
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     schema.assign(keywords::validation::_const,
                   std::vector<sourcemeta::jsontoolkit::JSON<std::string>>{});
     schema.erase(keywords::validation::maxItems);

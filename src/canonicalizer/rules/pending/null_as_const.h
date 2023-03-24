@@ -1,10 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class NullAsConst final : public sourcemeta::alterschema::Rule<std::string> {
+class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
   NullAsConst() : Rule("null_as_const"){};
   [[nodiscard]] auto
@@ -12,16 +8,14 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
            schema.is_object() && schema.defines(keywords::validation::type) &&
            schema.at(keywords::validation::type) == "null";
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     schema.assign(keywords::validation::_const,
                   sourcemeta::jsontoolkit::JSON<std::string>{nullptr});
     schema.erase(keywords::validation::type);

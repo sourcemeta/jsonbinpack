@@ -1,15 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
-#include <algorithm> // std::any_of, std::copy
-#include <iterator>  // std::back_inserter
-#include <vector>    // std::vector
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class DependentRequiredTautology final
-    : public sourcemeta::alterschema::Rule<std::string> {
+class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
 public:
   DependentRequiredTautology() : Rule("dependent_required_tautology"){};
   [[nodiscard]] auto
@@ -17,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary(
                schema, vocabularies::validation) &&
            schema.is_object() &&
@@ -38,9 +28,8 @@ public:
                });
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     std::vector<sourcemeta::jsontoolkit::JSON<std::string>> new_requires{};
 
     for (const auto &element :

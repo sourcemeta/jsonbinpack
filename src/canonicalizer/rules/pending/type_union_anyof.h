@@ -1,13 +1,6 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
-#include <utility> // std::move
-#include <vector>  // std::vector
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule<std::string> {
+class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};
   [[nodiscard]] auto
@@ -15,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
            sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
@@ -24,9 +16,8 @@ public:
            schema.at(keywords::validation::type).is_array();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON<std::string> &schema) const
-      -> void override {
-    using namespace sourcemeta::jsontoolkit::schema::draft2020_12;
+  auto transform(sourcemeta::jsontoolkit::JSON &document,
+                 sourcemeta::jsontoolkit::Value &value) const -> void override {
     std::vector<sourcemeta::jsontoolkit::JSON<std::string>> disjunctors;
     for (const auto &type : schema.at(keywords::validation::type).to_array()) {
       sourcemeta::jsontoolkit::JSON<std::string> disjunctor{schema};
