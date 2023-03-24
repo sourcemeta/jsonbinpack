@@ -11,7 +11,8 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_validation.h
   rules/if_without_then_else.h
-  rules/null_as_const.h)
+  rules/null_as_const.h
+  rules/then_else_without_if.h)
 target_include_directories(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta_jsontoolkit_json)
