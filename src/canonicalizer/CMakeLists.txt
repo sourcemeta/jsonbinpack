@@ -3,6 +3,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   canonicalizer.cc utils.h
   rules/boolean_as_enum.h
   rules/boolean_schema.h
+  rules/const_as_enum.h
   rules/drop_non_boolean_keywords_applicator.h
   rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_content.h

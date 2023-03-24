@@ -9,7 +9,8 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    return vocabularies.contains(
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
            sourcemeta::jsontoolkit::defines(schema, "const");
@@ -17,10 +18,10 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(
-        document, value, "enum",
-        sourcemeta::jsontoolkit::from(
-            sourcemeta::jsontoolkit::at(value, "const")));
+    sourcemeta::jsontoolkit::JSON values{sourcemeta::jsontoolkit::make_array()};
+    sourcemeta::jsontoolkit::push_back(
+        values, sourcemeta::jsontoolkit::at(value, "const"));
+    sourcemeta::jsontoolkit::assign(document, value, "enum", values);
     sourcemeta::jsontoolkit::erase(value, "const");
   }
 };
