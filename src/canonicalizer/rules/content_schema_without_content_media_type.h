@@ -1,7 +1,3 @@
-#include <alterschema/rule.h>
-#include <jsontoolkit/json.h>
-#include <jsontoolkit/schema.h>
-
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 class ContentSchemaWithoutContentMediaType final
@@ -15,7 +11,8 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    return vocabularies.contains(
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/content") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
            sourcemeta::jsontoolkit::defines(schema, "contentSchema") &&

@@ -4,6 +4,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/boolean_as_enum.h
   rules/boolean_schema.h
   rules/const_as_enum.h
+  rules/content_schema_without_content_media_type.h
   rules/drop_non_boolean_keywords_applicator.h
   rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_content.h
