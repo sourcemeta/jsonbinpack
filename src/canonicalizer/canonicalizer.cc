@@ -17,6 +17,7 @@
 #include "rules/drop_non_boolean_keywords_format.h"
 #include "rules/drop_non_boolean_keywords_unevaluated.h"
 #include "rules/drop_non_boolean_keywords_validation.h"
+#include "rules/if_without_then_else.h"
 
 sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
     const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
@@ -33,6 +34,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonBooleanKeywordsFormat>();
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
+  this->bundle.template add<IfWithoutThenElse>();
 }
 
 auto sourcemeta::jsonbinpack::Canonicalizer::apply(
