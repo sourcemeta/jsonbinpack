@@ -8,16 +8,19 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema, vocabularies::validation) &&
-           schema.is_object() &&
-           schema.defines(keywords::validation::minContains) &&
-           !schema.defines(keywords::applicator::contains);
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/validation") &&
+           sourcemeta::jsontoolkit::is_object(schema) &&
+           sourcemeta::jsontoolkit::defines(schema, "minContains") &&
+           !sourcemeta::jsontoolkit::defines(schema, "contains");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    schema.erase(keywords::validation::minContains);
+    sourcemeta::jsontoolkit::erase(value, "minContains");
   }
 };
 
