@@ -22,6 +22,7 @@
 #include "rules/implicit_array_lower_bound.h"
 #include "rules/implicit_object_lower_bound.h"
 #include "rules/implicit_object_properties.h"
+#include "rules/implicit_object_required.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
 #include "rules/null_as_const.h"
@@ -48,6 +49,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ImplicitArrayLowerBound>();
   this->bundle.template add<ImplicitObjectLowerBound>();
   this->bundle.template add<ImplicitObjectProperties>();
+  this->bundle.template add<ImplicitObjectRequired>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
   this->bundle.template add<NullAsConst>();
