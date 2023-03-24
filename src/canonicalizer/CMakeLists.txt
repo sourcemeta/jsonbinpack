@@ -10,6 +10,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/drop_non_boolean_keywords_format.h
   rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_validation.h
+  rules/equal_numeric_bounds_as_const.h
   rules/if_without_then_else.h
   rules/null_as_const.h
   rules/then_else_without_if.h)
