@@ -7,7 +7,7 @@
 #include <alterschema/rule.h>
 #include <set> // std::set
 
-// Boolean
+// Rules
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
@@ -19,6 +19,7 @@
 #include "rules/drop_non_boolean_keywords_validation.h"
 #include "rules/equal_numeric_bounds_as_const.h"
 #include "rules/if_without_then_else.h"
+#include "rules/implicit_array_lower_bound.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
 #include "rules/null_as_const.h"
@@ -42,6 +43,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
   this->bundle.template add<EqualNumericBoundsAsConst>();
   this->bundle.template add<IfWithoutThenElse>();
+  this->bundle.template add<ImplicitArrayLowerBound>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
   this->bundle.template add<NullAsConst>();
