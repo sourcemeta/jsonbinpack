@@ -9,13 +9,9 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    if (dialect != "https://json-schema.org/draft/2020-12/schema" ||
-        !sourcemeta::jsontoolkit::is_object(schema) ||
-        !is_boolean_schema(schema, vocabularies)) {
-      return false;
-    }
-
-    return (vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           is_boolean_schema(schema, vocabularies) &&
+           (vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-annotation") ||
             vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-assertion")) &&
