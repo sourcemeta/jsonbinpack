@@ -10,6 +10,7 @@
 // Boolean
 #include "rules/boolean_as_enum.h"
 #include "rules/boolean_schema.h"
+#include "rules/const_as_enum.h"
 #include "rules/drop_non_boolean_keywords_applicator.h"
 #include "rules/drop_non_boolean_keywords_content.h"
 #include "rules/drop_non_boolean_keywords_format.h"
@@ -24,6 +25,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   // Integers
   this->bundle.template add<BooleanAsEnum>();
   this->bundle.template add<BooleanSchema>();
+  this->bundle.template add<ConstAsEnum>();
   this->bundle.template add<DropNonBooleanKeywordsApplicator>();
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsContent>();
