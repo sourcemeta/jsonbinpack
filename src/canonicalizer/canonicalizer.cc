@@ -17,6 +17,7 @@
 #include "rules/drop_non_boolean_keywords_format.h"
 #include "rules/drop_non_boolean_keywords_unevaluated.h"
 #include "rules/drop_non_boolean_keywords_validation.h"
+#include "rules/equal_numeric_bounds_as_const.h"
 #include "rules/if_without_then_else.h"
 #include "rules/null_as_const.h"
 #include "rules/then_else_without_if.h"
@@ -36,6 +37,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonBooleanKeywordsFormat>();
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
+  this->bundle.template add<EqualNumericBoundsAsConst>();
   this->bundle.template add<IfWithoutThenElse>();
   this->bundle.template add<NullAsConst>();
   this->bundle.template add<ThenElseWithoutIf>();
