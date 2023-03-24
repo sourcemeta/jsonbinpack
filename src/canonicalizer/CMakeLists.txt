@@ -6,9 +6,9 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/const_as_enum.h
   rules/content_schema_without_content_media_type.h
   rules/drop_non_boolean_keywords_applicator.h
-  rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_content.h
   rules/drop_non_boolean_keywords_format.h
+  rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_validation.h)
 target_include_directories(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")

@@ -29,9 +29,9 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ConstAsEnum>();
   this->bundle.template add<ContentSchemaWithoutContentMediaType>();
   this->bundle.template add<DropNonBooleanKeywordsApplicator>();
-  this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsContent>();
   this->bundle.template add<DropNonBooleanKeywordsFormat>();
+  this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
 }
 
