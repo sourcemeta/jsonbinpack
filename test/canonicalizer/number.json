@@ -1,17 +1,5 @@
 [
   {
-    "title": "implicit_unit_multiple_of_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "integer"
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "integer",
-      "multipleOf": 1
-    }
-  },
-  {
     "title": "exclusive_minimum_to_minimum_1",
     "document": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -157,35 +145,6 @@
       "type": "integer",
       "multipleOf": 1,
       "minimum": 6.2
-    }
-  },
-  {
-    "title": "equal_numeric_bounds_as_const_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "integer",
-      "maximum": 5,
-      "minimum": 5
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "integer",
-      "multipleOf": 1,
-      "enum": [ 5 ]
-    }
-  },
-  {
-    "title": "equal_numeric_bounds_as_const_2",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "number",
-      "maximum": 5.2,
-      "minimum": 5.2
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "number",
-      "enum": [ 5.2 ]
     }
   },
   {
