@@ -8,16 +8,20 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema, vocabularies::validation) &&
-           schema.is_object() &&
-           schema.defines(keywords::validation::dependentRequired) &&
-           schema.at(keywords::validation::dependentRequired).empty();
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/validation") &&
+           sourcemeta::jsontoolkit::is_object(schema) &&
+           sourcemeta::jsontoolkit::defines(schema, "dependentRequired") &&
+           sourcemeta::jsontoolkit::is_object(
+               sourcemeta::jsontoolkit::at(schema, "dependentRequired")) &&
+           sourcemeta::jsontoolkit::empty(
+               sourcemeta::jsontoolkit::at(schema, "dependentRequired"));
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    schema.erase(keywords::validation::dependentRequired);
+    sourcemeta::jsontoolkit::erase(value, "dependentRequired");
   }
 };
 
