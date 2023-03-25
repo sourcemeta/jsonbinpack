@@ -30,6 +30,20 @@ auto is_boolean_schema(
                      });
 }
 
+// TODO: Move this upstream to JSON Toolkit. It uses the C++ definition of
+// boolean-based "strict weak ordering" from <algorithm>
+auto compare_number(const sourcemeta::jsontoolkit::Value &left,
+                    const sourcemeta::jsontoolkit::Value &right) -> bool {
+  assert(sourcemeta::jsontoolkit::is_number(left));
+  assert(sourcemeta::jsontoolkit::is_number(right));
+  return (sourcemeta::jsontoolkit::is_real(left)
+              ? sourcemeta::jsontoolkit::to_real(left)
+              : sourcemeta::jsontoolkit::to_integer(left)) <
+         (sourcemeta::jsontoolkit::is_real(right)
+              ? sourcemeta::jsontoolkit::to_real(right)
+              : sourcemeta::jsontoolkit::to_integer(right));
+}
+
 } // namespace sourcemeta::jsonbinpack::canonicalizer
 
 #endif

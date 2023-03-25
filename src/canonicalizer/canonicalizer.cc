@@ -23,6 +23,8 @@
 #include "rules/empty_pattern_properties.h"
 #include "rules/empty_string_as_const.h"
 #include "rules/equal_numeric_bounds_as_const.h"
+#include "rules/exclusive_maximum_and_maximum.h"
+#include "rules/exclusive_maximum_to_maximum.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_array_lower_bound.h"
 #include "rules/implicit_object_lower_bound.h"
@@ -58,6 +60,8 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<EmptyPatternProperties>();
   this->bundle.template add<EmptyStringAsConst>();
   this->bundle.template add<EqualNumericBoundsAsConst>();
+  this->bundle.template add<ExclusiveMaximumAndMaximum>();
+  this->bundle.template add<ExclusiveMaximumToMaximum>();
   this->bundle.template add<IfWithoutThenElse>();
   this->bundle.template add<ImplicitArrayLowerBound>();
   this->bundle.template add<ImplicitObjectLowerBound>();
