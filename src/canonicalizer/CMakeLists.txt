@@ -12,6 +12,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/drop_non_boolean_keywords_validation.h
   rules/empty_array_as_const.h
   rules/empty_object_as_const.h
+  rules/empty_string_as_const.h
   rules/equal_numeric_bounds_as_const.h
   rules/if_without_then_else.h
   rules/implicit_array_lower_bound.h
