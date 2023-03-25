@@ -18,6 +18,8 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/equal_numeric_bounds_as_const.h
   rules/exclusive_maximum_and_maximum.h
   rules/exclusive_maximum_to_maximum.h
+  rules/exclusive_minimum_and_minimum.h
+  rules/exclusive_minimum_to_minimum.h
   rules/if_without_then_else.h
   rules/implicit_array_lower_bound.h
   rules/implicit_object_lower_bound.h
