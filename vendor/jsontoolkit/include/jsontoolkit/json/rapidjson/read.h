@@ -85,6 +85,15 @@ from(T value) {
   return document;
 }
 
+// There are systems in which std::size_t is equivalent to std::uint64_t
+template <typename T,
+          typename std::enable_if<std::is_same_v<T, std::size_t> &&
+                                      !std::is_same_v<T, std::uint64_t>,
+                                  int>::type = 0>
+JSON from(T value) {
+  return from(static_cast<std::int64_t>(value));
+}
+
 template <typename T>
 typename std::enable_if_t<std::is_same_v<T, int>, JSON> from(T value) {
   return from(static_cast<std::int64_t>(value));
