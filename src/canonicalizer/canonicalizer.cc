@@ -18,6 +18,7 @@
 #include "rules/drop_non_boolean_keywords_unevaluated.h"
 #include "rules/drop_non_boolean_keywords_validation.h"
 #include "rules/empty_array_as_const.h"
+#include "rules/empty_object_as_const.h"
 #include "rules/equal_numeric_bounds_as_const.h"
 #include "rules/if_without_then_else.h"
 #include "rules/implicit_array_lower_bound.h"
@@ -49,6 +50,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
   this->bundle.template add<EmptyArrayAsConst>();
+  this->bundle.template add<EmptyObjectAsConst>();
   this->bundle.template add<EqualNumericBoundsAsConst>();
   this->bundle.template add<IfWithoutThenElse>();
   this->bundle.template add<ImplicitArrayLowerBound>();
