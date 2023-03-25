@@ -531,3 +531,25 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "number",
+    "exclusiveMaximum": 5,
+    "exclusiveMinimum": 3
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "number",
+    "enum": [ 4 ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
