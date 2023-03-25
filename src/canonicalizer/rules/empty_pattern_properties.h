@@ -8,16 +8,20 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
-               schema, vocabularies::applicator) &&
-           schema.is_object() &&
-           schema.defines(keywords::applicator::patternProperties) &&
-           schema.at(keywords::applicator::patternProperties).empty();
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
+           sourcemeta::jsontoolkit::is_object(schema) &&
+           sourcemeta::jsontoolkit::defines(schema, "patternProperties") &&
+           sourcemeta::jsontoolkit::is_object(
+               sourcemeta::jsontoolkit::at(schema, "patternProperties")) &&
+           sourcemeta::jsontoolkit::empty(
+               sourcemeta::jsontoolkit::at(schema, "patternProperties"));
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    schema.erase(keywords::applicator::patternProperties);
+    sourcemeta::jsontoolkit::erase(value, "patternProperties");
   }
 };
 
