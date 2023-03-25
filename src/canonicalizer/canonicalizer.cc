@@ -27,6 +27,7 @@
 #include "rules/implicit_unit_multiple_of.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
+#include "rules/min_properties_required_tautology.h"
 #include "rules/null_as_const.h"
 #include "rules/then_else_without_if.h"
 #include "rules/unsatisfiable_max_contains.h"
@@ -56,6 +57,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ImplicitUnitMultipleOf>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
+  this->bundle.template add<MinPropertiesRequiredTautology>();
   this->bundle.template add<NullAsConst>();
   this->bundle.template add<ThenElseWithoutIf>();
   this->bundle.template add<UnsatisfiableMaxContains>();

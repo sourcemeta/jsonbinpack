@@ -20,6 +20,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/implicit_unit_multiple_of.h
   rules/max_contains_without_contains.h
   rules/min_contains_without_contains.h
+  rules/min_properties_required_tautology.h
   rules/null_as_const.h
   rules/then_else_without_if.h
   rules/unsatisfiable_max_contains.h)
