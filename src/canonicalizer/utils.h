@@ -30,6 +30,27 @@ auto is_boolean_schema(
                      });
 }
 
+// We don't have to check for "type: null" as that type
+// is collapsed to an enum by other canonicalizer rules.
+auto is_null_schema(const sourcemeta::jsontoolkit::Value &schema,
+                    const std::unordered_map<std::string, bool> &vocabularies)
+    -> bool {
+  // If it is an enumeration of booleans
+  return vocabularies.contains(
+             "https://json-schema.org/draft/2020-12/vocab/validation") &&
+         sourcemeta::jsontoolkit::is_object(schema) &&
+         sourcemeta::jsontoolkit::defines(schema, "enum") &&
+         sourcemeta::jsontoolkit::is_array(
+             sourcemeta::jsontoolkit::at(schema, "enum")) &&
+         std::all_of(sourcemeta::jsontoolkit::cbegin_array(
+                         sourcemeta::jsontoolkit::at(schema, "enum")),
+                     sourcemeta::jsontoolkit::cend_array(
+                         sourcemeta::jsontoolkit::at(schema, "enum")),
+                     [](const auto &element) {
+                       return sourcemeta::jsontoolkit::is_null(element);
+                     });
+}
+
 // TODO: Move this upstream to JSON Toolkit. It uses the C++ definition of
 // boolean-based "strict weak ordering" from <algorithm>
 auto compare_number(const sourcemeta::jsontoolkit::Value &left,

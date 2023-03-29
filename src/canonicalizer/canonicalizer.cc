@@ -17,6 +17,11 @@
 #include "rules/drop_non_boolean_keywords_format.h"
 #include "rules/drop_non_boolean_keywords_unevaluated.h"
 #include "rules/drop_non_boolean_keywords_validation.h"
+#include "rules/drop_non_null_keywords_applicator.h"
+#include "rules/drop_non_null_keywords_content.h"
+#include "rules/drop_non_null_keywords_format.h"
+#include "rules/drop_non_null_keywords_unevaluated.h"
+#include "rules/drop_non_null_keywords_validation.h"
 #include "rules/empty_array_as_const.h"
 #include "rules/empty_dependent_required.h"
 #include "rules/empty_object_as_const.h"
@@ -56,6 +61,11 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonBooleanKeywordsFormat>();
   this->bundle.template add<DropNonBooleanKeywordsUnevaluated>();
   this->bundle.template add<DropNonBooleanKeywordsValidation>();
+  this->bundle.template add<DropNonNullKeywordsApplicator>();
+  this->bundle.template add<DropNonNullKeywordsContent>();
+  this->bundle.template add<DropNonNullKeywordsFormat>();
+  this->bundle.template add<DropNonNullKeywordsUnevaluated>();
+  this->bundle.template add<DropNonNullKeywordsValidation>();
   this->bundle.template add<EmptyArrayAsConst>();
   this->bundle.template add<EmptyDependentRequired>();
   this->bundle.template add<EmptyObjectAsConst>();
