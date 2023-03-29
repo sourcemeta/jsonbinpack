@@ -12,6 +12,11 @@
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/drop_non_array_keywords_applicator.h"
+#include "rules/drop_non_array_keywords_content.h"
+#include "rules/drop_non_array_keywords_format.h"
+#include "rules/drop_non_array_keywords_unevaluated.h"
+#include "rules/drop_non_array_keywords_validation.h"
 #include "rules/drop_non_boolean_keywords_applicator.h"
 #include "rules/drop_non_boolean_keywords_content.h"
 #include "rules/drop_non_boolean_keywords_format.h"
@@ -51,11 +56,15 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
     : bundle{sourcemeta::jsontoolkit::default_schema_walker, resolver} {
   using namespace sourcemeta::jsonbinpack::canonicalizer;
 
-  // Integers
   this->bundle.template add<BooleanAsEnum>();
   this->bundle.template add<BooleanSchema>();
   this->bundle.template add<ConstAsEnum>();
   this->bundle.template add<ContentSchemaWithoutContentMediaType>();
+  this->bundle.template add<DropNonArrayKeywordsApplicator>();
+  this->bundle.template add<DropNonArrayKeywordsContent>();
+  this->bundle.template add<DropNonArrayKeywordsFormat>();
+  this->bundle.template add<DropNonArrayKeywordsUnevaluated>();
+  this->bundle.template add<DropNonArrayKeywordsValidation>();
   this->bundle.template add<DropNonBooleanKeywordsApplicator>();
   this->bundle.template add<DropNonBooleanKeywordsContent>();
   this->bundle.template add<DropNonBooleanKeywordsFormat>();
@@ -96,6 +105,8 @@ auto sourcemeta::jsonbinpack::Canonicalizer::apply(
     sourcemeta::jsontoolkit::Value &value) const -> void {
   const std::optional<std::string> dialect{
       sourcemeta::jsontoolkit::dialect(value, this->bundle.resolver()).get()};
+  // TODO: Theoretically support other dialects here. Worst case
+  // we should add this restriction at the mapper level.
   if (!dialect.has_value() ||
       dialect.value() != "https://json-schema.org/draft/2020-12/schema") {
     throw std::domain_error("Only JSON Schema 2020-12 is supported");
