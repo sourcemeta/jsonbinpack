@@ -35,7 +35,7 @@ auto is_boolean_schema(
 auto is_null_schema(const sourcemeta::jsontoolkit::Value &schema,
                     const std::unordered_map<std::string, bool> &vocabularies)
     -> bool {
-  // If it is an enumeration of booleans
+  // If it is an enumeration of nulls
   return vocabularies.contains(
              "https://json-schema.org/draft/2020-12/vocab/validation") &&
          sourcemeta::jsontoolkit::is_object(schema) &&
