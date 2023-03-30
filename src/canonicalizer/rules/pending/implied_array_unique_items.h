@@ -28,6 +28,7 @@ public:
               return !element.is_array() || element.size() <= 1;
             })};
 
+    // TODO: Add a rule that sets uniqueItems: false as a default?
     return sourcemeta::jsontoolkit::schema::has_vocabulary<std::string>(
                schema, vocabularies::validation) &&
            schema.is_object() &&
