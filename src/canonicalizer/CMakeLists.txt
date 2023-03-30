@@ -5,11 +5,34 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/boolean_schema.h
   rules/const_as_enum.h
   rules/content_schema_without_content_media_type.h
+  rules/drop_non_array_keywords_applicator.h
+  rules/drop_non_array_keywords_content.h
+  rules/drop_non_array_keywords_format.h
+  rules/drop_non_array_keywords_unevaluated.h
+  rules/drop_non_array_keywords_validation.h
   rules/drop_non_boolean_keywords_applicator.h
   rules/drop_non_boolean_keywords_content.h
   rules/drop_non_boolean_keywords_format.h
   rules/drop_non_boolean_keywords_unevaluated.h
   rules/drop_non_boolean_keywords_validation.h
+  rules/drop_non_null_keywords_applicator.h
+  rules/drop_non_null_keywords_content.h
+  rules/drop_non_null_keywords_format.h
+  rules/drop_non_null_keywords_unevaluated.h
+  rules/drop_non_null_keywords_validation.h
+  rules/drop_non_numeric_keywords_applicator.h
+  rules/drop_non_numeric_keywords_content.h
+  rules/drop_non_numeric_keywords_format.h
+  rules/drop_non_numeric_keywords_unevaluated.h
+  rules/drop_non_numeric_keywords_validation.h
+  rules/drop_non_object_keywords_applicator.h
+  rules/drop_non_object_keywords_content.h
+  rules/drop_non_object_keywords_format.h
+  rules/drop_non_object_keywords_unevaluated.h
+  rules/drop_non_object_keywords_validation.h
+  rules/drop_non_string_keywords_applicator.h
+  rules/drop_non_string_keywords_unevaluated.h
+  rules/drop_non_string_keywords_validation.h
   rules/empty_array_as_const.h
   rules/empty_dependent_required.h
   rules/empty_object_as_const.h

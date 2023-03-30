@@ -1,6 +1,7 @@
 #include <alterschema/bundle.h>
 
 #include <optional>      // std::optional
+#include <sstream>       // std::ostringstream
 #include <stdexcept>     // std::runtime_error
 #include <unordered_set> // std::unordered_set
 
@@ -45,7 +46,9 @@ auto sourcemeta::alterschema::Bundle::apply_subschema(
           pair.second->apply(document, value, dialect, vocabularies)};
       if (was_transformed) {
         if (processed_rules.find(pair.first) != std::end(processed_rules)) {
-          throw std::runtime_error("Rules must only be processed once");
+          std::ostringstream error;
+          error << "Rules must only be processed once: " << pair.first;
+          throw std::runtime_error(error.str());
         }
 
         processed_rules.insert(pair.first);
