@@ -29,9 +29,9 @@ public:
 
 private:
   const std::set<std::string> BLACKLIST_VALIDATION{
-      "minLength",     "maxLength",        "maximum",     "exclusiveMinimum",
-      "multipleOf",    "exclusiveMaximum", "minimum",     "dependentRequired",
-      "minProperties", "maxProperties",    "required",    "minItems",
-      "maxItems",      "minContains",      "maxContains", "uniqueItems"};
+      "maximum",     "exclusiveMinimum",  "multipleOf",    "exclusiveMaximum",
+      "minimum",     "dependentRequired", "minProperties", "maxProperties",
+      "required",    "minItems",          "maxItems",      "minContains",
+      "maxContains", "uniqueItems"};
 };
 } // namespace sourcemeta::jsonbinpack::canonicalizer
