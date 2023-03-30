@@ -32,6 +32,11 @@
 #include "rules/drop_non_numeric_keywords_format.h"
 #include "rules/drop_non_numeric_keywords_unevaluated.h"
 #include "rules/drop_non_numeric_keywords_validation.h"
+#include "rules/drop_non_object_keywords_applicator.h"
+#include "rules/drop_non_object_keywords_content.h"
+#include "rules/drop_non_object_keywords_format.h"
+#include "rules/drop_non_object_keywords_unevaluated.h"
+#include "rules/drop_non_object_keywords_validation.h"
 #include "rules/drop_non_string_keywords_applicator.h"
 #include "rules/drop_non_string_keywords_unevaluated.h"
 #include "rules/drop_non_string_keywords_validation.h"
@@ -88,6 +93,11 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonNumericKeywordsFormat>();
   this->bundle.template add<DropNonNumericKeywordsUnevaluated>();
   this->bundle.template add<DropNonNumericKeywordsValidation>();
+  this->bundle.template add<DropNonObjectKeywordsApplicator>();
+  this->bundle.template add<DropNonObjectKeywordsContent>();
+  this->bundle.template add<DropNonObjectKeywordsFormat>();
+  this->bundle.template add<DropNonObjectKeywordsUnevaluated>();
+  this->bundle.template add<DropNonObjectKeywordsValidation>();
   this->bundle.template add<DropNonStringKeywordsApplicator>();
   this->bundle.template add<DropNonStringKeywordsUnevaluated>();
   this->bundle.template add<DropNonStringKeywordsValidation>();

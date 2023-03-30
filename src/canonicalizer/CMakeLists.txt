@@ -25,6 +25,11 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/drop_non_numeric_keywords_format.h
   rules/drop_non_numeric_keywords_unevaluated.h
   rules/drop_non_numeric_keywords_validation.h
+  rules/drop_non_object_keywords_applicator.h
+  rules/drop_non_object_keywords_content.h
+  rules/drop_non_object_keywords_format.h
+  rules/drop_non_object_keywords_unevaluated.h
+  rules/drop_non_object_keywords_validation.h
   rules/drop_non_string_keywords_applicator.h
   rules/drop_non_string_keywords_unevaluated.h
   rules/drop_non_string_keywords_validation.h
