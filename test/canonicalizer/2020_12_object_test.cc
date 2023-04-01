@@ -1,0 +1,151 @@
+#include "resolver.h"
+
+#include <jsonbinpack/canonicalizer/canonicalizer.h>
+#include <jsontoolkit/json.h>
+
+#include <gtest/gtest.h>
+
+// A shared instance for the tests
+static Resolver resolver{};
+
+TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 1
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "minProperties": 2,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "patternProperties": {}
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "minProperties": 0,
+    "required": [],
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object"
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "minProperties": 0,
+    "required": [],
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "maxProperties": 0
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "enum": [ {} ],
+    "minProperties": 0,
+    "properties": {},
+    "required": []
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "maxProperties": 4,
+    "maxItems": 3
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "maxProperties": 4,
+    "minProperties": 0,
+    "properties": {},
+    "required": []
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}

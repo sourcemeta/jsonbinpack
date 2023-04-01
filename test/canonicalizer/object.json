@@ -1,82 +1,5 @@
 [
   {
-    "title": "min_properties_required_tautology_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "required": [ "foo", "bar" ],
-      "minProperties": 1
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "required": [ "foo", "bar" ],
-      "minProperties": 2,
-      "properties": {}
-    }
-  },
-  {
-    "title": "min_properties_required_tautology_2",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "required": [ "foo", "bar" ],
-      "minProperties": 2
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "required": [ "foo", "bar" ],
-      "minProperties": 2,
-      "properties": {}
-    }
-  },
-  {
-    "title": "empty_pattern_properties_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "patternProperties": {}
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "minProperties": 0,
-      "required": [],
-      "properties": {}
-    }
-  },
-  {
-    "title": "implicit_object_lower_bound_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object"
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "minProperties": 0,
-      "required": [],
-      "properties": {}
-    }
-  },
-  {
-    "title": "empty_object_as_const_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "maxProperties": 0
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "enum": [ {} ],
-      "minProperties": 0,
-      "properties": {},
-      "required": []
-    }
-  },
-  {
     "title": "dependent_required_tautology_1",
     "document": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -110,23 +33,6 @@
       "required": [ "foo", "bar", "qux", "baz" ],
       "minProperties": 4,
       "properties": {}
-    }
-  },
-  {
-    "title": "drop_non_object_keywords_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "maxProperties": 4,
-      "maxItems": 3
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "maxProperties": 4,
-      "minProperties": 0,
-      "properties": {},
-      "required": []
     }
   }
 ]
