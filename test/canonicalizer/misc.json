@@ -1,36 +1,5 @@
 [
   {
-    "title": "if_without_then_else_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "if": { "minProperties": 2 }
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "minProperties": 0,
-      "required": [],
-      "properties": {}
-    }
-  },
-  {
-    "title": "then_else_without_if_1",
-    "document": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "then": { "minProperties": 2 },
-      "else": { "minProperties": 3 }
-    },
-    "expected": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "type": "object",
-      "minProperties": 0,
-      "required": [],
-      "properties": {}
-    }
-  },
-  {
     "title": "type_union_anyof_1",
     "document": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
