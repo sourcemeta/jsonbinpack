@@ -224,3 +224,88 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_3) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "number" }
+    ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string", "minLength": 0 }
+    ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_2) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "string" }
+    ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string", "minLength": 0 }
+    ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_3) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "number" },
+      { "type": "string" },
+      { "type": "string" },
+      { "type": "string" },
+      { "type": "number" },
+      { "type": "number" }
+    ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "type": "number" },
+      { "type": "string", "minLength": 0 }
+    ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
