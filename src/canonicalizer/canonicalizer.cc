@@ -12,6 +12,7 @@
 #include "rules/boolean_schema.h"
 #include "rules/const_as_enum.h"
 #include "rules/content_schema_without_content_media_type.h"
+#include "rules/dependent_required_tautology.h"
 #include "rules/drop_non_array_keywords_applicator.h"
 #include "rules/drop_non_array_keywords_content.h"
 #include "rules/drop_non_array_keywords_format.h"
@@ -73,6 +74,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<BooleanSchema>();
   this->bundle.template add<ConstAsEnum>();
   this->bundle.template add<ContentSchemaWithoutContentMediaType>();
+  this->bundle.template add<DependentRequiredTautology>();
   this->bundle.template add<DropNonArrayKeywordsApplicator>();
   this->bundle.template add<DropNonArrayKeywordsContent>();
   this->bundle.template add<DropNonArrayKeywordsFormat>();

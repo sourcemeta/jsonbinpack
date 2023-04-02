@@ -11,6 +11,7 @@ public:
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
+           sourcemeta::jsontoolkit::is_object(schema) &&
            sourcemeta::jsontoolkit::defines(schema, "type") &&
            sourcemeta::jsontoolkit::is_string(
                sourcemeta::jsontoolkit::at(schema, "type")) &&
