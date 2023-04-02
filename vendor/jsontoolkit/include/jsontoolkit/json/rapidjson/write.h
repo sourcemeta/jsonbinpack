@@ -33,11 +33,39 @@ inline auto erase(Value &value, const std::string &key) -> void {
   value.EraseMember(key);
 }
 
+inline auto erase_many(Value &value, rapidjson::Value::ValueIterator begin,
+                       rapidjson::Value::ValueIterator end) -> void {
+  value.Erase(begin, end);
+}
+
+inline auto erase_many(Value &value, rapidjson::Value::ConstValueIterator begin,
+                       rapidjson::Value::ConstValueIterator end) -> void {
+  value.Erase(begin, end);
+}
+
+inline auto erase_many(Value &value, rapidjson::Value::MemberIterator begin,
+                       rapidjson::Value::MemberIterator end) -> void {
+  value.EraseMember(begin, end);
+}
+
+inline auto erase_many(Value &value,
+                       rapidjson::Value::ConstMemberIterator begin,
+                       rapidjson::Value::ConstMemberIterator end) -> void {
+  value.EraseMember(begin, end);
+}
+
+template <typename Iterator>
+inline auto erase_many(Value &value, Iterator begin, Iterator end) -> void {
+  for (Iterator iterator{begin}; iterator != end; iterator++) {
+    erase(value, *iterator);
+  }
+}
+
 inline auto clear(Value &value) -> void {
   if (is_array(value)) {
-    value.Erase(value.Begin(), value.End());
+    erase_many(value, value.Begin(), value.End());
   } else {
-    value.EraseMember(value.MemberBegin(), value.MemberEnd());
+    erase_many(value, value.MemberBegin(), value.MemberEnd());
   }
 }
 
