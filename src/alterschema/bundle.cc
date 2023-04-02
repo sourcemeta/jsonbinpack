@@ -1,5 +1,6 @@
 #include <alterschema/bundle.h>
 
+#include <cassert>       // assert
 #include <optional>      // std::optional
 #include <sstream>       // std::ostringstream
 #include <stdexcept>     // std::runtime_error
@@ -8,6 +9,27 @@
 auto sourcemeta::alterschema::Bundle::apply(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value) const -> void {
+  // Transform boolean schemas into object schemas, as otherwise
+  // no rule could be applied to them.
+  // TODO: Add tests for this at the alterschema level
+  if (sourcemeta::jsontoolkit::is_boolean(value)) {
+    const bool current{sourcemeta::jsontoolkit::to_boolean(value)};
+    sourcemeta::jsontoolkit::make_object(value);
+    assert(sourcemeta::jsontoolkit::is_object(value));
+    sourcemeta::jsontoolkit::assign(
+        document, value, "$schema",
+        // TODO: Take the default metaschema as an argument?
+        // TODO: But then if we take a default metaschema, we
+        // can just use that below and truly rely on canonicalizer
+        // rules for transforming booleans.
+        sourcemeta::jsontoolkit::from(
+            "https://json-schema.org/draft/2020-12/schema"));
+    if (!current) {
+      sourcemeta::jsontoolkit::assign(document, value, "not",
+                                      sourcemeta::jsontoolkit::make_object());
+    }
+  }
+
   // TODO: Handle schemas with embedded schemas that use different
   // dialects/vocabularies
 
