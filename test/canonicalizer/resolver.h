@@ -107,6 +107,11 @@ public:
           }
         }
       })JSON"));
+    } else if (identifier == "https://www.jsonbinpack.org/dialect/unknown") {
+      promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
+        "$schema": "https://www.jsonbinpack.org/dialect/unknown",
+        "$id": "https://www.jsonbinpack.org/dialect/unknown"
+      })JSON"));
     } else {
       promise.set_value(std::nullopt);
     }

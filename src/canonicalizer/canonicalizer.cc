@@ -1,7 +1,5 @@
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 
-#include <stdexcept>
-
 // To be used by the rules below
 #include "utils.h"
 #include <alterschema/rule.h>
@@ -143,14 +141,5 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
 auto sourcemeta::jsonbinpack::Canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value) const -> void {
-  const std::optional<std::string> dialect{
-      sourcemeta::jsontoolkit::dialect(value, this->bundle.resolver()).get()};
-  // TODO: Theoretically support other dialects here. Worst case
-  // we should add this restriction at the mapper level.
-  if (!dialect.has_value() ||
-      dialect.value() != "https://json-schema.org/draft/2020-12/schema") {
-    throw std::domain_error("Only JSON Schema 2020-12 is supported");
-  }
-
   this->bundle.apply(document, value);
 }

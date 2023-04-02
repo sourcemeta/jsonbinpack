@@ -12,11 +12,19 @@ static Resolver resolver{};
 TEST(Canonicalizer, unsupported_dialect) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$schema": "https://www.jsonbinpack.org/dialect/unknown",
     "type": "boolean"
   })JSON")};
 
-  EXPECT_THROW(canonicalizer.apply(schema), std::domain_error);
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://www.jsonbinpack.org/dialect/unknown",
+    "type": "boolean"
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
 }
 
 TEST(Canonicalizer, unknown_dialect) {
@@ -25,5 +33,5 @@ TEST(Canonicalizer, unknown_dialect) {
     "type": "boolean"
   })JSON")};
 
-  EXPECT_THROW(canonicalizer.apply(schema), std::domain_error);
+  EXPECT_THROW(canonicalizer.apply(schema), std::runtime_error);
 }
