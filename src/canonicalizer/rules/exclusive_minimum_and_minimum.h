@@ -23,8 +23,9 @@ public:
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool exclusive_minimum_less_than_minimum{
-        compare_number(sourcemeta::jsontoolkit::at(value, "exclusiveMinimum"),
-                       sourcemeta::jsontoolkit::at(value, "minimum"))};
+        sourcemeta::jsontoolkit::compare(
+            sourcemeta::jsontoolkit::at(value, "exclusiveMinimum"),
+            sourcemeta::jsontoolkit::at(value, "minimum"))};
     if (exclusive_minimum_less_than_minimum) {
       sourcemeta::jsontoolkit::erase(value, "exclusiveMinimum");
     } else {

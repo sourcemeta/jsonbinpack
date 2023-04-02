@@ -236,6 +236,63 @@ inline auto contains(const Value &value, const Value &element) -> bool {
   return false;
 }
 
+// See https://en.cppreference.com/w/cpp/named_req/Compare
+inline auto compare(const Value &left, const Value &right) -> bool {
+  if (left == right) {
+    return false;
+  }
+
+  // Fallback to native sorting for these cases
+  if (is_boolean(left) && is_boolean(right)) {
+    return to_boolean(left) < to_boolean(right);
+  } else if (is_real(left) && is_real(right)) {
+    return to_real(left) < to_real(right);
+  } else if (is_integer(left) && is_integer(right)) {
+    return to_integer(left) < to_integer(right);
+  } else if ((is_real(left) && is_integer(right)) ||
+             (is_integer(left) && is_real(right))) {
+    return (is_real(left) ? to_real(left)
+                          : static_cast<double>(to_integer(left))) <
+           (is_real(right) ? to_real(right)
+                           : static_cast<double>(to_integer(right)));
+  } else if (is_string(left) && is_string(right)) {
+    return to_string(left) < to_string(right);
+  }
+
+  // Arrays
+  if (is_array(left) && is_array(right)) {
+    if (size(left) == size(right)) {
+      for (std::size_t index = 0; index < size(left); index++) {
+        if (compare(at(left, index), at(right, index))) {
+          return true;
+        }
+      }
+    }
+
+    return size(left) < size(right);
+  }
+
+  // Objects
+  if (is_object(left) && is_object(right)) {
+    if (size(left) == size(right)) {
+      for (rapidjson::Value::ConstMemberIterator iterator = left.MemberBegin();
+           iterator != left.MemberEnd(); ++iterator) {
+        const auto name{iterator->name.GetString()};
+        if (defines(right, name) && compare(iterator->value, at(right, name))) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    return size(left) < size(right);
+  }
+
+  // Resort to type comparison to get some sort of ordering
+  return left.GetType() < right.GetType();
+}
+
 } // namespace sourcemeta::jsontoolkit
 
 #endif

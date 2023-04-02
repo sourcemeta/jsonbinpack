@@ -23,8 +23,9 @@ public:
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool maximum_less_than_exclusive_maximum{
-        compare_number(sourcemeta::jsontoolkit::at(value, "maximum"),
-                       sourcemeta::jsontoolkit::at(value, "exclusiveMaximum"))};
+        sourcemeta::jsontoolkit::compare(
+            sourcemeta::jsontoolkit::at(value, "maximum"),
+            sourcemeta::jsontoolkit::at(value, "exclusiveMaximum"))};
     if (maximum_less_than_exclusive_maximum) {
       sourcemeta::jsontoolkit::erase(value, "exclusiveMaximum");
     } else {
