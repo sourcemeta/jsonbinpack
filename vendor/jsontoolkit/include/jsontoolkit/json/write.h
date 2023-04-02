@@ -16,13 +16,6 @@
 
 namespace sourcemeta::jsontoolkit {
 
-template <typename Iterator>
-auto erase_many(Value &value, Iterator begin, Iterator end) -> void {
-  for (Iterator iterator{begin}; iterator != end; iterator++) {
-    erase(value, *iterator);
-  }
-}
-
 inline auto erase_many(Value &value, std::initializer_list<std::string> keys)
     -> void {
   erase_many(value, keys.begin(), keys.end());

@@ -34,6 +34,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/drop_non_string_keywords_applicator.h
   rules/drop_non_string_keywords_unevaluated.h
   rules/drop_non_string_keywords_validation.h
+  rules/duplicate_allof_branches.h
   rules/empty_array_as_const.h
   rules/empty_dependent_required.h
   rules/empty_object_as_const.h
