@@ -51,6 +51,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/implicit_object_required.h
   rules/implicit_string_lower_bound.h
   rules/implicit_unit_multiple_of.h
+  rules/implied_array_unique_items.h
   rules/max_contains_without_contains.h
   rules/min_contains_without_contains.h
   rules/min_properties_required_tautology.h
