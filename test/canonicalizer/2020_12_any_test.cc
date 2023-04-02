@@ -413,3 +413,45 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_3) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema"
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "anyOf": [
+      { "enum": [ null ] },
+      { "enum": [ false, true ] },
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": []
+      },
+      {
+        "type": "array",
+        "minItems": 0
+      },
+      {
+        "type": "string",
+        "minLength": 0
+      },
+      {
+        "type": "number"
+      },
+      {
+        "type": "integer",
+        "multipleOf": 1
+      }
+    ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
