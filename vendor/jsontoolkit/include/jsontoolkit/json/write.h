@@ -9,10 +9,12 @@
 
 #include "read.h"
 
+#include <algorithm>        // std::copy
 #include <cassert>          // assert
 #include <initializer_list> // std::initializer_list
-#include <iterator>         // std::cbegin, std::cend
-#include <string>           // std::string
+#include <iterator> // std::cbegin, std::cend, std::begin, std::end, std::inserter
+#include <set>      // std::set
+#include <string>   // std::string
 
 namespace sourcemeta::jsontoolkit {
 
@@ -44,6 +46,14 @@ inline auto add(JSON &root, Value &value, const Value &additive) -> void {
 
 inline auto add(JSON &document, const Value &additive) -> void {
   add(document, document, additive);
+}
+
+inline auto clear_except(Value &value, std::initializer_list<std::string> keys)
+    -> void {
+  std::set<std::string> whitelist;
+  std::copy(std::begin(keys), std::end(keys),
+            std::inserter(whitelist, std::end(whitelist)));
+  clear_except(value, whitelist);
 }
 
 } // namespace sourcemeta::jsontoolkit
