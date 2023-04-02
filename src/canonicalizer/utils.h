@@ -4,6 +4,7 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/jsonschema.h>
 
+#include <algorithm>     // std::sort, std::unique, std::all_of
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 
@@ -49,6 +50,16 @@ auto is_null_schema(const sourcemeta::jsontoolkit::Value &schema,
                      [](const auto &element) {
                        return sourcemeta::jsontoolkit::is_null(element);
                      });
+}
+
+auto is_unique(const sourcemeta::jsontoolkit::Value &document) -> bool {
+  auto copy{sourcemeta::jsontoolkit::from(document)};
+  std::sort(sourcemeta::jsontoolkit::begin_array(copy),
+            sourcemeta::jsontoolkit::end_array(copy),
+            sourcemeta::jsontoolkit::compare);
+  return std::unique(sourcemeta::jsontoolkit::begin_array(copy),
+                     sourcemeta::jsontoolkit::end_array(copy)) !=
+         sourcemeta::jsontoolkit::end_array(copy);
 }
 
 } // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -42,6 +42,7 @@
 #include "rules/drop_non_string_keywords_unevaluated.h"
 #include "rules/drop_non_string_keywords_validation.h"
 #include "rules/duplicate_allof_branches.h"
+#include "rules/duplicate_oneof_branches.h"
 #include "rules/empty_array_as_const.h"
 #include "rules/empty_dependent_required.h"
 #include "rules/empty_object_as_const.h"
@@ -106,6 +107,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DropNonStringKeywordsUnevaluated>();
   this->bundle.template add<DropNonStringKeywordsValidation>();
   this->bundle.template add<DuplicateAllOfBranches>();
+  this->bundle.template add<DuplicateOneOfBranches>();
   this->bundle.template add<EmptyArrayAsConst>();
   this->bundle.template add<EmptyDependentRequired>();
   this->bundle.template add<EmptyObjectAsConst>();

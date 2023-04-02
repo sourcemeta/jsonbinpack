@@ -1,8 +1,8 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class DuplicateAllOfBranches final : public sourcemeta::alterschema::Rule {
+class DuplicateOneOfBranches final : public sourcemeta::alterschema::Rule {
 public:
-  DuplicateAllOfBranches() : Rule("duplicate_allof_branches"){};
+  DuplicateOneOfBranches() : Rule("duplicate_oneof_branches"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &dialect,
@@ -12,15 +12,15 @@ public:
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "allOf") &&
+           sourcemeta::jsontoolkit::defines(schema, "oneOf") &&
            sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "allOf")) &&
-           is_unique(sourcemeta::jsontoolkit::at(schema, "allOf"));
+               sourcemeta::jsontoolkit::at(schema, "oneOf")) &&
+           is_unique(sourcemeta::jsontoolkit::at(schema, "oneOf"));
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto &collection{sourcemeta::jsontoolkit::at(value, "allOf")};
+    auto &collection{sourcemeta::jsontoolkit::at(value, "oneOf")};
     std::sort(sourcemeta::jsontoolkit::begin_array(collection),
               sourcemeta::jsontoolkit::end_array(collection),
               sourcemeta::jsontoolkit::compare);
