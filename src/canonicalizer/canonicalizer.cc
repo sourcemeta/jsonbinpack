@@ -67,6 +67,7 @@
 #include "rules/min_properties_required_tautology.h"
 #include "rules/null_as_const.h"
 #include "rules/then_else_without_if.h"
+#include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
 
 sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
@@ -133,6 +134,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<MinPropertiesRequiredTautology>();
   this->bundle.template add<NullAsConst>();
   this->bundle.template add<ThenElseWithoutIf>();
+  this->bundle.template add<TypeUnionAnyOf>();
   this->bundle.template add<UnsatisfiableMaxContains>();
 }
 

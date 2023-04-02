@@ -60,6 +60,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/min_properties_required_tautology.h
   rules/null_as_const.h
   rules/then_else_without_if.h
+  rules/type_union_anyof.h
   rules/unsatisfiable_max_contains.h)
 target_include_directories(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")

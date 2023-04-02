@@ -6,6 +6,8 @@
 
 #include <cassert>     // assert
 #include <cstdint>     // std::int64_t
+#include <iterator>    // std::cbegin, std::cend
+#include <set>         // std::set
 #include <string>      // std::string
 #include <type_traits> // std::enable_if_t, std::is_same_v
 #include <utility>     // std::move
@@ -67,6 +69,19 @@ inline auto clear(Value &value) -> void {
   } else {
     erase_many(value, value.MemberBegin(), value.MemberEnd());
   }
+}
+
+template <typename T> auto clear_except(Value &value, const T &keys) -> void {
+  assert(is_object(value));
+  std::set<std::string> blacklist;
+  for (rapidjson::Value::ConstMemberIterator iterator = value.MemberBegin();
+       iterator != value.MemberEnd(); ++iterator) {
+    if (keys.find(iterator->name.GetString()) == keys.end()) {
+      blacklist.insert(iterator->name.GetString());
+    }
+  }
+
+  erase_many(value, std::cbegin(blacklist), std::cend(blacklist));
 }
 
 inline auto assign(JSON &root, Value &value, const std::string &key,
