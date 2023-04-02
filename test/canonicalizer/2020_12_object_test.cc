@@ -149,3 +149,55 @@ TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar" ],
+    "dependentRequired": {
+      "bar": [ "baz" ]
+    }
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar", "baz" ],
+    "minProperties": 3,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar", "qux" ],
+    "dependentRequired": {
+      "bar": [ "baz", "qux" ]
+    }
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar", "qux", "baz" ],
+    "minProperties": 4,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
