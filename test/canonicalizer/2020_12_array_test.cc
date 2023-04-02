@@ -197,3 +197,118 @@ TEST(CanonicalizerArray_2020_12, drop_non_array_keywords_1) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerArray_2020_12, implied_array_unique_items_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "uniqueItems": true,
+    "maxItems": 1
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "maxItems": 1,
+    "minItems": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerArray_2020_12, implied_array_unique_items_2) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "uniqueItems": true,
+    "const": [ 1 ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "enum": [ [ 1 ] ],
+    "minItems": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerArray_2020_12, implied_array_unique_items_3) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "uniqueItems": true,
+    "enum": [ [1] ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "enum": [ [1] ],
+    "minItems": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerArray_2020_12, implied_array_unique_items_4) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "uniqueItems": true,
+    "enum": [ [1], [] ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "enum": [ [1], [] ],
+    "minItems": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerArray_2020_12, implied_array_unique_items_5) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "uniqueItems": true,
+    "enum": [ [1], [], 2 ]
+  })JSON")};
+
+  canonicalizer.apply(schema);
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "array",
+    "enum": [ [1], [], 2 ],
+    "minItems": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}

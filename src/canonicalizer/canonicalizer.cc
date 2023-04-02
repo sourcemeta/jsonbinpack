@@ -58,6 +58,7 @@
 #include "rules/implicit_object_required.h"
 #include "rules/implicit_string_lower_bound.h"
 #include "rules/implicit_unit_multiple_of.h"
+#include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/min_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
@@ -120,6 +121,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ImplicitObjectRequired>();
   this->bundle.template add<ImplicitStringLowerBound>();
   this->bundle.template add<ImplicitUnitMultipleOf>();
+  this->bundle.template add<ImpliedArrayUniqueItems>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
   this->bundle.template add<MinPropertiesRequiredTautology>();
