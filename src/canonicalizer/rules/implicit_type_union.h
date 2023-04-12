@@ -8,7 +8,6 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
-    // TODO: Write rules that flatten allOf/oneOf/anyOf with one element
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            sourcemeta::jsontoolkit::is_object(schema) &&
            (!vocabularies.contains(
