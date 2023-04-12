@@ -16,7 +16,7 @@ TEST(Canonicalizer, unsupported_dialect) {
     "type": "boolean"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -33,5 +33,6 @@ TEST(Canonicalizer, unknown_dialect) {
     "type": "boolean"
   })JSON")};
 
-  EXPECT_THROW(canonicalizer.apply(schema), std::runtime_error);
+  EXPECT_THROW(canonicalizer.apply(schema, "https://example.com/invalid"),
+               std::runtime_error);
 }

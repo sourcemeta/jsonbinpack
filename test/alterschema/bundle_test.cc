@@ -35,7 +35,7 @@ TEST(Bundle, alter_flat_document_no_applicators) {
     "qux": "xxx"
   })JSON")};
 
-  bundle.apply(document);
+  bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
 
   sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -54,7 +54,7 @@ TEST(Bundle, condition_dialect) {
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON")};
 
-  bundle.apply(document);
+  bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
 
   sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -64,7 +64,7 @@ TEST(Bundle, condition_dialect) {
   EXPECT_EQ(expected, document);
 }
 
-TEST(Bundle, throw_if_no_dialect) {
+TEST(Bundle, throw_if_no_dialect_invalid_default) {
   sourcemeta::alterschema::Bundle bundle{
       sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
 
@@ -74,7 +74,29 @@ TEST(Bundle, throw_if_no_dialect) {
     "qux": "xxx"
   })JSON")};
 
-  EXPECT_THROW(bundle.apply(document), std::runtime_error);
+  EXPECT_THROW(bundle.apply(document, "https://example.com/invalid"),
+               std::runtime_error);
+}
+
+TEST(Bundle, no_dialect_valid_default) {
+  sourcemeta::alterschema::Bundle bundle{
+      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+  bundle.add<ExampleRule1>();
+  bundle.add<ExampleRule2>();
+
+  sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::parse(R"JSON({
+    "foo": "bar",
+    "bar": "baz",
+    "qux": "xxx"
+  })JSON")};
+
+  bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
+
+  sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
+    "qux": "xxx"
+  })JSON")};
+
+  EXPECT_EQ(expected, document);
 }
 
 TEST(Bundle, throw_on_rules_called_twice) {
@@ -88,7 +110,9 @@ TEST(Bundle, throw_on_rules_called_twice) {
     "foo": "bar"
   })JSON")};
 
-  EXPECT_THROW(bundle.apply(document), std::runtime_error);
+  EXPECT_THROW(
+      bundle.apply(document, "https://json-schema.org/draft/2020-12/schema"),
+      std::runtime_error);
 }
 
 static auto
@@ -153,7 +177,7 @@ TEST(Bundle, alter_nested_document_with_applicators) {
     }
   })JSON")};
 
-  bundle.apply(document);
+  bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
 
   sourcemeta::jsontoolkit::prettify(document, std::cout);
   std::cout << std::endl;

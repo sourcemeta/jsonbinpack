@@ -28,11 +28,13 @@ public:
   }
 
   auto apply(sourcemeta::jsontoolkit::JSON &document,
-             sourcemeta::jsontoolkit::Value &value) const -> void;
+             sourcemeta::jsontoolkit::Value &value,
+             const std::string &default_metaschema) const -> void;
 
   // For Convenience
-  inline auto apply(sourcemeta::jsontoolkit::JSON &document) const -> void {
-    return this->apply(document, document);
+  inline auto apply(sourcemeta::jsontoolkit::JSON &document,
+                    const std::string &default_metaschema) const -> void {
+    return this->apply(document, document, default_metaschema);
   }
 
   auto resolver() const -> const sourcemeta::jsontoolkit::schema_resolver_t &;

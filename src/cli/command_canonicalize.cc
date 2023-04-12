@@ -13,7 +13,7 @@ static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
     -> int {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{
       sourcemeta::jsonbinpack::cli::Resolver{}};
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;
   return EXIT_SUCCESS;

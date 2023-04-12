@@ -17,7 +17,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_1) {
     "maxContains": 2
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -39,7 +39,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_2) {
     "maxContains": 2
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -65,7 +65,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_1) {
     "minContains": 2
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -87,7 +87,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_2) {
     "minContains": 2
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -115,7 +115,7 @@ TEST(CanonicalizerArray_2020_12, unsatisfiable_max_contains_1) {
     "maxItems": 2
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -140,7 +140,7 @@ TEST(CanonicalizerArray_2020_12, implicit_array_lower_bound_1) {
     "type": "array"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -161,7 +161,7 @@ TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
     "maxItems": 0
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -184,7 +184,7 @@ TEST(CanonicalizerArray_2020_12, drop_non_array_keywords_1) {
     "maxLength": 3
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -207,7 +207,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_1) {
     "maxItems": 1
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -230,7 +230,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_2) {
     "const": [ 1 ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -253,7 +253,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_3) {
     "enum": [ [1] ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -276,7 +276,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_4) {
     "enum": [ [1], [] ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -299,7 +299,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_5) {
     "enum": [ [1], [], 2 ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({

@@ -7,19 +7,16 @@
 
 auto sourcemeta::alterschema::Bundle::apply(
     sourcemeta::jsontoolkit::JSON &document,
-    sourcemeta::jsontoolkit::Value &value) const -> void {
+    sourcemeta::jsontoolkit::Value &value,
+    const std::string &default_metaschema) const -> void {
   // TODO: Handle schemas with embedded schemas that use different
   // dialects/vocabularies
 
-  const std::optional<std::string> metaschema{
-      sourcemeta::jsontoolkit::metaschema(value)};
-  if (!metaschema.has_value()) {
-    throw std::runtime_error(
-        "Could not determine the metaschema of the given schema");
-  }
-
+  const std::string metaschema{
+      sourcemeta::jsontoolkit::metaschema(value).value_or(default_metaschema)};
   const std::optional<std::string> dialect{
-      sourcemeta::jsontoolkit::dialect(value, this->resolver_).get()};
+      sourcemeta::jsontoolkit::dialect(value, this->resolver_, metaschema)
+          .get()};
   if (!dialect.has_value()) {
     throw std::runtime_error(
         "Could not determine the dialect of the given schema");
@@ -27,7 +24,7 @@ auto sourcemeta::alterschema::Bundle::apply(
 
   const std::unordered_map<std::string, bool> vocabularies{
       sourcemeta::jsontoolkit::vocabularies(document, this->resolver_).get()};
-  return apply_subschema(document, value, metaschema.value(), dialect.value(),
+  return apply_subschema(document, value, metaschema, dialect.value(),
                          vocabularies);
 }
 

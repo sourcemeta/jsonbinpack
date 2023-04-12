@@ -17,7 +17,7 @@ TEST(CanonicalizerAny_2020_12, if_without_then_else_1) {
     "if": { "minProperties": 2 }
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -41,7 +41,7 @@ TEST(CanonicalizerAny_2020_12, then_else_without_if_1) {
     "else": { "minProperties": 3 }
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -67,7 +67,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_1) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -93,7 +93,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_2) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -126,7 +126,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_3) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -152,7 +152,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_1) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -178,7 +178,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_2) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -211,7 +211,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_3) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -237,7 +237,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_1) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -263,7 +263,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_2) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -296,7 +296,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_3) {
     ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -318,7 +318,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_1) {
     "type": [ "object", "array" ]
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -349,7 +349,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_2) {
     "maxProperties": 3
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -385,7 +385,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_3) {
     }
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -421,7 +421,7 @@ TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
