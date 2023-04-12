@@ -23,7 +23,9 @@ auto sourcemeta::alterschema::Bundle::apply(
   }
 
   const std::unordered_map<std::string, bool> vocabularies{
-      sourcemeta::jsontoolkit::vocabularies(document, this->resolver_).get()};
+      sourcemeta::jsontoolkit::vocabularies(document, this->resolver_,
+                                            default_metaschema)
+          .get()};
   return apply_subschema(document, value, metaschema, dialect.value(),
                          vocabularies);
 }

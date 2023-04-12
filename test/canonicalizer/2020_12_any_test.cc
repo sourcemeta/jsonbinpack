@@ -455,3 +455,83 @@ TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::from(true)};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  // TODO: Add back $schema
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "anyOf": [
+      { "enum": [ null ] },
+      { "enum": [ false, true ] },
+      {
+        "type": "object",
+        "minProperties": 0,
+        "properties": {},
+        "required": []
+      },
+      {
+        "type": "array",
+        "minItems": 0
+      },
+      {
+        "type": "string",
+        "minLength": 0
+      },
+      {
+        "type": "number"
+      },
+      {
+        "type": "integer",
+        "multipleOf": 1
+      }
+    ]
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerAny_2020_12, boolean_schema_2) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::from(false)};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  // TODO: Add back $schema
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "not": {
+      "anyOf": [
+        { "enum": [ null ] },
+        { "enum": [ false, true ] },
+        {
+          "type": "object",
+          "minProperties": 0,
+          "properties": {},
+          "required": []
+        },
+        {
+          "type": "array",
+          "minItems": 0
+        },
+        {
+          "type": "string",
+          "minLength": 0
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "integer",
+          "multipleOf": 1
+        }
+      ]
+    }
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}

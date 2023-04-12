@@ -8,21 +8,24 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies) const
       -> bool override {
+    const bool has_core_blacklist{
+        vocabularies.contains(
+            "https://json-schema.org/draft/2020-12/vocab/core") &&
+        sourcemeta::jsontoolkit::defines_any(schema, {"$ref", "$dynamicRef"})};
+    const bool has_applicator_blacklist{
+        vocabularies.contains(
+            "https://json-schema.org/draft/2020-12/vocab/applicator") &&
+        sourcemeta::jsontoolkit::defines_any(
+            schema, {"anyOf", "allOf", "oneOf", "not", "if", "then", "else"})};
+    const bool has_validation_blacklist{
+        vocabularies.contains(
+            "https://json-schema.org/draft/2020-12/vocab/validation") &&
+        sourcemeta::jsontoolkit::defines_any(schema,
+                                             {"type", "const", "enum"})};
+
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           (!vocabularies.contains(
-                "https://json-schema.org/draft/2020-12/vocab/core") ||
-            !sourcemeta::jsontoolkit::defines_any(schema,
-                                                  {"$ref", "$dynamicRef"})) &&
-           (!vocabularies.contains(
-                "https://json-schema.org/draft/2020-12/vocab/applicator") ||
-            !sourcemeta::jsontoolkit::defines_any(
-                schema,
-                {"anyOf", "allOf", "oneOf", "not", "if", "then", "else"})) &&
-           (!vocabularies.contains(
-                "https://json-schema.org/draft/2020-12/vocab/validation") ||
-            !sourcemeta::jsontoolkit::defines_any(schema,
-                                                  {"type", "const", "enum"}));
+           sourcemeta::jsontoolkit::is_object(schema) && !has_core_blacklist &&
+           !has_applicator_blacklist && !has_validation_blacklist;
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
