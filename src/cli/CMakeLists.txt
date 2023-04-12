@@ -1,7 +1,8 @@
 configure_file(version.h.in version.h @ONLY)
 add_executable(sourcemeta_jsonbinpack_cli main.cc commands.h
   command_help.cc command_version.cc
-  command_canonicalize.cc command_compile.cc resolver.h version.h.in)
+  command_canonicalize.cc command_compile.cc
+  defaults.h resolver.h version.h.in)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_mapper)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsontoolkit_json)
