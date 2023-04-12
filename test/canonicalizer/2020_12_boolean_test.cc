@@ -16,7 +16,7 @@ TEST(CanonicalizerBoolean_2020_12, type_boolean) {
     "type": "boolean"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -37,7 +37,7 @@ TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_1) {
     "maxLength": 3
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -58,7 +58,7 @@ TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_2) {
     "maxLength": 3
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -78,7 +78,7 @@ TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_3) {
     "format": "uri"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({

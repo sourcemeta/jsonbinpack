@@ -142,6 +142,7 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
 
 auto sourcemeta::jsonbinpack::Canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON &document,
-    sourcemeta::jsontoolkit::Value &value) const -> void {
-  this->bundle.apply(document, value);
+    sourcemeta::jsontoolkit::Value &value,
+    const std::string &default_metaschema) const -> void {
+  this->bundle.apply(document, value, default_metaschema);
 }

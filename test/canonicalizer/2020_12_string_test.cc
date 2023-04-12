@@ -19,7 +19,7 @@ TEST(CanonicalizerString_2020_12, content_schema_without_content_media_type_1) {
     }
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -39,7 +39,7 @@ TEST(CanonicalizerString_2020_12, implicit_string_lower_bound_1) {
     "type": "string"
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -60,7 +60,7 @@ TEST(CanonicalizerString_2020_12, empty_string_as_const_1) {
     "maxLength": 0
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -84,7 +84,7 @@ TEST(CanonicalizerString_2020_12, drop_non_string_keywords_1) {
     "properties": {}
   })JSON")};
 
-  canonicalizer.apply(schema);
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({

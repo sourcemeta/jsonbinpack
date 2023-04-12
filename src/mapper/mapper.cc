@@ -74,5 +74,6 @@ auto sourcemeta::jsonbinpack::Mapper::apply(
     throw std::domain_error("Only JSON Schema 2020-12 is supported");
   }
 
-  this->bundle.apply(document, value);
+  this->bundle.apply(document, value,
+                     "https://json-schema.org/draft/2020-12/schema");
 }
