@@ -59,8 +59,10 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/implicit_unit_multiple_of.h
   rules/implied_array_unique_items.h
   rules/max_contains_without_contains.h
+  rules/maximum_real_for_integer.h
   rules/min_contains_without_contains.h
   rules/min_properties_required_tautology.h
+  rules/minimum_real_for_integer.h
   rules/null_as_const.h
   rules/then_else_without_if.h
   rules/type_union_anyof.h

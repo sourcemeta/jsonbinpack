@@ -3,7 +3,8 @@
 // To be used by the rules below
 #include "utils.h"
 #include <alterschema/rule.h>
-#include <set> // std::set
+#include <cmath> // std::floor, std::ceil
+#include <set>   // std::set
 
 // Rules
 #include "rules/boolean_as_enum.h"
@@ -64,8 +65,10 @@
 #include "rules/implicit_unit_multiple_of.h"
 #include "rules/implied_array_unique_items.h"
 #include "rules/max_contains_without_contains.h"
+#include "rules/maximum_real_for_integer.h"
 #include "rules/min_contains_without_contains.h"
 #include "rules/min_properties_required_tautology.h"
+#include "rules/minimum_real_for_integer.h"
 #include "rules/null_as_const.h"
 #include "rules/then_else_without_if.h"
 #include "rules/type_union_anyof.h"
@@ -133,9 +136,11 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ImplicitTypeUnion>();
   this->bundle.template add<ImplicitUnitMultipleOf>();
   this->bundle.template add<ImpliedArrayUniqueItems>();
+  this->bundle.template add<MaximumRealForInteger>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
   this->bundle.template add<MinPropertiesRequiredTautology>();
+  this->bundle.template add<MinimumRealForInteger>();
   this->bundle.template add<NullAsConst>();
   this->bundle.template add<ThenElseWithoutIf>();
   this->bundle.template add<TypeUnionAnyOf>();

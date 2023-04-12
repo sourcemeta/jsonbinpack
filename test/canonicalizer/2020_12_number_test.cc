@@ -53,9 +53,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
-  // TODO: Write a rule that handles the case where "type: integer" and
-  // "maximum" is a real. In that case, "maximum" can be converted to an
-  // integer. Same for "minimum".
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -69,7 +66,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 4.1
+    "maximum": 4
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -138,7 +135,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 3.2
+    "maximum": 3
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -161,7 +158,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 3.2
+    "maximum": 3
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -253,7 +250,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 4.1
+    "maximum": 4
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -297,7 +294,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 6.1
+    "minimum": 7
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -366,7 +363,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 7.2
+    "minimum": 8
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -389,7 +386,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 7.2
+    "minimum": 8
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -435,7 +432,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 6.1
+    "minimum": 7
   })JSON")};
 
   EXPECT_EQ(schema, expected);
@@ -481,7 +478,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 6.2
+    "minimum": 7
   })JSON")};
 
   EXPECT_EQ(schema, expected);
