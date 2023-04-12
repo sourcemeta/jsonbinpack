@@ -5,6 +5,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/boolean_schema.h
   rules/const_as_enum.h
   rules/content_schema_without_content_media_type.h
+  rules/default_metaschema_2020_12.h
   rules/dependent_required_tautology.h
   rules/drop_non_array_keywords_applicator.h
   rules/drop_non_array_keywords_content.h

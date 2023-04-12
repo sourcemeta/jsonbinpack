@@ -1,26 +1,27 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
+class DefaultMetaschema_2020_12 final : public sourcemeta::alterschema::Rule {
 public:
-  ThenElseWithoutIf() : Rule("then_else_without_if"){};
+  DefaultMetaschema_2020_12() : Rule("default_metaschema_2020_12"){};
+
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
+            const std::size_t level) const -> bool override {
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
-               "https://json-schema.org/draft/2020-12/vocab/applicator") &&
+               "https://json-schema.org/draft/2020-12/vocab/core") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
-           !sourcemeta::jsontoolkit::defines(schema, "if") &&
-           sourcemeta::jsontoolkit::defines(schema, "then") &&
-           sourcemeta::jsontoolkit::defines(schema, "else");
+           !sourcemeta::jsontoolkit::defines(schema, "$schema") && level == 0;
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "then");
-    sourcemeta::jsontoolkit::erase(value, "else");
+    sourcemeta::jsontoolkit::assign(
+        document, value, "$schema",
+        sourcemeta::jsontoolkit::from(
+            "https://json-schema.org/draft/2020-12/schema"));
   }
 };
 
