@@ -13,8 +13,8 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &dialect,
-            const std::unordered_map<std::string, bool> &vocabularies) const
-      -> bool override {
+            const std::unordered_map<std::string, bool> &vocabularies,
+            const std::size_t) const -> bool override {
     if (sourcemeta::jsonbinpack::encoding::is_encoding(schema) ||
         dialect != "https://json-schema.org/draft/2020-12/schema" ||
         !vocabularies.contains(

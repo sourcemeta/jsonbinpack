@@ -462,9 +462,9 @@ TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
 
   canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
-  // TODO: Add back $schema
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "enum": [ null ] },
       { "enum": [ false, true ] },
@@ -501,9 +501,9 @@ TEST(CanonicalizerAny_2020_12, boolean_schema_2) {
 
   canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
-  // TODO: Add back $schema
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "not": {
       "anyOf": [
         { "enum": [ null ] },

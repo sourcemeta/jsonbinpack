@@ -7,8 +7,8 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &dialect,
-            const std::unordered_map<std::string, bool> &vocabularies) const
-      -> bool override {
+            const std::unordered_map<std::string, bool> &vocabularies,
+            const std::size_t) const -> bool override {
     return sourcemeta::jsontoolkit::is_boolean(schema);
   }
 

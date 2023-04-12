@@ -40,11 +40,12 @@ public:
   auto resolver() const -> const sourcemeta::jsontoolkit::schema_resolver_t &;
 
 private:
-  auto apply_subschema(
-      sourcemeta::jsontoolkit::JSON &document,
-      sourcemeta::jsontoolkit::Value &value, const std::string &metaschema,
-      const std::string &dialect,
-      const std::unordered_map<std::string, bool> &vocabularies) const -> void;
+  auto
+  apply_subschema(sourcemeta::jsontoolkit::JSON &document,
+                  sourcemeta::jsontoolkit::Value &value,
+                  const std::string &metaschema, const std::string &dialect,
+                  const std::unordered_map<std::string, bool> &vocabularies,
+                  const std::size_t level) const -> void;
   sourcemeta::jsontoolkit::schema_walker_t walker_;
   sourcemeta::jsontoolkit::schema_resolver_t resolver_;
   std::map<std::string, std::unique_ptr<sourcemeta::alterschema::Rule>> rules;
