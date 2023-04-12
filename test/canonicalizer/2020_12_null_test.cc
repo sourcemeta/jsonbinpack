@@ -41,11 +41,10 @@ TEST(CanonicalizerNull_2020_12, drop_non_null_keywords_2) {
 
   canonicalizer.apply(schema);
 
-  // TODO: Write a canonicalizer rule to collapse non-unique enums
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ null, null, null ]
+    "enum": [ null ]
   })JSON")};
 
   EXPECT_EQ(schema, expected);

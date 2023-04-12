@@ -163,7 +163,6 @@ TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
 
   canonicalizer.apply(schema);
 
-  // TODO: Write a rule to remove all validation keywords if "enum" is present
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",

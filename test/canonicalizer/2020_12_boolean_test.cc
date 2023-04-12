@@ -60,11 +60,10 @@ TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_2) {
 
   canonicalizer.apply(schema);
 
-  // TODO: Write a rule to de-duplicate enums with equal items
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ true, false, true ]
+    "enum": [ false, true ]
   })JSON")};
 
   EXPECT_EQ(schema, expected);
