@@ -18,7 +18,7 @@ public:
            is_unique(sourcemeta::jsontoolkit::at(schema, "enum"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto &collection{sourcemeta::jsontoolkit::at(value, "enum")};
     std::sort(sourcemeta::jsontoolkit::begin_array(collection),

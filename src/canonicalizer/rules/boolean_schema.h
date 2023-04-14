@@ -4,11 +4,10 @@ class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
   BooleanSchema() : Rule("boolean_schema"){};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::Value &schema,
+                               const std::string &,
+                               const std::unordered_map<std::string, bool> &,
+                               const std::size_t) const -> bool override {
     return sourcemeta::jsontoolkit::is_boolean(schema);
   }
 

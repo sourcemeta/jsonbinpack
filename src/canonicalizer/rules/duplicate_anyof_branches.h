@@ -18,7 +18,7 @@ public:
            is_unique(sourcemeta::jsontoolkit::at(schema, "anyOf"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto &collection{sourcemeta::jsontoolkit::at(value, "anyOf")};
     std::sort(sourcemeta::jsontoolkit::begin_array(collection),
