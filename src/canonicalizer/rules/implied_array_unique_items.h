@@ -59,7 +59,7 @@ public:
            (singular_by_max_items || singular_by_const || singular_by_enum);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "uniqueItems");
   }

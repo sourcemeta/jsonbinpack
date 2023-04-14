@@ -18,7 +18,7 @@ public:
            sourcemeta::jsontoolkit::defines_any(schema, this->BLACKLIST_FORMAT);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_FORMAT);
   }

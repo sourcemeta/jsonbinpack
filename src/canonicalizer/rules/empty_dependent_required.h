@@ -19,7 +19,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "dependentRequired"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "dependentRequired");
   }

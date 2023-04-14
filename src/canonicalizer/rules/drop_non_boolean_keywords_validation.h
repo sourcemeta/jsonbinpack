@@ -18,7 +18,7 @@ public:
                                                 this->BLACKLIST_VALIDATION);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_VALIDATION);
   }

@@ -19,7 +19,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "contentMediaType");
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "contentSchema");
   }

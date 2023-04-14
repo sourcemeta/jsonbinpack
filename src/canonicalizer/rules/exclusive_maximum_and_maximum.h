@@ -20,7 +20,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "exclusiveMaximum"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool maximum_less_than_exclusive_maximum{
         sourcemeta::jsontoolkit::compare(

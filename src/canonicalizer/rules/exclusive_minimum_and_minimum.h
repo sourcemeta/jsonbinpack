@@ -20,7 +20,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "exclusiveMinimum"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
+  auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool exclusive_minimum_less_than_minimum{
         sourcemeta::jsontoolkit::compare(
