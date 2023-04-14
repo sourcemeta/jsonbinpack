@@ -18,13 +18,13 @@ all:
 CASE ?=
 ifdef CASE
 test:
-	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET)
 	$(CTEST) --preset $(PRESET) --verbose --tests-regex $(CASE)
 else
 test:
-	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET)
 	$(CTEST) --preset $(PRESET) --verbose
@@ -33,7 +33,7 @@ endif
 .PHONY: debug
 ifdef CASE
 debug: scripts/lldb.sh
-	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET)
 	./$< $(PRESET) $(CASE)
 else
