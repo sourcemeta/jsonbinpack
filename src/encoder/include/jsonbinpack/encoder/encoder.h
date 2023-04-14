@@ -42,7 +42,8 @@ public:
             : this->divide_floor(options.maximum, options.multiplier)};
 #endif
     assert(this->is_byte(enum_maximum - enum_minimum));
-    this->put_byte((value / options.multiplier) - enum_minimum);
+    this->put_byte(
+        static_cast<std::uint8_t>((value / options.multiplier) - enum_minimum));
   }
 
   auto FLOOR_MULTIPLE_ENUM_VARINT(
@@ -115,7 +116,7 @@ public:
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(this->is_within(cursor, 0,
                            static_cast<std::int64_t>(options.choices.size())));
-    this->put_byte(cursor);
+    this->put_byte(static_cast<std::uint8_t>(cursor));
   }
 
   auto LARGE_CHOICE_INDEX(
@@ -145,7 +146,7 @@ public:
         cursor, 0, static_cast<std::int64_t>(options.choices.size()) - 1));
     // This encoding encodes the first option of the enum as "no data"
     if (cursor > 0) {
-      this->put_byte(cursor - 1);
+      this->put_byte(static_cast<std::uint8_t>(cursor - 1));
     }
   }
 
@@ -252,7 +253,7 @@ public:
     }
 
     // (2) Write length of the string + 1 (so it will never be zero)
-    this->put_byte(size - options.minimum + 1);
+    this->put_byte(static_cast<std::uint8_t>(size - options.minimum + 1));
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {

@@ -19,7 +19,9 @@ public:
                             std::ios_base::eofbit);
   }
 
-  inline auto get_byte() -> std::uint8_t { return this->stream.get(); }
+  inline auto get_byte() -> std::uint8_t {
+    return static_cast<std::uint8_t>(this->stream.get());
+  }
 
   // TODO: This function should return std::uint64_t
   inline auto get_varint() -> std::int64_t {
