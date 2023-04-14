@@ -12,8 +12,10 @@ auto sourcemeta::jsonbinpack::mapper::states::integer(
   assert(sourcemeta::jsontoolkit::defines(schema, "type"));
   assert(sourcemeta::jsontoolkit::to_string(
              sourcemeta::jsontoolkit::at(schema, "type")) == "integer");
-  assert(vocabularies.contains(
-      "https://json-schema.org/draft/2020-12/vocab/validation"));
+  if (!vocabularies.contains(
+          "https://json-schema.org/draft/2020-12/vocab/validation")) {
+    return std::nullopt;
+  }
 
   // The integer is unbounded by definition
   if (!sourcemeta::jsontoolkit::defines(schema, "minimum") ||
