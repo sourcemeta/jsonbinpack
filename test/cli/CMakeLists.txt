@@ -1,7 +1,12 @@
 set(JSONBINPACK_CLI_PATH $<TARGET_FILE:sourcemeta_jsonbinpack_cli>)
 
-set(RUNNER_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner.sh")
-set(RUNNER_STDIN_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner_stdin.sh")
+if(WIN32)
+  set(RUNNER_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner.bat")
+  set(RUNNER_STDIN_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner_stdin.bat")
+else()
+  set(RUNNER_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner.sh")
+  set(RUNNER_STDIN_BIN "${CMAKE_CURRENT_SOURCE_DIR}/runner_stdin.sh")
+endif()
 
 add_test(NAME jsonbinpack.cli_version
   COMMAND "${RUNNER_BIN}"
