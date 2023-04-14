@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.18)
+
+# Needs to happen before the first call to "project()".
+if(WIN32)
+  include(cmake/vcpkg.cmake)
+endif()
+
 project("JSON Toolkit" VERSION 0.0.1 LANGUAGES CXX
   DESCRIPTION "A multi-backend JSON library for modern C++")
 
@@ -26,6 +32,7 @@ set(JSONTOOLKIT_BACKEND "rapidjson" CACHE STRING "Set the JSON Toolkit backend")
 set(JSONTOOLKIT_BACKEND_PATH "" CACHE STRING "Set a custom path to the JSON Toolkit backend")
 option(JSONTOOLKIT_TESTS "Build the JSON Toolkit tests" OFF)
 option(JSONTOOLKIT_CONTRIB "Build the JSON Toolkit extra programs" OFF)
+option(JSONTOOLKIT_WEBSITE "Build the JSON Toolkit website" OFF)
 
 if(PROJECT_IS_TOP_LEVEL)
   include(GNUInstallDirs)
@@ -109,6 +116,9 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   include(cmake/clang-format.cmake)
+  if(JSONTOOLKIT_WEBSITE)
+    add_subdirectory(./www)
+  endif()
   if(JSONTOOLKIT_TESTS)
     enable_testing()
   endif()

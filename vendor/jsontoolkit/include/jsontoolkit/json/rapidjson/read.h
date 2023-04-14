@@ -76,7 +76,8 @@ from(T value) {
   rapidjson::Document document;
 
   // Safe to cast
-  if (value <= std::numeric_limits<std::int64_t>::max()) {
+  if (value <=
+      static_cast<std::uint64_t>(std::numeric_limits<std::int64_t>::max())) {
     document.SetInt64(static_cast<std::int64_t>(value));
   } else {
     throw std::overflow_error("The input unsigned integer is too large");
