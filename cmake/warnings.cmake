@@ -1,4 +1,4 @@
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
   add_compile_options(
     -Wall
     -Wextra
@@ -79,4 +79,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     -Wno-non-virtual-dtor
     -Wno-overloaded-virtual
     -Winvalid-offsetof)
+else()
+  message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
