@@ -13,6 +13,7 @@ namespace sourcemeta::jsontoolkit {
 // an enum class (which is namespaced by definition), can shadow an
 // alias defined even on a different namespace.
 #pragma GCC diagnostic ignored "-Wshadow"
+#endif
 enum class schema_walker_strategy_t {
   None,
   Value,
@@ -21,6 +22,7 @@ enum class schema_walker_strategy_t {
   ValueOrElements,
   ElementsOrMembers
 };
+#if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
