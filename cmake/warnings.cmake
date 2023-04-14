@@ -79,6 +79,8 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     -Wno-non-virtual-dtor
     -Wno-overloaded-virtual
     -Winvalid-offsetof)
+elseif(MSVC)
+  add_compile_options(/options:strict /W4 /WX /WL /sdl)
 else()
   message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
