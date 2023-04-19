@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(CanonicalizerAny_2020_12, if_without_then_else_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -32,6 +28,7 @@ TEST(CanonicalizerAny_2020_12, if_without_then_else_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, then_else_without_if_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -56,6 +53,7 @@ TEST(CanonicalizerAny_2020_12, then_else_without_if_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -82,6 +80,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -108,6 +107,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_2) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -141,6 +141,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_allof_branches_3) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -167,6 +168,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -193,6 +195,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_2) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -226,6 +229,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_oneof_branches_3) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -252,6 +256,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -278,6 +283,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_2) {
 }
 
 TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -311,6 +317,7 @@ TEST(CanonicalizerAny_2020_12, duplicate_anyof_branches_3) {
 }
 
 TEST(CanonicalizerAny_2020_12, type_union_anyof_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -341,6 +348,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, type_union_anyof_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -373,6 +381,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_2) {
 }
 
 TEST(CanonicalizerAny_2020_12, type_union_anyof_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -415,6 +424,7 @@ TEST(CanonicalizerAny_2020_12, type_union_anyof_3) {
 }
 
 TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -457,6 +467,7 @@ TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::from(true)};
 
@@ -496,6 +507,7 @@ TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
 }
 
 TEST(CanonicalizerAny_2020_12, boolean_schema_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::from(false)};
 

@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/mapper/mapper.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(MapperInteger, maximum_minimum_8_bit) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -36,6 +32,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
 }
 
 TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -64,6 +61,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
 }
 
 TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -90,6 +88,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
 }
 
 TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -117,6 +116,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
 }
 
 TEST(MapperInteger, minimum) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -142,6 +142,7 @@ TEST(MapperInteger, minimum) {
 }
 
 TEST(MapperInteger, minimum_multiplier) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -168,6 +169,7 @@ TEST(MapperInteger, minimum_multiplier) {
 }
 
 TEST(MapperInteger, maximum) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -193,6 +195,7 @@ TEST(MapperInteger, maximum) {
 }
 
 TEST(MapperInteger, maximum_multiplier) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -219,6 +222,7 @@ TEST(MapperInteger, maximum_multiplier) {
 }
 
 TEST(MapperInteger, unbounded) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -242,6 +246,7 @@ TEST(MapperInteger, unbounded) {
 }
 
 TEST(MapperInteger, unbounded_multiplier) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

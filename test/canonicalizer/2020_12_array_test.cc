@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(CanonicalizerArray_2020_12, max_contains_without_contains_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -30,6 +26,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, max_contains_without_contains_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -57,6 +54,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_2) {
 }
 
 TEST(CanonicalizerArray_2020_12, min_contains_without_contains_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -78,6 +76,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, min_contains_without_contains_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -105,6 +104,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_2) {
 }
 
 TEST(CanonicalizerArray_2020_12, unsatisfiable_max_contains_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -133,6 +133,7 @@ TEST(CanonicalizerArray_2020_12, unsatisfiable_max_contains_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, implicit_array_lower_bound_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -153,6 +154,7 @@ TEST(CanonicalizerArray_2020_12, implicit_array_lower_bound_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -175,6 +177,7 @@ TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, drop_non_array_keywords_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -198,6 +201,7 @@ TEST(CanonicalizerArray_2020_12, drop_non_array_keywords_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, implied_array_unique_items_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -221,6 +225,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_1) {
 }
 
 TEST(CanonicalizerArray_2020_12, implied_array_unique_items_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -244,6 +249,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_2) {
 }
 
 TEST(CanonicalizerArray_2020_12, implied_array_unique_items_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -267,6 +273,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_3) {
 }
 
 TEST(CanonicalizerArray_2020_12, implied_array_unique_items_4) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -290,6 +297,7 @@ TEST(CanonicalizerArray_2020_12, implied_array_unique_items_4) {
 }
 
 TEST(CanonicalizerArray_2020_12, implied_array_unique_items_5) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

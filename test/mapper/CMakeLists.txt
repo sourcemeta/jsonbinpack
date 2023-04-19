@@ -1,6 +1,5 @@
 add_executable(sourcemeta_jsonbinpack_mapper_unit
   "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
-  resolver.h
   mapper_test.cc
   mapper_integer_test.cc
   states_integer_test.cc)

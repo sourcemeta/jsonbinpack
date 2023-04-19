@@ -1,15 +1,34 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
-#include <gtest/gtest.h>
-#include <stdexcept>
+#include <future>    // std::promise, std::future
+#include <optional>  // std::optional
+#include <stdexcept> // std::runtime_error
+#include <string>    // std::string
 
-// A shared instance for the tests
-static Resolver resolver{};
+#include <gtest/gtest.h>
+
+class TestResolver {
+public:
+  auto operator()(const std::string &identifier)
+      -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+    std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+
+    if (identifier == "https://www.jsonbinpack.org/dialect/unknown") {
+      promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
+        "$schema": "https://www.jsonbinpack.org/dialect/unknown",
+        "$id": "https://www.jsonbinpack.org/dialect/unknown"
+      })JSON"));
+    } else {
+      promise.set_value(std::nullopt);
+    }
+
+    return promise.get_future();
+  }
+};
 
 TEST(Canonicalizer, unsupported_dialect) {
+  TestResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/dialect/unknown",
@@ -28,6 +47,7 @@ TEST(Canonicalizer, unsupported_dialect) {
 }
 
 TEST(Canonicalizer, unknown_dialect) {
+  TestResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "boolean"
