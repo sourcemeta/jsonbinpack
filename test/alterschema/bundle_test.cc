@@ -10,21 +10,24 @@
 #include "sample_rules.h"
 
 TEST(Bundle, can_add_a_rule) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   EXPECT_NO_THROW({ bundle.add<ExampleRule1>(); });
 }
 
 TEST(Bundle, can_add_multiple_rules) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   bundle.add<ExampleRule1>();
   EXPECT_NO_THROW({ bundle.add<ExampleRule2>(); });
 }
 
 TEST(Bundle, alter_flat_document_no_applicators) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   bundle.add<ExampleRule1>();
   bundle.add<ExampleRule2>();
 
@@ -46,8 +49,9 @@ TEST(Bundle, alter_flat_document_no_applicators) {
 }
 
 TEST(Bundle, condition_dialect) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   bundle.add<ExampleRule4>();
 
   sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -65,8 +69,9 @@ TEST(Bundle, condition_dialect) {
 }
 
 TEST(Bundle, throw_if_no_dialect_invalid_default) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
 
   sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::parse(R"JSON({
     "foo": "bar",
@@ -79,8 +84,9 @@ TEST(Bundle, throw_if_no_dialect_invalid_default) {
 }
 
 TEST(Bundle, no_dialect_valid_default) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   bundle.add<ExampleRule1>();
   bundle.add<ExampleRule2>();
 
@@ -100,8 +106,9 @@ TEST(Bundle, no_dialect_valid_default) {
 }
 
 TEST(Bundle, throw_on_rules_called_twice) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
-      sourcemeta::jsontoolkit::schema_walker_none, SampleResolver{}};
+      sourcemeta::jsontoolkit::schema_walker_none, resolver};
   bundle.add<ExampleRule1>();
   bundle.add<ExampleRule3>();
 

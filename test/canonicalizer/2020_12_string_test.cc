@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(CanonicalizerString_2020_12, content_schema_without_content_media_type_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -32,6 +28,7 @@ TEST(CanonicalizerString_2020_12, content_schema_without_content_media_type_1) {
 }
 
 TEST(CanonicalizerString_2020_12, implicit_string_lower_bound_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -52,6 +49,7 @@ TEST(CanonicalizerString_2020_12, implicit_string_lower_bound_1) {
 }
 
 TEST(CanonicalizerString_2020_12, empty_string_as_const_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -74,6 +72,7 @@ TEST(CanonicalizerString_2020_12, empty_string_as_const_1) {
 }
 
 TEST(CanonicalizerString_2020_12, drop_non_string_keywords_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

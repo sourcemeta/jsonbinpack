@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -33,6 +29,7 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -57,6 +54,7 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
 }
 
 TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -80,6 +78,7 @@ TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -102,6 +101,7 @@ TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -126,6 +126,7 @@ TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -151,6 +152,7 @@ TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -177,6 +179,7 @@ TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
 }
 
 TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

@@ -1,14 +1,10 @@
-#include "resolver.h"
-
 #include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-// A shared instance for the tests
-static Resolver resolver{};
-
 TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -29,6 +25,7 @@ TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -51,6 +48,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -73,6 +71,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -96,6 +95,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -119,6 +119,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -142,6 +143,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -165,6 +167,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -188,6 +191,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -211,6 +215,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -234,6 +239,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -257,6 +263,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -279,6 +286,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -301,6 +309,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -324,6 +333,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -347,6 +357,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -370,6 +381,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -393,6 +405,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -416,6 +429,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -439,6 +453,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -462,6 +477,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -485,6 +501,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -508,6 +525,7 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -530,6 +548,7 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -552,6 +571,7 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -575,6 +595,7 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

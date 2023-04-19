@@ -3,7 +3,14 @@ Makefile
 README.markdown
 contrib
 test
-vendor
+vendor/bootstrap
+vendor/bootstrap.mask
+vendor/jsonschema-2019-09.mask
+vendor/jsonschema-2020-12.mask
+vendor/jsontestsuite
+vendor/jsontestsuite.mask
+vendor/vendorpull
+vendor/vendorpull.mask
 www
 .editorconfig
 .ackrc
