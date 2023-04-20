@@ -30,10 +30,7 @@ public:
   }
 
   inline auto put_bytes(const std::uint16_t bytes) -> void {
-    using ByteType = char;
-    static_assert(sizeof(ByteType) == 1);
-    this->stream.write(reinterpret_cast<const ByteType *>(&bytes),
-                       sizeof bytes);
+    this->stream.write(reinterpret_cast<const CharT *>(&bytes), sizeof bytes);
   }
 
   inline auto put_varint(const std::uint64_t value) -> void {
@@ -44,7 +41,7 @@ public:
     encoder::varint(this->stream, encoder::zigzag(value));
   }
 
-  inline auto put_string_utf8(const std::basic_string<char> &string,
+  inline auto put_string_utf8(const std::basic_string<CharT> &string,
                               const std::size_t length) -> void {
     assert(string.size() == length);
     // Do a manual for-loop based on the provided length instead of a range
