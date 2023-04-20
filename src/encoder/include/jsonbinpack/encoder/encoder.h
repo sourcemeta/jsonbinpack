@@ -166,9 +166,7 @@ public:
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::SizeOptions &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
-    using ByteType = char;
-    static_assert(sizeof(ByteType) == 1);
-    const std::basic_string<ByteType> value{
+    const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     this->put_string_utf8(value, options.size);
   }
@@ -178,9 +176,7 @@ public:
       const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options,
       sourcemeta::jsonbinpack::encoder::Context &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
-    using ByteType = char;
-    static_assert(sizeof(ByteType) == 1);
-    const std::basic_string<ByteType> value{
+    const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     const bool is_shared{context.has(value)};
@@ -207,9 +203,7 @@ public:
       const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options,
       sourcemeta::jsonbinpack::encoder::Context &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
-    using ByteType = char;
-    static_assert(sizeof(ByteType) == 1);
-    const std::basic_string<ByteType> value{
+    const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     assert(size <= options.maximum);
@@ -237,9 +231,7 @@ public:
       const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options,
       sourcemeta::jsonbinpack::encoder::Context &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
-    using ByteType = char;
-    static_assert(sizeof(ByteType) == 1);
-    const std::basic_string<ByteType> value{
+    const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     assert(options.minimum <= options.maximum);
