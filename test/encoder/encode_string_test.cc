@@ -19,7 +19,7 @@ TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3}, context);
   EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f});
@@ -29,7 +29,7 @@ TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {0}, context);
   EXPECT_TRUE(context.has("foo"));
@@ -41,7 +41,7 @@ TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {4}, context);
   EXPECT_BYTES(stream, {0x02, 0x66, 0x6f, 0x6f});
@@ -51,7 +51,7 @@ TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3}, context);
   EXPECT_TRUE(context.has("foo"));
@@ -63,7 +63,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 5}, context);
   EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f});
@@ -73,7 +73,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 3}, context);
   EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f});
@@ -83,7 +83,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
   OutputByteStream stream{};
-  sourcemeta::jsonbinpack::encoder::Context context;
+  sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6}, context);
   EXPECT_TRUE(context.has("foo"));

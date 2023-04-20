@@ -174,7 +174,7 @@ public:
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context &context) -> void {
+      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -201,7 +201,7 @@ public:
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context &context) -> void {
+      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -229,7 +229,7 @@ public:
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context &context) -> void {
+      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
