@@ -9,7 +9,7 @@
 TEST(Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(1));
@@ -22,7 +22,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
 TEST(Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -35,7 +35,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
 TEST(Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -48,7 +48,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
 TEST(Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("bar")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from("foo"));
@@ -61,7 +61,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 TEST(Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
@@ -78,7 +78,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
 TEST(Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(1));
@@ -91,7 +91,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
 TEST(Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -104,7 +104,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
 TEST(Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -117,7 +117,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
 TEST(Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("bar")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from("foo"));
@@ -130,7 +130,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
 TEST(Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
@@ -147,7 +147,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
 TEST(Encoder, LARGE_CHOICE_INDEX_enum_250) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(250)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   for (std::int64_t x = 0; x < 255; x++) {
@@ -161,7 +161,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_enum_250) {
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(1));
@@ -174,7 +174,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -187,7 +187,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from(0));
@@ -200,7 +200,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("bar")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::from("foo"));
@@ -213,7 +213,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 
@@ -230,7 +230,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
 TEST(Encoder, CONST_NONE_scalar) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from(1)};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.CONST_NONE(document, {sourcemeta::jsontoolkit::from(document)});
   EXPECT_BYTES(stream, {});
@@ -239,7 +239,7 @@ TEST(Encoder, CONST_NONE_scalar) {
 TEST(Encoder, CONST_NONE_complex) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.CONST_NONE(document, {sourcemeta::jsontoolkit::from(document)});
   EXPECT_BYTES(stream, {});
