@@ -6,7 +6,6 @@
 
 #include <algorithm> // std::find_if
 #include <cassert>   // assert
-#include <cmath>     // std::ceil, std::floor
 #include <cstdint>   // std::int8_t, std::uint8_t, std::int64_t
 #include <ios>       // std::ios_base
 #include <iterator>  // std::cbegin, std::cend, std::distance
@@ -61,15 +60,37 @@ public:
   }
 
   inline auto divide_ceil(const std::int64_t dividend,
-                          const std::int64_t divisor) const -> std::int64_t {
-    return static_cast<std::int64_t>(std::ceil(static_cast<double>(dividend) /
-                                               static_cast<double>(divisor)));
+                          const std::uint64_t divisor) const -> std::int64_t {
+    // Division by zero is invalid
+    assert(divisor > 0);
+
+    // Avoid std::ceil as it involves casting to IEEE 764 imprecise types
+    if (divisor == 1) {
+      return dividend;
+    } else if (dividend >= 0) {
+      return (dividend + divisor - 1) / divisor;
+    } else {
+      // `dividend` is negative, so `-dividend` is ensured to be positive
+      // Then, `divisor` is ensured to be at least 2, which means the
+      // division result fits in a signed integer.
+      return -(static_cast<std::int64_t>(static_cast<std::uint64_t>(-dividend) /
+                                         divisor));
+    }
   }
 
   inline auto divide_floor(const std::int64_t dividend,
-                           const std::int64_t divisor) const -> std::int64_t {
-    return static_cast<std::int64_t>(std::floor(static_cast<double>(dividend) /
-                                                static_cast<double>(divisor)));
+                           const std::uint64_t divisor) const -> std::int64_t {
+    // Division by zero is invalid
+    assert(divisor > 0);
+
+    // Avoid std::floor as it involves casting to IEEE 764 imprecise types
+    if (divisor == 1) {
+      return dividend;
+    } else if (dividend >= 0) {
+      return dividend / divisor;
+    } else {
+      return -(static_cast<std::int64_t>((divisor - dividend - 1) / divisor));
+    }
   }
 
 private:

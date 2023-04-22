@@ -32,14 +32,10 @@ public:
     assert(options.multiplier > 0);
     assert(value % options.multiplier == 0);
     const std::int64_t enum_minimum{
-        options.multiplier == 1
-            ? options.minimum
-            : this->divide_ceil(options.minimum, options.multiplier)};
+        this->divide_ceil(options.minimum, options.multiplier)};
 #ifndef NDEBUG
     const std::int64_t enum_maximum{
-        options.multiplier == 1
-            ? options.maximum
-            : this->divide_floor(options.maximum, options.multiplier)};
+        this->divide_floor(options.maximum, options.multiplier)};
 #endif
     assert(this->is_byte(enum_maximum - enum_minimum));
     this->put_byte(
@@ -111,7 +107,7 @@ public:
     assert(this->is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
-        [&document](auto const &choice) { return choice == document; })};
+        [&document](const auto &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(this->is_within(cursor, 0,
@@ -125,7 +121,7 @@ public:
     assert(options.choices.size() > 0);
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
-        [&document](auto const &choice) { return choice == document; })};
+        [&document](const auto &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(this->is_within(cursor, 0, options.choices.size() - 1));
