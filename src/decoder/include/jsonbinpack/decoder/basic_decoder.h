@@ -33,7 +33,8 @@ public:
   }
 
   inline auto divide_ceil(const std::int64_t dividend,
-                          const std::int64_t divisor) const -> std::int64_t {
+                          const std::uint64_t divisor) const -> std::int64_t {
+    // TODO: Avoid double casting, as it might lead to imprecision
     return static_cast<std::int64_t>(std::ceil(static_cast<double>(dividend) /
                                                static_cast<double>(divisor)));
   }

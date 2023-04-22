@@ -21,22 +21,24 @@ public:
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsonbinpack::options::BoundedMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
-    const auto byte{this->get_byte()};
+    const std::uint8_t byte{this->get_byte()};
     assert(options.multiplier > 0);
+    // TODO: Can we just convert everything to unsigned first??? Negative we
+    // handle manually
     const std::int64_t closest_minimum_multiple{
         this->divide_ceil(options.minimum, options.multiplier) *
-        options.multiplier};
-    return sourcemeta::jsontoolkit::from((byte * options.multiplier) +
-                                         closest_minimum_multiple);
+        static_cast<std::int64_t>(options.multiplier)};
+    return sourcemeta::jsontoolkit::from(static_cast<std::int64_t>(
+        (byte * options.multiplier) + closest_minimum_multiple));
   }
 
   auto FLOOR_MULTIPLE_ENUM_VARINT(
       const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
-    const std::int64_t closest_minimum_multiple{
+    const std::int64_t closest_minimum_multiple{static_cast<std::int64_t>(
         this->divide_ceil(options.minimum, options.multiplier) *
-        options.multiplier};
+        options.multiplier)};
     return sourcemeta::jsontoolkit::from(
         (this->get_varint() * options.multiplier) + closest_minimum_multiple);
   }
@@ -45,9 +47,9 @@ public:
       const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
-    const std::int64_t closest_maximum_multiple{
+    const std::int64_t closest_maximum_multiple{static_cast<std::int64_t>(
         this->divide_ceil(options.maximum, -options.multiplier) *
-        -options.multiplier};
+        -options.multiplier)};
     return sourcemeta::jsontoolkit::from(
         -1 * (this->get_varint() * options.multiplier) +
         closest_maximum_multiple);
