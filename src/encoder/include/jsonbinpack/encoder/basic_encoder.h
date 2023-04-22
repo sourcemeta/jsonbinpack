@@ -70,7 +70,11 @@ public:
     } else if (dividend >= 0) {
       return (dividend + divisor - 1) / divisor;
     } else {
-      return -(-dividend / divisor);
+      // `dividend` is negative, so `-dividend` is ensured to be positive
+      // Then, `divisor` is ensured to be at least 2, which means the
+      // division result fits in a signed integer.
+      return -(static_cast<std::int64_t>(static_cast<std::uint64_t>(-dividend) /
+                                         divisor));
     }
   }
 
@@ -79,13 +83,13 @@ public:
     // Division by zero is invalid
     assert(divisor > 0);
 
-    // Avoid std::ceil as it involves casting to IEEE 764 imprecise types
+    // Avoid std::floor as it involves casting to IEEE 764 imprecise types
     if (divisor == 1) {
       return dividend;
     } else if (dividend >= 0) {
       return dividend / divisor;
     } else {
-      return -((divisor - dividend - 1) / divisor);
+      return -(static_cast<std::int64_t>((divisor - dividend - 1) / divisor));
     }
   }
 
