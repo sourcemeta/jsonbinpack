@@ -18,13 +18,11 @@ static auto bytes_to_string(std::initializer_list<std::uint8_t> bytes)
   return output.str();
 }
 
-using ByteType = char;
-// The byte type must actually be 1 byte
-static_assert(sizeof(ByteType) == 1);
-class InputByteStream : public std::basic_istringstream<ByteType> {
+template <typename CharT>
+class InputByteStream : public std::basic_istringstream<CharT> {
 public:
   InputByteStream(std::initializer_list<std::uint8_t> bytes)
-      : std::basic_istringstream<ByteType>{bytes_to_string<ByteType>(bytes)} {}
+      : std::basic_istringstream<CharT>{bytes_to_string<CharT>(bytes)} {}
 };
 
 #endif

@@ -7,7 +7,7 @@
 
 TEST(Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x00};
+  InputByteStream<char> stream{0x00};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -22,7 +22,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
 
 TEST(Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x01};
+  InputByteStream<char> stream{0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -37,7 +37,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
 
 TEST(Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x02};
+  InputByteStream<char> stream{0x02};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -52,7 +52,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
 
 TEST(Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x01};
+  InputByteStream<char> stream{0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
       "\"foo\"", "\"bar\"", "\"bar\""};
   choices.at(0).parse();
@@ -68,7 +68,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 
 TEST(Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x03};
+  InputByteStream<char> stream{0x03};
 
   sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
   sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
@@ -99,7 +99,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x00};
+  InputByteStream<char> stream{0x00};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -114,7 +114,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x01};
+  InputByteStream<char> stream{0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -129,7 +129,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x02};
+  InputByteStream<char> stream{0x02};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -144,7 +144,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x01};
+  InputByteStream<char> stream{0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
       "\"foo\"", "\"bar\"", "\"bar\""};
   choices.at(0).parse();
@@ -160,7 +160,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x03};
+  InputByteStream<char> stream{0x03};
 
   sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
   sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
@@ -191,7 +191,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
 
 TEST(Decoder, LARGE_CHOICE_INDEX_enum_250) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0xfa, 0x01};
+  InputByteStream<char> stream{0xfa, 0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices;
 
   for (std::int64_t x = 0; x < 255; x++) {
@@ -210,7 +210,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_enum_250) {
 
 TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{};
+  InputByteStream<char> stream{};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{1, 0, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -225,7 +225,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
 
 TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x00};
+  InputByteStream<char> stream{0x00};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 1, 0};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -240,7 +240,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
 
 TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x01};
+  InputByteStream<char> stream{0x01};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{0, 0, 1};
   choices.at(0).parse();
   choices.at(1).parse();
@@ -255,7 +255,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
 
 TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x00};
+  InputByteStream<char> stream{0x00};
   std::vector<sourcemeta::jsontoolkit::JSON<std::string>> choices{
       "\"foo\"", "\"bar\"", "\"bar\""};
   choices.at(0).parse();
@@ -271,7 +271,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 
 TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{0x02};
+  InputByteStream<char> stream{0x02};
 
   sourcemeta::jsontoolkit::JSON<std::string> choice1("{ \"foo\": 2 }");
   sourcemeta::jsontoolkit::JSON<std::string> choice2("{}");
@@ -302,7 +302,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
 
 TEST(Decoder, CONST_NONE_scalar) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{};
+  InputByteStream<char> stream{};
   sourcemeta::jsontoolkit::JSON<std::string> expected{1};
   sourcemeta::jsontoolkit::JSON<std::string> result{
       CONST_NONE<std::string>(stream, {expected})};
@@ -313,7 +313,7 @@ TEST(Decoder, CONST_NONE_scalar) {
 
 TEST(Decoder, CONST_NONE_complex) {
   using namespace sourcemeta::jsonbinpack::decoder;
-  InputByteStream stream{};
+  InputByteStream<char> stream{};
   sourcemeta::jsontoolkit::JSON<std::string> expected{"{ \"foo\": 1 }"};
   sourcemeta::jsontoolkit::JSON<std::string> result{
       CONST_NONE<std::string>(stream, {expected})};

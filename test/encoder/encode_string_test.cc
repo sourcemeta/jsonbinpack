@@ -8,7 +8,7 @@
 TEST(Encoder, UTF8_STRING_NO_LENGTH_foo_bar) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo bar")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.UTF8_STRING_NO_LENGTH(document,
                                 {sourcemeta::jsontoolkit::size(document)});
@@ -18,7 +18,7 @@ TEST(Encoder, UTF8_STRING_NO_LENGTH_foo_bar) {
 TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3}, context);
@@ -28,7 +28,7 @@ TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
 TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {0}, context);
@@ -40,7 +40,7 @@ TEST(Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
 TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {4}, context);
@@ -50,7 +50,7 @@ TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
 TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3}, context);
@@ -62,7 +62,7 @@ TEST(Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
 TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 5}, context);
@@ -72,7 +72,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
 TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 3}, context);
@@ -82,7 +82,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
 TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("foo")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6}, context);
@@ -94,7 +94,7 @@ TEST(Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
 TEST(Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
   const sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::from("2014-10-01")};
-  OutputByteStream stream{};
+  OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.RFC3339_DATE_INTEGER_TRIPLET(document);
   EXPECT_BYTES(stream, {0xde, 0x07, 0x0a, 0x01});
