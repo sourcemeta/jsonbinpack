@@ -32,6 +32,7 @@ public:
     return decoder::zigzag(decoder::varint<std::int64_t>(this->stream));
   }
 
+  // TODO: Use numeric module instead
   inline auto divide_ceil(const std::int64_t dividend,
                           const std::int64_t divisor) const -> std::int64_t {
     return static_cast<std::int64_t>(std::ceil(static_cast<double>(dividend) /

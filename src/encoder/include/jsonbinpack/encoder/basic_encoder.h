@@ -9,7 +9,6 @@
 #include <cstdint>   // std::int8_t, std::uint8_t, std::int64_t
 #include <ios>       // std::ios_base
 #include <iterator>  // std::cbegin, std::cend, std::distance
-#include <limits>    // std::numeric_limits
 #include <ostream>   // std::basic_ostream
 #include <string>    // std::basic_string
 
@@ -47,49 +46,6 @@ public:
     // loop based on the string value to avoid accidental overflows
     for (std::size_t index = 0; index < length; index++) {
       this->put_byte(string[index]);
-    }
-  }
-
-  inline auto is_byte(const std::int64_t value) const -> bool {
-    return value <= std::numeric_limits<std::uint8_t>::max();
-  }
-
-  inline auto is_within(const std::int64_t value, const std::int64_t lower,
-                        const std::int64_t higher) const -> bool {
-    return value >= lower && value <= higher;
-  }
-
-  inline auto divide_ceil(const std::int64_t dividend,
-                          const std::uint64_t divisor) const -> std::int64_t {
-    // Division by zero is invalid
-    assert(divisor > 0);
-
-    // Avoid std::ceil as it involves casting to IEEE 764 imprecise types
-    if (divisor == 1) {
-      return dividend;
-    } else if (dividend >= 0) {
-      return (dividend + divisor - 1) / divisor;
-    } else {
-      // `dividend` is negative, so `-dividend` is ensured to be positive
-      // Then, `divisor` is ensured to be at least 2, which means the
-      // division result fits in a signed integer.
-      return -(static_cast<std::int64_t>(static_cast<std::uint64_t>(-dividend) /
-                                         divisor));
-    }
-  }
-
-  inline auto divide_floor(const std::int64_t dividend,
-                           const std::uint64_t divisor) const -> std::int64_t {
-    // Division by zero is invalid
-    assert(divisor > 0);
-
-    // Avoid std::floor as it involves casting to IEEE 764 imprecise types
-    if (divisor == 1) {
-      return dividend;
-    } else if (dividend >= 0) {
-      return dividend / divisor;
-    } else {
-      return -(static_cast<std::int64_t>((divisor - dividend - 1) / divisor));
     }
   }
 
