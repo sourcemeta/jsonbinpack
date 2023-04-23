@@ -6,20 +6,20 @@
 namespace sourcemeta::jsonbinpack::options {
 
 struct SizeOptions {
-  std::uint64_t size;
+  const std::uint64_t size;
 };
 
 struct UnsignedFloorOptions {
-  std::uint64_t minimum;
+  const std::uint64_t minimum;
 };
 
 struct UnsignedRoofOptions {
-  std::uint64_t maximum;
+  const std::uint64_t maximum;
 };
 
 struct UnsignedBoundedOptions {
-  std::uint64_t minimum;
-  std::uint64_t maximum;
+  const std::uint64_t minimum;
+  const std::uint64_t maximum;
 };
 
 } // namespace sourcemeta::jsonbinpack::options

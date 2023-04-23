@@ -8,11 +8,11 @@
 namespace sourcemeta::jsonbinpack::options {
 
 struct EnumOptions {
-  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct StaticOptions {
-  sourcemeta::jsontoolkit::JSON value;
+  const sourcemeta::jsontoolkit::JSON value;
 };
 
 } // namespace sourcemeta::jsonbinpack::options
