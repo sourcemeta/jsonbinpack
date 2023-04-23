@@ -23,20 +23,12 @@ public:
     return static_cast<std::uint8_t>(this->stream.get());
   }
 
-  // TODO: This function should return std::uint64_t
-  inline auto get_varint() -> std::int64_t {
+  inline auto get_varint() -> std::uint64_t {
     return decoder::varint<std::int64_t>(this->stream);
   }
 
   inline auto get_varint_zigzag() -> std::int64_t {
     return decoder::zigzag(decoder::varint<std::int64_t>(this->stream));
-  }
-
-  // TODO: Use numeric module instead
-  inline auto divide_ceil(const std::int64_t dividend,
-                          const std::int64_t divisor) const -> std::int64_t {
-    return static_cast<std::int64_t>(std::ceil(static_cast<double>(dividend) /
-                                               static_cast<double>(divisor)));
   }
 
 private:
