@@ -6,13 +6,10 @@
 
 namespace sourcemeta::jsonbinpack::options {
 
-// TODO: Multiplier must be an unsigned integer
-// TODO: Revise docs too after this change
-
 struct BoundedMultiplierOptions {
   std::int64_t minimum;
   std::int64_t maximum;
-  std::int64_t multiplier;
+  std::uint64_t multiplier;
 };
 
 struct UnsignedFloorOptions {
@@ -30,16 +27,16 @@ struct UnsignedBoundedOptions {
 
 struct FloorMultiplierOptions {
   std::int64_t minimum;
-  std::int64_t multiplier;
+  std::uint64_t multiplier;
 };
 
 struct RoofMultiplierOptions {
   std::int64_t maximum;
-  std::int64_t multiplier;
+  std::uint64_t multiplier;
 };
 
 struct MultiplierOptions {
-  std::int64_t multiplier;
+  std::uint64_t multiplier;
 };
 
 } // namespace sourcemeta::jsonbinpack::options

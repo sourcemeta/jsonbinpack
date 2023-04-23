@@ -6,17 +6,17 @@ title:  "Encodings: Integer"
 `BOUNDED_MULTIPLE_8BITS_ENUM_FIXED`
 -----------------------------------
 
-The encoding consists of the integer value divided by the absolute
-`multiplier`, minus the ceil of `minimum` divided by the absolute `multiplier`,
-encoded as an 8-bit fixed-length unsigned integer.
+The encoding consists of the integer value divided by the `multiplier`, minus
+the ceil of `minimum` divided by the `multiplier`, encoded as an 8-bit
+fixed-length unsigned integer.
 
 ### Options
 
-| Option       | Type  | Description                 |
-|--------------|-------|-----------------------------|
-| `minimum`    | `int` | The inclusive minimum value |
-| `maximum`    | `int` | The inclusive maximum value |
-| `multiplier` | `int` | The multiplier value        |
+| Option       | Type   | Description                 |
+|--------------|--------|-----------------------------|
+| `minimum`    | `int`  | The inclusive minimum value |
+| `maximum`    | `int`  | The inclusive maximum value |
+| `multiplier` | `uint` | The multiplier value        |
 
 ### Conditions
 
@@ -25,7 +25,7 @@ encoded as an 8-bit fixed-length unsigned integer.
 | `value >= minimum`           | The input value must be greater than or equal to the minimum        |
 | `value <= maximum`           | The input value must be less than or equal to the maximum           |
 | `value % multiplier == 0`    | The input value must be divisible by the multiplier                 |
-| `floor(maximum / abs(multiplier)) - ceil(minimum / abs(multiplier)) < 2 ** 8` | The divided range must be representable in 8 bits |
+| `floor(maximum / multiplier) - ceil(minimum / multiplier) < 2 ** 8` | The divided range must be representable in 8 bits |
 
 ### Examples
 
@@ -41,16 +41,16 @@ multiplier is 5, the encoding results in the 8-bit unsigned integer 2:
 `FLOOR_MULTIPLE_ENUM_VARINT`
 ----------------------------
 
-The encoding consists of the integer value divided by the absolute
-`multiplier`, minus the ceil of `minimum` divided by the absolute `multiplier`,
-encoded as a Base-128 64-bit Little Endian variable-length unsigned integer.
+The encoding consists of the integer value divided by the `multiplier`, minus
+the ceil of `minimum` divided by the `multiplier`, encoded as a Base-128 64-bit
+Little Endian variable-length unsigned integer.
 
 ### Options
 
-| Option       | Type  | Description                 |
-|--------------|-------|-----------------------------|
-| `minimum`    | `int` | The inclusive minimum value |
-| `multiplier` | `int` | The multiplier value        |
+| Option       | Type   | Description                 |
+|--------------|--------|-----------------------------|
+| `minimum`    | `int`  | The inclusive minimum value |
+| `multiplier` | `uint` | The multiplier value        |
 
 ### Conditions
 
@@ -74,16 +74,16 @@ unsigned integer 250:
 `ROOF_MULTIPLE_MIRROR_ENUM_VARINT`
 ----------------------------------
 
-The encoding consists of the floor of `maximum` divided by the absolute
-`multiplier`, minus the integer value divided by the absolute `multiplier`,
-encoded as a Base-128 64-bit Little Endian variable-length unsigned integer.
+The encoding consists of the floor of `maximum` divided by the `multiplier`,
+minus the integer value divided by the `multiplier`, encoded as a Base-128
+64-bit Little Endian variable-length unsigned integer.
 
 ### Options
 
-| Option       | Type  | Description                 |
-|--------------|-------|-----------------------------|
-| `maximum`    | `int` | The inclusive maximum value |
-| `multiplier` | `int` | The multiplier value        |
+| Option       | Type   | Description                 |
+|--------------|--------|-----------------------------|
+| `maximum`    | `int`  | The inclusive maximum value |
+| `multiplier` | `uint` | The multiplier value        |
 
 ### Conditions
 
@@ -107,16 +107,16 @@ integer 2:
 `ARBITRARY_MULTIPLE_ZIGZAG_VARINT`
 ----------------------------------
 
-The encoding consists of the the integer value divided by the absolute
-`multiplier` encoded as a ZigZag-encoded Base-128 64-bit Little Endian
-variable-length unsigned integer.
+The encoding consists of the the integer value divided by the `multiplier`
+encoded as a ZigZag-encoded Base-128 64-bit Little Endian variable-length
+unsigned integer.
 
 
 ### Options
 
-| Option       | Type  | Description          |
-|--------------|-------|----------------------|
-| `multiplier` | `int` | The multiplier value |
+| Option       | Type   | Description          |
+|--------------|--------|----------------------|
+| `multiplier` | `uint` | The multiplier value |
 
 ### Conditions
 
