@@ -8,4 +8,5 @@ add_library(sourcemeta_jsonbinpack_encoder INTERFACE
 target_include_directories(sourcemeta_jsonbinpack_encoder INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta_jsonbinpack_numeric)
 target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta_jsonbinpack_options)

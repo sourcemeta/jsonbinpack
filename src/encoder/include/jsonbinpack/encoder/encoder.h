@@ -4,12 +4,12 @@
 #include <jsonbinpack/encoder/basic_encoder.h>
 #include <jsonbinpack/encoder/context.h>
 #include <jsonbinpack/encoder/real.h>
+#include <jsonbinpack/numeric/numeric.h>
 #include <jsonbinpack/options/enum.h>
 #include <jsonbinpack/options/number.h>
 #include <jsonbinpack/options/string.h>
 #include <jsontoolkit/json.h>
 
-#include <cmath>   // std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
 #include <ostream> // std::basic_ostream
 #include <string>  // std::basic_string, std::stoul
@@ -28,16 +28,16 @@ public:
       -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
-    assert(this->is_within(value, options.minimum, options.maximum));
+    assert(is_within(value, options.minimum, options.maximum));
     assert(options.multiplier > 0);
     assert(value % options.multiplier == 0);
     const std::int64_t enum_minimum{
-        this->divide_ceil(options.minimum, options.multiplier)};
+        divide_ceil(options.minimum, options.multiplier)};
 #ifndef NDEBUG
     const std::int64_t enum_maximum{
-        this->divide_floor(options.maximum, options.multiplier)};
+        divide_floor(options.maximum, options.multiplier)};
 #endif
-    assert(this->is_byte(enum_maximum - enum_minimum));
+    assert(is_byte(enum_maximum - enum_minimum));
     this->put_byte(
         static_cast<std::uint8_t>((value / options.multiplier) - enum_minimum));
   }
@@ -55,9 +55,8 @@ public:
       return this->put_varint(value - options.minimum);
     }
 
-    return this->put_varint(
-        (value / options.multiplier) -
-        this->divide_ceil(options.minimum, options.multiplier));
+    return this->put_varint((value / options.multiplier) -
+                            divide_ceil(options.minimum, options.multiplier));
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
@@ -73,9 +72,8 @@ public:
       return this->put_varint(options.maximum - value);
     }
 
-    return this->put_varint(
-        this->divide_floor(options.maximum, options.multiplier) -
-        (value / options.multiplier));
+    return this->put_varint(divide_floor(options.maximum, options.multiplier) -
+                            (value / options.multiplier));
   }
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
@@ -104,14 +102,14 @@ public:
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
-    assert(this->is_byte(options.choices.size()));
+    assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
         [&document](const auto &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(cursor, 0,
-                           static_cast<std::int64_t>(options.choices.size())));
+    assert(is_within(cursor, 0,
+                     static_cast<std::int64_t>(options.choices.size())));
     this->put_byte(static_cast<std::uint8_t>(cursor));
   }
 
@@ -124,7 +122,7 @@ public:
         [&document](const auto &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(cursor, 0, options.choices.size() - 1));
+    assert(is_within(cursor, 0, options.choices.size() - 1));
     this->put_varint(cursor);
   }
 
@@ -132,14 +130,14 @@ public:
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
-    assert(this->is_byte(options.choices.size()));
+    assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
         [&document](auto const &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(this->is_within(
-        cursor, 0, static_cast<std::int64_t>(options.choices.size()) - 1));
+    assert(is_within(cursor, 0,
+                     static_cast<std::int64_t>(options.choices.size()) - 1));
     // This encoding encodes the first option of the enum as "no data"
     if (cursor > 0) {
       this->put_byte(static_cast<std::uint8_t>(cursor - 1));
@@ -231,8 +229,8 @@ public:
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     assert(options.minimum <= options.maximum);
-    assert(this->is_byte(options.maximum - options.minimum + 1));
-    assert(this->is_within(size, options.minimum, options.maximum));
+    assert(is_byte(options.maximum - options.minimum + 1));
+    assert(is_within(size, options.minimum, options.maximum));
     const bool is_shared{context.has(value)};
 
     // (1) Write 0x00 if shared, else do nothing
