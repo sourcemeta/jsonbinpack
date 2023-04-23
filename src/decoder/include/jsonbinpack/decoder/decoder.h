@@ -124,6 +124,15 @@ public:
     const std::uint8_t index{this->get_byte()};
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
+
+  auto LARGE_CHOICE_INDEX(
+      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    assert(!options.choices.empty());
+    const std::uint64_t index{this->get_varint()};
+    assert(options.choices.size() > index);
+    return sourcemeta::jsontoolkit::from(options.choices[index]);
+  }
 };
 
 } // namespace sourcemeta::jsonbinpack
