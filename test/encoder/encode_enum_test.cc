@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
+
 #include <utility> // std::move
 #include <vector>  // std::vector
 
