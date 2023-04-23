@@ -13,21 +13,6 @@
 namespace sourcemeta::jsonbinpack::decoder {
 
 template <typename Source, typename CharT, typename Traits>
-auto BYTE_CHOICE_INDEX(
-    std::basic_istream<CharT, Traits> &stream,
-    const sourcemeta::jsonbinpack::options::EnumOptions<Source> &options)
-    -> sourcemeta::jsontoolkit::JSON<Source> {
-  const auto size{options.choices.size()};
-  assert(size > 0);
-  assert(size <= std::numeric_limits<std::uint8_t>::max());
-  const std::int64_t maximum{static_cast<std::int64_t>(size)};
-  const sourcemeta::jsontoolkit::JSON<Source> index{
-      BOUNDED_MULTIPLE_8BITS_ENUM_FIXED<Source>(stream, {0, maximum, 1})};
-  assert(index.is_integer());
-  return {options.choices.at(static_cast<std::size_t>(index.to_integer()))};
-}
-
-template <typename Source, typename CharT, typename Traits>
 auto LARGE_CHOICE_INDEX(
     std::basic_istream<CharT, Traits> &stream,
     const sourcemeta::jsonbinpack::options::EnumOptions<Source> &options)

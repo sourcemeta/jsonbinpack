@@ -101,7 +101,7 @@ public:
   auto BYTE_CHOICE_INDEX(
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
-    assert(options.choices.size() > 0);
+    assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),

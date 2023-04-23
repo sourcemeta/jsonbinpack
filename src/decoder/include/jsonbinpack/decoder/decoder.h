@@ -3,6 +3,7 @@
 
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/numeric/numeric.h>
+#include <jsonbinpack/options/enum.h>
 #include <jsonbinpack/options/integer.h>
 #include <jsontoolkit/json.h>
 
@@ -113,6 +114,15 @@ public:
     const std::uint64_t point{this->get_varint()};
     const double divisor{std::pow(10, static_cast<double>(point))};
     return sourcemeta::jsontoolkit::from(static_cast<double>(digits) / divisor);
+  }
+
+  auto BYTE_CHOICE_INDEX(
+      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    assert(!options.choices.empty());
+    assert(is_byte(options.choices.size()));
+    const std::uint8_t index{this->get_byte()};
+    return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 };
 
