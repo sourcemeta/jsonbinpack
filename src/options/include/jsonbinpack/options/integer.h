@@ -1,8 +1,7 @@
-#ifndef SOURCEMETA_JSONBINPACK_OPTIONS_NUMBER_H_
-#define SOURCEMETA_JSONBINPACK_OPTIONS_NUMBER_H_
+#ifndef SOURCEMETA_JSONBINPACK_OPTIONS_INTEGER_H_
+#define SOURCEMETA_JSONBINPACK_OPTIONS_INTEGER_H_
 
-#include <cstdint> // std::int64_t
-#include <limits>  // std::numeric_limits
+#include <cstdint> // std::int64_t, std::uint64_t
 
 namespace sourcemeta::jsonbinpack::options {
 
@@ -10,19 +9,6 @@ struct BoundedMultiplierOptions {
   std::int64_t minimum;
   std::int64_t maximum;
   std::uint64_t multiplier;
-};
-
-struct UnsignedFloorOptions {
-  std::uint64_t minimum;
-};
-
-struct UnsignedRoofOptions {
-  std::uint64_t maximum;
-};
-
-struct UnsignedBoundedOptions {
-  std::uint64_t minimum;
-  std::uint64_t maximum;
 };
 
 struct FloorMultiplierOptions {

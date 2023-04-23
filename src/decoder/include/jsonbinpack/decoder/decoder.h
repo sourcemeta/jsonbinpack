@@ -3,7 +3,7 @@
 
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/numeric/numeric.h>
-#include <jsonbinpack/options/number.h>
+#include <jsonbinpack/options/integer.h>
 #include <jsontoolkit/json.h>
 
 #include <cassert> // assert
