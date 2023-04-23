@@ -7,8 +7,8 @@
 #include <jsontoolkit/json.h>
 
 #include <cassert> // assert
-#include <cmath>   // std::pow
-#include <cstdint> // std::int64_t
+#include <cmath>   // std::pow, std::abs
+#include <cstdint> // std::uint8_t, std::uint32_t, std::int64_t, std::uint64_t
 #include <istream> // std::basic_istream
 
 namespace sourcemeta::jsonbinpack {
@@ -22,54 +22,90 @@ public:
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsonbinpack::options::BoundedMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
-    const std::uint8_t byte{this->get_byte()};
     assert(options.multiplier > 0);
-    // TODO: Avoid casting to signed
-    const std::int64_t closest_minimum_multiple{
-        divide_ceil(options.minimum, options.multiplier) *
-        static_cast<std::int64_t>(options.multiplier)};
-    // TODO: Avoid casting to signed
-    return sourcemeta::jsontoolkit::from(
-        static_cast<std::int64_t>(byte * options.multiplier) +
-        closest_minimum_multiple);
+    const std::uint8_t byte{this->get_byte()};
+    const std::int64_t closest_minimum{
+        divide_ceil(options.minimum, options.multiplier)};
+    if (closest_minimum >= 0) {
+      const std::uint64_t closest_minimum_multiple{
+          static_cast<std::uint32_t>(closest_minimum) * options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(static_cast<std::int64_t>(
+          (byte * options.multiplier) + closest_minimum_multiple));
+    } else {
+      const std::uint64_t closest_minimum_multiple{
+          static_cast<std::uint32_t>(std::abs(closest_minimum)) *
+          options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(static_cast<std::int64_t>(
+          (byte * options.multiplier) - closest_minimum_multiple));
+    }
   }
 
   auto FLOOR_MULTIPLE_ENUM_VARINT(
       const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
-    // TODO: Avoid casting to signed
-    const std::int64_t closest_minimum_multiple{
-        divide_ceil(options.minimum, options.multiplier) *
-        static_cast<std::int64_t>(options.multiplier)};
-    // TODO: Avoid casting to signed
-    return sourcemeta::jsontoolkit::from(
-        static_cast<std::int64_t>(this->get_varint() * options.multiplier) +
-        closest_minimum_multiple);
+    const std::int64_t closest_minimum{
+        divide_ceil(options.minimum, options.multiplier)};
+    if (closest_minimum >= 0) {
+      const std::uint64_t closest_minimum_multiple{
+          static_cast<std::uint32_t>(closest_minimum) * options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(
+          static_cast<std::int64_t>((this->get_varint() * options.multiplier) +
+                                    closest_minimum_multiple));
+    } else {
+      const std::uint64_t closest_minimum_multiple{
+          static_cast<std::uint32_t>(std::abs(closest_minimum)) *
+          options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(
+          static_cast<std::int64_t>((this->get_varint() * options.multiplier) -
+                                    closest_minimum_multiple));
+    }
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
       const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
-    // TODO: Avoid casting to signed
-    const std::int64_t closest_maximum_multiple{
-        divide_floor(options.maximum, options.multiplier) *
-        static_cast<std::int64_t>(options.multiplier)};
-    // TODO: Avoid casting to signed
-    return sourcemeta::jsontoolkit::from(
-        -(static_cast<std::int64_t>(this->get_varint() * options.multiplier)) +
-        closest_maximum_multiple);
+    const std::int64_t closest_maximum{
+        divide_floor(options.maximum, options.multiplier)};
+    if (closest_maximum >= 0) {
+      const std::uint64_t closest_maximum_multiple{
+          static_cast<std::uint32_t>(closest_maximum) * options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(
+          -(static_cast<std::int64_t>(this->get_varint() *
+                                      options.multiplier)) +
+          closest_maximum_multiple);
+    } else {
+      const std::uint64_t closest_maximum_multiple{
+          static_cast<std::uint32_t>(std::abs(closest_maximum)) *
+          options.multiplier};
+      // We trust the encoder that the data we are seeing
+      // corresponds to a valid 64-bit signed integer.
+      return sourcemeta::jsontoolkit::from(static_cast<std::int64_t>(
+          -(static_cast<std::int64_t>(this->get_varint() *
+                                      options.multiplier)) -
+          closest_maximum_multiple));
+    }
   }
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
       const sourcemeta::jsonbinpack::options::MultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
-    // TODO: Avoid casting to signed
-    return sourcemeta::jsontoolkit::from(
-        this->get_varint_zigzag() *
-        static_cast<std::int64_t>(options.multiplier));
+    // We trust the encoder that the data we are seeing
+    // corresponds to a valid 64-bit signed integer.
+    return sourcemeta::jsontoolkit::from(static_cast<std::int64_t>(
+        this->get_varint_zigzag() * options.multiplier));
   }
 
   auto DOUBLE_VARINT_TUPLE() -> sourcemeta::jsontoolkit::JSON {
