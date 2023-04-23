@@ -6,7 +6,7 @@
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsonbinpack/options/enum.h>
-#include <jsonbinpack/options/number.h>
+#include <jsonbinpack/options/integer.h>
 #include <jsonbinpack/options/string.h>
 #include <jsontoolkit/json.h>
 
