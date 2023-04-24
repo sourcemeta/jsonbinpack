@@ -149,6 +149,12 @@ public:
       return sourcemeta::jsontoolkit::from(options.choices[index]);
     }
   }
+
+  auto
+  CONST_NONE(const sourcemeta::jsonbinpack::options::StaticOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    return sourcemeta::jsontoolkit::from(options.value);
+  }
 };
 
 } // namespace sourcemeta::jsonbinpack
