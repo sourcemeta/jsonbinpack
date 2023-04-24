@@ -1,19 +1,17 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODER_ZIGZAG_H_
 #define SOURCEMETA_JSONBINPACK_ENCODER_ZIGZAG_H_
 
-#include <type_traits> // std::enable_if_t, std::is_integral_v
+#include <cmath>   // std::abs
+#include <cstdint> // std::uint64_t, std::int64_t
 
 namespace sourcemeta::jsonbinpack::encoder {
 
-// The SFINAE constrain would allow us to further overload this
-// class for big integers in the future.
-template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-constexpr auto zigzag(const T value) -> T {
+constexpr auto zigzag(const std::int64_t value) noexcept -> std::uint64_t {
   if (value >= 0) {
     return value * 2;
   }
 
-  return (value * -2) - 1;
+  return (std::abs(value) * 2) - 1;
 }
 
 } // namespace sourcemeta::jsonbinpack::encoder
