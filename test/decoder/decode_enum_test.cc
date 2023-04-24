@@ -239,24 +239,22 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(result, expected);
 }
 
-// TEST(Decoder, CONST_NONE_scalar) {
-// using namespace sourcemeta::jsonbinpack::decoder;
-// InputByteStream<char> stream{};
-// sourcemeta::jsontoolkit::JSON expected{1};
-// sourcemeta::jsontoolkit::JSON result{
-// CONST_NONEg(stream, {expected})};
-// result.parse();
-// expected.parse();
-// EXPECT_EQ(result, expected);
-// }
+TEST(Decoder, CONST_NONE_scalar) {
+  InputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.CONST_NONE({sourcemeta::jsontoolkit::from(1)})};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from(1)};
+  EXPECT_EQ(result, expected);
+}
 
-// TEST(Decoder, CONST_NONE_complex) {
-// using namespace sourcemeta::jsonbinpack::decoder;
-// InputByteStream<char> stream{};
-// sourcemeta::jsontoolkit::JSON expected{"{ \"foo\": 1 }"};
-// sourcemeta::jsontoolkit::JSON result{
-// CONST_NONEg(stream, {expected})};
-// result.parse();
-// expected.parse();
-// EXPECT_EQ(result, expected);
-// }
+TEST(Decoder, CONST_NONE_complex) {
+  InputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.CONST_NONE({sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")})};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
+  EXPECT_EQ(result, expected);
+}
