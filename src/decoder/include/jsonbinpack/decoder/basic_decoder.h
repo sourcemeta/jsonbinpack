@@ -31,6 +31,12 @@ public:
     return decoder::zigzag(decoder::varint<std::int64_t>(this->stream));
   }
 
+  inline auto has_more_data() const -> bool {
+    // A way to check if the stream is empty without using `.peek()`,
+    // which throws given we set exceptions on the EOF bit.
+    return this->stream.rdbuf()->in_avail() > 0;
+  }
+
 private:
   std::basic_istream<CharT, Traits> &stream;
 };
