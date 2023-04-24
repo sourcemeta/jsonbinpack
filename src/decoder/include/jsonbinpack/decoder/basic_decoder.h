@@ -28,7 +28,8 @@ public:
   }
 
   inline auto get_varint_zigzag() -> std::int64_t {
-    return decoder::zigzag(decoder::varint<std::int64_t>(this->stream));
+    const std::uint64_t value = decoder::varint<std::int64_t>(this->stream);
+    return decoder::zigzag(value);
   }
 
   inline auto has_more_data() const -> bool {
