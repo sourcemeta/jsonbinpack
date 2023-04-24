@@ -9,7 +9,7 @@
 
 #include <cassert> // assert
 #include <cmath>   // std::pow, std::abs
-#include <cstdint> // std::uint8_t, std::uint32_t, std::int64_t, std::uint64_t
+#include <cstdint> // std::uint8_t, std::uint16_t, std::uint32_t, std::int64_t, std::uint64_t
 #include <istream> // std::basic_istream
 
 namespace sourcemeta::jsonbinpack {
@@ -122,6 +122,7 @@ public:
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
     const std::uint8_t index{this->get_byte()};
+    assert(options.choices.size() > index);
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
@@ -132,6 +133,21 @@ public:
     const std::uint64_t index{this->get_varint()};
     assert(options.choices.size() > index);
     return sourcemeta::jsontoolkit::from(options.choices[index]);
+  }
+
+  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
+      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    assert(!options.choices.empty());
+    assert(is_byte(options.choices.size()));
+    if (!this->has_more_data()) {
+      return sourcemeta::jsontoolkit::from(options.choices.front());
+    } else {
+      const std::uint16_t index{
+          static_cast<std::uint16_t>(this->get_byte() + 1)};
+      assert(options.choices.size() > index);
+      return sourcemeta::jsontoolkit::from(options.choices[index]);
+    }
   }
 };
 
