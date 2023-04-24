@@ -2,7 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_ENCODER_VARINT_H_
 
 #include <cassert>     // assert
-#include <cstdint>     // std::uint8_t, std::int8_t
+#include <cstdint>     // std::uint8_t
 #include <ostream>     // std::basic_ostream
 #include <type_traits> // std::enable_if_t, std::is_integral_v
 
@@ -23,12 +23,12 @@ auto varint(std::basic_ostream<CharT, Traits> &stream, const T value)
   T accumulator = value;
 
   while (accumulator > LEAST_SIGNIFICANT_BITS) {
-    stream.put(static_cast<std::int8_t>((accumulator & LEAST_SIGNIFICANT_BITS) |
-                                        MOST_SIGNIFICANT_BIT));
+    stream.put(static_cast<std::uint8_t>(
+        (accumulator & LEAST_SIGNIFICANT_BITS) | MOST_SIGNIFICANT_BIT));
     accumulator >>= SHIFT;
   }
 
-  stream.put(static_cast<std::int8_t>(accumulator));
+  stream.put(static_cast<std::uint8_t>(accumulator));
   return stream;
 }
 

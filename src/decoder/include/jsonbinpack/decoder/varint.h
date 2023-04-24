@@ -2,6 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_DECODER_VARINT_H_
 
 #include <cassert>     // assert
+#include <cstdint>     // std::uint8_t
 #include <istream>     // std::basic_istream
 #include <type_traits> // std::enable_if_t, std::is_integral_v
 
