@@ -46,7 +46,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
     -Wcomma
     -Wdocumentation
     -Wmove
-    -Wrange-loop-analysis)
+    -Wrange-loop-analysis
+    # Assume that signed arithmetic overflow of addition, subtraction and
+    # multiplication wraps around using twos-complement representation
+    # See https://users.cs.utah.edu/~regehr/papers/overflow12.pdf
+    # See https://www.postgresql.org/message-id/1689.1134422394@sss.pgh.pa.us
+    -fwrapv)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   add_compile_options(
     -Wall
@@ -78,7 +83,12 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     -Wno-unknown-pragmas
     -Wno-non-virtual-dtor
     -Wno-overloaded-virtual
-    -Winvalid-offsetof)
+    -Winvalid-offsetof
+    # Assume that signed arithmetic overflow of addition, subtraction and
+    # multiplication wraps around using twos-complement representation
+    # See https://users.cs.utah.edu/~regehr/papers/overflow12.pdf
+    # See https://www.postgresql.org/message-id/1689.1134422394@sss.pgh.pa.us
+    -fwrapv)
 elseif(MSVC)
   add_compile_options(/options:strict /W4 /WX /WL /sdl)
 else()
