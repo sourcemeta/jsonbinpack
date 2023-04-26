@@ -24,11 +24,11 @@ public:
   }
 
   inline auto get_varint() -> std::uint64_t {
-    return decoder::varint<std::int64_t>(this->stream);
+    return decoder::varint(this->stream);
   }
 
   inline auto get_varint_zigzag() -> std::int64_t {
-    const std::uint64_t value = decoder::varint<std::int64_t>(this->stream);
+    const std::uint64_t value = decoder::varint(this->stream);
     return decoder::zigzag(value);
   }
 

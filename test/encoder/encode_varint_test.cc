@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
+#include <limits> // std::numeric_limits
 
 TEST(Encoder, varint_1) {
   OutputByteStream<char> stream{};
@@ -32,4 +33,18 @@ TEST(Encoder, varint_4294967294) {
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::encoder::varint(stream, 4294967294);
   EXPECT_BYTES(stream, {0xfe, 0xff, 0xff, 0xff, 0x0f});
+}
+
+TEST(Encoder, varint_uint64_max) {
+  OutputByteStream<char> stream{};
+  const std::uint64_t value = std::numeric_limits<std::uint64_t>::max();
+  sourcemeta::jsonbinpack::encoder::varint(stream, value);
+  // The input is 18446744073709551615
+  // In hex: 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff
+  // In binary: 11111111 11111111 11111111 11111111 11111111 11111111 11111111
+  // 11111111
+  // In Base-128: (1)1111111 (1)1111111 (1)1111111 (1)1111111
+  // (1)1111111 (1)1111111 (1)1111111 (1)1111111 (1)1111111 (0)0000001
+  EXPECT_BYTES(stream,
+               {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01});
 }
