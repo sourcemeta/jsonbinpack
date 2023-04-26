@@ -20,7 +20,12 @@ auto varint(std::basic_istream<CharT, Traits> &stream) -> std::uint64_t {
     assert(!stream.eof());
     const std::uint64_t value{
         static_cast<std::uint64_t>(byte & LEAST_SIGNIFICANT_BITS)};
+#ifndef NDEBUG
+    const std::uint64_t current = result;
+#endif
     result += static_cast<std::uint64_t>(value << SHIFT * cursor);
+    // Try to catch potential overflows from the above addition
+    assert(result >= current);
     cursor += 1;
     if ((byte & MOST_SIGNIFICANT_BIT) == 0) {
       break;
