@@ -168,10 +168,11 @@ public:
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
-    if (is_shared) {
-      const std::uint64_t length{this->get_varint() + options.minimum - 1};
-      assert(length >= options.minimum);
+    const std::uint64_t length{(is_shared ? this->get_varint() : prefix) +
+                               options.minimum - 1};
+    assert(length >= options.minimum);
 
+    if (is_shared) {
       // Calculate offset
       const std::uint64_t position{this->position()};
       const std::uint64_t relative_offset{this->get_varint()};
@@ -186,8 +187,6 @@ public:
       this->seek(current);
       return string;
     } else {
-      const std::uint64_t length{prefix + options.minimum - 1};
-      assert(length >= options.minimum);
       return UTF8_STRING_NO_LENGTH({length});
     }
   }
