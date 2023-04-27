@@ -19,6 +19,14 @@ public:
                             std::ios_base::eofbit);
   }
 
+  inline auto position() const noexcept -> std::uint64_t {
+    return this->stream.tellg();
+  }
+
+  inline auto seek(const std::uint64_t offset) -> void {
+    this->stream.seekg(offset);
+  }
+
   inline auto get_byte() -> std::uint8_t {
     return static_cast<std::uint8_t>(this->stream.get());
   }
