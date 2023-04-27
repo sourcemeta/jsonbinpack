@@ -40,11 +40,11 @@ public:
   }
 
   inline auto put_string_utf8(const std::basic_string<CharT> &string,
-                              const std::size_t length) -> void {
+                              const std::uint64_t length) -> void {
     assert(string.size() == length);
     // Do a manual for-loop based on the provided length instead of a range
     // loop based on the string value to avoid accidental overflows
-    for (std::size_t index = 0; index < length; index++) {
+    for (std::uint64_t index = 0; index < length; index++) {
       this->put_byte(string[index]);
     }
   }
