@@ -162,6 +162,35 @@ public:
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(this->get_string_utf8(options.size));
   }
+
+  auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
+      const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const std::uint64_t prefix{this->get_varint()};
+    const bool is_shared{prefix == 0};
+    if (is_shared) {
+      const std::uint64_t length{this->get_varint() + options.minimum - 1};
+      assert(length >= options.minimum);
+
+      // Calculate offset
+      const std::uint64_t position{this->position()};
+      const std::uint64_t relative_offset{this->get_varint()};
+      assert(position > relative_offset);
+      const std::uint64_t offset{position - relative_offset};
+      assert(offset < position);
+
+      // Rewind to parse the string
+      const std::uint64_t current{this->position()};
+      this->seek(offset);
+      sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
+      this->seek(current);
+      return string;
+    } else {
+      const std::uint64_t length{prefix + options.minimum - 1};
+      assert(length >= options.minimum);
+      return UTF8_STRING_NO_LENGTH({length});
+    }
+  }
 };
 
 } // namespace sourcemeta::jsonbinpack
