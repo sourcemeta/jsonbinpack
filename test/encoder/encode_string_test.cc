@@ -10,8 +10,7 @@ TEST(Encoder, UTF8_STRING_NO_LENGTH_foo_bar) {
       sourcemeta::jsontoolkit::from("foo bar")};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.UTF8_STRING_NO_LENGTH(document,
-                                {sourcemeta::jsontoolkit::size(document)});
+  encoder.UTF8_STRING_NO_LENGTH(document, {7});
   EXPECT_BYTES(stream, {0x66, 0x6f, 0x6f, 0x20, 0x62, 0x61, 0x72});
 }
 
