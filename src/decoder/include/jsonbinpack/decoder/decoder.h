@@ -5,6 +5,7 @@
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsonbinpack/options/enum.h>
 #include <jsonbinpack/options/integer.h>
+#include <jsonbinpack/options/string.h>
 #include <jsontoolkit/json.h>
 
 #include <cassert> // assert
@@ -154,6 +155,12 @@ public:
   CONST_NONE(const sourcemeta::jsonbinpack::options::StaticOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(options.value);
+  }
+
+  auto UTF8_STRING_NO_LENGTH(
+      const sourcemeta::jsonbinpack::options::SizeOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    return sourcemeta::jsontoolkit::from(this->get_string_utf8(options.size));
   }
 };
 

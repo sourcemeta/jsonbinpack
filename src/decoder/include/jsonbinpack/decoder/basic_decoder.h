@@ -38,6 +38,21 @@ public:
     return this->stream.rdbuf()->in_avail() > 0;
   }
 
+  inline auto get_string_utf8(const std::uint64_t length)
+      -> std::basic_string<CharT> {
+    std::basic_string<CharT> result;
+    result.reserve(length);
+    std::uint64_t counter = 0;
+    while (counter < length) {
+      result += this->get_byte();
+      counter += 1;
+    }
+
+    assert(counter == length);
+    assert(result.size() == length);
+    return result;
+  }
+
 private:
   std::basic_istream<CharT, Traits> &stream;
 };
