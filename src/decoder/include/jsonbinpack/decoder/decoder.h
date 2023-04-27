@@ -191,6 +191,34 @@ public:
       return UTF8_STRING_NO_LENGTH({length});
     }
   }
+
+  auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
+      const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const std::uint64_t prefix{this->get_varint()};
+    const bool is_shared{prefix == 0};
+    const std::uint64_t length{options.maximum -
+                               (is_shared ? this->get_varint() : prefix) + 1};
+    assert(length <= options.maximum);
+
+    if (is_shared) {
+      // Calculate offset
+      const std::uint64_t position{this->position()};
+      const std::uint64_t relative_offset{this->get_varint()};
+      assert(position > relative_offset);
+      const std::uint64_t offset{position - relative_offset};
+      assert(offset < position);
+
+      // Rewind to parse the string
+      const std::uint64_t current{this->position()};
+      this->seek(offset);
+      sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
+      this->seek(current);
+      return string;
+    } else {
+      return UTF8_STRING_NO_LENGTH({length});
+    }
+  }
 };
 
 } // namespace sourcemeta::jsonbinpack
