@@ -40,7 +40,7 @@ public:
     return decoder::zigzag(value);
   }
 
-  inline auto has_more_data() const -> bool {
+  inline auto has_more_data() const noexcept -> bool {
     // A way to check if the stream is empty without using `.peek()`,
     // which throws given we set exceptions on the EOF bit.
     return this->stream.rdbuf()->in_avail() > 0;

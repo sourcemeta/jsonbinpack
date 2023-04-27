@@ -21,7 +21,9 @@ public:
                             std::ios_base::eofbit);
   }
 
-  inline auto position() const -> std::uint64_t { return this->stream.tellp(); }
+  inline auto position() const noexcept -> std::uint64_t {
+    return this->stream.tellp();
+  }
 
   inline auto put_byte(const std::uint8_t byte) -> void {
     this->stream.put(static_cast<std::int8_t>(byte));
