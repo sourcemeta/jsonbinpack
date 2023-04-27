@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
+#include <limits> // std::numeric_limits
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
   const sourcemeta::jsontoolkit::JSON document{
@@ -155,4 +156,26 @@ TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {5});
   EXPECT_BYTES(stream, {0x04});
+}
+
+TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
+  const std::int64_t value = std::numeric_limits<std::int64_t>::max();
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(value)};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {1});
+  EXPECT_BYTES(stream,
+               {0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01});
+}
+
+TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_min_1) {
+  const std::int64_t value = std::numeric_limits<std::int64_t>::min() + 1;
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(value)};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {1});
+  EXPECT_BYTES(stream,
+               {0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01});
 }
