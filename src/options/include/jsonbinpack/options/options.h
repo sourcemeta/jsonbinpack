@@ -8,50 +8,70 @@
 
 namespace sourcemeta::jsonbinpack::options {
 
-struct EnumOptions {
+// Integers
+
+struct BOUNDED_MULTIPLE_8BITS_ENUM_FIXED {
+  const std::int64_t minimum;
+  const std::int64_t maximum;
+  const std::uint64_t multiplier;
+};
+
+struct FLOOR_MULTIPLE_ENUM_VARINT {
+  const std::int64_t minimum;
+  const std::uint64_t multiplier;
+};
+
+struct ROOF_MULTIPLE_MIRROR_ENUM_VARINT {
+  const std::int64_t maximum;
+  const std::uint64_t multiplier;
+};
+
+struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
+  const std::uint64_t multiplier;
+};
+
+// Number
+
+// TODO: DOUBLE_VARINT_TUPLE
+
+// Enumerations
+
+struct BYTE_CHOICE_INDEX {
   const std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
-struct StaticOptions {
+struct LARGE_CHOICE_INDEX {
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
+};
+
+struct TOP_LEVEL_BYTE_CHOICE_INDEX {
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
+};
+
+struct CONST_NONE {
   const sourcemeta::jsontoolkit::JSON value;
 };
 
-struct BoundedMultiplierOptions {
-  const std::int64_t minimum;
-  const std::int64_t maximum;
-  const std::uint64_t multiplier;
-};
+// Strings
 
-struct FloorMultiplierOptions {
-  const std::int64_t minimum;
-  const std::uint64_t multiplier;
-};
-
-struct RoofMultiplierOptions {
-  const std::int64_t maximum;
-  const std::uint64_t multiplier;
-};
-
-struct MultiplierOptions {
-  const std::uint64_t multiplier;
-};
-
-struct SizeOptions {
+struct UTF8_STRING_NO_LENGTH {
   const std::uint64_t size;
 };
 
-struct UnsignedFloorOptions {
+struct FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED {
   const std::uint64_t minimum;
 };
 
-struct UnsignedRoofOptions {
+struct ROOF_VARINT_PREFIX_UTF8_STRING_SHARED {
   const std::uint64_t maximum;
 };
 
-struct UnsignedBoundedOptions {
+struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED {
   const std::uint64_t minimum;
   const std::uint64_t maximum;
 };
+
+// TODO: RFC3339_DATE_INTEGER_TRIPLET
 
 } // namespace sourcemeta::jsonbinpack::options
 
