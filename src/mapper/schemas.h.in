@@ -1,0 +1,8 @@
+#ifndef SOURCEMETA_JSONBINPACK_MAPPER_SCHEMAS_H_
+#define SOURCEMETA_JSONBINPACK_MAPPER_SCHEMAS_H_
+
+namespace sourcemeta::jsonbinpack::mapper::schemas {
+  const char * const V1 = R"JSON(@SOURCEMETA_JSONBINPACK_ENCODING_SCHEMA_V1@)JSON";
+}
+
+#endif

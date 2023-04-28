@@ -1,6 +1,0 @@
-add_executable(sourcemeta_jsonbinpack_encoding_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
-  is_encoding_unit.cc make_encoding_unit.cc)
-target_link_libraries(sourcemeta_jsonbinpack_encoding_unit PRIVATE gtest)
-target_link_libraries(sourcemeta_jsonbinpack_encoding_unit PRIVATE sourcemeta_jsonbinpack_encoding)
-gtest_discover_tests(sourcemeta_jsonbinpack_encoding_unit)

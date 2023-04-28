@@ -16,7 +16,7 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
-    if (sourcemeta::jsonbinpack::encoding::is_encoding(schema) ||
+    if (is_encoding(schema) ||
         dialect != "https://json-schema.org/draft/2020-12/schema" ||
         !vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") ||
@@ -32,7 +32,7 @@ public:
     }
 
     const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
-        sourcemeta::jsonbinpack::mapper::states::integer(schema, vocabularies)};
+        states::integer(schema, vocabularies)};
     return !states.has_value() ||
            states->size() > std::numeric_limits<std::uint8_t>::max();
   }
@@ -49,8 +49,8 @@ public:
                                     sourcemeta::jsontoolkit::from(minimum));
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(multiplier));
-    sourcemeta::jsonbinpack::encoding::make_integer_encoding(
-        document, value, "FLOOR_MULTIPLE_ENUM_VARINT", options);
+    make_integer_encoding(document, value, "FLOOR_MULTIPLE_ENUM_VARINT",
+                          options);
   }
 };
 

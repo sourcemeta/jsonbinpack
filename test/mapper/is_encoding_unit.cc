@@ -1,9 +1,9 @@
-#include <jsonbinpack/encoding/encoding.h>
+#include <jsonbinpack/mapper/encoding.h>
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 
-TEST(Encoding, is_encoding_false) {
+TEST(MapperEncoding, is_encoding_false) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -12,10 +12,10 @@ TEST(Encoding, is_encoding_false) {
     "maximum": 100
   })JSON")};
 
-  EXPECT_FALSE(sourcemeta::jsonbinpack::encoding::is_encoding(schema));
+  EXPECT_FALSE(sourcemeta::jsonbinpack::mapper::is_encoding(schema));
 }
 
-TEST(Encoding, is_encoding_true) {
+TEST(MapperEncoding, is_encoding_true) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
@@ -28,10 +28,10 @@ TEST(Encoding, is_encoding_true) {
     }
   })JSON")};
 
-  EXPECT_TRUE(sourcemeta::jsonbinpack::encoding::is_encoding(schema));
+  EXPECT_TRUE(sourcemeta::jsonbinpack::mapper::is_encoding(schema));
 }
 
-TEST(Encoding, is_encoding_invalid_version) {
+TEST(MapperEncoding, is_encoding_invalid_version) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v99999.json",
@@ -44,14 +44,14 @@ TEST(Encoding, is_encoding_invalid_version) {
     }
   })JSON")};
 
-  EXPECT_FALSE(sourcemeta::jsonbinpack::encoding::is_encoding(schema));
+  EXPECT_FALSE(sourcemeta::jsonbinpack::mapper::is_encoding(schema));
 }
 
-TEST(Encoding, is_encoding_no_data) {
+TEST(MapperEncoding, is_encoding_no_data) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json"
   })JSON")};
 
-  EXPECT_FALSE(sourcemeta::jsonbinpack::encoding::is_encoding(schema));
+  EXPECT_FALSE(sourcemeta::jsonbinpack::mapper::is_encoding(schema));
 }

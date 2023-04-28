@@ -5,7 +5,7 @@
 
 // To be used by the rules below
 #include <alterschema/rule.h>
-#include <jsonbinpack/encoding/encoding.h>
+#include <jsonbinpack/mapper/encoding.h>
 
 #include "rules/integer_bounded_8_bit.h"
 #include "rules/integer_bounded_greater_than_8_bit.h"
@@ -48,7 +48,7 @@ sourcemeta::jsonbinpack::Mapper::Mapper(
     const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
     : bundle{
           sourcemeta::jsontoolkit::schema_walker_none,
-          ResolverJoin{sourcemeta::jsonbinpack::encoding::resolver, resolver}} {
+          ResolverJoin{sourcemeta::jsonbinpack::mapper::resolver, resolver}} {
   using namespace sourcemeta::jsonbinpack::mapper;
 
   // Integers

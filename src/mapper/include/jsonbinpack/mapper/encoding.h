@@ -1,5 +1,5 @@
-#ifndef SOURCEMETA_JSONBINPACK_ENCODING_ENCODING_H_
-#define SOURCEMETA_JSONBINPACK_ENCODING_ENCODING_H_
+#ifndef SOURCEMETA_JSONBINPACK_MAPPER_ENCODING_H_
+#define SOURCEMETA_JSONBINPACK_MAPPER_ENCODING_H_
 
 #include <jsontoolkit/json.h>
 
@@ -7,7 +7,7 @@
 #include <optional> // std::optional
 #include <string>   // std::string
 
-namespace sourcemeta::jsonbinpack::encoding {
+namespace sourcemeta::jsonbinpack::mapper {
 
 const std::string V1{"https://www.jsonbinpack.org/schemas/encoding/v1.json"};
 
@@ -50,6 +50,6 @@ inline auto make_integer_encoding(sourcemeta::jsontoolkit::JSON &document,
 auto resolver(const std::string &identifier)
     -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>>;
 
-} // namespace sourcemeta::jsonbinpack::encoding
+} // namespace sourcemeta::jsonbinpack::mapper
 
 #endif

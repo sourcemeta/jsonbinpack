@@ -1,10 +1,10 @@
 #include "schemas.h"
 
-#include <jsonbinpack/encoding/encoding.h>
+#include <jsonbinpack/mapper/encoding.h>
 #include <jsontoolkit/jsonschema.h>
 #include <optional> // std::optional
 
-auto sourcemeta::jsonbinpack::encoding::is_encoding(
+auto sourcemeta::jsonbinpack::mapper::is_encoding(
     const sourcemeta::jsontoolkit::Value &document) -> bool {
   const std::optional<std::string> metaschema{
       sourcemeta::jsontoolkit::metaschema(document)};
@@ -15,7 +15,7 @@ auto sourcemeta::jsonbinpack::encoding::is_encoding(
          metaschema.value() == V1;
 }
 
-auto sourcemeta::jsonbinpack::encoding::make_encoding(
+auto sourcemeta::jsonbinpack::mapper::make_encoding(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value, const Type type,
     const std::string &encoding, const sourcemeta::jsontoolkit::Value &options)
@@ -39,14 +39,14 @@ auto sourcemeta::jsonbinpack::encoding::make_encoding(
   sourcemeta::jsontoolkit::assign(document, value, keywords::options, options);
 }
 
-auto sourcemeta::jsonbinpack::encoding::make_integer_encoding(
+auto sourcemeta::jsonbinpack::mapper::make_integer_encoding(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value, const std::string &encoding,
     const sourcemeta::jsontoolkit::Value &options) -> void {
   return make_encoding(document, value, Type::Integer, encoding, options);
 }
 
-auto sourcemeta::jsonbinpack::encoding::resolver(const std::string &identifier)
+auto sourcemeta::jsonbinpack::mapper::resolver(const std::string &identifier)
     -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
   std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
 
