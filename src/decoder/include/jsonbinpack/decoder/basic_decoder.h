@@ -42,6 +42,14 @@ public:
     return static_cast<std::uint8_t>(this->stream.get());
   }
 
+  // A "word" corresponds to two bytes
+  // See https://stackoverflow.com/questions/28066462/how-many-bits-is-a-word
+  inline auto get_word() -> std::uint16_t {
+    std::uint16_t word;
+    this->stream.read(reinterpret_cast<char *>(&word), sizeof word);
+    return word;
+  }
+
   inline auto get_varint() -> std::uint64_t {
     return decoder::varint(this->stream);
   }
