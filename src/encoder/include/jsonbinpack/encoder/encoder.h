@@ -22,8 +22,7 @@ public:
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::BoundedMultiplierOptions &options)
-      -> void {
+      const options::BoundedMultiplierOptions &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(is_within(value, options.minimum, options.maximum));
@@ -40,9 +39,9 @@ public:
         static_cast<std::uint8_t>((value / options.multiplier) - enum_minimum));
   }
 
-  auto FLOOR_MULTIPLE_ENUM_VARINT(
-      const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
+  auto
+  FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::Value &document,
+                             const options::FloorMultiplierOptions &options)
       -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
@@ -59,8 +58,7 @@ public:
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
-      -> void {
+      const options::RoofMultiplierOptions &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(value <= options.maximum);
@@ -76,8 +74,7 @@ public:
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::MultiplierOptions &options)
-      -> void {
+      const options::MultiplierOptions &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(options.multiplier > 0);
@@ -96,9 +93,8 @@ public:
     this->put_varint(point_position);
   }
 
-  auto BYTE_CHOICE_INDEX(
-      const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
+  auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
+                         const options::EnumOptions &options) -> void {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
@@ -111,9 +107,8 @@ public:
     this->put_byte(static_cast<std::uint8_t>(cursor));
   }
 
-  auto LARGE_CHOICE_INDEX(
-      const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
+  auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
+                          const options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
@@ -124,9 +119,9 @@ public:
     this->put_varint(cursor);
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
-      const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
+  auto
+  TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
+                              const options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
@@ -145,18 +140,16 @@ public:
   auto CONST_NONE(
 #ifndef NDEBUG
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::StaticOptions &options)
+      const options::StaticOptions &options)
 #else
-      const sourcemeta::jsontoolkit::Value &,
-      const sourcemeta::jsonbinpack::options::StaticOptions &)
+      const sourcemeta::jsontoolkit::Value &, const options::StaticOptions &)
 #endif
       -> void {
     assert(document == options.value);
   }
 
-  auto UTF8_STRING_NO_LENGTH(
-      const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::SizeOptions &options) -> void {
+  auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::Value &document,
+                             const options::SizeOptions &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -165,8 +158,8 @@ public:
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
+      const options::UnsignedFloorOptions &options,
+      encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -192,8 +185,8 @@ public:
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
+      const options::UnsignedRoofOptions &options,
+      encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -220,8 +213,8 @@ public:
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options,
-      sourcemeta::jsonbinpack::encoder::Context<CharT> &context) -> void {
+      const options::UnsignedBoundedOptions &options,
+      encoder::Context<CharT> &context) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
