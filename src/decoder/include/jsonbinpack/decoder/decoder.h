@@ -22,7 +22,7 @@ public:
       : BasicDecoder<CharT, Traits>{input} {}
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-      const sourcemeta::jsonbinpack::options::BoundedMultiplierOptions &options)
+      const options::BoundedMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::uint8_t byte{this->get_byte()};
@@ -46,8 +46,8 @@ public:
     }
   }
 
-  auto FLOOR_MULTIPLE_ENUM_VARINT(
-      const sourcemeta::jsonbinpack::options::FloorMultiplierOptions &options)
+  auto
+  FLOOR_MULTIPLE_ENUM_VARINT(const options::FloorMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_minimum{
@@ -73,7 +73,7 @@ public:
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-      const sourcemeta::jsonbinpack::options::RoofMultiplierOptions &options)
+      const options::RoofMultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_maximum{
@@ -100,8 +100,8 @@ public:
     }
   }
 
-  auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
-      const sourcemeta::jsonbinpack::options::MultiplierOptions &options)
+  auto
+  ARBITRARY_MULTIPLE_ZIGZAG_VARINT(const options::MultiplierOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     // We trust the encoder that the data we are seeing
@@ -117,8 +117,7 @@ public:
     return sourcemeta::jsontoolkit::from(static_cast<double>(digits) / divisor);
   }
 
-  auto BYTE_CHOICE_INDEX(
-      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+  auto BYTE_CHOICE_INDEX(const options::EnumOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -127,8 +126,7 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto LARGE_CHOICE_INDEX(
-      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+  auto LARGE_CHOICE_INDEX(const options::EnumOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     const std::uint64_t index{this->get_varint()};
@@ -136,8 +134,7 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
-      const sourcemeta::jsonbinpack::options::EnumOptions &options)
+  auto TOP_LEVEL_BYTE_CHOICE_INDEX(const options::EnumOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -151,20 +148,18 @@ public:
     }
   }
 
-  auto
-  CONST_NONE(const sourcemeta::jsonbinpack::options::StaticOptions &options)
+  auto CONST_NONE(const options::StaticOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(options.value);
   }
 
-  auto UTF8_STRING_NO_LENGTH(
-      const sourcemeta::jsonbinpack::options::SizeOptions &options)
+  auto UTF8_STRING_NO_LENGTH(const options::SizeOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(this->get_string_utf8(options.size));
   }
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const sourcemeta::jsonbinpack::options::UnsignedFloorOptions &options)
+      const options::UnsignedFloorOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -184,7 +179,7 @@ public:
   }
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const sourcemeta::jsonbinpack::options::UnsignedRoofOptions &options)
+      const options::UnsignedRoofOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -204,7 +199,7 @@ public:
   }
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-      const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options)
+      const options::UnsignedBoundedOptions &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum));
