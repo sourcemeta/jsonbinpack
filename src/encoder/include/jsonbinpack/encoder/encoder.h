@@ -5,9 +5,7 @@
 #include <jsonbinpack/encoder/context.h>
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/numeric/numeric.h>
-#include <jsonbinpack/options/enum.h>
-#include <jsonbinpack/options/integer.h>
-#include <jsonbinpack/options/string.h>
+#include <jsonbinpack/options/options.h>
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
