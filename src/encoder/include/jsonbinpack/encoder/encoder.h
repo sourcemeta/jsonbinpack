@@ -272,6 +272,11 @@ public:
     this->put_byte(month);
     this->put_byte(day);
   }
+
+  // TODO: Implement STRING_BROTLI encoding
+  // TODO: Implement STRING_DICTIONARY_COMPRESSOR encoding
+  // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
+  // TODO: Implement URL_PROTOCOL_HOST_REST encoding
 };
 
 } // namespace sourcemeta::jsonbinpack
