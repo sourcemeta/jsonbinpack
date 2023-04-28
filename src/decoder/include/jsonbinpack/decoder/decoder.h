@@ -218,6 +218,36 @@ public:
       return UTF8_STRING_NO_LENGTH({length});
     }
   }
+
+  auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+      const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    assert(options.minimum <= options.maximum);
+    assert(is_byte(options.maximum - options.minimum));
+    const std::uint8_t prefix{this->get_byte()};
+    const bool is_shared{prefix == 0};
+    const std::uint64_t length{(is_shared ? this->get_byte() : prefix) +
+                               options.minimum - 1};
+    assert(is_within(length, options.minimum, options.maximum));
+
+    if (is_shared) {
+      // Calculate offset
+      const std::uint64_t position{this->position()};
+      const std::uint64_t relative_offset{this->get_varint()};
+      assert(position > relative_offset);
+      const std::uint64_t offset{position - relative_offset};
+      assert(offset < position);
+
+      // Rewind to parse the string
+      const std::uint64_t current{this->position()};
+      this->seek(offset);
+      sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
+      this->seek(current);
+      return string;
+    } else {
+      return UTF8_STRING_NO_LENGTH({length});
+    }
+  }
 };
 
 } // namespace sourcemeta::jsonbinpack

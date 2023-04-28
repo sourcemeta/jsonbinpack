@@ -19,36 +19,6 @@
 namespace sourcemeta::jsonbinpack::decoder {
 
 template <typename Source, typename CharT, typename Traits>
-auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-    std::basic_istream<CharT, Traits> &stream,
-    const sourcemeta::jsonbinpack::options::UnsignedBoundedOptions &options)
-    -> sourcemeta::jsontoolkit::JSON<Source> {
-  assert(options.minimum <= options.maximum);
-  assert(options.maximum - options.minimum <=
-         std::numeric_limits<std::uint8_t>::max() - 1);
-  const std::uint8_t marker{static_cast<std::uint8_t>(stream.get())};
-  const bool is_shared{marker == 0};
-  const auto size{
-      (marker == 0 ? static_cast<std::uint8_t>(stream.get()) : marker) +
-      options.minimum - 1};
-  const auto current_offset{stream.tellg()};
-
-  if (is_shared) {
-    const typename Traits::pos_type relative_offset{
-        utils::varint_decode<std::int64_t>(stream)};
-    stream.seekg(current_offset - relative_offset);
-  }
-
-  const auto result{
-      UTF8_STRING_NO_LENGTH<Source, CharT, Traits>(stream, {size})};
-  if (is_shared) {
-    stream.seekg(current_offset);
-  }
-
-  return result;
-}
-
-template <typename Source, typename CharT, typename Traits>
 auto RFC3339_DATE_INTEGER_TRIPLET(std::basic_istream<CharT, Traits> &stream)
     -> sourcemeta::jsontoolkit::JSON<Source> {
   std::uint16_t year;
