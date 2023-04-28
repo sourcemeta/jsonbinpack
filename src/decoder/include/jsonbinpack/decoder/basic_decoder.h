@@ -19,6 +19,10 @@ public:
                             std::ios_base::eofbit);
   }
 
+  // Prevent copying, as this class is tied to a stream resource
+  BasicDecoder(const BasicDecoder &) = delete;
+  auto operator=(const BasicDecoder &) -> BasicDecoder & = delete;
+
   inline auto position() const noexcept -> std::uint64_t {
     return this->stream.tellg();
   }
