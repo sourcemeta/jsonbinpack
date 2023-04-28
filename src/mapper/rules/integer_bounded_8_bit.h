@@ -12,7 +12,7 @@ public:
             const std::string &dialect,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
-    return !sourcemeta::jsonbinpack::encoding::is_encoding(schema) &&
+    return !is_encoding(schema) &&
            dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
@@ -42,8 +42,8 @@ public:
                                     sourcemeta::jsontoolkit::from(maximum));
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(1));
-    sourcemeta::jsonbinpack::encoding::make_integer_encoding(
-        document, value, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED", options);
+    make_integer_encoding(document, value, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+                          options);
   }
 };
 
