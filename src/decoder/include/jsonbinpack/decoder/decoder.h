@@ -9,6 +9,7 @@
 #include <cassert> // assert
 #include <cmath>   // std::pow, std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint32_t, std::int64_t, std::uint64_t
+#include <cstdlib> // std::abort
 #include <iomanip> // std::setw, std::setfill
 #include <istream> // std::basic_istream
 #include <sstream> // std::basic_ostringstream
@@ -20,6 +21,36 @@ class Decoder : private BasicDecoder<CharT, Traits> {
 public:
   Decoder(std::basic_istream<CharT, Traits> &input)
       : BasicDecoder<CharT, Traits>{input} {}
+
+  template <typename Encoding>
+  auto decode(const Encoding &) -> sourcemeta::jsontoolkit::JSON {
+    // We should never get here
+    assert(false);
+    std::abort();
+  }
+
+#define REGISTER_DECODING(encoding)                                            \
+  template <>                                                                  \
+  auto decode(const options::encoding &options)                                \
+      ->sourcemeta::jsontoolkit::JSON {                                        \
+    return this->encoding(options);                                            \
+  }
+
+  REGISTER_DECODING(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
+  REGISTER_DECODING(FLOOR_MULTIPLE_ENUM_VARINT)
+  REGISTER_DECODING(ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
+  REGISTER_DECODING(ARBITRARY_MULTIPLE_ZIGZAG_VARINT)
+  REGISTER_DECODING(DOUBLE_VARINT_TUPLE)
+  REGISTER_DECODING(BYTE_CHOICE_INDEX)
+  REGISTER_DECODING(LARGE_CHOICE_INDEX)
+  REGISTER_DECODING(TOP_LEVEL_BYTE_CHOICE_INDEX)
+  REGISTER_DECODING(CONST_NONE)
+  REGISTER_DECODING(UTF8_STRING_NO_LENGTH)
+  REGISTER_DECODING(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_DECODING(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_DECODING(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_DECODING(RFC3339_DATE_INTEGER_TRIPLET)
+#undef REGISTER_DECODING
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)

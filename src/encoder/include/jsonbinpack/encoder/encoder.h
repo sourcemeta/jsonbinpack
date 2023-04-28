@@ -9,6 +9,7 @@
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
+#include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
 #include <string>  // std::basic_string, std::stoul
 
@@ -19,6 +20,38 @@ class Encoder : private BasicEncoder<CharT, Traits> {
 public:
   Encoder(std::basic_ostream<CharT, Traits> &output)
       : BasicEncoder<CharT, Traits>{output} {}
+
+  template <typename Encoding>
+  auto encode(const sourcemeta::jsontoolkit::Value &, const Encoding &)
+      -> void {
+    // We should never get here
+    assert(false);
+    std::abort();
+  }
+
+#define REGISTER_ENCODING(encoding)                                            \
+  template <>                                                                  \
+  auto encode(const sourcemeta::jsontoolkit::Value &document,                  \
+              const options::encoding &options)                                \
+      ->void {                                                                 \
+    return this->encoding(document, options);                                  \
+  }
+
+  REGISTER_ENCODING(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
+  REGISTER_ENCODING(FLOOR_MULTIPLE_ENUM_VARINT)
+  REGISTER_ENCODING(ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
+  REGISTER_ENCODING(ARBITRARY_MULTIPLE_ZIGZAG_VARINT)
+  REGISTER_ENCODING(DOUBLE_VARINT_TUPLE)
+  REGISTER_ENCODING(BYTE_CHOICE_INDEX)
+  REGISTER_ENCODING(LARGE_CHOICE_INDEX)
+  REGISTER_ENCODING(TOP_LEVEL_BYTE_CHOICE_INDEX)
+  REGISTER_ENCODING(CONST_NONE)
+  REGISTER_ENCODING(UTF8_STRING_NO_LENGTH)
+  REGISTER_ENCODING(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_ENCODING(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_ENCODING(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
+  REGISTER_ENCODING(RFC3339_DATE_INTEGER_TRIPLET)
+#undef REGISTER_ENCODING
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::Value &document,
