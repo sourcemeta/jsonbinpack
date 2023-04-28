@@ -21,6 +21,10 @@ public:
                             std::ios_base::eofbit);
   }
 
+  // Prevent copying, as this class is tied to a stream resource
+  BasicEncoder(const BasicEncoder &) = delete;
+  auto operator=(const BasicEncoder &) -> BasicEncoder & = delete;
+
   inline auto position() const noexcept -> std::uint64_t {
     return this->stream.tellp();
   }
