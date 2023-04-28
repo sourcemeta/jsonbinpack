@@ -173,16 +173,8 @@ public:
     assert(length >= options.minimum);
 
     if (is_shared) {
-      // Calculate offset
       const std::uint64_t position{this->position()};
-      const std::uint64_t relative_offset{this->get_varint()};
-      assert(position > relative_offset);
-      const std::uint64_t offset{position - relative_offset};
-      assert(offset < position);
-
-      // Rewind to parse the string
-      const std::uint64_t current{this->position()};
-      this->seek(offset);
+      const std::uint64_t current{this->rewind(this->get_varint(), position)};
       sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
       this->seek(current);
       return string;
@@ -201,16 +193,8 @@ public:
     assert(length <= options.maximum);
 
     if (is_shared) {
-      // Calculate offset
       const std::uint64_t position{this->position()};
-      const std::uint64_t relative_offset{this->get_varint()};
-      assert(position > relative_offset);
-      const std::uint64_t offset{position - relative_offset};
-      assert(offset < position);
-
-      // Rewind to parse the string
-      const std::uint64_t current{this->position()};
-      this->seek(offset);
+      const std::uint64_t current{this->rewind(this->get_varint(), position)};
       sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
       this->seek(current);
       return string;
@@ -231,16 +215,8 @@ public:
     assert(is_within(length, options.minimum, options.maximum));
 
     if (is_shared) {
-      // Calculate offset
       const std::uint64_t position{this->position()};
-      const std::uint64_t relative_offset{this->get_varint()};
-      assert(position > relative_offset);
-      const std::uint64_t offset{position - relative_offset};
-      assert(offset < position);
-
-      // Rewind to parse the string
-      const std::uint64_t current{this->position()};
-      this->seek(offset);
+      const std::uint64_t current{this->rewind(this->get_varint(), position)};
       sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
       this->seek(current);
       return string;
