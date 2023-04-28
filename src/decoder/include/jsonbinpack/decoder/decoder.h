@@ -11,7 +11,9 @@
 #include <cassert> // assert
 #include <cmath>   // std::pow, std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint32_t, std::int64_t, std::uint64_t
+#include <iomanip> // std::setw, std::setfill
 #include <istream> // std::basic_istream
+#include <sstream> // std::basic_ostringstream
 
 namespace sourcemeta::jsonbinpack {
 
@@ -223,6 +225,28 @@ public:
     } else {
       return UTF8_STRING_NO_LENGTH({length});
     }
+  }
+
+  auto RFC3339_DATE_INTEGER_TRIPLET() -> sourcemeta::jsontoolkit::JSON {
+    const std::uint16_t year{this->get_word()};
+    const std::uint8_t month{this->get_byte()};
+    const std::uint8_t day{this->get_byte()};
+
+    assert(year <= 9999);
+    assert(month >= 1 && month <= 12);
+    assert(day >= 1 && day <= 31);
+
+    std::basic_ostringstream<CharT, Traits> output;
+    output << std::setfill('0');
+    output << std::setw(4) << year;
+    output << "-";
+    // Cast the bytes to a larger integer, otherwise
+    // they will be interpreted as characters.
+    output << std::setw(2) << static_cast<std::uint16_t>(month);
+    output << "-";
+    output << std::setw(2) << static_cast<std::uint16_t>(day);
+
+    return sourcemeta::jsontoolkit::from(output.str());
   }
 };
 

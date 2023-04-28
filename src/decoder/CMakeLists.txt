@@ -1,8 +1,3 @@
-# add_library(sourcemeta_jsonbinpack_decoder INTERFACE
-  # include/jsonbinpack/decoder/enum_decoder.h
-  # include/jsonbinpack/decoder/integer_decoder.h
-  # include/jsonbinpack/decoder/number_decoder.h
-  # include/jsonbinpack/decoder/string_decoder.h)
 add_library(sourcemeta_jsonbinpack_decoder INTERFACE
   include/jsonbinpack/decoder/varint.h
   include/jsonbinpack/decoder/zigzag.h

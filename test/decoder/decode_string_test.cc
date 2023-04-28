@@ -105,13 +105,12 @@ TEST(Decoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   EXPECT_EQ(result2, expected);
 }
 
-// TEST(Decoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
-// using namespace sourcemeta::jsonbinpack::decoder;
-// InputByteStream<char> stream{0xde, 0x07, 0x0a, 0x01};
-// sourcemeta::jsontoolkit::JSON<std::string> result{
-// RFC3339_DATE_INTEGER_TRIPLET<std::string>(stream)};
-// sourcemeta::jsontoolkit::JSON<std::string> expected{"\"2014-10-01\""};
-// result.parse();
-// expected.parse();
-// EXPECT_EQ(result, expected);
-// }
+TEST(Decoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
+  InputByteStream<char> stream{0xde, 0x07, 0x0a, 0x01};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.RFC3339_DATE_INTEGER_TRIPLET()};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from("2014-10-01")};
+  EXPECT_EQ(result, expected);
+}
