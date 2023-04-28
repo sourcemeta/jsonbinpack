@@ -30,8 +30,7 @@ public:
                                     sourcemeta::jsontoolkit::from(maximum));
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(1));
-    make_integer_encoding(document, value, "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
-                          options);
+    make_encoding(document, value, "ROOF_MULTIPLE_MIRROR_ENUM_VARINT", options);
   }
 };
 

@@ -30,8 +30,7 @@ public:
                                     sourcemeta::jsontoolkit::from(minimum));
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(1));
-    make_integer_encoding(document, value, "FLOOR_MULTIPLE_ENUM_VARINT",
-                          options);
+    make_encoding(document, value, "FLOOR_MULTIPLE_ENUM_VARINT", options);
   }
 };
 
