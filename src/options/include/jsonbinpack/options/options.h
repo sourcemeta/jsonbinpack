@@ -32,7 +32,7 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 
 // Number
 
-// TODO: DOUBLE_VARINT_TUPLE
+struct DOUBLE_VARINT_TUPLE {};
 
 // Enumerations
 
@@ -71,7 +71,7 @@ struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED {
   const std::uint64_t maximum;
 };
 
-// TODO: RFC3339_DATE_INTEGER_TRIPLET
+struct RFC3339_DATE_INTEGER_TRIPLET {};
 
 } // namespace sourcemeta::jsonbinpack::options
 

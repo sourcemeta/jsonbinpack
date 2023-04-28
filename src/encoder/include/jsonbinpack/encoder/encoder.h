@@ -82,8 +82,8 @@ public:
     this->put_varint_zigzag(value / options.multiplier);
   }
 
-  auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::Value &document)
-      -> void {
+  auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::Value &document,
+                           const options::DOUBLE_VARINT_TUPLE &) -> void {
     assert(sourcemeta::jsontoolkit::is_real(document));
     const auto value{sourcemeta::jsontoolkit::to_real(document)};
     std::uint64_t point_position;
@@ -243,7 +243,8 @@ public:
   }
 
   auto
-  RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::Value &document)
+  RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::Value &document,
+                               const options::RFC3339_DATE_INTEGER_TRIPLET &)
       -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const auto &value{sourcemeta::jsontoolkit::to_string(document)};
