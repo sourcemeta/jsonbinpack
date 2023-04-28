@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <algorithm>        // std::transform
+#include <algorithm>        // std::ranges::transform
 #include <cstddef>          // std::byte
 #include <cstdint>          // std::uint8_t
 #include <initializer_list> // std::initializer_list
@@ -23,8 +23,7 @@ public:
   auto bytes() const -> const std::vector<std::byte> {
     std::vector<std::byte> result{};
     const std::basic_string<CharT> string{this->str()};
-    std::transform(string.cbegin(), string.cend(), std::back_inserter(result),
-                   to_byte);
+    std::ranges::transform(string, std::back_inserter(result), to_byte);
     return result;
   }
 };
@@ -34,8 +33,7 @@ auto EXPECT_BYTES(const OutputByteStream<CharT> &stream,
                   std::initializer_list<std::uint8_t> bytes) -> void {
   const std::vector<std::byte> actual{stream.bytes()};
   std::vector<std::byte> expected{};
-  std::transform(bytes.begin(), bytes.end(), std::back_inserter(expected),
-                 to_byte);
+  std::ranges::transform(bytes, std::back_inserter(expected), to_byte);
   EXPECT_EQ(actual, expected);
 }
 

@@ -8,9 +8,10 @@
 #include <jsonbinpack/options/options.h>
 #include <jsontoolkit/json.h>
 
-#include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
-#include <ostream> // std::basic_ostream
-#include <string>  // std::basic_string, std::stoul
+#include <algorithm> // std::ranges::find_if
+#include <cstdint>   // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
+#include <ostream>   // std::basic_ostream
+#include <string>    // std::basic_string, std::stoul
 
 namespace sourcemeta::jsonbinpack {
 
@@ -101,9 +102,10 @@ public:
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
-    const auto iterator{std::find_if(
-        std::cbegin(options.choices), std::cend(options.choices),
-        [&document](const auto &choice) { return choice == document; })};
+    const auto iterator{
+        std::ranges::find_if(options.choices, [&document](const auto &choice) {
+          return choice == document;
+        })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(is_within(cursor, 0,
@@ -115,9 +117,10 @@ public:
       const sourcemeta::jsontoolkit::Value &document,
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
-    const auto iterator{std::find_if(
-        std::cbegin(options.choices), std::cend(options.choices),
-        [&document](const auto &choice) { return choice == document; })};
+    const auto iterator{
+        std::ranges::find_if(options.choices, [&document](const auto &choice) {
+          return choice == document;
+        })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(is_within(cursor, 0, options.choices.size() - 1));
@@ -129,9 +132,10 @@ public:
       const sourcemeta::jsonbinpack::options::EnumOptions &options) -> void {
     assert(options.choices.size() > 0);
     assert(is_byte(options.choices.size()));
-    const auto iterator{std::find_if(
-        std::cbegin(options.choices), std::cend(options.choices),
-        [&document](auto const &choice) { return choice == document; })};
+    const auto iterator{
+        std::ranges::find_if(options.choices, [&document](auto const &choice) {
+          return choice == document;
+        })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
     assert(is_within(cursor, 0,

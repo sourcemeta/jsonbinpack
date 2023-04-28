@@ -4,13 +4,12 @@
 #include "varint.h"
 #include "zigzag.h"
 
-#include <algorithm> // std::find_if
-#include <cassert>   // assert
-#include <cstdint>   // std::int8_t, std::uint8_t, std::int64_t
-#include <ios>       // std::ios_base
-#include <iterator>  // std::cbegin, std::cend, std::distance
-#include <ostream>   // std::basic_ostream
-#include <string>    // std::basic_string
+#include <cassert>  // assert
+#include <cstdint>  // std::int8_t, std::uint8_t, std::int64_t
+#include <ios>      // std::ios_base
+#include <iterator> // std::cbegin, std::cend, std::distance
+#include <ostream>  // std::basic_ostream
+#include <string>   // std::basic_string
 
 namespace sourcemeta::jsonbinpack {
 
