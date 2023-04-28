@@ -22,7 +22,7 @@ public:
       : BasicDecoder<CharT, Traits>{input} {}
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-      const options::BoundedMultiplierOptions &options)
+      const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::uint8_t byte{this->get_byte()};
@@ -47,7 +47,7 @@ public:
   }
 
   auto
-  FLOOR_MULTIPLE_ENUM_VARINT(const options::FloorMultiplierOptions &options)
+  FLOOR_MULTIPLE_ENUM_VARINT(const options::FLOOR_MULTIPLE_ENUM_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_minimum{
@@ -73,7 +73,7 @@ public:
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-      const options::RoofMultiplierOptions &options)
+      const options::ROOF_MULTIPLE_MIRROR_ENUM_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_maximum{
@@ -100,8 +100,8 @@ public:
     }
   }
 
-  auto
-  ARBITRARY_MULTIPLE_ZIGZAG_VARINT(const options::MultiplierOptions &options)
+  auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
+      const options::ARBITRARY_MULTIPLE_ZIGZAG_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     // We trust the encoder that the data we are seeing
@@ -117,7 +117,7 @@ public:
     return sourcemeta::jsontoolkit::from(static_cast<double>(digits) / divisor);
   }
 
-  auto BYTE_CHOICE_INDEX(const options::EnumOptions &options)
+  auto BYTE_CHOICE_INDEX(const options::BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -126,7 +126,7 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto LARGE_CHOICE_INDEX(const options::EnumOptions &options)
+  auto LARGE_CHOICE_INDEX(const options::LARGE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     const std::uint64_t index{this->get_varint()};
@@ -134,7 +134,8 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(const options::EnumOptions &options)
+  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
+      const options::TOP_LEVEL_BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -148,18 +149,18 @@ public:
     }
   }
 
-  auto CONST_NONE(const options::StaticOptions &options)
+  auto CONST_NONE(const options::CONST_NONE &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(options.value);
   }
 
-  auto UTF8_STRING_NO_LENGTH(const options::SizeOptions &options)
+  auto UTF8_STRING_NO_LENGTH(const options::UTF8_STRING_NO_LENGTH &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(this->get_string_utf8(options.size));
   }
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const options::UnsignedFloorOptions &options)
+      const options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -179,7 +180,7 @@ public:
   }
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const options::UnsignedRoofOptions &options)
+      const options::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -199,7 +200,7 @@ public:
   }
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-      const options::UnsignedBoundedOptions &options)
+      const options::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum));
