@@ -30,8 +30,7 @@ public:
     auto options{sourcemeta::jsontoolkit::make_object()};
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(multiplier));
-    make_integer_encoding(document, value, "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-                          options);
+    make_encoding(document, value, "ARBITRARY_MULTIPLE_ZIGZAG_VARINT", options);
   }
 };
 

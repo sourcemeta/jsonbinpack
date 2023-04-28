@@ -7,7 +7,6 @@ TEST(MapperEncoding, is_encoding_false) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "integer",
     "minimum": -100,
     "maximum": 100
   })JSON")};
@@ -19,7 +18,6 @@ TEST(MapperEncoding, is_encoding_true) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "type": "integer",
     "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
@@ -35,7 +33,6 @@ TEST(MapperEncoding, is_encoding_invalid_version) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v99999.json",
-    "type": "integer",
     "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,

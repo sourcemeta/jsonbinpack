@@ -52,8 +52,8 @@ public:
                                     sourcemeta::jsontoolkit::from(maximum));
     sourcemeta::jsontoolkit::assign(options, "multiplier",
                                     sourcemeta::jsontoolkit::from(multiplier));
-    sourcemeta::jsonbinpack::mapper::make_integer_encoding(
-        document, value, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED", options);
+    make_encoding(document, value, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+                  options);
   }
 };
 
