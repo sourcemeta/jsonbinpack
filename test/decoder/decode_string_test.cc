@@ -109,7 +109,7 @@ TEST(Decoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
   InputByteStream<char> stream{0xde, 0x07, 0x0a, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result{
-      decoder.RFC3339_DATE_INTEGER_TRIPLET()};
+      decoder.RFC3339_DATE_INTEGER_TRIPLET({})};
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::from("2014-10-01")};
   EXPECT_EQ(result, expected);

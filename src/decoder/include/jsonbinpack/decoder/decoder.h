@@ -110,7 +110,8 @@ public:
         this->get_varint_zigzag() * options.multiplier));
   }
 
-  auto DOUBLE_VARINT_TUPLE() -> sourcemeta::jsontoolkit::JSON {
+  auto DOUBLE_VARINT_TUPLE(const options::DOUBLE_VARINT_TUPLE &)
+      -> sourcemeta::jsontoolkit::JSON {
     const std::int64_t digits{this->get_varint_zigzag()};
     const std::uint64_t point{this->get_varint()};
     const double divisor{std::pow(10, static_cast<double>(point))};
@@ -221,7 +222,9 @@ public:
     }
   }
 
-  auto RFC3339_DATE_INTEGER_TRIPLET() -> sourcemeta::jsontoolkit::JSON {
+  auto
+  RFC3339_DATE_INTEGER_TRIPLET(const options::RFC3339_DATE_INTEGER_TRIPLET &)
+      -> sourcemeta::jsontoolkit::JSON {
     const std::uint16_t year{this->get_word()};
     const std::uint8_t month{this->get_byte()};
     const std::uint8_t day{this->get_byte()};

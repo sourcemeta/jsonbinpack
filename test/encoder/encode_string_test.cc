@@ -95,6 +95,6 @@ TEST(Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
       sourcemeta::jsontoolkit::from("2014-10-01")};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.RFC3339_DATE_INTEGER_TRIPLET(document);
+  encoder.RFC3339_DATE_INTEGER_TRIPLET(document, {});
   EXPECT_BYTES(stream, {0xde, 0x07, 0x0a, 0x01});
 }
