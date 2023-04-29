@@ -1,8 +1,9 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODER_BASIC_ENCODER_H_
 #define SOURCEMETA_JSONBINPACK_ENCODER_BASIC_ENCODER_H_
 
-#include "varint.h"
-#include "zigzag.h"
+#include <jsonbinpack/encoder/context.h>
+#include <jsonbinpack/encoder/varint.h>
+#include <jsonbinpack/encoder/zigzag.h>
 
 #include <algorithm> // std::find_if
 #include <cassert>   // assert
@@ -55,8 +56,11 @@ public:
     }
   }
 
+  inline auto context() -> encoder::Context<CharT> & { return this->context_; }
+
 private:
   std::basic_ostream<CharT, Traits> &stream;
+  encoder::Context<CharT> context_;
 };
 
 } // namespace sourcemeta::jsonbinpack

@@ -1,8 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_DECODER_BASIC_DECODER_H_
 #define SOURCEMETA_JSONBINPACK_DECODER_BASIC_DECODER_H_
 
-#include "varint.h"
-#include "zigzag.h"
+#include <jsonbinpack/decoder/varint.h>
+#include <jsonbinpack/decoder/zigzag.h>
 
 #include <cassert> // assert
 #include <cmath>   // std::ceil
