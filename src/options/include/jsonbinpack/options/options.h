@@ -4,6 +4,7 @@
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::int64_t, std::uint64_t
+#include <variant> // std::variant
 #include <vector>  // std::vector
 
 namespace sourcemeta::jsonbinpack::options {
@@ -72,6 +73,17 @@ struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED {
 };
 
 struct RFC3339_DATE_INTEGER_TRIPLET {};
+
+// Encoding type
+
+using Encoding = std::variant<
+    BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
+    ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
+    DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
+    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
+    FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
+    ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
+    BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET>;
 
 } // namespace sourcemeta::jsonbinpack::options
 
