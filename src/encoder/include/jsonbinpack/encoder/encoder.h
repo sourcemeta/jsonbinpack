@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONBINPACK_ENCODER_ENCODER_H_
 
 #include <jsonbinpack/encoder/basic_encoder.h>
-#include <jsonbinpack/encoder/context.h>
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsonbinpack/options/options.h>
@@ -159,13 +158,12 @@ public:
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options,
-      encoder::Context<CharT> &context) -> void {
+      const options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
-    const bool is_shared{context.has(value)};
+    const bool is_shared{this->context().has(value)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -177,23 +175,22 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - context.offset(value));
+      this->put_varint(this->position() - this->context().offset(value));
     } else {
-      context.record(value, this->position());
+      this->context().record(value, this->position());
       this->put_string_utf8(value, size);
     }
   }
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options,
-      encoder::Context<CharT> &context) -> void {
+      const options::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     assert(size <= options.maximum);
-    const bool is_shared{context.has(value)};
+    const bool is_shared{this->context().has(value)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -205,17 +202,16 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - context.offset(value));
+      this->put_varint(this->position() - this->context().offset(value));
     } else {
-      context.record(value, this->position());
+      this->context().record(value, this->position());
       this->put_string_utf8(value, size);
     }
   }
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options,
-      encoder::Context<CharT> &context) -> void {
+      const options::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -223,7 +219,7 @@ public:
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum + 1));
     assert(is_within(size, options.minimum, options.maximum));
-    const bool is_shared{context.has(value)};
+    const bool is_shared{this->context().has(value)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -235,9 +231,9 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - context.offset(value));
+      this->put_varint(this->position() - this->context().offset(value));
     } else {
-      context.record(value, this->position());
+      this->context().record(value, this->position());
       this->put_string_utf8(value, size);
     }
   }
