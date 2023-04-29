@@ -58,17 +58,6 @@ public:
     }
   }
 
-  auto remove_oldest() -> void {
-    assert(!this->strings.empty());
-    // std::map are by definition ordered by key,
-    // so the begin iterator points to the entry
-    // with the lowest offset, a.k.a. the oldest.
-    const auto iterator{std::cbegin(this->offsets)};
-    this->strings.erase(iterator->second);
-    this->byte_size -= iterator->second.size();
-    this->offsets.erase(iterator);
-  }
-
   auto has(const std::basic_string<CharT> &value) const -> bool {
     return this->strings.contains(value);
   }
@@ -80,6 +69,17 @@ public:
   }
 
 private:
+  auto remove_oldest() -> void {
+    assert(!this->strings.empty());
+    // std::map are by definition ordered by key,
+    // so the begin iterator points to the entry
+    // with the lowest offset, a.k.a. the oldest.
+    const auto iterator{std::cbegin(this->offsets)};
+    this->strings.erase(iterator->second);
+    this->byte_size -= iterator->second.size();
+    this->offsets.erase(iterator);
+  }
+
   std::map<std::basic_string<CharT>, std::uint64_t> strings;
   // A mirror of the above map to be able to sort by offset.
   // While this means we need 2x the amount of memory to keep track

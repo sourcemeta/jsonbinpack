@@ -54,35 +54,6 @@ TEST(Encoder, context_not_record_too_big) {
   EXPECT_FALSE(context.has(too_big));
 }
 
-TEST(Encoder, context_remove_oldest) {
-  sourcemeta::jsonbinpack::encoder::Context<char> context;
-  context.record("foo", 10);
-  context.record("bar", 3);
-  context.record("baz", 7);
-
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_TRUE(context.has("bar"));
-  EXPECT_TRUE(context.has("baz"));
-
-  context.remove_oldest();
-
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_TRUE(context.has("baz"));
-
-  context.remove_oldest();
-
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_FALSE(context.has("baz"));
-
-  context.remove_oldest();
-
-  EXPECT_FALSE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_FALSE(context.has("baz"));
-}
-
 TEST(Encoder, context_is_a_circular_buffer) {
   const auto length{5000000};
   const std::string string_1(length, 'u');
