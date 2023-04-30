@@ -14,7 +14,7 @@ TEST(Options, encoding_not_nothrow_movable) {
   EXPECT_FALSE(std::is_nothrow_move_constructible_v<Encoding>);
 }
 
-TEST(Options, encoding_not_copyable) {
+TEST(Options, encoding_copyable) {
   using namespace sourcemeta::jsonbinpack::options;
-  EXPECT_FALSE(std::is_copy_constructible_v<Encoding>);
+  EXPECT_TRUE(std::is_copy_constructible_v<Encoding>);
 }
