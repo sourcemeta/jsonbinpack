@@ -50,6 +50,15 @@ struct TOP_LEVEL_BYTE_CHOICE_INDEX {
 };
 
 struct CONST_NONE {
+  // These constructors allow this encoding to be movable
+  CONST_NONE(const sourcemeta::jsontoolkit::JSON &input)
+      : value{sourcemeta::jsontoolkit::from(input)} {}
+  // Older versions of clang-format seems to get confused
+  // about noexcept constructors.
+  // clang-format off
+  CONST_NONE(CONST_NONE &&other) noexcept
+      : value{sourcemeta::jsontoolkit::from(other.value)} {}
+  // clang-format on
   const sourcemeta::jsontoolkit::JSON value;
 };
 
