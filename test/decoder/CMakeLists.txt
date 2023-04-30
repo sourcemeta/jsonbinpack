@@ -1,5 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_decoder_unit
   "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  decode_test.cc
   decode_zigzag_test.cc decode_varint_test.cc decode_utils.h
   decode_integer_test.cc decode_number_test.cc decode_enum_test.cc
   decode_string_test.cc decode_traits_test.cc)

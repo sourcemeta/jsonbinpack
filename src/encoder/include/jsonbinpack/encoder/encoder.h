@@ -8,6 +8,7 @@
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
+#include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
 #include <string>  // std::basic_string, std::stoul
 
@@ -18,6 +19,34 @@ class Encoder : private BasicEncoder<CharT, Traits> {
 public:
   Encoder(std::basic_ostream<CharT, Traits> &output)
       : BasicEncoder<CharT, Traits>{output} {}
+
+  auto encode(const sourcemeta::jsontoolkit::Value &document,
+              const options::Encoding &encoding) -> void {
+    switch (encoding.index()) {
+#define HANDLE_ENCODING(index, name)                                           \
+  case (index):                                                                \
+    return this->name(document, std::get<options::name>(encoding));
+      HANDLE_ENCODING(0, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
+      HANDLE_ENCODING(1, FLOOR_MULTIPLE_ENUM_VARINT)
+      HANDLE_ENCODING(2, ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
+      HANDLE_ENCODING(3, ARBITRARY_MULTIPLE_ZIGZAG_VARINT)
+      HANDLE_ENCODING(4, DOUBLE_VARINT_TUPLE)
+      HANDLE_ENCODING(5, BYTE_CHOICE_INDEX)
+      HANDLE_ENCODING(6, LARGE_CHOICE_INDEX)
+      HANDLE_ENCODING(7, TOP_LEVEL_BYTE_CHOICE_INDEX)
+      HANDLE_ENCODING(8, CONST_NONE)
+      HANDLE_ENCODING(9, UTF8_STRING_NO_LENGTH)
+      HANDLE_ENCODING(10, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_ENCODING(11, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_ENCODING(12, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_ENCODING(13, RFC3339_DATE_INTEGER_TRIPLET)
+#undef HANDLE_ENCODING
+    default:
+      // We should never get here. If so, it is definitely a bug
+      assert(false);
+      std::abort();
+    }
+  }
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::Value &document,

@@ -9,6 +9,7 @@
 #include <cassert> // assert
 #include <cmath>   // std::pow, std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint32_t, std::int64_t, std::uint64_t
+#include <cstdlib> // std::abort
 #include <iomanip> // std::setw, std::setfill
 #include <istream> // std::basic_istream
 #include <sstream> // std::basic_ostringstream
@@ -20,6 +21,34 @@ class Decoder : private BasicDecoder<CharT, Traits> {
 public:
   Decoder(std::basic_istream<CharT, Traits> &input)
       : BasicDecoder<CharT, Traits>{input} {}
+
+  auto decode(const options::Encoding &encoding)
+      -> sourcemeta::jsontoolkit::JSON {
+    switch (encoding.index()) {
+#define HANDLE_DECODING(index, name)                                           \
+  case (index):                                                                \
+    return this->name(std::get<options::name>(encoding));
+      HANDLE_DECODING(0, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
+      HANDLE_DECODING(1, FLOOR_MULTIPLE_ENUM_VARINT)
+      HANDLE_DECODING(2, ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
+      HANDLE_DECODING(3, ARBITRARY_MULTIPLE_ZIGZAG_VARINT)
+      HANDLE_DECODING(4, DOUBLE_VARINT_TUPLE)
+      HANDLE_DECODING(5, BYTE_CHOICE_INDEX)
+      HANDLE_DECODING(6, LARGE_CHOICE_INDEX)
+      HANDLE_DECODING(7, TOP_LEVEL_BYTE_CHOICE_INDEX)
+      HANDLE_DECODING(8, CONST_NONE)
+      HANDLE_DECODING(9, UTF8_STRING_NO_LENGTH)
+      HANDLE_DECODING(10, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_DECODING(11, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_DECODING(12, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
+      HANDLE_DECODING(13, RFC3339_DATE_INTEGER_TRIPLET)
+#undef HANDLE_DECODING
+    default:
+      // We should never get here. If so, it is definitely a bug
+      assert(false);
+      std::abort();
+    }
+  }
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
