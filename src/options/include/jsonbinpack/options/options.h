@@ -59,6 +59,8 @@ struct CONST_NONE {
   CONST_NONE(CONST_NONE &&other) noexcept
       : value{sourcemeta::jsontoolkit::from(other.value)} {}
   // clang-format on
+  CONST_NONE(const CONST_NONE &other)
+      : value{sourcemeta::jsontoolkit::from(other.value)} {}
   const sourcemeta::jsontoolkit::JSON value;
 };
 
