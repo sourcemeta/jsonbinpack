@@ -1,0 +1,6 @@
+add_executable(sourcemeta_jsonbinpack_options_unit
+  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  options_traits_test.cc)
+target_link_libraries(sourcemeta_jsonbinpack_options_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_options_unit PRIVATE sourcemeta_jsonbinpack_options)
+gtest_discover_tests(sourcemeta_jsonbinpack_options_unit)
