@@ -42,7 +42,7 @@ struct BYTE_CHOICE_INDEX {
   BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &);
   BYTE_CHOICE_INDEX(BYTE_CHOICE_INDEX &&) noexcept = default;
   BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
-  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct LARGE_CHOICE_INDEX {
@@ -50,7 +50,7 @@ struct LARGE_CHOICE_INDEX {
   LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &);
   LARGE_CHOICE_INDEX(LARGE_CHOICE_INDEX &&) noexcept = default;
   LARGE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
-  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct TOP_LEVEL_BYTE_CHOICE_INDEX {
@@ -63,7 +63,7 @@ struct TOP_LEVEL_BYTE_CHOICE_INDEX {
     noexcept = default;
   // clang-format on
   TOP_LEVEL_BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
-  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  const std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct CONST_NONE {
