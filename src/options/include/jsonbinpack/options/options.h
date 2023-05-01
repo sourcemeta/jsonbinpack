@@ -4,10 +4,19 @@
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::int64_t, std::uint64_t
+#include <memory>  // std::shared_ptr
 #include <variant> // std::variant
 #include <vector>  // std::vector
 
 namespace sourcemeta::jsonbinpack::options {
+
+// We cannot directly create an Encoding variant type whose values potentially
+// include other Encoding instances.  As a workaround, we have a helper
+// encoding wrapper that we can use as an incomplete type
+struct __internal_encoding_wrapper;
+// Use these alias types. Never use the internal wrapper type directly
+using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
+using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
 
 // Integers
 
@@ -96,6 +105,11 @@ using Encoding = std::variant<
     FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
     ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET>;
+
+// Helper definitions that rely on the Encoding data type
+struct __internal_encoding_wrapper {
+  const Encoding value;
+};
 
 } // namespace sourcemeta::jsonbinpack::options
 
