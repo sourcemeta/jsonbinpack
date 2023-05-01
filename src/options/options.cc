@@ -28,8 +28,6 @@ TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
 
 CONST_NONE::CONST_NONE(const sourcemeta::jsontoolkit::JSON &input)
     : value{sourcemeta::jsontoolkit::from(input)} {}
-CONST_NONE::CONST_NONE(CONST_NONE &&other) noexcept
-    : value{sourcemeta::jsontoolkit::from(other.value)} {}
 CONST_NONE::CONST_NONE(const CONST_NONE &other)
     : value{sourcemeta::jsontoolkit::from(other.value)} {}
 
