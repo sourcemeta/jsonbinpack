@@ -39,34 +39,38 @@ struct DOUBLE_VARINT_TUPLE {};
 
 struct BYTE_CHOICE_INDEX {
   // Because JSON documents are not easily copyable
-  BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &other);
-  BYTE_CHOICE_INDEX(BYTE_CHOICE_INDEX &&other) noexcept;
-  BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&other);
+  BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &);
+  BYTE_CHOICE_INDEX(BYTE_CHOICE_INDEX &&) noexcept = default;
+  BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct LARGE_CHOICE_INDEX {
   // Because JSON documents are not easily copyable
-  LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &other);
-  LARGE_CHOICE_INDEX(LARGE_CHOICE_INDEX &&other) noexcept;
-  LARGE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&other);
+  LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &);
+  LARGE_CHOICE_INDEX(LARGE_CHOICE_INDEX &&) noexcept = default;
+  LARGE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct TOP_LEVEL_BYTE_CHOICE_INDEX {
   // Because JSON documents are not easily copyable
-  TOP_LEVEL_BYTE_CHOICE_INDEX(const TOP_LEVEL_BYTE_CHOICE_INDEX &other);
-  TOP_LEVEL_BYTE_CHOICE_INDEX(TOP_LEVEL_BYTE_CHOICE_INDEX &&other) noexcept;
-  TOP_LEVEL_BYTE_CHOICE_INDEX(
-      std::vector<sourcemeta::jsontoolkit::JSON> &&other);
+  TOP_LEVEL_BYTE_CHOICE_INDEX(const TOP_LEVEL_BYTE_CHOICE_INDEX &);
+  // Older versions of clang-format seems to get
+  // confused about noexcept constructors.
+  // clang-format off
+  TOP_LEVEL_BYTE_CHOICE_INDEX(TOP_LEVEL_BYTE_CHOICE_INDEX &&)
+    noexcept = default;
+  // clang-format on
+  TOP_LEVEL_BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
 
 struct CONST_NONE {
   // These constructors allow this encoding to be movable
-  CONST_NONE(const sourcemeta::jsontoolkit::JSON &input);
-  CONST_NONE(CONST_NONE &&other) noexcept;
-  CONST_NONE(const CONST_NONE &other);
+  CONST_NONE(const sourcemeta::jsontoolkit::JSON &);
+  CONST_NONE(CONST_NONE &&) noexcept;
+  CONST_NONE(const CONST_NONE &);
   const sourcemeta::jsontoolkit::JSON value;
 };
 
