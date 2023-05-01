@@ -7,7 +7,8 @@
 #error Unknown JSON Toolkit backend
 #endif
 
-#include <algorithm> // std::any_of
+#include <algorithm> // std::any_of, std::transform
+#include <iterator>  // std::cbegin, std::cend, std::back_inserter
 
 namespace sourcemeta::jsontoolkit {
 
@@ -30,6 +31,20 @@ inline auto defines_any(const Value &value,
 template <typename T>
 auto defines_any(const Value &value, const T &keys) -> bool {
   return defines_any(value, std::cbegin(keys), std::cend(keys));
+}
+
+template <typename InputIt, typename OutputIt>
+auto copy(InputIt begin, InputIt end, OutputIt output) -> void {
+  std::transform(begin, end, output,
+                 [](const auto &json) { return from(json); });
+}
+
+template <typename Container>
+auto copy(const Container &container) -> Container {
+  Container output;
+  sourcemeta::jsontoolkit::copy(std::cbegin(container), std::cend(container),
+                                std::back_inserter(output));
+  return output;
 }
 
 } // namespace sourcemeta::jsontoolkit

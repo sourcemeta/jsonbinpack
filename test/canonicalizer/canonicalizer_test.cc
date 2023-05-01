@@ -35,15 +35,9 @@ TEST(Canonicalizer, unsupported_dialect) {
     "type": "boolean"
   })JSON")};
 
-  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected{
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/dialect/unknown",
-    "type": "boolean"
-  })JSON")};
-
-  EXPECT_EQ(schema, expected);
+  EXPECT_THROW(canonicalizer.apply(
+                   schema, "https://json-schema.org/draft/2020-12/schema"),
+               std::runtime_error);
 }
 
 TEST(Canonicalizer, unknown_dialect) {
