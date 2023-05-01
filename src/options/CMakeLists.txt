@@ -1,6 +1,6 @@
-add_library(sourcemeta_jsonbinpack_options INTERFACE
-  include/jsonbinpack/options/options.h)
-target_link_libraries(sourcemeta_jsonbinpack_options INTERFACE
+add_library(sourcemeta_jsonbinpack_options
+  include/jsonbinpack/options/options.h options.cc)
+target_link_libraries(sourcemeta_jsonbinpack_options PUBLIC
   sourcemeta_jsontoolkit_json)
-target_include_directories(sourcemeta_jsonbinpack_options INTERFACE
+target_include_directories(sourcemeta_jsonbinpack_options PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
