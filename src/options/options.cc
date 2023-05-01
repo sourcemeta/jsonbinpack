@@ -1,40 +1,26 @@
 #include <jsonbinpack/options/options.h>
 
-#include <algorithm> // std::transform
-#include <iterator>  // std::back_inserter
-#include <utility>   // std::move
+#include <utility> // std::move
 
 namespace sourcemeta::jsonbinpack::options {
 
-BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &other) {
-  std::transform(other.choices.cbegin(), other.choices.cend(),
-                 std::back_inserter(this->choices), [](const auto &json) {
-                   return sourcemeta::jsontoolkit::from(json);
-                 });
-}
+BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &other)
+    : choices{sourcemeta::jsontoolkit::copy(other.choices)} {}
 
 BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
     : choices{std::move(other)} {}
 
-LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &other) {
-  std::transform(other.choices.cbegin(), other.choices.cend(),
-                 std::back_inserter(this->choices), [](const auto &json) {
-                   return sourcemeta::jsontoolkit::from(json);
-                 });
-}
+LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &other)
+    : choices{sourcemeta::jsontoolkit::copy(other.choices)} {}
 
 LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
     : choices{std::move(other)} {}
 
 TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
-    const TOP_LEVEL_BYTE_CHOICE_INDEX &other) {
-  std::transform(other.choices.cbegin(), other.choices.cend(),
-                 std::back_inserter(this->choices), [](const auto &json) {
-                   return sourcemeta::jsontoolkit::from(json);
-                 });
-}
+    const TOP_LEVEL_BYTE_CHOICE_INDEX &other)
+    : choices{sourcemeta::jsontoolkit::copy(other.choices)} {}
 
 TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
