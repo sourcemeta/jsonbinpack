@@ -56,8 +56,12 @@ struct LARGE_CHOICE_INDEX {
 struct TOP_LEVEL_BYTE_CHOICE_INDEX {
   // Because JSON documents are not easily copyable
   TOP_LEVEL_BYTE_CHOICE_INDEX(const TOP_LEVEL_BYTE_CHOICE_INDEX &);
-  TOP_LEVEL_BYTE_CHOICE_INDEX(TOP_LEVEL_BYTE_CHOICE_INDEX &&) noexcept =
-      default;
+  // Older versions of clang-format seems to get
+  // confused about noexcept constructors.
+  // clang-format off
+  TOP_LEVEL_BYTE_CHOICE_INDEX(TOP_LEVEL_BYTE_CHOICE_INDEX &&)
+    noexcept = default;
+  // clang-format on
   TOP_LEVEL_BYTE_CHOICE_INDEX(std::vector<sourcemeta::jsontoolkit::JSON> &&);
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
 };
