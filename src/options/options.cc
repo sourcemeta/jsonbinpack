@@ -13,9 +13,6 @@ BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &other) {
                  });
 }
 
-BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(BYTE_CHOICE_INDEX &&other) noexcept
-    : choices{std::move(other.choices)} {}
-
 BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
     : choices{std::move(other)} {}
@@ -26,9 +23,6 @@ LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &other) {
                    return sourcemeta::jsontoolkit::from(json);
                  });
 }
-
-LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(LARGE_CHOICE_INDEX &&other) noexcept
-    : choices{std::move(other.choices)} {}
 
 LARGE_CHOICE_INDEX::LARGE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
@@ -41,10 +35,6 @@ TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
                    return sourcemeta::jsontoolkit::from(json);
                  });
 }
-
-TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
-    TOP_LEVEL_BYTE_CHOICE_INDEX &&other) noexcept
-    : choices{std::move(other.choices)} {}
 
 TOP_LEVEL_BYTE_CHOICE_INDEX::TOP_LEVEL_BYTE_CHOICE_INDEX(
     std::vector<sourcemeta::jsontoolkit::JSON> &&other)
