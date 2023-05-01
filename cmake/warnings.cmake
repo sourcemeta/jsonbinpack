@@ -22,7 +22,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
     -Wuninitialized
     -Wno-shadow
     -Wno-four-char-constants
-    -Wno-conversion
     -Wenum-conversion
     -Wno-float-conversion
     -Wno-newline-eof
@@ -75,7 +74,6 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     -Wempty-body
     -Wuninitialized
     -Wno-shadow
-    -Wno-conversion
     -Wenum-conversion
     -Wno-float-conversion
     -Wno-implicit-fallthrough
