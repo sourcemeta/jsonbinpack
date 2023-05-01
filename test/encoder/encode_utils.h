@@ -12,7 +12,7 @@
 #include <string>           // std::basic_string
 #include <vector>           // std::vector
 
-static auto to_byte(std::uint8_t input) -> std::byte {
+static inline auto to_byte(std::uint8_t input) -> std::byte {
   return std::byte{input};
 }
 
