@@ -11,6 +11,10 @@ auto sourcemeta::jsontoolkit::DefaultResolver::operator()(
     promise.set_value(sourcemeta::jsontoolkit::parse(
         sourcemeta::jsontoolkit::METASCHEMA_JSONSCHEMA_2020_12));
   } else if (identifier ==
+             "https://json-schema.org/draft/2020-12/hyper-schema") {
+    promise.set_value(sourcemeta::jsontoolkit::parse(
+        sourcemeta::jsontoolkit::METASCHEMA_HYPERSCHEMA_2020_12));
+  } else if (identifier ==
              "https://json-schema.org/draft/2020-12/meta/applicator") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         sourcemeta::jsontoolkit::METASCHEMA_JSONSCHEMA_2020_12_APPLICATOR));
@@ -52,6 +56,10 @@ auto sourcemeta::jsontoolkit::DefaultResolver::operator()(
   } else if (identifier == "https://json-schema.org/draft/2019-09/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         sourcemeta::jsontoolkit::METASCHEMA_JSONSCHEMA_2019_09));
+  } else if (identifier ==
+             "https://json-schema.org/draft/2019-09/hyper-schema") {
+    promise.set_value(sourcemeta::jsontoolkit::parse(
+        sourcemeta::jsontoolkit::METASCHEMA_HYPERSCHEMA_2019_09));
   } else if (identifier ==
              "https://json-schema.org/draft/2019-09/meta/applicator") {
     promise.set_value(sourcemeta::jsontoolkit::parse(

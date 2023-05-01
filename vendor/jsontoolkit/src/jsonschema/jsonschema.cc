@@ -115,6 +115,22 @@ auto sourcemeta::jsontoolkit::dialect(
   return promise.get_future();
 }
 
+// TODO: Support every JSON Schema dialect from Draft 7 and older
+// for completeness, returning the dialect itself as the only vocabulary.
+static auto core_vocabulary(const std::string &dialect) -> std::string {
+  if (dialect == "https://json-schema.org/draft/2020-12/schema" ||
+      dialect == "https://json-schema.org/draft/2020-12/hyper-schema") {
+    return "https://json-schema.org/draft/2020-12/vocab/core";
+  } else if (dialect == "https://json-schema.org/draft/2019-09/schema" ||
+             dialect == "https://json-schema.org/draft/2019-09/hyper-schema") {
+    return "https://json-schema.org/draft/2019-09/vocab/core";
+  } else {
+    std::ostringstream error;
+    error << "Unrecognized dialect: " << dialect;
+    throw std::runtime_error(error.str());
+  }
+}
+
 auto sourcemeta::jsontoolkit::vocabularies(
     const sourcemeta::jsontoolkit::Value &schema,
     const sourcemeta::jsontoolkit::schema_resolver_t &resolver,
@@ -127,10 +143,7 @@ auto sourcemeta::jsontoolkit::vocabularies(
   // implementation proceeds with processing the schema, it MUST assume the
   // use of the vocabulary from the core specification.
   // See https://json-schema.org/draft/2020-12/json-schema-core.html#section-8
-  // TODO: Do not assume 2020-12 core if the schema already has a
-  // non-2020-12 metaschema
-  std::unordered_map<std::string, bool> result{
-      {"https://json-schema.org/draft/2020-12/vocab/core", true}};
+  std::unordered_map<std::string, bool> result;
 
   /*
    * (1) Identify the schema's metaschema
@@ -138,8 +151,11 @@ auto sourcemeta::jsontoolkit::vocabularies(
   const std::optional<std::string> metaschema_id{
       sourcemeta::jsontoolkit::metaschema(schema)};
   if (!metaschema_id.has_value() && !default_metaschema.has_value()) {
-    promise.set_value(result);
-    return promise.get_future();
+    // If the schema has no declared metaschema and the user didn't
+    // provide a explicit default, then we cannot do anything.
+    // Better to abort instead of trying to guess.
+    throw std::runtime_error(
+        "Cannot determine the metaschema of the given schema");
   }
   const std::string &effective_metaschema_id{metaschema_id.has_value()
                                                  ? metaschema_id.value()
@@ -168,24 +184,95 @@ auto sourcemeta::jsontoolkit::vocabularies(
   }
 
   /*
-   * (3) Parse the "$vocabulary" keyword, if any
+   * (3) Resolve the metaschema's dialect
+   */
+  const std::optional<std::string> dialect{
+      sourcemeta::jsontoolkit::dialect(metaschema.value(), resolver,
+                                       default_metaschema)
+          .get()};
+  if (!dialect.has_value()) {
+    std::ostringstream error;
+    error << "Could not determine dialect for schema: " << resolved_id.value();
+    throw std::runtime_error(error.str());
+  }
+  const std::string core{core_vocabulary(dialect.value())};
+
+  /*
+   * (4) Parse the "$vocabulary" keyword, if any
    */
   if (!sourcemeta::jsontoolkit::defines(metaschema.value(), "$vocabulary")) {
-    // Vocabularies from the core specification are assumed to be set
-    // if the $vocabulary keyword is not defined.
+    // The core vocabulary is always used
+    // See https://json-schema.org/draft/2020-12/json-schema-core.html#section-8
     // See
-    // https://json-schema.org/draft/2020-12/json-schema-core.html#section-10
-    // See
-    // https://json-schema.org/draft/2020-12/json-schema-core.html#section-11
-    result.insert(
-        {"https://json-schema.org/draft/2020-12/vocab/applicator", true});
-    result.insert(
-        {"https://json-schema.org/draft/2020-12/vocab/unevaluated", true});
+    // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-02#section-8
+    result.insert({core, true});
+
+    if (dialect.value() == "https://json-schema.org/draft/2020-12/schema" ||
+        dialect.value() ==
+            "https://json-schema.org/draft/2020-12/hyper-schema") {
+      // See
+      // https://json-schema.org/draft/2020-12/json-schema-core.html#section-10
+      result.insert(
+          {"https://json-schema.org/draft/2020-12/vocab/applicator", true});
+      // See
+      // https://json-schema.org/draft/2020-12/json-schema-core.html#section-11
+      result.insert(
+          {"https://json-schema.org/draft/2020-12/vocab/unevaluated", true});
+      // See
+      // https://json-schema.org/draft/2020-12/json-schema-validation.html#section-6
+      result.insert(
+          {"https://json-schema.org/draft/2020-12/vocab/validation", true});
+      // See
+      // https://json-schema.org/draft/2020-12/json-schema-validation.html#section-8
+      result.insert(
+          {"https://json-schema.org/draft/2020-12/vocab/content", true});
+      // See
+      // https://json-schema.org/draft/2020-12/json-schema-validation.html#section-9
+      result.insert(
+          {"https://json-schema.org/draft/2020-12/vocab/meta-data", true});
+    } else if (dialect.value() ==
+                   "https://json-schema.org/draft/2019-09/schema" ||
+               dialect.value() ==
+                   "https://json-schema.org/draft/2019-09/hyper-schema") {
+      // See
+      // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-02#section-9
+      result.insert(
+          {"https://json-schema.org/draft/2019-09/vocab/applicator", true});
+      // See
+      // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-02#section-6
+      result.insert(
+          {"https://json-schema.org/draft/2019-09/vocab/validation", true});
+      // The Format vocabulary is optional by default
+      // See
+      // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-02#section-7
+      result.insert(
+          {"https://json-schema.org/draft/2019-09/vocab/format", false});
+      // See
+      // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-02#section-8
+      result.insert(
+          {"https://json-schema.org/draft/2019-09/vocab/content", true});
+      // See
+      // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-02#section-9
+      result.insert(
+          {"https://json-schema.org/draft/2019-09/vocab/meta-data", true});
+    }
+
     promise.set_value(result);
     return promise.get_future();
   }
+
   const sourcemeta::jsontoolkit::Value &vocabulary_value{
       sourcemeta::jsontoolkit::at(metaschema.value(), "$vocabulary")};
+
+  // Handle core vocabulary edge cases
+  if (!sourcemeta::jsontoolkit::defines(vocabulary_value, core)) {
+    throw std::runtime_error(
+        "Every metaschema must declare the core vocabulary");
+  } else if (!sourcemeta::jsontoolkit::to_boolean(
+                 sourcemeta::jsontoolkit::at(vocabulary_value, core))) {
+    throw std::runtime_error("The core vocabulary must be marked as required");
+  }
+
   for (auto iterator = sourcemeta::jsontoolkit::cbegin_object(vocabulary_value);
        iterator != sourcemeta::jsontoolkit::cend_object(vocabulary_value);
        iterator++) {
