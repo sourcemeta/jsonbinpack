@@ -4,56 +4,56 @@
 #include <gtest/gtest.h>
 #include <limits> // std::numeric_limits
 
-TEST(decoder, zigzag_int_0_0) {
+TEST(Decoder, zigzag_int_0_0) {
   const unsigned int value = 0;
   const std::int64_t expected = 0;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int_1_minus_1) {
+TEST(Decoder, zigzag_int_1_minus_1) {
   const unsigned int value = 1;
   const std::int64_t expected = -1;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int_2_1) {
+TEST(Decoder, zigzag_int_2_1) {
   const unsigned int value = 2;
   const std::int64_t expected = 1;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int_3_minus_2) {
+TEST(Decoder, zigzag_int_3_minus_2) {
   const unsigned int value = 3;
   const std::int64_t expected = -2;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int64_0_0) {
+TEST(Decoder, zigzag_int64_0_0) {
   const std::uint64_t value = 0;
   const std::int64_t expected = 0;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int64_1_minus_1) {
+TEST(Decoder, zigzag_int64_1_minus_1) {
   const std::uint64_t value = 1;
   const std::int64_t expected = -1;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int64_2_1) {
+TEST(Decoder, zigzag_int64_2_1) {
   const std::uint64_t value = 2;
   const std::int64_t expected = 1;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
   EXPECT_EQ(result, expected);
 }
 
-TEST(decoder, zigzag_int64_3_minus_2) {
+TEST(Decoder, zigzag_int64_3_minus_2) {
   const std::uint64_t value = 3;
   const std::int64_t expected = -2;
   const std::int64_t result = sourcemeta::jsonbinpack::decoder::zigzag(value);
