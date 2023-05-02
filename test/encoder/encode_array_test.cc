@@ -116,3 +116,23 @@ TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
                 sourcemeta::jsontoolkit::copy(choices)}})});
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
+
+TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]")};
+  OutputByteStream<char> stream{};
+
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(false));
+  choices.push_back(sourcemeta::jsontoolkit::from(true));
+
+  Encoder encoder{stream};
+  encoder.BOUNDED_8BITS_TYPED_ARRAY(
+      document,
+      {0, 10, options::wrap(options::FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
+       options::wrap(
+           {options::BYTE_CHOICE_INDEX{sourcemeta::jsontoolkit::copy(choices)},
+            options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{3}})});
+  EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
+}
