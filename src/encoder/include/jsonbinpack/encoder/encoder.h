@@ -11,6 +11,7 @@
 #include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
 #include <string>  // std::basic_string, std::stoul
+#include <utility> // std::move
 
 namespace sourcemeta::jsonbinpack {
 
@@ -309,6 +310,19 @@ public:
                                    : options.encoding->value};
       this->encode(sourcemeta::jsontoolkit::at(document, index), encoding);
     }
+  }
+
+  auto
+  BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
+                            const options::BOUNDED_8BITS_TYPED_ARRAY &options)
+      -> void {
+    assert(options.maximum >= options.minimum);
+    const auto size{sourcemeta::jsontoolkit::size(document)};
+    assert(is_within(size, options.minimum, options.maximum));
+    assert(is_byte(options.maximum - options.minimum));
+    this->put_byte(static_cast<std::uint8_t>(size - options.minimum));
+    this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
+                                       std::move(options.prefix_encodings)});
   }
 };
 
