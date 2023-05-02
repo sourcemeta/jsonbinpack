@@ -56,3 +56,63 @@ TEST(Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
        {}});
   EXPECT_BYTES(stream, {});
 }
+
+TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("[ true, false, true ]")};
+  OutputByteStream<char> stream{};
+
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(false));
+  choices.push_back(sourcemeta::jsontoolkit::from(true));
+
+  Encoder encoder{stream};
+  encoder.BOUNDED_8BITS_TYPED_ARRAY(
+      document, {0,
+                 3,
+                 options::wrap(options::BYTE_CHOICE_INDEX{std::move(choices)}),
+                 {}});
+  EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
+}
+
+TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("[ true, false, true ]")};
+  OutputByteStream<char> stream{};
+
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(false));
+  choices.push_back(sourcemeta::jsontoolkit::from(true));
+
+  Encoder encoder{stream};
+  encoder.BOUNDED_8BITS_TYPED_ARRAY(
+      document, {3,
+                 3,
+                 options::wrap(options::BYTE_CHOICE_INDEX{std::move(choices)}),
+                 {}});
+  EXPECT_BYTES(stream, {0x00, 0x01, 0x00, 0x01});
+}
+
+TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("[ true, false, 5 ]")};
+  OutputByteStream<char> stream{};
+
+  std::vector<sourcemeta::jsontoolkit::JSON> choices;
+  choices.push_back(sourcemeta::jsontoolkit::from(false));
+  choices.push_back(sourcemeta::jsontoolkit::from(true));
+
+  Encoder encoder{stream};
+  encoder.BOUNDED_8BITS_TYPED_ARRAY(
+      document,
+      {1, 3,
+       options::wrap(options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
+       options::wrap(
+           {options::BYTE_CHOICE_INDEX{sourcemeta::jsontoolkit::copy(choices)},
+            options::BYTE_CHOICE_INDEX{
+                sourcemeta::jsontoolkit::copy(choices)}})});
+  EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
+}
