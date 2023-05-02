@@ -295,6 +295,18 @@ public:
     assert(sourcemeta::jsontoolkit::size(result) == options.size);
     return result;
   };
+
+  auto
+  BOUNDED_8BITS_TYPED_ARRAY(const options::BOUNDED_8BITS_TYPED_ARRAY &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    assert(options.maximum >= options.minimum);
+    assert(is_byte(options.maximum - options.minimum));
+    const std::uint8_t byte{this->get_byte()};
+    const std::uint64_t size{byte + options.minimum};
+    assert(is_within(size, options.minimum, options.maximum));
+    return this->FIXED_TYPED_ARRAY({size, std::move(options.encoding),
+                                    std::move(options.prefix_encodings)});
+  };
 };
 
 } // namespace sourcemeta::jsonbinpack
