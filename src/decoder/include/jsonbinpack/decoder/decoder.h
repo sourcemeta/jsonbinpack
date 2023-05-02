@@ -42,6 +42,7 @@ public:
       HANDLE_DECODING(11, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_DECODING(12, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_DECODING(13, RFC3339_DATE_INTEGER_TRIPLET)
+      HANDLE_DECODING(14, FIXED_TYPED_ARRAY)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -279,6 +280,21 @@ public:
   // TODO: Implement STRING_DICTIONARY_COMPRESSOR encoding
   // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
   // TODO: Implement URL_PROTOCOL_HOST_REST encoding
+
+  auto FIXED_TYPED_ARRAY(const options::FIXED_TYPED_ARRAY &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const auto prefix_encodings{options.prefix_encodings.size()};
+    sourcemeta::jsontoolkit::JSON result{sourcemeta::jsontoolkit::make_array()};
+    for (std::size_t index = 0; index < options.size; index++) {
+      const options::Encoding &encoding{
+          prefix_encodings > index ? options.prefix_encodings[index].value
+                                   : options.encoding->value};
+      sourcemeta::jsontoolkit::push_back(result, this->decode(encoding));
+    }
+
+    assert(sourcemeta::jsontoolkit::size(result) == options.size);
+    return result;
+  };
 };
 
 } // namespace sourcemeta::jsonbinpack

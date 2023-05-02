@@ -4,7 +4,6 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
-#include <memory>
 #include <vector>
 
 TEST(Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
