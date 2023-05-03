@@ -45,6 +45,7 @@ public:
       HANDLE_DECODING(14, FIXED_TYPED_ARRAY)
       HANDLE_DECODING(15, BOUNDED_8BITS_TYPED_ARRAY)
       HANDLE_DECODING(16, BOUNDED_TYPED_ARRAY)
+      HANDLE_DECODING(17, FLOOR_TYPED_ARRAY)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -317,6 +318,16 @@ public:
     const std::uint64_t size{value + options.minimum};
     assert(size >= value);
     assert(is_within(size, options.minimum, options.maximum));
+    return this->FIXED_TYPED_ARRAY({size, std::move(options.encoding),
+                                    std::move(options.prefix_encodings)});
+  };
+
+  auto FLOOR_TYPED_ARRAY(const options::FLOOR_TYPED_ARRAY &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const std::uint64_t value{this->get_varint()};
+    const std::uint64_t size{value + options.minimum};
+    assert(size >= value);
+    assert(size >= options.minimum);
     return this->FIXED_TYPED_ARRAY({size, std::move(options.encoding),
                                     std::move(options.prefix_encodings)});
   };
