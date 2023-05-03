@@ -116,6 +116,12 @@ struct FLOOR_TYPED_ARRAY {
   const MultipleEncodings prefix_encodings;
 };
 
+struct ROOF_TYPED_ARRAY {
+  const std::uint64_t maximum;
+  const SingleEncoding encoding;
+  const MultipleEncodings prefix_encodings;
+};
+
 // Encoding type
 
 using Encoding = std::variant<
@@ -126,7 +132,8 @@ using Encoding = std::variant<
     FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
     ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
-    FIXED_TYPED_ARRAY, BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY>;
+    FIXED_TYPED_ARRAY, BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY,
+    ROOF_TYPED_ARRAY>;
 
 // Helper definitions that rely on the Encoding data type
 struct __internal_encoding_wrapper {
