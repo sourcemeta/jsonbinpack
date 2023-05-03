@@ -43,8 +43,7 @@ public:
       HANDLE_ENCODING(13, RFC3339_DATE_INTEGER_TRIPLET)
       HANDLE_ENCODING(14, FIXED_TYPED_ARRAY)
       HANDLE_ENCODING(15, BOUNDED_8BITS_TYPED_ARRAY)
-      HANDLE_ENCODING(16, BOUNDED_TYPED_ARRAY)
-      HANDLE_ENCODING(17, FLOOR_TYPED_ARRAY)
+      HANDLE_ENCODING(16, FLOOR_TYPED_ARRAY)
 #undef HANDLE_ENCODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -324,18 +323,6 @@ public:
     assert(is_within(size, options.minimum, options.maximum));
     assert(is_byte(options.maximum - options.minimum));
     this->put_byte(static_cast<std::uint8_t>(size - options.minimum));
-    this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
-                                       std::move(options.prefix_encodings)});
-  }
-
-  // TODO: This encoding is useless. `FLOOR_TYPED_ARRAY` is always better
-  auto BOUNDED_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
-                           const options::BOUNDED_TYPED_ARRAY &options)
-      -> void {
-    assert(options.maximum >= options.minimum);
-    const auto size{sourcemeta::jsontoolkit::size(document)};
-    assert(is_within(size, options.minimum, options.maximum));
-    this->put_varint(size - options.minimum);
     this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
                                        std::move(options.prefix_encodings)});
   }

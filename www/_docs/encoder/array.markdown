@@ -84,8 +84,8 @@ false, true ]` and `encoding` corresponds to
 ```
 
 
-`BOUNDED_TYPED_ARRAY`
----------------------
+`FLOOR_TYPED_ARRAY`
+-------------------
 
 The encoding consists of the length of the array minus `minimum` encoded as a
 Base-128 64-bit Little Endian variable-length unsigned integer followed by the
@@ -97,26 +97,24 @@ elements of the array encoded in order. The encoding of the element at index
 | Option            | Type         | Description                     |
 |-------------------|--------------|---------------------------------|
 | `minimum`         | `uint`       | The minimum length of the array |
-| `maximum`         | `uint`       | The maximum length of the array |
 | `prefixEncodings` | `encoding[]` | Positional encodings            |
 | `encoding`        | `encoding`   | Element encoding                |
 
 ### Conditions
 
-| Condition                         | Description                                                                           |
-|-----------------------------------|---------------------------------------------------------------------------------------|
-| `len(value) >= minimum`           | The length of the array must be greater than or equal to the minimum                  |
-| `len(value) <= maximum`           | The length of the array must be less than or equal to the maximum                     |
-| `len(prefixEncodings) <= maximum` | The number of prefix encodings must be less than or equal to the maximum array length |
+| Condition               | Description                                                          |
+|-------------------------|----------------------------------------------------------------------|
+| `len(value) >= minimum` | The length of the array must be greater than or equal to the minimum |
 
 ### Examples
 
-Given the array `[ true, false, 5 ]` where the minimum is 1 and the maximum is
-3, the `prefixEncodings` corresponds to [`BYTE_CHOICE_INDEX`](./enum) with
-choices `[ false, true ]` and [`BYTE_CHOICE_INDEX`](./enum) with choices `[
-false, true ]` and `encoding` corresponds to
-[`BOUNDED_MULTIPLE_8BITS_ENUM_FIXED`](./integer) with minimum 0 and maximum
-255, the encoding results in:
+<!-- TODO: Give an example of an array with more than 8-bit of elements -->
+
+Given the array `[ true, false, 5 ]` where the minimum is 1, the
+`prefixEncodings` corresponds to [`BYTE_CHOICE_INDEX`](./enum) with choices `[
+false, true ]` and [`BYTE_CHOICE_INDEX`](./enum) with choices `[ false, true ]`
+and `encoding` corresponds to [`BOUNDED_MULTIPLE_8BITS_ENUM_FIXED`](./integer)
+with minimum 0 and maximum 255, the encoding results in:
 
 ```
 +------+------+------+------+
@@ -124,3 +122,4 @@ false, true ]` and `encoding` corresponds to
 +------+------+------+------+
   size   true   false  5
 ```
+
