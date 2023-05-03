@@ -44,6 +44,7 @@ public:
       HANDLE_ENCODING(14, FIXED_TYPED_ARRAY)
       HANDLE_ENCODING(15, BOUNDED_8BITS_TYPED_ARRAY)
       HANDLE_ENCODING(16, FLOOR_TYPED_ARRAY)
+      HANDLE_ENCODING(17, ROOF_TYPED_ARRAY)
 #undef HANDLE_ENCODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -332,6 +333,15 @@ public:
     const auto size{sourcemeta::jsontoolkit::size(document)};
     assert(size >= options.minimum);
     this->put_varint(size - options.minimum);
+    this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
+                                       std::move(options.prefix_encodings)});
+  }
+
+  auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
+                        const options::ROOF_TYPED_ARRAY &options) -> void {
+    const auto size{sourcemeta::jsontoolkit::size(document)};
+    assert(size <= options.maximum);
+    this->put_varint(options.maximum - size);
     this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
                                        std::move(options.prefix_encodings)});
   }
