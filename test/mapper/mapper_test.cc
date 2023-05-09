@@ -12,7 +12,9 @@ TEST(Mapper, unsupported_dialect) {
     "type": "boolean"
   })JSON")};
 
-  EXPECT_THROW(mapper.apply(schema), std::domain_error);
+  EXPECT_THROW(
+      mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema"),
+      std::domain_error);
 }
 
 TEST(Mapper, unknown_dialect) {
@@ -22,5 +24,7 @@ TEST(Mapper, unknown_dialect) {
     "type": "boolean"
   })JSON")};
 
-  EXPECT_THROW(mapper.apply(schema), std::domain_error);
+  EXPECT_THROW(
+      mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema"),
+      std::domain_error);
 }

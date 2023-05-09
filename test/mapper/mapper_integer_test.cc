@@ -14,7 +14,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
     "maximum": 100
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -42,7 +42,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
     "multipleOf": 5
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -69,7 +69,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
     "maximum": 100000
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -96,7 +96,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
     "multipleOf": 5
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -121,7 +121,7 @@ TEST(MapperInteger, minimum) {
     "minimum": 0
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -147,7 +147,7 @@ TEST(MapperInteger, minimum_multiplier) {
     "multipleOf": 5
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -172,7 +172,7 @@ TEST(MapperInteger, maximum) {
     "maximum": 100
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -198,7 +198,7 @@ TEST(MapperInteger, maximum_multiplier) {
     "multipleOf": 5
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -222,7 +222,7 @@ TEST(MapperInteger, unbounded) {
     "type": "integer"
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -246,7 +246,7 @@ TEST(MapperInteger, unbounded_multiplier) {
     "multipleOf": 5
   })JSON")};
 
-  mapper.apply(schema);
+  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
