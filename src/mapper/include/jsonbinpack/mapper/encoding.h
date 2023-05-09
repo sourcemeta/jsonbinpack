@@ -13,7 +13,7 @@ const std::string V1{"https://www.jsonbinpack.org/schemas/encoding/v1.json"};
 
 namespace keywords {
 const std::string version{"$schema"};
-const std::string encoding{"encoding"};
+const std::string name{"name"};
 const std::string options{"options"};
 } // namespace keywords
 

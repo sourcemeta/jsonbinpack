@@ -18,7 +18,7 @@ TEST(MapperEncoding, is_encoding_true) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
       "maximum": 100,
@@ -33,7 +33,7 @@ TEST(MapperEncoding, is_encoding_invalid_version) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v99999.json",
-    "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
       "maximum": 100,
