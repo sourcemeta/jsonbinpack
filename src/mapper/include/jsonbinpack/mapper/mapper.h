@@ -5,17 +5,21 @@
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/jsonschema.h>
 
+#include <string> // std::string
+
 namespace sourcemeta::jsonbinpack {
 
 class Mapper {
 public:
   Mapper(const sourcemeta::jsontoolkit::schema_resolver_t &resolver);
   auto apply(sourcemeta::jsontoolkit::JSON &document,
-             sourcemeta::jsontoolkit::Value &value) const -> void;
+             sourcemeta::jsontoolkit::Value &value,
+             const std::string &default_metaschema) const -> void;
 
   // For convenience
-  inline auto apply(sourcemeta::jsontoolkit::JSON &document) const -> void {
-    return apply(document, document);
+  inline auto apply(sourcemeta::jsontoolkit::JSON &document,
+                    const std::string &default_metaschema) const -> void {
+    return apply(document, document, default_metaschema);
   }
 
 private:

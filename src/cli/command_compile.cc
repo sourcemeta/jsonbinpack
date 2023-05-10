@@ -1,4 +1,6 @@
 #include "commands.h"
+#include "defaults.h"
+
 #include <jsonbinpack/mapper/mapper.h>
 #include <jsontoolkit/json.h>
 
@@ -11,7 +13,7 @@
 static auto compile_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
   sourcemeta::jsonbinpack::Mapper mapper{
       sourcemeta::jsontoolkit::DefaultResolver{}};
-  mapper.apply(schema);
+  mapper.apply(schema, sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;
   return EXIT_SUCCESS;
