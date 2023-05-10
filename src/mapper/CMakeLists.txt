@@ -7,6 +7,7 @@ add_library(sourcemeta_jsonbinpack_mapper
   include/jsonbinpack/mapper/mapper.h
   include/jsonbinpack/mapper/states.h
   include/jsonbinpack/mapper/encoding.h
+  rules/enum_8_bit_top_level.h
   rules/enum_singleton.h
   rules/integer_bounded_8_bit.h
   rules/integer_bounded_greater_than_8_bit.h
