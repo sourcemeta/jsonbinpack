@@ -23,11 +23,10 @@ public:
                sourcemeta::jsontoolkit::at(schema, "type")) == "integer" &&
            sourcemeta::jsontoolkit::defines(schema, "minimum") &&
            sourcemeta::jsontoolkit::defines(schema, "maximum") &&
-           sourcemeta::jsontoolkit::to_integer(
-               sourcemeta::jsontoolkit::at(schema, "maximum")) -
-                   sourcemeta::jsontoolkit::to_integer(
-                       sourcemeta::jsontoolkit::at(schema, "minimum")) >
-               std::numeric_limits<std::uint8_t>::max() &&
+           !is_byte(sourcemeta::jsontoolkit::to_integer(
+                        sourcemeta::jsontoolkit::at(schema, "maximum")) -
+                    sourcemeta::jsontoolkit::to_integer(
+                        sourcemeta::jsontoolkit::at(schema, "minimum"))) &&
            !sourcemeta::jsontoolkit::defines(schema, "multipleOf");
   }
 

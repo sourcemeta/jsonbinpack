@@ -6,6 +6,7 @@
 // To be used by the rules below
 #include <alterschema/rule.h>
 #include <jsonbinpack/mapper/encoding.h>
+#include <jsonbinpack/numeric/numeric.h>
 
 #include "rules/integer_bounded_8_bit.h"
 #include "rules/integer_bounded_greater_than_8_bit.h"

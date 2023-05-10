@@ -22,6 +22,7 @@ target_include_directories(sourcemeta_jsonbinpack_mapper PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_jsontoolkit_json)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_alterschema)
+target_link_libraries(sourcemeta_jsonbinpack_mapper PRIVATE sourcemeta_jsonbinpack_numeric)
 
 # To find the generated schemas file
 target_include_directories(sourcemeta_jsonbinpack_mapper PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
