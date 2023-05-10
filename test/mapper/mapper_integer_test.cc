@@ -19,7 +19,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
       "maximum": 100,
@@ -47,7 +47,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
       "maximum": 100,
@@ -74,7 +74,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
     "options": {
       "minimum": -100,
       "multiplier": 1
@@ -101,7 +101,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
     "options": {
       "minimum": -100,
       "multiplier": 5
@@ -126,7 +126,7 @@ TEST(MapperInteger, minimum) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
     "options": {
       "minimum": 0,
       "multiplier": 1
@@ -152,7 +152,7 @@ TEST(MapperInteger, minimum_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
     "options": {
       "minimum": 0,
       "multiplier": 5
@@ -177,7 +177,7 @@ TEST(MapperInteger, maximum) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "options": {
       "maximum": 100,
       "multiplier": 1
@@ -203,7 +203,7 @@ TEST(MapperInteger, maximum_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "options": {
       "maximum": 100,
       "multiplier": 5
@@ -227,7 +227,7 @@ TEST(MapperInteger, unbounded) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "options": {
       "multiplier": 1
     }
@@ -251,7 +251,7 @@ TEST(MapperInteger, unbounded_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "encoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "options": {
       "multiplier": 5
     }

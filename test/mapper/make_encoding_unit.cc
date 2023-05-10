@@ -12,7 +12,7 @@ TEST(MapperEncoding, make_encoding_1) {
                                                  options);
   EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
   EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "$schema"));
-  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "encoding"));
+  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "name"));
   EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "options"));
   EXPECT_TRUE(sourcemeta::jsonbinpack::mapper::is_encoding(result));
 }

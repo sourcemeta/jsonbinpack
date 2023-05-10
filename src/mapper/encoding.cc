@@ -9,7 +9,7 @@ auto sourcemeta::jsonbinpack::mapper::is_encoding(
   const std::optional<std::string> metaschema{
       sourcemeta::jsontoolkit::metaschema(document)};
   return metaschema.has_value() &&
-         sourcemeta::jsontoolkit::defines(document, keywords::encoding) &&
+         sourcemeta::jsontoolkit::defines(document, keywords::name) &&
          sourcemeta::jsontoolkit::defines(document, keywords::options) &&
          metaschema.value() == V1;
 }
@@ -21,7 +21,7 @@ auto sourcemeta::jsonbinpack::mapper::make_encoding(
   sourcemeta::jsontoolkit::make_object(value);
   sourcemeta::jsontoolkit::assign(document, value, keywords::version,
                                   sourcemeta::jsontoolkit::from(V1));
-  sourcemeta::jsontoolkit::assign(document, value, keywords::encoding,
+  sourcemeta::jsontoolkit::assign(document, value, keywords::name,
                                   sourcemeta::jsontoolkit::from(encoding));
   sourcemeta::jsontoolkit::assign(document, value, keywords::options, options);
 }
