@@ -1,3 +1,4 @@
+#include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsonbinpack/mapper/mapper.h>
 #include <jsontoolkit/json.h>
 
@@ -5,6 +6,7 @@
 
 TEST(MapperInteger, maximum_minimum_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -14,6 +16,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
     "maximum": 100
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -32,6 +35,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
 
 TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -42,6 +46,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
     "multipleOf": 5
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -60,6 +65,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
 
 TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -69,6 +75,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
     "maximum": 100000
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -86,6 +93,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
 
 TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -96,6 +104,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
     "multipleOf": 5
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -113,6 +122,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
 
 TEST(MapperInteger, minimum) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -121,6 +131,7 @@ TEST(MapperInteger, minimum) {
     "minimum": 0
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -138,6 +149,7 @@ TEST(MapperInteger, minimum) {
 
 TEST(MapperInteger, minimum_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -147,6 +159,7 @@ TEST(MapperInteger, minimum_multiplier) {
     "multipleOf": 5
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -164,6 +177,7 @@ TEST(MapperInteger, minimum_multiplier) {
 
 TEST(MapperInteger, maximum) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -172,6 +186,7 @@ TEST(MapperInteger, maximum) {
     "maximum": 100
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -189,6 +204,7 @@ TEST(MapperInteger, maximum) {
 
 TEST(MapperInteger, maximum_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -198,6 +214,7 @@ TEST(MapperInteger, maximum_multiplier) {
     "multipleOf": 5
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -215,6 +232,7 @@ TEST(MapperInteger, maximum_multiplier) {
 
 TEST(MapperInteger, unbounded) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -222,6 +240,7 @@ TEST(MapperInteger, unbounded) {
     "type": "integer"
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
@@ -238,6 +257,7 @@ TEST(MapperInteger, unbounded) {
 
 TEST(MapperInteger, unbounded_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -246,6 +266,7 @@ TEST(MapperInteger, unbounded_multiplier) {
     "multipleOf": 5
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{

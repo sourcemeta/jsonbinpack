@@ -1,3 +1,4 @@
+#include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsonbinpack/mapper/mapper.h>
 #include <jsontoolkit/json.h>
 
@@ -5,6 +6,7 @@
 
 TEST(MapperNumber, arbitrary) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
 
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -12,6 +14,7 @@ TEST(MapperNumber, arbitrary) {
     "type": "number"
   })JSON")};
 
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected{
