@@ -17,6 +17,7 @@ add_library(sourcemeta_jsonbinpack_mapper
   rules/integer_unbound_multiplier.h
   rules/integer_upper_bound.h
   rules/integer_upper_bound_multiplier.h
+  rules/number_arbitrary.h
   mapper.cc states.cc encoding.cc schemas.h.in)
 target_include_directories(sourcemeta_jsonbinpack_mapper PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
