@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(MapperInteger, maximum_minimum_8_bit) {
+TEST(MapperInteger_2020_12, maximum_minimum_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -33,7 +33,7 @@ TEST(MapperInteger, maximum_minimum_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
+TEST(MapperInteger_2020_12, maximum_minimum_multiplier_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -63,7 +63,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
+TEST(MapperInteger_2020_12, maximum_minimum_greater_than_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -91,7 +91,7 @@ TEST(MapperInteger, maximum_minimum_greater_than_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
+TEST(MapperInteger_2020_12, maximum_minimum_multiplier_greater_than_8_bit) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -120,7 +120,7 @@ TEST(MapperInteger, maximum_minimum_multiplier_greater_than_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, minimum) {
+TEST(MapperInteger_2020_12, minimum) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -147,7 +147,7 @@ TEST(MapperInteger, minimum) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, minimum_multiplier) {
+TEST(MapperInteger_2020_12, minimum_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -175,7 +175,7 @@ TEST(MapperInteger, minimum_multiplier) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, maximum) {
+TEST(MapperInteger_2020_12, maximum) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -202,7 +202,7 @@ TEST(MapperInteger, maximum) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, maximum_multiplier) {
+TEST(MapperInteger_2020_12, maximum_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -230,7 +230,7 @@ TEST(MapperInteger, maximum_multiplier) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, unbounded) {
+TEST(MapperInteger_2020_12, unbounded) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
@@ -255,7 +255,7 @@ TEST(MapperInteger, unbounded) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(MapperInteger, unbounded_multiplier) {
+TEST(MapperInteger_2020_12, unbounded_multiplier) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};

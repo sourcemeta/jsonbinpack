@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(MapperNumber, arbitrary) {
+TEST(MapperNumber_2020_12, arbitrary) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
