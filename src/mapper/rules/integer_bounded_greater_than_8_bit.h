@@ -1,6 +1,3 @@
-#include <cstdint> // std::uint8_t
-#include <limits>  // std::numeric_limits
-
 namespace sourcemeta::jsonbinpack::mapper {
 
 class IntegerBoundedGreaterThan8Bit final

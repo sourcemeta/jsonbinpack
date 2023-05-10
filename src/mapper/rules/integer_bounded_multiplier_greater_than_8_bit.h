@@ -33,8 +33,7 @@ public:
 
     const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
         states::integer(schema, vocabularies)};
-    return !states.has_value() ||
-           states->size() > std::numeric_limits<std::uint8_t>::max();
+    return !states.has_value() || !is_byte(states->size());
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
