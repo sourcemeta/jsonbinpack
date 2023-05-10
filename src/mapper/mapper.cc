@@ -18,6 +18,7 @@
 #include "rules/integer_unbound_multiplier.h"
 #include "rules/integer_upper_bound.h"
 #include "rules/integer_upper_bound_multiplier.h"
+#include "rules/number_arbitrary.h"
 
 // TODO: Improve this helper method that joins multiple
 // resolvers and move it upstream
@@ -63,6 +64,9 @@ sourcemeta::jsonbinpack::Mapper::Mapper(
   this->bundle.template add<IntegerUpperBoundMultiplier>();
   this->bundle.template add<IntegerUnbound>();
   this->bundle.template add<IntegerUnboundMultiplier>();
+
+  // Numbers
+  this->bundle.template add<NumberArbitrary>();
 }
 
 auto sourcemeta::jsonbinpack::Mapper::apply(
