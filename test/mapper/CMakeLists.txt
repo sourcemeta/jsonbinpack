@@ -3,6 +3,7 @@ add_executable(sourcemeta_jsonbinpack_mapper_unit
   is_encoding_unit.cc make_encoding_unit.cc
   mapper_test.cc
   mapper_integer_test.cc
+  mapper_number_test.cc
   states_integer_test.cc)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE gtest)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsonbinpack_mapper)
