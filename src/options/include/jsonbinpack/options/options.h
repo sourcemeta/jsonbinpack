@@ -18,6 +18,9 @@ struct __internal_encoding_wrapper;
 using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
 using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
 
+/// @defgroup options Options
+/// @{
+
 // Integers
 
 struct BOUNDED_MULTIPLE_8BITS_ENUM_FIXED {
@@ -122,6 +125,8 @@ struct ROOF_TYPED_ARRAY {
   const MultipleEncodings prefix_encodings;
 };
 
+/// @}
+
 // Encoding type
 
 using Encoding = std::variant<
@@ -136,9 +141,12 @@ using Encoding = std::variant<
     ROOF_TYPED_ARRAY>;
 
 // Helper definitions that rely on the Encoding data type
+#ifndef DOXYGEN
+// Ignore this definition on the documentation
 struct __internal_encoding_wrapper {
   const Encoding value;
 };
+#endif
 
 } // namespace sourcemeta::jsonbinpack::options
 
