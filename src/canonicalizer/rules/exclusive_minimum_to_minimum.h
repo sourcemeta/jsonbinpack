@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum"){};

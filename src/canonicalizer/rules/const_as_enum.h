@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   ConstAsEnum() : Rule("const_as_enum"){};

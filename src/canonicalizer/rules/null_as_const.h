@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
   NullAsConst() : Rule("null_as_const"){};

@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};

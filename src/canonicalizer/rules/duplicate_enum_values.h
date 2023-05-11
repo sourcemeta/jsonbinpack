@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class DuplicateEnumValues final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateEnumValues() : Rule("duplicate_enum_values"){};

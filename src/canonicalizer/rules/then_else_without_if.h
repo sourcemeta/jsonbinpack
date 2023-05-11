@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
 public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};

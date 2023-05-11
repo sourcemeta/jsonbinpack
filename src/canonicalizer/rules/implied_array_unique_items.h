@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ImpliedArrayUniqueItems final : public sourcemeta::alterschema::Rule {
 public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
