@@ -6,6 +6,7 @@
 #include <jsontoolkit/jsonschema.h>
 
 #include <cassert>       // assert
+#include <concepts>      // std::derived_from
 #include <map>           // std::map
 #include <memory>        // std::unique_ptr, std::make_unique
 #include <string>        // std::string
@@ -19,7 +20,7 @@ public:
          const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
       : walker_{walker}, resolver_{resolver} {}
 
-  template <typename T> auto add() -> void {
+  template <std::derived_from<Rule> T> auto add() -> void {
     auto rule{std::make_unique<T>()};
     const std::string &name{rule->name()};
     // Rules must only be defined once

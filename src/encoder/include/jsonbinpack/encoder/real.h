@@ -1,8 +1,9 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODER_REAL_H_
 #define SOURCEMETA_JSONBINPACK_ENCODER_REAL_H_
 
-#include <cmath>       // std::modf, std::floor
-#include <type_traits> // std::enable_if_t, std::is_integral_v
+#include <cassert>  // assert
+#include <cmath>    // std::modf, std::floor
+#include <concepts> // std::floating_point, std::integral
 
 namespace sourcemeta::jsonbinpack::encoder {
 
@@ -11,7 +12,7 @@ namespace sourcemeta::jsonbinpack::encoder {
 // used. Here, we abuse those imprecision characteristics for
 // space-efficiency by performing rounding on a very, very low
 // threshold.
-template <typename Real>
+template <std::floating_point Real>
 constexpr auto correct_ieee764(const Real value) -> Real {
   const Real IEEE764_CORRECTION_THRESHOLD{0.000000001};
   const Real base{std::floor(value)};
@@ -25,8 +26,7 @@ constexpr auto correct_ieee764(const Real value) -> Real {
   }
 }
 
-template <typename Integer, typename Real,
-          typename = std::enable_if_t<std::is_integral_v<Integer>>>
+template <std::integral Integer, std::floating_point Real>
 constexpr auto real_digits(Real value, std::uint64_t *point_position)
     -> Integer {
   Real integral;
