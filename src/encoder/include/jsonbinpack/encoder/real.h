@@ -2,7 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_ENCODER_REAL_H_
 
 #include <cassert>  // assert
-#include <cmath>    // std::modf, std::floor
+#include <cmath>    // std::modf, std::floor, std::isfinite
 #include <concepts> // std::floating_point, std::integral
 
 namespace sourcemeta::jsonbinpack::encoder {
@@ -14,6 +14,7 @@ namespace sourcemeta::jsonbinpack::encoder {
 // threshold.
 template <std::floating_point Real>
 constexpr auto correct_ieee764(const Real value) -> Real {
+  assert(std::isfinite(value));
   const Real IEEE764_CORRECTION_THRESHOLD{0.000000001};
   const Real base{std::floor(value)};
   const Real next{base + 1};
@@ -29,6 +30,7 @@ constexpr auto correct_ieee764(const Real value) -> Real {
 template <std::integral Integer, std::floating_point Real>
 constexpr auto real_digits(Real value, std::uint64_t *point_position)
     -> Integer {
+  assert(std::isfinite(value));
   Real integral;
   std::uint64_t shifts{0};
 
