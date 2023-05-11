@@ -19,5 +19,9 @@ test: .always
 clean: .always
 	$(CMAKE) -E rm -R -f build
 
+doxygen: .always
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --build --preset $(PRESET) --target doxygen
+
 # For NMake, which doesn't support .PHONY
 .always:
