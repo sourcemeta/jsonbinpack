@@ -48,7 +48,12 @@ clean:
 
 .PHONY: jekyll
 jekyll:
-	$(CMAKE) --preset $(PRESET) --log-context
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target bundler
 	$(BUNDLE) exec jekyll serve --watch --incremental --trace \
 		--source www --destination build/$(PRESET)/www
+
+.PHONY: doxygen
+doxygen:
+	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --build --preset $(PRESET) --target doxygen
