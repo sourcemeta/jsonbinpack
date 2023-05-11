@@ -1,6 +1,10 @@
 #ifndef SOURCEMETA_JSONBINPACK_MAPPER_MAPPER_H_
 #define SOURCEMETA_JSONBINPACK_MAPPER_MAPPER_H_
 
+/// @defgroup mapper Mapper
+/// @defgroup mapper_rules Rules
+/// @ingroup mapper
+
 #include <alterschema/bundle.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/jsonschema.h>
@@ -9,6 +13,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup mapper
 class Mapper {
 public:
   Mapper(const sourcemeta::jsontoolkit::schema_resolver_t &resolver);

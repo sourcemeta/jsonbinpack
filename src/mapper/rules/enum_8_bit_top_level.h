@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class Enum8BitTopLevel final : public sourcemeta::alterschema::Rule {
 public:
   Enum8BitTopLevel() : Rule("enum_8_bit_top_level"){};
