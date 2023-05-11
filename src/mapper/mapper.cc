@@ -9,7 +9,9 @@
 #include <jsonbinpack/mapper/states.h>
 #include <jsonbinpack/numeric/numeric.h>
 
+#include "rules/enum_8_bit.h"
 #include "rules/enum_8_bit_top_level.h"
+#include "rules/enum_arbitrary.h"
 #include "rules/enum_singleton.h"
 #include "rules/integer_bounded_8_bit.h"
 #include "rules/integer_bounded_greater_than_8_bit.h"
@@ -57,8 +59,10 @@ sourcemeta::jsonbinpack::Mapper::Mapper(
   using namespace sourcemeta::jsonbinpack::mapper;
 
   // Enums
-  this->bundle.template add<EnumSingleton>();
+  this->bundle.template add<Enum8Bit>();
   this->bundle.template add<Enum8BitTopLevel>();
+  this->bundle.template add<EnumArbitrary>();
+  this->bundle.template add<EnumSingleton>();
 
   // Integers
   this->bundle.template add<IntegerBounded8Bit>();
