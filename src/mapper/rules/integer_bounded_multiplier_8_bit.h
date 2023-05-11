@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class IntegerBoundedMultiplier8Bit final
     : public sourcemeta::alterschema::Rule {
 public:

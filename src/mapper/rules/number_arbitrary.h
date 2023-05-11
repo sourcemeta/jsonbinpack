@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class NumberArbitrary final : public sourcemeta::alterschema::Rule {
 public:
   NumberArbitrary() : Rule("number_arbitrary"){};
