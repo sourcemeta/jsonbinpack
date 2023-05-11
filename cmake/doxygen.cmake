@@ -6,6 +6,7 @@ if(DOXYGEN_FOUND)
   add_custom_target(doxygen
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     VERBATIM
+    COMMAND "${CMAKE_COMMAND}" -E make_directory "${JSONBINPACK_WEBSITE_OUT}"
     COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_OUT}")
 else()
   message(WARNING "Could not find `doxygen` in the system")
