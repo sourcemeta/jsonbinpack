@@ -15,7 +15,7 @@ static std::unordered_map<std::string, bool> test_vocabularies{
     {"https://json-schema.org/draft/2020-12/vocab/format-annotation", true},
     {"https://json-schema.org/draft/2020-12/vocab/content", true}};
 
-TEST(MapperStates, unbounded_infinity) {
+TEST(MapperStates_2020_12, unbounded_infinity) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer"
@@ -27,7 +27,7 @@ TEST(MapperStates, unbounded_infinity) {
   EXPECT_FALSE(states.has_value());
 }
 
-TEST(MapperStates, only_minimum) {
+TEST(MapperStates_2020_12, only_minimum) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -40,7 +40,7 @@ TEST(MapperStates, only_minimum) {
   EXPECT_FALSE(states.has_value());
 }
 
-TEST(MapperStates, only_maximum) {
+TEST(MapperStates_2020_12, only_maximum) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -53,7 +53,7 @@ TEST(MapperStates, only_maximum) {
   EXPECT_FALSE(states.has_value());
 }
 
-TEST(MapperStates, bounded_positive) {
+TEST(MapperStates_2020_12, bounded_positive) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -71,7 +71,7 @@ TEST(MapperStates, bounded_positive) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 5);
 }
 
-TEST(MapperStates, bounded_negative) {
+TEST(MapperStates_2020_12, bounded_negative) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -89,7 +89,7 @@ TEST(MapperStates, bounded_negative) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), -8);
 }
 
-TEST(MapperStates, bounded_negative_positive) {
+TEST(MapperStates_2020_12, bounded_negative_positive) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -110,7 +110,7 @@ TEST(MapperStates, bounded_negative_positive) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(5)), 2);
 }
 
-TEST(MapperStates, bounded_equal) {
+TEST(MapperStates_2020_12, bounded_equal) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -126,7 +126,7 @@ TEST(MapperStates, bounded_equal) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(0)), 3);
 }
 
-TEST(MapperStates, bounded_impossible) {
+TEST(MapperStates_2020_12, bounded_impossible) {
   // This is technically a valid JSON Schema that no instance can match against
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -142,7 +142,7 @@ TEST(MapperStates, bounded_impossible) {
   EXPECT_TRUE(states->empty());
 }
 
-TEST(MapperStates, bounded_positive_with_matching_positive_multiplier) {
+TEST(MapperStates_2020_12, bounded_positive_with_matching_positive_multiplier) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -161,7 +161,7 @@ TEST(MapperStates, bounded_positive_with_matching_positive_multiplier) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 6);
 }
 
-TEST(MapperStates, bounded_positive_with_matching_negative_multiplier) {
+TEST(MapperStates_2020_12, bounded_positive_with_matching_negative_multiplier) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -180,7 +180,8 @@ TEST(MapperStates, bounded_positive_with_matching_negative_multiplier) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(2)), 6);
 }
 
-TEST(MapperStates, bounded_positive_with_non_matching_positive_multiplier) {
+TEST(MapperStates_2020_12,
+     bounded_positive_with_non_matching_positive_multiplier) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -198,7 +199,7 @@ TEST(MapperStates, bounded_positive_with_non_matching_positive_multiplier) {
   EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(states->at(1)), 6);
 }
 
-TEST(MapperStates, bounded_positive_with_impossible_multiplier) {
+TEST(MapperStates_2020_12, bounded_positive_with_impossible_multiplier) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
@@ -214,7 +215,7 @@ TEST(MapperStates, bounded_positive_with_impossible_multiplier) {
   EXPECT_TRUE(states->empty());
 }
 
-TEST(MapperStates, bounded_with_real_multiplier) {
+TEST(MapperStates_2020_12, bounded_with_real_multiplier) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer",
