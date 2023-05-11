@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class IntegerLowerBound final : public sourcemeta::alterschema::Rule {
 public:
   IntegerLowerBound() : Rule("integer_lower_bound"){};

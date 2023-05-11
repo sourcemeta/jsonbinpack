@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class IntegerUnboundMultiplier final : public sourcemeta::alterschema::Rule {
 public:
   IntegerUnboundMultiplier() : Rule("integer_unbound_multiplier"){};

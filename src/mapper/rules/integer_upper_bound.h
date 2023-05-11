@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class IntegerUpperBound final : public sourcemeta::alterschema::Rule {
 public:
   IntegerUpperBound() : Rule("integer_upper_bound"){};

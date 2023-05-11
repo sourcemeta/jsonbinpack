@@ -1,6 +1,7 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
 // TODO: Unit test this mapping once we have container encodings
+/// @ingroup mapper_rules
 class Enum8Bit final : public sourcemeta::alterschema::Rule {
 public:
   Enum8Bit() : Rule("enum_8_bit"){};

@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
+/// @ingroup mapper_rules
 class EnumSingleton final : public sourcemeta::alterschema::Rule {
 public:
   EnumSingleton() : Rule("enum_singleton"){};
