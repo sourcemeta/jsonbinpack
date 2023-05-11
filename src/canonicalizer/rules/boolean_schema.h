@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
   BooleanSchema() : Rule("boolean_schema"){};

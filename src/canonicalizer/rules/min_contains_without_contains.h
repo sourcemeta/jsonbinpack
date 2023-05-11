@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class MinContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MinContainsWithoutContains() : Rule("min_contains_without_contains"){};

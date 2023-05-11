@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class DropNonStringKeywordsValidation final
     : public sourcemeta::alterschema::Rule {
 public:

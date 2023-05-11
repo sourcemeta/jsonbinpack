@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MaxContainsWithoutContains() : Rule("max_contains_without_contains"){};

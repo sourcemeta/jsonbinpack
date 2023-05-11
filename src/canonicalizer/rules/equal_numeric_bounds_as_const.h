@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const"){};

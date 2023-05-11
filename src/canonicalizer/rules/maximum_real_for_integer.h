@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class MaximumRealForInteger final : public sourcemeta::alterschema::Rule {
 public:
   MaximumRealForInteger() : Rule("maximum_real_for_integer"){};

@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};

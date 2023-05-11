@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class DropNonNullKeywordsFormat final : public sourcemeta::alterschema::Rule {
 public:
   DropNonNullKeywordsFormat() : Rule("drop_non_null_keywords_format"){};

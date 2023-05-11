@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class ImplicitStringLowerBound final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitStringLowerBound() : Rule("implicit_string_lower_bound"){};

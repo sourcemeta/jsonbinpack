@@ -1,6 +1,10 @@
 #ifndef SOURCEMETA_JSONBINPACK_CANONICALIZER_CANONICALIZER_H_
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_CANONICALIZER_H_
 
+/// @defgroup canonicalizer Canonicalizer
+/// @defgroup canonicalizer_rules Rules
+/// @ingroup canonicalizer
+
 #include <alterschema/bundle.h>
 #include <jsontoolkit/json.h>
 #include <jsontoolkit/jsonschema.h>
@@ -9,6 +13,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup canonicalizer
 class Canonicalizer {
 public:
   Canonicalizer(const sourcemeta::jsontoolkit::schema_resolver_t &resolver);

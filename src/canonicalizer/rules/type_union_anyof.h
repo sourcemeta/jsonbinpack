@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};

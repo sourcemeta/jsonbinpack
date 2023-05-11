@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
 public:
   DependentRequiredTautology() : Rule("dependent_required_tautology"){};

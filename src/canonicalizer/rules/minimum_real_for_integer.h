@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class MinimumRealForInteger final : public sourcemeta::alterschema::Rule {
 public:
   MinimumRealForInteger() : Rule("minimum_real_for_integer"){};

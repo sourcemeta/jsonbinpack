@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+/// @ingroup canonicalizer_rules
 class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   BooleanAsEnum() : Rule("boolean_as_enum"){};
