@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include <cassert>     // assert
+#include <cmath>       // std::isfinite
 #include <cstddef>     // std::size_t
 #include <cstdint>     // std::int64_t, std::uint64_t
 #include <istream>     // std::basic_istream
@@ -104,6 +105,7 @@ inline auto from(std::nullptr_t) -> JSON { return parse("null"); }
 
 template <typename T>
 typename std::enable_if_t<std::is_same_v<T, double>, JSON> from(T value) {
+  assert(std::isfinite(value));
   rapidjson::Document document;
   document.SetDouble(value);
   return document;
@@ -137,7 +139,11 @@ inline auto to_integer(const Value &value) -> std::int64_t {
 
 inline auto is_real(const Value &value) -> bool { return value.IsDouble(); }
 
-inline auto to_real(const Value &value) -> double { return value.GetDouble(); }
+inline auto to_real(const Value &value) -> double {
+  const double result{value.GetDouble()};
+  assert(std::isfinite(result));
+  return result;
+}
 
 inline auto to_string(const Value &value) -> std::string {
   return value.GetString();
