@@ -1,6 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_DECODER_DECODER_H_
 #define SOURCEMETA_JSONBINPACK_DECODER_DECODER_H_
 
+/// @defgroup decoder Decoder
+
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsonbinpack/options/options.h>
@@ -16,6 +18,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup decoder
 template <typename CharT, typename Traits>
 class Decoder : private BasicDecoder<CharT, Traits> {
 public:
@@ -53,6 +56,10 @@ public:
       std::abort();
     }
   }
+
+  /// @ingroup decoder
+  /// @defgroup decoder_integer Integer
+  /// @{
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
@@ -143,6 +150,12 @@ public:
         this->get_varint_zigzag() * options.multiplier));
   }
 
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_number Number
+  /// @{
+
   auto DOUBLE_VARINT_TUPLE(const options::DOUBLE_VARINT_TUPLE &)
       -> sourcemeta::jsontoolkit::JSON {
     const std::int64_t digits{this->get_varint_zigzag()};
@@ -150,6 +163,12 @@ public:
     const double divisor{std::pow(10, static_cast<double>(point))};
     return sourcemeta::jsontoolkit::from(static_cast<double>(digits) / divisor);
   }
+
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_enum Enumeration
+  /// @{
 
   auto BYTE_CHOICE_INDEX(const options::BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
@@ -187,6 +206,12 @@ public:
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(options.value);
   }
+
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_string String
+  /// @{
 
   auto UTF8_STRING_NO_LENGTH(const options::UTF8_STRING_NO_LENGTH &options)
       -> sourcemeta::jsontoolkit::JSON {
@@ -284,6 +309,12 @@ public:
   // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
   // TODO: Implement URL_PROTOCOL_HOST_REST encoding
 
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_array Array
+  /// @{
+
   auto FIXED_TYPED_ARRAY(const options::FIXED_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     const auto prefix_encodings{options.prefix_encodings.size()};
@@ -329,6 +360,8 @@ public:
     return this->FIXED_TYPED_ARRAY({size, std::move(options.encoding),
                                     std::move(options.prefix_encodings)});
   };
+
+  /// @}
 };
 
 } // namespace sourcemeta::jsonbinpack

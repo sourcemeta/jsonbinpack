@@ -12,6 +12,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup decoder
 template <typename CharT, typename Traits> class BasicDecoder {
 public:
   BasicDecoder(std::basic_istream<CharT, Traits> &input) : stream{input} {
