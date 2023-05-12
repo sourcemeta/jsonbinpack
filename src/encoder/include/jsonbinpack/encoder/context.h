@@ -20,6 +20,7 @@ static constexpr auto MAXIMUM_BYTE_SIZE{20971520};
 
 namespace sourcemeta::jsonbinpack::encoder {
 
+/// @ingroup encoder
 template <typename CharT> class Context {
 public:
   auto record(const std::basic_string<CharT> &value, const std::uint64_t offset)

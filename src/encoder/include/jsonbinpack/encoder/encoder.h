@@ -1,6 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODER_ENCODER_H_
 #define SOURCEMETA_JSONBINPACK_ENCODER_ENCODER_H_
 
+/// @defgroup encoder Encoder
+
 #include <jsonbinpack/encoder/basic_encoder.h>
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/numeric/numeric.h>
@@ -15,6 +17,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup encoder
 template <typename CharT, typename Traits>
 class Encoder : private BasicEncoder<CharT, Traits> {
 public:
@@ -52,6 +55,10 @@ public:
       std::abort();
     }
   }
+
+  /// @ingroup encoder
+  /// @defgroup encoder_integer Integer
+  /// @{
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::Value &document,
@@ -115,6 +122,12 @@ public:
     this->put_varint_zigzag(value / options.multiplier);
   }
 
+  /// @}
+
+  /// @ingroup encoder
+  /// @defgroup encoder_number Number
+  /// @{
+
   auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::Value &document,
                            const options::DOUBLE_VARINT_TUPLE &) -> void {
     assert(sourcemeta::jsontoolkit::is_real(document));
@@ -125,6 +138,12 @@ public:
     this->put_varint_zigzag(integral);
     this->put_varint(point_position);
   }
+
+  /// @}
+
+  /// @ingroup encoder
+  /// @defgroup encoder_enum Enumeration
+  /// @{
 
   auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
                          const options::BYTE_CHOICE_INDEX &options) -> void {
@@ -180,6 +199,12 @@ public:
       -> void {
     assert(document == options.value);
   }
+
+  /// @}
+
+  /// @ingroup encoder
+  /// @defgroup encoder_string String
+  /// @{
 
   auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::Value &document,
                              const options::UTF8_STRING_NO_LENGTH &options)
@@ -301,6 +326,12 @@ public:
   // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
   // TODO: Implement URL_PROTOCOL_HOST_REST encoding
 
+  /// @}
+
+  /// @ingroup encoder
+  /// @defgroup encoder_array Array
+  /// @{
+
   auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
                          const options::FIXED_TYPED_ARRAY &options) -> void {
     assert(sourcemeta::jsontoolkit::is_array(document));
@@ -345,6 +376,8 @@ public:
     this->FIXED_TYPED_ARRAY(document, {size, std::move(options.encoding),
                                        std::move(options.prefix_encodings)});
   }
+
+  /// @}
 };
 
 } // namespace sourcemeta::jsonbinpack

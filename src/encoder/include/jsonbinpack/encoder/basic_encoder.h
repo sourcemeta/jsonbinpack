@@ -15,6 +15,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup encoder
 template <typename CharT, typename Traits> class BasicEncoder {
 public:
   BasicEncoder(std::basic_ostream<CharT, Traits> &output) : stream{output} {
