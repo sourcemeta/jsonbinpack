@@ -1,6 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_OPTIONS_OPTIONS_H_
 #define SOURCEMETA_JSONBINPACK_OPTIONS_OPTIONS_H_
 
+/// @defgroup options Options
+
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::int64_t, std::uint64_t
@@ -18,10 +20,9 @@ struct __internal_encoding_wrapper;
 using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
 using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
 
-/// @defgroup options Options
+/// @ingroup options
+/// @defgroup options_integer Integer
 /// @{
-
-// Integers
 
 struct BOUNDED_MULTIPLE_8BITS_ENUM_FIXED {
   const std::int64_t minimum;
@@ -43,11 +44,19 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
   const std::uint64_t multiplier;
 };
 
-// Number
+/// @}
+
+/// @ingroup options
+/// @defgroup options_number Number
+/// @{
 
 struct DOUBLE_VARINT_TUPLE {};
 
-// Enumerations
+/// @}
+
+/// @ingroup options
+/// @defgroup options_enum Enumeration
+/// @{
 
 struct BYTE_CHOICE_INDEX {
   // Because JSON documents are not easily copyable
@@ -77,7 +86,11 @@ struct CONST_NONE {
   const sourcemeta::jsontoolkit::JSON value;
 };
 
-// Strings
+/// @}
+
+/// @ingroup options
+/// @defgroup options_string String
+/// @{
 
 struct UTF8_STRING_NO_LENGTH {
   const std::uint64_t size;
@@ -98,7 +111,11 @@ struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED {
 
 struct RFC3339_DATE_INTEGER_TRIPLET {};
 
-// Array
+/// @}
+
+/// @ingroup options
+/// @defgroup options_array Array
+/// @{
 
 struct FIXED_TYPED_ARRAY {
   const std::uint64_t size;
