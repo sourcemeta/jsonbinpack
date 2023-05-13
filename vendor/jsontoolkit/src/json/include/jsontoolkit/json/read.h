@@ -2,6 +2,7 @@
 #define JSONTOOLKIT_JSON_READ_H_
 
 #if defined(JSONTOOLKIT_BACKEND_RAPIDJSON)
+#include "rapidjson/iterators.h"
 #include "rapidjson/read.h"
 #else
 #error Unknown JSON Toolkit backend
@@ -9,6 +10,7 @@
 
 #include <algorithm> // std::any_of, std::transform
 #include <iterator>  // std::cbegin, std::cend, std::back_inserter
+#include <vector>    // std::vector
 
 namespace sourcemeta::jsontoolkit {
 
@@ -45,6 +47,14 @@ auto copy(const Container &container) -> Container {
   sourcemeta::jsontoolkit::copy(std::cbegin(container), std::cend(container),
                                 std::back_inserter(output));
   return output;
+}
+
+inline auto to_vector(const Value &value) -> std::vector<JSON> {
+  assert(is_array(value));
+  std::vector<JSON> result;
+  sourcemeta::jsontoolkit::copy(cbegin_array(value), cend_array(value),
+                                std::back_inserter(result));
+  return result;
 }
 
 } // namespace sourcemeta::jsontoolkit
