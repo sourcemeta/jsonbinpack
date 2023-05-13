@@ -20,27 +20,30 @@ template <typename T> struct aggregate_adapter : public T {
 
 } // namespace
 
-namespace sourcemeta::jsonbinpack::options {
+// TODO: These utilities should belong to the "parser" component
+namespace sourcemeta::jsonbinpack {
 
 // We define all wrap helper functions inline in this header file,
 // as we want to avoid including their definitions in if the user
 // doesn't import this header.
 
-inline auto wrap(Encoding &&encoding) -> SingleEncoding {
-  return std::make_shared<aggregate_adapter<__internal_encoding_wrapper>>(
+inline auto wrap(options::Encoding &&encoding) -> options::SingleEncoding {
+  return std::make_shared<
+      aggregate_adapter<options::__internal_encoding_wrapper>>(
       std::move(encoding));
 }
 
-inline auto wrap(std::initializer_list<Encoding> encodings)
-    -> MultipleEncodings {
-  MultipleEncodings result;
+inline auto wrap(std::initializer_list<options::Encoding> encodings)
+    -> options::MultipleEncodings {
+  options::MultipleEncodings result;
   std::transform(encodings.begin(), encodings.end(), std::back_inserter(result),
-                 [](Encoding encoding) {
-                   return __internal_encoding_wrapper{std::move(encoding)};
+                 [](options::Encoding encoding) {
+                   return options::__internal_encoding_wrapper{
+                       std::move(encoding)};
                  });
   return result;
 }
 
-} // namespace sourcemeta::jsonbinpack::options
+} // namespace sourcemeta::jsonbinpack
 
 #endif
