@@ -20,7 +20,6 @@ template <typename T> struct aggregate_adapter : public T {
 
 } // namespace
 
-// TODO: These utilities should belong to the "parser" component
 namespace sourcemeta::jsonbinpack {
 
 // We define all wrap helper functions inline in this header file,
