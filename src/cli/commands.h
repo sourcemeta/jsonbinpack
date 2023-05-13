@@ -16,6 +16,9 @@ auto compile() -> int;
 auto encode(const std::filesystem::path &schema_path,
             const std::filesystem::path &instance_path) -> int;
 auto encode(const std::filesystem::path &schema_path) -> int;
+auto decode(const std::filesystem::path &schema_path,
+            const std::filesystem::path &data_path) -> int;
+auto decode(const std::filesystem::path &schema_path) -> int;
 } // namespace sourcemeta::jsonbinpack::cli
 
 #endif
