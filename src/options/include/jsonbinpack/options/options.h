@@ -82,6 +82,7 @@ struct TOP_LEVEL_BYTE_CHOICE_INDEX {
 struct CONST_NONE {
   // These constructors allow this encoding to be movable
   CONST_NONE(const sourcemeta::jsontoolkit::JSON &);
+  CONST_NONE(const sourcemeta::jsontoolkit::Value &);
   CONST_NONE(const CONST_NONE &);
   const sourcemeta::jsontoolkit::JSON value;
 };
