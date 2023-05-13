@@ -14,6 +14,9 @@
 static auto encode_from_json(const sourcemeta::jsontoolkit::JSON &schema,
                              const sourcemeta::jsontoolkit::JSON &instance)
     -> int {
+  // TODO: Run canonicalizer and mapper on the schema.
+  // These components are vocabulary-aware, so they will
+  // be a no-op if the schema is already an encoding schema.
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};
