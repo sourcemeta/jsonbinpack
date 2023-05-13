@@ -1,5 +1,5 @@
 vendorpull https://github.com/sourcemeta/vendorpull 6c398482e30bd85d7e8138c606e01f28270c29ae
 rapidjson https://github.com/Tencent/rapidjson 06d58b9e848c650114556a23294d0b6440078c61
-jsontoolkit https://github.com/sourcemeta/jsontoolkit a2ef691054eaa9a3d1814d33dbad0e90d0ff0070
+jsontoolkit https://github.com/sourcemeta/jsontoolkit c70e5239440312b415cc82d7e583295b5a2245d9
 googletest https://github.com/google/googletest e2239ee6043f73722e7aa812a459f54a28552929
 bootstrap https://github.com/twbs/bootstrap 1a6fdfae6be09b09eaced8f0e442ca6f7680a61e
