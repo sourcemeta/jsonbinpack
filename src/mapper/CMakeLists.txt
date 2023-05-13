@@ -5,7 +5,6 @@ configure_file(schemas.h.in schemas.h @ONLY)
 
 add_library(sourcemeta_jsonbinpack_mapper
   include/jsonbinpack/mapper/mapper.h
-  include/jsonbinpack/mapper/parser.h
   include/jsonbinpack/mapper/states.h
   include/jsonbinpack/mapper/encoding.h
   rules/enum_8_bit.h
@@ -23,13 +22,12 @@ add_library(sourcemeta_jsonbinpack_mapper
   rules/integer_upper_bound.h
   rules/integer_upper_bound_multiplier.h
   rules/number_arbitrary.h
-  mapper.cc parser.cc states.cc encoding.cc schemas.h.in)
+  mapper.cc states.cc encoding.cc schemas.h.in)
 target_include_directories(sourcemeta_jsonbinpack_mapper PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_jsontoolkit_json)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_alterschema)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PRIVATE sourcemeta_jsonbinpack_numeric)
-target_link_libraries(sourcemeta_jsonbinpack_mapper PRIVATE sourcemeta_jsonbinpack_encoding)
 
 # To find the generated schemas file
 target_include_directories(sourcemeta_jsonbinpack_mapper PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
