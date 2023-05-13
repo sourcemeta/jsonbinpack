@@ -9,7 +9,7 @@
 #include <filesystem> // std::filesystem
 #include <fstream>    // std::ifstream
 #include <ios>        // std::ios_base
-#include <iostream>   // std::cin, std::cout, std::endl
+#include <iostream>   // std::cin, std::cout
 
 static auto encode_from_json(const sourcemeta::jsontoolkit::JSON &schema,
                              const sourcemeta::jsontoolkit::JSON &instance)
