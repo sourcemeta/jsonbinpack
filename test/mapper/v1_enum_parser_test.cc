@@ -14,7 +14,7 @@ TEST(MapperParser_v1, CONST_NONE_scalar) {
     }
   })JSON")};
 
-  using namespace sourcemeta::jsonbinpack::options;
+  using namespace sourcemeta::jsonbinpack;
   const Encoding result{sourcemeta::jsonbinpack::mapper::parse(input)};
   EXPECT_TRUE(std::holds_alternative<CONST_NONE>(result));
   EXPECT_EQ(std::get<CONST_NONE>(result).value,

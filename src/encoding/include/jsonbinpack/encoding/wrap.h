@@ -1,7 +1,7 @@
-#ifndef SOURCEMETA_JSONBINPACK_OPTIONS_WRAP_H_
-#define SOURCEMETA_JSONBINPACK_OPTIONS_WRAP_H_
+#ifndef SOURCEMETA_JSONBINPACK_ENCODING_WRAP_H_
+#define SOURCEMETA_JSONBINPACK_ENCODING_WRAP_H_
 
-#include <jsonbinpack/options/options.h>
+#include <jsonbinpack/encoding/encoding.h>
 
 #include <algorithm>        // std::transform
 #include <initializer_list> // std::initializer_list
@@ -27,19 +27,17 @@ namespace sourcemeta::jsonbinpack {
 // as we want to avoid including their definitions in if the user
 // doesn't import this header.
 
-inline auto wrap(options::Encoding &&encoding) -> options::SingleEncoding {
-  return std::make_shared<
-      aggregate_adapter<options::__internal_encoding_wrapper>>(
+inline auto wrap(Encoding &&encoding) -> SingleEncoding {
+  return std::make_shared<aggregate_adapter<__internal_encoding_wrapper>>(
       std::move(encoding));
 }
 
-inline auto wrap(std::initializer_list<options::Encoding> encodings)
-    -> options::MultipleEncodings {
-  options::MultipleEncodings result;
+inline auto wrap(std::initializer_list<Encoding> encodings)
+    -> MultipleEncodings {
+  MultipleEncodings result;
   std::transform(encodings.begin(), encodings.end(), std::back_inserter(result),
-                 [](options::Encoding encoding) {
-                   return options::__internal_encoding_wrapper{
-                       std::move(encoding)};
+                 [](Encoding encoding) {
+                   return __internal_encoding_wrapper{std::move(encoding)};
                  });
   return result;
 }
