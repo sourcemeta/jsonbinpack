@@ -16,6 +16,9 @@ template <typename CharT, typename Traits>
 static auto decode_from_stream(const sourcemeta::jsontoolkit::JSON &schema,
                                std::basic_istream<CharT, Traits> &stream)
     -> int {
+  // TODO: Run canonicalizer and mapper on the schema.
+  // These components are vocabulary-aware, so they will
+  // be a no-op if the schema is already an encoding schema.
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
