@@ -5,8 +5,8 @@
 
 #include <jsonbinpack/encoder/basic_encoder.h>
 #include <jsonbinpack/encoder/real.h>
+#include <jsonbinpack/encoding/encoding.h>
 #include <jsonbinpack/numeric/numeric.h>
-#include <jsonbinpack/options/options.h>
 #include <jsontoolkit/json.h>
 
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
@@ -25,11 +25,12 @@ public:
       : BasicEncoder<CharT, Traits>{output} {}
 
   auto encode(const sourcemeta::jsontoolkit::Value &document,
-              const options::Encoding &encoding) -> void {
+              const Encoding &encoding) -> void {
     switch (encoding.index()) {
 #define HANDLE_ENCODING(index, name)                                           \
   case (index):                                                                \
-    return this->name(document, std::get<options::name>(encoding));
+    return this->name(document,                                                \
+                      std::get<sourcemeta::jsonbinpack::name>(encoding));
       HANDLE_ENCODING(0, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
       HANDLE_ENCODING(1, FLOOR_MULTIPLE_ENUM_VARINT)
       HANDLE_ENCODING(2, ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
@@ -62,7 +63,7 @@ public:
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options) -> void {
+      const BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(is_within(value, options.minimum, options.maximum));
@@ -81,7 +82,7 @@ public:
 
   auto
   FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::Value &document,
-                             const options::FLOOR_MULTIPLE_ENUM_VARINT &options)
+                             const FLOOR_MULTIPLE_ENUM_VARINT &options)
       -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
@@ -98,7 +99,7 @@ public:
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::ROOF_MULTIPLE_MIRROR_ENUM_VARINT &options) -> void {
+      const ROOF_MULTIPLE_MIRROR_ENUM_VARINT &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(value <= options.maximum);
@@ -114,7 +115,7 @@ public:
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::ARBITRARY_MULTIPLE_ZIGZAG_VARINT &options) -> void {
+      const ARBITRARY_MULTIPLE_ZIGZAG_VARINT &options) -> void {
     assert(sourcemeta::jsontoolkit::is_integer(document));
     const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
     assert(options.multiplier > 0);
@@ -129,7 +130,7 @@ public:
   /// @{
 
   auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::Value &document,
-                           const options::DOUBLE_VARINT_TUPLE &) -> void {
+                           const DOUBLE_VARINT_TUPLE &) -> void {
     assert(sourcemeta::jsontoolkit::is_real(document));
     const auto value{sourcemeta::jsontoolkit::to_real(document)};
     std::uint64_t point_position;
@@ -146,7 +147,7 @@ public:
   /// @{
 
   auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
-                         const options::BYTE_CHOICE_INDEX &options) -> void {
+                         const BYTE_CHOICE_INDEX &options) -> void {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
@@ -160,7 +161,7 @@ public:
   }
 
   auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
-                          const options::LARGE_CHOICE_INDEX &options) -> void {
+                          const LARGE_CHOICE_INDEX &options) -> void {
     assert(options.choices.size() > 0);
     const auto iterator{std::find_if(
         std::cbegin(options.choices), std::cend(options.choices),
@@ -171,9 +172,10 @@ public:
     this->put_varint(cursor);
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
-      const sourcemeta::jsontoolkit::Value &document,
-      const options::TOP_LEVEL_BYTE_CHOICE_INDEX &options) -> void {
+  auto
+  TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::Value &document,
+                              const TOP_LEVEL_BYTE_CHOICE_INDEX &options)
+      -> void {
     assert(options.choices.size() > 0);
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
@@ -191,10 +193,9 @@ public:
 
   auto CONST_NONE(
 #ifndef NDEBUG
-      const sourcemeta::jsontoolkit::Value &document,
-      const options::CONST_NONE &options)
+      const sourcemeta::jsontoolkit::Value &document, const CONST_NONE &options)
 #else
-      const sourcemeta::jsontoolkit::Value &, const options::CONST_NONE &)
+      const sourcemeta::jsontoolkit::Value &, const CONST_NONE &)
 #endif
       -> void {
     assert(document == options.value);
@@ -207,8 +208,7 @@ public:
   /// @{
 
   auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::Value &document,
-                             const options::UTF8_STRING_NO_LENGTH &options)
-      -> void {
+                             const UTF8_STRING_NO_LENGTH &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -217,7 +217,7 @@ public:
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
+      const FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -243,7 +243,7 @@ public:
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
+      const ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -270,7 +270,7 @@ public:
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
       const sourcemeta::jsontoolkit::Value &document,
-      const options::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options) -> void {
+      const BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
@@ -299,8 +299,7 @@ public:
 
   auto
   RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::Value &document,
-                               const options::RFC3339_DATE_INTEGER_TRIPLET &)
-      -> void {
+                               const RFC3339_DATE_INTEGER_TRIPLET &) -> void {
     assert(sourcemeta::jsontoolkit::is_string(document));
     const auto &value{sourcemeta::jsontoolkit::to_string(document)};
     assert(value.size() == 10);
@@ -333,22 +332,21 @@ public:
   /// @{
 
   auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
-                         const options::FIXED_TYPED_ARRAY &options) -> void {
+                         const FIXED_TYPED_ARRAY &options) -> void {
     assert(sourcemeta::jsontoolkit::is_array(document));
     assert(sourcemeta::jsontoolkit::size(document) == options.size);
     const auto prefix_encodings{options.prefix_encodings.size()};
     assert(prefix_encodings <= sourcemeta::jsontoolkit::size(document));
     for (std::size_t index = 0; index < options.size; index++) {
-      const options::Encoding &encoding{
-          prefix_encodings > index ? options.prefix_encodings[index].value
+      const Encoding &encoding{prefix_encodings > index
+                                   ? options.prefix_encodings[index].value
                                    : options.encoding->value};
       this->encode(sourcemeta::jsontoolkit::at(document, index), encoding);
     }
   }
 
-  auto
-  BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
-                            const options::BOUNDED_8BITS_TYPED_ARRAY &options)
+  auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
+                                 const BOUNDED_8BITS_TYPED_ARRAY &options)
       -> void {
     assert(options.maximum >= options.minimum);
     const auto size{sourcemeta::jsontoolkit::size(document)};
@@ -360,7 +358,7 @@ public:
   }
 
   auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
-                         const options::FLOOR_TYPED_ARRAY &options) -> void {
+                         const FLOOR_TYPED_ARRAY &options) -> void {
     const auto size{sourcemeta::jsontoolkit::size(document)};
     assert(size >= options.minimum);
     this->put_varint(size - options.minimum);
@@ -369,7 +367,7 @@ public:
   }
 
   auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &document,
-                        const options::ROOF_TYPED_ARRAY &options) -> void {
+                        const ROOF_TYPED_ARRAY &options) -> void {
     const auto size{sourcemeta::jsontoolkit::size(document)};
     assert(size <= options.maximum);
     this->put_varint(options.maximum - size);

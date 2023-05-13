@@ -1,8 +1,8 @@
-#include <jsonbinpack/options/options.h>
+#include <jsonbinpack/encoding/encoding.h>
 
 #include <utility> // std::move
 
-namespace sourcemeta::jsonbinpack::options {
+namespace sourcemeta::jsonbinpack {
 
 BYTE_CHOICE_INDEX::BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &other)
     : choices{sourcemeta::jsontoolkit::copy(other.choices)} {}
@@ -33,4 +33,4 @@ CONST_NONE::CONST_NONE(const sourcemeta::jsontoolkit::Value &input)
 CONST_NONE::CONST_NONE(const CONST_NONE &other)
     : value{sourcemeta::jsontoolkit::from(other.value)} {}
 
-} // namespace sourcemeta::jsonbinpack::options
+} // namespace sourcemeta::jsonbinpack

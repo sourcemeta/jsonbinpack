@@ -1,7 +1,7 @@
-#ifndef SOURCEMETA_JSONBINPACK_OPTIONS_OPTIONS_H_
-#define SOURCEMETA_JSONBINPACK_OPTIONS_OPTIONS_H_
+#ifndef SOURCEMETA_JSONBINPACK_ENCODING_ENCODING_H_
+#define SOURCEMETA_JSONBINPACK_ENCODING_ENCODING_H_
 
-/// @defgroup options Options
+/// @defgroup encoding Encodings
 
 #include <jsontoolkit/json.h>
 
@@ -10,7 +10,7 @@
 #include <variant> // std::variant
 #include <vector>  // std::vector
 
-namespace sourcemeta::jsonbinpack::options {
+namespace sourcemeta::jsonbinpack {
 
 // We cannot directly create an Encoding variant type whose values potentially
 // include other Encoding instances.  As a workaround, we have a helper
@@ -20,8 +20,8 @@ struct __internal_encoding_wrapper;
 using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
 using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
 
-/// @ingroup options
-/// @defgroup options_integer Integer
+/// @ingroup encoding
+/// @defgroup encoding_integer Integer
 /// @{
 
 struct BOUNDED_MULTIPLE_8BITS_ENUM_FIXED {
@@ -46,16 +46,16 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 
 /// @}
 
-/// @ingroup options
-/// @defgroup options_number Number
+/// @ingroup encoding
+/// @defgroup encoding_number Number
 /// @{
 
 struct DOUBLE_VARINT_TUPLE {};
 
 /// @}
 
-/// @ingroup options
-/// @defgroup options_enum Enumeration
+/// @ingroup encoding
+/// @defgroup encoding_enum Enumeration
 /// @{
 
 struct BYTE_CHOICE_INDEX {
@@ -89,8 +89,8 @@ struct CONST_NONE {
 
 /// @}
 
-/// @ingroup options
-/// @defgroup options_string String
+/// @ingroup encoding
+/// @defgroup encoding_string String
 /// @{
 
 struct UTF8_STRING_NO_LENGTH {
@@ -114,8 +114,8 @@ struct RFC3339_DATE_INTEGER_TRIPLET {};
 
 /// @}
 
-/// @ingroup options
-/// @defgroup options_array Array
+/// @ingroup encoding
+/// @defgroup encoding_array Array
 /// @{
 
 struct FIXED_TYPED_ARRAY {
@@ -166,6 +166,6 @@ struct __internal_encoding_wrapper {
 };
 #endif
 
-} // namespace sourcemeta::jsonbinpack::options
+} // namespace sourcemeta::jsonbinpack
 
 #endif

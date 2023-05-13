@@ -4,8 +4,8 @@
 /// @defgroup decoder Decoder
 
 #include <jsonbinpack/decoder/basic_decoder.h>
+#include <jsonbinpack/encoding/encoding.h>
 #include <jsonbinpack/numeric/numeric.h>
-#include <jsonbinpack/options/options.h>
 #include <jsontoolkit/json.h>
 
 #include <cassert> // assert
@@ -25,12 +25,11 @@ public:
   Decoder(std::basic_istream<CharT, Traits> &input)
       : BasicDecoder<CharT, Traits>{input} {}
 
-  auto decode(const options::Encoding &encoding)
-      -> sourcemeta::jsontoolkit::JSON {
+  auto decode(const Encoding &encoding) -> sourcemeta::jsontoolkit::JSON {
     switch (encoding.index()) {
 #define HANDLE_DECODING(index, name)                                           \
   case (index):                                                                \
-    return this->name(std::get<options::name>(encoding));
+    return this->name(std::get<sourcemeta::jsonbinpack::name>(encoding));
       HANDLE_DECODING(0, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
       HANDLE_DECODING(1, FLOOR_MULTIPLE_ENUM_VARINT)
       HANDLE_DECODING(2, ROOF_MULTIPLE_MIRROR_ENUM_VARINT)
@@ -62,7 +61,7 @@ public:
   /// @{
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-      const options::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
+      const BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::uint8_t byte{this->get_byte()};
@@ -86,8 +85,7 @@ public:
     }
   }
 
-  auto
-  FLOOR_MULTIPLE_ENUM_VARINT(const options::FLOOR_MULTIPLE_ENUM_VARINT &options)
+  auto FLOOR_MULTIPLE_ENUM_VARINT(const FLOOR_MULTIPLE_ENUM_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_minimum{
@@ -113,7 +111,7 @@ public:
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-      const options::ROOF_MULTIPLE_MIRROR_ENUM_VARINT &options)
+      const ROOF_MULTIPLE_MIRROR_ENUM_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     const std::int64_t closest_maximum{
@@ -141,7 +139,7 @@ public:
   }
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
-      const options::ARBITRARY_MULTIPLE_ZIGZAG_VARINT &options)
+      const ARBITRARY_MULTIPLE_ZIGZAG_VARINT &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.multiplier > 0);
     // We trust the encoder that the data we are seeing
@@ -156,7 +154,7 @@ public:
   /// @defgroup decoder_number Number
   /// @{
 
-  auto DOUBLE_VARINT_TUPLE(const options::DOUBLE_VARINT_TUPLE &)
+  auto DOUBLE_VARINT_TUPLE(const DOUBLE_VARINT_TUPLE &)
       -> sourcemeta::jsontoolkit::JSON {
     const std::int64_t digits{this->get_varint_zigzag()};
     const std::uint64_t point{this->get_varint()};
@@ -170,7 +168,7 @@ public:
   /// @defgroup decoder_enum Enumeration
   /// @{
 
-  auto BYTE_CHOICE_INDEX(const options::BYTE_CHOICE_INDEX &options)
+  auto BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -179,7 +177,7 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto LARGE_CHOICE_INDEX(const options::LARGE_CHOICE_INDEX &options)
+  auto LARGE_CHOICE_INDEX(const LARGE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     const std::uint64_t index{this->get_varint()};
@@ -187,8 +185,7 @@ public:
     return sourcemeta::jsontoolkit::from(options.choices[index]);
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
-      const options::TOP_LEVEL_BYTE_CHOICE_INDEX &options)
+  auto TOP_LEVEL_BYTE_CHOICE_INDEX(const TOP_LEVEL_BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(!options.choices.empty());
     assert(is_byte(options.choices.size()));
@@ -202,8 +199,7 @@ public:
     }
   }
 
-  auto CONST_NONE(const options::CONST_NONE &options)
-      -> sourcemeta::jsontoolkit::JSON {
+  auto CONST_NONE(const CONST_NONE &options) -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(options.value);
   }
 
@@ -213,13 +209,13 @@ public:
   /// @defgroup decoder_string String
   /// @{
 
-  auto UTF8_STRING_NO_LENGTH(const options::UTF8_STRING_NO_LENGTH &options)
+  auto UTF8_STRING_NO_LENGTH(const UTF8_STRING_NO_LENGTH &options)
       -> sourcemeta::jsontoolkit::JSON {
     return sourcemeta::jsontoolkit::from(this->get_string_utf8(options.size));
   }
 
   auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const options::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options)
+      const FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -239,7 +235,7 @@ public:
   }
 
   auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
-      const options::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options)
+      const ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t prefix{this->get_varint()};
     const bool is_shared{prefix == 0};
@@ -259,7 +255,7 @@ public:
   }
 
   auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-      const options::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options)
+      const BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum));
@@ -280,8 +276,7 @@ public:
     }
   }
 
-  auto
-  RFC3339_DATE_INTEGER_TRIPLET(const options::RFC3339_DATE_INTEGER_TRIPLET &)
+  auto RFC3339_DATE_INTEGER_TRIPLET(const RFC3339_DATE_INTEGER_TRIPLET &)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint16_t year{this->get_word()};
     const std::uint8_t month{this->get_byte()};
@@ -315,13 +310,13 @@ public:
   /// @defgroup decoder_array Array
   /// @{
 
-  auto FIXED_TYPED_ARRAY(const options::FIXED_TYPED_ARRAY &options)
+  auto FIXED_TYPED_ARRAY(const FIXED_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     const auto prefix_encodings{options.prefix_encodings.size()};
     sourcemeta::jsontoolkit::JSON result{sourcemeta::jsontoolkit::make_array()};
     for (std::size_t index = 0; index < options.size; index++) {
-      const options::Encoding &encoding{
-          prefix_encodings > index ? options.prefix_encodings[index].value
+      const Encoding &encoding{prefix_encodings > index
+                                   ? options.prefix_encodings[index].value
                                    : options.encoding->value};
       sourcemeta::jsontoolkit::push_back(result, this->decode(encoding));
     }
@@ -330,8 +325,7 @@ public:
     return result;
   };
 
-  auto
-  BOUNDED_8BITS_TYPED_ARRAY(const options::BOUNDED_8BITS_TYPED_ARRAY &options)
+  auto BOUNDED_8BITS_TYPED_ARRAY(const BOUNDED_8BITS_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     assert(options.maximum >= options.minimum);
     assert(is_byte(options.maximum - options.minimum));
@@ -342,7 +336,7 @@ public:
                                     std::move(options.prefix_encodings)});
   };
 
-  auto FLOOR_TYPED_ARRAY(const options::FLOOR_TYPED_ARRAY &options)
+  auto FLOOR_TYPED_ARRAY(const FLOOR_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t value{this->get_varint()};
     const std::uint64_t size{value + options.minimum};
@@ -352,7 +346,7 @@ public:
                                     std::move(options.prefix_encodings)});
   };
 
-  auto ROOF_TYPED_ARRAY(const options::ROOF_TYPED_ARRAY &options)
+  auto ROOF_TYPED_ARRAY(const ROOF_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     const std::uint64_t value{this->get_varint()};
     const std::uint64_t size{options.maximum - value};
