@@ -55,6 +55,16 @@ static auto cli_main(const std::string &program, const std::string &command,
     return sourcemeta::jsonbinpack::cli::compile(arguments.at(0));
   }
 
+  if (command == "encode") {
+    if (arguments.size() == 1) {
+      return sourcemeta::jsonbinpack::cli::encode(arguments.at(0));
+    }
+
+    assert_arguments(command, arguments, 2);
+    return sourcemeta::jsonbinpack::cli::encode(arguments.at(0),
+                                                arguments.at(1));
+  }
+
   std::cerr << "Unknown command: " << command << "\n";
   return EXIT_FAILURE;
 }
