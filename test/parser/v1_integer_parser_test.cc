@@ -44,3 +44,22 @@ TEST(Parser_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
   EXPECT_EQ(std::get<FLOOR_MULTIPLE_ENUM_VARINT>(result).minimum, 0);
   EXPECT_EQ(std::get<FLOOR_MULTIPLE_ENUM_VARINT>(result).multiplier, 2);
 }
+
+TEST(Parser_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
+  const sourcemeta::jsontoolkit::JSON input{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "options": {
+      "maximum": 100,
+      "multiplier": 2
+    }
+  })JSON")};
+
+  const sourcemeta::jsonbinpack::Encoding result{
+      sourcemeta::jsonbinpack::parse(input)};
+  using namespace sourcemeta::jsonbinpack;
+  EXPECT_TRUE(std::holds_alternative<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result));
+  EXPECT_EQ(std::get<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result).maximum, 100);
+  EXPECT_EQ(std::get<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result).multiplier, 2);
+}
