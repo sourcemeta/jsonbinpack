@@ -52,6 +52,10 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     return ARBITRARY_MULTIPLE_ZIGZAG_VARINT{static_cast<std::uint64_t>(
         sourcemeta::jsontoolkit::to_integer(multiplier))};
 
+    // Numbers
+  } else if (encoding == "DOUBLE_VARINT_TUPLE") {
+    return DOUBLE_VARINT_TUPLE{};
+
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {
     assert(sourcemeta::jsontoolkit::defines(options, "choices"));
