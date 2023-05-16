@@ -1,2 +1,3 @@
 /vendor/** linguist-generated=true
+*.bin binary diff=hex
 * -text
