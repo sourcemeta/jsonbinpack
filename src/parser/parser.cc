@@ -27,6 +27,15 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
         sourcemeta::jsontoolkit::to_integer(maximum),
         static_cast<std::uint64_t>(
             sourcemeta::jsontoolkit::to_integer(multiplier))};
+  } else if (encoding == "FLOOR_MULTIPLE_ENUM_VARINT") {
+    assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
+    assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
+    const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
+    const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
+    return FLOOR_MULTIPLE_ENUM_VARINT{
+        sourcemeta::jsontoolkit::to_integer(minimum),
+        static_cast<std::uint64_t>(
+            sourcemeta::jsontoolkit::to_integer(multiplier))};
 
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {
