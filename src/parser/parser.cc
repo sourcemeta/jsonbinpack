@@ -45,6 +45,12 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
         sourcemeta::jsontoolkit::to_integer(maximum),
         static_cast<std::uint64_t>(
             sourcemeta::jsontoolkit::to_integer(multiplier))};
+  } else if (encoding == "ARBITRARY_MULTIPLE_ZIGZAG_VARINT") {
+    assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
+    const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
+    assert(sourcemeta::jsontoolkit::is_integer(multiplier));
+    return ARBITRARY_MULTIPLE_ZIGZAG_VARINT{static_cast<std::uint64_t>(
+        sourcemeta::jsontoolkit::to_integer(multiplier))};
 
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {
