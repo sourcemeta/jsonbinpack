@@ -36,6 +36,15 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
         sourcemeta::jsontoolkit::to_integer(minimum),
         static_cast<std::uint64_t>(
             sourcemeta::jsontoolkit::to_integer(multiplier))};
+  } else if (encoding == "ROOF_MULTIPLE_MIRROR_ENUM_VARINT") {
+    assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
+    assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
+    const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
+    const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
+    return ROOF_MULTIPLE_MIRROR_ENUM_VARINT{
+        sourcemeta::jsontoolkit::to_integer(maximum),
+        static_cast<std::uint64_t>(
+            sourcemeta::jsontoolkit::to_integer(multiplier))};
 
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {
