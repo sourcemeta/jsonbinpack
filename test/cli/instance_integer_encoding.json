@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+  "name": "BYTE_CHOICE_INDEX",
+  "options": {
+    "choices": [ 1, 2, 3 ]
+  }
+}

@@ -11,8 +11,6 @@ auto canonicalize(const std::filesystem::path &schema_path) -> int;
 auto canonicalize() -> int;
 auto compile(const std::filesystem::path &schema_path) -> int;
 auto compile() -> int;
-
-// TODO: Write CLI tests for these commands
 auto encode(const std::filesystem::path &schema_path,
             const std::filesystem::path &instance_path) -> int;
 auto encode(const std::filesystem::path &schema_path) -> int;
