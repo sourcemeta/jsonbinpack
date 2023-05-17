@@ -25,6 +25,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     assert(sourcemeta::jsontoolkit::is_integer(minimum));
     assert(sourcemeta::jsontoolkit::is_integer(maximum));
     assert(sourcemeta::jsontoolkit::is_integer(multiplier));
+    assert(sourcemeta::jsontoolkit::is_positive(multiplier));
     return BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
         sourcemeta::jsontoolkit::to_integer(minimum),
         sourcemeta::jsontoolkit::to_integer(maximum),
@@ -37,6 +38,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
     assert(sourcemeta::jsontoolkit::is_integer(minimum));
     assert(sourcemeta::jsontoolkit::is_integer(multiplier));
+    assert(sourcemeta::jsontoolkit::is_positive(multiplier));
     return FLOOR_MULTIPLE_ENUM_VARINT{
         sourcemeta::jsontoolkit::to_integer(minimum),
         static_cast<std::uint64_t>(
@@ -48,6 +50,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
     assert(sourcemeta::jsontoolkit::is_integer(maximum));
     assert(sourcemeta::jsontoolkit::is_integer(multiplier));
+    assert(sourcemeta::jsontoolkit::is_positive(multiplier));
     return ROOF_MULTIPLE_MIRROR_ENUM_VARINT{
         sourcemeta::jsontoolkit::to_integer(maximum),
         static_cast<std::uint64_t>(
@@ -56,6 +59,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
     const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
     assert(sourcemeta::jsontoolkit::is_integer(multiplier));
+    assert(sourcemeta::jsontoolkit::is_positive(multiplier));
     return ARBITRARY_MULTIPLE_ZIGZAG_VARINT{static_cast<std::uint64_t>(
         sourcemeta::jsontoolkit::to_integer(multiplier))};
 

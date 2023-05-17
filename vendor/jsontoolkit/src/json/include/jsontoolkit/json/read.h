@@ -18,6 +18,11 @@ inline auto is_number(const Value &value) -> bool {
   return is_integer(value) || is_real(value);
 }
 
+inline auto is_positive(const Value &value) -> bool {
+  assert(is_number(value));
+  return is_integer(value) ? to_integer(value) >= 0 : to_real(value) >= 0.0;
+}
+
 template <typename Iterator>
 auto defines_any(const Value &value, Iterator begin, Iterator end) -> bool {
   return std::any_of(begin, end, [&value](const auto &keyword) {
