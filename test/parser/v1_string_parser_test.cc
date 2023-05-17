@@ -79,3 +79,17 @@ TEST(Parser_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
   EXPECT_EQ(std::get<BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED>(result).maximum,
             3);
 }
+
+TEST(Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
+  const sourcemeta::jsontoolkit::JSON input{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "name": "RFC3339_DATE_INTEGER_TRIPLET",
+    "options": {}
+  })JSON")};
+
+  const sourcemeta::jsonbinpack::Encoding result{
+      sourcemeta::jsonbinpack::parse(input)};
+  using namespace sourcemeta::jsonbinpack;
+  EXPECT_TRUE(std::holds_alternative<RFC3339_DATE_INTEGER_TRIPLET>(result));
+}

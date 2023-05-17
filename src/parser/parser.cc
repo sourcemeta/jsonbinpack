@@ -124,6 +124,8 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
             sourcemeta::jsontoolkit::to_integer(minimum)),
         static_cast<std::uint64_t>(
             sourcemeta::jsontoolkit::to_integer(maximum))};
+  } else if (encoding == "RFC3339_DATE_INTEGER_TRIPLET") {
+    return RFC3339_DATE_INTEGER_TRIPLET{};
   }
 
   std::ostringstream error;
