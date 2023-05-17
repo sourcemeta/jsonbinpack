@@ -1,6 +1,7 @@
 #include <jsonbinpack/encoding/wrap.h>
 #include <jsonbinpack/parser/parser.h>
 
+#include "v1_enum.h"
 #include "v1_integer.h"
 #include "v1_number.h"
 
@@ -39,24 +40,13 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
 
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {
-    assert(sourcemeta::jsontoolkit::defines(options, "choices"));
-    const auto &choices{sourcemeta::jsontoolkit::at(options, "choices")};
-    assert(sourcemeta::jsontoolkit::is_array(choices));
-    return BYTE_CHOICE_INDEX(sourcemeta::jsontoolkit::to_vector(choices));
+    return parser::v1::BYTE_CHOICE_INDEX(options);
   } else if (encoding == "LARGE_CHOICE_INDEX") {
-    assert(sourcemeta::jsontoolkit::defines(options, "choices"));
-    const auto &choices{sourcemeta::jsontoolkit::at(options, "choices")};
-    assert(sourcemeta::jsontoolkit::is_array(choices));
-    return LARGE_CHOICE_INDEX(sourcemeta::jsontoolkit::to_vector(choices));
+    return parser::v1::LARGE_CHOICE_INDEX(options);
   } else if (encoding == "TOP_LEVEL_BYTE_CHOICE_INDEX") {
-    assert(sourcemeta::jsontoolkit::defines(options, "choices"));
-    const auto &choices{sourcemeta::jsontoolkit::at(options, "choices")};
-    assert(sourcemeta::jsontoolkit::is_array(choices));
-    return TOP_LEVEL_BYTE_CHOICE_INDEX(
-        sourcemeta::jsontoolkit::to_vector(choices));
+    return parser::v1::TOP_LEVEL_BYTE_CHOICE_INDEX(options);
   } else if (encoding == "CONST_NONE") {
-    assert(sourcemeta::jsontoolkit::defines(options, "value"));
-    return CONST_NONE(sourcemeta::jsontoolkit::at(options, "value"));
+    return parser::v1::CONST_NONE(options);
 
     // Strings
   } else if (encoding == "UTF8_STRING_NO_LENGTH") {
