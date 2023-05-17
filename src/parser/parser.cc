@@ -1,9 +1,13 @@
+#include <jsonbinpack/encoding/wrap.h>
 #include <jsonbinpack/parser/parser.h>
 
+#include <algorithm> // std::transform
 #include <cstdint>   // std::uint64_t
+#include <iterator>  // std::back_inserter
 #include <sstream>   // std::ostringstream
 #include <stdexcept> // std::runtime_error
 #include <string>    // std::string
+#include <vector>    // std::vector
 
 namespace sourcemeta::jsonbinpack {
 
@@ -128,6 +132,30 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
             sourcemeta::jsontoolkit::to_integer(maximum))};
   } else if (encoding == "RFC3339_DATE_INTEGER_TRIPLET") {
     return RFC3339_DATE_INTEGER_TRIPLET{};
+
+    // Arrays
+  } else if (encoding == "FIXED_TYPED_ARRAY") {
+    assert(sourcemeta::jsontoolkit::defines(options, "size"));
+    assert(sourcemeta::jsontoolkit::defines(options, "encoding"));
+    assert(sourcemeta::jsontoolkit::defines(options, "prefixEncodings"));
+    const auto &size{sourcemeta::jsontoolkit::at(options, "size")};
+    const auto &array_encoding{
+        sourcemeta::jsontoolkit::at(options, "encoding")};
+    const auto &prefix_encodings{
+        sourcemeta::jsontoolkit::at(options, "prefixEncodings")};
+    assert(sourcemeta::jsontoolkit::is_integer(size));
+    assert(sourcemeta::jsontoolkit::is_positive(size));
+    assert(sourcemeta::jsontoolkit::is_object(array_encoding));
+    assert(sourcemeta::jsontoolkit::is_array(prefix_encodings));
+    std::vector<Encoding> encodings;
+    std::transform(sourcemeta::jsontoolkit::cbegin_array(prefix_encodings),
+                   sourcemeta::jsontoolkit::cend_array(prefix_encodings),
+                   std::back_inserter(encodings),
+                   [](const auto &element) { return parse(element); });
+    assert(encodings.size() == sourcemeta::jsontoolkit::size(prefix_encodings));
+    return FIXED_TYPED_ARRAY{
+        static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(size)),
+        wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
   }
 
   std::ostringstream error;

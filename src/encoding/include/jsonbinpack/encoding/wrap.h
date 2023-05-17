@@ -5,9 +5,10 @@
 
 #include <algorithm>        // std::transform
 #include <initializer_list> // std::initializer_list
-#include <iterator>         // std::back_inserter
+#include <iterator>         // std::back_inserter, std::forward_iterator
 #include <memory>           // std::make_shared
 #include <utility>          // std::move, std::forward
+#include <vector>           // std::vector
 
 namespace {
 
@@ -31,14 +32,21 @@ inline auto wrap(Encoding &&encoding) -> SingleEncoding {
       std::move(encoding));
 }
 
+// clang-format off
+template <typename Iterator>
+requires std::forward_iterator<Iterator>
+// clang-format on
+inline auto wrap(Iterator begin, Iterator end) -> MultipleEncodings {
+  MultipleEncodings result;
+  std::transform(begin, end, std::back_inserter(result), [](Encoding encoding) {
+    return __internal_encoding_wrapper{std::move(encoding)};
+  });
+  return result;
+}
+
 inline auto wrap(std::initializer_list<Encoding> encodings)
     -> MultipleEncodings {
-  MultipleEncodings result;
-  std::transform(encodings.begin(), encodings.end(), std::back_inserter(result),
-                 [](Encoding encoding) {
-                   return __internal_encoding_wrapper{std::move(encoding)};
-                 });
-  return result;
+  return wrap(encodings.begin(), encodings.end());
 }
 
 } // namespace sourcemeta::jsonbinpack
