@@ -7,6 +7,8 @@
 
 namespace sourcemeta::jsonbinpack {
 
+// TODO: Reduce the size of this function, by creating a parse function
+// for each encoding (taken its options as arguments)
 auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
   assert(sourcemeta::jsontoolkit::defines(input, "name"));
   assert(sourcemeta::jsontoolkit::defines(input, "options"));
