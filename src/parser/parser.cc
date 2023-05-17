@@ -96,6 +96,34 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
     assert(sourcemeta::jsontoolkit::is_positive(size));
     return UTF8_STRING_NO_LENGTH{
         static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(size))};
+  } else if (encoding == "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED") {
+    assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
+    const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
+    assert(sourcemeta::jsontoolkit::is_integer(minimum));
+    assert(sourcemeta::jsontoolkit::is_positive(minimum));
+    return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{static_cast<std::uint64_t>(
+        sourcemeta::jsontoolkit::to_integer(minimum))};
+  } else if (encoding == "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED") {
+    assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
+    const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
+    assert(sourcemeta::jsontoolkit::is_integer(maximum));
+    assert(sourcemeta::jsontoolkit::is_positive(maximum));
+    return ROOF_VARINT_PREFIX_UTF8_STRING_SHARED{static_cast<std::uint64_t>(
+        sourcemeta::jsontoolkit::to_integer(maximum))};
+  } else if (encoding == "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED") {
+    assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
+    assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
+    const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
+    const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
+    assert(sourcemeta::jsontoolkit::is_integer(minimum));
+    assert(sourcemeta::jsontoolkit::is_integer(maximum));
+    assert(sourcemeta::jsontoolkit::is_positive(minimum));
+    assert(sourcemeta::jsontoolkit::is_positive(maximum));
+    return BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED{
+        static_cast<std::uint64_t>(
+            sourcemeta::jsontoolkit::to_integer(minimum)),
+        static_cast<std::uint64_t>(
+            sourcemeta::jsontoolkit::to_integer(maximum))};
   }
 
   std::ostringstream error;
