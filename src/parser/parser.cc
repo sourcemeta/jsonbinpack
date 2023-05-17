@@ -2,6 +2,7 @@
 #include <jsonbinpack/parser/parser.h>
 
 #include "v1_integer.h"
+#include "v1_number.h"
 
 #include <algorithm> // std::transform
 #include <cstdint>   // std::uint64_t
@@ -34,7 +35,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
 
     // Numbers
   } else if (encoding == "DOUBLE_VARINT_TUPLE") {
-    return DOUBLE_VARINT_TUPLE{};
+    return parser::v1::DOUBLE_VARINT_TUPLE(options);
 
     // Enumerations
   } else if (encoding == "BYTE_CHOICE_INDEX") {

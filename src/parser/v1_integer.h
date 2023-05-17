@@ -2,7 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_PARSER_V1_INTEGER_H_
 
 #include <jsonbinpack/encoding/encoding.h>
-#include <jsonbinpack/parser/parser.h>
+#include <jsontoolkit/json.h>
 
 #include <cassert> // assert
 #include <cstdint> // std::uint64_t
