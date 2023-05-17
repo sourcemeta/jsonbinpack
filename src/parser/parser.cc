@@ -87,6 +87,15 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
   } else if (encoding == "CONST_NONE") {
     assert(sourcemeta::jsontoolkit::defines(options, "value"));
     return CONST_NONE(sourcemeta::jsontoolkit::at(options, "value"));
+
+    // Strings
+  } else if (encoding == "UTF8_STRING_NO_LENGTH") {
+    assert(sourcemeta::jsontoolkit::defines(options, "size"));
+    const auto &size{sourcemeta::jsontoolkit::at(options, "size")};
+    assert(sourcemeta::jsontoolkit::is_integer(size));
+    assert(sourcemeta::jsontoolkit::is_positive(size));
+    return UTF8_STRING_NO_LENGTH{
+        static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(size))};
   }
 
   std::ostringstream error;
