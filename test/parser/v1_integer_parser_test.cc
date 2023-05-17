@@ -63,3 +63,20 @@ TEST(Parser_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
   EXPECT_EQ(std::get<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result).maximum, 100);
   EXPECT_EQ(std::get<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result).multiplier, 2);
 }
+
+TEST(Parser_v1, ARBITRARY_MULTIPLE_ZIGZAG_VARINT_unit_multiplier) {
+  const sourcemeta::jsontoolkit::JSON input{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "options": {
+      "multiplier": 1
+    }
+  })JSON")};
+
+  const sourcemeta::jsonbinpack::Encoding result{
+      sourcemeta::jsonbinpack::parse(input)};
+  using namespace sourcemeta::jsonbinpack;
+  EXPECT_TRUE(std::holds_alternative<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(result));
+  EXPECT_EQ(std::get<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(result).multiplier, 1);
+}
