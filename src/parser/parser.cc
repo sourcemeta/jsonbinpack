@@ -4,6 +4,7 @@
 #include "v1_enum.h"
 #include "v1_integer.h"
 #include "v1_number.h"
+#include "v1_string.h"
 
 #include <algorithm> // std::transform
 #include <cstdint>   // std::uint64_t
@@ -50,42 +51,15 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
 
     // Strings
   } else if (encoding == "UTF8_STRING_NO_LENGTH") {
-    assert(sourcemeta::jsontoolkit::defines(options, "size"));
-    const auto &size{sourcemeta::jsontoolkit::at(options, "size")};
-    assert(sourcemeta::jsontoolkit::is_integer(size));
-    assert(sourcemeta::jsontoolkit::is_positive(size));
-    return UTF8_STRING_NO_LENGTH{
-        static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(size))};
+    return parser::v1::UTF8_STRING_NO_LENGTH(options);
   } else if (encoding == "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED") {
-    assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-    const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-    assert(sourcemeta::jsontoolkit::is_integer(minimum));
-    assert(sourcemeta::jsontoolkit::is_positive(minimum));
-    return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{static_cast<std::uint64_t>(
-        sourcemeta::jsontoolkit::to_integer(minimum))};
+    return parser::v1::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(options);
   } else if (encoding == "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED") {
-    assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-    const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-    assert(sourcemeta::jsontoolkit::is_integer(maximum));
-    assert(sourcemeta::jsontoolkit::is_positive(maximum));
-    return ROOF_VARINT_PREFIX_UTF8_STRING_SHARED{static_cast<std::uint64_t>(
-        sourcemeta::jsontoolkit::to_integer(maximum))};
+    return parser::v1::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(options);
   } else if (encoding == "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED") {
-    assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-    assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-    const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-    const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-    assert(sourcemeta::jsontoolkit::is_integer(minimum));
-    assert(sourcemeta::jsontoolkit::is_integer(maximum));
-    assert(sourcemeta::jsontoolkit::is_positive(minimum));
-    assert(sourcemeta::jsontoolkit::is_positive(maximum));
-    return BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED{
-        static_cast<std::uint64_t>(
-            sourcemeta::jsontoolkit::to_integer(minimum)),
-        static_cast<std::uint64_t>(
-            sourcemeta::jsontoolkit::to_integer(maximum))};
+    return parser::v1::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(options);
   } else if (encoding == "RFC3339_DATE_INTEGER_TRIPLET") {
-    return RFC3339_DATE_INTEGER_TRIPLET{};
+    return parser::v1::RFC3339_DATE_INTEGER_TRIPLET(options);
 
     // Arrays
   } else if (encoding == "FIXED_TYPED_ARRAY") {
