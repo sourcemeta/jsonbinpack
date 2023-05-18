@@ -67,6 +67,30 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &options)
       wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
+auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::Value &options)
+    -> Encoding {
+  assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
+  assert(sourcemeta::jsontoolkit::defines(options, "encoding"));
+  assert(sourcemeta::jsontoolkit::defines(options, "prefixEncodings"));
+  const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
+  const auto &array_encoding{sourcemeta::jsontoolkit::at(options, "encoding")};
+  const auto &prefix_encodings{
+      sourcemeta::jsontoolkit::at(options, "prefixEncodings")};
+  assert(sourcemeta::jsontoolkit::is_integer(minimum));
+  assert(sourcemeta::jsontoolkit::is_positive(minimum));
+  assert(sourcemeta::jsontoolkit::is_object(array_encoding));
+  assert(sourcemeta::jsontoolkit::is_array(prefix_encodings));
+  std::vector<Encoding> encodings;
+  std::transform(sourcemeta::jsontoolkit::cbegin_array(prefix_encodings),
+                 sourcemeta::jsontoolkit::cend_array(prefix_encodings),
+                 std::back_inserter(encodings),
+                 [](const auto &element) { return parse(element); });
+  assert(encodings.size() == sourcemeta::jsontoolkit::size(prefix_encodings));
+  return sourcemeta::jsonbinpack::FLOOR_TYPED_ARRAY{
+      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(minimum)),
+      wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
+}
+
 } // namespace sourcemeta::jsonbinpack::parser::v1
 
 #endif
