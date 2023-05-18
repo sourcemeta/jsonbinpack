@@ -43,6 +43,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
   PARSE_ENCODING(v1, RFC3339_DATE_INTEGER_TRIPLET)
   // Arrays
   PARSE_ENCODING(v1, FIXED_TYPED_ARRAY)
+  PARSE_ENCODING(v1, BOUNDED_8BITS_TYPED_ARRAY)
 
 #undef PARSE_ENCODING
 
