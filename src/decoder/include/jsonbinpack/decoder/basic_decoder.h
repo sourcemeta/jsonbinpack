@@ -67,7 +67,11 @@ public:
   inline auto has_more_data() const noexcept -> bool {
     // A way to check if the stream is empty without using `.peek()`,
     // which throws given we set exceptions on the EOF bit.
-    return this->stream.rdbuf()->in_avail() > 0;
+    // However, `in_avail()` works on characters and will return zero
+    // if all that's remaining is 0x00 (null), so we need to handle
+    // that case separately.
+    return this->stream.rdbuf()->in_avail() > 0 ||
+           this->stream.rdbuf()->sgetc() == '\0';
   }
 
   inline auto get_string_utf8(const std::uint64_t length)
