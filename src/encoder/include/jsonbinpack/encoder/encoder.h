@@ -50,6 +50,7 @@ public:
       HANDLE_ENCODING(16, FLOOR_TYPED_ARRAY)
       HANDLE_ENCODING(17, ROOF_TYPED_ARRAY)
       HANDLE_ENCODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
+      HANDLE_ENCODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
 #undef HANDLE_ENCODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -388,6 +389,23 @@ public:
       -> void {
     assert(sourcemeta::jsontoolkit::is_object(document));
     assert(sourcemeta::jsontoolkit::size(document) == options.size);
+    for (const auto &pair :
+         sourcemeta::jsontoolkit::object_iterator(document)) {
+      this->encode(
+          sourcemeta::jsontoolkit::from(sourcemeta::jsontoolkit::key(pair)),
+          options.key_encoding->value);
+      this->encode(sourcemeta::jsontoolkit::value(pair),
+                   options.encoding->value);
+    }
+  }
+
+  auto
+  VARINT_TYPED_ARBITRARY_OBJECT(const sourcemeta::jsontoolkit::Value &document,
+                                const VARINT_TYPED_ARBITRARY_OBJECT &options)
+      -> void {
+    assert(sourcemeta::jsontoolkit::is_object(document));
+    const auto size{sourcemeta::jsontoolkit::size(document)};
+    this->put_varint(size);
     for (const auto &pair :
          sourcemeta::jsontoolkit::object_iterator(document)) {
       this->encode(
