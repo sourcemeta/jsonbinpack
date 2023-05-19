@@ -25,6 +25,8 @@ public:
                                              {"type", "const", "enum"})};
 
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/validation") &&
            sourcemeta::jsontoolkit::is_object(schema) && !has_core_blacklist &&
            !has_applicator_blacklist && !has_validation_blacklist;
   }
