@@ -267,6 +267,24 @@ struct ROOF_TYPED_ARRAY {
 
 /// @}
 
+/// @ingroup encoding
+/// @defgroup encoding_object Object
+/// @{
+
+/// @brief The encoding consists of each pair encoded as the key followed by
+/// the value according to `key_encoding` and `encoding`. The order in which
+/// pairs are encoded is undefined.
+struct FIXED_TYPED_ARBITRARY_OBJECT {
+  /// The object size
+  const std::uint64_t size;
+  /// Key encoding
+  const SingleEncoding key_encoding;
+  /// Value encoding
+  const SingleEncoding encoding;
+};
+
+/// @}
+
 // Encoding type
 
 using Encoding = std::variant<
@@ -278,7 +296,7 @@ using Encoding = std::variant<
     ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
     FIXED_TYPED_ARRAY, BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY,
-    ROOF_TYPED_ARRAY>;
+    ROOF_TYPED_ARRAY, FIXED_TYPED_ARBITRARY_OBJECT>;
 
 // Helper definitions that rely on the Encoding data type
 #ifndef DOXYGEN

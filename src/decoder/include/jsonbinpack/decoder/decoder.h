@@ -48,6 +48,7 @@ public:
       HANDLE_DECODING(15, BOUNDED_8BITS_TYPED_ARRAY)
       HANDLE_DECODING(16, FLOOR_TYPED_ARRAY)
       HANDLE_DECODING(17, ROOF_TYPED_ARRAY)
+      HANDLE_DECODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -353,6 +354,29 @@ public:
     assert(size <= options.maximum);
     return this->FIXED_TYPED_ARRAY({size, std::move(options.encoding),
                                     std::move(options.prefix_encodings)});
+  };
+
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_object Object
+  /// @{
+
+  auto FIXED_TYPED_ARBITRARY_OBJECT(const FIXED_TYPED_ARBITRARY_OBJECT &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    sourcemeta::jsontoolkit::JSON document{
+        sourcemeta::jsontoolkit::make_object()};
+    for (std::size_t index = 0; index < options.size; index++) {
+      const sourcemeta::jsontoolkit::JSON key{
+          this->decode(options.key_encoding->value)};
+      assert(sourcemeta::jsontoolkit::is_string(key));
+      sourcemeta::jsontoolkit::assign(document,
+                                      sourcemeta::jsontoolkit::to_string(key),
+                                      this->decode(options.encoding->value));
+    }
+
+    assert(sourcemeta::jsontoolkit::size(document) == options.size);
+    return document;
   };
 
   /// @}
