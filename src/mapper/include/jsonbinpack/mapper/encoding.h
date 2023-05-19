@@ -9,8 +9,6 @@
 
 namespace sourcemeta::jsonbinpack::mapper {
 
-const std::string V1{"https://www.jsonbinpack.org/schemas/encoding/v1.json"};
-
 namespace keywords {
 const std::string version{"$schema"};
 const std::string name{"name"};

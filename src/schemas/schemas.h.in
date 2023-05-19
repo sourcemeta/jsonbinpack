@@ -1,0 +1,13 @@
+#ifndef SOURCEMETA_JSONBINPACK_SCHEMAS_H_
+#define SOURCEMETA_JSONBINPACK_SCHEMAS_H_
+
+#include <string> // std::string
+
+namespace sourcemeta::jsonbinpack::schemas {
+  namespace encoding::v1 {
+    const std::string id{"@SCHEMAS_ENCODING_V1_ID@"};
+    const char * const json = R"JSON(@SCHEMAS_ENCODING_V1_JSON@)JSON";
+  }
+}
+
+#endif
