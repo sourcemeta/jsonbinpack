@@ -1,6 +1,10 @@
 #include "commands.h"
+#include "defaults.h"
+#include "resolver.h"
 
+#include <jsonbinpack/canonicalizer/canonicalizer.h>
 #include <jsonbinpack/encoder/encoder.h>
+#include <jsonbinpack/mapper/mapper.h>
 #include <jsonbinpack/parser/parser.h>
 
 #include <jsontoolkit/json.h>
@@ -11,12 +15,15 @@
 #include <ios>        // std::ios_base
 #include <iostream>   // std::cin, std::cout
 
-static auto encode_from_json(const sourcemeta::jsontoolkit::JSON &schema,
+static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
                              const sourcemeta::jsontoolkit::JSON &instance)
     -> int {
-  // TODO: Run canonicalizer and mapper on the schema.
-  // These components are vocabulary-aware, so they will
-  // be a no-op if the schema is already an encoding schema.
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{
+      sourcemeta::jsonbinpack::cli::resolver};
+  canonicalizer.apply(schema, sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::Mapper mapper{
+      sourcemeta::jsonbinpack::cli::resolver};
+  mapper.apply(schema, sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};
@@ -31,7 +38,9 @@ auto sourcemeta::jsonbinpack::cli::encode(
   std::ifstream instance_stream{instance_path};
   schema_stream.exceptions(std::ios_base::badbit);
   instance_stream.exceptions(std::ios_base::badbit);
-  return encode_from_json(sourcemeta::jsontoolkit::parse(schema_stream),
+  sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(schema_stream)};
+  return encode_from_json(schema,
                           sourcemeta::jsontoolkit::parse(instance_stream));
 }
 
@@ -39,6 +48,7 @@ auto sourcemeta::jsonbinpack::cli::encode(
     const std::filesystem::path &schema_path) -> int {
   std::ifstream schema_stream{schema_path};
   schema_stream.exceptions(std::ios_base::badbit);
-  return encode_from_json(sourcemeta::jsontoolkit::parse(schema_stream),
-                          sourcemeta::jsontoolkit::parse(std::cin));
+  sourcemeta::jsontoolkit::JSON schema{
+      sourcemeta::jsontoolkit::parse(schema_stream)};
+  return encode_from_json(schema, sourcemeta::jsontoolkit::parse(std::cin));
 }
