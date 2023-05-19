@@ -50,13 +50,15 @@ add_test(NAME JSONBinPack.cli_compile_stdin
   "${JSONBINPACK_CLI_PATH}" 0 "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED"
   compile)
 
-add_test(NAME JSONBinPack.cli_encode_encoding_schema
+# Encoding Schema
+
+add_test(NAME JSONBinPack.cli_encode_encoding_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin" encode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json")
 
-add_test(NAME JSONBinPack.cli_decode_encoding_schema
+add_test(NAME JSONBinPack.cli_decode_encoding_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json" decode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json"
@@ -73,3 +75,29 @@ add_test(NAME JSONBinPack.cli_decode_encoding_schema_stdin
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
   decode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json")
+
+# JSON Schema
+
+add_test(NAME JSONBinPack.cli_encode_json_schema_arg
+  COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin" encode
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json")
+
+add_test(NAME JSONBinPack.cli_decode_json_schema_arg
+  COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json" decode
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin")
+
+add_test(NAME JSONBinPack.cli_encode_json_schema_stdin
+  COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
+  encode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json")
+
+add_test(NAME JSONBinPack.cli_decode_json_schema_stdin
+  COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
+  "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
+  decode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json")
