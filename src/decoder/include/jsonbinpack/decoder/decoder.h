@@ -49,6 +49,7 @@ public:
       HANDLE_DECODING(16, FLOOR_TYPED_ARRAY)
       HANDLE_DECODING(17, ROOF_TYPED_ARRAY)
       HANDLE_DECODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
+      HANDLE_DECODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -376,6 +377,25 @@ public:
     }
 
     assert(sourcemeta::jsontoolkit::size(document) == options.size);
+    return document;
+  };
+
+  auto
+  VARINT_TYPED_ARBITRARY_OBJECT(const VARINT_TYPED_ARBITRARY_OBJECT &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const std::uint64_t size{this->get_varint()};
+    sourcemeta::jsontoolkit::JSON document{
+        sourcemeta::jsontoolkit::make_object()};
+    for (std::size_t index = 0; index < size; index++) {
+      const sourcemeta::jsontoolkit::JSON key{
+          this->decode(options.key_encoding->value)};
+      assert(sourcemeta::jsontoolkit::is_string(key));
+      sourcemeta::jsontoolkit::assign(document,
+                                      sourcemeta::jsontoolkit::to_string(key),
+                                      this->decode(options.encoding->value));
+    }
+
+    assert(sourcemeta::jsontoolkit::size(document) == size);
     return document;
   };
 

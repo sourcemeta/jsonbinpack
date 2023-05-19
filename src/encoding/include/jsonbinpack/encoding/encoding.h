@@ -283,20 +283,34 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
   const SingleEncoding encoding;
 };
 
+/// @brief The encoding consists of the number of key-value pairs in the input
+/// object as a Base-128 64-bit Little Endian variable-length unsigned integer
+/// followed by each pair encoded as the key followed by the value according to
+/// `key_encoding` and `encoding`. The order in which pairs are encoded is
+/// undefined.
+struct VARINT_TYPED_ARBITRARY_OBJECT {
+  /// Key encoding
+  const SingleEncoding key_encoding;
+  /// Value encoding
+  const SingleEncoding encoding;
+};
+
 /// @}
 
 // Encoding type
 
-using Encoding = std::variant<
-    BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
-    ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
-    DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
-    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
-    FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
-    ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
-    BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
-    FIXED_TYPED_ARRAY, BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY,
-    ROOF_TYPED_ARRAY, FIXED_TYPED_ARBITRARY_OBJECT>;
+using Encoding =
+    std::variant<BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
+                 ROOF_MULTIPLE_MIRROR_ENUM_VARINT,
+                 ARBITRARY_MULTIPLE_ZIGZAG_VARINT, DOUBLE_VARINT_TUPLE,
+                 BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
+                 TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
+                 FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
+                 ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
+                 BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED,
+                 RFC3339_DATE_INTEGER_TRIPLET, FIXED_TYPED_ARRAY,
+                 BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY, ROOF_TYPED_ARRAY,
+                 FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT>;
 
 // Helper definitions that rely on the Encoding data type
 #ifndef DOXYGEN
