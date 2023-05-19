@@ -5,6 +5,7 @@
 
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/encoding/encoding.h>
+#include <jsonbinpack/encoding/tag.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsontoolkit/json.h>
 
@@ -50,6 +51,7 @@ public:
       HANDLE_DECODING(17, ROOF_TYPED_ARRAY)
       HANDLE_DECODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
       HANDLE_DECODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
+      HANDLE_DECODING(20, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -398,6 +400,75 @@ public:
     assert(sourcemeta::jsontoolkit::size(document) == size);
     return document;
   };
+
+  /// @}
+
+  /// @ingroup decoder
+  /// @defgroup decoder_any Any
+  /// @{
+
+  auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &)
+      -> sourcemeta::jsontoolkit::JSON {
+    using namespace tag::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
+    const std::uint8_t byte{this->get_byte()};
+    const std::uint8_t type{
+        static_cast<std::uint8_t>(byte & (0xff >> subtype_size))};
+    const std::uint8_t subtype{static_cast<std::uint8_t>(byte >> type_size)};
+
+    if (type == TYPE_OTHER) {
+      switch (subtype) {
+      case SUBTYPE_NULL:
+        return sourcemeta::jsontoolkit::from(nullptr);
+      case SUBTYPE_FALSE:
+        return sourcemeta::jsontoolkit::from(false);
+      case SUBTYPE_TRUE:
+        return sourcemeta::jsontoolkit::from(true);
+      case SUBTYPE_NUMBER:
+        return this->DOUBLE_VARINT_TUPLE({});
+      case SUBTYPE_POSITIVE_INTEGER:
+        return sourcemeta::jsontoolkit::from(this->get_varint());
+      case SUBTYPE_NEGATIVE_INTEGER:
+        return sourcemeta::jsontoolkit::from(
+            -static_cast<std::int64_t>(this->get_varint()) - 1);
+      default:
+        // We should never get here
+        assert(false);
+      }
+
+      // TODO: Bring this back into the switch clause below
+    } else if (type == TYPE_SHARED_STRING) {
+      const std::uint64_t position{this->position()};
+      const std::uint64_t current{this->rewind(this->get_varint(), position)};
+      sourcemeta::jsontoolkit::JSON string{
+          sourcemeta::jsontoolkit::from(this->get_string_utf8(subtype - 1))};
+      this->seek(current);
+      return string;
+
+    } else {
+      switch (type) {
+      case TYPE_POSITIVE_INTEGER_BYTE:
+        return sourcemeta::jsontoolkit::from(subtype > 0 ? subtype - 1
+                                                         : this->get_byte());
+      case TYPE_NEGATIVE_INTEGER_BYTE:
+        return sourcemeta::jsontoolkit::from(
+            subtype > 0 ? static_cast<std::int64_t>(-subtype)
+                        : static_cast<std::int64_t>(-this->get_byte() - 1));
+      case TYPE_STRING:
+        return subtype == 0 ? FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({0})
+                            : sourcemeta::jsontoolkit::from(
+                                  this->get_string_utf8(subtype - 1));
+      case TYPE_LONG_STRING:
+        return sourcemeta::jsontoolkit::from(
+            this->get_string_utf8(subtype + uint_max<5>));
+      default:
+        // We should never get here
+        assert(false);
+      }
+    }
+
+    // TODO: Not implemented
+    std::terminate();
+  }
 
   /// @}
 };
