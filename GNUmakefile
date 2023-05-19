@@ -11,7 +11,7 @@ GENERATOR ?= Ninja Multi-Config
 all:
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET)
+	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET)
 
 .PHONY: test
@@ -20,13 +20,13 @@ ifdef CASE
 test:
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET)
+	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --verbose --tests-regex $(CASE)
 else
 test:
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET)
+	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --verbose
 endif
 
@@ -34,7 +34,7 @@ endif
 ifdef CASE
 debug: scripts/lldb.sh
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
-	$(CMAKE) --build --preset $(PRESET)
+	$(CMAKE) --build --preset $(PRESET) --parallel
 	./$< $(PRESET) $(CASE)
 else
 debug:
