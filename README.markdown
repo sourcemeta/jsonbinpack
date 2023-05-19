@@ -43,9 +43,9 @@ You can configure, build and test the project using a given preset as follows:
 
 ```sh
 cmake --preset <preset>
-cmake --build --preset <preset>
+cmake --build --preset <preset> --parallel
 ctest --preset <preset>
 ```
 
 Once the project has been built, the JSON BinPack command-line tool can be
-found at `build/src/cli/<preset>/jsonbinpack`.
+found somewhere within `build`, depending on your generator of choice.
