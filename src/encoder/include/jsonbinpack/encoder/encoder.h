@@ -6,9 +6,11 @@
 #include <jsonbinpack/encoder/basic_encoder.h>
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/encoding/encoding.h>
+#include <jsonbinpack/encoding/tag.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsontoolkit/json.h>
 
+#include <cmath>   // std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
 #include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
@@ -51,6 +53,7 @@ public:
       HANDLE_ENCODING(17, ROOF_TYPED_ARRAY)
       HANDLE_ENCODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
       HANDLE_ENCODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
+      HANDLE_ENCODING(20, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_ENCODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -413,6 +416,94 @@ public:
           options.key_encoding->value);
       this->encode(sourcemeta::jsontoolkit::value(pair),
                    options.encoding->value);
+    }
+  }
+
+  /// @}
+
+  /// @ingroup encoder
+  /// @defgroup encoder_any Any
+  /// @{
+
+  auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
+      const sourcemeta::jsontoolkit::Value &document,
+      const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &) -> void {
+    using namespace tag::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
+    if (sourcemeta::jsontoolkit::is_null(document)) {
+      this->put_byte(TYPE_OTHER | (SUBTYPE_NULL << type_size));
+    } else if (sourcemeta::jsontoolkit::is_boolean(document)) {
+      const std::uint8_t subtype{sourcemeta::jsontoolkit::to_boolean(document)
+                                     ? SUBTYPE_TRUE
+                                     : SUBTYPE_FALSE};
+      this->put_byte(TYPE_OTHER |
+                     static_cast<std::uint8_t>(subtype << type_size));
+    } else if (sourcemeta::jsontoolkit::is_real(document)) {
+      this->put_byte(TYPE_OTHER | SUBTYPE_NUMBER << type_size);
+      this->DOUBLE_VARINT_TUPLE(document, {});
+    } else if (sourcemeta::jsontoolkit::is_integer(document)) {
+      const std::int64_t value{sourcemeta::jsontoolkit::to_integer(document)};
+      const bool is_positive{value >= 0};
+      const std::uint64_t absolute{is_positive
+                                       ? static_cast<std::uint64_t>(value)
+                                       : std::abs(value) - 1};
+      if (is_byte(absolute)) {
+        const std::uint8_t type{is_positive ? TYPE_POSITIVE_INTEGER_BYTE
+                                            : TYPE_NEGATIVE_INTEGER_BYTE};
+        const std::uint8_t absolute_byte{static_cast<std::uint8_t>(absolute)};
+        if (absolute < uint_max<5>) {
+          this->put_byte(type | static_cast<std::uint8_t>((absolute_byte + 1)
+                                                          << type_size));
+        } else {
+          this->put_byte(type);
+          this->put_byte(absolute_byte);
+        }
+      } else {
+        const std::uint8_t subtype{is_positive ? SUBTYPE_POSITIVE_INTEGER
+                                               : SUBTYPE_NEGATIVE_INTEGER};
+        this->put_byte(TYPE_OTHER |
+                       static_cast<std::uint8_t>(subtype << type_size));
+        this->put_varint(absolute);
+      }
+    } else if (sourcemeta::jsontoolkit::is_string(document)) {
+      const std::basic_string<CharT> value{
+          sourcemeta::jsontoolkit::to_string(document)};
+      const auto size{sourcemeta::jsontoolkit::size(document)};
+      const bool is_shared{this->context().has(value)};
+      if (size < uint_max<5>) {
+        const std::uint8_t type{is_shared ? TYPE_SHARED_STRING : TYPE_STRING};
+        this->put_byte(
+            static_cast<std::uint8_t>(type | ((size + 1) << type_size)));
+        if (is_shared) {
+          this->put_varint(this->position() - this->context().offset(value));
+        } else {
+          this->context().record(value, this->position());
+          this->put_string_utf8(value, size);
+        }
+      } else if (size >= uint_max<5> && size < uint_max<5> * 2 && !is_shared) {
+        this->put_byte(static_cast<std::uint8_t>(
+            TYPE_LONG_STRING | ((size - uint_max<5>) << type_size)));
+        this->put_string_utf8(value, size);
+      } else if (size >= 2 << (SUBTYPE_LONG_STRING_BASE_EXPONENT_7 - 1) &&
+                 size <= 2 << (SUBTYPE_LONG_STRING_BASE_EXPONENT_10 - 1) &&
+                 !is_shared) {
+        // TODO: Not implemented
+        std::terminate();
+      } else {
+        // TODO: Test this generic string case
+        // Exploit the fact that a shared string always starts
+        // with an impossible length marker (0) to avoid having
+        // to encode an additional tag
+        if (!is_shared) {
+          this->put_byte(TYPE_STRING);
+        }
+
+        // TODO: If we got this far, we know that the string has a
+        // certain length, so we can bump up the minimum to uint_max<5>?
+        return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {0});
+      }
+    } else {
+      // TODO: Not implemented
+      std::terminate();
     }
   }
 

@@ -8,6 +8,8 @@
 
 namespace sourcemeta::jsonbinpack {
 
+template <unsigned int T> constexpr auto uint_max = (2 << (T - 1)) - 1;
+
 constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
   return value <= std::numeric_limits<std::uint8_t>::max();
 }
