@@ -63,6 +63,27 @@ constexpr auto divide_floor(const std::int64_t dividend,
   }
 }
 
+constexpr auto closest_smallest_exponent(const std::uint64_t value,
+                                         const std::uint8_t base,
+                                         const std::uint8_t exponent_start,
+                                         const std::uint8_t exponent_end)
+    -> std::uint8_t {
+  assert(exponent_start <= exponent_end);
+  std::uint64_t result{base};
+  for (std::uint8_t exponent = 1; exponent < exponent_end; exponent++) {
+    // Avoid std::pow, which officially only returns `double`
+    const std::uint64_t next{result * base};
+    if (next > value && exponent >= exponent_start) {
+      return exponent;
+    } else {
+      result = next;
+    }
+  }
+
+  assert(result <= value);
+  return exponent_end;
+}
+
 } // namespace sourcemeta::jsonbinpack
 
 #endif
