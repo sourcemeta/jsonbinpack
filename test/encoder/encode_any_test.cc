@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
+#include <string>
 
 TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
@@ -143,7 +144,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
 TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+      sourcemeta::jsontoolkit::from(std::string(30, 'x'))};
   EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 30);
   OutputByteStream<char> stream{};
 
@@ -177,7 +178,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
 TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+      sourcemeta::jsontoolkit::from(std::string(31, 'x'))};
   EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 31);
   OutputByteStream<char> stream{};
 
@@ -191,8 +192,8 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
 
 TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   using namespace sourcemeta::jsonbinpack;
-  sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::from(
-      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from(std::string(61, 'x'))};
   EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 61);
   OutputByteStream<char> stream{};
 
