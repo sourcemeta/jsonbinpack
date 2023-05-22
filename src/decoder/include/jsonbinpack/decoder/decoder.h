@@ -430,6 +430,18 @@ public:
       case SUBTYPE_NEGATIVE_INTEGER:
         return sourcemeta::jsontoolkit::from(
             -static_cast<std::int64_t>(this->get_varint()) - 1);
+      case SUBTYPE_LONG_STRING_BASE_EXPONENT_7:
+        return sourcemeta::jsontoolkit::from(
+            this->get_string_utf8(this->get_varint() + 128));
+      case SUBTYPE_LONG_STRING_BASE_EXPONENT_8:
+        return sourcemeta::jsontoolkit::from(
+            this->get_string_utf8(this->get_varint() + 256));
+      case SUBTYPE_LONG_STRING_BASE_EXPONENT_9:
+        return sourcemeta::jsontoolkit::from(
+            this->get_string_utf8(this->get_varint() + 512));
+      case SUBTYPE_LONG_STRING_BASE_EXPONENT_10:
+        return sourcemeta::jsontoolkit::from(
+            this->get_string_utf8(this->get_varint() + 1024));
       default:
         // We should never get here
         assert(false);

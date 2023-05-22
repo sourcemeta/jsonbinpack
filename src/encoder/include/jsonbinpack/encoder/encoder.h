@@ -484,10 +484,14 @@ public:
             TYPE_LONG_STRING | ((size - uint_max<5>) << type_size)));
         this->put_string_utf8(value, size);
       } else if (size >= 2 << (SUBTYPE_LONG_STRING_BASE_EXPONENT_7 - 1) &&
-                 size <= 2 << (SUBTYPE_LONG_STRING_BASE_EXPONENT_10 - 1) &&
                  !is_shared) {
-        // TODO: Not implemented
-        std::terminate();
+        const std::uint8_t exponent{closest_smallest_exponent(
+            size, 2, SUBTYPE_LONG_STRING_BASE_EXPONENT_7,
+            SUBTYPE_LONG_STRING_BASE_EXPONENT_10)};
+        this->put_byte(
+            static_cast<std::uint8_t>(TYPE_OTHER | (exponent << type_size)));
+        this->put_varint(size - (2 << (exponent - 1)));
+        this->put_string_utf8(value, size);
       } else {
         // TODO: Test this generic string case
         // Exploit the fact that a shared string always starts
