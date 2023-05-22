@@ -3,6 +3,7 @@
 #include <jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
+#include <string>
 
 TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
@@ -146,7 +147,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   const sourcemeta::jsontoolkit::JSON result{
       decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
   const sourcemeta::jsontoolkit::JSON expected{
-      sourcemeta::jsontoolkit::from("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+      sourcemeta::jsontoolkit::from(std::string(30, 'x'))};
   EXPECT_EQ(result, expected);
 }
 
@@ -181,7 +182,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   const sourcemeta::jsontoolkit::JSON result{
       decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
   const sourcemeta::jsontoolkit::JSON expected{
-      sourcemeta::jsontoolkit::from("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+      sourcemeta::jsontoolkit::from(std::string(31, 'x'))};
   EXPECT_EQ(result, expected);
 }
 
@@ -197,8 +198,8 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result{
       decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
-  const sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::from(
-      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from(std::string(61, 'x'))};
   EXPECT_EQ(result, expected);
 }
 
