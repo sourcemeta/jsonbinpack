@@ -493,7 +493,6 @@ public:
         this->put_varint(size - (2 << (exponent - 1)));
         this->put_string_utf8(value, size);
       } else {
-        // TODO: Test this generic string case
         // Exploit the fact that a shared string always starts
         // with an impossible length marker (0) to avoid having
         // to encode an additional tag
@@ -501,9 +500,9 @@ public:
           this->put_byte(TYPE_STRING);
         }
 
-        // TODO: If we got this far, we know that the string has a
-        // certain length, so we can bump up the minimum to uint_max<5>?
-        return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {0});
+        // If we got this far, the string is at least a certain length
+        return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document,
+                                                      {uint_max<5> * 2});
       }
     } else {
       // TODO: Not implemented
