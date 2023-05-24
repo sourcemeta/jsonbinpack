@@ -466,9 +466,10 @@ public:
             subtype > 0 ? static_cast<std::int64_t>(-subtype)
                         : static_cast<std::int64_t>(-this->get_byte() - 1));
       case TYPE_STRING:
-        return subtype == 0 ? FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({0})
-                            : sourcemeta::jsontoolkit::from(
-                                  this->get_string_utf8(subtype - 1));
+        return subtype == 0
+                   ? FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({uint_max<5> * 2})
+                   : sourcemeta::jsontoolkit::from(
+                         this->get_string_utf8(subtype - 1));
       case TYPE_LONG_STRING:
         return sourcemeta::jsontoolkit::from(
             this->get_string_utf8(subtype + uint_max<5>));
