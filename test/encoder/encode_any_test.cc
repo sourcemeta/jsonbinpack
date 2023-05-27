@@ -642,3 +642,61 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::parse("[ \"foo\", true, 2000 ]")};
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream, {
+                           0x24,                   // tag: array with length 3
+                           0x21, 0x66, 0x6f, 0x6f, // "foo"
+                           0x0f,                   // true
+                           0x1f, 0xd0, 0x0f        // 2000
+                       });
+}
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::make_array()};
+  for (auto count = 0; count < 30; count++) {
+    sourcemeta::jsontoolkit::push_back(document,
+                                       sourcemeta::jsontoolkit::from(true));
+  }
+
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 30);
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream,
+               {0xfc, // tag: array with length 30
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
+}
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::make_array()};
+  for (auto count = 0; count < 31; count++) {
+    sourcemeta::jsontoolkit::push_back(document,
+                                       sourcemeta::jsontoolkit::from(true));
+  }
+
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 31);
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream,
+               {0x04, // tag: array
+                0x1f, // length 31
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
+}

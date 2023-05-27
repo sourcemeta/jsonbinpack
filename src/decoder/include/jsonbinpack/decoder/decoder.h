@@ -6,6 +6,7 @@
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/encoding/encoding.h>
 #include <jsonbinpack/encoding/tag.h>
+#include <jsonbinpack/encoding/wrap.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsontoolkit/json.h>
 
@@ -466,13 +467,24 @@ public:
             subtype > 0 ? static_cast<std::int64_t>(-subtype)
                         : static_cast<std::int64_t>(-this->get_byte() - 1));
       case TYPE_STRING:
-        return subtype == 0
-                   ? FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({uint_max<5> * 2})
-                   : sourcemeta::jsontoolkit::from(
-                         this->get_string_utf8(subtype - 1));
+        return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
+                                  {uint_max<5> * 2})
+                            : sourcemeta::jsontoolkit::from(
+                                  this->get_string_utf8(subtype - 1));
       case TYPE_LONG_STRING:
         return sourcemeta::jsontoolkit::from(
             this->get_string_utf8(subtype + uint_max<5>));
+      case TYPE_ARRAY:
+        return subtype == 0 ? this->FIXED_TYPED_ARRAY(
+                                  {this->get_varint(),
+                                   wrap(sourcemeta::jsonbinpack::
+                                            ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
+                                   {}})
+                            : this->FIXED_TYPED_ARRAY(
+                                  {static_cast<std::uint64_t>(subtype - 1),
+                                   wrap(sourcemeta::jsonbinpack::
+                                            ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
+                                   {}});
       default:
         // We should never get here
         assert(false);
