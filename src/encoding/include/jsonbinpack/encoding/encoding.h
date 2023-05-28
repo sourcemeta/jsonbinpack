@@ -206,6 +206,18 @@ struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED {
 /// integer, and the day as an 8-bit fixed-length unsigned integer.
 struct RFC3339_DATE_INTEGER_TRIPLET {};
 
+/// @brief The encoding consists of the byte-length of the string plus 1 as a
+/// Base-128 64-bit Little Endian variable-length unsigned integer followed by
+/// the UTF-8 encoding of the input value.
+///
+/// Optionally, if the input string has already been encoded to the buffer
+/// using this encoding the encoding may consist of the byte constant `0x00`
+/// followed by the current offset minus the offset to the start of the string
+/// as a Base-128 64-bit Little Endian variable-length unsigned integer.  It is
+/// permissible to point to another instance of the string that is a pointer
+/// itself.
+struct PREFIX_VARINT_LENGTH_STRING_SHARED {};
+
 /// @}
 
 /// @ingroup encoding
@@ -316,9 +328,10 @@ using Encoding = std::variant<
     FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
     ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
-    FIXED_TYPED_ARRAY, BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY,
-    ROOF_TYPED_ARRAY, FIXED_TYPED_ARBITRARY_OBJECT,
-    VARINT_TYPED_ARBITRARY_OBJECT, ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
+    PREFIX_VARINT_LENGTH_STRING_SHARED, FIXED_TYPED_ARRAY,
+    BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY, ROOF_TYPED_ARRAY,
+    FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
+    ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
 
 // Helper definitions that rely on the Encoding data type
 #ifndef DOXYGEN
