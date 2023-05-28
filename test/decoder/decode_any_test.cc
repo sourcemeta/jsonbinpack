@@ -610,3 +610,117 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
       sourcemeta::jsontoolkit::from(std::string(63, 'x'))};
   EXPECT_EQ(result, expected);
 }
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{0x24, 0x21, 0x66, 0x6f, 0x6f,
+                               0x0f, 0x1f, 0xd0, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_array(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 3);
+  using namespace sourcemeta::jsontoolkit;
+  EXPECT_EQ(at(result, 0), from("foo"));
+  EXPECT_EQ(at(result, 1), from(true));
+  EXPECT_EQ(at(result, 2), from(2000));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{0xfc, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                               0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                               0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                               0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_array(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 30);
+  using namespace sourcemeta::jsontoolkit;
+
+  EXPECT_EQ(at(result, 0), from(true));
+  EXPECT_EQ(at(result, 1), from(true));
+  EXPECT_EQ(at(result, 2), from(true));
+  EXPECT_EQ(at(result, 3), from(true));
+  EXPECT_EQ(at(result, 4), from(true));
+  EXPECT_EQ(at(result, 5), from(true));
+  EXPECT_EQ(at(result, 6), from(true));
+  EXPECT_EQ(at(result, 7), from(true));
+  EXPECT_EQ(at(result, 8), from(true));
+  EXPECT_EQ(at(result, 9), from(true));
+
+  EXPECT_EQ(at(result, 10), from(true));
+  EXPECT_EQ(at(result, 11), from(true));
+  EXPECT_EQ(at(result, 12), from(true));
+  EXPECT_EQ(at(result, 13), from(true));
+  EXPECT_EQ(at(result, 14), from(true));
+  EXPECT_EQ(at(result, 15), from(true));
+  EXPECT_EQ(at(result, 16), from(true));
+  EXPECT_EQ(at(result, 17), from(true));
+  EXPECT_EQ(at(result, 18), from(true));
+  EXPECT_EQ(at(result, 19), from(true));
+
+  EXPECT_EQ(at(result, 20), from(true));
+  EXPECT_EQ(at(result, 21), from(true));
+  EXPECT_EQ(at(result, 22), from(true));
+  EXPECT_EQ(at(result, 23), from(true));
+  EXPECT_EQ(at(result, 24), from(true));
+  EXPECT_EQ(at(result, 25), from(true));
+  EXPECT_EQ(at(result, 26), from(true));
+  EXPECT_EQ(at(result, 27), from(true));
+  EXPECT_EQ(at(result, 28), from(true));
+  EXPECT_EQ(at(result, 29), from(true));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0x04, 0x1f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_array(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 31);
+  using namespace sourcemeta::jsontoolkit;
+
+  EXPECT_EQ(at(result, 0), from(true));
+  EXPECT_EQ(at(result, 1), from(true));
+  EXPECT_EQ(at(result, 2), from(true));
+  EXPECT_EQ(at(result, 3), from(true));
+  EXPECT_EQ(at(result, 4), from(true));
+  EXPECT_EQ(at(result, 5), from(true));
+  EXPECT_EQ(at(result, 6), from(true));
+  EXPECT_EQ(at(result, 7), from(true));
+  EXPECT_EQ(at(result, 8), from(true));
+  EXPECT_EQ(at(result, 9), from(true));
+
+  EXPECT_EQ(at(result, 10), from(true));
+  EXPECT_EQ(at(result, 11), from(true));
+  EXPECT_EQ(at(result, 12), from(true));
+  EXPECT_EQ(at(result, 13), from(true));
+  EXPECT_EQ(at(result, 14), from(true));
+  EXPECT_EQ(at(result, 15), from(true));
+  EXPECT_EQ(at(result, 16), from(true));
+  EXPECT_EQ(at(result, 17), from(true));
+  EXPECT_EQ(at(result, 18), from(true));
+  EXPECT_EQ(at(result, 19), from(true));
+
+  EXPECT_EQ(at(result, 20), from(true));
+  EXPECT_EQ(at(result, 21), from(true));
+  EXPECT_EQ(at(result, 22), from(true));
+  EXPECT_EQ(at(result, 23), from(true));
+  EXPECT_EQ(at(result, 24), from(true));
+  EXPECT_EQ(at(result, 25), from(true));
+  EXPECT_EQ(at(result, 26), from(true));
+  EXPECT_EQ(at(result, 27), from(true));
+  EXPECT_EQ(at(result, 28), from(true));
+  EXPECT_EQ(at(result, 29), from(true));
+
+  EXPECT_EQ(at(result, 30), from(true));
+}

@@ -7,6 +7,7 @@
 #include <jsonbinpack/encoder/real.h>
 #include <jsonbinpack/encoding/encoding.h>
 #include <jsonbinpack/encoding/tag.h>
+#include <jsonbinpack/encoding/wrap.h>
 #include <jsonbinpack/numeric/numeric.h>
 #include <jsontoolkit/json.h>
 
@@ -504,6 +505,19 @@ public:
         return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document,
                                                       {uint_max<5> * 2});
       }
+    } else if (sourcemeta::jsontoolkit::is_array(document)) {
+      const auto size{sourcemeta::jsontoolkit::size(document)};
+      if (size >= uint_max<5>) {
+        this->put_byte(TYPE_ARRAY);
+        this->put_varint(size);
+      } else {
+        this->put_byte(
+            static_cast<std::uint8_t>(TYPE_ARRAY | ((size + 1) << type_size)));
+      }
+
+      Encoding encoding{
+          sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
+      this->FIXED_TYPED_ARRAY(document, {size, wrap(std::move(encoding)), {}});
     } else {
       // TODO: Not implemented
       std::terminate();
