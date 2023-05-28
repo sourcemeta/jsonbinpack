@@ -444,8 +444,9 @@ public:
         return sourcemeta::jsontoolkit::from(
             this->get_string_utf8(this->get_varint() + 1024));
       default:
-        // We should never get here
+        // We should never get here. If so, it is definitely a bug
         assert(false);
+        std::abort();
       }
 
       // TODO: Bring this back into the switch clause below
@@ -486,8 +487,9 @@ public:
                                             ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
                                    {}});
       default:
-        // We should never get here
+        // We should never get here. If so, it is definitely a bug
         assert(false);
+        std::abort();
       }
     }
 
