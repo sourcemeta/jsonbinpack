@@ -228,6 +228,7 @@ public:
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
+    assert(sourcemeta::jsontoolkit::size(document) == size);
     const bool is_shared{this->context().has(value)};
 
     // (1) Write 0x00 if shared, else do nothing
@@ -254,6 +255,7 @@ public:
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
+    assert(sourcemeta::jsontoolkit::size(document) == size);
     assert(size <= options.maximum);
     const bool is_shared{this->context().has(value)};
 
@@ -281,6 +283,7 @@ public:
     const std::basic_string<CharT> value{
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
+    assert(sourcemeta::jsontoolkit::size(document) == size);
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum + 1));
     assert(is_within(size, options.minimum, options.maximum));
@@ -309,6 +312,7 @@ public:
     assert(sourcemeta::jsontoolkit::is_string(document));
     const auto &value{sourcemeta::jsontoolkit::to_string(document)};
     assert(value.size() == 10);
+    assert(sourcemeta::jsontoolkit::size(document) == value.size());
 
     // As according to RFC3339: Internet Protocols MUST
     // generate four digit years in dates.
