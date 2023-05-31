@@ -64,4 +64,4 @@ jobs:
       - run: cmake --build --preset release --target shellcheck
       - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release --parallel
-      - run: ctest --preset release
+      - run: ctest --preset release --parallel
