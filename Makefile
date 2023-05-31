@@ -8,13 +8,13 @@ all: .always
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET)
+	$(CTEST) --preset $(PRESET) --parallel
 
 test: .always
 	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --verbose
+	$(CTEST) --preset $(PRESET) --verbose --parallel
 
 clean: .always
 	$(CMAKE) -E rm -R -f build

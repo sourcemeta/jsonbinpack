@@ -12,7 +12,7 @@ all:
 	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET)
+	$(CTEST) --preset $(PRESET) --parallel
 
 .PHONY: test
 CASE ?=
