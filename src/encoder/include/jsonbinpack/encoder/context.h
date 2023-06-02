@@ -6,6 +6,7 @@
 #include <map>       // std::map
 #include <stdexcept> // std::logic_error
 #include <string>    // std::basic_string
+#include <utility>   // std::pair, std::make_pair
 
 // Encoding a shared string has some overhead, such as the
 // shared string marker + the offset, so its not worth
@@ -23,6 +24,8 @@ namespace sourcemeta::jsonbinpack::encoder {
 /// @ingroup encoder
 template <typename CharT> class Context {
 public:
+  enum class Type { Standalone };
+
   auto record(const std::basic_string<CharT> &value, const std::uint64_t offset)
       -> void {
     const auto value_size{value.size()};
@@ -42,18 +45,20 @@ public:
     // If the string already exists, we want to
     // bump the offset for locality purposes.
     if (this->has(value)) {
-      const auto previous_offset{this->strings[value]};
+      const auto key{std::make_pair(value, Type::Standalone)};
+      const auto previous_offset{this->strings[key]};
       if (offset > previous_offset) {
-        this->strings[value] = offset;
+        this->strings[key] = offset;
         this->offsets.erase(previous_offset);
-        this->offsets.insert({offset, value});
+        this->offsets.insert({offset, std::make_pair(value, Type::Standalone)});
       }
     } else {
-      const auto result{this->offsets.insert({offset, value})};
+      const auto result{this->offsets.insert(
+          {offset, std::make_pair(value, Type::Standalone)})};
       // Prevent recording two strings to the same offset
       assert(result.second);
       if (result.second) {
-        this->strings.insert({value, offset});
+        this->strings.insert({std::make_pair(value, Type::Standalone), offset});
         this->byte_size += value_size;
       }
     }
@@ -65,28 +70,29 @@ public:
     // so the begin iterator points to the entry
     // with the lowest offset, a.k.a. the oldest.
     const auto iterator{std::cbegin(this->offsets)};
-    this->strings.erase(iterator->second);
-    this->byte_size -= iterator->second.size();
+    this->strings.erase(
+        std::make_pair(iterator->second.first, Type::Standalone));
+    this->byte_size -= iterator->second.first.size();
     this->offsets.erase(iterator);
   }
 
   auto has(const std::basic_string<CharT> &value) const -> bool {
-    return this->strings.contains(value);
+    return this->strings.contains(std::make_pair(value, Type::Standalone));
   }
 
   auto offset(const std::basic_string<CharT> &value) const -> std::uint64_t {
     // This method assumes the value indeed exists for performance reasons
     assert(this->has(value));
-    return this->strings.at(value);
+    return this->strings.at(std::make_pair(value, Type::Standalone));
   }
 
 private:
-  std::map<std::basic_string<CharT>, std::uint64_t> strings;
+  std::map<std::pair<std::basic_string<CharT>, Type>, std::uint64_t> strings;
   // A mirror of the above map to be able to sort by offset.
   // While this means we need 2x the amount of memory to keep track
   // of strings, it allows us to efficiently put an upper bound
   // on the amount of memory being consumed by this class.
-  std::map<std::uint64_t, std::basic_string<CharT>> offsets;
+  std::map<std::uint64_t, std::pair<std::basic_string<CharT>, Type>> offsets;
   std::uint64_t byte_size = 0;
 };
 
