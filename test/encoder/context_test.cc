@@ -66,29 +66,29 @@ TEST(Encoder, context_remove_oldest) {
   using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
   context.record("foo", 10, ContextType::Standalone);
   context.record("bar", 3, ContextType::Standalone);
-  context.record("baz", 7, ContextType::PrefixLengthVarint);
+  context.record("baz", 7, ContextType::PrefixLengthVarintPlusOne);
 
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
   EXPECT_TRUE(context.has("bar", ContextType::Standalone));
-  EXPECT_TRUE(context.has("baz", ContextType::PrefixLengthVarint));
+  EXPECT_TRUE(context.has("baz", ContextType::PrefixLengthVarintPlusOne));
 
   context.remove_oldest();
 
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
   EXPECT_FALSE(context.has("bar", ContextType::Standalone));
-  EXPECT_TRUE(context.has("baz", ContextType::PrefixLengthVarint));
+  EXPECT_TRUE(context.has("baz", ContextType::PrefixLengthVarintPlusOne));
 
   context.remove_oldest();
 
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
   EXPECT_FALSE(context.has("bar", ContextType::Standalone));
-  EXPECT_FALSE(context.has("baz", ContextType::PrefixLengthVarint));
+  EXPECT_FALSE(context.has("baz", ContextType::PrefixLengthVarintPlusOne));
 
   context.remove_oldest();
 
   EXPECT_FALSE(context.has("foo", ContextType::Standalone));
   EXPECT_FALSE(context.has("bar", ContextType::Standalone));
-  EXPECT_FALSE(context.has("baz", ContextType::PrefixLengthVarint));
+  EXPECT_FALSE(context.has("baz", ContextType::PrefixLengthVarintPlusOne));
 }
 
 TEST(Encoder, context_is_a_circular_buffer) {
@@ -142,13 +142,13 @@ TEST(Encoder, context_same_string_different_type) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
   using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
   context.record("foo", 10, ContextType::Standalone);
-  context.record("foo", 20, ContextType::PrefixLengthVarint);
+  context.record("foo", 20, ContextType::PrefixLengthVarintPlusOne);
 
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
-  EXPECT_TRUE(context.has("foo", ContextType::PrefixLengthVarint));
+  EXPECT_TRUE(context.has("foo", ContextType::PrefixLengthVarintPlusOne));
 
   EXPECT_EQ(context.offset("foo", ContextType::Standalone), 10);
-  EXPECT_EQ(context.offset("foo", ContextType::PrefixLengthVarint), 20);
+  EXPECT_EQ(context.offset("foo", ContextType::PrefixLengthVarintPlusOne), 20);
 }
 
 TEST(Encoder, context_no_fallback_type) {
@@ -156,5 +156,5 @@ TEST(Encoder, context_no_fallback_type) {
   using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
   context.record("foo", 10, ContextType::Standalone);
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
-  EXPECT_FALSE(context.has("foo", ContextType::PrefixLengthVarint));
+  EXPECT_FALSE(context.has("foo", ContextType::PrefixLengthVarintPlusOne));
 }
