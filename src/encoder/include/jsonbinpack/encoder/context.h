@@ -26,8 +26,8 @@ template <typename CharT> class Context {
 public:
   enum class Type { Standalone };
 
-  auto record(const std::basic_string<CharT> &value, const std::uint64_t offset)
-      -> void {
+  auto record(const std::basic_string<CharT> &value, const std::uint64_t offset,
+              const Type type) -> void {
     const auto value_size{value.size()};
     if (value_size < MINIMUM_STRING_LENGTH) {
       return;
@@ -44,21 +44,21 @@ public:
 
     // If the string already exists, we want to
     // bump the offset for locality purposes.
-    if (this->has(value)) {
-      const auto key{std::make_pair(value, Type::Standalone)};
+    if (this->has(value, type)) {
+      const auto key{std::make_pair(value, type)};
       const auto previous_offset{this->strings[key]};
       if (offset > previous_offset) {
         this->strings[key] = offset;
         this->offsets.erase(previous_offset);
-        this->offsets.insert({offset, std::make_pair(value, Type::Standalone)});
+        this->offsets.insert({offset, std::make_pair(value, type)});
       }
     } else {
-      const auto result{this->offsets.insert(
-          {offset, std::make_pair(value, Type::Standalone)})};
+      const auto result{
+          this->offsets.insert({offset, std::make_pair(value, type)})};
       // Prevent recording two strings to the same offset
       assert(result.second);
       if (result.second) {
-        this->strings.insert({std::make_pair(value, Type::Standalone), offset});
+        this->strings.insert({std::make_pair(value, type), offset});
         this->byte_size += value_size;
       }
     }
@@ -71,19 +71,21 @@ public:
     // with the lowest offset, a.k.a. the oldest.
     const auto iterator{std::cbegin(this->offsets)};
     this->strings.erase(
-        std::make_pair(iterator->second.first, Type::Standalone));
+        std::make_pair(iterator->second.first, iterator->second.second));
     this->byte_size -= iterator->second.first.size();
     this->offsets.erase(iterator);
   }
 
-  auto has(const std::basic_string<CharT> &value) const -> bool {
-    return this->strings.contains(std::make_pair(value, Type::Standalone));
+  auto has(const std::basic_string<CharT> &value, const Type type) const
+      -> bool {
+    return this->strings.contains(std::make_pair(value, type));
   }
 
-  auto offset(const std::basic_string<CharT> &value) const -> std::uint64_t {
+  auto offset(const std::basic_string<CharT> &value, const Type type) const
+      -> std::uint64_t {
     // This method assumes the value indeed exists for performance reasons
-    assert(this->has(value));
-    return this->strings.at(std::make_pair(value, Type::Standalone));
+    assert(this->has(value, type));
+    return this->strings.at(std::make_pair(value, type));
   }
 
 private:

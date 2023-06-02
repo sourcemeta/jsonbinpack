@@ -6,43 +6,49 @@
 
 TEST(Encoder, context_record_string) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  EXPECT_FALSE(context.has("foo"));
-  context.record("foo", 2);
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_EQ(context.offset("foo"), 2);
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  EXPECT_FALSE(context.has("foo", ContextType::Standalone));
+  context.record("foo", 2, ContextType::Standalone);
+  EXPECT_TRUE(context.has("foo", ContextType::Standalone));
+  EXPECT_EQ(context.offset("foo", ContextType::Standalone), 2);
 }
 
 TEST(Encoder, context_record_string_too_short) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  EXPECT_FALSE(context.has("fo"));
-  context.record("fo", 2);
-  EXPECT_FALSE(context.has("fo"));
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  EXPECT_FALSE(context.has("fo", ContextType::Standalone));
+  context.record("fo", 2, ContextType::Standalone);
+  EXPECT_FALSE(context.has("fo", ContextType::Standalone));
 }
 
 TEST(Encoder, context_record_string_empty) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  EXPECT_FALSE(context.has(""));
-  context.record("", 2);
-  EXPECT_FALSE(context.has(""));
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  EXPECT_FALSE(context.has("", ContextType::Standalone));
+  context.record("", 2, ContextType::Standalone);
+  EXPECT_FALSE(context.has("", ContextType::Standalone));
 }
 
 TEST(Encoder, context_has_on_unknown_string) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  EXPECT_FALSE(context.has("foobarbaz"));
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  EXPECT_FALSE(context.has("foobarbaz", ContextType::Standalone));
 }
 
 TEST(Encoder, context_increase_offset) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  context.record("foo", 2);
-  context.record("foo", 4);
-  EXPECT_EQ(context.offset("foo"), 4);
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  context.record("foo", 2, ContextType::Standalone);
+  context.record("foo", 4, ContextType::Standalone);
+  EXPECT_EQ(context.offset("foo", ContextType::Standalone), 4);
 }
 
 TEST(Encoder, context_do_not_decrease_offset) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  context.record("foo", 4);
-  context.record("foo", 2);
-  EXPECT_EQ(context.offset("foo"), 4);
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  context.record("foo", 4, ContextType::Standalone);
+  context.record("foo", 2, ContextType::Standalone);
+  EXPECT_EQ(context.offset("foo", ContextType::Standalone), 4);
 }
 
 TEST(Encoder, context_not_record_too_big) {
@@ -50,37 +56,39 @@ TEST(Encoder, context_not_record_too_big) {
   const std::string too_big(length, 'x');
   EXPECT_EQ(too_big.size(), length);
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  context.record(too_big, 1);
-  EXPECT_FALSE(context.has(too_big));
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  context.record(too_big, 1, ContextType::Standalone);
+  EXPECT_FALSE(context.has(too_big, ContextType::Standalone));
 }
 
 TEST(Encoder, context_remove_oldest) {
   sourcemeta::jsonbinpack::encoder::Context<char> context;
-  context.record("foo", 10);
-  context.record("bar", 3);
-  context.record("baz", 7);
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
+  context.record("foo", 10, ContextType::Standalone);
+  context.record("bar", 3, ContextType::Standalone);
+  context.record("baz", 7, ContextType::Standalone);
 
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_TRUE(context.has("bar"));
-  EXPECT_TRUE(context.has("baz"));
-
-  context.remove_oldest();
-
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_TRUE(context.has("baz"));
+  EXPECT_TRUE(context.has("foo", ContextType::Standalone));
+  EXPECT_TRUE(context.has("bar", ContextType::Standalone));
+  EXPECT_TRUE(context.has("baz", ContextType::Standalone));
 
   context.remove_oldest();
 
-  EXPECT_TRUE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_FALSE(context.has("baz"));
+  EXPECT_TRUE(context.has("foo", ContextType::Standalone));
+  EXPECT_FALSE(context.has("bar", ContextType::Standalone));
+  EXPECT_TRUE(context.has("baz", ContextType::Standalone));
 
   context.remove_oldest();
 
-  EXPECT_FALSE(context.has("foo"));
-  EXPECT_FALSE(context.has("bar"));
-  EXPECT_FALSE(context.has("baz"));
+  EXPECT_TRUE(context.has("foo", ContextType::Standalone));
+  EXPECT_FALSE(context.has("bar", ContextType::Standalone));
+  EXPECT_FALSE(context.has("baz", ContextType::Standalone));
+
+  context.remove_oldest();
+
+  EXPECT_FALSE(context.has("foo", ContextType::Standalone));
+  EXPECT_FALSE(context.has("bar", ContextType::Standalone));
+  EXPECT_FALSE(context.has("baz", ContextType::Standalone));
 }
 
 TEST(Encoder, context_is_a_circular_buffer) {
@@ -100,31 +108,32 @@ TEST(Encoder, context_is_a_circular_buffer) {
   EXPECT_EQ(string_6.size(), length);
 
   sourcemeta::jsonbinpack::encoder::Context<char> context;
+  using ContextType = sourcemeta::jsonbinpack::encoder::Context<char>::Type;
 
-  context.record(string_1, length * 0);
-  context.record(string_2, length * 1);
-  context.record(string_3, length * 2);
-  context.record(string_4, length * 3);
+  context.record(string_1, length * 0, ContextType::Standalone);
+  context.record(string_2, length * 1, ContextType::Standalone);
+  context.record(string_3, length * 2, ContextType::Standalone);
+  context.record(string_4, length * 3, ContextType::Standalone);
 
-  EXPECT_TRUE(context.has(string_1));
-  EXPECT_TRUE(context.has(string_2));
-  EXPECT_TRUE(context.has(string_3));
-  EXPECT_TRUE(context.has(string_4));
+  EXPECT_TRUE(context.has(string_1, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_2, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_3, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_4, ContextType::Standalone));
 
-  context.record(string_5, length * 4);
+  context.record(string_5, length * 4, ContextType::Standalone);
 
-  EXPECT_FALSE(context.has(string_1));
-  EXPECT_TRUE(context.has(string_2));
-  EXPECT_TRUE(context.has(string_3));
-  EXPECT_TRUE(context.has(string_4));
-  EXPECT_TRUE(context.has(string_5));
+  EXPECT_FALSE(context.has(string_1, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_2, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_3, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_4, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_5, ContextType::Standalone));
 
-  context.record(string_6, length * 5);
+  context.record(string_6, length * 5, ContextType::Standalone);
 
-  EXPECT_FALSE(context.has(string_1));
-  EXPECT_FALSE(context.has(string_2));
-  EXPECT_TRUE(context.has(string_3));
-  EXPECT_TRUE(context.has(string_4));
-  EXPECT_TRUE(context.has(string_5));
-  EXPECT_TRUE(context.has(string_6));
+  EXPECT_FALSE(context.has(string_1, ContextType::Standalone));
+  EXPECT_FALSE(context.has(string_2, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_3, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_4, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_5, ContextType::Standalone));
+  EXPECT_TRUE(context.has(string_6, ContextType::Standalone));
 }

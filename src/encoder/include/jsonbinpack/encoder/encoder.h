@@ -229,7 +229,7 @@ public:
         sourcemeta::jsontoolkit::to_string(document)};
     const auto size{value.size()};
     assert(sourcemeta::jsontoolkit::size(document) == size);
-    const bool is_shared{this->context().has(value)};
+    const bool is_shared{this->context().has(value, ContextType::Standalone)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -241,9 +241,10 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - this->context().offset(value));
+      this->put_varint(this->position() -
+                       this->context().offset(value, ContextType::Standalone));
     } else {
-      this->context().record(value, this->position());
+      this->context().record(value, this->position(), ContextType::Standalone);
       this->put_string_utf8(value, size);
     }
   }
@@ -257,7 +258,7 @@ public:
     const auto size{value.size()};
     assert(sourcemeta::jsontoolkit::size(document) == size);
     assert(size <= options.maximum);
-    const bool is_shared{this->context().has(value)};
+    const bool is_shared{this->context().has(value, ContextType::Standalone)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -269,9 +270,10 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - this->context().offset(value));
+      this->put_varint(this->position() -
+                       this->context().offset(value, ContextType::Standalone));
     } else {
-      this->context().record(value, this->position());
+      this->context().record(value, this->position(), ContextType::Standalone);
       this->put_string_utf8(value, size);
     }
   }
@@ -287,7 +289,7 @@ public:
     assert(options.minimum <= options.maximum);
     assert(is_byte(options.maximum - options.minimum + 1));
     assert(is_within(size, options.minimum, options.maximum));
-    const bool is_shared{this->context().has(value)};
+    const bool is_shared{this->context().has(value, ContextType::Standalone)};
 
     // (1) Write 0x00 if shared, else do nothing
     if (is_shared) {
@@ -299,9 +301,10 @@ public:
 
     // (3) Write relative offset if shared, else write plain string
     if (is_shared) {
-      this->put_varint(this->position() - this->context().offset(value));
+      this->put_varint(this->position() -
+                       this->context().offset(value, ContextType::Standalone));
     } else {
-      this->context().record(value, this->position());
+      this->context().record(value, this->position(), ContextType::Standalone);
       this->put_string_utf8(value, size);
     }
   }
@@ -473,15 +476,18 @@ public:
       const std::basic_string<CharT> value{
           sourcemeta::jsontoolkit::to_string(document)};
       const auto size{sourcemeta::jsontoolkit::size(document)};
-      const bool is_shared{this->context().has(value)};
+      const bool is_shared{this->context().has(value, ContextType::Standalone)};
       if (size < uint_max<5>) {
         const std::uint8_t type{is_shared ? TYPE_SHARED_STRING : TYPE_STRING};
         this->put_byte(
             static_cast<std::uint8_t>(type | ((size + 1) << type_size)));
         if (is_shared) {
-          this->put_varint(this->position() - this->context().offset(value));
+          this->put_varint(
+              this->position() -
+              this->context().offset(value, ContextType::Standalone));
         } else {
-          this->context().record(value, this->position());
+          this->context().record(value, this->position(),
+                                 ContextType::Standalone);
           this->put_string_utf8(value, size);
         }
       } else if (size >= uint_max<5> && size < uint_max<5> * 2 && !is_shared) {
@@ -529,6 +535,9 @@ public:
   }
 
   /// @}
+
+private:
+  using ContextType = typename encoder::Context<CharT>::Type;
 };
 
 } // namespace sourcemeta::jsonbinpack
