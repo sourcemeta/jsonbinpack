@@ -24,7 +24,7 @@ namespace sourcemeta::jsonbinpack::encoder {
 /// @ingroup encoder
 template <typename CharT> class Context {
 public:
-  enum class Type { Standalone, PrefixLengthVarint };
+  enum class Type { Standalone, PrefixLengthVarintPlusOne };
 
   auto record(const std::basic_string<CharT> &value, const std::uint64_t offset,
               const Type type) -> void {
