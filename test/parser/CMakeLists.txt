@@ -1,5 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_parser_unit
   "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
+  v1_any_parser_test.cc
   v1_array_parser_test.cc
   v1_enum_parser_test.cc
   v1_integer_parser_test.cc
