@@ -114,3 +114,60 @@ TEST(Decoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
       sourcemeta::jsontoolkit::from("2014-10-01")};
   EXPECT_EQ(result, expected);
 }
+
+TEST(Decoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo) {
+  InputByteStream<char> stream{0x04, 0x66, 0x6f, 0x6f};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from("foo")};
+  EXPECT_EQ(result, expected);
+}
+
+TEST(Decoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo_foo_foo_foo) {
+  InputByteStream<char> stream{0x04, 0x66, 0x6f, 0x6f, 0x00,
+                               0x05, 0x00, 0x03, 0x00, 0x03};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result1{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON result2{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON result3{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON result4{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from("foo")};
+  EXPECT_EQ(result1, expected);
+  EXPECT_EQ(result2, expected);
+  EXPECT_EQ(result3, expected);
+  EXPECT_EQ(result4, expected);
+}
+
+TEST(Decoder, PREFIX_VARINT_LENGTH_STRING_SHARED_non_key_foo_key_foo) {
+  InputByteStream<char> stream{0x01, 0x66, 0x6f, 0x6f, 0x04, 0x66, 0x6f, 0x6f};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result1{
+      decoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({3})};
+  const sourcemeta::jsontoolkit::JSON result2{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from("foo")};
+  EXPECT_EQ(result1, expected);
+  EXPECT_EQ(result2, expected);
+}
+
+TEST(Decoder, PREFIX_VARINT_LENGTH_STRING_SHARED_key_foo_non_key_foo) {
+  InputByteStream<char> stream{0x04, 0x66, 0x6f, 0x6f, 0x00, 0x01, 0x05};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result1{
+      decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({})};
+  const sourcemeta::jsontoolkit::JSON result2{
+      decoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({3})};
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::from("foo")};
+  EXPECT_EQ(result1, expected);
+  EXPECT_EQ(result2, expected);
+}

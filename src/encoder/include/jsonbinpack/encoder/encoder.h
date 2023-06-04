@@ -48,13 +48,14 @@ public:
       HANDLE_ENCODING(11, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_ENCODING(12, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_ENCODING(13, RFC3339_DATE_INTEGER_TRIPLET)
-      HANDLE_ENCODING(14, FIXED_TYPED_ARRAY)
-      HANDLE_ENCODING(15, BOUNDED_8BITS_TYPED_ARRAY)
-      HANDLE_ENCODING(16, FLOOR_TYPED_ARRAY)
-      HANDLE_ENCODING(17, ROOF_TYPED_ARRAY)
-      HANDLE_ENCODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
-      HANDLE_ENCODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
-      HANDLE_ENCODING(20, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
+      HANDLE_ENCODING(14, PREFIX_VARINT_LENGTH_STRING_SHARED)
+      HANDLE_ENCODING(15, FIXED_TYPED_ARRAY)
+      HANDLE_ENCODING(16, BOUNDED_8BITS_TYPED_ARRAY)
+      HANDLE_ENCODING(17, FLOOR_TYPED_ARRAY)
+      HANDLE_ENCODING(18, ROOF_TYPED_ARRAY)
+      HANDLE_ENCODING(19, FIXED_TYPED_ARBITRARY_OBJECT)
+      HANDLE_ENCODING(20, VARINT_TYPED_ARBITRARY_OBJECT)
+      HANDLE_ENCODING(21, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_ENCODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -331,6 +332,34 @@ public:
     this->put_bytes(year);
     this->put_byte(month);
     this->put_byte(day);
+  }
+
+  auto PREFIX_VARINT_LENGTH_STRING_SHARED(
+      const sourcemeta::jsontoolkit::Value &document,
+      const PREFIX_VARINT_LENGTH_STRING_SHARED &) -> void {
+    assert(sourcemeta::jsontoolkit::is_string(document));
+    const std::basic_string<CharT> value{
+        sourcemeta::jsontoolkit::to_string(document)};
+
+    if (this->context().has(value, ContextType::PrefixLengthVarintPlusOne)) {
+      const auto new_offset{this->position()};
+      this->put_byte(0);
+      this->put_varint(this->position() -
+                       this->context().offset(
+                           value, ContextType::PrefixLengthVarintPlusOne));
+      // Bump the context cache for locality purposes
+      this->context().record(value, new_offset,
+                             ContextType::PrefixLengthVarintPlusOne);
+    } else {
+      const auto size{value.size()};
+      assert(sourcemeta::jsontoolkit::size(document) == size);
+      this->context().record(value, this->position(),
+                             ContextType::PrefixLengthVarintPlusOne);
+      this->put_varint(size + 1);
+      // Also record a standalone variant of it
+      this->context().record(value, this->position(), ContextType::Standalone);
+      this->put_string_utf8(value, size);
+    }
   }
 
   // TODO: Implement STRING_BROTLI encoding

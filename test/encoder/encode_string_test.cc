@@ -87,3 +87,70 @@ TEST(Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
   encoder.RFC3339_DATE_INTEGER_TRIPLET(document, {});
   EXPECT_BYTES(stream, {0xde, 0x07, 0x0a, 0x01});
 }
+
+TEST(Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo) {
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("foo")};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  EXPECT_BYTES(stream, {
+                           0x04,            // String length + 1
+                           0x66, 0x6f, 0x6f // "foo"
+                       });
+}
+
+TEST(Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo_foo_foo_foo) {
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("foo")};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+
+  EXPECT_BYTES(stream, {
+                           0x04,             // String length + 1
+                           0x66, 0x6f, 0x6f, // "foo"
+                           0x00,             // Start of pointer
+                           0x05, // Pointer (current = 5 - location = 0)
+                           0x00, // Start of pointer
+                           0x03, // Pointer (current = 7 - location = 3)
+                           0x00, // Start of pointer
+                           0x03  // Pointer (current = 9 - location = 3)
+                       });
+}
+
+TEST(Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_non_key_foo_key_foo) {
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("foo")};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3});
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+
+  EXPECT_BYTES(stream, {
+                           0x01,             // String length + 1 - 3
+                           0x66, 0x6f, 0x6f, // "foo"
+                           0x04,             // String length + 1
+                           0x66, 0x6f, 0x6f  // "foo"
+                       });
+}
+
+TEST(Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_key_foo_non_key_foo) {
+  const sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::from("foo")};
+  OutputByteStream<char> stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3});
+
+  EXPECT_BYTES(stream, {
+                           0x04,             // String length + 1
+                           0x66, 0x6f, 0x6f, // "foo"
+                           0x00,             // Start of pointer
+                           0x01,             // String length + 1 - 3
+                           0x05              // Pointer (6 - 1 = 5)
+                       });
+}

@@ -226,3 +226,47 @@ Given the input string `2014-10-01`, the encoding results in:
 +------+------+------+------+
   year   ...    month  day
 ```
+
+`PREFIX_VARINT_LENGTH_STRING_SHARED`
+------------------------------------
+
+The encoding consists of the byte-length of the string plus 1 as a Base-128
+64-bit Little Endian variable-length unsigned integer followed by the UTF-8
+encoding of the input value.
+
+Optionally, if the input string has already been encoded to the buffer using
+this encoding the encoding may consist of the byte constant `0x00` followed by
+the current offset minus the offset to the start of the string as a Base-128
+64-bit Little Endian variable-length unsigned integer.  It is permissible to
+point to another instance of the string that is a pointer itself.
+
+### Options
+
+None
+
+### Conditions
+
+None
+
+### Examples
+
+Given the input string `foo` where the string has not been previously encoded,
+the encoding results in:
+
+```
++------+------+------+------+
+| 0x04 | 0x66 | 0x6f | 0x6f |
++------+------+------+------+
+         f      o      o
+```
+
+Given the encoding of `foo` repeated 3 times, the encoding may result in:
+
+```
+0      1      2      3      4      5      6      7
+^      ^      ^      ^      ^      ^      ^      ^
++------+------+------+------+------+------+------+------+
+| 0x04 | 0x66 | 0x6f | 0x6f | 0x00 | 0x05 | 0x00 | 0x03 |
++------+------+------+------+------+------+------+------+
+         f      o      o             5 - 0         7 - 4
+```
