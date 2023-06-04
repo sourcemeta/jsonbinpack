@@ -59,6 +59,11 @@ auto RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::Value &)
   return sourcemeta::jsonbinpack::RFC3339_DATE_INTEGER_TRIPLET{};
 }
 
+auto PREFIX_VARINT_LENGTH_STRING_SHARED(const sourcemeta::jsontoolkit::Value &)
+    -> Encoding {
+  return sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{};
+}
+
 } // namespace sourcemeta::jsonbinpack::parser::v1
 
 #endif
