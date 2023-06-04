@@ -35,7 +35,7 @@ public:
   // Seek backwards given a relative offset
   inline auto rewind(const std::uint64_t relative_offset,
                      const std::uint64_t position) -> std::uint64_t {
-    assert(position > relative_offset);
+    assert(position >= relative_offset);
     const std::uint64_t offset{position - relative_offset};
     assert(offset < position);
     const std::uint64_t current{this->position()};

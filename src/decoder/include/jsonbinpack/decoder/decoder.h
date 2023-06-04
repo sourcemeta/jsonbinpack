@@ -46,13 +46,14 @@ public:
       HANDLE_DECODING(11, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_DECODING(12, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED)
       HANDLE_DECODING(13, RFC3339_DATE_INTEGER_TRIPLET)
-      HANDLE_DECODING(14, FIXED_TYPED_ARRAY)
-      HANDLE_DECODING(15, BOUNDED_8BITS_TYPED_ARRAY)
-      HANDLE_DECODING(16, FLOOR_TYPED_ARRAY)
-      HANDLE_DECODING(17, ROOF_TYPED_ARRAY)
-      HANDLE_DECODING(18, FIXED_TYPED_ARBITRARY_OBJECT)
-      HANDLE_DECODING(19, VARINT_TYPED_ARBITRARY_OBJECT)
-      HANDLE_DECODING(20, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
+      HANDLE_DECODING(14, PREFIX_VARINT_LENGTH_STRING_SHARED)
+      HANDLE_DECODING(15, FIXED_TYPED_ARRAY)
+      HANDLE_DECODING(16, BOUNDED_8BITS_TYPED_ARRAY)
+      HANDLE_DECODING(17, FLOOR_TYPED_ARRAY)
+      HANDLE_DECODING(18, ROOF_TYPED_ARRAY)
+      HANDLE_DECODING(19, FIXED_TYPED_ARBITRARY_OBJECT)
+      HANDLE_DECODING(20, VARINT_TYPED_ARBITRARY_OBJECT)
+      HANDLE_DECODING(21, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_DECODING
     default:
       // We should never get here. If so, it is definitely a bug
@@ -302,6 +303,22 @@ public:
     output << std::setw(2) << static_cast<std::uint16_t>(day);
 
     return sourcemeta::jsontoolkit::from(output.str());
+  }
+
+  auto PREFIX_VARINT_LENGTH_STRING_SHARED(
+      const PREFIX_VARINT_LENGTH_STRING_SHARED &options)
+      -> sourcemeta::jsontoolkit::JSON {
+    const std::uint64_t prefix{this->get_varint()};
+    if (prefix == 0) {
+      const std::uint64_t position{this->position()};
+      const std::uint64_t current{this->rewind(this->get_varint(), position)};
+      sourcemeta::jsontoolkit::JSON string{
+          PREFIX_VARINT_LENGTH_STRING_SHARED(options)};
+      this->seek(current);
+      return string;
+    } else {
+      return sourcemeta::jsontoolkit::from(this->get_string_utf8(prefix - 1));
+    }
   }
 
   // TODO: Implement STRING_BROTLI encoding
