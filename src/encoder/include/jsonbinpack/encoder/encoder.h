@@ -548,6 +548,7 @@ public:
       const auto size{sourcemeta::jsontoolkit::size(document)};
       if (size >= uint_max<5>) {
         this->put_byte(TYPE_ARRAY);
+        // TODO: Why encode the entire size instead of size - uint_max<5>???
         this->put_varint(size);
       } else {
         this->put_byte(
@@ -557,9 +558,28 @@ public:
       Encoding encoding{
           sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
       this->FIXED_TYPED_ARRAY(document, {size, wrap(std::move(encoding)), {}});
+    } else if (sourcemeta::jsontoolkit::is_object(document)) {
+      const auto size{sourcemeta::jsontoolkit::size(document)};
+      if (size >= uint_max<5>) {
+        this->put_byte(TYPE_OBJECT);
+        // TODO: Why encode the entire size instead of size - uint_max<5>???
+        this->put_varint(size);
+      } else {
+        this->put_byte(
+            static_cast<std::uint8_t>(TYPE_OBJECT | ((size + 1) << type_size)));
+      }
+
+      Encoding key_encoding{
+          sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{}};
+      Encoding value_encoding{
+          sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
+      this->FIXED_TYPED_ARBITRARY_OBJECT(document,
+                                         {size, wrap(std::move(key_encoding)),
+                                          wrap(std::move(value_encoding))});
     } else {
-      // TODO: Not implemented
-      std::terminate();
+      // We should never get here.
+      assert(false);
+      std::abort();
     }
   }
 
