@@ -93,3 +93,18 @@ TEST(Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<RFC3339_DATE_INTEGER_TRIPLET>(result));
 }
+
+TEST(Parser_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
+  const sourcemeta::jsontoolkit::JSON input{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "name": "PREFIX_VARINT_LENGTH_STRING_SHARED",
+    "options": {}
+  })JSON")};
+
+  const sourcemeta::jsonbinpack::Encoding result{
+      sourcemeta::jsonbinpack::parse(input)};
+  using namespace sourcemeta::jsonbinpack;
+  EXPECT_TRUE(
+      std::holds_alternative<PREFIX_VARINT_LENGTH_STRING_SHARED>(result));
+}
