@@ -678,7 +678,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
 TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
-      0x04, 0x1f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x04, 0x00, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
       0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
       0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
   Decoder decoder{stream};
@@ -723,6 +723,57 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   EXPECT_EQ(at(result, 29), from(true));
 
   EXPECT_EQ(at(result, 30), from(true));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0x04, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_array(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 32);
+  using namespace sourcemeta::jsontoolkit;
+
+  EXPECT_EQ(at(result, 0), from(true));
+  EXPECT_EQ(at(result, 1), from(true));
+  EXPECT_EQ(at(result, 2), from(true));
+  EXPECT_EQ(at(result, 3), from(true));
+  EXPECT_EQ(at(result, 4), from(true));
+  EXPECT_EQ(at(result, 5), from(true));
+  EXPECT_EQ(at(result, 6), from(true));
+  EXPECT_EQ(at(result, 7), from(true));
+  EXPECT_EQ(at(result, 8), from(true));
+  EXPECT_EQ(at(result, 9), from(true));
+
+  EXPECT_EQ(at(result, 10), from(true));
+  EXPECT_EQ(at(result, 11), from(true));
+  EXPECT_EQ(at(result, 12), from(true));
+  EXPECT_EQ(at(result, 13), from(true));
+  EXPECT_EQ(at(result, 14), from(true));
+  EXPECT_EQ(at(result, 15), from(true));
+  EXPECT_EQ(at(result, 16), from(true));
+  EXPECT_EQ(at(result, 17), from(true));
+  EXPECT_EQ(at(result, 18), from(true));
+  EXPECT_EQ(at(result, 19), from(true));
+
+  EXPECT_EQ(at(result, 20), from(true));
+  EXPECT_EQ(at(result, 21), from(true));
+  EXPECT_EQ(at(result, 22), from(true));
+  EXPECT_EQ(at(result, 23), from(true));
+  EXPECT_EQ(at(result, 24), from(true));
+  EXPECT_EQ(at(result, 25), from(true));
+  EXPECT_EQ(at(result, 26), from(true));
+  EXPECT_EQ(at(result, 27), from(true));
+  EXPECT_EQ(at(result, 28), from(true));
+  EXPECT_EQ(at(result, 29), from(true));
+
+  EXPECT_EQ(at(result, 30), from(true));
+  EXPECT_EQ(at(result, 31), from(true));
 }
 
 TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
@@ -812,7 +863,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
 TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
-      0x03, 0x1f, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
+      0x03, 0x00, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
       0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03, 0x30,
       0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f, 0x03, 0x30,
       0x38, 0x0f, 0x03, 0x30, 0x39, 0x0f, 0x03, 0x31, 0x30, 0x0f, 0x03, 0x31,
@@ -863,4 +914,61 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   EXPECT_TRUE(is_member_true(result, "29"));
 
   EXPECT_TRUE(is_member_true(result, "30"));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0x03, 0x01, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
+      0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03, 0x30,
+      0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f, 0x03, 0x30,
+      0x38, 0x0f, 0x03, 0x30, 0x39, 0x0f, 0x03, 0x31, 0x30, 0x0f, 0x03, 0x31,
+      0x31, 0x0f, 0x03, 0x31, 0x32, 0x0f, 0x03, 0x31, 0x33, 0x0f, 0x03, 0x31,
+      0x34, 0x0f, 0x03, 0x31, 0x35, 0x0f, 0x03, 0x31, 0x36, 0x0f, 0x03, 0x31,
+      0x37, 0x0f, 0x03, 0x31, 0x38, 0x0f, 0x03, 0x31, 0x39, 0x0f, 0x03, 0x32,
+      0x30, 0x0f, 0x03, 0x32, 0x31, 0x0f, 0x03, 0x32, 0x32, 0x0f, 0x03, 0x32,
+      0x33, 0x0f, 0x03, 0x32, 0x34, 0x0f, 0x03, 0x32, 0x35, 0x0f, 0x03, 0x32,
+      0x36, 0x0f, 0x03, 0x32, 0x37, 0x0f, 0x03, 0x32, 0x38, 0x0f, 0x03, 0x32,
+      0x39, 0x0f, 0x03, 0x33, 0x30, 0x0f, 0x03, 0x33, 0x31, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 32);
+
+  EXPECT_TRUE(is_member_true(result, "00"));
+  EXPECT_TRUE(is_member_true(result, "01"));
+  EXPECT_TRUE(is_member_true(result, "02"));
+  EXPECT_TRUE(is_member_true(result, "03"));
+  EXPECT_TRUE(is_member_true(result, "04"));
+  EXPECT_TRUE(is_member_true(result, "05"));
+  EXPECT_TRUE(is_member_true(result, "06"));
+  EXPECT_TRUE(is_member_true(result, "07"));
+  EXPECT_TRUE(is_member_true(result, "08"));
+  EXPECT_TRUE(is_member_true(result, "09"));
+
+  EXPECT_TRUE(is_member_true(result, "10"));
+  EXPECT_TRUE(is_member_true(result, "11"));
+  EXPECT_TRUE(is_member_true(result, "12"));
+  EXPECT_TRUE(is_member_true(result, "13"));
+  EXPECT_TRUE(is_member_true(result, "14"));
+  EXPECT_TRUE(is_member_true(result, "15"));
+  EXPECT_TRUE(is_member_true(result, "16"));
+  EXPECT_TRUE(is_member_true(result, "17"));
+  EXPECT_TRUE(is_member_true(result, "18"));
+  EXPECT_TRUE(is_member_true(result, "19"));
+
+  EXPECT_TRUE(is_member_true(result, "20"));
+  EXPECT_TRUE(is_member_true(result, "21"));
+  EXPECT_TRUE(is_member_true(result, "22"));
+  EXPECT_TRUE(is_member_true(result, "23"));
+  EXPECT_TRUE(is_member_true(result, "24"));
+  EXPECT_TRUE(is_member_true(result, "25"));
+  EXPECT_TRUE(is_member_true(result, "26"));
+  EXPECT_TRUE(is_member_true(result, "27"));
+  EXPECT_TRUE(is_member_true(result, "28"));
+  EXPECT_TRUE(is_member_true(result, "29"));
+
+  EXPECT_TRUE(is_member_true(result, "30"));
+  EXPECT_TRUE(is_member_true(result, "31"));
 }

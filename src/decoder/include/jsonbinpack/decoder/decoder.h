@@ -494,7 +494,7 @@ public:
             this->get_string_utf8(subtype + uint_max<5>));
       case TYPE_ARRAY:
         return subtype == 0 ? this->FIXED_TYPED_ARRAY(
-                                  {this->get_varint(),
+                                  {this->get_varint() + uint_max<5>,
                                    wrap(sourcemeta::jsonbinpack::
                                             ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
                                    {}})
@@ -506,7 +506,7 @@ public:
       case TYPE_OBJECT:
         return subtype == 0
                    ? this->FIXED_TYPED_ARBITRARY_OBJECT(
-                         {this->get_varint(),
+                         {this->get_varint() + uint_max<5>,
                           wrap(sourcemeta::jsonbinpack::
                                    PREFIX_VARINT_LENGTH_STRING_SHARED{}),
                           wrap(sourcemeta::jsonbinpack::

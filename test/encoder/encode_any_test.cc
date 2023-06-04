@@ -694,11 +694,33 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
   EXPECT_BYTES(stream,
                {0x04, // tag: array
-                0x1f, // length 31
+                0x00, // length 31 - uint5_max
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
+}
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::make_array()};
+  for (auto count = 0; count < 32; count++) {
+    sourcemeta::jsontoolkit::push_back(document,
+                                       sourcemeta::jsontoolkit::from(true));
+  }
+
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(document), 32);
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream,
+               {0x04, // tag: array
+                0x01, // length 32 - uint5_max
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
 }
 
 TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
@@ -849,7 +871,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
   EXPECT_BYTES(stream, {
                            0x03, // tag: object
-                           0x1f, // length 31
+                           0x00, // length 31 - uint5_max
 
                            0x03, 0x30, 0x30, 0x0f, // Key "00" = true
                            0x03, 0x30, 0x31, 0x0f, // Key "01" = true
@@ -885,5 +907,94 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
                            0x03, 0x32, 0x39, 0x0f, // Key "29" = true
 
                            0x03, 0x33, 0x30, 0x0f // Key "30" = true
+                       });
+}
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::make_object()};
+  const sourcemeta::jsontoolkit::JSON value{
+      sourcemeta::jsontoolkit::from(true)};
+
+  sourcemeta::jsontoolkit::assign(document, "00", value);
+  sourcemeta::jsontoolkit::assign(document, "01", value);
+  sourcemeta::jsontoolkit::assign(document, "02", value);
+  sourcemeta::jsontoolkit::assign(document, "03", value);
+  sourcemeta::jsontoolkit::assign(document, "04", value);
+  sourcemeta::jsontoolkit::assign(document, "05", value);
+  sourcemeta::jsontoolkit::assign(document, "06", value);
+  sourcemeta::jsontoolkit::assign(document, "07", value);
+  sourcemeta::jsontoolkit::assign(document, "08", value);
+  sourcemeta::jsontoolkit::assign(document, "09", value);
+
+  sourcemeta::jsontoolkit::assign(document, "10", value);
+  sourcemeta::jsontoolkit::assign(document, "11", value);
+  sourcemeta::jsontoolkit::assign(document, "12", value);
+  sourcemeta::jsontoolkit::assign(document, "13", value);
+  sourcemeta::jsontoolkit::assign(document, "14", value);
+  sourcemeta::jsontoolkit::assign(document, "15", value);
+  sourcemeta::jsontoolkit::assign(document, "16", value);
+  sourcemeta::jsontoolkit::assign(document, "17", value);
+  sourcemeta::jsontoolkit::assign(document, "18", value);
+  sourcemeta::jsontoolkit::assign(document, "19", value);
+
+  sourcemeta::jsontoolkit::assign(document, "20", value);
+  sourcemeta::jsontoolkit::assign(document, "21", value);
+  sourcemeta::jsontoolkit::assign(document, "22", value);
+  sourcemeta::jsontoolkit::assign(document, "23", value);
+  sourcemeta::jsontoolkit::assign(document, "24", value);
+  sourcemeta::jsontoolkit::assign(document, "25", value);
+  sourcemeta::jsontoolkit::assign(document, "26", value);
+  sourcemeta::jsontoolkit::assign(document, "27", value);
+  sourcemeta::jsontoolkit::assign(document, "28", value);
+  sourcemeta::jsontoolkit::assign(document, "29", value);
+
+  sourcemeta::jsontoolkit::assign(document, "30", value);
+  sourcemeta::jsontoolkit::assign(document, "31", value);
+
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream, {
+                           0x03, // tag: object
+                           0x01, // length 32 - uint5_max
+
+                           0x03, 0x30, 0x30, 0x0f, // Key "00" = true
+                           0x03, 0x30, 0x31, 0x0f, // Key "01" = true
+                           0x03, 0x30, 0x32, 0x0f, // Key "02" = true
+                           0x03, 0x30, 0x33, 0x0f, // Key "03" = true
+                           0x03, 0x30, 0x34, 0x0f, // Key "04" = true
+                           0x03, 0x30, 0x35, 0x0f, // Key "05" = true
+                           0x03, 0x30, 0x36, 0x0f, // Key "06" = true
+                           0x03, 0x30, 0x37, 0x0f, // Key "07" = true
+                           0x03, 0x30, 0x38, 0x0f, // Key "08" = true
+                           0x03, 0x30, 0x39, 0x0f, // Key "09" = true
+
+                           0x03, 0x31, 0x30, 0x0f, // Key "10" = true
+                           0x03, 0x31, 0x31, 0x0f, // Key "11" = true
+                           0x03, 0x31, 0x32, 0x0f, // Key "12" = true
+                           0x03, 0x31, 0x33, 0x0f, // Key "13" = true
+                           0x03, 0x31, 0x34, 0x0f, // Key "14" = true
+                           0x03, 0x31, 0x35, 0x0f, // Key "15" = true
+                           0x03, 0x31, 0x36, 0x0f, // Key "16" = true
+                           0x03, 0x31, 0x37, 0x0f, // Key "17" = true
+                           0x03, 0x31, 0x38, 0x0f, // Key "18" = true
+                           0x03, 0x31, 0x39, 0x0f, // Key "19" = true
+
+                           0x03, 0x32, 0x30, 0x0f, // Key "20" = true
+                           0x03, 0x32, 0x31, 0x0f, // Key "21" = true
+                           0x03, 0x32, 0x32, 0x0f, // Key "22" = true
+                           0x03, 0x32, 0x33, 0x0f, // Key "23" = true
+                           0x03, 0x32, 0x34, 0x0f, // Key "24" = true
+                           0x03, 0x32, 0x35, 0x0f, // Key "25" = true
+                           0x03, 0x32, 0x36, 0x0f, // Key "26" = true
+                           0x03, 0x32, 0x37, 0x0f, // Key "27" = true
+                           0x03, 0x32, 0x38, 0x0f, // Key "28" = true
+                           0x03, 0x32, 0x39, 0x0f, // Key "29" = true
+
+                           0x03, 0x33, 0x30, 0x0f, // Key "30" = true
+                           0x03, 0x33, 0x31, 0x0f  // Key "31" = true
                        });
 }

@@ -548,8 +548,7 @@ public:
       const auto size{sourcemeta::jsontoolkit::size(document)};
       if (size >= uint_max<5>) {
         this->put_byte(TYPE_ARRAY);
-        // TODO: Why encode the entire size instead of size - uint_max<5>???
-        this->put_varint(size);
+        this->put_varint(size - uint_max<5>);
       } else {
         this->put_byte(
             static_cast<std::uint8_t>(TYPE_ARRAY | ((size + 1) << type_size)));
@@ -562,8 +561,7 @@ public:
       const auto size{sourcemeta::jsontoolkit::size(document)};
       if (size >= uint_max<5>) {
         this->put_byte(TYPE_OBJECT);
-        // TODO: Why encode the entire size instead of size - uint_max<5>???
-        this->put_varint(size);
+        this->put_varint(size - uint_max<5>);
       } else {
         this->put_byte(
             static_cast<std::uint8_t>(TYPE_OBJECT | ((size + 1) << type_size)));
