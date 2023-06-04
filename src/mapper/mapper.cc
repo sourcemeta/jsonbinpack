@@ -1,5 +1,7 @@
+#include <jsonbinpack/mapper/encoding.h>
 #include <jsonbinpack/mapper/mapper.h>
 
+#include <cassert>    // assert
 #include <functional> // std::function
 #include <stdexcept>  // std::domain_error
 
@@ -94,4 +96,12 @@ auto sourcemeta::jsonbinpack::Mapper::apply(
   }
 
   this->bundle.apply(document, value, default_metaschema);
+
+  // The "any" encoding is always the last resort
+  if (!mapper::is_encoding(value)) {
+    mapper::make_encoding(document, value, "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+                          sourcemeta::jsontoolkit::make_object());
+  }
+
+  assert(mapper::is_encoding(value));
 }
