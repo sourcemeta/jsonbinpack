@@ -20,5 +20,8 @@ endmacro()
 
 add_jsonbinpack_e2e_test(circleciblank)
 add_jsonbinpack_e2e_test(circlecimatrix)
+add_jsonbinpack_e2e_test(commitlint)
+add_jsonbinpack_e2e_test(commitlintbasic)
+add_jsonbinpack_e2e_test(epr)
 
 # TODO: Add remaining e2e tests from benchmark paper
