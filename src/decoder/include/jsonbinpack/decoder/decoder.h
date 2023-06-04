@@ -503,15 +503,26 @@ public:
                                    wrap(sourcemeta::jsonbinpack::
                                             ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
                                    {}});
+      case TYPE_OBJECT:
+        return subtype == 0
+                   ? this->FIXED_TYPED_ARBITRARY_OBJECT(
+                         {this->get_varint(),
+                          wrap(sourcemeta::jsonbinpack::
+                                   PREFIX_VARINT_LENGTH_STRING_SHARED{}),
+                          wrap(sourcemeta::jsonbinpack::
+                                   ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})})
+                   : this->FIXED_TYPED_ARBITRARY_OBJECT(
+                         {static_cast<std::uint64_t>(subtype - 1),
+                          wrap(sourcemeta::jsonbinpack::
+                                   PREFIX_VARINT_LENGTH_STRING_SHARED{}),
+                          wrap(sourcemeta::jsonbinpack::
+                                   ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})});
       default:
         // We should never get here. If so, it is definitely a bug
         assert(false);
         std::abort();
       }
     }
-
-    // TODO: Not implemented
-    std::terminate();
   }
 
   /// @}

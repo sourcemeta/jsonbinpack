@@ -724,3 +724,143 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
 
   EXPECT_EQ(at(result, 30), from(true));
 }
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x21, 0x62,
+                               0x61, 0x72, 0x04, 0x62, 0x61, 0x7a, 0x15};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 2);
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "foo"));
+  const auto &foo{sourcemeta::jsontoolkit::at(result, "foo")};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_string(foo));
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_string(foo), "bar");
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "baz"));
+  const auto &baz{sourcemeta::jsontoolkit::at(result, "baz")};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_integer(baz));
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(baz), 1);
+}
+
+static auto is_member_true(const sourcemeta::jsontoolkit::JSON &object,
+                           const std::string &key) -> bool {
+  return sourcemeta::jsontoolkit::defines(object, key) &&
+         sourcemeta::jsontoolkit::is_boolean(
+             sourcemeta::jsontoolkit::at(object, key)) &&
+         sourcemeta::jsontoolkit::to_boolean(
+             sourcemeta::jsontoolkit::at(object, key));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0xfb, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
+      0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03,
+      0x30, 0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f,
+      0x03, 0x30, 0x38, 0x0f, 0x03, 0x30, 0x39, 0x0f, 0x03, 0x31, 0x30,
+      0x0f, 0x03, 0x31, 0x31, 0x0f, 0x03, 0x31, 0x32, 0x0f, 0x03, 0x31,
+      0x33, 0x0f, 0x03, 0x31, 0x34, 0x0f, 0x03, 0x31, 0x35, 0x0f, 0x03,
+      0x31, 0x36, 0x0f, 0x03, 0x31, 0x37, 0x0f, 0x03, 0x31, 0x38, 0x0f,
+      0x03, 0x31, 0x39, 0x0f, 0x03, 0x32, 0x30, 0x0f, 0x03, 0x32, 0x31,
+      0x0f, 0x03, 0x32, 0x32, 0x0f, 0x03, 0x32, 0x33, 0x0f, 0x03, 0x32,
+      0x34, 0x0f, 0x03, 0x32, 0x35, 0x0f, 0x03, 0x32, 0x36, 0x0f, 0x03,
+      0x32, 0x37, 0x0f, 0x03, 0x32, 0x38, 0x0f, 0x03, 0x32, 0x39, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 30);
+
+  EXPECT_TRUE(is_member_true(result, "00"));
+  EXPECT_TRUE(is_member_true(result, "01"));
+  EXPECT_TRUE(is_member_true(result, "02"));
+  EXPECT_TRUE(is_member_true(result, "03"));
+  EXPECT_TRUE(is_member_true(result, "04"));
+  EXPECT_TRUE(is_member_true(result, "05"));
+  EXPECT_TRUE(is_member_true(result, "06"));
+  EXPECT_TRUE(is_member_true(result, "07"));
+  EXPECT_TRUE(is_member_true(result, "08"));
+  EXPECT_TRUE(is_member_true(result, "09"));
+
+  EXPECT_TRUE(is_member_true(result, "10"));
+  EXPECT_TRUE(is_member_true(result, "11"));
+  EXPECT_TRUE(is_member_true(result, "12"));
+  EXPECT_TRUE(is_member_true(result, "13"));
+  EXPECT_TRUE(is_member_true(result, "14"));
+  EXPECT_TRUE(is_member_true(result, "15"));
+  EXPECT_TRUE(is_member_true(result, "16"));
+  EXPECT_TRUE(is_member_true(result, "17"));
+  EXPECT_TRUE(is_member_true(result, "18"));
+  EXPECT_TRUE(is_member_true(result, "19"));
+
+  EXPECT_TRUE(is_member_true(result, "20"));
+  EXPECT_TRUE(is_member_true(result, "21"));
+  EXPECT_TRUE(is_member_true(result, "22"));
+  EXPECT_TRUE(is_member_true(result, "23"));
+  EXPECT_TRUE(is_member_true(result, "24"));
+  EXPECT_TRUE(is_member_true(result, "25"));
+  EXPECT_TRUE(is_member_true(result, "26"));
+  EXPECT_TRUE(is_member_true(result, "27"));
+  EXPECT_TRUE(is_member_true(result, "28"));
+  EXPECT_TRUE(is_member_true(result, "29"));
+}
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0x03, 0x1f, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
+      0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03, 0x30,
+      0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f, 0x03, 0x30,
+      0x38, 0x0f, 0x03, 0x30, 0x39, 0x0f, 0x03, 0x31, 0x30, 0x0f, 0x03, 0x31,
+      0x31, 0x0f, 0x03, 0x31, 0x32, 0x0f, 0x03, 0x31, 0x33, 0x0f, 0x03, 0x31,
+      0x34, 0x0f, 0x03, 0x31, 0x35, 0x0f, 0x03, 0x31, 0x36, 0x0f, 0x03, 0x31,
+      0x37, 0x0f, 0x03, 0x31, 0x38, 0x0f, 0x03, 0x31, 0x39, 0x0f, 0x03, 0x32,
+      0x30, 0x0f, 0x03, 0x32, 0x31, 0x0f, 0x03, 0x32, 0x32, 0x0f, 0x03, 0x32,
+      0x33, 0x0f, 0x03, 0x32, 0x34, 0x0f, 0x03, 0x32, 0x35, 0x0f, 0x03, 0x32,
+      0x36, 0x0f, 0x03, 0x32, 0x37, 0x0f, 0x03, 0x32, 0x38, 0x0f, 0x03, 0x32,
+      0x39, 0x0f, 0x03, 0x33, 0x30, 0x0f};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 31);
+
+  EXPECT_TRUE(is_member_true(result, "00"));
+  EXPECT_TRUE(is_member_true(result, "01"));
+  EXPECT_TRUE(is_member_true(result, "02"));
+  EXPECT_TRUE(is_member_true(result, "03"));
+  EXPECT_TRUE(is_member_true(result, "04"));
+  EXPECT_TRUE(is_member_true(result, "05"));
+  EXPECT_TRUE(is_member_true(result, "06"));
+  EXPECT_TRUE(is_member_true(result, "07"));
+  EXPECT_TRUE(is_member_true(result, "08"));
+  EXPECT_TRUE(is_member_true(result, "09"));
+
+  EXPECT_TRUE(is_member_true(result, "10"));
+  EXPECT_TRUE(is_member_true(result, "11"));
+  EXPECT_TRUE(is_member_true(result, "12"));
+  EXPECT_TRUE(is_member_true(result, "13"));
+  EXPECT_TRUE(is_member_true(result, "14"));
+  EXPECT_TRUE(is_member_true(result, "15"));
+  EXPECT_TRUE(is_member_true(result, "16"));
+  EXPECT_TRUE(is_member_true(result, "17"));
+  EXPECT_TRUE(is_member_true(result, "18"));
+  EXPECT_TRUE(is_member_true(result, "19"));
+
+  EXPECT_TRUE(is_member_true(result, "20"));
+  EXPECT_TRUE(is_member_true(result, "21"));
+  EXPECT_TRUE(is_member_true(result, "22"));
+  EXPECT_TRUE(is_member_true(result, "23"));
+  EXPECT_TRUE(is_member_true(result, "24"));
+  EXPECT_TRUE(is_member_true(result, "25"));
+  EXPECT_TRUE(is_member_true(result, "26"));
+  EXPECT_TRUE(is_member_true(result, "27"));
+  EXPECT_TRUE(is_member_true(result, "28"));
+  EXPECT_TRUE(is_member_true(result, "29"));
+
+  EXPECT_TRUE(is_member_true(result, "30"));
+}
