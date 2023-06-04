@@ -5,14 +5,13 @@
 #include <cstdint> // std::uint8_t, std::uint64_t
 #include <istream> // std::basic_istream
 
-static const std::uint8_t LEAST_SIGNIFICANT_BITS{0b01111111};
-static const std::uint8_t MOST_SIGNIFICANT_BIT{0b10000000};
-static const std::uint8_t SHIFT{7};
-
 namespace sourcemeta::jsonbinpack::decoder {
 
 template <typename CharT, typename Traits>
 auto varint(std::basic_istream<CharT, Traits> &stream) -> std::uint64_t {
+  constexpr std::uint8_t LEAST_SIGNIFICANT_BITS{0b01111111};
+  constexpr std::uint8_t MOST_SIGNIFICANT_BIT{0b10000000};
+  constexpr std::uint8_t SHIFT{7};
   std::uint64_t result{0};
   std::size_t cursor{0};
   while (true) {
