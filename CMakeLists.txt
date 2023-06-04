@@ -69,6 +69,7 @@ if(JSONBINPACK_TESTS)
   if(JSONBINPACK_CLI)
     add_subdirectory(test/cli)
   endif()
+  add_subdirectory(test/e2e)
 endif()
 
 # Only for top-level builds
