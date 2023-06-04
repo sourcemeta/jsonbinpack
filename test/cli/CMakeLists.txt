@@ -12,39 +12,39 @@ else()
   set(SAME_STDIN_BIN "${CMAKE_CURRENT_SOURCE_DIR}/same_stdin.sh")
 endif()
 
-add_test(NAME JSONBinPack.cli_version
+add_test(NAME cli.version
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 0 "${CMAKE_PROJECT_VERSION}" version)
 
-add_test(NAME JSONBinPack.cli_default
+add_test(NAME cli.default
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 1 "Usage:")
 
-add_test(NAME JSONBinPack.cli_help
+add_test(NAME cli.help
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 0 "Usage:" help)
 
-add_test(NAME JSONBinPack.cli_unknown
+add_test(NAME cli.unknown
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 1 "Unknown command" foobarbaz)
 
-add_test(NAME JSONBinPack.cli_canonicalize_file
+add_test(NAME cli.canonicalize_file
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
   canonicalize "${CMAKE_CURRENT_SOURCE_DIR}/schema_boolean.json")
 
-add_test(NAME JSONBinPack.cli_canonicalize_stdin
+add_test(NAME cli.canonicalize_stdin
   COMMAND "${RUNNER_STDIN_BIN}"
   "${CMAKE_CURRENT_SOURCE_DIR}/schema_boolean.json"
   "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
   canonicalize)
 
-add_test(NAME JSONBinPack.cli_compile_file
+add_test(NAME cli.compile_file
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 0 "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED"
   compile "${CMAKE_CURRENT_SOURCE_DIR}/schema_bounded_integer.json")
 
-add_test(NAME JSONBinPack.cli_compile_stdin
+add_test(NAME cli.compile_stdin
   COMMAND "${RUNNER_STDIN_BIN}"
   "${CMAKE_CURRENT_SOURCE_DIR}/schema_bounded_integer.json"
   "${JSONBINPACK_CLI_PATH}" 0 "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED"
@@ -52,25 +52,25 @@ add_test(NAME JSONBinPack.cli_compile_stdin
 
 # Encoding Schema
 
-add_test(NAME JSONBinPack.cli_encode_encoding_schema_arg
+add_test(NAME cli.encode_encoding_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin" encode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json")
 
-add_test(NAME JSONBinPack.cli_decode_encoding_schema_arg
+add_test(NAME cli.decode_encoding_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json" decode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin")
 
-add_test(NAME JSONBinPack.cli_encode_encoding_schema_stdin
+add_test(NAME cli.encode_encoding_schema_stdin
   COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   encode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json")
 
-add_test(NAME JSONBinPack.cli_decode_encoding_schema_stdin
+add_test(NAME cli.decode_encoding_schema_stdin
   COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
@@ -78,25 +78,25 @@ add_test(NAME JSONBinPack.cli_decode_encoding_schema_stdin
 
 # JSON Schema
 
-add_test(NAME JSONBinPack.cli_encode_json_schema_arg
+add_test(NAME cli.encode_json_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin" encode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json")
 
-add_test(NAME JSONBinPack.cli_decode_json_schema_arg
+add_test(NAME cli.decode_json_schema_arg
   COMMAND "${SAME_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json" decode
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin")
 
-add_test(NAME JSONBinPack.cli_encode_json_schema_stdin
+add_test(NAME cli.encode_json_schema_stdin
   COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   encode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json")
 
-add_test(NAME JSONBinPack.cli_decode_json_schema_stdin
+add_test(NAME cli.decode_json_schema_stdin
   COMMAND "${SAME_STDIN_BIN}" "${JSONBINPACK_CLI_PATH}"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
