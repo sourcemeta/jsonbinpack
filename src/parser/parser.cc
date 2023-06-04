@@ -1,5 +1,6 @@
 #include <jsonbinpack/parser/parser.h>
 
+#include "v1_any.h"
 #include "v1_array.h"
 #include "v1_enum.h"
 #include "v1_integer.h"
@@ -46,6 +47,8 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
   PARSE_ENCODING(v1, BOUNDED_8BITS_TYPED_ARRAY)
   PARSE_ENCODING(v1, FLOOR_TYPED_ARRAY)
   PARSE_ENCODING(v1, ROOF_TYPED_ARRAY)
+  // Any
+  PARSE_ENCODING(v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 
 #undef PARSE_ENCODING
 
