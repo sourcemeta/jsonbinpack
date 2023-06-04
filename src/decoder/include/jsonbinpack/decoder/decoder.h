@@ -465,16 +465,6 @@ public:
         assert(false);
         std::abort();
       }
-
-      // TODO: Bring this back into the switch clause below
-    } else if (type == TYPE_SHARED_STRING) {
-      const std::uint64_t position{this->position()};
-      const std::uint64_t current{this->rewind(this->get_varint(), position)};
-      sourcemeta::jsontoolkit::JSON string{
-          sourcemeta::jsontoolkit::from(this->get_string_utf8(subtype - 1))};
-      this->seek(current);
-      return string;
-
     } else {
       switch (type) {
       case TYPE_POSITIVE_INTEGER_BYTE:
@@ -484,6 +474,14 @@ public:
         return sourcemeta::jsontoolkit::from(
             subtype > 0 ? static_cast<std::int64_t>(-subtype)
                         : static_cast<std::int64_t>(-this->get_byte() - 1));
+      case TYPE_SHARED_STRING: {
+        const std::uint64_t position{this->position()};
+        const std::uint64_t current{this->rewind(this->get_varint(), position)};
+        sourcemeta::jsontoolkit::JSON string{
+            sourcemeta::jsontoolkit::from(this->get_string_utf8(subtype - 1))};
+        this->seek(current);
+        return string;
+      };
       case TYPE_STRING:
         return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
                                   {uint_max<5> * 2})
