@@ -540,9 +540,11 @@ public:
           this->put_byte(TYPE_STRING);
         }
 
-        // If we got this far, the string is at least a certain length
-        return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document,
-                                                      {uint_max<5> * 2});
+        // If we got this far, the string is at least a certain length.
+        // However, we can't impose a minimum given that if the string is
+        // shared, its type at decoding will be interpreted as
+        // TYPE_SHARED_STRING, which cannot have a floor.
+        return FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {0});
       }
     } else if (sourcemeta::jsontoolkit::is_array(document)) {
       const auto size{sourcemeta::jsontoolkit::size(document)};

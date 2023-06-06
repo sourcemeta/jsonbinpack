@@ -483,8 +483,7 @@ public:
         return string;
       };
       case TYPE_STRING:
-        return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-                                  {uint_max<5> * 2})
+        return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({0})
                             : sourcemeta::jsontoolkit::from(
                                   this->get_string_utf8(subtype - 1));
       case TYPE_LONG_STRING:
