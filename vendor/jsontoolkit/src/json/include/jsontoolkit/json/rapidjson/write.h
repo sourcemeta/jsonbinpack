@@ -91,7 +91,7 @@ inline auto assign(JSON &root, Value &value, const std::string &key,
   if (defines(value, key)) {
     value[key] = Value{member, allocator};
   } else {
-    value.AddMember(from(key), Value{member, allocator}, allocator);
+    value.AddMember(Value{key, allocator}, Value{member, allocator}, allocator);
   }
 }
 
@@ -106,8 +106,8 @@ inline auto assign(JSON &root, Value &value, const std::string &key,
   if (defines(value, key)) {
     value[key] = member;
   } else {
-    value.AddMember(from(key), Value{member, root.GetAllocator()},
-                    root.GetAllocator());
+    auto &allocator{root.GetAllocator()};
+    value.AddMember(Value{key, allocator}, Value{member, allocator}, allocator);
   }
 }
 

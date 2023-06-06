@@ -5,7 +5,10 @@
 #include "read.h"
 
 #include <cassert>  // assert
-#include <iterator> // std::reverse_iterator
+#include <cstddef>  // std::ptrdiff_t
+#include <iterator> // std::reverse_iterator,
+                    // std::random_access_iterator,
+                    // std::bidirectional_iterator_tag
 
 namespace sourcemeta::jsontoolkit {
 
@@ -94,6 +97,92 @@ inline auto end_object(Value &value) -> rapidjson::Value::MemberIterator {
   assert(is_object(value));
   return value.MemberEnd();
 }
+
+class ArrayIteratorWrapper {
+public:
+  using iterator_category = std::random_access_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = rapidjson::Value;
+  using pointer = value_type *;
+  using reference = value_type &;
+
+  ArrayIteratorWrapper(Value &input) : data{input} { assert(is_array(input)); }
+  auto begin() -> rapidjson::Value::ValueIterator {
+    return begin_array(this->data);
+  }
+  auto end() -> rapidjson::Value::ValueIterator {
+    return end_array(this->data);
+  }
+
+private:
+  Value &data;
+};
+
+class ConstArrayIteratorWrapper {
+public:
+  using iterator_category = std::random_access_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = const rapidjson::Value;
+  using pointer = value_type *;
+  using reference = value_type &;
+
+  ConstArrayIteratorWrapper(const Value &input) : data{input} {
+    assert(is_array(input));
+  }
+  auto begin() const -> rapidjson::Value::ConstValueIterator {
+    return cbegin_array(this->data);
+  }
+  auto end() const -> rapidjson::Value::ConstValueIterator {
+    return cend_array(this->data);
+  }
+
+private:
+  const Value &data;
+};
+
+class ObjectIteratorWrapper {
+public:
+  using iterator_category = std::bidirectional_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = rapidjson::Value::Member;
+  using pointer = value_type *;
+  using reference = value_type &;
+
+  ObjectIteratorWrapper(Value &input) : data{input} {
+    assert(is_object(input));
+  }
+  auto begin() -> rapidjson::Value::MemberIterator {
+    return begin_object(this->data);
+  }
+  auto end() -> rapidjson::Value::MemberIterator {
+    return end_object(this->data);
+  }
+
+private:
+  Value &data;
+};
+
+class ConstObjectIteratorWrapper {
+public:
+  using iterator_category = std::bidirectional_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = const rapidjson::Value::Member;
+  using pointer = value_type *;
+  using reference = value_type &;
+
+  ConstObjectIteratorWrapper(const Value &input) : data{input} {
+    assert(is_object(input));
+  }
+  auto begin() const -> rapidjson::Value::ConstMemberIterator {
+    return cbegin_object(this->data);
+  }
+  auto end() const -> rapidjson::Value::ConstMemberIterator {
+    return cend_object(this->data);
+  }
+
+private:
+  const Value &data;
+};
 
 } // namespace sourcemeta::jsontoolkit
 
