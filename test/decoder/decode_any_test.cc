@@ -972,3 +972,30 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   EXPECT_TRUE(is_member_true(result, "30"));
   EXPECT_TRUE(is_member_true(result, "31"));
 }
+
+TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream<char> stream{
+      0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x01, 0x01, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x04, 0x62, 0x61, 0x72, 0x00, 0x01, 0x44};
+  Decoder decoder{stream};
+  const sourcemeta::jsontoolkit::JSON result{
+      decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({})};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
+  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 2);
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "foo"));
+  const auto &foo{sourcemeta::jsontoolkit::at(result, "foo")};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_string(foo));
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_string(foo), std::string(62, 'x'));
+
+  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "bar"));
+  const auto &baz{sourcemeta::jsontoolkit::at(result, "bar")};
+  EXPECT_TRUE(sourcemeta::jsontoolkit::is_string(baz));
+  EXPECT_EQ(sourcemeta::jsontoolkit::to_string(baz), std::string(62, 'x'));
+}
