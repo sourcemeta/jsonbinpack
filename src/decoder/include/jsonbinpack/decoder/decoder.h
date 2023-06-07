@@ -232,7 +232,8 @@ public:
     if (is_shared) {
       const std::uint64_t position{this->position()};
       const std::uint64_t current{this->rewind(this->get_varint(), position)};
-      sourcemeta::jsontoolkit::JSON string{UTF8_STRING_NO_LENGTH({length})};
+      sourcemeta::jsontoolkit::JSON string{
+          sourcemeta::jsontoolkit::from(this->get_string_utf8(length))};
       this->seek(current);
       return string;
     } else {
