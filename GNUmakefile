@@ -5,11 +5,10 @@ CTEST ?= ctest
 BUNDLE ?= bundle
 
 PRESET ?= debug
-GENERATOR ?= Ninja Multi-Config
 
 .PHONY: all
 all:
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --parallel
@@ -18,13 +17,13 @@ all:
 CASE ?=
 ifdef CASE
 test:
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --verbose --tests-regex $(CASE)
 else
 test:
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target clang_format
 	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --verbose
@@ -33,7 +32,7 @@ endif
 .PHONY: debug
 ifdef CASE
 debug: scripts/lldb.sh
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --parallel
 	./$< $(PRESET) $(CASE)
 else
@@ -48,12 +47,12 @@ clean:
 
 .PHONY: jekyll
 jekyll:
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target bundler
 	$(BUNDLE) exec jekyll serve --watch --incremental --trace \
 		--source www --destination build/$(PRESET)/www
 
 .PHONY: doxygen
 doxygen:
-	$(CMAKE) --preset $(PRESET) --log-context -G "$(GENERATOR)"
+	$(CMAKE) --preset $(PRESET) --log-context
 	$(CMAKE) --build --preset $(PRESET) --target doxygen
