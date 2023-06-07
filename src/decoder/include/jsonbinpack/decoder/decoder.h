@@ -476,10 +476,13 @@ public:
             subtype > 0 ? static_cast<std::int64_t>(-subtype)
                         : static_cast<std::int64_t>(-this->get_byte() - 1));
       case TYPE_SHARED_STRING: {
+        const auto length = subtype == 0
+                                ? this->get_varint() - 1 + uint_max<5> * 2
+                                : subtype - 1;
         const std::uint64_t position{this->position()};
         const std::uint64_t current{this->rewind(this->get_varint(), position)};
         sourcemeta::jsontoolkit::JSON string{
-            sourcemeta::jsontoolkit::from(this->get_string_utf8(subtype - 1))};
+            sourcemeta::jsontoolkit::from(this->get_string_utf8(length))};
         this->seek(current);
         return string;
       };

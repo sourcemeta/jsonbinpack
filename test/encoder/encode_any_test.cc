@@ -998,3 +998,39 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
                            0x03, 0x33, 0x31, 0x0f  // Key "31" = true
                        });
 }
+
+TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{
+      sourcemeta::jsontoolkit::make_object()};
+  sourcemeta::jsontoolkit::assign(
+      document, "foo", sourcemeta::jsontoolkit::from(std::string(62, 'x')));
+  sourcemeta::jsontoolkit::assign(
+      document, "bar", sourcemeta::jsontoolkit::from(std::string(62, 'x')));
+
+  OutputByteStream<char> stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream,
+               {
+                   0x1b,                   // tag: object (with length 2)
+                   0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
+                   0x01,                   // tag: string
+                   0x01, // length 62 (with uint5_max as minimum)
+
+                   // 62 "x"s
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                   0x78, 0x78,
+
+                   0x04, 0x62, 0x61, 0x72, // String tag + length + 'bar'
+                   0x00,                   // tag: shared string
+                   0x01, // length 62 (with uint5_max as minimum)
+                   0x44  // pointer: 75 - 7 = 68
+               });
+}
