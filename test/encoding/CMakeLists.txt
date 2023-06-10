@@ -1,7 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_encodings_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   encoding_traits_test.cc encoding_wrap_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_encodings_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_encodings_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_encodings_unit PRIVATE sourcemeta_jsonbinpack_encoding)
 target_link_libraries(sourcemeta_jsonbinpack_encodings_unit PRIVATE sourcemeta_jsontoolkit_json)
 gtest_discover_tests(sourcemeta_jsonbinpack_encodings_unit)

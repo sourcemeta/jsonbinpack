@@ -1,7 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_numeric_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   closest_smallest_exponent_test.cc
   divide_ceil_test.cc divide_floor_test.cc uint_max_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE sourcemeta_jsonbinpack_numeric)
 gtest_discover_tests(sourcemeta_jsonbinpack_numeric_unit)

@@ -46,7 +46,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream canonical_output_stream(directory / "canonical.json");
   canonical_output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::prettify(schema, canonical_output_stream);
-  canonical_output_stream << std::endl;
+  canonical_output_stream << "\n";
   canonical_output_stream.flush();
   canonical_output_stream.close();
 
@@ -56,7 +56,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream mapper_output_stream(directory / "encoding.json");
   mapper_output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::prettify(schema, mapper_output_stream);
-  mapper_output_stream << std::endl;
+  mapper_output_stream << "\n";
   mapper_output_stream.flush();
   mapper_output_stream.close();
 

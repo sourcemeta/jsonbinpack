@@ -1,12 +1,11 @@
 add_executable(sourcemeta_jsonbinpack_parser_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   v1_any_parser_test.cc
   v1_array_parser_test.cc
   v1_enum_parser_test.cc
   v1_integer_parser_test.cc
   v1_number_parser_test.cc
   v1_string_parser_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta_jsonbinpack_parser)
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta_jsonbinpack_encoding)
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta_jsontoolkit_json)
