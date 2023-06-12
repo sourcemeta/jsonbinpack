@@ -1,5 +1,4 @@
 add_executable(sourcemeta_jsonbinpack_mapper_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   is_encoding_unit.cc make_encoding_unit.cc
   mapper_test.cc
   2020_12_mapper_any_test.cc
@@ -7,7 +6,7 @@ add_executable(sourcemeta_jsonbinpack_mapper_unit
   2020_12_mapper_integer_test.cc
   2020_12_mapper_number_test.cc
   2020_12_states_integer_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsonbinpack_mapper)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsonbinpack_canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsontoolkit_json)
