@@ -1,5 +1,4 @@
 add_executable(sourcemeta_jsonbinpack_decoder_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   decode_utils.h decode_test.cc decode_varint_test.cc
   decode_zigzag_test.cc decode_traits_test.cc
   decode_any_test.cc
@@ -9,7 +8,7 @@ add_executable(sourcemeta_jsonbinpack_decoder_unit
   decode_number_test.cc
   decode_object_test.cc
   decode_string_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_decoder_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_decoder_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_decoder_unit PRIVATE sourcemeta_jsonbinpack_decoder)
 target_link_libraries(sourcemeta_jsonbinpack_decoder_unit PRIVATE sourcemeta_jsontoolkit_json)
 gtest_discover_tests(sourcemeta_jsonbinpack_decoder_unit)
