@@ -12,7 +12,7 @@
 #include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
 #include <fstream>    // std::ifstream
-#include <ios>        // std::ios_base
+#include <ios>        // std::ios_base, std::ios::binary
 #include <iostream>   // std::cin, std::cout
 #include <istream>    // std::basic_istream
 
@@ -37,8 +37,8 @@ static auto decode_from_stream(sourcemeta::jsontoolkit::JSON &schema,
 auto sourcemeta::jsonbinpack::cli::decode(
     const std::filesystem::path &schema_path,
     const std::filesystem::path &data_path) -> int {
-  std::ifstream schema_stream{schema_path};
-  std::ifstream data_stream{data_path};
+  std::ifstream schema_stream{schema_path, std::ios::binary};
+  std::ifstream data_stream{data_path, std::ios::binary};
   schema_stream.exceptions(std::ios_base::badbit);
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{
@@ -48,7 +48,7 @@ auto sourcemeta::jsonbinpack::cli::decode(
 
 auto sourcemeta::jsonbinpack::cli::decode(
     const std::filesystem::path &schema_path) -> int {
-  std::ifstream schema_stream{schema_path};
+  std::ifstream schema_stream{schema_path, std::ios::binary};
   schema_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(schema_stream)};

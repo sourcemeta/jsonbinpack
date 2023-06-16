@@ -12,7 +12,7 @@
 #include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
 #include <fstream>    // std::ifstream
-#include <ios>        // std::ios_base
+#include <ios>        // std::ios_base, std::ios::binary
 #include <iostream>   // std::cin, std::cout
 
 static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
@@ -34,8 +34,8 @@ static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
 auto sourcemeta::jsonbinpack::cli::encode(
     const std::filesystem::path &schema_path,
     const std::filesystem::path &instance_path) -> int {
-  std::ifstream schema_stream{schema_path};
-  std::ifstream instance_stream{instance_path};
+  std::ifstream schema_stream{schema_path, std::ios::binary};
+  std::ifstream instance_stream{instance_path, std::ios::binary};
   schema_stream.exceptions(std::ios_base::badbit);
   instance_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{
@@ -46,7 +46,7 @@ auto sourcemeta::jsonbinpack::cli::encode(
 
 auto sourcemeta::jsonbinpack::cli::encode(
     const std::filesystem::path &schema_path) -> int {
-  std::ifstream schema_stream{schema_path};
+  std::ifstream schema_stream{schema_path, std::ios::binary};
   schema_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(schema_stream)};
