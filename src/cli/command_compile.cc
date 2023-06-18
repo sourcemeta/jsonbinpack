@@ -8,7 +8,7 @@
 #include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
 #include <fstream>    // std::ifstream
-#include <ios>        // std::ios_base
+#include <ios>        // std::ios_base, std::ios::binary
 #include <iostream>   // std::cin, std::cout, std::endl
 
 static auto compile_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
@@ -24,7 +24,7 @@ static auto compile_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
 
 auto sourcemeta::jsonbinpack::cli::compile(
     const std::filesystem::path &schema_path) -> int {
-  std::ifstream stream{schema_path};
+  std::ifstream stream{schema_path, std::ios::binary};
   stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(stream)};
   return compile_from_json(schema);
