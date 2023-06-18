@@ -9,7 +9,7 @@
 #include <cstdlib>    // EXIT_SUCCESS, EXIT_FAILURE
 #include <filesystem> // std::filesystem
 #include <fstream>    // std::ifstream, std::ofstream
-#include <ios>        // std::ios_base
+#include <ios>        // std::ios_base, std::ios::binary
 #include <iostream>   // std::cerr
 #include <string>     // std::to_string
 
@@ -24,7 +24,7 @@ auto main(int argc, char *argv[]) -> int {
 
   const std::filesystem::path instance_path{argv[1]};
   assert(std::filesystem::is_regular_file(instance_path));
-  std::ifstream instance_stream{instance_path};
+  std::ifstream instance_stream{instance_path, std::ios::binary};
   instance_stream.exceptions(std::ios_base::badbit);
   const sourcemeta::jsontoolkit::JSON instance{
       sourcemeta::jsontoolkit::parse(instance_stream)};
@@ -35,7 +35,7 @@ auto main(int argc, char *argv[]) -> int {
   // Schema
   const std::filesystem::path schema_path{directory / "schema.json"};
   assert(std::filesystem::is_regular_file(schema_path));
-  std::ifstream schema_stream{schema_path};
+  std::ifstream schema_stream{schema_path, std::ios::binary};
   schema_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(schema_stream)};
@@ -43,41 +43,43 @@ auto main(int argc, char *argv[]) -> int {
   // Canonicalize
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   canonicalizer.apply(schema, DEFAULT_METASCHEMA);
-  std::ofstream canonical_output_stream(directory / "canonical.json");
+  std::ofstream canonical_output_stream(directory / "canonical.json",
+                                        std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::prettify(schema, canonical_output_stream);
-  canonical_output_stream << std::endl;
+  canonical_output_stream << "\n";
   canonical_output_stream.flush();
   canonical_output_stream.close();
 
   // Mapper
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
   mapper.apply(schema, DEFAULT_METASCHEMA);
-  std::ofstream mapper_output_stream(directory / "encoding.json");
+  std::ofstream mapper_output_stream(directory / "encoding.json",
+                                     std::ios::binary);
   mapper_output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::prettify(schema, mapper_output_stream);
-  mapper_output_stream << std::endl;
+  mapper_output_stream << "\n";
   mapper_output_stream.flush();
   mapper_output_stream.close();
 
   // Encoder
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
-  std::ofstream output_stream(directory / "output.bin");
+  std::ofstream output_stream(directory / "output.bin", std::ios::binary);
   output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Encoder encoder{output_stream};
   encoder.encode(instance, encoding);
   output_stream.flush();
   const auto size{output_stream.tellp()};
   output_stream.close();
-  std::ofstream size_stream(directory / "size.txt");
+  std::ofstream size_stream(directory / "size.txt", std::ios::binary);
   size_stream.exceptions(std::ios_base::badbit);
   size_stream << std::to_string(size) << "\n";
   size_stream.flush();
   size_stream.close();
 
   // Decoder
-  std::ifstream data_stream{directory / "output.bin"};
+  std::ifstream data_stream{directory / "output.bin", std::ios::binary};
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Decoder decoder{data_stream};
   const sourcemeta::jsontoolkit::JSON result{decoder.decode(encoding)};

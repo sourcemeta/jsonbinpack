@@ -186,9 +186,6 @@ TEST(Bundle, alter_nested_document_with_applicators) {
 
   bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
 
-  sourcemeta::jsontoolkit::prettify(document, std::cout);
-  std::cout << std::endl;
-
   sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.org/test-metaschema-1",
     "array": [

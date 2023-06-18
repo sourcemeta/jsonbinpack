@@ -1,5 +1,4 @@
 add_executable(sourcemeta_jsonbinpack_canonicalizer_unit
-  "${PROJECT_SOURCE_DIR}/vendor/googletest/googletest/src/gtest_main.cc"
   canonicalizer_test.cc
   2020_12_any_test.cc
   2020_12_array_test.cc
@@ -8,7 +7,7 @@ add_executable(sourcemeta_jsonbinpack_canonicalizer_unit
   2020_12_number_test.cc
   2020_12_object_test.cc
   2020_12_string_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE gtest)
+target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE sourcemeta_jsonbinpack_canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit PRIVATE sourcemeta_jsontoolkit_json)
 gtest_discover_tests(sourcemeta_jsonbinpack_canonicalizer_unit)
