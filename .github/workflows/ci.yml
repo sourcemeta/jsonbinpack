@@ -61,3 +61,7 @@ jobs:
       - run: cmake --build --preset release --target clang_format_test
       - run: cmake --build --preset release --parallel
       - run: ctest --preset release --parallel
+
+      - name: Ensure no uncommitted changes
+        run: ./scripts/no-staged-uncommitted-files.sh
+        shell: bash

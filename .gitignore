@@ -242,3 +242,4 @@ dist
 !/Makefile
 .DS_Store
 CMakeUserPresets.json
+Brewfile.lock.json
