@@ -1,0 +1,10 @@
+freebsd_instance:
+  image_family: freebsd-13-2
+
+task:
+  name: JSON BinPack / test (freebsd)
+  prepare_script: pkg install -y cmake hs-shellcheck
+  configure_script: cmake --preset release --log-context
+  lint_script: cmake --build --preset release --target shellcheck
+  build_script: cmake --build --preset release --parallel 2
+  test_script: ctest --preset release --parallel
