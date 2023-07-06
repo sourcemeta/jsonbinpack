@@ -10,7 +10,7 @@ target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_schemas)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_encoder)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_decoder)
-target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::json)
 
 # To find the generated version file
 target_include_directories(sourcemeta_jsonbinpack_cli PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")

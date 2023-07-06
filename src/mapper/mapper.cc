@@ -86,12 +86,12 @@ auto sourcemeta::jsonbinpack::Mapper::apply(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value,
     const std::string &default_metaschema) const -> void {
-  const std::optional<std::string> dialect{
-      sourcemeta::jsontoolkit::dialect(value, this->bundle.resolver(),
-                                       default_metaschema)
+  const std::optional<std::string> draft{
+      sourcemeta::jsontoolkit::draft(value, this->bundle.resolver(),
+                                     default_metaschema)
           .get()};
-  if (!dialect.has_value() ||
-      dialect.value() != "https://json-schema.org/draft/2020-12/schema") {
+  if (!draft.has_value() ||
+      draft.value() != "https://json-schema.org/draft/2020-12/schema") {
     throw std::domain_error("Only JSON Schema 2020-12 is supported");
   }
 

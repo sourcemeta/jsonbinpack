@@ -1,0 +1,10 @@
+freebsd_instance:
+  image_family: freebsd-13-2
+
+task:
+  name: JSON Toolkit / test (freebsd, rapidjson)
+  prepare_script: pkg install -y cmake rapidjson googletest
+  configure_script: cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DJSONTOOLKIT_BACKEND=rapidjson -DJSONTOOLKIT_CONTRIB=ON -DJSONTOOLKIT_TESTS=ON
+  build_script: cmake --build ./build --config Release
+  test_script: cd ./build && ctest --build-config Release --output-on-failure --parallel
+  install_script: cmake --install ./build --prefix ./build/dist --config Release --verbose

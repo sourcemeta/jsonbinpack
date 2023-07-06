@@ -6,10 +6,10 @@ public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
-    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+    return draft == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            sourcemeta::jsontoolkit::is_object(schema) &&

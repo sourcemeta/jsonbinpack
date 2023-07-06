@@ -20,7 +20,7 @@ add_library(sourcemeta_jsonbinpack_mapper
   mapper.cc states.cc encoding.cc)
 target_include_directories(sourcemeta_jsonbinpack_mapper PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_alterschema)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_jsonbinpack_schemas)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PRIVATE sourcemeta_jsonbinpack_numeric)

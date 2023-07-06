@@ -9,14 +9,18 @@ add_library(sourcemeta_jsontoolkit_jsonschema
   include/jsontoolkit/jsonschema/default_resolver.h
   jsonschema.cc default_metaschemas.h.in
   default_walker.cc default_resolver.cc)
+add_library(sourcemeta::jsontoolkit::jsonschema ALIAS sourcemeta_jsontoolkit_jsonschema)
 set_target_properties(sourcemeta_jsontoolkit_jsonschema
-  PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/jsontoolkit/jsonschema.h")
+  PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/jsontoolkit/jsonschema.h"
+  OUTPUT_NAME jsontoolkit-jsonschema
+  EXPORT_NAME jsontoolkit::jsonschema)
+
 target_include_directories(sourcemeta_jsontoolkit_jsonschema
   PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
 target_link_libraries(sourcemeta_jsontoolkit_jsonschema PUBLIC
-  sourcemeta_jsontoolkit_json)
+  sourcemeta::jsontoolkit::json)
 
 # To find the generated metaschemas file
 target_include_directories(sourcemeta_jsontoolkit_jsonschema
@@ -31,10 +35,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_link_libraries(sourcemeta_jsontoolkit_jsonschema PUBLIC Threads::Threads)
 endif()
 
+# Installation
 install(TARGETS sourcemeta_jsontoolkit_jsonschema
   EXPORT sourcemeta_jsontoolkit_jsonschema
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  COMPONENT jsonschema
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit")
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT jsontoolkit
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit" COMPONENT jsontoolkit)
 install(FILES include/jsontoolkit/jsonschema/resolver.h
-  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit/jsonschema")
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit/jsonschema"
+  COMPONENT jsontoolkit)

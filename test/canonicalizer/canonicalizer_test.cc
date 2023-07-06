@@ -14,10 +14,10 @@ public:
       -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
     std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
 
-    if (identifier == "https://www.jsonbinpack.org/dialect/unknown") {
+    if (identifier == "https://www.jsonbinpack.org/draft/unknown") {
       promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
-        "$schema": "https://www.jsonbinpack.org/dialect/unknown",
-        "$id": "https://www.jsonbinpack.org/dialect/unknown"
+        "$schema": "https://www.jsonbinpack.org/draft/unknown",
+        "$id": "https://www.jsonbinpack.org/draft/unknown"
       })JSON"));
     } else {
       promise.set_value(std::nullopt);
@@ -27,11 +27,11 @@ public:
   }
 };
 
-TEST(Canonicalizer, unsupported_dialect) {
+TEST(Canonicalizer, unsupported_draft) {
   TestResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/dialect/unknown",
+    "$schema": "https://www.jsonbinpack.org/draft/unknown",
     "type": "boolean"
   })JSON")};
 
@@ -40,7 +40,7 @@ TEST(Canonicalizer, unsupported_dialect) {
                std::runtime_error);
 }
 
-TEST(Canonicalizer, unknown_dialect) {
+TEST(Canonicalizer, unknown_draft) {
   TestResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

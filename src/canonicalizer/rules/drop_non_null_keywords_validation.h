@@ -7,10 +7,10 @@ public:
   DropNonNullKeywordsValidation() : Rule("drop_non_null_keywords_validation"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
-    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+    return draft == "https://json-schema.org/draft/2020-12/schema" &&
            is_null_schema(schema, vocabularies) &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&

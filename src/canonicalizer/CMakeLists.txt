@@ -69,5 +69,5 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/unsatisfiable_max_contains.h)
 target_include_directories(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta_jsontoolkit_json)
+target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta_alterschema)
