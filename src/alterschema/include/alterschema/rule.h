@@ -25,14 +25,14 @@ public:
   auto operator!=(const Rule &other) const -> bool;
   [[nodiscard]] auto name() const -> const std::string &;
   auto apply(sourcemeta::jsontoolkit::JSON &document,
-             sourcemeta::jsontoolkit::Value &value, const std::string &dialect,
+             sourcemeta::jsontoolkit::Value &value, const std::string &draft,
              const std::unordered_map<std::string, bool> &vocabularies,
              const std::size_t level) const -> bool;
 
 private:
   [[nodiscard]] virtual auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t level) const -> bool = 0;
   virtual auto transform(sourcemeta::jsontoolkit::JSON &document,

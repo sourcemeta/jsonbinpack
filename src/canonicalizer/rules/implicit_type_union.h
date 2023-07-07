@@ -6,7 +6,7 @@ public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
     const bool has_core_blacklist{
@@ -24,7 +24,7 @@ public:
         sourcemeta::jsontoolkit::defines_any(schema,
                                              {"type", "const", "enum"})};
 
-    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+    return draft == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            sourcemeta::jsontoolkit::is_object(schema) && !has_core_blacklist &&

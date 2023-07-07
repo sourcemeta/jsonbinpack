@@ -85,17 +85,17 @@ public:
   ExampleRule4() : sourcemeta::alterschema::Rule("example_rule_4"){};
 
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::Value &schema,
-                               const std::string &dialect,
+                               const std::string &draft,
                                const std::unordered_map<std::string, bool> &,
                                const std::size_t) const -> bool override {
-    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
-           !sourcemeta::jsontoolkit::defines(schema, "dialect");
+    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+           !sourcemeta::jsontoolkit::defines(schema, "draft");
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &schema) const
       -> void override {
-    sourcemeta::jsontoolkit::assign(document, schema, "dialect",
+    sourcemeta::jsontoolkit::assign(document, schema, "draft",
                                     sourcemeta::jsontoolkit::from("2020-12"));
   }
 };

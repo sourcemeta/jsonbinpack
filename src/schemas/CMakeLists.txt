@@ -6,6 +6,6 @@ set(SCHEMAS_ENCODING_V1_ID "https://www.jsonbinpack.org/schemas/encoding/v1.json
 configure_file(schemas.h.in include/jsonbinpack/schemas/schemas.h @ONLY)
 add_library(sourcemeta_jsonbinpack_schemas INTERFACE schemas.h.in)
 target_link_libraries(sourcemeta_jsonbinpack_schemas
-  INTERFACE sourcemeta_jsontoolkit_json)
+  INTERFACE sourcemeta::jsontoolkit::json)
 target_include_directories(sourcemeta_jsonbinpack_schemas
   INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/include")

@@ -48,7 +48,7 @@ TEST(Bundle, alter_flat_document_no_applicators) {
   EXPECT_EQ(expected, document);
 }
 
-TEST(Bundle, condition_dialect) {
+TEST(Bundle, condition_draft) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
       sourcemeta::jsontoolkit::schema_walker_none, resolver};
@@ -62,13 +62,13 @@ TEST(Bundle, condition_dialect) {
 
   sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "dialect": "2020-12"
+    "draft": "2020-12"
   })JSON")};
 
   EXPECT_EQ(expected, document);
 }
 
-TEST(Bundle, throw_if_no_dialect_invalid_default) {
+TEST(Bundle, throw_if_no_draft_invalid_default) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
       sourcemeta::jsontoolkit::schema_walker_none, resolver};
@@ -83,7 +83,7 @@ TEST(Bundle, throw_if_no_dialect_invalid_default) {
                std::runtime_error);
 }
 
-TEST(Bundle, no_dialect_valid_default) {
+TEST(Bundle, no_draft_valid_default) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::alterschema::Bundle bundle{
       sourcemeta::jsontoolkit::schema_walker_none, resolver};

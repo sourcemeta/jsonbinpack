@@ -44,7 +44,7 @@ private:
   auto
   apply_subschema(sourcemeta::jsontoolkit::JSON &document,
                   sourcemeta::jsontoolkit::Value &value,
-                  const std::string &metaschema, const std::string &dialect,
+                  const std::string &metaschema, const std::string &draft,
                   const std::unordered_map<std::string, bool> &vocabularies,
                   const std::size_t level) const -> void;
   sourcemeta::jsontoolkit::schema_walker_t walker_;

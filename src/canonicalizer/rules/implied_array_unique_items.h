@@ -6,11 +6,11 @@ public:
   ImpliedArrayUniqueItems() : Rule("implied_array_unique_items"){};
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
     const bool singular_by_max_items{
-        dialect == "https://json-schema.org/draft/2020-12/schema" &&
+        draft == "https://json-schema.org/draft/2020-12/schema" &&
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") &&
         sourcemeta::jsontoolkit::is_object(schema) &&
@@ -21,7 +21,7 @@ public:
             sourcemeta::jsontoolkit::at(schema, "maxItems")) <= 1};
 
     const bool singular_by_const{
-        dialect == "https://json-schema.org/draft/2020-12/schema" &&
+        draft == "https://json-schema.org/draft/2020-12/schema" &&
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") &&
         sourcemeta::jsontoolkit::is_object(schema) &&
@@ -32,7 +32,7 @@ public:
             sourcemeta::jsontoolkit::at(schema, "const")) <= 1};
 
     const bool singular_by_enum{
-        dialect == "https://json-schema.org/draft/2020-12/schema" &&
+        draft == "https://json-schema.org/draft/2020-12/schema" &&
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") &&
         sourcemeta::jsontoolkit::is_object(schema) &&
@@ -48,7 +48,7 @@ public:
                              sourcemeta::jsontoolkit::size(element) <= 1;
                     })};
 
-    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
+    return draft == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            sourcemeta::jsontoolkit::is_object(schema) &&

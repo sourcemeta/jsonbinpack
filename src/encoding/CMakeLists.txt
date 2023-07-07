@@ -4,7 +4,7 @@ add_library(sourcemeta_jsonbinpack_encoding
   include/jsonbinpack/encoding/tag.h
   encoding.cc)
 target_link_libraries(sourcemeta_jsonbinpack_encoding PUBLIC
-  sourcemeta_jsontoolkit_json)
+  sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_encoding PUBLIC
   sourcemeta_jsonbinpack_numeric)
 target_include_directories(sourcemeta_jsonbinpack_encoding PUBLIC

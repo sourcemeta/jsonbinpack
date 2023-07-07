@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 #include <stdexcept>
 
-TEST(Mapper, unsupported_dialect) {
+TEST(Mapper, unsupported_draft) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
@@ -17,7 +17,7 @@ TEST(Mapper, unsupported_dialect) {
       std::domain_error);
 }
 
-TEST(Mapper, unknown_dialect_default) {
+TEST(Mapper, unknown_draft_default) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Mapper mapper{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({

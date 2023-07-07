@@ -300,6 +300,13 @@ inline auto compare(const Value &left, const Value &right) -> bool {
   return left.GetType() < right.GetType();
 }
 
+inline auto hash(const sourcemeta::jsontoolkit::Value &value) -> std::size_t {
+  rapidjson::internal::Hasher<rapidjson::Value, rapidjson::CrtAllocator> hasher;
+  value.Accept(hasher);
+  assert(hasher.IsValid());
+  return hasher.GetHashCode();
+}
+
 } // namespace sourcemeta::jsontoolkit
 
 #endif

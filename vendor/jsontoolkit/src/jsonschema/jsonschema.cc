@@ -57,7 +57,7 @@ auto sourcemeta::jsontoolkit::metaschema(
   return std::nullopt;
 }
 
-auto sourcemeta::jsontoolkit::dialect(
+auto sourcemeta::jsontoolkit::draft(
     const sourcemeta::jsontoolkit::Value &schema,
     const sourcemeta::jsontoolkit::schema_resolver_t &resolver,
     const std::optional<std::string> &default_metaschema)
@@ -72,7 +72,7 @@ auto sourcemeta::jsontoolkit::dialect(
       metaschema_id.has_value() ? metaschema_id : default_metaschema};
 
   if (effective_metaschema_id.has_value()) {
-    // For compatibility with older JSON Schema dialects that didn't support $id
+    // For compatibility with older JSON Schema drafts that didn't support $id
     if (effective_metaschema_id.value() ==
             "http://json-schema.org/draft-00/hyper-schema#" ||
         effective_metaschema_id.value() ==
@@ -88,7 +88,7 @@ auto sourcemeta::jsontoolkit::dialect(
       return promise.get_future();
     }
 
-    // If the schema defines itself, then the schema is the dialect definition
+    // If the schema defines itself, then the schema is the draft definition
     if (schema_id.has_value() &&
         schema_id.value() == effective_metaschema_id.value()) {
       std::promise<std::optional<std::string>> promise;
@@ -106,8 +106,7 @@ auto sourcemeta::jsontoolkit::dialect(
       throw std::runtime_error(error.str());
     }
 
-    return dialect(metaschema.value(), resolver,
-                   effective_metaschema_id.value());
+    return draft(metaschema.value(), resolver, effective_metaschema_id.value());
   }
 
   std::promise<std::optional<std::string>> promise;
@@ -115,18 +114,18 @@ auto sourcemeta::jsontoolkit::dialect(
   return promise.get_future();
 }
 
-// TODO: Support every JSON Schema dialect from Draft 7 and older
-// for completeness, returning the dialect itself as the only vocabulary.
-static auto core_vocabulary(const std::string &dialect) -> std::string {
-  if (dialect == "https://json-schema.org/draft/2020-12/schema" ||
-      dialect == "https://json-schema.org/draft/2020-12/hyper-schema") {
+// TODO: Support every JSON Schema draft from Draft 7 and older
+// for completeness, returning the draft itself as the only vocabulary.
+static auto core_vocabulary(const std::string &draft) -> std::string {
+  if (draft == "https://json-schema.org/draft/2020-12/schema" ||
+      draft == "https://json-schema.org/draft/2020-12/hyper-schema") {
     return "https://json-schema.org/draft/2020-12/vocab/core";
-  } else if (dialect == "https://json-schema.org/draft/2019-09/schema" ||
-             dialect == "https://json-schema.org/draft/2019-09/hyper-schema") {
+  } else if (draft == "https://json-schema.org/draft/2019-09/schema" ||
+             draft == "https://json-schema.org/draft/2019-09/hyper-schema") {
     return "https://json-schema.org/draft/2019-09/vocab/core";
   } else {
     std::ostringstream error;
-    error << "Unrecognized dialect: " << dialect;
+    error << "Unrecognized draft: " << draft;
     throw std::runtime_error(error.str());
   }
 }
@@ -184,18 +183,18 @@ auto sourcemeta::jsontoolkit::vocabularies(
   }
 
   /*
-   * (3) Resolve the metaschema's dialect
+   * (3) Resolve the metaschema's draft
    */
-  const std::optional<std::string> dialect{
-      sourcemeta::jsontoolkit::dialect(metaschema.value(), resolver,
-                                       default_metaschema)
+  const std::optional<std::string> draft{
+      sourcemeta::jsontoolkit::draft(metaschema.value(), resolver,
+                                     default_metaschema)
           .get()};
-  if (!dialect.has_value()) {
+  if (!draft.has_value()) {
     std::ostringstream error;
-    error << "Could not determine dialect for schema: " << resolved_id.value();
+    error << "Could not determine draft for schema: " << resolved_id.value();
     throw std::runtime_error(error.str());
   }
-  const std::string core{core_vocabulary(dialect.value())};
+  const std::string core{core_vocabulary(draft.value())};
 
   /*
    * (4) Parse the "$vocabulary" keyword, if any
@@ -207,9 +206,8 @@ auto sourcemeta::jsontoolkit::vocabularies(
     // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-02#section-8
     result.insert({core, true});
 
-    if (dialect.value() == "https://json-schema.org/draft/2020-12/schema" ||
-        dialect.value() ==
-            "https://json-schema.org/draft/2020-12/hyper-schema") {
+    if (draft.value() == "https://json-schema.org/draft/2020-12/schema" ||
+        draft.value() == "https://json-schema.org/draft/2020-12/hyper-schema") {
       // See
       // https://json-schema.org/draft/2020-12/json-schema-core.html#section-10
       result.insert(
@@ -230,9 +228,9 @@ auto sourcemeta::jsontoolkit::vocabularies(
       // https://json-schema.org/draft/2020-12/json-schema-validation.html#section-9
       result.insert(
           {"https://json-schema.org/draft/2020-12/vocab/meta-data", true});
-    } else if (dialect.value() ==
+    } else if (draft.value() ==
                    "https://json-schema.org/draft/2019-09/schema" ||
-               dialect.value() ==
+               draft.value() ==
                    "https://json-schema.org/draft/2019-09/hyper-schema") {
       // See
       // https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-02#section-9

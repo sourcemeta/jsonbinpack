@@ -14,26 +14,25 @@ auto sourcemeta::alterschema::Bundle::apply(
 
   const std::string metaschema{
       sourcemeta::jsontoolkit::metaschema(value).value_or(default_metaschema)};
-  const std::optional<std::string> dialect{
-      sourcemeta::jsontoolkit::dialect(value, this->resolver_, metaschema)
-          .get()};
-  if (!dialect.has_value()) {
+  const std::optional<std::string> draft{
+      sourcemeta::jsontoolkit::draft(value, this->resolver_, metaschema).get()};
+  if (!draft.has_value()) {
     throw std::runtime_error(
-        "Could not determine the dialect of the given schema");
+        "Could not determine the draft of the given schema");
   }
 
   const std::unordered_map<std::string, bool> vocabularies{
       sourcemeta::jsontoolkit::vocabularies(document, this->resolver_,
                                             default_metaschema)
           .get()};
-  return apply_subschema(document, value, metaschema, dialect.value(),
+  return apply_subschema(document, value, metaschema, draft.value(),
                          vocabularies, 0);
 }
 
 auto sourcemeta::alterschema::Bundle::apply_subschema(
     sourcemeta::jsontoolkit::JSON &document,
     sourcemeta::jsontoolkit::Value &value, const std::string &metaschema,
-    const std::string &dialect,
+    const std::string &draft,
     const std::unordered_map<std::string, bool> &vocabularies,
     const std::size_t level) const -> void {
   // (1) Canonicalize the current schema object
@@ -43,7 +42,7 @@ auto sourcemeta::alterschema::Bundle::apply_subschema(
     auto matches = processed_rules.size();
     for (auto const &pair : this->rules) {
       const bool was_transformed{
-          pair.second->apply(document, value, dialect, vocabularies, level)};
+          pair.second->apply(document, value, draft, vocabularies, level)};
       if (was_transformed) {
         if (processed_rules.find(pair.first) != std::end(processed_rules)) {
           std::ostringstream error;
@@ -65,7 +64,7 @@ auto sourcemeta::alterschema::Bundle::apply_subschema(
   // (2) Canonicalize its sub-schemas
   for (auto &subschema : sourcemeta::jsontoolkit::flat_subschema_iterator(
            value, this->walker_, this->resolver_, metaschema)) {
-    apply_subschema(document, subschema, metaschema, dialect, vocabularies,
+    apply_subschema(document, subschema, metaschema, draft, vocabularies,
                     level + 1);
   }
 }

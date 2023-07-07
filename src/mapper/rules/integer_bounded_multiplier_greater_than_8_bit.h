@@ -14,11 +14,11 @@ public:
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &dialect,
+            const std::string &draft,
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
     if (is_encoding(schema) ||
-        dialect != "https://json-schema.org/draft/2020-12/schema" ||
+        draft != "https://json-schema.org/draft/2020-12/schema" ||
         !vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") ||
         !sourcemeta::jsontoolkit::defines(schema, "type") ||
