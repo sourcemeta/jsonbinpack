@@ -57,10 +57,10 @@ public:
       HANDLE_ENCODING(20, VARINT_TYPED_ARBITRARY_OBJECT)
       HANDLE_ENCODING(21, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_ENCODING
-    default:
-      // We should never get here. If so, it is definitely a bug
-      assert(false);
-      std::abort();
+      default:
+        // We should never get here. If so, it is definitely a bug
+        assert(false);
+        std::abort();
     }
   }
 

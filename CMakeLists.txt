@@ -4,6 +4,7 @@ project("JSON BinPack" VERSION 0.0.1 LANGUAGES CXX
 A space-efficient open-source binary JSON serialization \
 format based on JSON Schema with \
 both schema-driven and schema-less support.")
+include(vendor/noa/cmake/noa.cmake)
 
 # Only allow Debug and Release builds
 # Adapted from Professional CMake (https://crascit.com/professional-cmake/)
@@ -20,12 +21,6 @@ include(cmake/warnings.cmake)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Hide symbols from shared libraries by default
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
@@ -79,7 +74,7 @@ if(PROJECT_IS_TOP_LEVEL)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
   set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
   set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
-  include(${PROJECT_SOURCE_DIR}/cmake/clang-format.cmake)
+  noa_target_clang_format(SOURCES ${JSONBINPACK_CXX_SOURCE_FILES})
   include(${PROJECT_SOURCE_DIR}/cmake/clang-tidy.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/bundler.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/jekyll.cmake)
