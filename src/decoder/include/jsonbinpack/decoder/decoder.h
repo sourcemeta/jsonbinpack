@@ -55,10 +55,10 @@ public:
       HANDLE_DECODING(20, VARINT_TYPED_ARBITRARY_OBJECT)
       HANDLE_DECODING(21, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_DECODING
-    default:
-      // We should never get here. If so, it is definitely a bug
-      assert(false);
-      std::abort();
+      default:
+        // We should never get here. If so, it is definitely a bug
+        assert(false);
+        std::abort();
     }
   }
 
@@ -436,93 +436,95 @@ public:
 
     if (type == TYPE_OTHER) {
       switch (subtype) {
-      case SUBTYPE_NULL:
-        return sourcemeta::jsontoolkit::from(nullptr);
-      case SUBTYPE_FALSE:
-        return sourcemeta::jsontoolkit::from(false);
-      case SUBTYPE_TRUE:
-        return sourcemeta::jsontoolkit::from(true);
-      case SUBTYPE_NUMBER:
-        return this->DOUBLE_VARINT_TUPLE({});
-      case SUBTYPE_POSITIVE_INTEGER:
-        return sourcemeta::jsontoolkit::from(this->get_varint());
-      case SUBTYPE_NEGATIVE_INTEGER:
-        return sourcemeta::jsontoolkit::from(
-            -static_cast<std::int64_t>(this->get_varint()) - 1);
-      case SUBTYPE_LONG_STRING_BASE_EXPONENT_7:
-        return sourcemeta::jsontoolkit::from(
-            this->get_string_utf8(this->get_varint() + 128));
-      case SUBTYPE_LONG_STRING_BASE_EXPONENT_8:
-        return sourcemeta::jsontoolkit::from(
-            this->get_string_utf8(this->get_varint() + 256));
-      case SUBTYPE_LONG_STRING_BASE_EXPONENT_9:
-        return sourcemeta::jsontoolkit::from(
-            this->get_string_utf8(this->get_varint() + 512));
-      case SUBTYPE_LONG_STRING_BASE_EXPONENT_10:
-        return sourcemeta::jsontoolkit::from(
-            this->get_string_utf8(this->get_varint() + 1024));
-      default:
-        // We should never get here. If so, it is definitely a bug
-        assert(false);
-        std::abort();
+        case SUBTYPE_NULL:
+          return sourcemeta::jsontoolkit::from(nullptr);
+        case SUBTYPE_FALSE:
+          return sourcemeta::jsontoolkit::from(false);
+        case SUBTYPE_TRUE:
+          return sourcemeta::jsontoolkit::from(true);
+        case SUBTYPE_NUMBER:
+          return this->DOUBLE_VARINT_TUPLE({});
+        case SUBTYPE_POSITIVE_INTEGER:
+          return sourcemeta::jsontoolkit::from(this->get_varint());
+        case SUBTYPE_NEGATIVE_INTEGER:
+          return sourcemeta::jsontoolkit::from(
+              -static_cast<std::int64_t>(this->get_varint()) - 1);
+        case SUBTYPE_LONG_STRING_BASE_EXPONENT_7:
+          return sourcemeta::jsontoolkit::from(
+              this->get_string_utf8(this->get_varint() + 128));
+        case SUBTYPE_LONG_STRING_BASE_EXPONENT_8:
+          return sourcemeta::jsontoolkit::from(
+              this->get_string_utf8(this->get_varint() + 256));
+        case SUBTYPE_LONG_STRING_BASE_EXPONENT_9:
+          return sourcemeta::jsontoolkit::from(
+              this->get_string_utf8(this->get_varint() + 512));
+        case SUBTYPE_LONG_STRING_BASE_EXPONENT_10:
+          return sourcemeta::jsontoolkit::from(
+              this->get_string_utf8(this->get_varint() + 1024));
+        default:
+          // We should never get here. If so, it is definitely a bug
+          assert(false);
+          std::abort();
       }
     } else {
       switch (type) {
-      case TYPE_POSITIVE_INTEGER_BYTE:
-        return sourcemeta::jsontoolkit::from(subtype > 0 ? subtype - 1
-                                                         : this->get_byte());
-      case TYPE_NEGATIVE_INTEGER_BYTE:
-        return sourcemeta::jsontoolkit::from(
-            subtype > 0 ? static_cast<std::int64_t>(-subtype)
-                        : static_cast<std::int64_t>(-this->get_byte() - 1));
-      case TYPE_SHARED_STRING: {
-        const auto length = subtype == 0
-                                ? this->get_varint() - 1 + uint_max<5> * 2
-                                : subtype - 1;
-        const std::uint64_t position{this->position()};
-        const std::uint64_t current{this->rewind(this->get_varint(), position)};
-        sourcemeta::jsontoolkit::JSON string{
-            sourcemeta::jsontoolkit::from(this->get_string_utf8(length))};
-        this->seek(current);
-        return string;
-      };
-      case TYPE_STRING:
-        return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-                                  {uint_max<5> * 2})
-                            : sourcemeta::jsontoolkit::from(
-                                  this->get_string_utf8(subtype - 1));
-      case TYPE_LONG_STRING:
-        return sourcemeta::jsontoolkit::from(
-            this->get_string_utf8(subtype + uint_max<5>));
-      case TYPE_ARRAY:
-        return subtype == 0 ? this->FIXED_TYPED_ARRAY(
-                                  {this->get_varint() + uint_max<5>,
-                                   wrap(sourcemeta::jsonbinpack::
-                                            ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
-                                   {}})
-                            : this->FIXED_TYPED_ARRAY(
-                                  {static_cast<std::uint64_t>(subtype - 1),
-                                   wrap(sourcemeta::jsonbinpack::
-                                            ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
-                                   {}});
-      case TYPE_OBJECT:
-        return subtype == 0
-                   ? this->FIXED_TYPED_ARBITRARY_OBJECT(
-                         {this->get_varint() + uint_max<5>,
-                          wrap(sourcemeta::jsonbinpack::
-                                   PREFIX_VARINT_LENGTH_STRING_SHARED{}),
-                          wrap(sourcemeta::jsonbinpack::
-                                   ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})})
-                   : this->FIXED_TYPED_ARBITRARY_OBJECT(
-                         {static_cast<std::uint64_t>(subtype - 1),
-                          wrap(sourcemeta::jsonbinpack::
-                                   PREFIX_VARINT_LENGTH_STRING_SHARED{}),
-                          wrap(sourcemeta::jsonbinpack::
-                                   ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})});
-      default:
-        // We should never get here. If so, it is definitely a bug
-        assert(false);
-        std::abort();
+        case TYPE_POSITIVE_INTEGER_BYTE:
+          return sourcemeta::jsontoolkit::from(subtype > 0 ? subtype - 1
+                                                           : this->get_byte());
+        case TYPE_NEGATIVE_INTEGER_BYTE:
+          return sourcemeta::jsontoolkit::from(
+              subtype > 0 ? static_cast<std::int64_t>(-subtype)
+                          : static_cast<std::int64_t>(-this->get_byte() - 1));
+        case TYPE_SHARED_STRING: {
+          const auto length = subtype == 0
+                                  ? this->get_varint() - 1 + uint_max<5> * 2
+                                  : subtype - 1;
+          const std::uint64_t position{this->position()};
+          const std::uint64_t current{
+              this->rewind(this->get_varint(), position)};
+          sourcemeta::jsontoolkit::JSON string{
+              sourcemeta::jsontoolkit::from(this->get_string_utf8(length))};
+          this->seek(current);
+          return string;
+        };
+        case TYPE_STRING:
+          return subtype == 0 ? this->FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
+                                    {uint_max<5> * 2})
+                              : sourcemeta::jsontoolkit::from(
+                                    this->get_string_utf8(subtype - 1));
+        case TYPE_LONG_STRING:
+          return sourcemeta::jsontoolkit::from(
+              this->get_string_utf8(subtype + uint_max<5>));
+        case TYPE_ARRAY:
+          return subtype == 0
+                     ? this->FIXED_TYPED_ARRAY(
+                           {this->get_varint() + uint_max<5>,
+                            wrap(sourcemeta::jsonbinpack::
+                                     ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
+                            {}})
+                     : this->FIXED_TYPED_ARRAY(
+                           {static_cast<std::uint64_t>(subtype - 1),
+                            wrap(sourcemeta::jsonbinpack::
+                                     ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}),
+                            {}});
+        case TYPE_OBJECT:
+          return subtype == 0
+                     ? this->FIXED_TYPED_ARBITRARY_OBJECT(
+                           {this->get_varint() + uint_max<5>,
+                            wrap(sourcemeta::jsonbinpack::
+                                     PREFIX_VARINT_LENGTH_STRING_SHARED{}),
+                            wrap(sourcemeta::jsonbinpack::
+                                     ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})})
+                     : this->FIXED_TYPED_ARBITRARY_OBJECT(
+                           {static_cast<std::uint64_t>(subtype - 1),
+                            wrap(sourcemeta::jsonbinpack::
+                                     PREFIX_VARINT_LENGTH_STRING_SHARED{}),
+                            wrap(sourcemeta::jsonbinpack::
+                                     ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})});
+        default:
+          // We should never get here. If so, it is definitely a bug
+          assert(false);
+          std::abort();
       }
     }
   }
