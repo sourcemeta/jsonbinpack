@@ -6,3 +6,5 @@ target_link_libraries(sourcemeta_jsonbinpack_schemas_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit PRIVATE sourcemeta_jsonbinpack_schemas)
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit PRIVATE sourcemeta::jsontoolkit::json)
 gtest_discover_tests(sourcemeta_jsonbinpack_schemas_unit)
+set_target_properties(sourcemeta_jsonbinpack_schemas_unit
+  PROPERTIES FOLDER "Schemas")

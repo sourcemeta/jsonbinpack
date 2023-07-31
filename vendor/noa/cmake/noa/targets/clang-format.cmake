@@ -23,7 +23,7 @@ function(noa_target_clang_format)
       VERBATIM
       COMMAND "${CLANG_FORMAT_BIN}" "--style=file:${CLANG_FORMAT_CONFIG}"
         -i ${NOA_TARGET_CLANG_FORMAT_FILES}
-      COMMENT "Formatting files using ClangFormat")
+      COMMENT "Formatting sources using ClangFormat")
     add_custom_target(clang_format_test
       WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
       VERBATIM
@@ -43,4 +43,6 @@ function(noa_target_clang_format)
       COMMAND "${CMAKE_COMMAND}" -E echo "Could not locate ClangFormat"
       COMMAND "${CMAKE_COMMAND}" -E false)
   endif()
+
+  set_target_properties(clang_format clang_format_test PROPERTIES FOLDER "Formatting")
 endfunction()

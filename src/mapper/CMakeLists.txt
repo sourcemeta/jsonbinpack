@@ -24,3 +24,5 @@ target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta::jsontoolk
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_alterschema)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC sourcemeta_jsonbinpack_schemas)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PRIVATE sourcemeta_jsonbinpack_numeric)
+set_target_properties(sourcemeta_jsonbinpack_mapper
+  PROPERTIES FOLDER "JSON BinPack/Mapper")

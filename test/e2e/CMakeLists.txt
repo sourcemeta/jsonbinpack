@@ -5,6 +5,8 @@ target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_parser)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_encoder)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_decoder)
+set_target_properties(jsonbinpack_e2e_test_runner
+  PROPERTIES FOLDER "Misc")
 
 macro(add_jsonbinpack_e2e_test_schemaless name)
   add_test(NAME e2e.${name}.schema-less

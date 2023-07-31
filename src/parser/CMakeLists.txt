@@ -5,3 +5,5 @@ target_include_directories(sourcemeta_jsonbinpack_parser PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_parser PUBLIC sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_parser PRIVATE sourcemeta_jsonbinpack_encoding)
+set_target_properties(sourcemeta_jsonbinpack_parser
+  PROPERTIES FOLDER "JSON BinPack/Parser")

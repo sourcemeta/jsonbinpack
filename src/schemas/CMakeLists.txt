@@ -9,3 +9,5 @@ target_link_libraries(sourcemeta_jsonbinpack_schemas
   INTERFACE sourcemeta::jsontoolkit::json)
 target_include_directories(sourcemeta_jsonbinpack_schemas
   INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/include")
+set_target_properties(sourcemeta_jsonbinpack_schemas
+  PROPERTIES FOLDER "JSON BinPack/Schemas")

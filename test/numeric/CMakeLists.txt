@@ -4,3 +4,5 @@ add_executable(sourcemeta_jsonbinpack_numeric_unit
 target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE sourcemeta_jsonbinpack_numeric)
 gtest_discover_tests(sourcemeta_jsonbinpack_numeric_unit)
+set_target_properties(sourcemeta_jsonbinpack_numeric_unit
+  PROPERTIES FOLDER "Numeric")

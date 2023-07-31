@@ -16,4 +16,5 @@ target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit
 target_include_directories(sourcemeta_jsonbinpack_cli PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 # Set a friendly name for the binary
 set_target_properties(sourcemeta_jsonbinpack_cli PROPERTIES
-  OUTPUT_NAME jsonbinpack)
+  OUTPUT_NAME jsonbinpack
+  FOLDER "JSON BinPack/CLI")

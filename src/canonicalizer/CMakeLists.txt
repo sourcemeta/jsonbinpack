@@ -71,3 +71,5 @@ target_include_directories(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC sourcemeta_alterschema)
+set_target_properties(sourcemeta_jsonbinpack_canonicalizer
+  PROPERTIES FOLDER "JSON BinPack/Canonicalizer")

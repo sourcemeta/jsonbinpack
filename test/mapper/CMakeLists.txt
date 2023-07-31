@@ -11,3 +11,5 @@ target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_json
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta_jsonbinpack_canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit PRIVATE sourcemeta::jsontoolkit::json)
 gtest_discover_tests(sourcemeta_jsonbinpack_mapper_unit)
+set_target_properties(sourcemeta_jsonbinpack_mapper_unit
+  PROPERTIES FOLDER "Mapper")

@@ -8,6 +8,8 @@ if(DOXYGEN_FOUND)
     VERBATIM
     COMMAND "${CMAKE_COMMAND}" -E make_directory "${JSONBINPACK_WEBSITE_OUT}"
     COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_OUT}")
+  set_target_properties(doxygen
+    PROPERTIES FOLDER "Website")
 else()
   message(WARNING "Could not find `doxygen` in the system")
 endif()
