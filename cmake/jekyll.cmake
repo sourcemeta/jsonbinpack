@@ -5,6 +5,8 @@ if(BUNDLE_BIN)
     VERBATIM
     COMMAND "${BUNDLE_BIN}" exec jekyll build
       --source "${JSONBINPACK_WEBSITE_SRC}" --destination "${JSONBINPACK_WEBSITE_OUT}")
+  set_target_properties(jekyll
+    PROPERTIES FOLDER "Website")
 else()
   message(WARNING "Could not find `jekyll` in the system")
 endif()

@@ -9,3 +9,5 @@ target_link_libraries(sourcemeta_jsonbinpack_encoding PUBLIC
   sourcemeta_jsonbinpack_numeric)
 target_include_directories(sourcemeta_jsonbinpack_encoding PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set_target_properties(sourcemeta_jsonbinpack_encoding
+  PROPERTIES FOLDER "JSON BinPack/Encoding")

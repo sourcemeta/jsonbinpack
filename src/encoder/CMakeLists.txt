@@ -10,3 +10,5 @@ target_include_directories(sourcemeta_jsonbinpack_encoder INTERFACE
 target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta_jsonbinpack_numeric)
 target_link_libraries(sourcemeta_jsonbinpack_encoder INTERFACE sourcemeta_jsonbinpack_encoding)
+set_target_properties(sourcemeta_jsonbinpack_encoder
+  PROPERTIES FOLDER "JSON BinPack/Encoder")
