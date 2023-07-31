@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.24)
 project("JSON BinPack" VERSION 0.0.1 LANGUAGES CXX
   DESCRIPTION "\
 A space-efficient open-source binary JSON serialization \

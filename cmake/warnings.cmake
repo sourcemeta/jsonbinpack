@@ -2,7 +2,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
   add_compile_options(
     -Wall
     -Wextra
-    -Werror
     -Wpedantic
     -Wshadow
     -Wdouble-promotion
@@ -88,7 +87,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # See https://www.postgresql.org/message-id/1689.1134422394@sss.pgh.pa.us
     -fwrapv)
 elseif(MSVC)
-  add_compile_options(/options:strict /W4 /WX /WL /sdl)
+  add_compile_options(/options:strict /W4 /WL /sdl)
 else()
   message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
