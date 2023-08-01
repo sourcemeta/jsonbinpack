@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_syntax_sugar
 class ExclusiveMaximumAndMaximum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMaximumAndMaximum() : Rule("exclusive_maximum_and_maximum"){};

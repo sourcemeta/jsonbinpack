@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_superfluous
 class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
 public:
   UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};

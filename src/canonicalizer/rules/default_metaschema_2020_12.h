@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_implicit
 class DefaultMetaschema_2020_12 final : public sourcemeta::alterschema::Rule {
 public:
   DefaultMetaschema_2020_12() : Rule("default_metaschema_2020_12"){};

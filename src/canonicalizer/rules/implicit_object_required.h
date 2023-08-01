@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_implicit
 class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectRequired() : Rule("implicit_object_required"){};

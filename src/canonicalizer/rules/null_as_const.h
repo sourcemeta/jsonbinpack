@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_syntax_sugar
 class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
   NullAsConst() : Rule("null_as_const"){};

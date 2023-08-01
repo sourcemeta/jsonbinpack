@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_heterogeneous
 class DropNonArrayKeywordsFormat final : public sourcemeta::alterschema::Rule {
 public:
   DropNonArrayKeywordsFormat() : Rule("drop_non_array_keywords_format"){};

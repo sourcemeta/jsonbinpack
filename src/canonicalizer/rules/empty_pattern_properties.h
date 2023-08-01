@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_superfluous
 class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
 public:
   EmptyPatternProperties() : Rule("empty_pattern_properties"){};
