@@ -8,9 +8,6 @@ include(vendor/noa/cmake/noa.cmake)
 
 include(cmake/warnings.cmake)
 
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD 20)
-
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" ON)
