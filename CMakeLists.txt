@@ -66,6 +66,4 @@ if(PROJECT_IS_TOP_LEVEL)
   include(${PROJECT_SOURCE_DIR}/cmake/bundler.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/jekyll.cmake)
   include(${PROJECT_SOURCE_DIR}/cmake/doxygen.cmake)
-
-  # TODO: Define packaging
 endif()
