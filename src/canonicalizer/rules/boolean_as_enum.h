@@ -1,6 +1,23 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules
+
+/// ### JSON Schema 2020-12
+///
+/// The [Core](https://json-schema.org/draft/2020-12/json-schema-core.html)
+/// specification defines the trivial boolean schemas `true` and `false` where
+/// `true` validates successfully against any instance and `false` never
+/// validates successfully against any instance.  According to the
+/// specification, boolean schemas are syntactic sugar for the empty object
+/// schema and the `not` applicator.
+///
+/// For the `true` schema:
+///
+/// \f[\frac{s = true}{s \mapsto \{\}}\f]
+///
+/// For the `false` schema:
+///
+/// \f[\frac{s = false}{s \mapsto \{ not \mapsto \{\} \}}\f]
 class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   BooleanAsEnum() : Rule("boolean_as_enum"){};
