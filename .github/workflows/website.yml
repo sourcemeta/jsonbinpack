@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: sudo apt-get install --yes doxygen bundler
+      - run: sudo apt-get install --yes doxygen doxygen-latex bundler
       - run: cmake --version
       - run: >
           cmake -S . -B ./build
