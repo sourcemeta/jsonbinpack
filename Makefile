@@ -3,27 +3,31 @@ CTEST = ctest
 
 PRESET = debug
 
-all: .always
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --parallel
+configure: .always
+	$(CMAKE) -S . -B ./build \
+		-DCMAKE_BUILD_TYPE:STRING=$(PRESET) \
+		-DJSONBINPACK_CLI:BOOL=ON \
+		-DJSONBINPACK_TESTS:BOOL=ON \
+		-DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
 
-test: .always
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --verbose --parallel
+compile: .always
+	$(CMAKE) --build ./build --config $(PRESET) --target clang_format
+	$(CMAKE) --build ./build --config $(PRESET) --parallel
+
+all: configure compile
+	$(CTEST) --test-dir ./build --build-config $(PRESET) --parallel
+
+test: configure compile
+	$(CTEST) --test-dir ./build --build-config $(PRESET) --verbose --parallel
 
 lint: .always
-	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
+	$(CMAKE) --build ./build --config $(PRESET) --target clang_tidy
 
 clean: .always
 	$(CMAKE) -E rm -R -f build
 
-doxygen: .always
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target doxygen
+doxygen: configure
+	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
 
 # For NMake, which doesn't support .PHONY
 .always:
