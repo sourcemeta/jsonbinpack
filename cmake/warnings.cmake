@@ -1,4 +1,4 @@
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+if(NOA_COMPILER_LLVM)
   add_compile_options(
     -Wall
     -Wextra
@@ -50,7 +50,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "App
     # See https://users.cs.utah.edu/~regehr/papers/overflow12.pdf
     # See https://www.postgresql.org/message-id/1689.1134422394@sss.pgh.pa.us
     -fwrapv)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+elseif(NOA_COMPILER_GCC)
   add_compile_options(
     -Wall
     -Wextra
@@ -86,7 +86,7 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # See https://users.cs.utah.edu/~regehr/papers/overflow12.pdf
     # See https://www.postgresql.org/message-id/1689.1134422394@sss.pgh.pa.us
     -fwrapv)
-elseif(MSVC)
+elseif(NOA_COMPILER_MSVC)
   add_compile_options(/options:strict /W4 /WL /sdl)
 else()
   message(WARNING "Unrecognized compiler: ${CMAKE_CXX_COMPILER_ID}")
