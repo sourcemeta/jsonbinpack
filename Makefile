@@ -15,6 +15,9 @@ test: .always
 	$(CMAKE) --build --preset $(PRESET) --parallel
 	$(CTEST) --preset $(PRESET) --verbose --parallel
 
+lint: .always
+	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
+
 clean: .always
 	$(CMAKE) -E rm -R -f build
 
