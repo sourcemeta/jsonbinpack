@@ -42,6 +42,10 @@ debug:
 endif
 
 .PHONY: clean
+lint:
+	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
+
+.PHONY: clean
 clean:
 	$(CMAKE) -E rm -R -f build .bundle .sass-cache
 
