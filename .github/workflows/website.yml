@@ -9,11 +9,15 @@ jobs:
       - uses: actions/checkout@v2
       - run: sudo apt-get install --yes doxygen bundler
       - run: cmake --version
-      - run: cmake --preset release --log-context
-      - run: cmake --build --preset release --target bundler
+      - run: >
+          cmake -S . -B ./build
+          -DCMAKE_BUILD_TYPE:STRING=Release
+          -DJSONBINPACK_CLI:BOOL=OFF
+          -DJSONBINPACK_TESTS:BOOL=OFF
+      - run: cmake --build ./build --config Release --target bundler
       # Jekyll is often flaky on GitHub Actions
-      - run: ./scripts/retry.sh cmake --build --preset release --target jekyll
-      - run: cmake --build --preset release --target doxygen
+      - run: ./scripts/retry.sh cmake --build ./build --config Release --target jekyll
+      - run: cmake --build ./build --config Release --target doxygen
       # Only deploy website from the main branch
       - if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3

@@ -6,34 +6,36 @@ BUNDLE ?= bundle
 
 PRESET ?= debug
 
+.PHONY: configure
+configure:
+	$(CMAKE) -S . -B ./build \
+		-DCMAKE_BUILD_TYPE:STRING=$(PRESET) \
+		-DJSONBINPACK_CLI:BOOL=ON \
+		-DJSONBINPACK_TESTS:BOOL=ON \
+		-DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
+
+.PHONY: compile
+compile:
+	$(CMAKE) --build ./build --config $(PRESET) --target clang_format
+	$(CMAKE) --build ./build --config $(PRESET) --parallel
+
 .PHONY: all
-all:
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --parallel
+all: configure compile
+	$(CTEST) --test-dir ./build --build-config $(PRESET) --parallel
 
 .PHONY: test
 CASE ?=
 ifdef CASE
-test:
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --verbose --tests-regex $(CASE)
+test: configure compile
+	$(CTEST) --test-dir ./build --build-config $(PRESET) --verbose --tests-regex $(CASE)
 else
-test:
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target clang_format
-	$(CMAKE) --build --preset $(PRESET) --parallel
-	$(CTEST) --preset $(PRESET) --verbose
+test: configure compile
+	$(CTEST) --test-dir ./build --build-config $(PRESET) --verbose
 endif
 
 .PHONY: debug
 ifdef CASE
-debug: scripts/lldb.sh
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --parallel
+debug: scripts/lldb.sh configure compile
 	./$< $(PRESET) $(CASE)
 else
 debug:
@@ -43,20 +45,18 @@ endif
 
 .PHONY: clean
 lint:
-	$(CMAKE) --build --preset $(PRESET) --target clang_tidy
+	$(CMAKE) --build ./build --config $(PRESET) --target clang_tidy
 
 .PHONY: clean
 clean:
 	$(CMAKE) -E rm -R -f build .bundle .sass-cache
 
 .PHONY: jekyll
-jekyll:
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target bundler
+jekyll: configure
+	$(CMAKE) --build ./build --config $(PRESET) --target bundler
 	$(BUNDLE) exec jekyll serve --watch --incremental --trace \
 		--source www --destination build/$(PRESET)/www
 
 .PHONY: doxygen
-doxygen:
-	$(CMAKE) --preset $(PRESET) --log-context
-	$(CMAKE) --build --preset $(PRESET) --target doxygen
+doxygen: configure
+	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
