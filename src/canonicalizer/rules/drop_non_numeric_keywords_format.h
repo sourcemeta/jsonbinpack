@@ -10,9 +10,10 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/format-assertion  | N        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation        | Y        |
 ///
-/// If the `type` keyword from the Validation is set to either `number` or
-/// `integer` and either the Format Annotation or Format Assertion vocabularies
-/// are also in use, then keywords from these vocabularies can be removed.
+/// If the `type` keyword from the Validation vocabulary is set to either
+/// `number` or `integer` and either the Format Annotation or Format Assertion
+/// vocabularies are also in use, then keywords from these vocabularies can be
+/// removed.
 ///
 /// \f[\frac{S.type \in \{ number, integer \} \land format \in dom(S) }{S
 /// \mapsto S \setminus \{ format \} }\f]

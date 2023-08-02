@@ -9,7 +9,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/unevaluated | Y        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation  | Y        |
 ///
-/// If the `type` keyword from the Validation is set to `boolean` and
+/// If the `type` keyword from the Validation vocabulary is set to `boolean` and
 /// the Unevaluated vocabulary is in use, then keywords from the
 /// Unevaluated vocabulary that do not apply to boolean JSON instances can be
 /// removed.

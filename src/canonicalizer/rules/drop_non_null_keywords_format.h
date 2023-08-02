@@ -10,7 +10,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/format-assertion  | N        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation        | Y        |
 ///
-/// If the `type` keyword from the Validation is set to `null` and
+/// If the `type` keyword from the Validation vocabulary is set to `null` and
 /// either the Format Annotation or Format Assertion vocabularies are also in
 /// use, then keywords from these vocabularies can be removed.
 ///

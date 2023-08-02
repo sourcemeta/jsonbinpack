@@ -9,7 +9,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/content    | Y        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
 ///
-/// If the `type` keyword from the Validation is set to `null` and
+/// If the `type` keyword from the Validation vocabulary is set to `null` and
 /// the Content vocabulary is also in use, then keywords from the
 /// Content vocabulary that do not apply to null JSON instances
 /// can be removed.

@@ -9,10 +9,10 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/unevaluated | Y        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation  | Y        |
 ///
-/// If the `type` keyword from the Validation is set to either `number` or
-/// `integer` and the Unevaluated vocabulary is in use, then keywords from the
-/// Unevaluated vocabulary that do not apply to numeric JSON instances can be
-/// removed.
+/// If the `type` keyword from the Validation vocabulary is set to either
+/// `number` or `integer` and the Unevaluated vocabulary is in use, then
+/// keywords from the Unevaluated vocabulary that do not apply to numeric JSON
+/// instances can be removed.
 ///
 /// \f[\frac{S.type \in \{ number, integer \} \land K \subseteq dom(S) }{S
 /// \mapsto S \setminus K }\f]

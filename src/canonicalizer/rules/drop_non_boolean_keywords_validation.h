@@ -8,9 +8,9 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// |--------------------------------------------------------|----------|
 /// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
 ///
-/// If the `type` keyword from the Validation is set to `boolean`, then keywords
-/// from the Validation vocabulary that do not apply to boolean JSON instances
-/// can be removed.
+/// If the `type` keyword from the Validation vocabulary is set to `boolean`,
+/// then keywords from the Validation vocabulary that do not apply to boolean
+/// JSON instances can be removed.
 ///
 /// \f[\frac{S.type = boolean \land (K_{string} \cup K_{number} \cup K_{object}
 /// \cup K_{array}) \cap S \not\in \emptyset }{S \mapsto S \setminus (K_{string}
