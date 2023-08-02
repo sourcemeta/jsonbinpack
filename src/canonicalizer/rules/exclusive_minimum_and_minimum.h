@@ -1,6 +1,29 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules_syntax_sugar
+/// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// Both the `minimum` and `exclusiveMinimum` keywords from the Validation
+/// vocabulary express the same lower bound constraint. If both are present,
+/// only the most restrictive one can remain.
+///
+/// If `exclusiveMinimum` is less than `minimum`:
+///
+/// \f[\frac{\{ minimum, exclusiveMinimum \} \subseteq dom(S) \land
+/// S.exclusiveMinimum < S.minimum}{S \mapsto S \setminus \{ exclusiveMinimum \}
+/// }\f]
+///
+/// Otherwise:
+///
+/// \f[\frac{\{ minimum, exclusiveMinimum \} \subseteq dom(S) \land
+/// S.exclusiveMinimum \geq S.minimum}{S \mapsto S \setminus \{ minimum \}
+/// }\f]
+
 class ExclusiveMinimumAndMinimum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMinimumAndMinimum() : Rule("exclusive_minimum_and_minimum"){};
