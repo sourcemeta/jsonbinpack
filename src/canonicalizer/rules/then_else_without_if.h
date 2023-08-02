@@ -1,6 +1,22 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_superfluous
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
+///
+/// Declaring either the `then` or `else` keywords from the Applicator
+/// vocabulary without also declaring the `if` keyword from the Validation
+/// vocabulary does not contribute any constraints to the given schema, and thus
+/// can be removed.
+///
+/// \f[\frac{if \not\in dom(S) \land \{ then, else \} \cap dom(s) \neq \emptyset
+/// }{S \mapsto S \setminus \{ then, else \}
+/// }\f]
+
 class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
 public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};
@@ -14,8 +30,8 @@ public:
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
            !sourcemeta::jsontoolkit::defines(schema, "if") &&
-           sourcemeta::jsontoolkit::defines(schema, "then") &&
-           sourcemeta::jsontoolkit::defines(schema, "else");
+           (sourcemeta::jsontoolkit::defines(schema, "then") ||
+            sourcemeta::jsontoolkit::defines(schema, "else"));
   }
 
   auto transform(sourcemeta::jsontoolkit::JSON &,
