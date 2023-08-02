@@ -12,16 +12,16 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - os: macos-13
+          - os: macos-latest
             cc: clang
             cxx: clang++
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             cc: clang
             cxx: clang++
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             cc: gcc
             cxx: g++
-          - os: windows-2022
+          - os: windows-latest
 
     runs-on: ${{ matrix.platform.os }}
     env:
