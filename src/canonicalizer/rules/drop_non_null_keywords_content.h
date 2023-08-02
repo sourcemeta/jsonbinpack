@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_heterogeneous
 class DropNonNullKeywordsContent final : public sourcemeta::alterschema::Rule {
 public:
   DropNonNullKeywordsContent() : Rule("drop_non_null_keywords_content"){};

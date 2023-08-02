@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_simplification
 class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches"){};

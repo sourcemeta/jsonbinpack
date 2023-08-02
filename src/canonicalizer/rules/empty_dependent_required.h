@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_superfluous
 class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
 public:
   EmptyDependentRequired() : Rule("empty_dependent_required"){};

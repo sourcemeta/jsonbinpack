@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_simplification
 class EmptyObjectAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EmptyObjectAsConst() : Rule("empty_object_as_const"){};

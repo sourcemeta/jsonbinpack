@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_heterogeneous
 class DropNonObjectKeywordsValidation final
     : public sourcemeta::alterschema::Rule {
 public:

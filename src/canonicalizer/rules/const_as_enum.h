@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_syntax_sugar
 class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   ConstAsEnum() : Rule("const_as_enum"){};

@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_simplification
 class MinPropertiesRequiredTautology final
     : public sourcemeta::alterschema::Rule {
 public:

@@ -4,7 +4,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 // are not used, results in potential dropped annotations.
 // However, this is fine in the context of JSON BinPack,
 // as it does not rely on these type of annotations.
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_superfluous
 class IfWithoutThenElse final : public sourcemeta::alterschema::Rule {
 public:
   IfWithoutThenElse() : Rule("if_without_then_else"){};

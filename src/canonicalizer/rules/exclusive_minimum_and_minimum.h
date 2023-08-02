@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_syntax_sugar
 class ExclusiveMinimumAndMinimum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMinimumAndMinimum() : Rule("exclusive_minimum_and_minimum"){};

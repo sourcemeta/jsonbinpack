@@ -1,6 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules
+/// @ingroup canonicalizer_rules_implicit
 class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectProperties() : Rule("implicit_object_properties"){};
