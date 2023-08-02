@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_heterogeneous
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                                | Required |
+/// |---------------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/format-annotation | N        |
+/// | https://json-schema.org/draft/2020-12/vocab/format-assertion  | N        |
+/// | https://json-schema.org/draft/2020-12/vocab/validation        | Y        |
+///
+/// If the `type` keyword from the Validation is set to either `number` or
+/// `integer` and either the Format Annotation or Format Assertion vocabularies
+/// are also in use, then keywords from these vocabularies can be removed.
+///
+/// \f[\frac{S.type \in \{ number, integer \} \land format \in dom(S) }{S
+/// \mapsto S \setminus \{ format \} }\f]
 class DropNonNumericKeywordsFormat final
     : public sourcemeta::alterschema::Rule {
 public:
