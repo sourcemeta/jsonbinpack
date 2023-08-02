@@ -1,6 +1,29 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
-/// @ingroup canonicalizer_rules_syntax_sugar
+/// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// Both the `maximum` and `exclusiveMaximum` keywords from the Validation
+/// vocabulary express the same upper bound constraint. If both are present,
+/// only the most restrictive one can remain.
+///
+/// If `maximum` is less than or equal to `exclusiveMaximum`:
+///
+/// \f[\frac{\{ maximum, exclusiveMaximum \} \subseteq dom(S) \land S.maximum
+/// \leq S.exclusiveMaximum}{S \mapsto S \setminus \{ exclusiveMaximum \}
+/// }\f]
+///
+/// Otherwise:
+///
+/// \f[\frac{\{ maximum, exclusiveMaximum \} \subseteq dom(S) \land S.maximum >
+/// S.exclusiveMaximum}{S \mapsto S \setminus \{ maximum \}
+/// }\f]
+
 class ExclusiveMaximumAndMaximum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMaximumAndMaximum() : Rule("exclusive_maximum_and_maximum"){};

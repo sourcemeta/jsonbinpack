@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_syntax_sugar
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// The constraint imposed by the `exclusiveMinimum` keyword from the Validation
+/// vocabulary can be expressed in terms of the `minimum` keyword from the
+/// Validation vocabulary.
+///
+/// \f[\frac{exclusiveMinimum \in dom(S) \land minimum \not\in dom(S)}{S \mapsto
+/// S \cup \{ minimum \mapsto S.exclusiveMinimum + 1 \} \setminus \{
+/// exclusiveMinimum \} }\f]
+
 class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum"){};
