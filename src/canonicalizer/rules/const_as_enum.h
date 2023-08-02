@@ -13,7 +13,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// a single matching value. As such, `const` is an enumeration consisting
 /// of a single value.
 ///
-/// \f[\frac{const \in dom(s)}{s \mapsto s \cup \{ enum \mapsto \langle s.const
+/// \f[\frac{const \in dom(S)}{S \mapsto S \cup \{ enum \mapsto \langle S.const
 /// \rangle \} \setminus \{const\} }\f]
 
 class ConstAsEnum final : public sourcemeta::alterschema::Rule {
