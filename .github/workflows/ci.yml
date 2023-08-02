@@ -51,5 +51,5 @@ jobs:
           -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
       - run: cmake --build ./build --config Release --target shellcheck
       - run: cmake --build ./build --config Release --target clang_format_test
-      - run: cmake --build ./build --config Release --parallel
+      - run: cmake --build ./build --config Release --parallel 2
       - run: cd ./build && ctest --build-config Release --output-on-failure --parallel
