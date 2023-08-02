@@ -56,7 +56,9 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/implicit_string_lower_bound.h
   rules/implicit_type_union.h
   rules/implicit_unit_multiple_of.h
-  rules/implied_array_unique_items.h
+  rules/implied_array_unique_items_by_const.h
+  rules/implied_array_unique_items_by_enum.h
+  rules/implied_array_unique_items_by_max_items.h
   rules/max_contains_without_contains.h
   rules/maximum_real_for_integer.h
   rules/min_contains_without_contains.h
