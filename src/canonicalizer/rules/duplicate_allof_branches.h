@@ -1,6 +1,20 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
+///
+/// The `allOf` keyword from the Applicator vocabulary represents a logical
+/// conjunction. As such, duplicate branches do not affect the result and can be
+/// removed.
+///
+/// \f[\frac{allOf \in dom(S) \land \#S.allOf \neq \#\{ x \mid S.allOf \}}{S
+/// \mapsto S \cup \{ allOf \mapsto seq \; \{ x \mid S.allOf \} \} }\f]
+
 class DuplicateAllOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAllOfBranches() : Rule("duplicate_allof_branches"){};
