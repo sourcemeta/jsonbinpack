@@ -62,7 +62,9 @@
 #include "rules/implicit_string_lower_bound.h"
 #include "rules/implicit_type_union.h"
 #include "rules/implicit_unit_multiple_of.h"
-#include "rules/implied_array_unique_items.h"
+#include "rules/implied_array_unique_items_by_const.h"
+#include "rules/implied_array_unique_items_by_enum.h"
+#include "rules/implied_array_unique_items_by_max_items.h"
 #include "rules/max_contains_without_contains.h"
 #include "rules/maximum_real_for_integer.h"
 #include "rules/min_contains_without_contains.h"
@@ -133,7 +135,9 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<ImplicitStringLowerBound>();
   this->bundle.template add<ImplicitTypeUnion>();
   this->bundle.template add<ImplicitUnitMultipleOf>();
-  this->bundle.template add<ImpliedArrayUniqueItems>();
+  this->bundle.template add<ImpliedArrayUniqueItemsByConst>();
+  this->bundle.template add<ImpliedArrayUniqueItemsByEnum>();
+  this->bundle.template add<ImpliedArrayUniqueItemsByMaxItems>();
   this->bundle.template add<MaximumRealForInteger>();
   this->bundle.template add<MaxContainsWithoutContains>();
   this->bundle.template add<MinContainsWithoutContains>();
