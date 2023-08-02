@@ -44,7 +44,6 @@
 #include "rules/duplicate_allof_branches.h"
 #include "rules/duplicate_anyof_branches.h"
 #include "rules/duplicate_enum_values.h"
-#include "rules/duplicate_oneof_branches.h"
 #include "rules/empty_array_as_const.h"
 #include "rules/empty_dependent_required.h"
 #include "rules/empty_object_as_const.h"
@@ -116,7 +115,6 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
   this->bundle.template add<DuplicateAllOfBranches>();
   this->bundle.template add<DuplicateAnyOfBranches>();
   this->bundle.template add<DuplicateEnumValues>();
-  this->bundle.template add<DuplicateOneOfBranches>();
   this->bundle.template add<EmptyArrayAsConst>();
   this->bundle.template add<EmptyDependentRequired>();
   this->bundle.template add<EmptyObjectAsConst>();
