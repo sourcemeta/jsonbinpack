@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_superfluous
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// Declaring the `maxContains` keyword from the Validation vocabulary to a
+/// value that is greater or equal to the value set in the `maxItems` keyword
+/// from the Validation vocabulary does not contribute any constraints to the
+/// given schema, as `maxContains` would never be unsuccessful.
+///
+/// \f[\frac{\{ maxContains, maxItems \} \subseteq dom(S) \land S.maxContains
+/// \geq S.maxItems }{S \mapsto S \setminus \{ maxContains \} }\f]
+
 class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
 public:
   UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};

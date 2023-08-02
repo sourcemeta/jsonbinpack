@@ -1,6 +1,22 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_superfluous
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// Declaring the `maxContains` keyword from the Validation
+/// vocabulary without also declaring the `contains` keyword from the Applicator
+/// vocabulary does not contribute any constraints to the given schema, and thus
+/// can be removed.
+///
+/// \f[\frac{maxContains \in dom(S) \land contains \not\in dom(s) }{S \mapsto S
+/// \setminus \{ maxContains \} }\f]
+
 class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MaxContainsWithoutContains() : Rule("max_contains_without_contains"){};
