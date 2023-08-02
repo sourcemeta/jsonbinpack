@@ -2,7 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_CANONICALIZER_H_
 
 /// @defgroup canonicalizer Canonicalizer
-/// @brief A canonicalization rule is expressed using set theory
+/// A canonicalization rule is expressed using set theory
 /// notation. Each rule is expressed as \f$\frac{Condition}{Transformation}\f$,
 /// where the given transformation only applies if the condition holds true. In
 /// this notation, \f$S\f$ corresponds to the schema in question. After a
