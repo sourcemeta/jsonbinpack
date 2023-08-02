@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_syntax_sugar
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// The JSON Schema Validation vocabulary defines the `enum` keyword to
+/// declare a set of matching values and the `const` keyword to define
+/// a single matching value. As such, `const` is an enumeration consisting
+/// of a single value.
+///
+/// \f[\frac{const \in dom(s)}{s \mapsto s \cup \{ enum \mapsto \langle s.const
+/// \rangle \} \setminus \{const\} }\f]
+
 class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   ConstAsEnum() : Rule("const_as_enum"){};
