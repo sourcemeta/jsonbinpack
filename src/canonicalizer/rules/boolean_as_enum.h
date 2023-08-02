@@ -14,7 +14,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// declaring the `enum` keyword from the Validation vocabulary to the
 /// constants `false` and `true`.
 ///
-/// \f[\frac{s.type = boolean}{s \mapsto s \cup \{ enum \mapsto \langle false,
+/// \f[\frac{S.type = boolean}{S \mapsto S \cup \{ enum \mapsto \langle false,
 /// true \rangle \} \setminus \{ type \} }\f]
 
 class BooleanAsEnum final : public sourcemeta::alterschema::Rule {

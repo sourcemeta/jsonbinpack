@@ -13,11 +13,12 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 ///
 /// For the `true` schema:
 ///
-/// \f[\frac{s = true}{s \mapsto \{\}}\f]
+/// \f[\frac{S = true}{S \mapsto \{\}}\f]
 ///
 /// For the `false` schema:
 ///
-/// \f[\frac{s = false}{s \mapsto \{ not \mapsto \{\} \}}\f]
+/// \f[\frac{S = false}{S \mapsto \{ not \mapsto \{\} \}}\f]
+
 class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
   BooleanSchema() : Rule("boolean_schema"){};
