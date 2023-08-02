@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// If the `type` keyword from the Validation vocabulary is set to `string` and
+/// the `maxLength` keyword from the Validation keyword is set to 0, then the
+/// only instance that can possibly match the schema is the empty string.
+///
+/// \f[\frac{S.type = string \land S.maxLength = 0}{S
+/// \mapsto S \cup \{ const \mapsto "" \} \setminus \{ maxLength \}
+/// }\f]
+
 class EmptyStringAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EmptyStringAsConst() : Rule("empty_string_as_const"){};

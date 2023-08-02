@@ -9,8 +9,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
 ///
 /// If the `type` keyword from the Validation vocabulary is set to `object` and
-/// the `maxProperties` keyword from the Validation is set to 0, then the only
-/// instance that can possibly match the schema is the empty object.
+/// the `maxProperties` keyword from the Validation vocabulary is set to 0, then
+/// the only instance that can possibly match the schema is the empty object.
 ///
 /// \f[\frac{S.type = object \land S.maxProperties = 0}{S
 /// \mapsto S \cup \{ const \mapsto \{\} \} \setminus \{ maxProperties \}

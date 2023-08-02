@@ -618,3 +618,26 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_without_numeric_type) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string",
+    "maximum": 5,
+    "minimum": 5
+  })JSON")};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "string",
+    "minLength": 0
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
