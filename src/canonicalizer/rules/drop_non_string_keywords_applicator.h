@@ -9,7 +9,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
 ///
-/// If the `type` keyword from the Validation is set to `string` and
+/// If the `type` keyword from the Validation vocabulary is set to `string` and
 /// the Applicator vocabulary is also in use, then keywords from the
 /// Applicator vocabulary that do not apply to string JSON instances
 /// can be removed.
