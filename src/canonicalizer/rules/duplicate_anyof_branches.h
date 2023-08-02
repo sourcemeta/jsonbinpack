@@ -1,6 +1,20 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
+///
+/// The `anyOf` keyword from the Applicator vocabulary represents a logical
+/// disjunction. As such, duplicate branches do not affect the result and can be
+/// removed.
+///
+/// \f[\frac{anyOf \in dom(S) \land \#S.anyOf \neq \#\{ x \mid S.anyOf \}}{S
+/// \mapsto S \cup \{ anyOf \mapsto seq \; \{ x \mid S.anyOf \} \} }\f]
+
 class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches"){};
