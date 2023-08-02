@@ -6,12 +6,13 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 ///
 /// | Vocabulary URI                                          | Required |
 /// |---------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/unevaluated | N        |
+/// | https://json-schema.org/draft/2020-12/vocab/unevaluated | Y        |
 /// | https://json-schema.org/draft/2020-12/vocab/validation  | Y        |
 ///
 /// If the `type` keyword from the Validation is set to `array` and
 /// the Unevaluated vocabulary is in use, then keywords from the
-/// Unevaluated vocabulary can be removed.
+/// Unevaluated vocabulary that do not apply to array JSON instances can be
+/// removed.
 ///
 /// \f[\frac{S.type = array \land unevaluatedProperties \in dom(S) }{S
 /// \mapsto S \setminus \{ unevaluatedProperties \} }\f]
