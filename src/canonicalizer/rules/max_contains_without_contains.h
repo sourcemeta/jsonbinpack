@@ -14,7 +14,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// vocabulary does not contribute any constraints to the given schema, and thus
 /// can be removed.
 ///
-/// \f[\frac{maxContains \in dom(S) \land contains \not\in dom(s) }{S \mapsto S
+/// \f[\frac{maxContains \in dom(S) \land contains \not\in dom(S) }{S \mapsto S
 /// \setminus \{ maxContains \} }\f]
 
 class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
