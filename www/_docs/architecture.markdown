@@ -41,27 +41,9 @@ by the same schema definition to a minimum.
 Canonicalizer
 -------------
 
-JSON Schema is a particularly expressive and complex schema language. To
-mitigate such complexity in the context of static analysis, the *Canonicalizer*
-component is a total function that maps JSON Schema definitions to equivalent
-but simpler JSON Schema definitions according to a set formal transformations.
-The concept of simplifying JSON Schema definitions based on formal
-transformations for static analysis purposes was originally introduced by [Type
-Safety with JSON Subschema](https://arxiv.org/abs/1911.12651).  We extend their
-work by modernizing and extending their set of canonicalization rules.
+See {{ siet.url }}/api/group__canonicalizer.html.
 
-![JSON BinPack C4 Canonicalizer Diagram]({{ site.url }}/assets/images/c4-jsonbinpack-canonicalizer.png)
-
-The canonicalizer repeatedly applies the set of defined canonizalization
-transformations rules to every subschema of a given JSON Schema definition
-until no more transformations are possible. A JSON Schema definition that
-cannot be further modified by any canonizalization rule is considered to be a
-*Canonical JSON Schema*. In order to prevent an infinite loop in the
-canonizalization algorithm, canonizalization rules do not conflict with each
-other and the pre-condition of a given canonizalization rule does not hold
-after such canonizalization rule has been applied to the schema.
-
-Encoder
+Encode
 -------
 
 JSON BinPack implements a diverse set of encodings that are space-efficient in

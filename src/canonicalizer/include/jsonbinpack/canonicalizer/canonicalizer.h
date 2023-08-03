@@ -2,11 +2,34 @@
 #define SOURCEMETA_JSONBINPACK_CANONICALIZER_CANONICALIZER_H_
 
 /// @defgroup canonicalizer Canonicalizer
-/// A canonicalization rule is expressed using set theory
-/// notation. Each rule is expressed as \f$\frac{Condition}{Transformation}\f$,
-/// where the given transformation only applies if the condition holds true. In
-/// this notation, \f$S\f$ corresponds to the schema in question. After a
-/// transformation takes place, its condition must not hold anymore.
+/// @brief A pure and deterministic function that simplifies a JSON Schema
+/// definition to ease the static analysis process
+///
+/// JSON Schema is a particularly expressive and complex schema language. To
+/// mitigate such complexity in the context of static analysis, the
+/// *Canonicalizer* component is a total function that maps JSON Schema
+/// definitions to equivalent but simpler JSON Schema definitions according to a
+/// set formal transformations. The concept of simplifying JSON Schema
+/// definitions based on formal transformations for static analysis purposes was
+/// originally introduced by [Type Safety with JSON
+/// Subschema](https://arxiv.org/abs/1911.12651). We extend their work by
+/// modernizing and extending their set of canonicalization rules.
+///
+/// \image html c4-jsonbinpack-canonicalizer.png width=80%
+///
+/// The canonicalizer repeatedly applies the set of defined canonizalization
+/// transformations rules to every subschema of a given JSON Schema definition
+/// until no more transformations are possible. A JSON Schema definition that
+/// cannot be further modified by any canonizalization rule is considered to be
+/// a *Canonical JSON Schema*. In order to prevent an infinite loop in the
+/// canonizalization algorithm, canonizalization rules do not conflict with each
+/// other and the pre-condition of a given canonizalization rule does not hold
+/// after such canonizalization rule has been applied to the schema.
+///
+/// Inspired by the notation introduced by [Type Safety with JSON
+/// Subschema](https://arxiv.org/abs/1911.12651), each canonizalization rule is
+/// defined using the form \f$\frac{Condition}{Transformation}\f$ where \f$S\f$
+/// corresponds to the JSON Schema in question.
 //
 /// @defgroup canonicalizer_rules_syntax_sugar Syntax Sugar
 /// @brief Syntax sugar canonicalization rules aim to simplify the
