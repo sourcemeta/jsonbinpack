@@ -20,6 +20,7 @@ class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   ConstAsEnum() : Rule("const_as_enum"){};
 
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -32,6 +33,7 @@ public:
            sourcemeta::jsontoolkit::defines(schema, "const");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::JSON values{sourcemeta::jsontoolkit::make_array()};

@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class MinimumRealForInteger final : public sourcemeta::alterschema::Rule {
 public:
   MinimumRealForInteger() : Rule("minimum_real_for_integer"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -38,6 +40,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "minimum"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const auto current{sourcemeta::jsontoolkit::to_real(

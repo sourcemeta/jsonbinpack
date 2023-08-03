@@ -21,6 +21,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -47,6 +49,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "maximum");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(

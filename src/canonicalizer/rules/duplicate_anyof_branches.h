@@ -18,6 +18,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
 public:
   DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -33,6 +35,7 @@ public:
            is_unique(sourcemeta::jsontoolkit::at(schema, "anyOf"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto &collection{sourcemeta::jsontoolkit::at(value, "anyOf")};

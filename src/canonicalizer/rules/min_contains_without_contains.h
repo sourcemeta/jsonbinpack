@@ -20,6 +20,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class MinContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
   MinContainsWithoutContains() : Rule("min_contains_without_contains"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -35,6 +37,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "contains");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "minContains");

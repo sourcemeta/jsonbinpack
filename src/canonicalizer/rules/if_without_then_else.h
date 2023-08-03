@@ -24,6 +24,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class IfWithoutThenElse final : public sourcemeta::alterschema::Rule {
 public:
   IfWithoutThenElse() : Rule("if_without_then_else"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -38,6 +40,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "else");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "if");

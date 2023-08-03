@@ -20,6 +20,7 @@ class DefaultMetaschema_2020_12 final : public sourcemeta::alterschema::Rule {
 public:
   DefaultMetaschema_2020_12() : Rule("default_metaschema_2020_12"){};
 
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -32,6 +33,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "$schema") && level == 0;
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(

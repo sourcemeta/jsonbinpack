@@ -9,6 +9,8 @@ class MinPropertiesRequiredTautology final
 public:
   MinPropertiesRequiredTautology()
       : Rule("min_properties_required_tautology"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -30,6 +32,7 @@ public:
                    sourcemeta::jsontoolkit::at(schema, "minProperties")));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(

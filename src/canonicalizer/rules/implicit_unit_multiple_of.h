@@ -20,6 +20,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -37,6 +39,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "multipleOf");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(document, value, "multipleOf",

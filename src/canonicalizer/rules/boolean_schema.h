@@ -23,6 +23,7 @@ class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
   BooleanSchema() : Rule("boolean_schema"){};
 
+  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::Value &schema,
                                const std::string &,
                                const std::unordered_map<std::string, bool> &,
@@ -30,6 +31,7 @@ public:
     return sourcemeta::jsontoolkit::is_boolean(schema);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool current_value{sourcemeta::jsontoolkit::to_boolean(value)};

@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -34,6 +36,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "maximum");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto new_maximum{sourcemeta::jsontoolkit::from(

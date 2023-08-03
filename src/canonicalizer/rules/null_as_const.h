@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
   NullAsConst() : Rule("null_as_const"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -35,6 +37,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "type")) == "null";
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(document, value, "const",

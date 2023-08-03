@@ -27,6 +27,8 @@ class DropNonArrayKeywordsApplicator final
 public:
   DropNonArrayKeywordsApplicator()
       : Rule("drop_non_array_keywords_applicator"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -46,6 +48,7 @@ public:
                                                 this->BLACKLIST_APPLICATOR);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_APPLICATOR);

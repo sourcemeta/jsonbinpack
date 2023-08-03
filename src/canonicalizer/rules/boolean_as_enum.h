@@ -21,6 +21,7 @@ class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
 public:
   BooleanAsEnum() : Rule("boolean_as_enum"){};
 
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -38,6 +39,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "enum");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     auto choices{sourcemeta::jsontoolkit::make_array()};

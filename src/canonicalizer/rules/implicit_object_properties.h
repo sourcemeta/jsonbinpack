@@ -20,6 +20,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectProperties() : Rule("implicit_object_properties"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -39,6 +41,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "properties");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(document, value, "properties",
