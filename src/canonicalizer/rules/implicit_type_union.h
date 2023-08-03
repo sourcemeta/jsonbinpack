@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+// TODO: Write formula description
 /// @ingroup canonicalizer_rules_heterogeneous
 class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
