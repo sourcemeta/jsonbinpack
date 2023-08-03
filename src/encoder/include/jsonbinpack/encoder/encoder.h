@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_ENCODER_ENCODER_H_
 
 /// @defgroup encoder Encoder
+/// @brief A set of procedures to serialize a JSON document given a Encoding
+/// Schema
 
 #include <jsonbinpack/encoder/basic_encoder.h>
 #include <jsonbinpack/encoder/real.h>

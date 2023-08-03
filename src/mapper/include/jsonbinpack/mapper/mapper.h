@@ -2,6 +2,9 @@
 #define SOURCEMETA_JSONBINPACK_MAPPER_MAPPER_H_
 
 /// @defgroup mapper Mapper
+/// @brief A pure and deterministic function that converts a Canonical JSON
+/// Schema into a JSON BinPack Encoding Schema
+///
 /// @defgroup mapper_rules Rules
 /// @ingroup mapper
 

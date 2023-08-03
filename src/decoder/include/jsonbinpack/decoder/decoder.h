@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_DECODER_DECODER_H_
 
 /// @defgroup decoder Decoder
+/// @brief A set of procedures to deserialize a bit-string given a Encoding
+/// Schema
 
 #include <jsonbinpack/decoder/basic_decoder.h>
 #include <jsonbinpack/encoding/encoding.h>
