@@ -17,6 +17,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 ///
 /// \f[\frac{S.type \in \{ number, integer \} \land format \in dom(S) }{S
 /// \mapsto S \setminus \{ format \} }\f]
+
 class DropNonNumericKeywordsFormat final
     : public sourcemeta::alterschema::Rule {
 public:
