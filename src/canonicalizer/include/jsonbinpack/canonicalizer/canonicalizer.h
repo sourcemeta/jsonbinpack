@@ -83,12 +83,15 @@ namespace sourcemeta::jsonbinpack {
 /// @ingroup canonicalizer
 class Canonicalizer {
 public:
+  /// Create a Canonicalizer object
   Canonicalizer(const sourcemeta::jsontoolkit::schema_resolver_t &resolver);
+
+  /// Canonicalize the given JSON Schema
   auto apply(sourcemeta::jsontoolkit::JSON &document,
              sourcemeta::jsontoolkit::Value &value,
              const std::string &default_metaschema) const -> void;
 
-  // For convenience
+  /// Canonicalize the given JSON Schema
   inline auto apply(sourcemeta::jsontoolkit::JSON &document,
                     const std::string &default_metaschema) const -> void {
     return apply(document, document, default_metaschema);
