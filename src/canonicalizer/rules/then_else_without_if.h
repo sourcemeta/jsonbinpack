@@ -13,7 +13,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// vocabulary does not contribute any constraints to the given schema, and thus
 /// can be removed.
 ///
-/// \f[\frac{if \not\in dom(S) \land \{ then, else \} \cap dom(s) \neq \emptyset
+/// \f[\frac{if \not\in dom(S) \land \{ then, else \} \cap dom(S) \neq \emptyset
 /// }{S \mapsto S \setminus \{ then, else \}
 /// }\f]
 

@@ -1,6 +1,21 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 /// @ingroup canonicalizer_rules_simplification
+///
+/// ### JSON Schema 2020-12
+///
+/// | Vocabulary URI                                         | Required |
+/// |--------------------------------------------------------|----------|
+/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
+///
+/// If the `type` keyword from the Validation vocabulary is set to `integer` and
+/// the `maximum` keyword from the Validation vocabulary is set to a real
+/// number, then the upper bound is the floor of such real number.
+///
+/// \f[\frac{S.type = integer \land maximum \in dom(S) \land S.maximum \in
+/// \mathbb{R}}{S \mapsto S \cup \{ maximum \mapsto \lfloor S.maximum \rfloor \}
+/// }\f]
+
 class MaximumRealForInteger final : public sourcemeta::alterschema::Rule {
 public:
   MaximumRealForInteger() : Rule("maximum_real_for_integer"){};

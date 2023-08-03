@@ -17,7 +17,7 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// results in potential dropped annotations.  However, this is fine in the
 /// context of JSON BinPack, as it does not rely on these type of annotations.
 ///
-/// \f[\frac{if \in dom(S) \land \{ then, else \} \cap dom(s) = \emptyset }{S
+/// \f[\frac{if \in dom(S) \land \{ then, else \} \cap dom(S) = \emptyset }{S
 /// \mapsto S \setminus \{ if \}
 /// }\f]
 
