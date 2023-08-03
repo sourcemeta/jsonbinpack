@@ -1,6 +1,9 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+// TODO: Document this rule
+// TODO: Handle the case where `required` has duplicated elements
 /// @ingroup canonicalizer_rules_simplification
+
 class MinPropertiesRequiredTautology final
     : public sourcemeta::alterschema::Rule {
 public:
