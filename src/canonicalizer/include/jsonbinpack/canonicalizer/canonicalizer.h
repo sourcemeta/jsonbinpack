@@ -15,7 +15,7 @@
 /// Subschema](https://arxiv.org/abs/1911.12651). We extend their work by
 /// modernizing and extending their set of canonicalization rules.
 ///
-/// \image html c4-jsonbinpack-canonicalizer.png width=80%
+/// @image html c4-jsonbinpack-canonicalizer.png width=80%
 ///
 /// The canonicalizer repeatedly applies the set of defined canonizalization
 /// transformations rules to every subschema of a given JSON Schema definition
