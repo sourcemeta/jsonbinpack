@@ -1,12 +1,10 @@
----
-layout: docs
-title:  "The Architecture of JSON BinPack"
----
+The Architecture of JSON BinPack
+================================
 
-JSON BinPack consists of three software modules: the Canonicalizer, the Encoder
-and the Mapper.
+JSON BinPack consists of three software modules: the @ref canonicalizer, the
+@ref encoder and the @ref mapper.
 
-![JSON BinPack C4 Container Diagram]({{ site.url }}/assets/images/c4-jsonbinpack-container.png)
+@image html c4-jsonbinpack-container.png width=80%
 
 The core goal of JSON BinPack is to **unambiguously and bi-directionally map
 the high-level data types provided by JSON and JSON Schema to low-level
@@ -38,11 +36,6 @@ rather than once per input data instance, reducing the amount of computation
 required to serialize and deserialize multiple input data instances described
 by the same schema definition to a minimum.
 
-Canonicalizer
--------------
-
-See {{ siet.url }}/api/group__canonicalizer.html.
-
 Encode
 -------
 
@@ -54,7 +47,7 @@ procedures defined in the *Encoder* component are bounded by the JSON data
 model. However, the set of serialization and deserialization procedures are
 agnostic to the schema language used to validate and describe the input data.
 
-![JSON BinPack C4 Encoder Diagram]({{ site.url }}/assets/images/c4-jsonbinpack-encoder.png)
+@image html c4-jsonbinpack-encoder.png width=80%
 
 The *Encoder* defines a proxy serialization procedure that given a JSON
 document and a matching *Encoding Schema*, serializes the JSON document into a
@@ -75,4 +68,4 @@ parameters defined by the Encoder are likely to produce the most
 space-efficient bit-strings for any JSON instance that successfully validates
 against the given schema.
 
-![JSON BinPack C4 Mapper Diagram]({{ site.url }}/assets/images/c4-jsonbinpack-mapper.png)
+@image html c4-jsonbinpack-mapper.png width=80%

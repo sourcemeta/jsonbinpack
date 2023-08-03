@@ -4,13 +4,6 @@
   {% else %}
   <div class="container">
   {% endif %}
-
-    {% if page.title %}
-    <button id="offcanvas-toggle" type="button" class="btn btn-lg btn-outline-light me-1 d-lg-none">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    {% endif %}
-
     {% if page.title %}
     <a class="navbar-brand flex-grow-1 fs-3 d-none d-lg-inline-block" href="{{ site.url }}">
     {% else %}
@@ -26,7 +19,7 @@
     <div class="navbar-collapse flex-grow-0">
       <div class="navbar-nav align-items-center">
         <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.repository }}/discussions">Discussions</a>
-        <a class="nav-link ms-2 d-none d-md-inline-block" href="{% link _docs/architecture.markdown %}">Docs</a>
+        <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.url }}/api">Docs</a>
         {% if page.title %}
         <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.url }}#research">Research</a>
         {% else %}
