@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class EmptyObjectAsConst final : public sourcemeta::alterschema::Rule {
 public:
   EmptyObjectAsConst() : Rule("empty_object_as_const"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -40,6 +42,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "maxProperties")) == 0;
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(document, value, "const",

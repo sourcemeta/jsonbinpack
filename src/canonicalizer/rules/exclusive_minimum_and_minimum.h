@@ -27,6 +27,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ExclusiveMinimumAndMinimum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMinimumAndMinimum() : Rule("exclusive_minimum_and_minimum"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -44,6 +46,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "exclusiveMinimum"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool exclusive_minimum_less_than_minimum{

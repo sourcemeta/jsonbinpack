@@ -5,6 +5,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
   TypeUnionAnyOf() : Rule("type_union_anyof"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -21,6 +23,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "type"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::JSON disjunctors{

@@ -20,6 +20,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
 public:
   ThenElseWithoutIf() : Rule("then_else_without_if"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -34,6 +36,7 @@ public:
             sourcemeta::jsontoolkit::defines(schema, "else"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "then");

@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitObjectRequired() : Rule("implicit_object_required"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -36,6 +38,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "required");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::assign(document, value, "required",

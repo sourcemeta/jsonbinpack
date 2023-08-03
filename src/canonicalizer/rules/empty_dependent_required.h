@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
 public:
   EmptyDependentRequired() : Rule("empty_dependent_required"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -35,6 +37,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "dependentRequired"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "dependentRequired");

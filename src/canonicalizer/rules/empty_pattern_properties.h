@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
 public:
   EmptyPatternProperties() : Rule("empty_pattern_properties"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -35,6 +37,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "patternProperties"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "patternProperties");

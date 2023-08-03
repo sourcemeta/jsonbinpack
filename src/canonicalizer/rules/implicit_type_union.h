@@ -5,6 +5,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
   ImplicitTypeUnion() : Rule("implicit_type_union"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -32,6 +34,7 @@ public:
            !has_applicator_blacklist && !has_validation_blacklist;
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &document,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::JSON types{sourcemeta::jsontoolkit::make_array()};

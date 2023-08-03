@@ -19,6 +19,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
 public:
   UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -40,6 +42,7 @@ public:
                    sourcemeta::jsontoolkit::at(schema, "maxItems"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "maxContains");

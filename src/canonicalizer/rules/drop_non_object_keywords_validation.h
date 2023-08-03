@@ -31,6 +31,8 @@ class DropNonObjectKeywordsValidation final
 public:
   DropNonObjectKeywordsValidation()
       : Rule("drop_non_object_keywords_validation"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -48,6 +50,7 @@ public:
                                                 this->BLACKLIST_VALIDATION);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_VALIDATION);

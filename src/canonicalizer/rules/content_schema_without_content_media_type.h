@@ -21,6 +21,7 @@ public:
   ContentSchemaWithoutContentMediaType()
       : Rule("content_schema_without_content_media_type"){};
 
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -34,6 +35,7 @@ public:
            !sourcemeta::jsontoolkit::defines(schema, "contentMediaType");
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase(value, "contentSchema");

@@ -24,6 +24,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class DropNonNullKeywordsContent final : public sourcemeta::alterschema::Rule {
 public:
   DropNonNullKeywordsContent() : Rule("drop_non_null_keywords_content"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -37,6 +39,7 @@ public:
                                                 this->BLACKLIST_CONTENT);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_CONTENT);

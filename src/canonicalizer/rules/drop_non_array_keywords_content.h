@@ -24,6 +24,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class DropNonArrayKeywordsContent final : public sourcemeta::alterschema::Rule {
 public:
   DropNonArrayKeywordsContent() : Rule("drop_non_array_keywords_content"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -44,6 +46,7 @@ public:
                                                 this->BLACKLIST_CONTENT);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_CONTENT);

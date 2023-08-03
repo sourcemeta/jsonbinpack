@@ -27,6 +27,8 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 class ExclusiveMaximumAndMaximum final : public sourcemeta::alterschema::Rule {
 public:
   ExclusiveMaximumAndMaximum() : Rule("exclusive_maximum_and_maximum"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -44,6 +46,7 @@ public:
                sourcemeta::jsontoolkit::at(schema, "exclusiveMaximum"));
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     const bool maximum_less_than_exclusive_maximum{

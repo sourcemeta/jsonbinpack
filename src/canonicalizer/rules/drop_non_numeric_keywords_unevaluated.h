@@ -26,6 +26,8 @@ class DropNonNumericKeywordsUnevaluated final
 public:
   DropNonNumericKeywordsUnevaluated()
       : Rule("drop_non_numeric_keywords_unevaluated"){};
+
+  /// The rule condition
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::Value &schema,
             const std::string &draft,
@@ -47,6 +49,7 @@ public:
                                                 this->BLACKLIST_UNEVALUATED);
   }
 
+  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::JSON &,
                  sourcemeta::jsontoolkit::Value &value) const -> void override {
     sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_UNEVALUATED);
