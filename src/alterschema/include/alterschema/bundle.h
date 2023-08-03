@@ -16,10 +16,12 @@
 namespace sourcemeta::alterschema {
 class Bundle {
 public:
+  /// Instantiate an Alterschema bundle
   Bundle(const sourcemeta::jsontoolkit::schema_walker_t &walker,
          const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
       : walker_{walker}, resolver_{resolver} {}
 
+  /// Add an Alterschema rule to the bundle
   template <std::derived_from<Rule> T> auto add() -> void {
     auto rule{std::make_unique<T>()};
     const std::string &name{rule->name()};
@@ -28,16 +30,18 @@ public:
     this->rules.insert({name, std::move(rule)});
   }
 
+  /// Apply the bundle of rules to a JSON document
   auto apply(sourcemeta::jsontoolkit::JSON &document,
              sourcemeta::jsontoolkit::Value &value,
              const std::string &default_metaschema) const -> void;
 
-  // For Convenience
+  /// Apply the bundle of rules to a JSON document
   inline auto apply(sourcemeta::jsontoolkit::JSON &document,
                     const std::string &default_metaschema) const -> void {
     return this->apply(document, document, default_metaschema);
   }
 
+  /// Fetch the bundle resolver
   auto resolver() const -> const sourcemeta::jsontoolkit::schema_resolver_t &;
 
 private:
