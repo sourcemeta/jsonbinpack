@@ -30,6 +30,8 @@
 /// Subschema](https://arxiv.org/abs/1911.12651), each canonizalization rule is
 /// defined using the form \f$\frac{Condition}{Transformation}\f$ where \f$S\f$
 /// corresponds to the JSON Schema in question.
+///
+/// @see mapper
 //
 /// @defgroup canonicalizer_rules_syntax_sugar Syntax Sugar
 /// @brief Syntax sugar canonicalization rules aim to simplify the

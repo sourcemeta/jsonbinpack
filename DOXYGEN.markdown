@@ -1,6 +1,8 @@
 The Architecture of JSON BinPack
 ================================
 
+@tableofcontents
+
 JSON BinPack consists of three software modules: the @ref canonicalizer, the
 @ref encoder and the @ref mapper.
 
