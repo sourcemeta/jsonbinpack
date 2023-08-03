@@ -1,5 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
+// TODO: Document this rule
 /// @ingroup canonicalizer_rules_heterogeneous
 class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
@@ -10,6 +11,8 @@ public:
             const std::unordered_map<std::string, bool> &vocabularies,
             const std::size_t) const -> bool override {
     return draft == "https://json-schema.org/draft/2020-12/schema" &&
+           vocabularies.contains(
+               "https://json-schema.org/draft/2020-12/vocab/validation") &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
            sourcemeta::jsontoolkit::is_object(schema) &&
@@ -25,6 +28,8 @@ public:
     for (const auto &type : sourcemeta::jsontoolkit::array_iterator(
              sourcemeta::jsontoolkit::at(value, "type"))) {
       auto copy{sourcemeta::jsontoolkit::from(value)};
+      // TODO: Handle $id too and other top-level keywords that should not
+      // remain
       sourcemeta::jsontoolkit::erase(copy, "$schema");
       sourcemeta::jsontoolkit::assign(copy, "type", type);
       sourcemeta::jsontoolkit::push_back(disjunctors, copy);
