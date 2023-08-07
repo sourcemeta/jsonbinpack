@@ -32,7 +32,7 @@ public:
            sourcemeta::jsontoolkit::defines(schema, "enum") &&
            sourcemeta::jsontoolkit::is_array(
                sourcemeta::jsontoolkit::at(schema, "enum")) &&
-           is_unique(sourcemeta::jsontoolkit::at(schema, "enum"));
+           !is_unique(sourcemeta::jsontoolkit::at(schema, "enum"));
   }
 
   /// The rule transformation
