@@ -12,7 +12,6 @@ These are documented and implemented in @ref canonicalizer.
 
 | Rule                                                                        | Category                                | Notes                  |
 |-----------------------------------------------------------------------------|-----------------------------------------|------------------------|
-| @ref sourcemeta::jsonbinpack::canonicalizer::ImplicitTypeUnion              | @ref canonicalizer_rules_heterogeneous  | Missing documentation  |
 | @ref sourcemeta::jsonbinpack::canonicalizer::MinPropertiesRequiredTautology | @ref canonicalizer_rules_simplification | Missing documentation  |
 | @ref sourcemeta::jsonbinpack::canonicalizer::MinPropertiesRequiredTautology | @ref canonicalizer_rules_simplification | Resolve known bugs     |
 | @ref sourcemeta::jsonbinpack::canonicalizer::TypeUnionAnyOf                 | @ref canonicalizer_rules_heterogeneous  | Missing documentation  |
