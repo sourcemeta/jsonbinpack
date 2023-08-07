@@ -53,6 +53,31 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
   EXPECT_EQ(schema, expected);
 }
 
+TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_3) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "bar", "foo", "bar", "bar" ],
+    "minProperties": 1
+  })JSON")};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "bar", "foo" ],
+    "minProperties": 2,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
 TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
   sourcemeta::jsontoolkit::DefaultResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
