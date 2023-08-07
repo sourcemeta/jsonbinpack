@@ -1,7 +1,6 @@
 namespace sourcemeta::jsonbinpack::canonicalizer {
 
 // TODO: Document this rule
-// TODO: Handle the case where `required` has duplicated elements
 /// @ingroup canonicalizer_rules_simplification
 
 class MinPropertiesRequiredTautology final
@@ -26,6 +25,7 @@ public:
            sourcemeta::jsontoolkit::defines(schema, "required") &&
            sourcemeta::jsontoolkit::is_array(
                sourcemeta::jsontoolkit::at(schema, "required")) &&
+           is_unique(sourcemeta::jsontoolkit::at(schema, "required")) &&
            sourcemeta::jsontoolkit::size(
                sourcemeta::jsontoolkit::at(schema, "required")) >
                static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(
