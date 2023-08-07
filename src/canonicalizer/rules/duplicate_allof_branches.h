@@ -32,7 +32,7 @@ public:
            sourcemeta::jsontoolkit::defines(schema, "allOf") &&
            sourcemeta::jsontoolkit::is_array(
                sourcemeta::jsontoolkit::at(schema, "allOf")) &&
-           is_unique(sourcemeta::jsontoolkit::at(schema, "allOf"));
+           !is_unique(sourcemeta::jsontoolkit::at(schema, "allOf"));
   }
 
   /// The rule transformation

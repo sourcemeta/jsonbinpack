@@ -33,7 +33,7 @@ public:
            sourcemeta::jsontoolkit::defines(schema, "required") &&
            sourcemeta::jsontoolkit::is_array(
                sourcemeta::jsontoolkit::at(schema, "required")) &&
-           is_unique(sourcemeta::jsontoolkit::at(schema, "required"));
+           !is_unique(sourcemeta::jsontoolkit::at(schema, "required"));
   }
 
   /// The rule transformation

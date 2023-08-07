@@ -58,7 +58,7 @@ auto is_unique(const sourcemeta::jsontoolkit::Value &document) -> bool {
             sourcemeta::jsontoolkit::end_array(copy),
             sourcemeta::jsontoolkit::compare);
   return std::unique(sourcemeta::jsontoolkit::begin_array(copy),
-                     sourcemeta::jsontoolkit::end_array(copy)) !=
+                     sourcemeta::jsontoolkit::end_array(copy)) ==
          sourcemeta::jsontoolkit::end_array(copy);
 }
 
