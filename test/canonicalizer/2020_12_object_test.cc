@@ -204,3 +204,51 @@ TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
 
   EXPECT_EQ(schema, expected);
 }
+
+TEST(CanonicalizerObject_2020_12, duplicate_required_values_1) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "foo" ]
+  })JSON")};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo" ],
+    "minProperties": 1,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CanonicalizerObject_2020_12, duplicate_required_values_2) {
+  sourcemeta::jsontoolkit::DefaultResolver resolver;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
+
+  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "foo", "bar", "bar", "baz", "bar" ]
+  })JSON")};
+
+  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected{
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "required": [ "bar", "baz", "foo" ],
+    "minProperties": 3,
+    "properties": {}
+  })JSON")};
+
+  EXPECT_EQ(schema, expected);
+}

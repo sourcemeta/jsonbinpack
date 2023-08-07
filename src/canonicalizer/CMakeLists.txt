@@ -38,6 +38,7 @@ add_library(sourcemeta_jsonbinpack_canonicalizer
   rules/duplicate_allof_branches.h
   rules/duplicate_anyof_branches.h
   rules/duplicate_enum_values.h
+  rules/duplicate_required_values.h
   rules/empty_array_as_const.h
   rules/empty_dependent_required.h
   rules/empty_object_as_const.h
