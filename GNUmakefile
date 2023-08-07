@@ -36,7 +36,7 @@ endif
 .PHONY: debug
 ifdef CASE
 debug: scripts/lldb.sh configure compile
-	./$< $(PRESET) $(CASE)
+	./$< $(CASE)
 else
 debug:
 	@echo "Missing CASE option" 1>&2
