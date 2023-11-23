@@ -38,6 +38,14 @@ jobs:
       - name: Install dependencies (GNU/Linux)
         if: runner.os == 'linux'
         run: sudo apt-get install --yes clang-format shellcheck
+
+      # See https://github.com/actions/runner-images/issues/8659
+      - name: Workaround Clang issue (GNU/Linux)
+        if: runner.os == 'linux' && matrix.platform.cc == 'clang'
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
+          sudo apt-get install --yes --allow-downgrades libc6=2.35-0ubuntu3.4 libc6-dev=2.35-0ubuntu3.4 libstdc++6=12.3.0-1ubuntu1~22.04 libgcc-s1=12.3.0-1ubuntu1~22.04
+
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
         run: choco install shellcheck
