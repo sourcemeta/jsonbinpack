@@ -30,3 +30,15 @@ Building JSON BinPack
 JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
 build system. It is expected to compile on LLVM and GCC on macOS, GNU/Linux and
 FreeBSD, an on MSVC on Windows.
+
+Commercial Use
+--------------
+
+This project is governed by the [AGPL-3.0](./LICENSE) license and our
+[Contribution Agreement](https://www.sourcemeta.com/contributing/). To ensure
+the sustainability of the project, copy-left restrictions are removed by
+holding a *paid* [Patron License](./LICENSE-PATRON.markdown).
+
+If you have questions, or want to acquire a license outside the supported
+payment platforms, reach out to
+[hello@sourcemeta.com](mailto:hello@sourcemeta.com).
