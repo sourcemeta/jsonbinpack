@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
-#include <jsonbinpack/decoder/decoder.h>
+
+#include <sourcemeta/jsonbinpack/decoder.h>
+
 #include <string> // std::char_traits
 #include <type_traits>
 

@@ -1,5 +1,5 @@
-#include <jsonbinpack/encoding/encoding.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/encoding.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 #include <type_traits>

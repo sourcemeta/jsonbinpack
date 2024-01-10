@@ -1,8 +1,7 @@
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
 
 // To be used by the rules below
 #include "utils.h"
-#include <alterschema/rule.h>
 #include <cmath> // std::floor, std::ceil
 #include <set>   // std::set
 
@@ -73,9 +72,7 @@
 #include "rules/type_union_anyof.h"
 #include "rules/unsatisfiable_max_contains.h"
 
-sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
-    const sourcemeta::jsontoolkit::schema_resolver_t &resolver)
-    : bundle{sourcemeta::jsontoolkit::default_schema_walker, resolver} {
+sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer() {
   using namespace sourcemeta::jsonbinpack::canonicalizer;
 
   this->bundle.template add<BooleanAsEnum>();
@@ -147,7 +144,9 @@ sourcemeta::jsonbinpack::Canonicalizer::Canonicalizer(
 
 auto sourcemeta::jsonbinpack::Canonicalizer::apply(
     sourcemeta::jsontoolkit::JSON &document,
-    sourcemeta::jsontoolkit::Value &value,
-    const std::string &default_metaschema) const -> void {
-  this->bundle.apply(document, value, default_metaschema);
+    const sourcemeta::jsontoolkit::SchemaWalker &walker,
+    const sourcemeta::jsontoolkit::SchemaResolver &resolver,
+    const std::optional<std::string> &default_dialect) const -> void {
+  this->bundle.apply(document, walker, resolver,
+                     sourcemeta::jsontoolkit::empty_pointer, default_dialect);
 }

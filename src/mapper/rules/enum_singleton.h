@@ -1,35 +1,31 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
 /// @ingroup mapper_rules
-class EnumSingleton final : public sourcemeta::alterschema::Rule {
+class EnumSingleton final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EnumSingleton() : Rule("enum_singleton"){};
+  EnumSingleton()
+      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_singleton"){};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
     return !is_encoding(schema) &&
-           draft == "https://json-schema.org/draft/2020-12/schema" &&
+           dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "enum") &&
-           sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "enum")) &&
-           sourcemeta::jsontoolkit::size(
-               sourcemeta::jsontoolkit::at(schema, "enum")) == 1;
+           schema.defines("enum") && schema.at("enum").is_array() &&
+           schema.at("enum").size() == 1;
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto options{sourcemeta::jsontoolkit::make_object()};
-    sourcemeta::jsontoolkit::assign(
-        options, "value",
-        sourcemeta::jsontoolkit::from(sourcemeta::jsontoolkit::front(
-            sourcemeta::jsontoolkit::at(value, "enum"))));
-
-    make_encoding(document, value, "CONST_NONE", options);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto options = sourcemeta::jsontoolkit::JSON::make_object();
+    options.assign("value", sourcemeta::jsontoolkit::JSON(
+                                transformer.schema().at("enum").at(0)));
+    make_encoding(transformer, "CONST_NONE", options);
   }
 };
 

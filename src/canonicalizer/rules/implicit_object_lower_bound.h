@@ -16,33 +16,31 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \cup \{ minProperties \mapsto 0 \}
 /// }\f]
 
-class ImplicitObjectLowerBound final : public sourcemeta::alterschema::Rule {
+class ImplicitObjectLowerBound final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ImplicitObjectLowerBound() : Rule("implicit_object_lower_bound"){};
+  ImplicitObjectLowerBound()
+      : SchemaTransformRule("implicit_object_lower_bound"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "object" &&
-           !sourcemeta::jsontoolkit::defines(schema, "minProperties");
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "object" &&
+           !schema.defines("minProperties");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(document, value, "minProperties",
-                                    sourcemeta::jsontoolkit::from(0));
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.assign("minProperties", sourcemeta::jsontoolkit::JSON{0});
   }
 };
 

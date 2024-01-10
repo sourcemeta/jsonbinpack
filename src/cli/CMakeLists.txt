@@ -11,6 +11,7 @@ target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_encoder)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta_jsonbinpack_decoder)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::json)
+target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::jsonschema)
 
 # To find the generated version file
 target_include_directories(sourcemeta_jsonbinpack_cli PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
@@ -18,3 +19,7 @@ target_include_directories(sourcemeta_jsonbinpack_cli PRIVATE "${CMAKE_CURRENT_B
 set_target_properties(sourcemeta_jsonbinpack_cli PROPERTIES
   OUTPUT_NAME jsonbinpack
   FOLDER "JSON BinPack/CLI")
+
+install(TARGETS sourcemeta_jsonbinpack_cli
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  COMPONENT sourcemeta_jsonbinpack)

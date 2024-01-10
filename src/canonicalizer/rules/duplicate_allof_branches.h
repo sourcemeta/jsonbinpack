@@ -15,37 +15,33 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{allOf \in dom(S) \land \#S.allOf \neq \#\{ x \mid S.allOf \}}{S
 /// \mapsto S \cup \{ allOf \mapsto seq \; \{ x \mid S.allOf \} \} }\f]
 
-class DuplicateAllOfBranches final : public sourcemeta::alterschema::Rule {
+class DuplicateAllOfBranches final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DuplicateAllOfBranches() : Rule("duplicate_allof_branches"){};
+  DuplicateAllOfBranches() : SchemaTransformRule("duplicate_allof_branches"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "allOf") &&
-           sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "allOf")) &&
-           !is_unique(sourcemeta::jsontoolkit::at(schema, "allOf"));
+           schema.is_object() && schema.defines("allOf") &&
+           schema.at("allOf").is_array() && !is_unique(schema.at("allOf"));
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto &collection{sourcemeta::jsontoolkit::at(value, "allOf")};
-    std::sort(sourcemeta::jsontoolkit::begin_array(collection),
-              sourcemeta::jsontoolkit::end_array(collection),
-              sourcemeta::jsontoolkit::compare);
-    auto last = std::unique(sourcemeta::jsontoolkit::begin_array(collection),
-                            sourcemeta::jsontoolkit::end_array(collection));
-    sourcemeta::jsontoolkit::erase_many(
-        collection, last, sourcemeta::jsontoolkit::end_array(collection));
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto collection = transformer.schema().at("allOf");
+    std::sort(collection.as_array().begin(), collection.as_array().end());
+    auto last =
+        std::unique(collection.as_array().begin(), collection.as_array().end());
+    collection.erase(last, collection.as_array().end());
+    transformer.replace({"allOf"}, std::move(collection));
   }
 };
 

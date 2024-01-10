@@ -5,10 +5,14 @@ add_executable(sourcemeta_jsonbinpack_parser_unit
   v1_integer_parser_test.cc
   v1_number_parser_test.cc
   v1_string_parser_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE gtest_main)
-target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta_jsonbinpack_parser)
-target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta_jsonbinpack_encoding)
-target_link_libraries(sourcemeta_jsonbinpack_parser_unit PRIVATE sourcemeta::jsontoolkit::json)
+target_link_libraries(sourcemeta_jsonbinpack_parser_unit
+  PRIVATE GTest::gtest GTest::gtest_main)
+target_link_libraries(sourcemeta_jsonbinpack_parser_unit
+  PRIVATE sourcemeta::jsonbinpack::parser)
+target_link_libraries(sourcemeta_jsonbinpack_parser_unit
+  PRIVATE sourcemeta::jsonbinpack::encoding)
+target_link_libraries(sourcemeta_jsonbinpack_parser_unit
+  PRIVATE sourcemeta::jsontoolkit::json)
 gtest_discover_tests(sourcemeta_jsonbinpack_parser_unit)
 set_target_properties(sourcemeta_jsonbinpack_parser_unit
-  PROPERTIES FOLDER "Parser")
+  PROPERTIES FOLDER "JSON BinPack/Parser")

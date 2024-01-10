@@ -1,8 +1,16 @@
 add_executable(sourcemeta_jsonbinpack_numeric_unit
-  closest_smallest_exponent_test.cc
-  divide_ceil_test.cc divide_floor_test.cc uint_max_test.cc)
-target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE gtest_main)
-target_link_libraries(sourcemeta_jsonbinpack_numeric_unit PRIVATE sourcemeta_jsonbinpack_numeric)
+  numeric_closest_smallest_exponent_test.cc
+  numeric_divide_ceil_test.cc
+  numeric_divide_floor_test.cc
+  numeric_uint_max_test.cc)
+sourcemeta_jsonbinpack_add_compile_options(
+  PRIVATE sourcemeta_jsonbinpack_numeric_unit)
+
+target_link_libraries(sourcemeta_jsonbinpack_numeric_unit
+  PRIVATE GTest::gtest GTest::gtest_main)
+target_link_libraries(sourcemeta_jsonbinpack_numeric_unit
+  PRIVATE sourcemeta::jsonbinpack::numeric)
+
 gtest_discover_tests(sourcemeta_jsonbinpack_numeric_unit)
 set_target_properties(sourcemeta_jsonbinpack_numeric_unit
-  PROPERTIES FOLDER "Numeric")
+  PROPERTIES FOLDER "JSON BinPack/Numeric")

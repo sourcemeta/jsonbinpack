@@ -1,47 +1,55 @@
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsonbinpack/mapper/mapper.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
 
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsonbinpack/mapper.h>
+#include <sourcemeta/jsontoolkit/json.h>
+
+#include "mapper_resolver.h"
+
 TEST(MapperAny_2020_12, only_metaschema) {
-  sourcemeta::jsontoolkit::DefaultResolver resolver;
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  sourcemeta::jsonbinpack::Mapper mapper{resolver};
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::jsonbinpack::Mapper mapper;
 
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema"
-  })JSON")};
+  })JSON");
 
-  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
-  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+                      mapper_test_resolver,
+                      "https://json-schema.org/draft/2020-12/schema");
+  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+               mapper_test_resolver,
+               "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsontoolkit::JSON expected{
+  const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
-  })JSON")};
+  })JSON");
 
   EXPECT_EQ(schema, expected);
 }
 
 TEST(MapperAny_2020_12, empty) {
-  sourcemeta::jsontoolkit::DefaultResolver resolver;
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  sourcemeta::jsonbinpack::Mapper mapper{resolver};
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::jsonbinpack::Mapper mapper;
 
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse("{}")};
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse("{}");
 
-  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
-  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+                      mapper_test_resolver,
+                      "https://json-schema.org/draft/2020-12/schema");
+  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+               mapper_test_resolver,
+               "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsontoolkit::JSON expected{
+  const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
-  })JSON")};
+  })JSON");
 
   EXPECT_EQ(schema, expected);
 }

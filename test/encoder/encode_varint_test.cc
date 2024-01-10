@@ -1,9 +1,9 @@
-#include "encode_utils.h"
-#include <jsonbinpack/encoder/varint.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
 #include <limits> // std::numeric_limits
+
+#include "encode_utils.h"
+#include <sourcemeta/jsonbinpack/encoder_varint.h>
 
 TEST(Encoder, varint_1) {
   OutputByteStream<char> stream{};

@@ -30,28 +30,30 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// uniqueItems\}\f]
 
 class DropNonNullKeywordsValidation final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DropNonNullKeywordsValidation() : Rule("drop_non_null_keywords_validation"){};
+  DropNonNullKeywordsValidation()
+      : SchemaTransformRule("drop_non_null_keywords_validation"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            is_null_schema(schema, vocabularies) &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines_any(schema,
-                                                this->BLACKLIST_VALIDATION);
+           schema.defines_any(this->BLACKLIST_VALIDATION.cbegin(),
+                              this->BLACKLIST_VALIDATION.cend());
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_VALIDATION);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase_keys(this->BLACKLIST_VALIDATION.cbegin(),
+                           this->BLACKLIST_VALIDATION.cend());
   }
 
 private:

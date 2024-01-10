@@ -1,9 +1,10 @@
-#include "decode_utils.h"
-#include <jsonbinpack/decoder/decoder.h>
-#include <jsonbinpack/encoding/wrap.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
+#include "decode_utils.h"
+
+#include <sourcemeta/jsonbinpack/decoder.h>
+#include <sourcemeta/jsonbinpack/encoding_wrap.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 TEST(Decoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
@@ -14,20 +15,20 @@ TEST(Decoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
       0x02              // 2
   };
   Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result{
+  const sourcemeta::jsontoolkit::JSON result =
       decoder.FIXED_TYPED_ARBITRARY_OBJECT(
           {2, wrap(UTF8_STRING_NO_LENGTH{3}),
-           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})})};
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
-  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 2);
-  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "foo"));
-  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "bar"));
-  const auto &foo{sourcemeta::jsontoolkit::at(result, "foo")};
-  const auto &bar{sourcemeta::jsontoolkit::at(result, "bar")};
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_integer(foo));
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_integer(bar));
-  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(foo), 1);
-  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(bar), 2);
+           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+  EXPECT_TRUE(result.is_object());
+  EXPECT_EQ(result.size(), 2);
+  EXPECT_TRUE(result.defines("foo"));
+  EXPECT_TRUE(result.defines("bar"));
+  const auto &foo{result.at("foo")};
+  const auto &bar{result.at("bar")};
+  EXPECT_TRUE(foo.is_integer());
+  EXPECT_TRUE(bar.is_integer());
+  EXPECT_EQ(foo.to_integer(), 1);
+  EXPECT_EQ(bar.to_integer(), 2);
 }
 
 TEST(Decoder, VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
@@ -40,18 +41,18 @@ TEST(Decoder, VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
       0x02              // 2
   };
   Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result{
+  const sourcemeta::jsontoolkit::JSON result =
       decoder.VARINT_TYPED_ARBITRARY_OBJECT(
           {wrap(UTF8_STRING_NO_LENGTH{3}),
-           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})})};
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_object(result));
-  EXPECT_EQ(sourcemeta::jsontoolkit::size(result), 2);
-  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "foo"));
-  EXPECT_TRUE(sourcemeta::jsontoolkit::defines(result, "bar"));
-  const auto &foo{sourcemeta::jsontoolkit::at(result, "foo")};
-  const auto &bar{sourcemeta::jsontoolkit::at(result, "bar")};
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_integer(foo));
-  EXPECT_TRUE(sourcemeta::jsontoolkit::is_integer(bar));
-  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(foo), 1);
-  EXPECT_EQ(sourcemeta::jsontoolkit::to_integer(bar), 2);
+           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+  EXPECT_TRUE(result.is_object());
+  EXPECT_EQ(result.size(), 2);
+  EXPECT_TRUE(result.defines("foo"));
+  EXPECT_TRUE(result.defines("bar"));
+  const auto &foo{result.at("foo")};
+  const auto &bar{result.at("bar")};
+  EXPECT_TRUE(foo.is_integer());
+  EXPECT_TRUE(bar.is_integer());
+  EXPECT_EQ(foo.to_integer(), 1);
+  EXPECT_EQ(bar.to_integer(), 2);
 }

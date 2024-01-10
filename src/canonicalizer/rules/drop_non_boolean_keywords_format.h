@@ -18,29 +18,32 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \setminus \{ format \} }\f]
 
 class DropNonBooleanKeywordsFormat final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DropNonBooleanKeywordsFormat() : Rule("drop_non_boolean_keywords_format"){};
+  DropNonBooleanKeywordsFormat()
+      : SchemaTransformRule("drop_non_boolean_keywords_format"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            is_boolean_schema(schema, vocabularies) &&
            (vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-annotation") ||
             vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-assertion")) &&
-           sourcemeta::jsontoolkit::defines_any(schema, this->BLACKLIST_FORMAT);
+           schema.defines_any(this->BLACKLIST_FORMAT.cbegin(),
+                              this->BLACKLIST_FORMAT.cend());
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_FORMAT);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase_keys(this->BLACKLIST_FORMAT.cbegin(),
+                           this->BLACKLIST_FORMAT.cend());
   }
 
 private:

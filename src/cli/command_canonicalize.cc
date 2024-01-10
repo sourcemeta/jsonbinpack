@@ -1,20 +1,21 @@
 #include "commands.h"
 #include "defaults.h"
+#include "resolver.h"
 
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/jsontoolkit/jsonschema.h>
 
 #include <cstdlib>    // EXIT_SUCCESS
 #include <filesystem> // std::filesystem
-#include <fstream>    // std::ifstream
-#include <ios>        // std::ios_base, std::ios::binary
 #include <iostream>   // std::cin, std::cout, std::endl;
 
 static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
     -> int {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{
-      sourcemeta::jsontoolkit::DefaultResolver{}};
-  canonicalizer.apply(schema, sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+                      sourcemeta::jsonbinpack::cli::resolver,
+                      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;
   return EXIT_SUCCESS;
@@ -22,14 +23,12 @@ static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
 
 auto sourcemeta::jsonbinpack::cli::canonicalize(
     const std::filesystem::path &schema_path) -> int {
-  std::ifstream stream{schema_path, std::ios::binary};
-  stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(stream)};
+  auto schema = sourcemeta::jsontoolkit::from_file(schema_path);
   return canonicalize_from_json(schema);
 }
 
 auto sourcemeta::jsonbinpack::cli::canonicalize() -> int {
-  sourcemeta::jsontoolkit::JSON schema{
-      sourcemeta::jsontoolkit::parse(std::cin)};
+  sourcemeta::jsontoolkit::JSON schema =
+      sourcemeta::jsontoolkit::parse(std::cin);
   return canonicalize_from_json(schema);
 }

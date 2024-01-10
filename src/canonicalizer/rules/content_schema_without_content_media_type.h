@@ -16,29 +16,28 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{contentSchema \in dom(S) \land contentMediaType \not\in dom(S)}{S
 /// \mapsto S \setminus \{contentSchema\} }\f]
 class ContentSchemaWithoutContentMediaType final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ContentSchemaWithoutContentMediaType()
-      : Rule("content_schema_without_content_media_type"){};
+      : SchemaTransformRule("content_schema_without_content_media_type"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/content") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "contentSchema") &&
-           !sourcemeta::jsontoolkit::defines(schema, "contentMediaType");
+           schema.is_object() && schema.defines("contentSchema") &&
+           !schema.defines("contentMediaType");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "contentSchema");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("contentSchema");
   }
 };
 

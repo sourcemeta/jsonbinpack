@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include <jsonbinpack/encoder/real.h>
+
+#include <sourcemeta/jsonbinpack/encoder_real.h>
 
 TEST(Encoder, real_digits_1) {
   const double input{3.14};

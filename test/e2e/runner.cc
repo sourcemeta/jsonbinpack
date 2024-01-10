@@ -1,9 +1,12 @@
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsonbinpack/decoder/decoder.h>
-#include <jsonbinpack/encoder/encoder.h>
-#include <jsonbinpack/mapper/mapper.h>
-#include <jsonbinpack/parser/parser.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsonbinpack/decoder.h>
+#include <sourcemeta/jsonbinpack/encoder.h>
+#include <sourcemeta/jsonbinpack/mapper.h>
+#include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsonbinpack/schemas.h>
+
+#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/jsontoolkit/jsonschema.h>
 
 #include <cassert>    // assert
 #include <cstdlib>    // EXIT_SUCCESS, EXIT_FAILURE
@@ -16,6 +19,21 @@
 constexpr auto DEFAULT_METASCHEMA =
     "https://json-schema.org/draft/2020-12/schema";
 
+// TODO: Get rid of this
+static auto test_resolver(std::string_view identifier)
+    -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+  std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+  if (identifier == sourcemeta::jsonbinpack::schemas::encoding::v1::id) {
+    promise.set_value(sourcemeta::jsontoolkit::parse(
+        sourcemeta::jsonbinpack::schemas::encoding::v1::json));
+  } else {
+    promise.set_value(
+        sourcemeta::jsontoolkit::official_resolver(identifier).get());
+  }
+
+  return promise.get_future();
+}
+
 auto main(int argc, char *argv[]) -> int {
   if (argc <= 2) {
     std::cerr << "Usage: " << argv[0] << " <instance.json> <directory>\n";
@@ -24,25 +42,22 @@ auto main(int argc, char *argv[]) -> int {
 
   const std::filesystem::path instance_path{argv[1]};
   assert(std::filesystem::is_regular_file(instance_path));
-  std::ifstream instance_stream{instance_path, std::ios::binary};
-  instance_stream.exceptions(std::ios_base::badbit);
-  const sourcemeta::jsontoolkit::JSON instance{
-      sourcemeta::jsontoolkit::parse(instance_stream)};
+  const sourcemeta::jsontoolkit::JSON instance =
+      sourcemeta::jsontoolkit::from_file(instance_path);
   const std::filesystem::path directory{argv[2]};
   assert(std::filesystem::is_directory(directory));
-  const auto resolver{sourcemeta::jsontoolkit::DefaultResolver{}};
 
   // Schema
   const std::filesystem::path schema_path{directory / "schema.json"};
   assert(std::filesystem::is_regular_file(schema_path));
-  std::ifstream schema_stream{schema_path, std::ios::binary};
-  schema_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::JSON schema{
-      sourcemeta::jsontoolkit::parse(schema_stream)};
+  sourcemeta::jsontoolkit::JSON schema =
+      sourcemeta::jsontoolkit::from_file(schema_path);
 
   // Canonicalize
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  canonicalizer.apply(schema, DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+                      test_resolver, DEFAULT_METASCHEMA);
+
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
@@ -52,8 +67,10 @@ auto main(int argc, char *argv[]) -> int {
   canonical_output_stream.close();
 
   // Mapper
-  sourcemeta::jsonbinpack::Mapper mapper{resolver};
-  mapper.apply(schema, DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::Mapper mapper;
+  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+               test_resolver, DEFAULT_METASCHEMA);
+
   std::ofstream mapper_output_stream(directory / "encoding.json",
                                      std::ios::binary);
   mapper_output_stream.exceptions(std::ios_base::badbit);
@@ -82,7 +99,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ifstream data_stream{directory / "output.bin", std::ios::binary};
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Decoder decoder{data_stream};
-  const sourcemeta::jsontoolkit::JSON result{decoder.decode(encoding)};
+  const sourcemeta::jsontoolkit::JSON result = decoder.decode(encoding);
 
   // Report results
   if (result == instance) {

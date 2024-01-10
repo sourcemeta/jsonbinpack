@@ -1,13 +1,13 @@
-#include "encode_utils.h"
-#include <jsonbinpack/encoder/encoder.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
 #include <limits> // std::numeric_limits
 
+#include "encode_utils.h"
+#include <sourcemeta/jsonbinpack/encoder.h>
+#include <sourcemeta/jsontoolkit/json.h>
+
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(-5)};
+  const sourcemeta::jsontoolkit::JSON document{-5};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {-5, -1, 1});
@@ -15,8 +15,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
 }
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(2)};
+  const sourcemeta::jsontoolkit::JSON document{2};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {-5, 5, 1});
@@ -24,8 +23,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
 }
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(5)};
+  const sourcemeta::jsontoolkit::JSON document{5};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {2, 8, 1});
@@ -33,8 +31,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
 }
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(5)};
+  const sourcemeta::jsontoolkit::JSON document{5};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {1, 19, 5});
@@ -42,8 +39,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
 }
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__15_1_19_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(15)};
+  const sourcemeta::jsontoolkit::JSON document{15};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {1, 19, 5});
@@ -51,8 +47,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__15_1_19_5) {
 }
 
 TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(255)};
+  const sourcemeta::jsontoolkit::JSON document{255};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {0, 255, 1});
@@ -60,8 +55,7 @@ TEST(Encoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
 }
 
 TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(-3)};
+  const sourcemeta::jsontoolkit::JSON document{-3};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {-10, 1});
@@ -69,8 +63,7 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
 }
 
 TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(5)};
+  const sourcemeta::jsontoolkit::JSON document{5};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {2, 1});
@@ -78,8 +71,7 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
 }
 
 TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(10)};
+  const sourcemeta::jsontoolkit::JSON document{10};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {5, 5});
@@ -87,8 +79,7 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
 }
 
 TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(10)};
+  const sourcemeta::jsontoolkit::JSON document{10};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {2, 5});
@@ -96,8 +87,7 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
 }
 
 TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(1000)};
+  const sourcemeta::jsontoolkit::JSON document{1000};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {-2, 4});
@@ -105,8 +95,7 @@ TEST(Encoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
 }
 
 TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(-3)};
+  const sourcemeta::jsontoolkit::JSON document{-3};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {-2, 1});
@@ -114,8 +103,7 @@ TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
 }
 
 TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(8)};
+  const sourcemeta::jsontoolkit::JSON document{8};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {10, 1});
@@ -123,8 +111,7 @@ TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
 }
 
 TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(5)};
+  const sourcemeta::jsontoolkit::JSON document{5};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {15, 5});
@@ -132,8 +119,7 @@ TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
 }
 
 TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(10)};
+  const sourcemeta::jsontoolkit::JSON document{10};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {15, 5});
@@ -141,8 +127,7 @@ TEST(Encoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
 }
 
 TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(-25200)};
+  const sourcemeta::jsontoolkit::JSON document{-25200};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {1});
@@ -150,8 +135,7 @@ TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
 }
 
 TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(10)};
+  const sourcemeta::jsontoolkit::JSON document{10};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {5});
@@ -160,8 +144,7 @@ TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
 
 TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
   const std::int64_t value = std::numeric_limits<std::int64_t>::max();
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(value)};
+  const sourcemeta::jsontoolkit::JSON document{value};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {1});
@@ -171,8 +154,7 @@ TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
 
 TEST(Encoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_min_1) {
   const std::int64_t value = std::numeric_limits<std::int64_t>::min() + 1;
-  const sourcemeta::jsontoolkit::JSON document{
-      sourcemeta::jsontoolkit::from(value)};
+  const sourcemeta::jsontoolkit::JSON document{value};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   encoder.ARBITRARY_MULTIPLE_ZIGZAG_VARINT(document, {1});

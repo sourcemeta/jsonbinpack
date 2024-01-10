@@ -1,6 +1,8 @@
-add_library(sourcemeta_jsonbinpack_numeric INTERFACE
-  include/jsonbinpack/numeric/numeric.h)
-target_include_directories(sourcemeta_jsonbinpack_numeric INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set_target_properties(sourcemeta_jsonbinpack_numeric
-  PROPERTIES FOLDER "JSON BinPack/Numeric")
+noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME numeric
+  FOLDER "JSON BinPack/Numeric")
+
+if(JSONBINPACK_INSTALL)
+  noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME numeric)
+endif()
+
+sourcemeta_jsonbinpack_add_compile_options(INTERFACE sourcemeta_jsonbinpack_numeric)

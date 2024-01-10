@@ -2,44 +2,48 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 
 // TODO: Document this rule
 /// @ingroup canonicalizer_rules_heterogeneous
-class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
+class TypeUnionAnyOf final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  TypeUnionAnyOf() : Rule("type_union_anyof"){};
+  TypeUnionAnyOf() : SchemaTransformRule("type_union_anyof"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "type"));
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_array();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::JSON disjunctors{
-        sourcemeta::jsontoolkit::make_array()};
-    for (const auto &type : sourcemeta::jsontoolkit::array_iterator(
-             sourcemeta::jsontoolkit::at(value, "type"))) {
-      auto copy{sourcemeta::jsontoolkit::from(value)};
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    sourcemeta::jsontoolkit::JSON disjunctors =
+        sourcemeta::jsontoolkit::JSON::make_array();
+    for (const auto &type : transformer.schema().at("type").as_array()) {
+      auto copy = transformer.schema();
       // TODO: Handle $id too and other top-level keywords that should not
       // remain
-      sourcemeta::jsontoolkit::erase(copy, "$schema");
-      sourcemeta::jsontoolkit::assign(copy, "type", type);
-      sourcemeta::jsontoolkit::push_back(disjunctors, copy);
+      copy.erase("$schema");
+      copy.assign("type", type);
+      disjunctors.push_back(std::move(copy));
     }
 
-    sourcemeta::jsontoolkit::clear_except(value, {"$schema"});
-    sourcemeta::jsontoolkit::assign(document, value, "anyOf", disjunctors);
+    sourcemeta::jsontoolkit::JSON result =
+        sourcemeta::jsontoolkit::JSON::make_object();
+    if (transformer.schema().defines("$schema")) {
+      result.assign("$schema", transformer.schema().at("$schema"));
+    }
+
+    result.assign("anyOf", std::move(disjunctors));
+    transformer.replace(std::move(result));
   }
 };
 

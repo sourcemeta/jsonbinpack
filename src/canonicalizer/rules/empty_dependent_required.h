@@ -16,31 +16,29 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \setminus \{ dependentRequired \}
 /// }\f]
 
-class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
+class EmptyDependentRequired final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyDependentRequired() : Rule("empty_dependent_required"){};
+  EmptyDependentRequired() : SchemaTransformRule("empty_dependent_required"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "dependentRequired") &&
-           sourcemeta::jsontoolkit::is_object(
-               sourcemeta::jsontoolkit::at(schema, "dependentRequired")) &&
-           sourcemeta::jsontoolkit::empty(
-               sourcemeta::jsontoolkit::at(schema, "dependentRequired"));
+           schema.is_object() && schema.defines("dependentRequired") &&
+           schema.at("dependentRequired").is_object() &&
+           schema.at("dependentRequired").empty();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "dependentRequired");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("dependentRequired");
   }
 };
 

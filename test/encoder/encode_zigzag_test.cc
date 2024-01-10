@@ -1,8 +1,8 @@
-#include <jsonbinpack/encoder/zigzag.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
 #include <limits> // std::numeric_limits
+
+#include <sourcemeta/jsonbinpack/encoder_zigzag.h>
 
 TEST(Encoder, zigzag_int_0_0) {
   const int value = 0;

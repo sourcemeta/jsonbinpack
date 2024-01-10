@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
-#include <jsonbinpack/encoder/encoder.h>
+
 #include <string> // std::char_traits
 #include <type_traits>
+
+#include <sourcemeta/jsonbinpack/encoder.h>
 
 using CharT = char;
 using Traits = std::char_traits<CharT>;

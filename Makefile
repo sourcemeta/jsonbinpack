@@ -1,7 +1,11 @@
+# Programs
 CMAKE = cmake
 CTEST = ctest
 
-PRESET = debug
+# Options
+PRESET = Debug
+
+all: configure compile test
 
 configure: .always
 	$(CMAKE) -S . -B ./build \
@@ -12,13 +16,15 @@ configure: .always
 
 compile: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target clang_format
-	$(CMAKE) --build ./build --config $(PRESET) --parallel
+	$(CMAKE) --build ./build --config $(PRESET) --parallel 4
+	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
+		--component sourcemeta_jsonbinpack
+	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
+		--component sourcemeta_jsonbinpack_dev
 
-all: configure compile
-	$(CTEST) --test-dir ./build --build-config $(PRESET) --parallel
-
-test: configure compile
-	$(CTEST) --test-dir ./build --build-config $(PRESET) --verbose --parallel
+test: .always
+	$(CTEST) --test-dir ./build --build-config $(PRESET) \
+		--output-on-failure --progress --parallel
 
 lint: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target clang_tidy
@@ -26,7 +32,7 @@ lint: .always
 clean: .always
 	$(CMAKE) -E rm -R -f build
 
-doxygen: configure
+doxygen:
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
 
 # For NMake, which doesn't support .PHONY

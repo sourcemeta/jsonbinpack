@@ -16,38 +16,32 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mathbb{R}}{S \mapsto S \cup \{ maximum \mapsto \lfloor S.maximum \rfloor \}
 /// }\f]
 
-class MaximumRealForInteger final : public sourcemeta::alterschema::Rule {
+class MaximumRealForInteger final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  MaximumRealForInteger() : Rule("maximum_real_for_integer"){};
+  MaximumRealForInteger() : SchemaTransformRule("maximum_real_for_integer"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "integer" &&
-           sourcemeta::jsontoolkit::defines(schema, "maximum") &&
-           sourcemeta::jsontoolkit::is_real(
-               sourcemeta::jsontoolkit::at(schema, "maximum"));
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "integer" &&
+           schema.defines("maximum") && schema.at("maximum").is_real();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const auto current{sourcemeta::jsontoolkit::to_real(
-        sourcemeta::jsontoolkit::at(value, "maximum"))};
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    const auto current{transformer.schema().at("maximum").to_real()};
     const auto new_value{static_cast<std::int64_t>(std::floor(current))};
-    sourcemeta::jsontoolkit::assign(document, value, "maximum",
-                                    sourcemeta::jsontoolkit::from(new_value));
+    transformer.assign("maximum", sourcemeta::jsontoolkit::JSON{new_value});
   }
 };
 

@@ -17,30 +17,29 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// }{S \mapsto S \setminus \{ then, else \}
 /// }\f]
 
-class ThenElseWithoutIf final : public sourcemeta::alterschema::Rule {
+class ThenElseWithoutIf final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ThenElseWithoutIf() : Rule("then_else_without_if"){};
+  ThenElseWithoutIf() : SchemaTransformRule("then_else_without_if"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           !sourcemeta::jsontoolkit::defines(schema, "if") &&
-           (sourcemeta::jsontoolkit::defines(schema, "then") ||
-            sourcemeta::jsontoolkit::defines(schema, "else"));
+           schema.is_object() && !schema.defines("if") &&
+           (schema.defines("then") || schema.defines("else"));
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "then");
-    sourcemeta::jsontoolkit::erase(value, "else");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("then");
+    transformer.erase("else");
   }
 };
 

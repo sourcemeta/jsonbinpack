@@ -21,29 +21,28 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \setminus \{ if \}
 /// }\f]
 
-class IfWithoutThenElse final : public sourcemeta::alterschema::Rule {
+class IfWithoutThenElse final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  IfWithoutThenElse() : Rule("if_without_then_else"){};
+  IfWithoutThenElse() : SchemaTransformRule("if_without_then_else"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "if") &&
-           !sourcemeta::jsontoolkit::defines(schema, "then") &&
-           !sourcemeta::jsontoolkit::defines(schema, "else");
+           schema.is_object() && schema.defines("if") &&
+           !schema.defines("then") && !schema.defines("else");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "if");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("if");
   }
 };
 

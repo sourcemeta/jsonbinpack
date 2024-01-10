@@ -1,28 +1,33 @@
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsonbinpack/mapper/mapper.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
 
-TEST(MapperNumber_2020_12, arbitrary) {
-  sourcemeta::jsontoolkit::DefaultResolver resolver;
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  sourcemeta::jsonbinpack::Mapper mapper{resolver};
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsonbinpack/mapper.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+#include "mapper_resolver.h"
+
+TEST(MapperNumber_2020_12, arbitrary) {
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::jsonbinpack::Mapper mapper;
+
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number"
-  })JSON")};
+  })JSON");
 
-  canonicalizer.apply(schema, "https://json-schema.org/draft/2020-12/schema");
-  mapper.apply(schema, "https://json-schema.org/draft/2020-12/schema");
+  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+                      mapper_test_resolver,
+                      "https://json-schema.org/draft/2020-12/schema");
+  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
+               mapper_test_resolver,
+               "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsontoolkit::JSON expected{
+  const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "DOUBLE_VARINT_TUPLE",
     "options": {}
-  })JSON")};
+  })JSON");
 
   EXPECT_EQ(schema, expected);
 }

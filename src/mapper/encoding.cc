@@ -1,31 +1,27 @@
-#include <jsonbinpack/mapper/encoding.h>
-#include <jsonbinpack/schemas/schemas.h>
-#include <jsontoolkit/jsonschema.h>
+#include <sourcemeta/jsonbinpack/mapper_encoding.h>
+#include <sourcemeta/jsonbinpack/schemas.h>
+
 #include <optional> // std::optional
 
 auto sourcemeta::jsonbinpack::mapper::is_encoding(
-    const sourcemeta::jsontoolkit::Value &document) -> bool {
-  const std::optional<std::string> metaschema{
-      sourcemeta::jsontoolkit::metaschema(document)};
-  return metaschema.has_value() &&
-         sourcemeta::jsontoolkit::defines(document, keywords::name) &&
-         sourcemeta::jsontoolkit::defines(document, keywords::options) &&
-         metaschema.value() ==
-             sourcemeta::jsonbinpack::schemas::encoding::v1::id;
+    const sourcemeta::jsontoolkit::JSON &document) -> bool {
+  const std::optional<std::string> dialect{
+      sourcemeta::jsontoolkit::dialect(document)};
+  return dialect.has_value() && document.defines(keywords::name) &&
+         document.defines(keywords::options) &&
+         dialect.value() == sourcemeta::jsonbinpack::schemas::encoding::v1::id;
 }
 
 auto sourcemeta::jsonbinpack::mapper::make_encoding(
-    sourcemeta::jsontoolkit::JSON &document,
-    sourcemeta::jsontoolkit::Value &value, const std::string &encoding,
-    const sourcemeta::jsontoolkit::Value &options) -> void {
-  sourcemeta::jsontoolkit::make_object(value);
-  sourcemeta::jsontoolkit::assign(
-      document, value, keywords::version,
-      sourcemeta::jsontoolkit::from(
-          sourcemeta::jsonbinpack::schemas::encoding::v1::id));
-  sourcemeta::jsontoolkit::assign(document, value, keywords::name,
-                                  sourcemeta::jsontoolkit::from(encoding));
-  sourcemeta::jsontoolkit::assign(document, value, keywords::options, options);
+    sourcemeta::jsontoolkit::SchemaTransformer &document,
+    const std::string &encoding, const sourcemeta::jsontoolkit::JSON &options)
+    -> void {
+  document.replace(sourcemeta::jsontoolkit::JSON::make_object());
+  document.assign(keywords::version,
+                  sourcemeta::jsontoolkit::JSON{
+                      sourcemeta::jsonbinpack::schemas::encoding::v1::id});
+  document.assign(keywords::name, sourcemeta::jsontoolkit::JSON{encoding});
+  document.assign(keywords::options, options);
 }
 
 auto sourcemeta::jsonbinpack::mapper::resolver(const std::string &identifier)

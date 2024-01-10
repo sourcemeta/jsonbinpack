@@ -1,5 +1,5 @@
 {
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+  "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+  "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+  "options": {}
 }

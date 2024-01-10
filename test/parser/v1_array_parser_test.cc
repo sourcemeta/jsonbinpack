@@ -1,13 +1,14 @@
-#include <jsonbinpack/parser/parser.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
+#include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsontoolkit/json.h>
+
 #include <variant>
 
 TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "FIXED_TYPED_ARRAY",
     "options": {
       "size": 3,
@@ -30,7 +31,7 @@ TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
         }
       ]
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -52,12 +53,12 @@ TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
       std::get<BYTE_CHOICE_INDEX>(
           std::get<FIXED_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
           .choices.at(0),
-      sourcemeta::jsontoolkit::from(1));
+      sourcemeta::jsontoolkit::JSON{1});
   EXPECT_EQ(
       std::get<BYTE_CHOICE_INDEX>(
           std::get<FIXED_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
           .choices.at(1),
-      sourcemeta::jsontoolkit::from(2));
+      sourcemeta::jsontoolkit::JSON{2});
 
   EXPECT_TRUE(std::holds_alternative<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(
       std::get<FIXED_TYPED_ARRAY>(result).prefix_encodings.at(1).value));
@@ -69,9 +70,9 @@ TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
 }
 
 TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "BOUNDED_8BITS_TYPED_ARRAY",
     "options": {
       "minimum": 1,
@@ -95,7 +96,7 @@ TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
         }
       ]
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -123,13 +124,13 @@ TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
                                       .prefix_encodings.at(0)
                                       .value)
           .choices.at(0),
-      sourcemeta::jsontoolkit::from(1));
+      sourcemeta::jsontoolkit::JSON{1});
   EXPECT_EQ(
       std::get<BYTE_CHOICE_INDEX>(std::get<BOUNDED_8BITS_TYPED_ARRAY>(result)
                                       .prefix_encodings.at(0)
                                       .value)
           .choices.at(1),
-      sourcemeta::jsontoolkit::from(2));
+      sourcemeta::jsontoolkit::JSON{2});
 
   EXPECT_TRUE(std::holds_alternative<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(
       std::get<BOUNDED_8BITS_TYPED_ARRAY>(result)
@@ -144,9 +145,9 @@ TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
 }
 
 TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "FLOOR_TYPED_ARRAY",
     "options": {
       "minimum": 1,
@@ -169,7 +170,7 @@ TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
         }
       ]
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -191,12 +192,12 @@ TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
       std::get<BYTE_CHOICE_INDEX>(
           std::get<FLOOR_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
           .choices.at(0),
-      sourcemeta::jsontoolkit::from(1));
+      sourcemeta::jsontoolkit::JSON{1});
   EXPECT_EQ(
       std::get<BYTE_CHOICE_INDEX>(
           std::get<FLOOR_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
           .choices.at(1),
-      sourcemeta::jsontoolkit::from(2));
+      sourcemeta::jsontoolkit::JSON{2});
 
   EXPECT_TRUE(std::holds_alternative<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(
       std::get<FLOOR_TYPED_ARRAY>(result).prefix_encodings.at(1).value));
@@ -208,9 +209,9 @@ TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
 }
 
 TEST(Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ROOF_TYPED_ARRAY",
     "options": {
       "maximum": 3,
@@ -233,7 +234,7 @@ TEST(Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
         }
       ]
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -253,11 +254,11 @@ TEST(Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
   EXPECT_EQ(std::get<BYTE_CHOICE_INDEX>(
                 std::get<ROOF_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
                 .choices.at(0),
-            sourcemeta::jsontoolkit::from(1));
+            sourcemeta::jsontoolkit::JSON{1});
   EXPECT_EQ(std::get<BYTE_CHOICE_INDEX>(
                 std::get<ROOF_TYPED_ARRAY>(result).prefix_encodings.at(0).value)
                 .choices.at(1),
-            sourcemeta::jsontoolkit::from(2));
+            sourcemeta::jsontoolkit::JSON{2});
 
   EXPECT_TRUE(std::holds_alternative<ARBITRARY_MULTIPLE_ZIGZAG_VARINT>(
       std::get<ROOF_TYPED_ARRAY>(result).prefix_encodings.at(1).value));
