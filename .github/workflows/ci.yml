@@ -43,8 +43,8 @@ jobs:
       - name: Workaround Clang issue (GNU/Linux)
         if: runner.os == 'linux' && matrix.platform.cc == 'clang'
         run: |
-          sudo rm -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
-          sudo apt-get install --yes --allow-downgrades libc6=2.35-0ubuntu3.4 libc6-dev=2.35-0ubuntu3.4 libstdc++6=12.3.0-1ubuntu1~22.04 libgcc-s1=12.3.0-1ubuntu1~22.04
+          sudo apt-get purge -y g++-13 gcc-13 libstdc++-13-dev
+          sudo apt-get install -y --allow-downgrades libstdc++-12-dev libstdc++6=12.* libgcc-s1=12.*
 
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
