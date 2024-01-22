@@ -28,8 +28,10 @@ function(noa_sanitizer)
   elseif(NOA_COMPILER_LLVM AND "${NOA_SANITIZER_TYPE}" STREQUAL "undefined")
     # See https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
     message(STATUS "Enabling sanitizer: Clang UndefinedBehaviorSanitizer")
-    add_compile_options(-fsanitize=undefined,nullability,integer,implicit-conversion,local-bounds)
-    add_link_options(-fsanitize=undefined,nullability,integer,implicit-conversion,local-bounds)
+    add_compile_options(-fsanitize=undefined,nullability,integer,implicit-conversion,local-bounds
+      -fno-sanitize=unsigned-integer-overflow)
+    add_link_options(-fsanitize=undefined,nullability,integer,implicit-conversion,local-bounds
+      -fno-sanitize=unsigned-integer-overflow)
     # Exit after an error, otherwise this sanitizer only prints warnings
     add_compile_options(-fno-sanitize-recover=all)
   else()

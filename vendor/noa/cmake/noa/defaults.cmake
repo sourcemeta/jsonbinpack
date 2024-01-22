@@ -55,3 +55,17 @@ set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
 # Always use folders in IDE
 # See https://cmake.org/cmake/help/latest/prop_gbl/USE_FOLDERS.html
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# On Windows, during build, put executables and libraries in the same directory.
+# Otherwise, if there is any shared library being generated, the binaries
+# linking to it will not be able to find it and i.e. unit tests will fail.
+# Note that GoogleTest does this already to a non-configurable top-level
+# `bin` directory, so adopting that convention here.
+# See https://stackoverflow.com/q/39807664
+# See https://github.com/google/googletest/blob/e47544ad31cb3ceecd04cc13e8fe556f8df9fe0b/googletest/cmake/internal_utils.cmake#L173-L174
+if(WIN32)
+  # For EXE files
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE STRING "")
+  # For DLL files
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE STRING "")
+endif()
