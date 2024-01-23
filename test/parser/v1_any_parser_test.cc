@@ -7,7 +7,7 @@
 TEST(Parser_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
   const sourcemeta::jsontoolkit::JSON input{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON")};

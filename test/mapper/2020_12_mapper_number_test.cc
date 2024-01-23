@@ -19,7 +19,7 @@ TEST(MapperNumber_2020_12, arbitrary) {
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "DOUBLE_VARINT_TUPLE",
     "options": {}
   })JSON")};

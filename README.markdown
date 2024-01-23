@@ -8,7 +8,7 @@ encode any [JSON](https://www.json.org) document given a matching [JSON Schema
 ***
 
 **This is a work-in-progress. You can watch the repository or [join the
-wait-list on the official website](https://www.jsonbinpack.org) to get a
+wait-list on the official website](https://jsonbinpack.sourcemeta.com) to get a
 notification when the first release is out.**
 
 In the mean-time, star the project to show your support!
@@ -19,7 +19,7 @@ Documentation
 -------------
 
 Refer to the project website for documentation:
-[https://www.jsonbinpack.org](https://www.jsonbinpack.org).
+[https://jsonbinpack.sourcemeta.com](https://jsonbinpack.sourcemeta.com).
 
 Do you have any questions? Open a ticket on [GitHub
 Discussions](https://github.com/sourcemeta/jsonbinpack/discussions)!

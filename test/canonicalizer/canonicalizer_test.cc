@@ -14,10 +14,10 @@ public:
       -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
     std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
 
-    if (identifier == "https://www.jsonbinpack.org/draft/unknown") {
+    if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
       promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
-        "$schema": "https://www.jsonbinpack.org/draft/unknown",
-        "$id": "https://www.jsonbinpack.org/draft/unknown"
+        "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
+        "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON"));
     } else {
       promise.set_value(std::nullopt);
@@ -31,7 +31,7 @@ TEST(Canonicalizer, unsupported_draft) {
   TestResolver resolver;
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
   sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/draft/unknown",
+    "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
   })JSON")};
 
