@@ -7,7 +7,7 @@
 TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "FIXED_TYPED_ARRAY",
     "options": {
       "size": 3,
@@ -71,7 +71,7 @@ TEST(Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
 TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "BOUNDED_8BITS_TYPED_ARRAY",
     "options": {
       "minimum": 1,
@@ -146,7 +146,7 @@ TEST(Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
 TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "FLOOR_TYPED_ARRAY",
     "options": {
       "minimum": 1,
@@ -210,7 +210,7 @@ TEST(Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
 TEST(Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ROOF_TYPED_ARRAY",
     "options": {
       "maximum": 3,

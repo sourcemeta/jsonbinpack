@@ -126,7 +126,7 @@ static auto
 walker_test(const std::string &keyword,
             const std::unordered_map<std::string, bool> &vocabularies)
     -> sourcemeta::jsontoolkit::schema_walker_strategy_t {
-  if (vocabularies.contains("https://jsonbinpack.org/vocab/test")) {
+  if (vocabularies.contains("https://jsonbinpack.sourcemeta.com/vocab/test")) {
     if (keyword == "array") {
       return sourcemeta::jsontoolkit::schema_walker_strategy_t::Elements;
     }
@@ -149,7 +149,7 @@ TEST(Bundle, alter_nested_document_with_applicators) {
   bundle.add<ExampleRule2>();
 
   sourcemeta::jsontoolkit::JSON document{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.org/test-metaschema-1",
+    "$schema": "https://jsonbinpack.sourcemeta.com/test-metaschema-1",
     "array": [
       {
         "foo": "bar",
@@ -187,7 +187,7 @@ TEST(Bundle, alter_nested_document_with_applicators) {
   bundle.apply(document, "https://json-schema.org/draft/2020-12/schema");
 
   sourcemeta::jsontoolkit::JSON expected{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.org/test-metaschema-1",
+    "$schema": "https://jsonbinpack.sourcemeta.com/test-metaschema-1",
     "array": [
       {
         "qux": "xxx"
