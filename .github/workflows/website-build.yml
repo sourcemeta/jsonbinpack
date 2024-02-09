@@ -1,26 +1,28 @@
-name: JSON BinPack
+name: website
 on:
-  - push
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: website-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  website:
-    runs-on: ubuntu-22.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: sudo apt update
       - run: sudo apt-get install --yes doxygen doxygen-latex bundler
-      - run: cmake --version
       - run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DJSONBINPACK_CLI:BOOL=OFF
           -DJSONBINPACK_TESTS:BOOL=OFF
+          -DJSONBINPACK_DOCS:BOOL=ON
       - run: cmake --build ./build --config Release --target bundler
       # Jekyll is often flaky on GitHub Actions
       - run: ./scripts/retry.sh cmake --build ./build --config Release --target jekyll
       - run: cmake --build ./build --config Release --target doxygen
-      # Only deploy website from the main branch
-      - if: github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/release/www
