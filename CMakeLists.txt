@@ -20,7 +20,6 @@ option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
 # TODO: Generate (and test) CMake config
 
 # Dependencies
-# TODO: Disable non-required JSON Toolkit components
 find_package(JSONToolkit REQUIRED)
 
 # Sources
