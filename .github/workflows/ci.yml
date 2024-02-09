@@ -1,17 +1,19 @@
 name: JSON BinPack
 
-# Do not run this job for changes that only affect the website
 on:
+  schedule:
+    # Once per day, Monday to Friday
+    - cron: '0 19 * * 1-5'
   push:
-    paths-ignore:
-      - 'www/**'
 
 jobs:
+  # TODO: Add Unikraft job too
   test:
     strategy:
       fail-fast: false
       matrix:
         platform:
+          # TODO: Enable shared libraries too
           - os: macos-latest
             cc: clang
             cxx: clang++
@@ -23,22 +25,16 @@ jobs:
             # cc: gcc
             # cxx: g++
           - os: windows-latest
+          # TODO: Enable sanitizers
 
     runs-on: ${{ matrix.platform.os }}
     env:
       CC: ${{ matrix.platform.cc }}
       CXX: ${{ matrix.platform.cxx }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macos'
-        run: brew bundle
-        env:
-          HOMEBREW_NO_ANALYTICS: 1
-          HOMEBREW_NO_AUTO_UPDATE: 1
       - name: Install dependencies (GNU/Linux)
         if: runner.os == 'linux'
-        run: sudo apt-get install --yes clang-format shellcheck
+        run: sudo apt-get install --yes clang-format
 
       # See https://github.com/actions/runner-images/issues/8659
       - name: Workaround Clang issue (GNU/Linux)
@@ -47,18 +43,37 @@ jobs:
           sudo apt-get purge -y g++-13 gcc-13 libstdc++-13-dev
           sudo apt-get install -y --allow-downgrades libstdc++-12-dev libstdc++6=12.* libgcc-s1=12.*
 
-      - name: Install dependencies (Windows)
-        if: runner.os == 'windows'
-        run: choco install shellcheck
+      - uses: actions/checkout@v3
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macos'
+        run: brew bundle
+        env:
+          HOMEBREW_NO_ANALYTICS: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
 
       - run: cmake --version
-      - run: >
+      - name: Configure JSON BinPack (static)
+        run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DJSONBINPACK_CLI:BOOL=ON
           -DJSONBINPACK_TESTS:BOOL=ON
+          -DJSONBINPACK_DOCS:BOOL=ON
+          -DBUILD_SHARED_LIBS:BOOL=OFF
           -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
-      - run: cmake --build ./build --config Release --target shellcheck
       - run: cmake --build ./build --config Release --target clang_format_test
       - run: cmake --build ./build --config Release --parallel 4
+      - run: >
+          cmake --install ./build --prefix ./build/dist --config Release --verbose
+          --component sourcemeta_jsonbinpack
+      - run: >
+          cmake --install ./build --prefix ./build/dist --config Release --verbose
+          --component sourcemeta_jsonbinpack_dev
+
+      # Not every CTest version supports the --test-dir option. If such option
+      # is not recognized, `ctest` will successfully exit finding no tests.
+      # Better to be sure and `cd` all the time here.
       - run: cd ./build && ctest --build-config Release --output-on-failure --parallel
+        env:
+          # See https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+          UBSAN_OPTIONS: print_stacktrace=1
