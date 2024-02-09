@@ -5,7 +5,7 @@ add_executable(sourcemeta_jsonbinpack_schemas_unit
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit
   PRIVATE GTest::gtest GTest::gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit
-  PRIVATE sourcemeta_jsonbinpack_schemas)
+  PRIVATE sourcemeta::jsonbinpack::schemas)
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit
   PRIVATE sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_schemas_unit
