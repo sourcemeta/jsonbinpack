@@ -11,9 +11,9 @@ add_executable(sourcemeta_jsonbinpack_mapper_unit
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit
   PRIVATE GTest::gtest GTest::gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit
-  PRIVATE sourcemeta_jsonbinpack_mapper)
+  PRIVATE sourcemeta::jsonbinpack::mapper)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit
-  PRIVATE sourcemeta_jsonbinpack_canonicalizer)
+  PRIVATE sourcemeta::jsonbinpack::canonicalizer)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit
   PRIVATE sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_mapper_unit

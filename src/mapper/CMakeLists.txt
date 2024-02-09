@@ -29,4 +29,4 @@ target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC
   sourcemeta::jsontoolkit::jsonschema)
 target_link_libraries(sourcemeta_jsonbinpack_mapper PUBLIC
-  sourcemeta_jsonbinpack_schemas)
+  sourcemeta::jsonbinpack::schemas)

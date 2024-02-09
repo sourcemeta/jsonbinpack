@@ -1,10 +1,10 @@
 add_executable(jsonbinpack_e2e_test_runner runner.cc)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsontoolkit::json)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_canonicalizer)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_mapper)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_parser)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_encoder)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta_jsonbinpack_decoder)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::canonicalizer)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::mapper)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::parser)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::encoder)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::decoder)
 set_target_properties(jsonbinpack_e2e_test_runner
   PROPERTIES FOLDER "Misc")
 
