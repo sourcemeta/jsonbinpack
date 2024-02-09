@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: sudo apt update
-      - run: sudo apt-get install --yes doxygen doxygen-latex bundler
+      - run: sudo apt-get install --yes doxygen doxygen-latex sassc
       - run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
@@ -32,9 +32,9 @@ jobs:
           -DJSONBINPACK_COMPILER:BOOL=ON
           -DJSONBINPACK_TESTS:BOOL=OFF
           -DJSONBINPACK_WEBSITE:BOOL=ON
+          -DJSONBINPACK_DOCS:BOOL=ON
 
-      # Jekyll is often flaky on GitHub Actions
-      - run: ./scripts/retry.sh cmake --build ./build --config Release --target jekyll
+      - run: cmake --build ./build --config Release --target website
       - run: cmake --build ./build --config Release --target doxygen
 
       - name: Setup Pages
@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./build/release/www
+          path: ./build/www
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
