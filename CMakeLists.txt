@@ -39,32 +39,17 @@ endif()
 # TODO: Get rid of Jekyll
 if(JSONBINPACK_WEBSITE)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
+  set(JSONBINPACK_WEBSITE_OUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www")
   noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
-    OUTPUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www/api")
-  set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
-  set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
-  find_program(BUNDLE_BIN NAMES bundle)
-  set(JSONBINPACK_BUNDLER_PATH "${PROJECT_SOURCE_DIR}/build/bundler")
-  if(BUNDLE_BIN)
-    add_custom_target(bundler
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-      VERBATIM
-      COMMAND "${BUNDLE_BIN}" install --path "${JSONBINPACK_BUNDLER_PATH}")
-  else()
-    message(WARNING "Could not find `bundler` in the system")
-  endif()
-  find_program(BUNDLE_BIN NAMES bundle)
-  if(BUNDLE_BIN)
-    add_custom_target(jekyll
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-      VERBATIM
-      COMMAND "${BUNDLE_BIN}" exec jekyll build
-        --source "${JSONBINPACK_WEBSITE_SRC}" --destination "${JSONBINPACK_WEBSITE_OUT}")
-    set_target_properties(jekyll
-      PROPERTIES FOLDER "Website")
-  else()
-    message(WARNING "Could not find `jekyll` in the system")
-  endif()
+    OUTPUT "${JSONBINPACK_WEBSITE_OUT}/api")
+  find_program(BUNDLE_BIN NAMES bundle REQUIRED)
+  add_custom_target(jekyll
+    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+    VERBATIM
+    COMMAND "${BUNDLE_BIN}" install --path "${PROJECT_SOURCE_DIR}/build/bundler"
+    COMMAND "${BUNDLE_BIN}" exec jekyll build
+      --source "${PROJECT_SOURCE_DIR}/www" --destination "${JSONBINPACK_WEBSITE_OUT}")
+  set_target_properties(jekyll PROPERTIES FOLDER "JSON BinPack/Website")
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)

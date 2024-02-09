@@ -36,7 +36,6 @@ test: .always
 			--output-on-failure --progress --parallel
 
 website: .always
-	$(CMAKE) --build ./build --config $(PRESET) --target bundler
 	$(CMAKE) --build ./build --config $(PRESET) --target jekyll
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
 
