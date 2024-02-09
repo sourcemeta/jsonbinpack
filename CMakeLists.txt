@@ -17,6 +17,8 @@ option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
 option(JSONBINPACK_INSTALL "Install the JSON BinPack library" ON)
 option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
 option(JSONBINPACK_DOCS "Build the JSON BinPack documentation" OFF)
+option(JSONBINPACK_ADDRESS_SANITIZER "Build JSON BinPack with an address sanitizer" OFF)
+option(JSONBINPACK_UNDEFINED_SANITIZER "Build JSON BinPack with an undefined behavior sanitizer" OFF)
 
 # TODO: Generate (and test) CMake config
 
@@ -39,6 +41,12 @@ endif()
 # CLI
 if(JSONBINPACK_CLI)
   add_subdirectory(src/cli)
+endif()
+
+if(JSONBINPACK_ADDRESS_SANITIZER)
+  noa_sanitizer(TYPE address)
+elseif(JSONBINPACK_UNDEFINED_SANITIZER)
+  noa_sanitizer(TYPE undefined)
 endif()
 
 if(JSONBINPACK_WEBSITE)
