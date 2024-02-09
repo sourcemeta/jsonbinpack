@@ -3,9 +3,9 @@
 #include "resolver.h"
 
 #include <sourcemeta/jsonbinpack/canonicalizer.h>
-#include <sourcemeta/jsonbinpack/decoder.h>
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>

@@ -11,4 +11,4 @@ sourcemeta_jsonbinpack_add_compile_options(PRIVATE sourcemeta_jsonbinpack_parser
 target_link_libraries(sourcemeta_jsonbinpack_parser PUBLIC
   sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_parser PRIVATE
-  sourcemeta::jsonbinpack::encoding)
+  sourcemeta::jsonbinpack::runtime)

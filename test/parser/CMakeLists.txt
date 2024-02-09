@@ -10,7 +10,7 @@ target_link_libraries(sourcemeta_jsonbinpack_parser_unit
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit
   PRIVATE sourcemeta::jsonbinpack::parser)
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit
-  PRIVATE sourcemeta::jsonbinpack::encoding)
+  PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(sourcemeta_jsonbinpack_parser_unit
   PRIVATE sourcemeta::jsontoolkit::json)
 gtest_discover_tests(sourcemeta_jsonbinpack_parser_unit)

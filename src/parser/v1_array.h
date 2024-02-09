@@ -1,9 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_PARSER_V1_ARRAY_H_
 #define SOURCEMETA_JSONBINPACK_PARSER_V1_ARRAY_H_
 
-#include <sourcemeta/jsonbinpack/encoding.h>
-#include <sourcemeta/jsonbinpack/encoding_wrap.h>
 #include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <algorithm> // std::transform

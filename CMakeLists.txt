@@ -25,10 +25,7 @@ find_package(JSONToolkit REQUIRED)
 
 # Runtime
 if(JSONBINPACK_RUNTIME OR JSONBINPACK_CLI OR JSONBINPACK_COMPILER)
-  add_subdirectory(src/numeric)
-  add_subdirectory(src/encoding)
-  add_subdirectory(src/encoder)
-  add_subdirectory(src/decoder)
+  add_subdirectory(src/runtime)
 endif()
 
 # Compiler
@@ -67,10 +64,7 @@ if(JSONBINPACK_TESTS)
   enable_testing()
 
   if(JSONBINPACK_RUNTIME OR JSONBINPACK_CLI OR JSONBINPACK_COMPILER)
-    add_subdirectory(test/numeric)
-    add_subdirectory(test/encoding)
-    add_subdirectory(test/encoder)
-    add_subdirectory(test/decoder)
+    add_subdirectory(test/runtime)
   endif()
 
   if(JSONBINPACK_COMPILER OR JSONBINPACK_CLI)

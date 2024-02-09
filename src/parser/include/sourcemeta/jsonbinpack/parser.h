@@ -1,7 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_PARSER_H_
 #define SOURCEMETA_JSONBINPACK_PARSER_H_
 
-#include <sourcemeta/jsonbinpack/encoding.h>
+#include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 namespace sourcemeta::jsonbinpack {

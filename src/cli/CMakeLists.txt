@@ -8,8 +8,7 @@ target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::mapper)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::parser)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::schemas)
-target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::encoder)
-target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::decoder)
+target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::jsonschema)
 
