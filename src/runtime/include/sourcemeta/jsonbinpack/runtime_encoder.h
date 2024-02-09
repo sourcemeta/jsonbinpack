@@ -8,7 +8,6 @@
 #include <sourcemeta/jsonbinpack/runtime_encoder_basic.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder_real.h>
 #include <sourcemeta/jsonbinpack/runtime_encoding.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_tag.h>
 #include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
 
@@ -144,7 +143,7 @@ public:
     const auto value{document.to_real()};
     std::uint64_t point_position;
     const std::int64_t integral{
-        encoder::real_digits<std::int64_t>(value, &point_position)};
+        real_digits<std::int64_t>(value, &point_position)};
     this->put_varint_zigzag(integral);
     this->put_varint(point_position);
   }
@@ -459,7 +458,7 @@ public:
   ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &document,
                                   const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &)
       -> void {
-    using namespace tag::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
+    using namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
     if (document.is_null()) {
       this->put_byte(TYPE_OTHER | (SUBTYPE_NULL << type_size));
     } else if (document.is_boolean()) {
@@ -576,7 +575,7 @@ public:
   /// @}
 
 private:
-  using ContextType = typename encoder::Context<CharT>::Type;
+  using ContextType = typename Context<CharT>::Type;
 };
 
 } // namespace sourcemeta::jsonbinpack

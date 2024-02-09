@@ -57,11 +57,11 @@ public:
     }
   }
 
-  inline auto context() -> encoder::Context<CharT> & { return this->context_; }
+  inline auto context() -> Context<CharT> & { return this->context_; }
 
 private:
   std::basic_ostream<CharT, Traits> &stream;
-  encoder::Context<CharT> context_;
+  Context<CharT> context_;
 };
 
 } // namespace sourcemeta::jsonbinpack

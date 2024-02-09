@@ -7,7 +7,6 @@
 
 #include <sourcemeta/jsonbinpack/runtime_decoder_basic.h>
 #include <sourcemeta/jsonbinpack/runtime_encoding.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_tag.h>
 #include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
 
@@ -427,7 +426,7 @@ public:
 
   auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &)
       -> sourcemeta::jsontoolkit::JSON {
-    using namespace tag::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
+    using namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
     const std::uint8_t byte{this->get_byte()};
     const std::uint8_t type{
         static_cast<std::uint8_t>(byte & (0xff >> subtype_size))};
