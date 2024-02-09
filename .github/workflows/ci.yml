@@ -58,7 +58,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DJSONBINPACK_CLI:BOOL=ON
           -DJSONBINPACK_TESTS:BOOL=ON
-          -DJSONBINPACK_DOCS:BOOL=ON
+          -DJSONBINPACK_DOCS:BOOL=OFF
           -DBUILD_SHARED_LIBS:BOOL=OFF
           -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
       - run: cmake --build ./build --config Release --target clang_format_test

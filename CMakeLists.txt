@@ -64,9 +64,12 @@ if(JSONBINPACK_TESTS)
   add_subdirectory(test/e2e)
 endif()
 
-# Website
-if(PROJECT_IS_TOP_LEVEL)
+# TODO: Rename to JSONBINPACK_WEBSITE
+if(JSONBINPACK_DOCS)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
+  noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
+    OUTPUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www/api")
+
   set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
   set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
 
@@ -93,22 +96,5 @@ if(PROJECT_IS_TOP_LEVEL)
       PROPERTIES FOLDER "Website")
   else()
     message(WARNING "Could not find `jekyll` in the system")
-  endif()
-
-  # TODO: Use Noa for Doxygen
-  find_package(Doxygen)
-  if(DOXYGEN_FOUND)
-    set(DOXYGEN_IN "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in")
-    set(DOXYGEN_OUT "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
-    configure_file("${DOXYGEN_IN}" "${DOXYGEN_OUT}" @ONLY)
-    add_custom_target(doxygen
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-      VERBATIM
-      COMMAND "${CMAKE_COMMAND}" -E make_directory "${JSONBINPACK_WEBSITE_OUT}"
-      COMMAND "${DOXYGEN_EXECUTABLE}" "${DOXYGEN_OUT}")
-    set_target_properties(doxygen
-      PROPERTIES FOLDER "Website")
-  else()
-    message(WARNING "Could not find `doxygen` in the system")
   endif()
 endif()
