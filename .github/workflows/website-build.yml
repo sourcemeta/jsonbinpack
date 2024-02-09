@@ -20,6 +20,8 @@ jobs:
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DJSONBINPACK_CLI:BOOL=OFF
+          -DJSONBINPACK_RUNTIME:BOOL=ON
+          -DJSONBINPACK_COMPILER:BOOL=ON
           -DJSONBINPACK_TESTS:BOOL=OFF
           -DJSONBINPACK_WEBSITE:BOOL=ON
       - run: cmake --build ./build --config Release --target bundler

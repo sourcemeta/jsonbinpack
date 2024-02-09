@@ -1,33 +1,27 @@
 cmake_minimum_required(VERSION 3.24)
-project(jsonbinpack VERSION 0.0.1 LANGUAGES C CXX
+project(jsonbinpack VERSION 0.0.1 LANGUAGES CXX
   DESCRIPTION "\
 A space-efficient open-source binary JSON serialization \
 format based on JSON Schema with \
 both schema-driven and schema-less support."
   HOMEPAGE_URL "https://jsonbinpack.sourcemeta.com")
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-
-# Dependencies
-# TODO: Disable non-required JSON Toolkit components
-find_package(JSONToolkit REQUIRED)
+include(vendor/noa/cmake/noa.cmake)
+include(cmake/CompilerOptions.cmake)
 
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
+option(JSONBINPACK_RUNTIME "Build the JSON BinPack runtime" ON)
+option(JSONBINPACK_COMPILER "Build the JSON BinPack compiler" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
 option(JSONBINPACK_INSTALL "Install the JSON BinPack library" ON)
 option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
 
-# Global includes
-include(vendor/noa/cmake/noa.cmake)
-include(cmake/CompilerOptions.cmake)
+# TODO: Generate (and test) CMake config
 
-if(PROJECT_IS_TOP_LEVEL)
-  noa_target_clang_format(SOURCES
-    src/*.h src/*.cc
-    test/*.h test/*.cc)
-  noa_target_clang_tidy(SOURCES
-    src/*.h src/*.cc)
-endif()
+# Dependencies
+# TODO: Disable non-required JSON Toolkit components
+find_package(JSONToolkit REQUIRED)
 
 # Sources
 add_subdirectory(src/numeric)
@@ -40,6 +34,45 @@ add_subdirectory(src/canonicalizer)
 add_subdirectory(src/mapper)
 if(JSONBINPACK_CLI)
   add_subdirectory(src/cli)
+endif()
+
+# TODO: Get rid of Jekyll
+if(JSONBINPACK_WEBSITE)
+  string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
+  noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
+    OUTPUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www/api")
+  set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
+  set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
+  find_program(BUNDLE_BIN NAMES bundle)
+  set(JSONBINPACK_BUNDLER_PATH "${PROJECT_SOURCE_DIR}/build/bundler")
+  if(BUNDLE_BIN)
+    add_custom_target(bundler
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+      VERBATIM
+      COMMAND "${BUNDLE_BIN}" install --path "${JSONBINPACK_BUNDLER_PATH}")
+  else()
+    message(WARNING "Could not find `bundler` in the system")
+  endif()
+  find_program(BUNDLE_BIN NAMES bundle)
+  if(BUNDLE_BIN)
+    add_custom_target(jekyll
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+      VERBATIM
+      COMMAND "${BUNDLE_BIN}" exec jekyll build
+        --source "${JSONBINPACK_WEBSITE_SRC}" --destination "${JSONBINPACK_WEBSITE_OUT}")
+    set_target_properties(jekyll
+      PROPERTIES FOLDER "Website")
+  else()
+    message(WARNING "Could not find `jekyll` in the system")
+  endif()
+endif()
+
+if(PROJECT_IS_TOP_LEVEL)
+  noa_target_clang_format(SOURCES
+    src/*.h src/*.cc
+    test/*.h test/*.cc)
+  noa_target_clang_tidy(SOURCES
+    src/*.h src/*.cc)
 endif()
 
 # Testing
@@ -61,39 +94,4 @@ if(JSONBINPACK_TESTS)
   endif()
 
   add_subdirectory(test/e2e)
-endif()
-
-# TODO: Rename to JSONBINPACK_WEBSITE
-if(JSONBINPACK_WEBSITE)
-  string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
-  noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
-    OUTPUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www/api")
-
-  set(JSONBINPACK_WEBSITE_OUT ${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www)
-  set(JSONBINPACK_WEBSITE_SRC ${PROJECT_SOURCE_DIR}/www)
-
-  # TODO: Move to Makefile?
-  find_program(BUNDLE_BIN NAMES bundle)
-  set(JSONBINPACK_BUNDLER_PATH "${PROJECT_SOURCE_DIR}/build/bundler")
-  if(BUNDLE_BIN)
-    add_custom_target(bundler
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-      VERBATIM
-      COMMAND "${BUNDLE_BIN}" install --path "${JSONBINPACK_BUNDLER_PATH}")
-  else()
-    message(WARNING "Could not find `bundler` in the system")
-  endif()
-
-  find_program(BUNDLE_BIN NAMES bundle)
-  if(BUNDLE_BIN)
-    add_custom_target(jekyll
-      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-      VERBATIM
-      COMMAND "${BUNDLE_BIN}" exec jekyll build
-        --source "${JSONBINPACK_WEBSITE_SRC}" --destination "${JSONBINPACK_WEBSITE_OUT}")
-    set_target_properties(jekyll
-      PROPERTIES FOLDER "Website")
-  else()
-    message(WARNING "Could not find `jekyll` in the system")
-  endif()
 endif()
