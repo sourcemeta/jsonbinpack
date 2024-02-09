@@ -15,6 +15,7 @@ find_package(JSONToolkit REQUIRED)
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
 option(JSONBINPACK_INSTALL "Install the JSON BinPack library" ON)
+option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
 
 # Global includes
 include(vendor/noa/cmake/noa.cmake)
@@ -65,7 +66,7 @@ if(JSONBINPACK_TESTS)
 endif()
 
 # TODO: Rename to JSONBINPACK_WEBSITE
-if(JSONBINPACK_DOCS)
+if(JSONBINPACK_WEBSITE)
   string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
   noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
     OUTPUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www/api")

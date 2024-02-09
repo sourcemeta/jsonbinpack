@@ -21,7 +21,7 @@ jobs:
           -DCMAKE_BUILD_TYPE:STRING=Release
           -DJSONBINPACK_CLI:BOOL=OFF
           -DJSONBINPACK_TESTS:BOOL=OFF
-          -DJSONBINPACK_DOCS:BOOL=ON
+          -DJSONBINPACK_WEBSITE:BOOL=ON
       - run: cmake --build ./build --config Release --target bundler
       # Jekyll is often flaky on GitHub Actions
       - run: ./scripts/retry.sh cmake --build ./build --config Release --target jekyll
