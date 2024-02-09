@@ -24,13 +24,6 @@ Refer to the project website for documentation:
 Do you have any questions? Open a ticket on [GitHub
 Discussions](https://github.com/sourcemeta/jsonbinpack/discussions)!
 
-Building JSON BinPack
----------------------
-
-JSON BinPack is a C++ project that makes use of the [CMake](https://cmake.org)
-build system. It is expected to compile on LLVM and GCC on macOS, GNU/Linux and
-FreeBSD, an on MSVC on Windows.
-
 Commercial Use
 --------------
 
