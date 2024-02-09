@@ -1,41 +1,36 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
 /// @ingroup mapper_rules
-class IntegerLowerBoundMultiplier final : public sourcemeta::alterschema::Rule {
+class IntegerLowerBoundMultiplier final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  IntegerLowerBoundMultiplier() : Rule("integer_lower_bound_multiplier"){};
+  IntegerLowerBoundMultiplier()
+      : sourcemeta::jsontoolkit::SchemaTransformRule(
+            "integer_lower_bound_multiplier"){};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
     return !is_encoding(schema) &&
-           draft == "https://json-schema.org/draft/2020-12/schema" &&
+           dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "integer" &&
-           sourcemeta::jsontoolkit::defines(schema, "minimum") &&
-           !sourcemeta::jsontoolkit::defines(schema, "maximum") &&
-           sourcemeta::jsontoolkit::defines(schema, "multipleOf") &&
-           sourcemeta::jsontoolkit::is_integer(
-               sourcemeta::jsontoolkit::at(schema, "multipleOf"));
+           schema.defines("type") &&
+           schema.at("type").to_string() == "integer" &&
+           schema.defines("minimum") && !schema.defines("maximum") &&
+           schema.defines("multipleOf") && schema.at("multipleOf").is_integer();
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const auto minimum{sourcemeta::jsontoolkit::to_integer(
-        sourcemeta::jsontoolkit::at(value, "minimum"))};
-    const auto multiplier{sourcemeta::jsontoolkit::to_integer(
-        sourcemeta::jsontoolkit::at(value, "multipleOf"))};
-    auto options{sourcemeta::jsontoolkit::make_object()};
-    sourcemeta::jsontoolkit::assign(options, "minimum",
-                                    sourcemeta::jsontoolkit::from(minimum));
-    sourcemeta::jsontoolkit::assign(options, "multiplier",
-                                    sourcemeta::jsontoolkit::from(multiplier));
-    make_encoding(document, value, "FLOOR_MULTIPLE_ENUM_VARINT", options);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto minimum{transformer.schema().at("minimum")};
+    auto multiplier{transformer.schema().at("multipleOf")};
+    auto options = sourcemeta::jsontoolkit::JSON::make_object();
+    options.assign("minimum", std::move(minimum));
+    options.assign("multiplier", std::move(multiplier));
+    make_encoding(transformer, "FLOOR_MULTIPLE_ENUM_VARINT", options);
   }
 };
 

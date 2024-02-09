@@ -1,52 +1,51 @@
-#include <jsonbinpack/canonicalizer/canonicalizer.h>
-#include <jsontoolkit/json.h>
-
-#include <future>    // std::promise, std::future
-#include <optional>  // std::optional
-#include <stdexcept> // std::runtime_error
-#include <string>    // std::string
-
 #include <gtest/gtest.h>
 
-class TestResolver {
-public:
-  auto operator()(const std::string &identifier)
-      -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
-    std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+#include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/jsontoolkit/jsonschema.h>
 
-    if (identifier == "https://www.jsonbinpack.org/draft/unknown") {
-      promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
-        "$schema": "https://www.jsonbinpack.org/draft/unknown",
-        "$id": "https://www.jsonbinpack.org/draft/unknown"
+#include <future>   // std::promise, std::future
+#include <optional> // std::optional
+#include <string>   // std::string
+
+static auto test_resolver(std::string_view identifier)
+    -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+  std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+  if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
+    promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
+        "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
+        "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON"));
-    } else {
-      promise.set_value(std::nullopt);
-    }
-
-    return promise.get_future();
+  } else {
+    promise.set_value(
+        sourcemeta::jsontoolkit::official_resolver(identifier).get());
   }
-};
+
+  return promise.get_future();
+}
 
 TEST(Canonicalizer, unsupported_draft) {
-  TestResolver resolver;
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/draft/unknown",
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
-  })JSON")};
+  })JSON");
 
   EXPECT_THROW(canonicalizer.apply(
-                   schema, "https://json-schema.org/draft/2020-12/schema"),
-               std::runtime_error);
+                   schema, sourcemeta::jsontoolkit::default_schema_walker,
+                   test_resolver,
+                   "https://json-schema.org/draft/2020-12/schema"),
+               sourcemeta::jsontoolkit::SchemaError);
 }
 
 TEST(Canonicalizer, unknown_draft) {
-  TestResolver resolver;
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer{resolver};
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::parse(R"JSON({
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "boolean"
-  })JSON")};
+  })JSON");
 
-  EXPECT_THROW(canonicalizer.apply(schema, "https://example.com/invalid"),
-               std::runtime_error);
+  EXPECT_THROW(canonicalizer.apply(
+                   schema, sourcemeta::jsontoolkit::default_schema_walker,
+                   test_resolver, "https://example.com/invalid"),
+               sourcemeta::jsontoolkit::SchemaResolutionError);
 }

@@ -19,26 +19,27 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 ///
 /// \f[\frac{S = false}{S \mapsto \{ not \mapsto \{\} \}}\f]
 
-class BooleanSchema final : public sourcemeta::alterschema::Rule {
+class BooleanSchema final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  BooleanSchema() : Rule("boolean_schema"){};
+  BooleanSchema() : SchemaTransformRule("boolean_schema"){};
 
   /// The rule condition
-  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::Value &schema,
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &,
-                               const std::unordered_map<std::string, bool> &,
-                               const std::size_t) const -> bool override {
-    return sourcemeta::jsontoolkit::is_boolean(schema);
+                               const std::set<std::string> &,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return schema.is_boolean();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const bool current_value{sourcemeta::jsontoolkit::to_boolean(value)};
-    sourcemeta::jsontoolkit::make_object(value);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    const bool current_value{transformer.schema().to_boolean()};
+    transformer.replace(sourcemeta::jsontoolkit::JSON::make_object());
     if (!current_value) {
-      sourcemeta::jsontoolkit::assign(document, value, "not",
-                                      sourcemeta::jsontoolkit::make_object());
+      transformer.assign("not", sourcemeta::jsontoolkit::JSON::make_object());
     }
   }
 };

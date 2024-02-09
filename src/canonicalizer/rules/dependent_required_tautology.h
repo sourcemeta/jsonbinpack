@@ -27,82 +27,69 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[R = \bigcup \{ v \mid (k, v) \in S.dependentRequired \land k \in
 /// S.required \}\f]
 
-class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
+class DependentRequiredTautology final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DependentRequiredTautology() : Rule("dependent_required_tautology"){};
+  DependentRequiredTautology()
+      : SchemaTransformRule("dependent_required_tautology"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "dependentRequired") &&
-           sourcemeta::jsontoolkit::is_object(
-               sourcemeta::jsontoolkit::at(schema, "dependentRequired")) &&
-           sourcemeta::jsontoolkit::defines(schema, "required") &&
-           sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "required")) &&
-           std::any_of(
-               sourcemeta::jsontoolkit::cbegin_array(
-                   sourcemeta::jsontoolkit::at(schema, "required")),
-               sourcemeta::jsontoolkit::cend_array(
-                   sourcemeta::jsontoolkit::at(schema, "required")),
-               [&schema](const auto &element) {
-                 return sourcemeta::jsontoolkit::is_string(element) &&
-                        sourcemeta::jsontoolkit::defines(
-                            sourcemeta::jsontoolkit::at(schema,
-                                                        "dependentRequired"),
-                            sourcemeta::jsontoolkit::to_string(element));
-               });
+           schema.is_object() && schema.defines("dependentRequired") &&
+           schema.at("dependentRequired").is_object() &&
+           schema.defines("required") && schema.at("required").is_array() &&
+           std::any_of(schema.at("required").as_array().cbegin(),
+                       schema.at("required").as_array().cend(),
+                       [&schema](const auto &element) {
+                         return element.is_string() &&
+                                schema.at("dependentRequired")
+                                    .defines(element.to_string());
+                       });
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const auto &current_requirements{sourcemeta::jsontoolkit::from(
-        sourcemeta::jsontoolkit::at(value, "required"))};
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    const auto &current_requirements = transformer.schema().at("required");
+    sourcemeta::jsontoolkit::JSON new_requirements = current_requirements;
 
-    for (const auto &element :
-         sourcemeta::jsontoolkit::array_iterator(current_requirements)) {
-      if (!sourcemeta::jsontoolkit::is_string(element)) {
+    for (const auto &element : current_requirements.as_array()) {
+      if (!element.is_string()) {
         continue;
       }
 
-      const auto name{sourcemeta::jsontoolkit::to_string(element)};
-      if (!sourcemeta::jsontoolkit::defines(
-              sourcemeta::jsontoolkit::at(value, "dependentRequired"), name)) {
+      const auto name{element.to_string()};
+      if (!transformer.schema().at("dependentRequired").defines(name)) {
         continue;
       }
 
-      const auto &dependents{sourcemeta::jsontoolkit::at(
-          sourcemeta::jsontoolkit::at(value, "dependentRequired"), name)};
-      if (!sourcemeta::jsontoolkit::is_array(dependents)) {
+      const auto &dependents{
+          transformer.schema().at("dependentRequired").at(name)};
+      if (!dependents.is_array()) {
         continue;
       }
 
-      for (const auto &dependent :
-           sourcemeta::jsontoolkit::array_iterator(dependents)) {
-        if (!sourcemeta::jsontoolkit::is_string(dependent)) {
+      for (const auto &dependent : dependents.as_array()) {
+        if (!dependent.is_string()) {
           continue;
         }
 
-        if (!sourcemeta::jsontoolkit::contains(
-                current_requirements,
-                sourcemeta::jsontoolkit::from(dependent))) {
-          sourcemeta::jsontoolkit::push_back(
-              document, sourcemeta::jsontoolkit::at(value, "required"),
-              sourcemeta::jsontoolkit::from(dependent));
+        if (!new_requirements.contains(dependent)) {
+          new_requirements.push_back(dependent);
         }
       }
 
-      sourcemeta::jsontoolkit::erase(
-          sourcemeta::jsontoolkit::at(value, "dependentRequired"), name);
+      transformer.erase({"dependentRequired"}, name);
     }
+
+    transformer.assign("required", new_requirements);
   }
 };
 

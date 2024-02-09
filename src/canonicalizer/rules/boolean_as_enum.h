@@ -17,38 +17,34 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{S.type = boolean}{S \mapsto S \cup \{ enum \mapsto \langle false,
 /// true \rangle \} \setminus \{ type \} }\f]
 
-class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
+class BooleanAsEnum final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  BooleanAsEnum() : Rule("boolean_as_enum"){};
+  BooleanAsEnum() : SchemaTransformRule("boolean_as_enum"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "boolean" &&
-           !sourcemeta::jsontoolkit::defines(schema, "enum");
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "boolean" &&
+           !schema.defines("enum");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto choices{sourcemeta::jsontoolkit::make_array()};
-    sourcemeta::jsontoolkit::push_back(choices,
-                                       sourcemeta::jsontoolkit::from(false));
-    sourcemeta::jsontoolkit::push_back(choices,
-                                       sourcemeta::jsontoolkit::from(true));
-    sourcemeta::jsontoolkit::assign(document, value, "enum", choices);
-    sourcemeta::jsontoolkit::erase(value, "type");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto choices = sourcemeta::jsontoolkit::JSON::make_array();
+    choices.push_back(sourcemeta::jsontoolkit::JSON{false});
+    choices.push_back(sourcemeta::jsontoolkit::JSON{true});
+    transformer.assign("enum", choices);
+    transformer.erase("type");
   }
 };
 

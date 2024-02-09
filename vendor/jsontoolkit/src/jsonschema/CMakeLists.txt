@@ -1,30 +1,27 @@
-include("${CMAKE_CURRENT_SOURCE_DIR}/metaschemas.cmake")
-configure_file(default_metaschemas.h.in default_metaschemas.h @ONLY)
+set(OFFICIAL_RESOLVER_INPUT "${CMAKE_CURRENT_SOURCE_DIR}/official_resolver.in.cc")
+set(OFFICIAL_RESOLVER_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/official_resolver.cc")
+include(./official_resolver.cmake)
 
-add_library(sourcemeta_jsontoolkit_jsonschema
-  include/jsontoolkit/jsonschema.h
-  include/jsontoolkit/jsonschema/resolver.h
-  include/jsontoolkit/jsonschema/walker.h
-  include/jsontoolkit/jsonschema/default_walker.h
-  include/jsontoolkit/jsonschema/default_resolver.h
-  jsonschema.cc default_metaschemas.h.in
-  default_walker.cc default_resolver.cc)
-add_library(sourcemeta::jsontoolkit::jsonschema ALIAS sourcemeta_jsontoolkit_jsonschema)
-set_target_properties(sourcemeta_jsontoolkit_jsonschema
-  PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/jsontoolkit/jsonschema.h"
-  OUTPUT_NAME jsontoolkit-jsonschema
-  EXPORT_NAME jsontoolkit::jsonschema)
+noa_library(NAMESPACE sourcemeta PROJECT jsontoolkit NAME jsonschema
+  FOLDER "JSON Toolkit/JSON Schema"
+  PRIVATE_HEADERS anchor.h bundle.h resolver.h walker.h reference.h
+    error.h transformer.h transform_rule.h transform_bundle.h
+  SOURCES jsonschema.cc default_walker.cc reference.cc anchor.cc
+    walker.cc bundle.cc transformer.cc transform_rule.cc transform_bundle.cc
+    "${CMAKE_CURRENT_BINARY_DIR}/official_resolver.cc")
 
-target_include_directories(sourcemeta_jsontoolkit_jsonschema
-  PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+if(JSONTOOLKIT_INSTALL)
+  noa_library_install(NAMESPACE sourcemeta PROJECT jsontoolkit NAME jsonschema)
+endif()
+
 target_link_libraries(sourcemeta_jsontoolkit_jsonschema PUBLIC
   sourcemeta::jsontoolkit::json)
+target_link_libraries(sourcemeta_jsontoolkit_jsonschema PUBLIC
+  sourcemeta::jsontoolkit::jsonpointer)
+target_link_libraries(sourcemeta_jsontoolkit_jsonschema PRIVATE
+  sourcemeta::jsontoolkit::uri)
 
-# To find the generated metaschemas file
-target_include_directories(sourcemeta_jsontoolkit_jsonschema
-  PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+sourcemeta_jsontoolkit_add_compile_options(sourcemeta_jsontoolkit_jsonschema)
 
 # GCC does not allow the use of std::promise, std::future
 # without compiling with pthreads support.
@@ -34,12 +31,3 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   find_package(Threads REQUIRED)
   target_link_libraries(sourcemeta_jsontoolkit_jsonschema PUBLIC Threads::Threads)
 endif()
-
-# Installation
-install(TARGETS sourcemeta_jsontoolkit_jsonschema
-  EXPORT sourcemeta_jsontoolkit_jsonschema
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT jsontoolkit
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit" COMPONENT jsontoolkit)
-install(FILES include/jsontoolkit/jsonschema/resolver.h
-  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/jsontoolkit/jsonschema"
-  COMPONENT jsontoolkit)

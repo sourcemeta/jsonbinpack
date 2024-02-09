@@ -16,31 +16,30 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{const \in dom(S)}{S \mapsto S \cup \{ enum \mapsto \langle S.const
 /// \rangle \} \setminus \{const\} }\f]
 
-class ConstAsEnum final : public sourcemeta::alterschema::Rule {
+class ConstAsEnum final : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ConstAsEnum() : Rule("const_as_enum"){};
+  ConstAsEnum() : SchemaTransformRule("const_as_enum"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "const");
+           schema.is_object() && schema.defines("const");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::JSON values{sourcemeta::jsontoolkit::make_array()};
-    sourcemeta::jsontoolkit::push_back(
-        values, sourcemeta::jsontoolkit::at(value, "const"));
-    sourcemeta::jsontoolkit::assign(document, value, "enum", values);
-    sourcemeta::jsontoolkit::erase(value, "const");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    sourcemeta::jsontoolkit::JSON values =
+        sourcemeta::jsontoolkit::JSON::make_array();
+    values.push_back(transformer.schema().at("const"));
+    transformer.assign("enum", values);
+    transformer.erase("const");
   }
 };
 

@@ -25,35 +25,33 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[K_{array} = \{prefixItems, contains, items\}\f]
 
 class DropNonStringKeywordsApplicator final
-    : public sourcemeta::alterschema::Rule {
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonStringKeywordsApplicator()
-      : Rule("drop_non_string_keywords_applicator"){};
+      : SchemaTransformRule("drop_non_string_keywords_applicator"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "string" &&
+           schema.defines("type") && schema.at("type").is_string() &&
+           schema.at("type").to_string() == "string" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::defines_any(schema,
-                                                this->BLACKLIST_APPLICATOR);
+           schema.defines_any(this->BLACKLIST_APPLICATOR.cbegin(),
+                              this->BLACKLIST_APPLICATOR.cend());
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_APPLICATOR);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase_keys(this->BLACKLIST_APPLICATOR.cbegin(),
+                           this->BLACKLIST_APPLICATOR.cend());
   }
 
 private:

@@ -24,39 +24,35 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// S.exclusiveMaximum}{S \mapsto S \setminus \{ maximum \}
 /// }\f]
 
-class ExclusiveMaximumAndMaximum final : public sourcemeta::alterschema::Rule {
+class ExclusiveMaximumAndMaximum final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ExclusiveMaximumAndMaximum() : Rule("exclusive_maximum_and_maximum"){};
+  ExclusiveMaximumAndMaximum()
+      : SchemaTransformRule("exclusive_maximum_and_maximum"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "maximum") &&
-           sourcemeta::jsontoolkit::defines(schema, "exclusiveMaximum") &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "maximum")) &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "exclusiveMaximum"));
+           schema.is_object() && schema.defines("maximum") &&
+           schema.defines("exclusiveMaximum") &&
+           schema.at("maximum").is_number() &&
+           schema.at("exclusiveMaximum").is_number();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const bool maximum_less_than_exclusive_maximum{
-        sourcemeta::jsontoolkit::compare(
-            sourcemeta::jsontoolkit::at(value, "maximum"),
-            sourcemeta::jsontoolkit::at(value, "exclusiveMaximum"))};
-    if (maximum_less_than_exclusive_maximum) {
-      sourcemeta::jsontoolkit::erase(value, "exclusiveMaximum");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    if (transformer.schema().at("maximum") <
+        transformer.schema().at("exclusiveMaximum")) {
+      transformer.erase("exclusiveMaximum");
     } else {
-      sourcemeta::jsontoolkit::erase(value, "maximum");
+      transformer.erase("maximum");
     }
   }
 };

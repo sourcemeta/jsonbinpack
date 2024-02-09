@@ -3,22 +3,23 @@
 
 #include "resolver.h"
 
-#include <jsonbinpack/schemas/schemas.h>
-#include <jsontoolkit/jsonschema.h>
+#include <sourcemeta/jsonbinpack/schemas.h>
+#include <sourcemeta/jsontoolkit/jsonschema.h>
 
 namespace sourcemeta::jsonbinpack::cli {
 
-auto resolver(const std::string &identifier)
+auto resolver(std::string_view identifier)
     -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+  std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
   if (identifier == sourcemeta::jsonbinpack::schemas::encoding::v1::id) {
-    std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
     promise.set_value(sourcemeta::jsontoolkit::parse(
         sourcemeta::jsonbinpack::schemas::encoding::v1::json));
-    return promise.get_future();
+  } else {
+    promise.set_value(
+        sourcemeta::jsontoolkit::official_resolver(identifier).get());
   }
 
-  static sourcemeta::jsontoolkit::DefaultResolver fallback;
-  return fallback(identifier);
+  return promise.get_future();
 }
 
 } // namespace sourcemeta::jsonbinpack::cli

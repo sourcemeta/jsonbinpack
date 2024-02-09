@@ -17,33 +17,30 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \cup \{ multipleOf \mapsto 1 \}
 /// }\f]
 
-class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
+class ImplicitUnitMultipleOf final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of"){};
+  ImplicitUnitMultipleOf() : SchemaTransformRule("implicit_unit_multiple_of"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "integer" &&
-           !sourcemeta::jsontoolkit::defines(schema, "multipleOf");
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "integer" &&
+           !schema.defines("multipleOf");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(document, value, "multipleOf",
-                                    sourcemeta::jsontoolkit::from(1));
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.assign("multipleOf", sourcemeta::jsontoolkit::JSON{1});
   }
 };
 

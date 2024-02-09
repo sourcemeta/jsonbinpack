@@ -17,35 +17,36 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{S.type = array \land format \in dom(S) }{S
 /// \mapsto S \setminus \{ format \} }\f]
 
-class DropNonArrayKeywordsFormat final : public sourcemeta::alterschema::Rule {
+class DropNonArrayKeywordsFormat final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DropNonArrayKeywordsFormat() : Rule("drop_non_array_keywords_format"){};
+  DropNonArrayKeywordsFormat()
+      : SchemaTransformRule("drop_non_array_keywords_format"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "array" &&
+           schema.defines("type") && schema.at("type").is_string() &&
+           schema.at("type").to_string() == "array" &&
            (vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-annotation") ||
             vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
                                   "format-assertion")) &&
-           sourcemeta::jsontoolkit::defines_any(schema, this->BLACKLIST_FORMAT);
+           schema.defines_any(this->BLACKLIST_FORMAT.cbegin(),
+                              this->BLACKLIST_FORMAT.cend());
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase_many(value, this->BLACKLIST_FORMAT);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase_keys(this->BLACKLIST_FORMAT.cbegin(),
+                           this->BLACKLIST_FORMAT.cend());
   }
 
 private:

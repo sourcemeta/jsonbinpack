@@ -16,38 +16,32 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \cup \{ const \mapsto "" \} \setminus \{ maxLength \}
 /// }\f]
 
-class EmptyStringAsConst final : public sourcemeta::alterschema::Rule {
+class EmptyStringAsConst final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyStringAsConst() : Rule("empty_string_as_const"){};
+  EmptyStringAsConst() : SchemaTransformRule("empty_string_as_const"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "string" &&
-           sourcemeta::jsontoolkit::defines(schema, "maxLength") &&
-           sourcemeta::jsontoolkit::is_integer(
-               sourcemeta::jsontoolkit::at(schema, "maxLength")) &&
-           sourcemeta::jsontoolkit::to_integer(
-               sourcemeta::jsontoolkit::at(schema, "maxLength")) == 0;
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "string" &&
+           schema.defines("maxLength") && schema.at("maxLength").is_integer() &&
+           schema.at("maxLength").to_integer() == 0;
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(document, value, "const",
-                                    sourcemeta::jsontoolkit::from(""));
-    sourcemeta::jsontoolkit::erase(value, "maxLength");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.assign("const", sourcemeta::jsontoolkit::JSON{""});
+    transformer.erase("maxLength");
   }
 };
 

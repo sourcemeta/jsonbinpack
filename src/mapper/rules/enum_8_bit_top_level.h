@@ -1,38 +1,31 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
 /// @ingroup mapper_rules
-class Enum8BitTopLevel final : public sourcemeta::alterschema::Rule {
+class Enum8BitTopLevel final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  Enum8BitTopLevel() : Rule("enum_8_bit_top_level"){};
+  Enum8BitTopLevel()
+      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit_top_level"){};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t level) const -> bool override {
+  [[nodiscard]] auto condition(
+      const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,
+      const std::set<std::string> &vocabularies,
+      const sourcemeta::jsontoolkit::Pointer &pointer) const -> bool override {
     return !is_encoding(schema) &&
-           draft == "https://json-schema.org/draft/2020-12/schema" &&
+           dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "enum") &&
-           sourcemeta::jsontoolkit::is_array(
-               sourcemeta::jsontoolkit::at(schema, "enum")) &&
-           level == 0 &&
-           sourcemeta::jsontoolkit::size(
-               sourcemeta::jsontoolkit::at(schema, "enum")) > 1 &&
-           is_byte(sourcemeta::jsontoolkit::size(
-                       sourcemeta::jsontoolkit::at(schema, "enum")) -
-                   1);
+           schema.defines("enum") && schema.at("enum").is_array() &&
+           pointer.empty() && schema.at("enum").size() > 1 &&
+           is_byte(schema.at("enum").size() - 1);
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto options{sourcemeta::jsontoolkit::make_object()};
-    sourcemeta::jsontoolkit::assign(
-        options, "choices",
-        sourcemeta::jsontoolkit::from(
-            sourcemeta::jsontoolkit::at(value, "enum")));
-    make_encoding(document, value, "TOP_LEVEL_BYTE_CHOICE_INDEX", options);
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto options = sourcemeta::jsontoolkit::JSON::make_object();
+    options.assign("choices", sourcemeta::jsontoolkit::JSON(
+                                  transformer.schema().at("enum")));
+    make_encoding(transformer, "TOP_LEVEL_BYTE_CHOICE_INDEX", options);
   }
 };
 

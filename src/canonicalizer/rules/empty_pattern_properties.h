@@ -16,31 +16,29 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \setminus \{ patternProperties \}
 /// }\f]
 
-class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
+class EmptyPatternProperties final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyPatternProperties() : Rule("empty_pattern_properties"){};
+  EmptyPatternProperties() : SchemaTransformRule("empty_pattern_properties"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/applicator") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "patternProperties") &&
-           sourcemeta::jsontoolkit::is_object(
-               sourcemeta::jsontoolkit::at(schema, "patternProperties")) &&
-           sourcemeta::jsontoolkit::empty(
-               sourcemeta::jsontoolkit::at(schema, "patternProperties"));
+           schema.is_object() && schema.defines("patternProperties") &&
+           schema.at("patternProperties").is_object() &&
+           schema.at("patternProperties").empty();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "patternProperties");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("patternProperties");
   }
 };
 

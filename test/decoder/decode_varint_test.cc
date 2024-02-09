@@ -1,8 +1,10 @@
-#include "decode_utils.h"
-#include <jsonbinpack/decoder/varint.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
+#include "decode_utils.h"
+
+#include <sourcemeta/jsonbinpack/decoder_varint.h>
+#include <sourcemeta/jsontoolkit/json.h>
+
 #include <limits> // std::numeric_limits
 
 TEST(Decoder, varint_0x01) {

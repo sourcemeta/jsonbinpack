@@ -1,65 +1,65 @@
 #ifndef SOURCEMETA_JSONBINPACK_PARSER_V1_STRING_H_
 #define SOURCEMETA_JSONBINPACK_PARSER_V1_STRING_H_
 
-#include <jsonbinpack/encoding/encoding.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/encoding.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <cassert> // assert
 #include <cstdint> // std::uint64_t
 
 namespace sourcemeta::jsonbinpack::parser::v1 {
 
-auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::Value &options)
+auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::JSON &options)
     -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "size"));
-  const auto &size{sourcemeta::jsontoolkit::at(options, "size")};
-  assert(sourcemeta::jsontoolkit::is_integer(size));
-  assert(sourcemeta::jsontoolkit::is_positive(size));
+  assert(options.defines("size"));
+  const auto &size{options.at("size")};
+  assert(size.is_integer());
+  assert(size.is_positive());
   return sourcemeta::jsonbinpack::UTF8_STRING_NO_LENGTH{
-      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(size))};
+      static_cast<std::uint64_t>(size.to_integer())};
 }
 
 auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-  const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-  assert(sourcemeta::jsontoolkit::is_integer(minimum));
-  assert(sourcemeta::jsontoolkit::is_positive(minimum));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("minimum"));
+  const auto &minimum{options.at("minimum")};
+  assert(minimum.is_integer());
+  assert(minimum.is_positive());
   return sourcemeta::jsonbinpack::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{
-      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(minimum))};
+      static_cast<std::uint64_t>(minimum.to_integer())};
 }
 
 auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-  const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-  assert(sourcemeta::jsontoolkit::is_integer(maximum));
-  assert(sourcemeta::jsontoolkit::is_positive(maximum));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("maximum"));
+  const auto &maximum{options.at("maximum")};
+  assert(maximum.is_integer());
+  assert(maximum.is_positive());
   return sourcemeta::jsonbinpack::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED{
-      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(maximum))};
+      static_cast<std::uint64_t>(maximum.to_integer())};
 }
 
 auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-  assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-  const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-  const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-  assert(sourcemeta::jsontoolkit::is_integer(minimum));
-  assert(sourcemeta::jsontoolkit::is_integer(maximum));
-  assert(sourcemeta::jsontoolkit::is_positive(minimum));
-  assert(sourcemeta::jsontoolkit::is_positive(maximum));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("minimum"));
+  assert(options.defines("maximum"));
+  const auto &minimum{options.at("minimum")};
+  const auto &maximum{options.at("maximum")};
+  assert(minimum.is_integer());
+  assert(maximum.is_integer());
+  assert(minimum.is_positive());
+  assert(maximum.is_positive());
   return sourcemeta::jsonbinpack::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED{
-      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(minimum)),
-      static_cast<std::uint64_t>(sourcemeta::jsontoolkit::to_integer(maximum))};
+      static_cast<std::uint64_t>(minimum.to_integer()),
+      static_cast<std::uint64_t>(maximum.to_integer())};
 }
 
-auto RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::Value &)
+auto RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::JSON &)
     -> Encoding {
   return sourcemeta::jsonbinpack::RFC3339_DATE_INTEGER_TRIPLET{};
 }
 
-auto PREFIX_VARINT_LENGTH_STRING_SHARED(const sourcemeta::jsontoolkit::Value &)
+auto PREFIX_VARINT_LENGTH_STRING_SHARED(const sourcemeta::jsontoolkit::JSON &)
     -> Encoding {
   return sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{};
 }

@@ -1,28 +1,28 @@
 namespace sourcemeta::jsonbinpack::mapper {
 
 /// @ingroup mapper_rules
-class NumberArbitrary final : public sourcemeta::alterschema::Rule {
+class NumberArbitrary final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  NumberArbitrary() : Rule("number_arbitrary"){};
+  NumberArbitrary()
+      : sourcemeta::jsontoolkit::SchemaTransformRule("number_arbitrary"){};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
     return !is_encoding(schema) &&
-           draft == "https://json-schema.org/draft/2020-12/schema" &&
+           dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "number";
+           schema.defines("type") && schema.at("type").to_string() == "number";
   }
 
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    make_encoding(document, value, "DOUBLE_VARINT_TUPLE",
-                  sourcemeta::jsontoolkit::make_object());
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    make_encoding(transformer, "DOUBLE_VARINT_TUPLE",
+                  sourcemeta::jsontoolkit::JSON::make_object());
   }
 };
 

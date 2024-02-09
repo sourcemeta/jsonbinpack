@@ -1,18 +1,19 @@
-#include <jsonbinpack/parser/parser.h>
-#include <jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
+#include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsontoolkit/json.h>
+
 #include <variant>
 
 TEST(Parser_v1, UTF8_STRING_NO_LENGTH_3) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "UTF8_STRING_NO_LENGTH",
     "options": {
       "size": 3
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -22,14 +23,14 @@ TEST(Parser_v1, UTF8_STRING_NO_LENGTH_3) {
 }
 
 TEST(Parser_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED",
     "options": {
       "minimum": 3
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -41,14 +42,14 @@ TEST(Parser_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
 }
 
 TEST(Parser_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED",
     "options": {
       "maximum": 3
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -59,15 +60,15 @@ TEST(Parser_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
 }
 
 TEST(Parser_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED",
     "options": {
       "minimum": 1,
       "maximum": 3
     }
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -81,12 +82,12 @@ TEST(Parser_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
 }
 
 TEST(Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "RFC3339_DATE_INTEGER_TRIPLET",
     "options": {}
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};
@@ -95,12 +96,12 @@ TEST(Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
 }
 
 TEST(Parser_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
-  const sourcemeta::jsontoolkit::JSON input{
+  const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
     "name": "PREFIX_VARINT_LENGTH_STRING_SHARED",
     "options": {}
-  })JSON")};
+  })JSON");
 
   const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::parse(input)};

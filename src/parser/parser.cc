@@ -1,4 +1,4 @@
-#include <jsonbinpack/parser/parser.h>
+#include <sourcemeta/jsonbinpack/parser.h>
 
 #include "v1_any.h"
 #include "v1_array.h"
@@ -13,12 +13,11 @@
 
 namespace sourcemeta::jsonbinpack {
 
-auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(input, "name"));
-  assert(sourcemeta::jsontoolkit::defines(input, "options"));
-  const auto encoding{sourcemeta::jsontoolkit::to_string(
-      sourcemeta::jsontoolkit::at(input, "name"))};
-  const auto &options{sourcemeta::jsontoolkit::at(input, "options")};
+auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Encoding {
+  assert(input.defines("name"));
+  assert(input.defines("options"));
+  const auto encoding{input.at("name").to_string()};
+  const auto &options{input.at("options")};
 
 #define PARSE_ENCODING(version, name)                                          \
   if (encoding == #name)                                                       \
@@ -53,6 +52,7 @@ auto parse(const sourcemeta::jsontoolkit::Value &input) -> Encoding {
 
 #undef PARSE_ENCODING
 
+  // TODO: Have a custom error for this
   std::ostringstream error;
   error << "Unrecognized encoding: " << encoding;
   throw std::runtime_error(error.str());

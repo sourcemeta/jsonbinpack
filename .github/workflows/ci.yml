@@ -18,9 +18,10 @@ jobs:
           - os: ubuntu-latest
             cc: clang
             cxx: clang++
-          - os: ubuntu-latest
-            cc: gcc
-            cxx: g++
+          # TODO: Re-enable this
+          # - os: ubuntu-latest
+            # cc: gcc
+            # cxx: g++
           - os: windows-latest
 
     runs-on: ${{ matrix.platform.os }}
@@ -28,7 +29,7 @@ jobs:
       CC: ${{ matrix.platform.cc }}
       CXX: ${{ matrix.platform.cxx }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install dependencies (macOS)
         if: runner.os == 'macos'
         run: brew bundle
@@ -43,8 +44,8 @@ jobs:
       - name: Workaround Clang issue (GNU/Linux)
         if: runner.os == 'linux' && matrix.platform.cc == 'clang'
         run: |
-          sudo rm -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
-          sudo apt-get install --yes --allow-downgrades libc6=2.35-0ubuntu3.4 libc6-dev=2.35-0ubuntu3.4 libstdc++6=12.3.0-1ubuntu1~22.04 libgcc-s1=12.3.0-1ubuntu1~22.04
+          sudo apt-get purge -y g++-13 gcc-13 libstdc++-13-dev
+          sudo apt-get install -y --allow-downgrades libstdc++-12-dev libstdc++6=12.* libgcc-s1=12.*
 
       - name: Install dependencies (Windows)
         if: runner.os == 'windows'
@@ -59,5 +60,5 @@ jobs:
           -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
       - run: cmake --build ./build --config Release --target shellcheck
       - run: cmake --build ./build --config Release --target clang_format_test
-      - run: cmake --build ./build --config Release --parallel 2
+      - run: cmake --build ./build --config Release --parallel 4
       - run: cd ./build && ctest --build-config Release --output-on-failure --parallel

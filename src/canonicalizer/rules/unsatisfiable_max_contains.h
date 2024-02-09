@@ -16,36 +16,32 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \f[\frac{\{ maxContains, maxItems \} \subseteq dom(S) \land S.maxContains
 /// \geq S.maxItems }{S \mapsto S \setminus \{ maxContains \} }\f]
 
-class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
+class UnsatisfiableMaxContains final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains"){};
+  UnsatisfiableMaxContains()
+      : SchemaTransformRule("unsatisfiable_max_contains"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "maxContains") &&
-           sourcemeta::jsontoolkit::is_integer(
-               sourcemeta::jsontoolkit::at(schema, "maxContains")) &&
-           sourcemeta::jsontoolkit::defines(schema, "maxItems") &&
-           sourcemeta::jsontoolkit::is_integer(
-               sourcemeta::jsontoolkit::at(schema, "maxItems")) &&
-           sourcemeta::jsontoolkit::to_integer(
-               sourcemeta::jsontoolkit::at(schema, "maxContains")) >=
-               sourcemeta::jsontoolkit::to_integer(
-                   sourcemeta::jsontoolkit::at(schema, "maxItems"));
+           schema.is_object() && schema.defines("maxContains") &&
+           schema.at("maxContains").is_integer() &&
+           schema.defines("maxItems") && schema.at("maxItems").is_integer() &&
+           schema.at("maxContains").to_integer() >=
+               schema.at("maxItems").to_integer();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::erase(value, "maxContains");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.erase("maxContains");
   }
 };
 

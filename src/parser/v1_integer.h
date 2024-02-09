@@ -1,8 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_PARSER_V1_INTEGER_H_
 #define SOURCEMETA_JSONBINPACK_PARSER_V1_INTEGER_H_
 
-#include <jsonbinpack/encoding/encoding.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/encoding.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <cassert> // assert
 #include <cstdint> // std::uint64_t
@@ -10,63 +10,58 @@
 namespace sourcemeta::jsonbinpack::parser::v1 {
 
 auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-  assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-  assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
-  const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-  const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-  const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
-  assert(sourcemeta::jsontoolkit::is_integer(minimum));
-  assert(sourcemeta::jsontoolkit::is_integer(maximum));
-  assert(sourcemeta::jsontoolkit::is_integer(multiplier));
-  assert(sourcemeta::jsontoolkit::is_positive(multiplier));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("minimum"));
+  assert(options.defines("maximum"));
+  assert(options.defines("multiplier"));
+  const auto &minimum{options.at("minimum")};
+  const auto &maximum{options.at("maximum")};
+  const auto &multiplier{options.at("multiplier")};
+  assert(minimum.is_integer());
+  assert(maximum.is_integer());
+  assert(multiplier.is_integer());
+  assert(multiplier.is_positive());
   return sourcemeta::jsonbinpack::BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
-      sourcemeta::jsontoolkit::to_integer(minimum),
-      sourcemeta::jsontoolkit::to_integer(maximum),
-      static_cast<std::uint64_t>(
-          sourcemeta::jsontoolkit::to_integer(multiplier))};
+      minimum.to_integer(), maximum.to_integer(),
+      static_cast<std::uint64_t>(multiplier.to_integer())};
 }
 
-auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::Value &options)
+auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &options)
     -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "minimum"));
-  assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
-  const auto &minimum{sourcemeta::jsontoolkit::at(options, "minimum")};
-  const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
-  assert(sourcemeta::jsontoolkit::is_integer(minimum));
-  assert(sourcemeta::jsontoolkit::is_integer(multiplier));
-  assert(sourcemeta::jsontoolkit::is_positive(multiplier));
+  assert(options.defines("minimum"));
+  assert(options.defines("multiplier"));
+  const auto &minimum{options.at("minimum")};
+  const auto &multiplier{options.at("multiplier")};
+  assert(minimum.is_integer());
+  assert(multiplier.is_integer());
+  assert(multiplier.is_positive());
   return sourcemeta::jsonbinpack::FLOOR_MULTIPLE_ENUM_VARINT{
-      sourcemeta::jsontoolkit::to_integer(minimum),
-      static_cast<std::uint64_t>(
-          sourcemeta::jsontoolkit::to_integer(multiplier))};
+      minimum.to_integer(),
+      static_cast<std::uint64_t>(multiplier.to_integer())};
 }
 
 auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "maximum"));
-  assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
-  const auto &maximum{sourcemeta::jsontoolkit::at(options, "maximum")};
-  const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
-  assert(sourcemeta::jsontoolkit::is_integer(maximum));
-  assert(sourcemeta::jsontoolkit::is_integer(multiplier));
-  assert(sourcemeta::jsontoolkit::is_positive(multiplier));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("maximum"));
+  assert(options.defines("multiplier"));
+  const auto &maximum{options.at("maximum")};
+  const auto &multiplier{options.at("multiplier")};
+  assert(maximum.is_integer());
+  assert(multiplier.is_integer());
+  assert(multiplier.is_positive());
   return sourcemeta::jsonbinpack::ROOF_MULTIPLE_MIRROR_ENUM_VARINT{
-      sourcemeta::jsontoolkit::to_integer(maximum),
-      static_cast<std::uint64_t>(
-          sourcemeta::jsontoolkit::to_integer(multiplier))};
+      maximum.to_integer(),
+      static_cast<std::uint64_t>(multiplier.to_integer())};
 }
 
 auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
-    const sourcemeta::jsontoolkit::Value &options) -> Encoding {
-  assert(sourcemeta::jsontoolkit::defines(options, "multiplier"));
-  const auto &multiplier{sourcemeta::jsontoolkit::at(options, "multiplier")};
-  assert(sourcemeta::jsontoolkit::is_integer(multiplier));
-  assert(sourcemeta::jsontoolkit::is_positive(multiplier));
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+  assert(options.defines("multiplier"));
+  const auto &multiplier{options.at("multiplier")};
+  assert(multiplier.is_integer());
+  assert(multiplier.is_positive());
   return sourcemeta::jsonbinpack::ARBITRARY_MULTIPLE_ZIGZAG_VARINT{
-      static_cast<std::uint64_t>(
-          sourcemeta::jsontoolkit::to_integer(multiplier))};
+      static_cast<std::uint64_t>(multiplier.to_integer())};
 }
 
 } // namespace sourcemeta::jsonbinpack::parser::v1

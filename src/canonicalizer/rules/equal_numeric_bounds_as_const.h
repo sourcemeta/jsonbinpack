@@ -18,45 +18,36 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S.minimum \} \setminus \{ minimum, maximum \}
 /// }\f]
 
-class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
+class EqualNumericBoundsAsConst final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const"){};
+  EqualNumericBoundsAsConst()
+      : SchemaTransformRule("equal_numeric_bounds_as_const"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           (sourcemeta::jsontoolkit::to_string(
-                sourcemeta::jsontoolkit::at(schema, "type")) == "integer" ||
-            sourcemeta::jsontoolkit::to_string(
-                sourcemeta::jsontoolkit::at(schema, "type")) == "number") &&
-           sourcemeta::jsontoolkit::defines(schema, "minimum") &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "minimum")) &&
-           sourcemeta::jsontoolkit::defines(schema, "maximum") &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "maximum")) &&
-           sourcemeta::jsontoolkit::at(schema, "minimum") ==
-               sourcemeta::jsontoolkit::at(schema, "maximum");
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           (schema.at("type").to_string() == "integer" ||
+            schema.at("type").to_string() == "number") &&
+           schema.defines("minimum") && schema.at("minimum").is_number() &&
+           schema.defines("maximum") && schema.at("maximum").is_number() &&
+           schema.at("minimum") == schema.at("maximum");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(
-        document, value, "const",
-        sourcemeta::jsontoolkit::at(value, "minimum"));
-    sourcemeta::jsontoolkit::erase(value, "minimum");
-    sourcemeta::jsontoolkit::erase(value, "maximum");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.assign("const", transformer.schema().at("minimum"));
+    transformer.erase("minimum");
+    transformer.erase("maximum");
   }
 };
 

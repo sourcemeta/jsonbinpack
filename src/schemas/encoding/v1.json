@@ -1,8 +1,0 @@
-{
-  "$id": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$vocabulary": {
-    "https://json-schema.org/draft/2020-12/vocab/core": true
-  },
-  "$comment": "TODO: Make this a proper encoding schema"
-}

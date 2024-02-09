@@ -1,13 +1,14 @@
-add_library(sourcemeta_jsonbinpack_encoding
-  include/jsonbinpack/encoding/encoding.h
-  include/jsonbinpack/encoding/wrap.h
-  include/jsonbinpack/encoding/tag.h
-  encoding.cc)
-target_link_libraries(sourcemeta_jsonbinpack_encoding PUBLIC
+noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME encoding
+  FOLDER "JSON BinPack/Encoding"
+  PRIVATE_HEADERS tag.h wrap.h)
+
+if(JSONBINPACK_INSTALL)
+  noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME encoding)
+endif()
+
+sourcemeta_jsonbinpack_add_compile_options(INTERFACE sourcemeta_jsonbinpack_encoding)
+
+target_link_libraries(sourcemeta_jsonbinpack_encoding INTERFACE
   sourcemeta::jsontoolkit::json)
-target_link_libraries(sourcemeta_jsonbinpack_encoding PUBLIC
-  sourcemeta_jsonbinpack_numeric)
-target_include_directories(sourcemeta_jsonbinpack_encoding PUBLIC
-  "${CMAKE_CURRENT_SOURCE_DIR}/include")
-set_target_properties(sourcemeta_jsonbinpack_encoding
-  PROPERTIES FOLDER "JSON BinPack/Encoding")
+target_link_libraries(sourcemeta_jsonbinpack_encoding INTERFACE
+  sourcemeta::jsonbinpack::numeric)

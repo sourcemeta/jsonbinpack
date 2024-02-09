@@ -16,30 +16,29 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mapsto S \cup \{ \$schema \mapsto
 /// \textsl{https://json-schema.org/draft/2020-12/schema} \} }\f]
 
-class DefaultMetaschema_2020_12 final : public sourcemeta::alterschema::Rule {
+class DefaultMetaschema_2020_12 final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DefaultMetaschema_2020_12() : Rule("default_metaschema_2020_12"){};
+  DefaultMetaschema_2020_12()
+      : SchemaTransformRule("default_metaschema_2020_12"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t level) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(
+      const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,
+      const std::set<std::string> &vocabularies,
+      const sourcemeta::jsontoolkit::Pointer &level) const -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/core") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           !sourcemeta::jsontoolkit::defines(schema, "$schema") && level == 0;
+           schema.is_object() && !schema.defines("$schema") && level.empty();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    sourcemeta::jsontoolkit::assign(
-        document, value, "$schema",
-        sourcemeta::jsontoolkit::from(
-            "https://json-schema.org/draft/2020-12/schema"));
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    transformer.assign("$schema",
+                       sourcemeta::jsontoolkit::JSON{
+                           "https://json-schema.org/draft/2020-12/schema"});
   }
 };
 

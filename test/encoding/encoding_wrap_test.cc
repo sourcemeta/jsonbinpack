@@ -1,6 +1,6 @@
-#include <jsonbinpack/encoding/encoding.h>
-#include <jsonbinpack/encoding/wrap.h>
-#include <jsontoolkit/json.h>
+#include <sourcemeta/jsonbinpack/encoding.h>
+#include <sourcemeta/jsonbinpack/encoding_wrap.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 #include <utility>
@@ -18,8 +18,8 @@ TEST(Encoding, wrap_single_encoding) {
 TEST(Encoding, wrap_multiple_encodings) {
   using namespace sourcemeta::jsonbinpack;
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
-  choices.push_back(sourcemeta::jsontoolkit::from(false));
-  choices.push_back(sourcemeta::jsontoolkit::from(true));
+  choices.push_back(sourcemeta::jsontoolkit::JSON{false});
+  choices.push_back(sourcemeta::jsontoolkit::JSON{true});
   const MultipleEncodings wrapper{
       wrap({BYTE_CHOICE_INDEX{std::move(choices)},
             BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}})};

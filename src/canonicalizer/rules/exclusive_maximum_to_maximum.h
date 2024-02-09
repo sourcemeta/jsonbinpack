@@ -16,35 +16,33 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// S \cup \{ maximum \mapsto S.exclusiveMaximum - 1 \} \setminus \{
 /// exclusiveMaximum \} }\f]
 
-class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
+class ExclusiveMaximumToMaximum final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum"){};
+  ExclusiveMaximumToMaximum()
+      : SchemaTransformRule("exclusive_maximum_to_maximum"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "exclusiveMaximum") &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "exclusiveMaximum")) &&
-           !sourcemeta::jsontoolkit::defines(schema, "maximum");
+           schema.is_object() && schema.defines("exclusiveMaximum") &&
+           schema.at("exclusiveMaximum").is_number() &&
+           !schema.defines("maximum");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto new_maximum{sourcemeta::jsontoolkit::from(
-        sourcemeta::jsontoolkit::at(value, "exclusiveMaximum"))};
-    sourcemeta::jsontoolkit::add(new_maximum,
-                                 sourcemeta::jsontoolkit::from(-1));
-    sourcemeta::jsontoolkit::assign(document, value, "maximum", new_maximum);
-    sourcemeta::jsontoolkit::erase(value, "exclusiveMaximum");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto new_maximum = transformer.schema().at("exclusiveMaximum");
+    new_maximum += sourcemeta::jsontoolkit::JSON{-1};
+    transformer.assign("maximum", new_maximum);
+    transformer.erase("exclusiveMaximum");
   }
 };
 

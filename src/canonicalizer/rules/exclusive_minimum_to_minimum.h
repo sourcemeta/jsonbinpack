@@ -16,34 +16,33 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// S \cup \{ minimum \mapsto S.exclusiveMinimum + 1 \} \setminus \{
 /// exclusiveMinimum \} }\f]
 
-class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
+class ExclusiveMinimumToMinimum final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum"){};
+  ExclusiveMinimumToMinimum()
+      : SchemaTransformRule("exclusive_minimum_to_minimum"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "exclusiveMinimum") &&
-           sourcemeta::jsontoolkit::is_number(
-               sourcemeta::jsontoolkit::at(schema, "exclusiveMinimum")) &&
-           !sourcemeta::jsontoolkit::defines(schema, "minimum");
+           schema.is_object() && schema.defines("exclusiveMinimum") &&
+           schema.at("exclusiveMinimum").is_number() &&
+           !schema.defines("minimum");
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    auto new_minimum{sourcemeta::jsontoolkit::from(
-        sourcemeta::jsontoolkit::at(value, "exclusiveMinimum"))};
-    sourcemeta::jsontoolkit::add(new_minimum, sourcemeta::jsontoolkit::from(1));
-    sourcemeta::jsontoolkit::assign(document, value, "minimum", new_minimum);
-    sourcemeta::jsontoolkit::erase(value, "exclusiveMinimum");
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    auto new_minimum = transformer.schema().at("exclusiveMinimum");
+    new_minimum += sourcemeta::jsontoolkit::JSON{1};
+    transformer.assign("minimum", new_minimum);
+    transformer.erase("exclusiveMinimum");
   }
 };
 

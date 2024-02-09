@@ -16,38 +16,32 @@ namespace sourcemeta::jsonbinpack::canonicalizer {
 /// \mathbb{R}}{S \mapsto S \cup \{ minimum \mapsto \lceil S.minimum \rceil \}
 /// }\f]
 
-class MinimumRealForInteger final : public sourcemeta::alterschema::Rule {
+class MinimumRealForInteger final
+    : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  MinimumRealForInteger() : Rule("minimum_real_for_integer"){};
+  MinimumRealForInteger() : SchemaTransformRule("minimum_real_for_integer"){};
 
   /// The rule condition
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::Value &schema,
-            const std::string &draft,
-            const std::unordered_map<std::string, bool> &vocabularies,
-            const std::size_t) const -> bool override {
-    return draft == "https://json-schema.org/draft/2020-12/schema" &&
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           sourcemeta::jsontoolkit::is_object(schema) &&
-           sourcemeta::jsontoolkit::defines(schema, "type") &&
-           sourcemeta::jsontoolkit::is_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) &&
-           sourcemeta::jsontoolkit::to_string(
-               sourcemeta::jsontoolkit::at(schema, "type")) == "integer" &&
-           sourcemeta::jsontoolkit::defines(schema, "minimum") &&
-           sourcemeta::jsontoolkit::is_real(
-               sourcemeta::jsontoolkit::at(schema, "minimum"));
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
+           schema.at("type").to_string() == "integer" &&
+           schema.defines("minimum") && schema.at("minimum").is_real();
   }
 
   /// The rule transformation
-  auto transform(sourcemeta::jsontoolkit::JSON &document,
-                 sourcemeta::jsontoolkit::Value &value) const -> void override {
-    const auto current{sourcemeta::jsontoolkit::to_real(
-        sourcemeta::jsontoolkit::at(value, "minimum"))};
+  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+      -> void override {
+    const auto current{transformer.schema().at("minimum").to_real()};
     const auto new_value{static_cast<std::int64_t>(std::ceil(current))};
-    sourcemeta::jsontoolkit::assign(document, value, "minimum",
-                                    sourcemeta::jsontoolkit::from(new_value));
+    transformer.assign("minimum", sourcemeta::jsontoolkit::JSON{new_value});
   }
 };
 
