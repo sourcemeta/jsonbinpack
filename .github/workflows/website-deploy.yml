@@ -33,7 +33,6 @@ jobs:
           -DJSONBINPACK_TESTS:BOOL=OFF
           -DJSONBINPACK_WEBSITE:BOOL=ON
 
-      - run: cmake --build ./build --config Release --target bundler
       # Jekyll is often flaky on GitHub Actions
       - run: ./scripts/retry.sh cmake --build ./build --config Release --target jekyll
       - run: cmake --build ./build --config Release --target doxygen
