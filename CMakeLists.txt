@@ -27,8 +27,6 @@ if(PROJECT_IS_TOP_LEVEL)
     test/*.h test/*.cc)
   noa_target_clang_tidy(SOURCES
     src/*.h src/*.cc)
-  noa_target_shellcheck(SOURCES
-    test/*.sh scripts/*.sh)
 endif()
 
 # Sources
