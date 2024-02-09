@@ -16,6 +16,7 @@ option(JSONBINPACK_COMPILER "Build the JSON BinPack compiler" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
 option(JSONBINPACK_INSTALL "Install the JSON BinPack library" ON)
 option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
+option(JSONBINPACK_DOCS "Build the JSON BinPack documentation" OFF)
 
 # TODO: Generate (and test) CMake config
 
@@ -35,20 +36,13 @@ if(JSONBINPACK_CLI)
   add_subdirectory(src/cli)
 endif()
 
-# TODO: Get rid of Jekyll
 if(JSONBINPACK_WEBSITE)
-  string(TOLOWER ${CMAKE_BUILD_TYPE} JSONBINPACK_BUILD_TYPE)
-  set(JSONBINPACK_WEBSITE_OUT "${PROJECT_SOURCE_DIR}/build/${JSONBINPACK_BUILD_TYPE}/www")
+  add_subdirectory(www)
+endif()
+
+if(JSONBINPACK_DOCS)
   noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
-    OUTPUT "${JSONBINPACK_WEBSITE_OUT}/api")
-  find_program(BUNDLE_BIN NAMES bundle REQUIRED)
-  add_custom_target(jekyll
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    VERBATIM
-    COMMAND "${BUNDLE_BIN}" install --path "${PROJECT_SOURCE_DIR}/build/bundler"
-    COMMAND "${BUNDLE_BIN}" exec jekyll build
-      --source "${PROJECT_SOURCE_DIR}/www" --destination "${JSONBINPACK_WEBSITE_OUT}")
-  set_target_properties(jekyll PROPERTIES FOLDER "JSON BinPack/Website")
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/www/api")
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)

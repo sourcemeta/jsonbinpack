@@ -1,6 +1,7 @@
 # Programs
 CMAKE = cmake
 CTEST = ctest
+PYTHON = python3
 
 # Options
 PRESET = Debug
@@ -17,6 +18,7 @@ configure: .always
 		-DJSONBINPACK_COMPILER:BOOL=ON \
 		-DJSONBINPACK_TESTS:BOOL=ON \
 		-DJSONBINPACK_WEBSITE:BOOL=ON \
+		-DJSONBINPACK_DOCS:BOOL=ON \
 		-DBUILD_SHARED_LIBS:BOOL=$(SHARED)
 
 compile: .always
@@ -35,9 +37,12 @@ test: .always
 		$(CTEST) --test-dir ./build --build-config $(PRESET) \
 			--output-on-failure --progress --parallel
 
-website: .always
-	$(CMAKE) --build ./build --config $(PRESET) --target jekyll
+doxygen: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
+
+website: .always
+	$(CMAKE) --build ./build --config $(PRESET) --target website
+	$(PYTHON) -m http.server 3000 --directory build/www
 
 clean: .always
 	$(CMAKE) -E rm -R -f build

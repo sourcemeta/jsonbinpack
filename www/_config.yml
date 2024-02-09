@@ -1,7 +1,0 @@
-title: JSON BinPack
-baseurl: ""
-url: "https://jsonbinpack.sourcemeta.com"
-markdown: kramdown
-sass:
-  style: :compressed
-  sass_dir: .
