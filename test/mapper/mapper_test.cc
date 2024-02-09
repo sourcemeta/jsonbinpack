@@ -28,7 +28,7 @@ TEST(Mapper, unknown_draft_default) {
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
     "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "options": {
       "multiplier": 1

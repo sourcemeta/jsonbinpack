@@ -17,7 +17,7 @@ TEST(MapperEncoding, is_encoding_false) {
 TEST(MapperEncoding, is_encoding_true) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
     "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
@@ -32,7 +32,7 @@ TEST(MapperEncoding, is_encoding_true) {
 TEST(MapperEncoding, is_encoding_invalid_version) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v99999.json",
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v99999.json",
     "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "options": {
       "minimum": -100,
@@ -47,7 +47,7 @@ TEST(MapperEncoding, is_encoding_invalid_version) {
 TEST(MapperEncoding, is_encoding_no_data) {
   const sourcemeta::jsontoolkit::JSON schema{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json"
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json"
   })JSON")};
 
   EXPECT_FALSE(sourcemeta::jsonbinpack::mapper::is_encoding(schema));

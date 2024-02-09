@@ -13,13 +13,13 @@ public:
       -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
     std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
 
-    if (identifier == "https://jsonbinpack.sourcemeta.com/test-metaschema-1") {
+    if (identifier == "https://jsonbinpack.org/test-metaschema-1") {
       promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
-        "$id": "https://jsonbinpack.sourcemeta.com/test-metaschema-1",
+        "$id": "https://jsonbinpack.org/test-metaschema-1",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$vocabulary": {
           "https://json-schema.org/draft/2020-12/vocab/core": true,
-          "https://jsonbinpack.sourcemeta.com/vocab/test": true
+          "https://jsonbinpack.org/vocab/test": true
         }
       })JSON"));
       return promise.get_future();

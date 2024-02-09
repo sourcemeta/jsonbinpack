@@ -30,7 +30,7 @@ vendor() {
   # Patching
   if [ -d "$PATCHES/$1" ]
   then
-    for patch in "$PATCHES/$1"/*.patch
+    for patch in "$2"/*.patch
     do
       log "Patching $1: $patch"
       git -C "$4/$1" apply --3way "$patch"
@@ -58,14 +58,6 @@ vendor() {
       log "Masking $1: $path"
       rm -rf "$4/$1/${path:?}"
     done < "$VENDOR/$1.mask"
-  elif [ -f "$4/$1/vendorpull.mask" ]
-  then
-    while read -r path
-    do
-      log "Masking $1: $path"
-      rm -rf "$4/$1/${path:?}"
-    done < "$4/$1/vendorpull.mask"
-    rm -f "$4/$1/vendorpull.mask"
   fi
 
   # Swap
