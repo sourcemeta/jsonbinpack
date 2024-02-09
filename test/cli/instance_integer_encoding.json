@@ -1,5 +1,5 @@
 {
-  "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+  "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
   "name": "TOP_LEVEL_BYTE_CHOICE_INDEX",
   "options": {
     "choices": [ 1, 2, 3 ]

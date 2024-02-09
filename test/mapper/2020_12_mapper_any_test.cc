@@ -18,7 +18,7 @@ TEST(MapperAny_2020_12, only_metaschema) {
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON")};
@@ -38,7 +38,7 @@ TEST(MapperAny_2020_12, empty) {
 
   const sourcemeta::jsontoolkit::JSON expected{
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "https://www.jsonbinpack.org/schemas/encoding/v1.json",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON")};

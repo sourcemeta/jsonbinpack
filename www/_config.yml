@@ -2,7 +2,7 @@ title: JSON BinPack
 email: hello@sourcemeta.com
 description: A space-efficient open-source binary JSON serialization format based on JSON Schema
 baseurl: ""
-url: "https://jsonbinpack.sourcemeta.com"
+url: "https://www.jsonbinpack.org"
 repository: https://github.com/sourcemeta/jsonbinpack
 markdown: kramdown
 collections:
@@ -13,7 +13,7 @@ sass:
   style: :compressed
   sass_dir: .
 plausible:
-  domain: jsonbinpack.sourcemeta.com
+  domain: jsonbinpack.org
 twitter:
   url: https://twitter.com/sourcemeta
 
