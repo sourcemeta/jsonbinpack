@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>{{ site.title }}</title>
+    <title>JSON BinPack</title>
     <link rel="canonical" href="{{ site.url }}">
-    <meta name="description" content="{{ site.description }}">
-    <meta property="og:title" content="{{ site.title }}">
+    <meta name="description" content="A space-efficient open-source binary JSON serialization format based on JSON Schema">
+    <meta property="og:title" content="JSON BinPack">
     <meta property="og:url" content="{{ site.url }}">
-    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:description" content="A space-efficient open-source binary JSON serialization format based on JSON Schema">
     <meta property="og:locale" content="en_US">
-    <meta property="og:site_name" content="{{ site.description }}">
+    <meta property="og:site_name" content="A space-efficient open-source binary JSON serialization format based on JSON Schema">
 
     <link rel="icon" href="{{ site.url }}/favicon.ico" sizes="any">
     <link rel="icon" href="{{ site.url }}/icon.svg" type="image/svg+xml">
@@ -24,7 +24,7 @@
 
     <link rel="stylesheet" href="{{ site.url }}/assets/css/main.css" type="text/css">
 
-    <script defer data-domain="{{ site.plausible.domain }}" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <script defer data-domain="jsonbinpack.sourcemeta.com" src="https://plausible.io/js/script.outbound-links.js"></script>
     <script>
       window.plausible = window.plausible || function() {
         (window.plausible.q = window.plausible.q || []).push(arguments);
@@ -39,7 +39,7 @@
         </a>
         <div class="navbar-collapse flex-grow-0">
           <div class="navbar-nav align-items-center">
-            <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.repository }}/discussions">Discussions</a>
+            <a class="nav-link ms-2 d-none d-md-inline-block" href="https://github.com/sourcemeta/jsonbinpack/discussions">Discussions</a>
             <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.url }}/api">Docs</a>
             {% if page.title %}
             <a class="nav-link ms-2 d-none d-md-inline-block" href="{{ site.url }}#research">Research</a>
@@ -47,7 +47,7 @@
             <a class="nav-link ms-2 d-none d-md-inline-block" href="#research">Research</a>
             {% endif %}
 
-            <a class="nav-link ms-2" href="{{ site.repository }}">
+            <a class="nav-link ms-2" href="https://github.com/sourcemeta/jsonbinpack">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
               </svg>
@@ -73,7 +73,7 @@
             >Try the alpha</a
           >
           <a
-            href="{{ site.repository }}"
+            href="https://github.com/sourcemeta/jsonbinpack"
             class="btn text-white btn-secondary btn-lg px-4 me-sm-3"
             >View on GitHub</a
           >
@@ -244,7 +244,7 @@
           <p class="fst-italic mb-0">
             Do you have further questions or feedback? Don't hesitate in reaching
             out on
-            <a href="{{ site.repository }}/discussions?utm_source=jsonbinpack"
+            <a href="https://github.com/sourcemeta/jsonbinpack/discussions?utm_source=jsonbinpack"
               >GitHub Discussions</a
             >!
           </p>
@@ -368,10 +368,10 @@
         </a>
 
         <ul class="col-12 col-md-6 nav justify-content-center justify-content-md-end">
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="{{ site.repository }}">GitHub</a></li>
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="{{ site.repository }}/discussions">Discussions</a></li>
+          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/sourcemeta/jsonbinpack">GitHub</a></li>
+          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/sourcemeta/jsonbinpack/discussions">Discussions</a></li>
           <li class="nav-item"><a class="nav-link px-2 text-muted" href="{{ site.url }}/api">Docs</a></li>
-          <li class="nav-item"><a class="nav-link px-2 text-muted" href="{{ site.repository }}/issues">Issues</a></li>
+          <li class="nav-item"><a class="nav-link px-2 text-muted" href="https://github.com/sourcemeta/jsonbinpack/issues">Issues</a></li>
         </ul>
       </footer>
     </div>
