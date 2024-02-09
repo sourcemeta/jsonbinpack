@@ -2,12 +2,17 @@
 #include <sourcemeta/jsonbinpack/mapper_encoding.h>
 
 #include <cassert>   // assert
+#include <cstdint>   // std::int64_t
+#include <limits>    // std::numeric_limits
 #include <stdexcept> // std::domain_error
 
 // To be used by the rules below
 #include <sourcemeta/jsonbinpack/mapper_encoding.h>
 #include <sourcemeta/jsonbinpack/mapper_states.h>
-#include <sourcemeta/jsonbinpack/numeric.h>
+
+constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
+  return value <= std::numeric_limits<std::uint8_t>::max();
+}
 
 #include "rules/enum_8_bit.h"
 #include "rules/enum_8_bit_top_level.h"
