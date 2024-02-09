@@ -5,7 +5,7 @@
 #include <cmath>    // std::modf, std::floor, std::isfinite
 #include <concepts> // std::floating_point, std::integral
 
-namespace sourcemeta::jsonbinpack::encoder {
+namespace sourcemeta::jsonbinpack {
 
 // IEEE764 floating-point encoding is not precise. Some real numbers
 // cannot be represented directly and thus approximations must be
@@ -47,6 +47,6 @@ constexpr auto real_digits(Real value, std::uint64_t *point_position)
   return static_cast<Integer>(std::floor(integral));
 }
 
-} // namespace sourcemeta::jsonbinpack::encoder
+} // namespace sourcemeta::jsonbinpack
 
 #endif

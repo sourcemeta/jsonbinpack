@@ -19,7 +19,7 @@ static constexpr auto MINIMUM_STRING_LENGTH{3};
 // document that contains a high number of large strings.
 static constexpr auto MAXIMUM_BYTE_SIZE{20971520};
 
-namespace sourcemeta::jsonbinpack::encoder {
+namespace sourcemeta::jsonbinpack {
 
 /// @ingroup encoder
 template <typename CharT> class Context {
@@ -98,6 +98,6 @@ private:
   std::uint64_t byte_size = 0;
 };
 
-} // namespace sourcemeta::jsonbinpack::encoder
+} // namespace sourcemeta::jsonbinpack
 
 #endif
