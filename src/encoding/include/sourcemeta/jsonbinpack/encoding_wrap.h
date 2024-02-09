@@ -1,6 +1,9 @@
 #ifndef SOURCEMETA_JSONBINPACK_ENCODING_WRAP_H_
 #define SOURCEMETA_JSONBINPACK_ENCODING_WRAP_H_
 
+// TODO: Do not compile this file as part of the runtime. It logically belongs
+// to the compiler
+
 #include <sourcemeta/jsonbinpack/encoding.h>
 
 #include <algorithm>        // std::transform
