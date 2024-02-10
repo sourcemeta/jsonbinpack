@@ -139,8 +139,8 @@ TEST(Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   choices.push_back(sourcemeta::jsontoolkit::parse("{ \"bar\": 1 }"));
   const sourcemeta::jsontoolkit::JSON result =
       decoder.LARGE_CHOICE_INDEX({std::move(choices)});
-  const sourcemeta::jsontoolkit::JSON expected{
-      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }")};
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   EXPECT_EQ(result, expected);
 }
 

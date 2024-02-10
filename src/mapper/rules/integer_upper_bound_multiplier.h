@@ -25,8 +25,8 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
-    auto maximum{transformer.schema().at("maximum")};
-    auto multiplier{transformer.schema().at("multipleOf")};
+    auto maximum = transformer.schema().at("maximum");
+    auto multiplier = transformer.schema().at("multipleOf");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("maximum", std::move(maximum));
     options.assign("multiplier", std::move(multiplier));

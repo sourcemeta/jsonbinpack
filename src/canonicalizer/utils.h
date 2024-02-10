@@ -39,7 +39,7 @@ auto is_null_schema(const sourcemeta::jsontoolkit::JSON &schema,
 }
 
 auto is_unique(const sourcemeta::jsontoolkit::JSON &document) -> bool {
-  auto copy{document};
+  auto copy = document;
   std::sort(copy.as_array().begin(), copy.as_array().end());
   return std::unique(copy.as_array().begin(), copy.as_array().end()) ==
          copy.as_array().end();

@@ -25,8 +25,8 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
-    auto minimum{transformer.schema().at("minimum")};
-    auto multiplier{transformer.schema().at("multipleOf")};
+    auto minimum = transformer.schema().at("minimum");
+    auto multiplier = transformer.schema().at("multipleOf");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("minimum", std::move(minimum));
     options.assign("multiplier", std::move(multiplier));
