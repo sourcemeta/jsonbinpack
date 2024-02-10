@@ -393,7 +393,7 @@ TEST(CanonicalizerAny_2020_12, implicit_type_union_1) {
 
 TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::JSON{true}};
+  sourcemeta::jsontoolkit::JSON schema{true};
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
                       sourcemeta::jsontoolkit::official_resolver,
@@ -434,7 +434,7 @@ TEST(CanonicalizerAny_2020_12, boolean_schema_1) {
 
 TEST(CanonicalizerAny_2020_12, boolean_schema_2) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  sourcemeta::jsontoolkit::JSON schema{sourcemeta::jsontoolkit::JSON{false}};
+  sourcemeta::jsontoolkit::JSON schema{false};
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
                       sourcemeta::jsontoolkit::official_resolver,
