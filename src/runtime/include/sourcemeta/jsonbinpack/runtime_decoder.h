@@ -130,9 +130,10 @@ public:
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
-          -(static_cast<std::int64_t>(this->get_varint() *
-                                      options.multiplier)) +
-          closest_maximum_multiple)};
+          -(static_cast<std::int64_t>(
+              this->get_varint() *
+              static_cast<std::int64_t>(options.multiplier))) +
+          static_cast<std::int64_t>(closest_maximum_multiple))};
     } else {
       const std::uint64_t closest_maximum_multiple{
           static_cast<std::uint32_t>(std::abs(closest_maximum)) *
