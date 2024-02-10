@@ -143,7 +143,7 @@ public:
           -(static_cast<std::int64_t>(
               this->get_varint() *
               static_cast<std::int64_t>(options.multiplier))) -
-          closest_maximum_multiple)};
+          static_cast<std::int64_t>(closest_maximum_multiple))};
     }
   }
 
