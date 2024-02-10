@@ -26,8 +26,8 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
-    auto minimum{transformer.schema().at("minimum")};
-    auto maximum{transformer.schema().at("maximum")};
+    auto minimum = transformer.schema().at("minimum");
+    auto maximum = transformer.schema().at("maximum");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("minimum", std::move(minimum));
     options.assign("maximum", std::move(maximum));

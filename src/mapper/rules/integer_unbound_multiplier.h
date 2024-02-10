@@ -25,7 +25,7 @@ public:
 
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
-    auto multiplier{transformer.schema().at("multipleOf")};
+    auto multiplier = transformer.schema().at("multipleOf");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("multiplier", std::move(multiplier));
     make_encoding(transformer, "ARBITRARY_MULTIPLE_ZIGZAG_VARINT", options);

@@ -23,8 +23,7 @@ public:
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
-    options.assign("choices", sourcemeta::jsontoolkit::JSON(
-                                  transformer.schema().at("enum")));
+    options.assign("choices", transformer.schema().at("enum"));
     make_encoding(transformer, "TOP_LEVEL_BYTE_CHOICE_INDEX", options);
   }
 };

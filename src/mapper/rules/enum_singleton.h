@@ -23,8 +23,7 @@ public:
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
-    options.assign("value", sourcemeta::jsontoolkit::JSON(
-                                transformer.schema().at("enum").at(0)));
+    options.assign("value", transformer.schema().at("enum").at(0));
     make_encoding(transformer, "CONST_NONE", options);
   }
 };
