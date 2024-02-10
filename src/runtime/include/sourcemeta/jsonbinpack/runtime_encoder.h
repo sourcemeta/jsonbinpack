@@ -129,7 +129,8 @@ public:
     const std::int64_t value{document.to_integer()};
     assert(options.multiplier > 0);
     assert(std::abs(value) % options.multiplier == 0);
-    this->put_varint_zigzag(value / options.multiplier);
+    this->put_varint_zigzag(value /
+                            static_cast<std::int64_t>(options.multiplier));
   }
 
   /// @}

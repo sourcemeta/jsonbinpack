@@ -140,8 +140,9 @@ public:
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
-          -(static_cast<std::int64_t>(this->get_varint() *
-                                      options.multiplier)) -
+          -(static_cast<std::int64_t>(
+              this->get_varint() *
+              static_cast<std::int64_t>(options.multiplier))) -
           closest_maximum_multiple)};
     }
   }
@@ -153,7 +154,8 @@ public:
     // We trust the encoder that the data we are seeing
     // corresponds to a valid 64-bit signed integer.
     return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
-        this->get_varint_zigzag() * options.multiplier)};
+        this->get_varint_zigzag() *
+        static_cast<std::int64_t>(options.multiplier))};
   }
 
   /// @}
