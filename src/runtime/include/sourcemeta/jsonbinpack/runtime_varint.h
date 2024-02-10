@@ -19,12 +19,12 @@ auto varint_encode(std::basic_ostream<CharT, Traits> &stream,
   std::uint64_t accumulator = value;
 
   while (accumulator > LEAST_SIGNIFICANT_BITS) {
-    stream.put(static_cast<std::uint8_t>(
-        (accumulator & LEAST_SIGNIFICANT_BITS) | MOST_SIGNIFICANT_BIT));
+    stream.put(static_cast<CharT>((accumulator & LEAST_SIGNIFICANT_BITS) |
+                                  MOST_SIGNIFICANT_BIT));
     accumulator >>= SHIFT;
   }
 
-  stream.put(static_cast<std::uint8_t>(accumulator));
+  stream.put(static_cast<CharT>(accumulator));
   return stream;
 }
 

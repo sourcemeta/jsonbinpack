@@ -12,7 +12,7 @@
 #include <string>           // std::basic_string
 #include <vector>           // std::vector
 
-static inline auto to_byte(std::uint8_t input) -> std::byte {
+static inline auto to_byte(const std::uint8_t input) -> std::byte {
   return std::byte{input};
 }
 
@@ -24,7 +24,9 @@ public:
     std::vector<std::byte> result{};
     const std::basic_string<CharT> string{this->str()};
     std::transform(string.cbegin(), string.cend(), std::back_inserter(result),
-                   to_byte);
+                   [](const auto character) {
+                     return to_byte(static_cast<std::uint8_t>(character));
+                   });
     return result;
   }
 };
@@ -35,7 +37,9 @@ auto EXPECT_BYTES(const OutputByteStream<CharT> &stream,
   const std::vector<std::byte> actual{stream.bytes()};
   std::vector<std::byte> expected{};
   std::transform(bytes.begin(), bytes.end(), std::back_inserter(expected),
-                 to_byte);
+                 [](const auto character) {
+                   return to_byte(static_cast<std::uint8_t>(character));
+                 });
   EXPECT_EQ(actual, expected);
 }
 

@@ -9,10 +9,10 @@ namespace sourcemeta::jsonbinpack {
 constexpr auto zigzag_encode(const std::int64_t value) noexcept
     -> std::uint64_t {
   if (value >= 0) {
-    return value * 2;
+    return static_cast<std::uint64_t>(value * 2);
   }
 
-  return (std::abs(value) * 2) - 1;
+  return (static_cast<std::uint64_t>(std::abs(value)) * 2) - 1;
 }
 
 constexpr auto zigzag_decode(const std::uint64_t value) noexcept
