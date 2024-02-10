@@ -85,8 +85,8 @@ public:
         divide_floor(options.maximum, options.multiplier)};
 #endif
     assert(is_byte(enum_maximum - enum_minimum));
-    this->put_byte(
-        static_cast<std::uint8_t>((value / options.multiplier) - enum_minimum));
+    this->put_byte(static_cast<std::uint8_t>(
+        static_cast<std::int64_t>(value / options.multiplier) - enum_minimum));
   }
 
   auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &document,

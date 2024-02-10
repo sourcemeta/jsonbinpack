@@ -32,7 +32,7 @@ public:
   }
 
   inline auto put_byte(const std::uint8_t byte) -> void {
-    this->stream.put(static_cast<std::int8_t>(byte));
+    this->stream.put(static_cast<CharT>(byte));
   }
 
   inline auto put_bytes(const std::uint16_t bytes) -> void {
@@ -53,7 +53,7 @@ public:
     // Do a manual for-loop based on the provided length instead of a range
     // loop based on the string value to avoid accidental overflows
     for (std::uint64_t index = 0; index < length; index++) {
-      this->put_byte(string[index]);
+      this->put_byte(static_cast<std::uint8_t>(string[index]));
     }
   }
 
