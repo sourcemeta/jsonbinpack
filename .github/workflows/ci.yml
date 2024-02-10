@@ -20,10 +20,9 @@ jobs:
           - os: ubuntu-latest
             cc: clang
             cxx: clang++
-          # TODO: Re-enable this
-          # - os: ubuntu-latest
-            # cc: gcc
-            # cxx: g++
+          - os: ubuntu-latest
+            cc: gcc
+            cxx: g++
           - os: windows-latest
 
           # Sanitizers
