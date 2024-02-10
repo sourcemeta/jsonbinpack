@@ -86,7 +86,8 @@ public:
 #endif
     assert(is_byte(enum_maximum - enum_minimum));
     this->put_byte(static_cast<std::uint8_t>(
-        static_cast<std::int64_t>(value / options.multiplier) - enum_minimum));
+        (value / static_cast<std::int64_t>(options.multiplier)) -
+        enum_minimum));
   }
 
   auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &document,
@@ -128,7 +129,8 @@ public:
     const std::int64_t value{document.to_integer()};
     assert(options.multiplier > 0);
     assert(std::abs(value) % options.multiplier == 0);
-    this->put_varint_zigzag(value / options.multiplier);
+    this->put_varint_zigzag(value /
+                            static_cast<std::int64_t>(options.multiplier));
   }
 
   /// @}

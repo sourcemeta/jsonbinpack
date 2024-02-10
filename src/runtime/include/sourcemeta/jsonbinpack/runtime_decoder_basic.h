@@ -80,7 +80,7 @@ public:
     result.reserve(length);
     std::uint64_t counter = 0;
     while (counter < length) {
-      result += this->get_byte();
+      result += static_cast<CharT>(this->get_byte());
       counter += 1;
     }
 
