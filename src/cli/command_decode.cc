@@ -34,7 +34,7 @@ static auto decode_from_stream(sourcemeta::jsontoolkit::JSON &schema,
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result{decoder.decode(encoding)};
+  const sourcemeta::jsontoolkit::JSON result = decoder.decode(encoding);
   sourcemeta::jsontoolkit::stringify(result, std::cout);
   return EXIT_SUCCESS;
 }
