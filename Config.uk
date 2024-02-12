@@ -1,0 +1,10 @@
+menuconfig LIBJSONBINPACK
+	bool "libjsonbinpack - a space-efficient binary serialization technology based on JSON Schema"
+	select LIBJSONTOOLKIT
+	select LIBCXXABI
+	select LIBCXX
+	select CXX_THREADS
+	select LIBUNWIND
+	select LIBCOMPILER_RT
+	select LIBMUSL
+	default n
