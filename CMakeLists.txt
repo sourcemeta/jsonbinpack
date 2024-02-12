@@ -94,4 +94,12 @@ if(JSONBINPACK_TESTS)
   endif()
 
   add_subdirectory(test/e2e)
+
+  if(PROJECT_IS_TOP_LEVEL)
+    # Otherwise we need the child project to link
+    # against the sanitizers too.
+    if(NOT JSONBINPACK_ADDRESS_SANITIZER AND NOT JSONBINPACK_UNDEFINED_SANITIZER)
+      add_subdirectory(test/packaging)
+    endif()
+  endif()
 endif()

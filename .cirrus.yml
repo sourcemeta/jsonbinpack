@@ -6,4 +6,5 @@ task:
   prepare_script: pkg install -y cmake
   configure_script: cmake -S . -B ./build -DCMAKE_BUILD_TYPE:STRING=Release -DJSONBINPACK_CLI:BOOL=ON -DJSONBINPACK_RUNTIME:BOOL=ON -DJSONBINPACK_COMPILER:BOOL=ON -DJSONBINPACK_TESTS:BOOL=ON -DCMAKE_COMPILE_WARNING_AS_ERROR:BOOL=ON
   build_script: cmake --build ./build --config Release --parallel 2
+  install_script: cmake --install ./build --prefix ./build/dist --config Release --verbose
   test_script: cd ./build && ctest --build-config Release --output-on-failure --parallel

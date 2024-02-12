@@ -1,5 +1,5 @@
 vendorpull https://github.com/sourcemeta/vendorpull 70342aaf458e6cb80baeb5b718901075fc42ede6
-jsontoolkit https://github.com/sourcemeta/jsontoolkit e1aa5f637ff094e6ef38267ddc69852390bbfca7
+jsontoolkit https://github.com/sourcemeta/jsontoolkit b38f7619ce73c12e61b6d5f7ca11ff867f3ec2ae
 googletest https://github.com/google/googletest 987e225614755fec7253aa95bf959c09e0d380d7
 bootstrap https://github.com/twbs/bootstrap 1a6fdfae6be09b09eaced8f0e442ca6f7680a61e
 noa https://github.com/sourcemeta/noa 653bda26413812241e503fd0b550a66f2df4700f
