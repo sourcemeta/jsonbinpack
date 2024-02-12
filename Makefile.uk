@@ -1,0 +1,17 @@
+$(eval $(call addlib_s,libjsonbinpack,$(CONFIG_LIBJSONBINPACK)))
+
+# Flags
+LIBJSONBINPACK_SRC = $(LIBJSONBINPACK_BASE)/src
+LIBJSONBINPACK_CXXFLAGS-y += --std=c++20
+
+# Runtime
+CXXINCLUDES-$(CONFIG_LIBJSONBINPACK) += -I$(LIBJSONBINPACK_SRC)/runtime/include
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/runtime/runtime_parser.cc
+
+# Compiler
+CXXINCLUDES-$(CONFIG_LIBJSONBINPACK) += -I$(LIBJSONBINPACK_SRC)/compiler/include
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/compiler/compiler.cc
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/compiler/canonicalizer.cc
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/compiler/mapper.cc
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/compiler/mapper_encoding.cc
+LIBJSONBINPACK_SRCS-y += $(LIBJSONBINPACK_SRC)/compiler/mapper_states.cc
