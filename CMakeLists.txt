@@ -32,7 +32,6 @@ endif()
 
 # Compiler
 if(JSONBINPACK_COMPILER OR JSONBINPACK_CLI)
-  add_subdirectory(src/parser)
   add_subdirectory(src/schemas)
   add_subdirectory(src/canonicalizer)
   add_subdirectory(src/mapper)
@@ -76,7 +75,6 @@ if(JSONBINPACK_TESTS)
   endif()
 
   if(JSONBINPACK_COMPILER OR JSONBINPACK_CLI)
-    add_subdirectory(test/parser)
     add_subdirectory(test/schemas)
     add_subdirectory(test/canonicalizer)
     add_subdirectory(test/mapper)
