@@ -1,7 +1,6 @@
 add_executable(jsonbinpack_e2e_test_runner runner.cc)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsontoolkit::json)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::canonicalizer)
-target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::mapper)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::compiler)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::runtime)
 set_target_properties(jsonbinpack_e2e_test_runner
   PROPERTIES FOLDER "JSON BinPack/E2E")

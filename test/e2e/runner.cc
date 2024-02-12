@@ -1,5 +1,4 @@
-#include <sourcemeta/jsonbinpack/canonicalizer.h>
-#include <sourcemeta/jsonbinpack/mapper.h>
+#include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
