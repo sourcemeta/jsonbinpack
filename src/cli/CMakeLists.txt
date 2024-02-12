@@ -4,8 +4,7 @@ add_executable(sourcemeta_jsonbinpack_cli main.cc commands.h
   command_canonicalize.cc command_compile.cc
   command_encode.cc command_decode.cc
   defaults.h version.h.in)
-target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::canonicalizer)
-target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::mapper)
+target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::compiler)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::jsonschema)

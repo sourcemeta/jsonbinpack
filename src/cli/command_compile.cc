@@ -1,8 +1,7 @@
 #include "commands.h"
 #include "defaults.h"
 
-#include <sourcemeta/jsonbinpack/canonicalizer.h>
-#include <sourcemeta/jsonbinpack/mapper.h>
+#include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
