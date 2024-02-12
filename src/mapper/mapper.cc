@@ -15,21 +15,21 @@ constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
   return value <= std::numeric_limits<std::uint8_t>::max();
 }
 
-#include "rules/enum_8_bit.h"
-#include "rules/enum_8_bit_top_level.h"
-#include "rules/enum_arbitrary.h"
-#include "rules/enum_singleton.h"
-#include "rules/integer_bounded_8_bit.h"
-#include "rules/integer_bounded_greater_than_8_bit.h"
-#include "rules/integer_bounded_multiplier_8_bit.h"
-#include "rules/integer_bounded_multiplier_greater_than_8_bit.h"
-#include "rules/integer_lower_bound.h"
-#include "rules/integer_lower_bound_multiplier.h"
-#include "rules/integer_unbound.h"
-#include "rules/integer_unbound_multiplier.h"
-#include "rules/integer_upper_bound.h"
-#include "rules/integer_upper_bound_multiplier.h"
-#include "rules/number_arbitrary.h"
+#include "mapper_rules/enum_8_bit.h"
+#include "mapper_rules/enum_8_bit_top_level.h"
+#include "mapper_rules/enum_arbitrary.h"
+#include "mapper_rules/enum_singleton.h"
+#include "mapper_rules/integer_bounded_8_bit.h"
+#include "mapper_rules/integer_bounded_greater_than_8_bit.h"
+#include "mapper_rules/integer_bounded_multiplier_8_bit.h"
+#include "mapper_rules/integer_bounded_multiplier_greater_than_8_bit.h"
+#include "mapper_rules/integer_lower_bound.h"
+#include "mapper_rules/integer_lower_bound_multiplier.h"
+#include "mapper_rules/integer_unbound.h"
+#include "mapper_rules/integer_unbound_multiplier.h"
+#include "mapper_rules/integer_upper_bound.h"
+#include "mapper_rules/integer_upper_bound_multiplier.h"
+#include "mapper_rules/number_arbitrary.h"
 
 sourcemeta::jsonbinpack::Mapper::Mapper() {
   using namespace sourcemeta::jsonbinpack::mapper;
