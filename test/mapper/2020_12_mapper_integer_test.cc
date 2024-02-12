@@ -4,8 +4,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include "mapper_resolver.h"
-
 TEST(MapperInteger_2020_12, maximum_minimum_8_bit) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsonbinpack::Mapper mapper;
@@ -18,10 +16,10 @@ TEST(MapperInteger_2020_12, maximum_minimum_8_bit) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -51,10 +49,10 @@ TEST(MapperInteger_2020_12, maximum_minimum_multiplier_8_bit) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -83,10 +81,10 @@ TEST(MapperInteger_2020_12, maximum_minimum_greater_than_8_bit) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -115,10 +113,10 @@ TEST(MapperInteger_2020_12, maximum_minimum_multiplier_greater_than_8_bit) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -145,10 +143,10 @@ TEST(MapperInteger_2020_12, minimum) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -176,10 +174,10 @@ TEST(MapperInteger_2020_12, minimum_multiplier) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -206,10 +204,10 @@ TEST(MapperInteger_2020_12, maximum) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -237,10 +235,10 @@ TEST(MapperInteger_2020_12, maximum_multiplier) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -266,10 +264,10 @@ TEST(MapperInteger_2020_12, unbounded) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -295,10 +293,10 @@ TEST(MapperInteger_2020_12, unbounded_multiplier) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =

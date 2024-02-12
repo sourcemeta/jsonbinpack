@@ -4,8 +4,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include "mapper_resolver.h"
-
 TEST(MapperEnum_2020_12, enum_singleton) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsonbinpack::Mapper mapper;
@@ -16,10 +14,10 @@ TEST(MapperEnum_2020_12, enum_singleton) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -44,10 +42,10 @@ TEST(MapperEnum_2020_12, const_scalar) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -72,10 +70,10 @@ TEST(MapperEnum_2020_12, enum_small_top_level) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =

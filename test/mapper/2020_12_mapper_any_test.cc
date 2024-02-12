@@ -4,8 +4,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include "mapper_resolver.h"
-
 TEST(MapperAny_2020_12, only_metaschema) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsonbinpack::Mapper mapper;
@@ -15,10 +13,10 @@ TEST(MapperAny_2020_12, only_metaschema) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
@@ -38,10 +36,10 @@ TEST(MapperAny_2020_12, empty) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse("{}");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =

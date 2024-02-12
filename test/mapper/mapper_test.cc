@@ -5,8 +5,6 @@
 
 #include <stdexcept>
 
-#include "mapper_resolver.h"
-
 TEST(Mapper, unsupported_draft) {
   sourcemeta::jsonbinpack::Mapper mapper;
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
@@ -16,7 +14,7 @@ TEST(Mapper, unsupported_draft) {
 
   EXPECT_THROW(mapper.apply(schema,
                             sourcemeta::jsontoolkit::default_schema_walker,
-                            mapper_test_resolver,
+                            sourcemeta::jsontoolkit::official_resolver,
                             "https://json-schema.org/draft/2020-12/schema"),
                std::domain_error);
 }
@@ -28,7 +26,7 @@ TEST(Mapper, unknown_draft_default) {
   })JSON");
 
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =

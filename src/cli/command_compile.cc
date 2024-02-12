@@ -1,6 +1,5 @@
 #include "commands.h"
 #include "defaults.h"
-#include "resolver.h"
 
 #include <sourcemeta/jsonbinpack/canonicalizer.h>
 #include <sourcemeta/jsonbinpack/mapper.h>
@@ -16,10 +15,10 @@ static auto compile_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
   sourcemeta::jsonbinpack::Mapper mapper;
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsonbinpack::cli::resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               sourcemeta::jsonbinpack::cli::resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
 
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
