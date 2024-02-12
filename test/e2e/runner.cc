@@ -52,8 +52,7 @@ auto main(int argc, char *argv[]) -> int {
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
-  std::ofstream mapper_output_stream(directory / "encoding.json",
-                                     std::ios::binary);
+  std::ofstream mapper_output_stream(directory / "plan.json", std::ios::binary);
   mapper_output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsontoolkit::prettify(schema, mapper_output_stream);
   mapper_output_stream << "\n";
@@ -61,12 +60,12 @@ auto main(int argc, char *argv[]) -> int {
   mapper_output_stream.close();
 
   // Encoder
-  const sourcemeta::jsonbinpack::Encoding encoding{
+  const sourcemeta::jsonbinpack::Plan plan{
       sourcemeta::jsonbinpack::parse(schema)};
   std::ofstream output_stream(directory / "output.bin", std::ios::binary);
   output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Encoder encoder{output_stream};
-  encoder.encode(instance, encoding);
+  encoder.encode(instance, plan);
   output_stream.flush();
   const auto size{output_stream.tellp()};
   output_stream.close();
@@ -80,7 +79,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ifstream data_stream{directory / "output.bin", std::ios::binary};
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Decoder decoder{data_stream};
-  const sourcemeta::jsontoolkit::JSON result = decoder.decode(encoding);
+  const sourcemeta::jsontoolkit::JSON result = decoder.decode(plan);
 
   // Report results
   if (result == instance) {

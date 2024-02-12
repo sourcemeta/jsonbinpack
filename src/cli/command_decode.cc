@@ -22,10 +22,10 @@ static auto decode_from_stream(sourcemeta::jsontoolkit::JSON &schema,
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-  const sourcemeta::jsonbinpack::Encoding encoding{
+  const sourcemeta::jsonbinpack::Plan plan{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result = decoder.decode(encoding);
+  const sourcemeta::jsontoolkit::JSON result = decoder.decode(plan);
   sourcemeta::jsontoolkit::stringify(result, std::cout);
   return EXIT_SUCCESS;
 }

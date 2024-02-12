@@ -18,10 +18,10 @@ static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-  const sourcemeta::jsonbinpack::Encoding encoding{
+  const sourcemeta::jsonbinpack::Plan plan{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};
-  encoder.encode(instance, encoding);
+  encoder.encode(instance, plan);
   return EXIT_SUCCESS;
 }
 
