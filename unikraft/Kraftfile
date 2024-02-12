@@ -1,0 +1,31 @@
+specification: v0.6
+name: sourcemeta_jsonbinpack_test
+unikraft:
+  version: stable
+
+targets:
+  - name: development
+    platform: qemu
+    architecture: x86_64
+    kconfig:
+      - CONFIG_LIBJSONBINPACK=y
+      - CONFIG_LIBGOOGLETEST=y
+      - CONFIG_LIBGOOGLETEST_BUILD_MAIN=y
+
+libraries:
+  libcxxabi:
+    version: stable
+  libcxx:
+    version: stable
+  libunwind:
+    version: stable
+  compiler-rt:
+    version: stable
+  musl:
+    version: stable
+  googletest:
+    version: stable
+  jsonbinpack:
+    source: ..
+  jsontoolkit:
+    source: ../vendor/jsontoolkit
