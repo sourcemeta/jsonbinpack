@@ -25,13 +25,12 @@ static auto test_resolver(std::string_view identifier)
 }
 
 TEST(Canonicalizer, unsupported_draft) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
   })JSON");
 
-  EXPECT_THROW(canonicalizer.apply(
+  EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
                    schema, sourcemeta::jsontoolkit::default_schema_walker,
                    test_resolver,
                    "https://json-schema.org/draft/2020-12/schema"),
@@ -39,12 +38,11 @@ TEST(Canonicalizer, unsupported_draft) {
 }
 
 TEST(Canonicalizer, unknown_draft) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "boolean"
   })JSON");
 
-  EXPECT_THROW(canonicalizer.apply(
+  EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
                    schema, sourcemeta::jsontoolkit::default_schema_walker,
                    test_resolver, "https://example.com/invalid"),
                sourcemeta::jsontoolkit::SchemaResolutionError);

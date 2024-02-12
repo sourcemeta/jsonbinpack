@@ -22,9 +22,6 @@ auto make_encoding(sourcemeta::jsontoolkit::SchemaTransformer &document,
                    const std::string &encoding,
                    const sourcemeta::jsontoolkit::JSON &options) -> void;
 
-auto resolver(const std::string &identifier)
-    -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>>;
-
 } // namespace sourcemeta::jsonbinpack::mapper
 
 #endif

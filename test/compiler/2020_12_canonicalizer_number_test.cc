@@ -5,16 +5,15 @@
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
 TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer"
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -27,17 +26,16 @@ TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "exclusiveMaximum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -51,17 +49,16 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "exclusiveMaximum": 5.1
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -75,8 +72,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -84,9 +79,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
     "maximum": 3
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -100,8 +96,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -109,9 +103,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
     "maximum": 3
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -125,8 +120,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -134,9 +127,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
     "maximum": 3.2
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -150,8 +144,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -159,9 +151,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
     "maximum": 3.2
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -175,8 +168,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -184,9 +175,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
     "maximum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -200,8 +192,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -209,9 +199,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
     "maximum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -225,8 +216,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -234,9 +223,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
     "maximum": 5.1
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -250,8 +240,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -259,9 +247,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
     "maximum": 5.1
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -275,17 +264,16 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "exclusiveMinimum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -299,17 +287,16 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "exclusiveMinimum": 5.1
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -323,8 +310,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -332,9 +317,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
     "minimum": 7
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -348,8 +334,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -357,9 +341,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
     "minimum": 7
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -373,8 +358,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -382,9 +365,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
     "minimum": 7.2
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -398,8 +382,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -407,9 +389,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
     "minimum": 7.2
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -423,8 +406,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -432,9 +413,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
     "minimum": 4
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -448,8 +430,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -457,9 +437,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
     "minimum": 4
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -473,8 +454,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -482,9 +461,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
     "minimum": 4.8
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -498,8 +478,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
 }
 
 TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -507,9 +485,10 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
     "minimum": 4.8
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -523,8 +502,6 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -532,9 +509,10 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
     "minimum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -548,8 +526,6 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -557,9 +533,10 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
     "minimum": 5.2
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -572,8 +549,6 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -581,9 +556,10 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
     "exclusiveMinimum": 3
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -596,8 +572,6 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
 }
 
 TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -606,9 +580,10 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
     "properties": {}
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -621,8 +596,6 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
 }
 
 TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -631,9 +604,10 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
     "properties": {}
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
@@ -647,8 +621,6 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
 }
 
 TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_without_numeric_type) {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
@@ -656,9 +628,10 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_without_numeric_type) {
     "minimum": 5
   })JSON");
 
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({

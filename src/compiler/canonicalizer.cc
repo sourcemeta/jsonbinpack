@@ -1,5 +1,4 @@
-#include <sourcemeta/jsonbinpack/compiler_canonicalizer.h>
-
+#include "canonicalizer.h"
 #include "schemas.h"
 
 // To be used by the rules below
