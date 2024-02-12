@@ -5,7 +5,7 @@
 
 #include <variant>
 
-TEST(Parser_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
+TEST(JSONBinPack_Parser_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
@@ -27,7 +27,7 @@ TEST(Parser_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
   EXPECT_EQ(std::get<BOUNDED_MULTIPLE_8BITS_ENUM_FIXED>(result).multiplier, 2);
 }
 
-TEST(Parser_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
+TEST(JSONBinPack_Parser_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
@@ -46,7 +46,7 @@ TEST(Parser_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
   EXPECT_EQ(std::get<FLOOR_MULTIPLE_ENUM_VARINT>(result).multiplier, 2);
 }
 
-TEST(Parser_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
+TEST(JSONBinPack_Parser_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
@@ -65,7 +65,7 @@ TEST(Parser_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
   EXPECT_EQ(std::get<ROOF_MULTIPLE_MIRROR_ENUM_VARINT>(result).multiplier, 2);
 }
 
-TEST(Parser_v1, ARBITRARY_MULTIPLE_ZIGZAG_VARINT_unit_multiplier) {
+TEST(JSONBinPack_Parser_v1, ARBITRARY_MULTIPLE_ZIGZAG_VARINT_unit_multiplier) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",

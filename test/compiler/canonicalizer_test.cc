@@ -24,7 +24,7 @@ static auto test_resolver(std::string_view identifier)
   return promise.get_future();
 }
 
-TEST(Canonicalizer, unsupported_draft) {
+TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
@@ -37,7 +37,7 @@ TEST(Canonicalizer, unsupported_draft) {
                sourcemeta::jsontoolkit::SchemaError);
 }
 
-TEST(Canonicalizer, unknown_draft) {
+TEST(JSONBinPack_Canonicalizer, unknown_draft) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "boolean"
   })JSON");

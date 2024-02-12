@@ -8,7 +8,7 @@
 #include <utility> // std::move
 #include <vector>  // std::vector
 
-TEST(Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -21,7 +21,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -34,7 +34,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   InputByteStream<char> stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -47,7 +47,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -60,7 +60,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream<char> stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -76,7 +76,7 @@ TEST(Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -89,7 +89,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -102,7 +102,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   InputByteStream<char> stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -115,7 +115,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -128,7 +128,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream<char> stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -144,7 +144,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, LARGE_CHOICE_INDEX_enum_250) {
+TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_enum_250) {
   InputByteStream<char> stream{0xfa, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
 
@@ -159,7 +159,7 @@ TEST(Decoder, LARGE_CHOICE_INDEX_enum_250) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   InputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -172,7 +172,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -185,7 +185,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -198,7 +198,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -211,7 +211,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream<char> stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
@@ -227,7 +227,7 @@ TEST(Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, CONST_NONE_scalar) {
+TEST(JSONBinPack_Decoder, CONST_NONE_scalar) {
   InputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -236,7 +236,7 @@ TEST(Decoder, CONST_NONE_scalar) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, CONST_NONE_complex) {
+TEST(JSONBinPack_Decoder, CONST_NONE_complex) {
   InputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =

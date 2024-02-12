@@ -6,7 +6,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{nullptr};
   OutputByteStream<char> stream{};
@@ -16,7 +16,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   EXPECT_BYTES(stream, {0x17});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{false};
   OutputByteStream<char> stream{};
@@ -26,7 +26,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   EXPECT_BYTES(stream, {0x07});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{true};
   OutputByteStream<char> stream{};
@@ -36,7 +36,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   EXPECT_BYTES(stream, {0x0f});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{3.14};
   OutputByteStream<char> stream{};
@@ -49,7 +49,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{256};
   OutputByteStream<char> stream{};
@@ -62,7 +62,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{-257};
   OutputByteStream<char> stream{};
@@ -75,7 +75,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{255};
   OutputByteStream<char> stream{};
@@ -88,7 +88,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{-256};
   OutputByteStream<char> stream{};
@@ -101,7 +101,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{0};
   OutputByteStream<char> stream{};
@@ -111,7 +111,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   EXPECT_BYTES(stream, {0x0d});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{-1};
   OutputByteStream<char> stream{};
@@ -121,7 +121,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   EXPECT_BYTES(stream, {0x0e});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{" "};
   OutputByteStream<char> stream{};
@@ -131,7 +131,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   EXPECT_BYTES(stream, {0x11, 0x20});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{"foo"};
   OutputByteStream<char> stream{};
@@ -141,7 +141,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   EXPECT_BYTES(stream, {0x21, 0x66, 0x6f, 0x6f});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(30, 'x')};
   EXPECT_EQ(document.size(), 30);
@@ -155,7 +155,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{"foo"};
   OutputByteStream<char> stream{};
@@ -174,7 +174,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(31, 'x')};
   EXPECT_EQ(document.size(), 31);
@@ -188,7 +188,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(61, 'x')};
   EXPECT_EQ(document.size(), 61);
@@ -205,7 +205,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{"https://soundcloud.com/dandymusicnl"};
   OutputByteStream<char> stream{};
@@ -218,7 +218,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
                         0x64, 0x79, 0x6d, 0x75, 0x73, 0x69, 0x63, 0x6e, 0x6c});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(128, 'x')};
   EXPECT_EQ(document.size(), 128);
@@ -243,7 +243,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(130, 'x')};
   EXPECT_EQ(document.size(), 130);
@@ -268,7 +268,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(256, 'x')};
   EXPECT_EQ(document.size(), 256);
@@ -307,7 +307,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(258, 'x')};
   EXPECT_EQ(document.size(), 258);
@@ -346,7 +346,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(512, 'x')};
   EXPECT_EQ(document.size(), 512);
@@ -412,7 +412,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(513, 'x')};
   EXPECT_EQ(document.size(), 513);
@@ -479,7 +479,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
        0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(1024, 'x')};
   EXPECT_EQ(document.size(), 1024);
@@ -596,7 +596,8 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
        0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
+TEST(JSONBinPack_Encoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(62, 'x')};
   EXPECT_EQ(document.size(), 62);
@@ -613,7 +614,8 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
+TEST(JSONBinPack_Encoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{std::string(63, 'x')};
   EXPECT_EQ(document.size(), 63);
@@ -630,7 +632,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ \"foo\", true, 2000 ]");
@@ -646,7 +648,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Array{}};
@@ -666,7 +668,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Array{}};
@@ -688,7 +690,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Array{}};
@@ -710,7 +712,8 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
                 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f});
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
+TEST(JSONBinPack_Encoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{ \"foo\": \"bar\", \"baz\": 1 }");
@@ -728,7 +731,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
                });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Object{}};
@@ -809,7 +812,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Object{}};
@@ -895,7 +898,7 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Object{}};
@@ -983,7 +986,8 @@ TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
                        });
 }
 
-TEST(Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
+TEST(JSONBinPack_Encoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
   using namespace sourcemeta::jsonbinpack;
 
   sourcemeta::jsontoolkit::JSON document{

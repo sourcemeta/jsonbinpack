@@ -3,7 +3,7 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(CompilerAny_2020_12, only_metaschema) {
+TEST(JSONBinPack_Compiler_Any_2020_12, only_metaschema) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
@@ -23,7 +23,7 @@ TEST(CompilerAny_2020_12, only_metaschema) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CompilerAny_2020_12, empty) {
+TEST(JSONBinPack_Compiler_Any_2020_12, empty) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse("{}");
 
   sourcemeta::jsonbinpack::compile(

@@ -4,7 +4,7 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerArray_2020_12, max_contains_without_contains_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, max_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -26,7 +26,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, max_contains_without_contains_2) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, max_contains_without_contains_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -54,7 +54,7 @@ TEST(CanonicalizerArray_2020_12, max_contains_without_contains_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, min_contains_without_contains_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, min_contains_without_contains_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -76,7 +76,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, min_contains_without_contains_2) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, min_contains_without_contains_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -104,7 +104,7 @@ TEST(CanonicalizerArray_2020_12, min_contains_without_contains_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, unsatisfiable_max_contains_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, unsatisfiable_max_contains_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -133,7 +133,7 @@ TEST(CanonicalizerArray_2020_12, unsatisfiable_max_contains_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, implicit_array_lower_bound_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, implicit_array_lower_bound_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array"
@@ -154,7 +154,7 @@ TEST(CanonicalizerArray_2020_12, implicit_array_lower_bound_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, empty_array_as_const_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",
@@ -177,7 +177,7 @@ TEST(CanonicalizerArray_2020_12, empty_array_as_const_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerArray_2020_12, drop_non_array_keywords_1) {
+TEST(JSONBinPack_Canonicalizer_Array_2020_12, drop_non_array_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "array",

@@ -5,7 +5,8 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Decoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+TEST(JSONBinPack_Decoder,
+     FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x66, 0x6f, 0x6f, // "foo"
@@ -30,7 +31,8 @@ TEST(Decoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   EXPECT_EQ(bar.to_integer(), 2);
 }
 
-TEST(Decoder, VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+TEST(JSONBinPack_Decoder,
+     VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x02,             // length 2

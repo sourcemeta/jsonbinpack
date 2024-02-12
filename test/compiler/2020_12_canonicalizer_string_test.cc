@@ -4,7 +4,8 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerString_2020_12, content_schema_without_content_media_type_1) {
+TEST(JSONBinPack_Canonicalizer_String_2020_12,
+     content_schema_without_content_media_type_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
@@ -28,7 +29,7 @@ TEST(CanonicalizerString_2020_12, content_schema_without_content_media_type_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerString_2020_12, implicit_string_lower_bound_1) {
+TEST(JSONBinPack_Canonicalizer_String_2020_12, implicit_string_lower_bound_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string"
@@ -49,7 +50,7 @@ TEST(CanonicalizerString_2020_12, implicit_string_lower_bound_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerString_2020_12, empty_string_as_const_1) {
+TEST(JSONBinPack_Canonicalizer_String_2020_12, empty_string_as_const_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
@@ -72,7 +73,7 @@ TEST(CanonicalizerString_2020_12, empty_string_as_const_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerString_2020_12, drop_non_string_keywords_1) {
+TEST(JSONBinPack_Canonicalizer_String_2020_12, drop_non_string_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",

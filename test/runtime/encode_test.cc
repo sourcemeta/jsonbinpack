@@ -4,7 +4,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
+TEST(JSONBinPack_Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document{-5};
   OutputByteStream<char> stream{};

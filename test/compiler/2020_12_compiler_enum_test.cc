@@ -3,7 +3,7 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(CompilerEnum_2020_12, enum_singleton) {
+TEST(JSONBinPack_Compiler_Enum_2020_12, enum_singleton) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 2 ]
@@ -26,7 +26,7 @@ TEST(CompilerEnum_2020_12, enum_singleton) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CompilerEnum_2020_12, const_scalar) {
+TEST(JSONBinPack_Compiler_Enum_2020_12, const_scalar) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "const": 2
@@ -49,7 +49,7 @@ TEST(CompilerEnum_2020_12, const_scalar) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CompilerEnum_2020_12, enum_small_top_level) {
+TEST(JSONBinPack_Compiler_Enum_2020_12, enum_small_top_level) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 1, 2, 3 ]

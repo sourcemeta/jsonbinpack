@@ -4,7 +4,8 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12,
+     min_properties_required_tautology_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -29,7 +30,8 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12,
+     min_properties_required_tautology_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -54,7 +56,8 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_3) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12,
+     min_properties_required_tautology_3) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -79,7 +82,7 @@ TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_3) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -103,7 +106,7 @@ TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object"
@@ -126,7 +129,7 @@ TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_object_as_const_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -151,7 +154,7 @@ TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -177,7 +180,7 @@ TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -204,7 +207,7 @@ TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -231,7 +234,7 @@ TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, duplicate_required_values_1) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -255,7 +258,7 @@ TEST(CanonicalizerObject_2020_12, duplicate_required_values_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, duplicate_required_values_2) {
+TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
