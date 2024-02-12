@@ -7,7 +7,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -19,7 +19,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_BYTES(stream, {0x00});
 }
 
-TEST(Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -31,7 +31,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_BYTES(stream, {0x01});
 }
 
-TEST(Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -43,7 +43,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_BYTES(stream, {0x02});
 }
 
-TEST(Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{"bar"};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -55,7 +55,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_BYTES(stream, {0x01});
 }
 
-TEST(Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   OutputByteStream<char> stream{};
@@ -72,7 +72,7 @@ TEST(Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_BYTES(stream, {0x03});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -84,7 +84,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_BYTES(stream, {0x00});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -96,7 +96,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_BYTES(stream, {0x01});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -108,7 +108,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_BYTES(stream, {0x02});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{"bar"};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -120,7 +120,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_BYTES(stream, {0x01});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   OutputByteStream<char> stream{};
@@ -137,7 +137,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_BYTES(stream, {0x03});
 }
 
-TEST(Encoder, LARGE_CHOICE_INDEX_enum_250) {
+TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_enum_250) {
   const sourcemeta::jsontoolkit::JSON document{250};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -150,7 +150,7 @@ TEST(Encoder, LARGE_CHOICE_INDEX_enum_250) {
   EXPECT_BYTES(stream, {0xfa, 0x01});
 }
 
-TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -162,7 +162,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_BYTES(stream, {});
 }
 
-TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -174,7 +174,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_BYTES(stream, {0x00});
 }
 
-TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -186,7 +186,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_BYTES(stream, {0x01});
 }
 
-TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::jsontoolkit::JSON document{"bar"};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -198,7 +198,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_BYTES(stream, {0x00});
 }
 
-TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   OutputByteStream<char> stream{};
@@ -215,7 +215,7 @@ TEST(Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_BYTES(stream, {0x02});
 }
 
-TEST(Encoder, CONST_NONE_scalar) {
+TEST(JSONBinPack_Encoder, CONST_NONE_scalar) {
   const sourcemeta::jsontoolkit::JSON document{1};
   OutputByteStream<char> stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -223,7 +223,7 @@ TEST(Encoder, CONST_NONE_scalar) {
   EXPECT_BYTES(stream, {});
 }
 
-TEST(Encoder, CONST_NONE_complex) {
+TEST(JSONBinPack_Encoder, CONST_NONE_complex) {
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   OutputByteStream<char> stream{};

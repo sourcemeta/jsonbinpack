@@ -4,7 +4,8 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Encoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+TEST(JSONBinPack_Encoder,
+     FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");
@@ -22,7 +23,8 @@ TEST(Encoder, FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
                        });
 }
 
-TEST(Encoder, VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+TEST(JSONBinPack_Encoder,
+     VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");

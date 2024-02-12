@@ -4,7 +4,7 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerNull_2020_12, drop_non_null_keywords_1) {
+TEST(JSONBinPack_Canonicalizer_Null_2020_12, drop_non_null_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "null",
@@ -26,7 +26,7 @@ TEST(CanonicalizerNull_2020_12, drop_non_null_keywords_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNull_2020_12, drop_non_null_keywords_2) {
+TEST(JSONBinPack_Canonicalizer_Null_2020_12, drop_non_null_keywords_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ null, null, null ],

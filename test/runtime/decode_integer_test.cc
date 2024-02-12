@@ -7,7 +7,8 @@
 
 #include <limits> // std::numeric_limits
 
-TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
+TEST(JSONBinPack_Decoder,
+     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -16,7 +17,7 @@ TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
+TEST(JSONBinPack_Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
   InputByteStream<char> stream{0x07};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -25,7 +26,7 @@ TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
+TEST(JSONBinPack_Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
   InputByteStream<char> stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -34,7 +35,7 @@ TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
+TEST(JSONBinPack_Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
   InputByteStream<char> stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -43,7 +44,7 @@ TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
+TEST(JSONBinPack_Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
   InputByteStream<char> stream{0xff};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -52,7 +53,7 @@ TEST(Decoder, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
+TEST(JSONBinPack_Decoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
   InputByteStream<char> stream{0x07};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -61,7 +62,7 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
+TEST(JSONBinPack_Decoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
   InputByteStream<char> stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -70,7 +71,7 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
+TEST(JSONBinPack_Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -79,7 +80,7 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
+TEST(JSONBinPack_Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -88,7 +89,7 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
+TEST(JSONBinPack_Decoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
   InputByteStream<char> stream{0xfa, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -97,7 +98,7 @@ TEST(Decoder, FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
+TEST(JSONBinPack_Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -106,7 +107,7 @@ TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
+TEST(JSONBinPack_Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
   InputByteStream<char> stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -115,7 +116,7 @@ TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
+TEST(JSONBinPack_Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
   InputByteStream<char> stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -124,7 +125,7 @@ TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
+TEST(JSONBinPack_Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
   InputByteStream<char> stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -133,7 +134,7 @@ TEST(Decoder, ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
+TEST(JSONBinPack_Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
   InputByteStream<char> stream{0xdf, 0x89, 0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -142,7 +143,7 @@ TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__minus_25200_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
+TEST(JSONBinPack_Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
   InputByteStream<char> stream{0x04};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
@@ -151,7 +152,7 @@ TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__10_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
+TEST(JSONBinPack_Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
   InputByteStream<char> stream{0xfe, 0xff, 0xff, 0xff, 0xff,
                                0xff, 0xff, 0xff, 0xff, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
@@ -162,7 +163,7 @@ TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_max_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_min_1) {
+TEST(JSONBinPack_Decoder, ARBITRARY_MULTIPLE_ZIGZAG_VARINT__int64_min_1) {
   InputByteStream<char> stream{0xfd, 0xff, 0xff, 0xff, 0xff,
                                0xff, 0xff, 0xff, 0xff, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};

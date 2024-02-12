@@ -3,7 +3,7 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(CompilerNumber_2020_12, arbitrary) {
+TEST(JSONBinPack_Compiler_Number_2020_12, arbitrary) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number"

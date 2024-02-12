@@ -4,7 +4,7 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, implicit_unit_multiple_of_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer"
@@ -25,7 +25,7 @@ TEST(CanonicalizerNumber_2020_12, implicit_unit_multiple_of_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -48,7 +48,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -71,7 +71,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_3) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -95,7 +95,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_3) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_4) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -119,7 +119,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_4) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_5) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -143,7 +143,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_5) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_6) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -167,7 +167,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_6) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_7) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -191,7 +191,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_7) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_8) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -215,7 +215,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_8) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_9) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -239,7 +239,8 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_9) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     exclusive_maximum_to_maximum_10) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -263,7 +264,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_maximum_to_maximum_10) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -286,7 +287,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -309,7 +310,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_3) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -333,7 +334,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_3) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_4) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -357,7 +358,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_4) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_5) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -381,7 +382,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_5) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_6) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -405,7 +406,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_6) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_7) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -429,7 +430,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_7) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_8) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -453,7 +454,7 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_8) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_9) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -477,7 +478,8 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_9) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     exclusive_minimum_to_minimum_10) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -501,7 +503,8 @@ TEST(CanonicalizerNumber_2020_12, exclusive_minimum_to_minimum_10) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     equal_numeric_bounds_as_const_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -525,7 +528,8 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     equal_numeric_bounds_as_const_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -548,7 +552,8 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     equal_numeric_bounds_as_const_4) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -571,7 +576,7 @@ TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_as_const_4) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
@@ -595,7 +600,7 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_2) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -620,7 +625,8 @@ TEST(CanonicalizerNumber_2020_12, drop_non_numeric_keywords_2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerNumber_2020_12, equal_numeric_bounds_without_numeric_type) {
+TEST(JSONBinPack_Canonicalizer_Number_2020_12,
+     equal_numeric_bounds_without_numeric_type) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",

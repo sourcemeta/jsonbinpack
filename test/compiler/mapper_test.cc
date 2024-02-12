@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-TEST(Mapper, unsupported_draft) {
+TEST(JSONBinPack_Mapper, unsupported_draft) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "type": "boolean"
@@ -18,7 +18,7 @@ TEST(Mapper, unsupported_draft) {
                std::domain_error);
 }
 
-TEST(Mapper, unknown_draft_default) {
+TEST(JSONBinPack_Mapper, unknown_draft_default) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer"
   })JSON");

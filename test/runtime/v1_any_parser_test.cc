@@ -5,7 +5,7 @@
 
 #include <variant>
 
-TEST(Parser_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
+TEST(JSONBinPack_Parser_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",

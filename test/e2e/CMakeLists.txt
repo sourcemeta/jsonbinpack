@@ -6,7 +6,7 @@ set_target_properties(jsonbinpack_e2e_test_runner
   PROPERTIES FOLDER "JSON BinPack/E2E")
 
 macro(add_jsonbinpack_e2e_test_schemaless name)
-  add_test(NAME e2e.${name}.schema-less
+  add_test(NAME JSONBinPack.e2e.${name}.schema-less
     COMMAND "$<TARGET_FILE:jsonbinpack_e2e_test_runner>"
     "${CMAKE_CURRENT_SOURCE_DIR}/${name}/document.json"
     "${CMAKE_CURRENT_SOURCE_DIR}/${name}/schema-less")

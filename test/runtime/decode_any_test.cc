@@ -7,7 +7,7 @@
 
 #include <string>
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x17};
   Decoder decoder{stream};
@@ -17,7 +17,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x07};
   Decoder decoder{stream};
@@ -27,7 +27,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x0f};
   Decoder decoder{stream};
@@ -37,7 +37,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x2f, 0xf4, 0x04, 0x02};
   Decoder decoder{stream};
@@ -47,7 +47,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x1f, 0x80, 0x02};
   Decoder decoder{stream};
@@ -57,7 +57,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x27, 0x80, 0x02};
   Decoder decoder{stream};
@@ -67,7 +67,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x05, 0xff};
   Decoder decoder{stream};
@@ -77,7 +77,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x06, 0xff};
   Decoder decoder{stream};
@@ -87,7 +87,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x0d};
   Decoder decoder{stream};
@@ -97,7 +97,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x0e};
   Decoder decoder{stream};
@@ -107,7 +107,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x11, 0x20};
   Decoder decoder{stream};
@@ -117,7 +117,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x21, 0x66, 0x6f, 0x6f};
   Decoder decoder{stream};
@@ -127,7 +127,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0xf9, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
                                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -140,7 +140,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x21, 0x66, 0x6f, 0x6f, 0x20, 0x04, 0x20, 0x06};
   Decoder decoder{stream};
@@ -158,7 +158,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
   EXPECT_EQ(result3, expected3);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
                                0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -171,7 +171,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0xf2, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -187,7 +187,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x22, 0x68, 0x74, 0x74, 0x70, 0x73, 0x3a, 0x2f, 0x2f, 0x73, 0x6f, 0x75,
@@ -201,7 +201,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x3f, 0x00, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -222,7 +222,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x3f, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -243,7 +243,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x47, 0x00, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -278,7 +278,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x47, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -313,7 +313,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x4f, 0x00,
@@ -376,7 +376,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x4f, 0x01,
@@ -440,7 +440,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x57, 0x00,
@@ -554,7 +554,8 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
+TEST(JSONBinPack_Decoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x01, 0x01, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -570,7 +571,8 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
+TEST(JSONBinPack_Decoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x01, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -586,7 +588,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x24, 0x21, 0x66, 0x6f, 0x6f,
                                0x0f, 0x1f, 0xd0, 0x0f};
@@ -602,7 +604,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
   EXPECT_EQ(result.at(2), JSON{2000});
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0xfc, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
                                0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
@@ -650,7 +652,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
   EXPECT_EQ(result.at(29), JSON{true});
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x04, 0x00, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
@@ -700,7 +702,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   EXPECT_EQ(result.at(30), JSON{true});
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x04, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
@@ -751,7 +753,8 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   EXPECT_EQ(result.at(31), JSON{true});
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
+TEST(JSONBinPack_Decoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x21, 0x62,
                                0x61, 0x72, 0x04, 0x62, 0x61, 0x7a, 0x15};
@@ -778,7 +781,7 @@ static auto is_member_true(const sourcemeta::jsontoolkit::JSON &object,
          object.at(key).to_boolean();
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0xfb, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
@@ -832,7 +835,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   EXPECT_TRUE(is_member_true(result, "29"));
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x03, 0x00, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
@@ -888,7 +891,7 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   EXPECT_TRUE(is_member_true(result, "30"));
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x03, 0x01, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
@@ -945,7 +948,8 @@ TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   EXPECT_TRUE(is_member_true(result, "31"));
 }
 
-TEST(Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
+TEST(JSONBinPack_Decoder,
+     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{
       0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x01, 0x01, 0x78, 0x78, 0x78, 0x78,

@@ -1,5 +1,5 @@
-#ifndef SOURCEMETA_JSONBINPACK_TEST_DECODER_UTILS_H_
-#define SOURCEMETA_JSONBINPACK_TEST_DECODER_UTILS_H_
+#ifndef SOURCEMETA_JSONBINPACK_TEST_RUNTIME_DECODE_UTILS_H_
+#define SOURCEMETA_JSONBINPACK_TEST_RUNTIME_DECODE_UTILS_H_
 
 #include <cstdint>          // std::uint8_t
 #include <initializer_list> // std::initializer_list

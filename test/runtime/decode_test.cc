@@ -5,7 +5,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
+TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream<char> stream{0x00};
   Decoder decoder{stream};

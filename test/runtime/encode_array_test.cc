@@ -6,7 +6,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-TEST(Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
+TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ 0, 1, 2 ]");
@@ -18,7 +18,7 @@ TEST(Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   EXPECT_BYTES(stream, {0x00, 0x01, 0x02});
 }
 
-TEST(Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
+TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ 0, 1, true ]");
@@ -38,7 +38,7 @@ TEST(Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   EXPECT_BYTES(stream, {0x00, 0x01, 0x01});
 }
 
-TEST(Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
+TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Array{}};
@@ -50,7 +50,8 @@ TEST(Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   EXPECT_BYTES(stream, {});
 }
 
-TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(JSONBinPack_Encoder,
+     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
@@ -66,7 +67,8 @@ TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
-TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
+TEST(JSONBinPack_Encoder,
+     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
@@ -82,7 +84,7 @@ TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   EXPECT_BYTES(stream, {0x00, 0x01, 0x00, 0x01});
 }
 
-TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
+TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
@@ -100,7 +102,7 @@ TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
-TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
+TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
@@ -118,7 +120,8 @@ TEST(Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
 }
 
-TEST(Encoder, FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(JSONBinPack_Encoder,
+     FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
@@ -134,7 +137,7 @@ TEST(Encoder, FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
-TEST(Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
+TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
@@ -152,7 +155,7 @@ TEST(Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
-TEST(Encoder, FLOOR_TYPED_ARRAY_complex) {
+TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
@@ -170,7 +173,8 @@ TEST(Encoder, FLOOR_TYPED_ARRAY_complex) {
   EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
 }
 
-TEST(Encoder, ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(JSONBinPack_Encoder,
+     ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
@@ -186,7 +190,7 @@ TEST(Encoder, ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
-TEST(Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
+TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
@@ -204,7 +208,7 @@ TEST(Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
-TEST(Encoder, ROOF_TYPED_ARRAY_complex) {
+TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
