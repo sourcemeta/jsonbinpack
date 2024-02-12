@@ -1,6 +1,5 @@
 add_executable(sourcemeta_jsonbinpack_mapper_unit
   is_encoding_unit.cc make_encoding_unit.cc
-  mapper_resolver.h
   mapper_test.cc
   2020_12_mapper_any_test.cc
   2020_12_mapper_enum_test.cc

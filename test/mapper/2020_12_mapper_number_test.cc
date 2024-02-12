@@ -4,8 +4,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include "mapper_resolver.h"
-
 TEST(MapperNumber_2020_12, arbitrary) {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::jsonbinpack::Mapper mapper;
@@ -16,10 +14,10 @@ TEST(MapperNumber_2020_12, arbitrary) {
   })JSON");
 
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      mapper_test_resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       "https://json-schema.org/draft/2020-12/schema");
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               mapper_test_resolver,
+               sourcemeta::jsontoolkit::official_resolver,
                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =

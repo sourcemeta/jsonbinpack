@@ -1,5 +1,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsonbinpack/mapper_encoding.h>
+#include <sourcemeta/jsonbinpack/schemas.h>
 
 #include <cassert>   // assert
 #include <cstdint>   // std::int64_t
@@ -60,8 +61,23 @@ auto sourcemeta::jsonbinpack::Mapper::apply(
     const sourcemeta::jsontoolkit::SchemaWalker &walker,
     const sourcemeta::jsontoolkit::SchemaResolver &resolver,
     const std::optional<std::string> &default_dialect) const -> void {
+  // TODO: Avoid adding a new metaschema for mapper to get rid of this
+  const auto mapper_resolver = [&resolver](std::string_view identifier)
+      -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+    std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+    if (identifier == sourcemeta::jsonbinpack::schemas::encoding::v1::id) {
+      promise.set_value(sourcemeta::jsontoolkit::parse(
+          sourcemeta::jsonbinpack::schemas::encoding::v1::json));
+    } else {
+      promise.set_value(resolver(identifier).get());
+    }
+
+    return promise.get_future();
+  };
+
   const std::optional<std::string> base_dialect{
-      sourcemeta::jsontoolkit::base_dialect(document, resolver, default_dialect)
+      sourcemeta::jsontoolkit::base_dialect(document, mapper_resolver,
+                                            default_dialect)
           .get()};
 
   // TODO: Use a custom error here
@@ -70,7 +86,7 @@ auto sourcemeta::jsonbinpack::Mapper::apply(
     throw std::domain_error("Only JSON Schema 2020-12 is supported");
   }
 
-  this->bundle.apply(document, walker, resolver,
+  this->bundle.apply(document, walker, mapper_resolver,
                      sourcemeta::jsontoolkit::empty_pointer, default_dialect);
 
   // The "any" encoding is always the last resort

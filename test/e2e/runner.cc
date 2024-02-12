@@ -2,7 +2,6 @@
 #include <sourcemeta/jsonbinpack/mapper.h>
 #include <sourcemeta/jsonbinpack/parser.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/schemas.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
@@ -17,21 +16,6 @@
 
 constexpr auto DEFAULT_METASCHEMA =
     "https://json-schema.org/draft/2020-12/schema";
-
-// TODO: Get rid of this
-static auto test_resolver(std::string_view identifier)
-    -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
-  std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
-  if (identifier == sourcemeta::jsonbinpack::schemas::encoding::v1::id) {
-    promise.set_value(sourcemeta::jsontoolkit::parse(
-        sourcemeta::jsonbinpack::schemas::encoding::v1::json));
-  } else {
-    promise.set_value(
-        sourcemeta::jsontoolkit::official_resolver(identifier).get());
-  }
-
-  return promise.get_future();
-}
 
 auto main(int argc, char *argv[]) -> int {
   if (argc <= 2) {
@@ -55,7 +39,8 @@ auto main(int argc, char *argv[]) -> int {
   // Canonicalize
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      test_resolver, DEFAULT_METASCHEMA);
+                      sourcemeta::jsontoolkit::official_resolver,
+                      DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
@@ -68,7 +53,7 @@ auto main(int argc, char *argv[]) -> int {
   // Mapper
   sourcemeta::jsonbinpack::Mapper mapper;
   mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               test_resolver, DEFAULT_METASCHEMA);
+               sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream mapper_output_stream(directory / "encoding.json",
                                      std::ios::binary);

@@ -1,4 +1,5 @@
 #include <sourcemeta/jsonbinpack/canonicalizer.h>
+#include <sourcemeta/jsonbinpack/schemas.h>
 
 // To be used by the rules below
 #include "utils.h"
@@ -147,6 +148,20 @@ auto sourcemeta::jsonbinpack::Canonicalizer::apply(
     const sourcemeta::jsontoolkit::SchemaWalker &walker,
     const sourcemeta::jsontoolkit::SchemaResolver &resolver,
     const std::optional<std::string> &default_dialect) const -> void {
-  this->bundle.apply(document, walker, resolver,
+  // TODO: Avoid adding a new metaschema for mapper to get rid of this
+  const auto canonicalizer_resolver = [&resolver](std::string_view identifier)
+      -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
+    std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+    if (identifier == sourcemeta::jsonbinpack::schemas::encoding::v1::id) {
+      promise.set_value(sourcemeta::jsontoolkit::parse(
+          sourcemeta::jsonbinpack::schemas::encoding::v1::json));
+    } else {
+      promise.set_value(resolver(identifier).get());
+    }
+
+    return promise.get_future();
+  };
+
+  this->bundle.apply(document, walker, canonicalizer_resolver,
                      sourcemeta::jsontoolkit::empty_pointer, default_dialect);
 }

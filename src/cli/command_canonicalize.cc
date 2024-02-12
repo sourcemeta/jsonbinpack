@@ -1,6 +1,5 @@
 #include "commands.h"
 #include "defaults.h"
-#include "resolver.h"
 
 #include <sourcemeta/jsonbinpack/canonicalizer.h>
 #include <sourcemeta/jsontoolkit/json.h>
@@ -14,7 +13,7 @@ static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
     -> int {
   sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsonbinpack::cli::resolver,
+                      sourcemeta::jsontoolkit::official_resolver,
                       sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;

@@ -77,3 +77,5 @@ target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC
   sourcemeta::jsontoolkit::jsonschema)
+target_link_libraries(sourcemeta_jsonbinpack_canonicalizer PUBLIC
+  sourcemeta::jsonbinpack::schemas)
