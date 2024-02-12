@@ -46,8 +46,8 @@ doxygen: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
 
 unikraft: .always
-	$(KRAFT) build --target development --jobs 4 --log-type=basic unikraft
-	$(KRAFT) run --target development unikraft
+	cd unikraft && $(KRAFT) build --target development --jobs 4 --log-type=basic
+	cd unikraft && $(KRAFT) run --target development
 
 website: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target website
