@@ -2,278 +2,259 @@
 
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
-#include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_1) {
+TEST(CompilerInteger_2020_12, maximum_minimum_8_bit) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar" ],
-    "minProperties": 1
+    "type": "integer",
+    "minimum": -100,
+    "maximum": 100
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar" ],
-    "minProperties": 2,
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_2) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar" ],
-    "minProperties": 2
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar" ],
-    "minProperties": 2,
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, min_properties_required_tautology_3) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "bar", "foo", "bar", "bar" ],
-    "minProperties": 1
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "bar", "foo" ],
-    "minProperties": 2,
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, empty_pattern_properties_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "patternProperties": {}
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "minProperties": 0,
-    "required": [],
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, implicit_object_lower_bound_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object"
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "minProperties": 0,
-    "required": [],
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, empty_object_as_const_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "maxProperties": 0
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "enum": [ {} ],
-    "minProperties": 0,
-    "properties": {},
-    "required": []
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, drop_non_object_keywords_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "maxProperties": 4,
-    "maxItems": 3
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "maxProperties": 4,
-    "minProperties": 0,
-    "properties": {},
-    "required": []
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, dependent_required_tautology_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar" ],
-    "dependentRequired": {
-      "bar": [ "baz" ]
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "options": {
+      "minimum": -100,
+      "maximum": 100,
+      "multiplier": 1
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, maximum_minimum_multiplier_8_bit) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "minimum": -100,
+    "maximum": 100,
+    "multipleOf": 5
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar", "baz" ],
-    "minProperties": 3,
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerObject_2020_12, dependent_required_tautology_2) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar", "qux" ],
-    "dependentRequired": {
-      "bar": [ "baz", "qux" ]
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "options": {
+      "minimum": -100,
+      "maximum": 100,
+      "multiplier": 5
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, maximum_minimum_greater_than_8_bit) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "minimum": -100,
+    "maximum": 100000
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar", "qux", "baz" ],
-    "minProperties": 4,
-    "properties": {}
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "options": {
+      "minimum": -100,
+      "multiplier": 1
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, duplicate_required_values_1) {
+TEST(CompilerInteger_2020_12, maximum_minimum_multiplier_greater_than_8_bit) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "foo" ]
+    "type": "integer",
+    "minimum": -100,
+    "maximum": 10000,
+    "multipleOf": 5
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo" ],
-    "minProperties": 1,
-    "properties": {}
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "options": {
+      "minimum": -100,
+      "multiplier": 5
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerObject_2020_12, duplicate_required_values_2) {
+TEST(CompilerInteger_2020_12, minimum) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "foo", "bar", "bar", "baz", "bar" ]
+    "type": "integer",
+    "minimum": 0
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "options": {
+      "minimum": 0,
+      "multiplier": 1
+    }
+  })JSON");
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, minimum_multiplier) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "required": [ "bar", "baz", "foo" ],
-    "minProperties": 3,
-    "properties": {}
+    "type": "integer",
+    "minimum": 0,
+    "multipleOf": 5
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "options": {
+      "minimum": 0,
+      "multiplier": 5
+    }
+  })JSON");
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, maximum) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "maximum": 100
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "options": {
+      "maximum": 100,
+      "multiplier": 1
+    }
+  })JSON");
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, maximum_multiplier) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "maximum": 100,
+    "multipleOf": 5
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "options": {
+      "maximum": 100,
+      "multiplier": 5
+    }
+  })JSON");
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, unbounded) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer"
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "options": {
+      "multiplier": 1
+    }
+  })JSON");
+
+  EXPECT_EQ(schema, expected);
+}
+
+TEST(CompilerInteger_2020_12, unbounded_multiplier) {
+  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "integer",
+    "multipleOf": 5
+  })JSON");
+
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      "https://json-schema.org/draft/2020-12/schema");
+
+  const sourcemeta::jsontoolkit::JSON expected =
+      sourcemeta::jsontoolkit::parse(R"JSON({
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "options": {
+      "multiplier": 5
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);

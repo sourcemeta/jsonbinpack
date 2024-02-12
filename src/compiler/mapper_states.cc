@@ -1,4 +1,4 @@
-#include <sourcemeta/jsonbinpack/compiler_mapper_states.h>
+#include "mapper_states.h"
 
 #include <cassert> // assert
 #include <cmath>   // std::abs, std::ceil, std::floor

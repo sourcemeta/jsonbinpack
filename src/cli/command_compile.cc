@@ -10,16 +10,10 @@
 #include <iostream>   // std::cin, std::cout, std::endl
 
 static auto compile_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  sourcemeta::jsonbinpack::Mapper mapper;
-
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               sourcemeta::jsontoolkit::official_resolver,
-               sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;
   return EXIT_SUCCESS;

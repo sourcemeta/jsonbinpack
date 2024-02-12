@@ -11,10 +11,10 @@
 
 static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
     -> int {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   sourcemeta::jsontoolkit::prettify(schema, std::cout);
   std::cout << std::endl;
   return EXIT_SUCCESS;

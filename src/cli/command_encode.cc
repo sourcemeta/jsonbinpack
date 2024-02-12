@@ -14,16 +14,10 @@
 static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
                              const sourcemeta::jsontoolkit::JSON &instance)
     -> int {
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  sourcemeta::jsonbinpack::Mapper mapper;
-
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               sourcemeta::jsontoolkit::official_resolver,
-               sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
-
+  sourcemeta::jsonbinpack::compile(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver,
+      sourcemeta::jsonbinpack::DEFAULT_METASCHEMA);
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::parse(schema)};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};

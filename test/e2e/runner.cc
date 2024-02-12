@@ -35,10 +35,9 @@ auto main(int argc, char *argv[]) -> int {
       sourcemeta::jsontoolkit::from_file(schema_path);
 
   // Canonicalize
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-  canonicalizer.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-                      sourcemeta::jsontoolkit::official_resolver,
-                      DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
@@ -49,9 +48,9 @@ auto main(int argc, char *argv[]) -> int {
   canonical_output_stream.close();
 
   // Mapper
-  sourcemeta::jsonbinpack::Mapper mapper;
-  mapper.apply(schema, sourcemeta::jsontoolkit::default_schema_walker,
-               sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::map(
+      schema, sourcemeta::jsontoolkit::default_schema_walker,
+      sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream mapper_output_stream(directory / "encoding.json",
                                      std::ios::binary);

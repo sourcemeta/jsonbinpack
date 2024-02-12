@@ -1,16 +1,12 @@
-#include <sourcemeta/jsonbinpack/compiler_mapper.h>
-#include <sourcemeta/jsonbinpack/compiler_mapper_encoding.h>
-
+#include "mapper.h"
+#include "mapper_encoding.h"
+#include "mapper_states.h"
 #include "schemas.h"
 
 #include <cassert>   // assert
 #include <cstdint>   // std::int64_t
 #include <limits>    // std::numeric_limits
 #include <stdexcept> // std::domain_error
-
-// To be used by the rules below
-#include <sourcemeta/jsonbinpack/compiler_mapper_encoding.h>
-#include <sourcemeta/jsonbinpack/compiler_mapper_states.h>
 
 constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
   return value <= std::numeric_limits<std::uint8_t>::max();

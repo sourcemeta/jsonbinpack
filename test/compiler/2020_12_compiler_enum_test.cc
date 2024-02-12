@@ -2,88 +2,71 @@
 
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/json.h>
-#include <sourcemeta/jsontoolkit/jsonschema.h>
 
-TEST(CanonicalizerBoolean_2020_12, type_boolean) {
+TEST(CompilerEnum_2020_12, enum_singleton) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "boolean"
+    "enum": [ 2 ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ false, true ]
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "CONST_NONE",
+    "options": {
+      "value": 2
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_1) {
+TEST(CompilerEnum_2020_12, const_scalar) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "boolean",
-    "maxItems": 4,
-    "maxLength": 3
+    "const": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ false, true ]
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "CONST_NONE",
+    "options": {
+      "value": 2
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);
 }
 
-TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_2) {
+TEST(CompilerEnum_2020_12, enum_small_top_level) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ true, false, true ],
-    "maxItems": 4,
-    "maxLength": 3
+    "enum": [ 1, 2, 3 ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ false, true ]
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
-TEST(CanonicalizerBoolean_2020_12, drop_non_boolean_keywords_3) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "boolean",
-    "format": "uri"
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ false, true ]
+    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "name": "TOP_LEVEL_BYTE_CHOICE_INDEX",
+    "options": {
+      "choices": [ 1, 2, 3 ]
+    }
   })JSON");
 
   EXPECT_EQ(schema, expected);
