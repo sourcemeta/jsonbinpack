@@ -27,8 +27,8 @@ TEST(Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   choices.emplace_back(false);
   choices.emplace_back(true);
 
-  Encoding first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
-  Encoding second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Plan first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Plan second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
 
   const sourcemeta::jsontoolkit::JSON result =
       decoder.FIXED_TYPED_ARRAY({3, wrap(BYTE_CHOICE_INDEX{std::move(choices)}),

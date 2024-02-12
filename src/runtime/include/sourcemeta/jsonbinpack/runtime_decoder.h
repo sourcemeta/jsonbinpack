@@ -2,13 +2,13 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_H_
 
 /// @defgroup decoder Decoder
-/// @brief A set of procedures to deserialize a bit-string given a Encoding
+/// @brief A set of procedures to deserialize a bit-string given a Plan
 /// Schema
 
 #include <sourcemeta/jsonbinpack/runtime_decoder_basic.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
+#include <sourcemeta/jsonbinpack/runtime_plan.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -29,7 +29,7 @@ public:
   Decoder(std::basic_istream<CharT, Traits> &input)
       : BasicDecoder<CharT, Traits>{input} {}
 
-  auto decode(const Encoding &encoding) -> sourcemeta::jsontoolkit::JSON {
+  auto decode(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON {
     switch (encoding.index()) {
 #define HANDLE_DECODING(index, name)                                           \
   case (index):                                                                \
@@ -343,9 +343,9 @@ public:
     sourcemeta::jsontoolkit::JSON result =
         sourcemeta::jsontoolkit::JSON::make_array();
     for (std::size_t index = 0; index < options.size; index++) {
-      const Encoding &encoding{prefix_encodings > index
-                                   ? options.prefix_encodings[index].value
-                                   : options.encoding->value};
+      const Plan &encoding{prefix_encodings > index
+                               ? options.prefix_encodings[index].value
+                               : options.encoding->value};
       result.push_back(this->decode(encoding));
     }
 

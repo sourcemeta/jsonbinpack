@@ -13,7 +13,7 @@ TEST(Parser_v1, DOUBLE_VARINT_TUPLE) {
     "options": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<DOUBLE_VARINT_TUPLE>(result));

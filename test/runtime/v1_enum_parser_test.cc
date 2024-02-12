@@ -15,7 +15,7 @@ TEST(Parser_v1, BYTE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<BYTE_CHOICE_INDEX>(result));
@@ -38,7 +38,7 @@ TEST(Parser_v1, LARGE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<LARGE_CHOICE_INDEX>(result));
@@ -61,7 +61,7 @@ TEST(Parser_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<TOP_LEVEL_BYTE_CHOICE_INDEX>(result));
@@ -84,7 +84,7 @@ TEST(Parser_v1, CONST_NONE_scalar) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<CONST_NONE>(result));

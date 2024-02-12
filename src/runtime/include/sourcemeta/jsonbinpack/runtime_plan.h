@@ -1,7 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 
-/// @defgroup encoding Encodings
+/// @defgroup encoding Plans
 ///
 /// @see sourcemeta::jsonbinpack::Encoder
 /// @see sourcemeta::jsonbinpack::Decoder
@@ -16,13 +16,13 @@
 
 namespace sourcemeta::jsonbinpack {
 
-// We cannot directly create an Encoding variant type whose values potentially
-// include other Encoding instances.  As a workaround, we have a helper
+// We cannot directly create an Plan variant type whose values potentially
+// include other Plan instances.  As a workaround, we have a helper
 // encoding wrapper that we can use as an incomplete type
 struct __internal_encoding_wrapper;
 // Use these alias types. Never use the internal wrapper type directly
-using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
-using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
+using SinglePlan = std::shared_ptr<__internal_encoding_wrapper>;
+using MultiplePlans = std::vector<__internal_encoding_wrapper>;
 
 /// @ingroup encoding
 /// @defgroup encoding_integer Integer
@@ -707,9 +707,9 @@ struct FIXED_TYPED_ARRAY {
   /// The array length
   const std::uint64_t size;
   /// Element encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const MultiplePlans prefix_encodings;
 };
 
 // clang-format off
@@ -758,9 +758,9 @@ struct BOUNDED_8BITS_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const MultiplePlans prefix_encodings;
 };
 
 // clang-format off
@@ -804,9 +804,9 @@ struct FLOOR_TYPED_ARRAY {
   /// The minimum length of the array
   const std::uint64_t minimum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const MultiplePlans prefix_encodings;
 };
 
 // clang-format off
@@ -849,9 +849,9 @@ struct ROOF_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const MultiplePlans prefix_encodings;
 };
 
 /// @}
@@ -906,9 +906,9 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
   /// The object size
   const std::uint64_t size;
   /// Key encoding
-  const SingleEncoding key_encoding;
+  const SinglePlan key_encoding;
   /// Value encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
 };
 
 // clang-format off
@@ -950,9 +950,9 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
 // clang-format on
 struct VARINT_TYPED_ARBITRARY_OBJECT {
   /// Key encoding
-  const SingleEncoding key_encoding;
+  const SinglePlan key_encoding;
   /// Value encoding
-  const SingleEncoding encoding;
+  const SinglePlan encoding;
 };
 
 /// @}
@@ -1017,10 +1017,9 @@ static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
 /// @}
 // clang-format on
 
-// Encoding type
+// Plan type
 
-// TODO: Find a better name that is not confusing with encoder/decoder
-using Encoding = std::variant<
+using Plan = std::variant<
     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
     ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
     DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
@@ -1033,11 +1032,11 @@ using Encoding = std::variant<
     FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
     ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
 
-// Helper definitions that rely on the Encoding data type
+// Helper definitions that rely on the Plan data type
 #ifndef DOXYGEN
 // Ignore this definition on the documentation
 struct __internal_encoding_wrapper {
-  const Encoding value;
+  const Plan value;
 };
 #endif
 

@@ -15,7 +15,7 @@ TEST(Parser_v1, UTF8_STRING_NO_LENGTH_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<UTF8_STRING_NO_LENGTH>(result));
@@ -32,7 +32,7 @@ TEST(Parser_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
@@ -51,7 +51,7 @@ TEST(Parser_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
@@ -70,7 +70,7 @@ TEST(Parser_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
@@ -89,7 +89,7 @@ TEST(Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
     "options": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<RFC3339_DATE_INTEGER_TRIPLET>(result));
@@ -103,7 +103,7 @@ TEST(Parser_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
     "options": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
+  const sourcemeta::jsonbinpack::Plan result{
       sourcemeta::jsonbinpack::parse(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(

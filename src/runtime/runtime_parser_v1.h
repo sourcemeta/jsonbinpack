@@ -17,7 +17,7 @@ namespace sourcemeta::jsonbinpack::v1 {
 // Integers
 
 auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("minimum"));
   assert(options.defines("maximum"));
   assert(options.defines("multiplier"));
@@ -34,7 +34,7 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
 }
 
 auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+    -> Plan {
   assert(options.defines("minimum"));
   assert(options.defines("multiplier"));
   const auto &minimum{options.at("minimum")};
@@ -48,7 +48,7 @@ auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &options)
 }
 
 auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("maximum"));
   assert(options.defines("multiplier"));
   const auto &maximum{options.at("maximum")};
@@ -62,7 +62,7 @@ auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
 }
 
 auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("multiplier"));
   const auto &multiplier{options.at("multiplier")};
   assert(multiplier.is_integer());
@@ -73,14 +73,13 @@ auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
 
 // Numbers
 
-auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::JSON &) -> Encoding {
+auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::JSON &) -> Plan {
   return sourcemeta::jsonbinpack::DOUBLE_VARINT_TUPLE{};
 }
 
 // Enumerations
 
-auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -90,8 +89,7 @@ auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
   return sourcemeta::jsonbinpack::BYTE_CHOICE_INDEX({std::move(elements)});
 }
 
-auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -102,7 +100,7 @@ auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
 }
 
 auto TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+    -> Plan {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -113,7 +111,7 @@ auto TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
       {std::move(elements)});
 }
 
-auto CONST_NONE(const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+auto CONST_NONE(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("value"));
   return sourcemeta::jsonbinpack::CONST_NONE({options.at("value")});
 }
@@ -121,7 +119,7 @@ auto CONST_NONE(const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
 // Strings
 
 auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+    -> Plan {
   assert(options.defines("size"));
   const auto &size{options.at("size")};
   assert(size.is_integer());
@@ -131,7 +129,7 @@ auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::JSON &options)
 }
 
 auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("minimum"));
   const auto &minimum{options.at("minimum")};
   assert(minimum.is_integer());
@@ -141,7 +139,7 @@ auto FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
 }
 
 auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("maximum"));
   const auto &maximum{options.at("maximum")};
   assert(maximum.is_integer());
@@ -151,7 +149,7 @@ auto ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
 }
 
 auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
-    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
+    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("minimum"));
   assert(options.defines("maximum"));
   const auto &minimum{options.at("minimum")};
@@ -166,19 +164,18 @@ auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
 }
 
 auto RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::jsontoolkit::JSON &)
-    -> Encoding {
+    -> Plan {
   return sourcemeta::jsonbinpack::RFC3339_DATE_INTEGER_TRIPLET{};
 }
 
 auto PREFIX_VARINT_LENGTH_STRING_SHARED(const sourcemeta::jsontoolkit::JSON &)
-    -> Encoding {
+    -> Plan {
   return sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{};
 }
 
 // Arrays
 
-auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("size"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -189,7 +186,7 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(size.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Encoding> encodings;
+  std::vector<Plan> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -201,7 +198,7 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
 }
 
 auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+    -> Plan {
   assert(options.defines("minimum"));
   assert(options.defines("maximum"));
   assert(options.defines("encoding"));
@@ -216,7 +213,7 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(maximum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Encoding> encodings;
+  std::vector<Plan> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -228,8 +225,7 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
       wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
-auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("minimum"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -240,7 +236,7 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(minimum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Encoding> encodings;
+  std::vector<Plan> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -251,8 +247,7 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
       wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
-auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
-    -> Encoding {
+auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(options.defines("maximum"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -263,7 +258,7 @@ auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(maximum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Encoding> encodings;
+  std::vector<Plan> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -277,7 +272,7 @@ auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
 // Any
 
 auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &)
-    -> Encoding {
+    -> Plan {
   return sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{};
 }
 

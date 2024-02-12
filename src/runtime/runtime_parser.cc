@@ -8,7 +8,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Encoding {
+auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Plan {
   assert(input.defines("name"));
   assert(input.defines("options"));
   const auto encoding{input.at("name").to_string()};

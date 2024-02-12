@@ -3,7 +3,7 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   PRIVATE_HEADERS
     decoder.h decoder_basic.h
     encoder.h encoder_basic.h encoder_context.h encoder_real.h
-    encoding.h encoding_wrap.h parser.h
+    plan.h plan_wrap.h parser.h
     zigzag.h varint.h numeric.h
   SOURCES runtime_parser.cc runtime_parser_v1.h)
 

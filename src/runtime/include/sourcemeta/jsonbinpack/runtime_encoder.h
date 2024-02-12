@@ -2,14 +2,14 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_H_
 
 /// @defgroup encoder Encoder
-/// @brief A set of procedures to serialize a JSON document given a Encoding
+/// @brief A set of procedures to serialize a JSON document given a Plan
 /// Schema
 
 #include <sourcemeta/jsonbinpack/runtime_encoder_basic.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder_real.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
+#include <sourcemeta/jsonbinpack/runtime_plan.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -30,7 +30,7 @@ public:
       : BasicEncoder<CharT, Traits>{output} {}
 
   auto encode(const sourcemeta::jsontoolkit::JSON &document,
-              const Encoding &encoding) -> void {
+              const Plan &encoding) -> void {
     switch (encoding.index()) {
 #define HANDLE_ENCODING(index, name)                                           \
   case (index):                                                                \
@@ -378,9 +378,9 @@ public:
     const auto prefix_encodings{options.prefix_encodings.size()};
     assert(prefix_encodings <= document.size());
     for (std::size_t index = 0; index < options.size; index++) {
-      const Encoding &encoding{prefix_encodings > index
-                                   ? options.prefix_encodings[index].value
-                                   : options.encoding->value};
+      const Plan &encoding{prefix_encodings > index
+                               ? options.prefix_encodings[index].value
+                               : options.encoding->value};
       this->encode(document.at(index), encoding);
     }
   }
@@ -547,8 +547,7 @@ public:
             static_cast<std::uint8_t>(TYPE_ARRAY | ((size + 1) << type_size)));
       }
 
-      Encoding encoding{
-          sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
+      Plan encoding{sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
       this->FIXED_TYPED_ARRAY(document, {size, wrap(std::move(encoding)), {}});
     } else if (document.is_object()) {
       const auto size{document.size()};
@@ -560,9 +559,9 @@ public:
             static_cast<std::uint8_t>(TYPE_OBJECT | ((size + 1) << type_size)));
       }
 
-      Encoding key_encoding{
+      Plan key_encoding{
           sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{}};
-      Encoding value_encoding{
+      Plan value_encoding{
           sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
       this->FIXED_TYPED_ARBITRARY_OBJECT(document,
                                          {size, wrap(std::move(key_encoding)),
