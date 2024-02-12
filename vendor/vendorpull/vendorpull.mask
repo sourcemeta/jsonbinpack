@@ -1,3 +1,0 @@
-bootstrap
-.editorconfig
-README.markdown
