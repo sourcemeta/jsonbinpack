@@ -1,8 +1,8 @@
 #ifndef SOURCEMETA_JSONBINPACK_PARSER_V1_H_
 #define SOURCEMETA_JSONBINPACK_PARSER_V1_H_
 
-#include <sourcemeta/jsonbinpack/parser.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_parser.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <algorithm> // std::transform
@@ -12,7 +12,7 @@
 #include <utility>   // std::move
 #include <vector>    // std::vector
 
-namespace sourcemeta::jsonbinpack::parser::v1 {
+namespace sourcemeta::jsonbinpack::v1 {
 
 // Integers
 
@@ -281,6 +281,6 @@ auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &)
   return sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{};
 }
 
-} // namespace sourcemeta::jsonbinpack::parser::v1
+} // namespace sourcemeta::jsonbinpack::v1
 
 #endif

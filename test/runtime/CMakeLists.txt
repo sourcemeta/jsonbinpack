@@ -30,7 +30,13 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   numeric_closest_smallest_exponent_test.cc
   numeric_divide_ceil_test.cc
   numeric_divide_floor_test.cc
-  numeric_uint_max_test.cc)
+  numeric_uint_max_test.cc
+  v1_any_parser_test.cc
+  v1_array_parser_test.cc
+  v1_enum_parser_test.cc
+  v1_integer_parser_test.cc
+  v1_number_parser_test.cc
+  v1_string_parser_test.cc)
 
 sourcemeta_jsonbinpack_add_compile_options(
   PRIVATE sourcemeta_jsonbinpack_runtime_unit)

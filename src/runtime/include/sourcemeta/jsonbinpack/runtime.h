@@ -4,5 +4,6 @@
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
 #include <sourcemeta/jsonbinpack/runtime_encoding.h>
+#include <sourcemeta/jsonbinpack/runtime_parser.h>
 
 #endif

@@ -3,14 +3,15 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   PRIVATE_HEADERS
     decoder.h decoder_basic.h
     encoder.h encoder_basic.h encoder_context.h encoder_real.h
-    encoding.h encoding_wrap.h
-    zigzag.h varint.h numeric.h)
+    encoding.h encoding_wrap.h parser.h
+    zigzag.h varint.h numeric.h
+  SOURCES runtime_parser.cc runtime_parser_v1.h)
 
 if(JSONBINPACK_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime)
 endif()
 
-sourcemeta_jsonbinpack_add_compile_options(INTERFACE sourcemeta_jsonbinpack_runtime)
+sourcemeta_jsonbinpack_add_compile_options(PUBLIC sourcemeta_jsonbinpack_runtime)
 
-target_link_libraries(sourcemeta_jsonbinpack_runtime INTERFACE
+target_link_libraries(sourcemeta_jsonbinpack_runtime PUBLIC
   sourcemeta::jsontoolkit::json)

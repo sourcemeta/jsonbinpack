@@ -1,6 +1,6 @@
-#include <sourcemeta/jsonbinpack/parser.h>
+#include <sourcemeta/jsonbinpack/runtime_parser.h>
 
-#include "v1.h"
+#include "runtime_parser_v1.h"
 
 #include <cassert>   // assert
 #include <sstream>   // std::ostringstream
@@ -16,7 +16,7 @@ auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Encoding {
 
 #define PARSE_ENCODING(version, name)                                          \
   if (encoding == #name)                                                       \
-    return parser::version::name(options);
+    return version::name(options);
 
   // Integers
   PARSE_ENCODING(v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED)
