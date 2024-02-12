@@ -1,0 +1,57 @@
+$(eval $(call addlib,sourcemeta_jsonbinpack_test))
+
+SOURCEMETA_JSONBINPACK_TEST_CXXFLAGS-y += --std=c++20
+TEST_BASE := $(SOURCEMETA_JSONBINPACK_TEST_BASE)/../test
+
+# Runtime
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_any_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_array_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_enum_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_integer_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_number_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_object_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_string_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_traits_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_varint_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_zigzag_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_any_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_array_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_context_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_enum_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_integer_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_number_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_object_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_real_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_string_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_traits_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_varint_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_zigzag_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/numeric_closest_smallest_exponent_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/numeric_divide_ceil_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/numeric_divide_floor_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/numeric_uint_max_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/plan_traits_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/plan_wrap_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_any_parser_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_array_parser_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_enum_parser_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_integer_parser_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_number_parser_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/v1_string_parser_test.cc
+
+# Compiler
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_any_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_array_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_boolean_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_null_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_number_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_object_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_canonicalizer_string_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_compiler_any_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_compiler_enum_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_compiler_integer_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/2020_12_compiler_number_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/canonicalizer_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/compiler/plan_test.cc

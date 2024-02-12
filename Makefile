@@ -1,6 +1,7 @@
 # Programs
 CMAKE = cmake
 CTEST = ctest
+KRAFT = kraft
 PYTHON = python3
 
 # Options
@@ -43,6 +44,10 @@ test: .always
 
 doxygen: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
+
+unikraft: .always
+	$(KRAFT) build --target development --jobs 4 --log-type=basic unikraft
+	$(KRAFT) run --target development unikraft
 
 website: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target website
