@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+# TODO: Support component-based `find_package`
+find_package(JSONToolkit REQUIRED)
+include("${CMAKE_CURRENT_LIST_DIR}/sourcemeta_jsonbinpack_runtime.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/sourcemeta_jsonbinpack_compiler.cmake")
+check_required_components("@PROJECT_NAME@")
