@@ -1,12 +1,12 @@
 add_executable(sourcemeta_jsonbinpack_canonicalizer_unit
   canonicalizer_test.cc
-  2020_12_any_test.cc
-  2020_12_array_test.cc
-  2020_12_boolean_test.cc
-  2020_12_null_test.cc
-  2020_12_number_test.cc
-  2020_12_object_test.cc
-  2020_12_string_test.cc)
+  2020_12_canonicalizer_any_test.cc
+  2020_12_canonicalizer_array_test.cc
+  2020_12_canonicalizer_boolean_test.cc
+  2020_12_canonicalizer_null_test.cc
+  2020_12_canonicalizer_number_test.cc
+  2020_12_canonicalizer_object_test.cc
+  2020_12_canonicalizer_string_test.cc)
 
 target_link_libraries(sourcemeta_jsonbinpack_canonicalizer_unit
   PRIVATE GTest::gtest GTest::gtest_main)
