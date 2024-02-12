@@ -1,11 +1,6 @@
 #include <sourcemeta/jsonbinpack/parser.h>
 
-#include "v1_any.h"
-#include "v1_array.h"
-#include "v1_enum.h"
-#include "v1_integer.h"
-#include "v1_number.h"
-#include "v1_string.h"
+#include "v1.h"
 
 #include <cassert>   // assert
 #include <sstream>   // std::ostringstream

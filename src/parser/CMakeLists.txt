@@ -1,6 +1,5 @@
 noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME parser
-  FOLDER "JSON BinPack/Parser"
-  SOURCES parser.cc v1_any.h v1_array.h v1_enum.h v1_integer.h v1_number.h v1_string.h)
+  FOLDER "JSON BinPack/Parser" SOURCES parser.cc v1.h)
 
 if(JSONBINPACK_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME parser)
