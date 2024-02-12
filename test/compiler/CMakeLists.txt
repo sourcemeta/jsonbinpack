@@ -1,5 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_compiler_unit
-  canonicalizer_test.cc
+  canonicalizer_test.cc plan_test.cc
+
   2020_12_canonicalizer_any_test.cc
   2020_12_canonicalizer_array_test.cc
   2020_12_canonicalizer_boolean_test.cc
@@ -8,7 +9,6 @@ add_executable(sourcemeta_jsonbinpack_compiler_unit
   2020_12_canonicalizer_object_test.cc
   2020_12_canonicalizer_string_test.cc
 
-  mapper_test.cc
   2020_12_compiler_any_test.cc
   2020_12_compiler_enum_test.cc
   2020_12_compiler_integer_test.cc

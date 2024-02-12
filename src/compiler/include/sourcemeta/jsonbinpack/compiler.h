@@ -21,11 +21,10 @@ auto canonicalize(
     const sourcemeta::jsontoolkit::SchemaResolver &resolver,
     const std::optional<std::string> &default_dialect = std::nullopt) -> void;
 
-// TODO: Rename to plan()?
-auto map(sourcemeta::jsontoolkit::JSON &schema,
-         const sourcemeta::jsontoolkit::SchemaWalker &walker,
-         const sourcemeta::jsontoolkit::SchemaResolver &resolver,
-         const std::optional<std::string> &default_dialect = std::nullopt)
+auto plan(sourcemeta::jsontoolkit::JSON &schema,
+          const sourcemeta::jsontoolkit::SchemaWalker &walker,
+          const sourcemeta::jsontoolkit::SchemaResolver &resolver,
+          const std::optional<std::string> &default_dialect = std::nullopt)
     -> void;
 
 } // namespace sourcemeta::jsonbinpack

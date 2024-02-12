@@ -5,28 +5,28 @@
 
 #include <stdexcept>
 
-TEST(JSONBinPack_Mapper, unsupported_draft) {
+TEST(JSONBinPack_Plan, unsupported_draft) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "type": "boolean"
   })JSON");
 
-  EXPECT_THROW(sourcemeta::jsonbinpack::map(
+  EXPECT_THROW(sourcemeta::jsonbinpack::plan(
                    schema, sourcemeta::jsontoolkit::default_schema_walker,
                    sourcemeta::jsontoolkit::official_resolver,
                    "https://json-schema.org/draft/2020-12/schema"),
                std::domain_error);
 }
 
-TEST(JSONBinPack_Mapper, unknown_draft_default) {
+TEST(JSONBinPack_Plan, unknown_draft_default) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "type": "integer"
   })JSON");
 
-  sourcemeta::jsonbinpack::map(schema,
-                               sourcemeta::jsontoolkit::default_schema_walker,
-                               sourcemeta::jsontoolkit::official_resolver,
-                               "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::jsonbinpack::plan(schema,
+                                sourcemeta::jsontoolkit::default_schema_walker,
+                                sourcemeta::jsontoolkit::official_resolver,
+                                "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({

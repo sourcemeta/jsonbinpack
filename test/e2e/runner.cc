@@ -47,17 +47,17 @@ auto main(int argc, char *argv[]) -> int {
   canonical_output_stream.flush();
   canonical_output_stream.close();
 
-  // Mapper
-  sourcemeta::jsonbinpack::map(
+  // Plan
+  sourcemeta::jsonbinpack::plan(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
-  std::ofstream mapper_output_stream(directory / "plan.json", std::ios::binary);
-  mapper_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::prettify(schema, mapper_output_stream);
-  mapper_output_stream << "\n";
-  mapper_output_stream.flush();
-  mapper_output_stream.close();
+  std::ofstream plan_output_stream(directory / "plan.json", std::ios::binary);
+  plan_output_stream.exceptions(std::ios_base::badbit);
+  sourcemeta::jsontoolkit::prettify(schema, plan_output_stream);
+  plan_output_stream << "\n";
+  plan_output_stream.flush();
+  plan_output_stream.close();
 
   // Encoder
   const sourcemeta::jsonbinpack::Plan plan{
