@@ -54,7 +54,7 @@ website: .always
 	$(PYTHON) -m http.server 3000 --directory build/www
 
 clean: .always
-	$(CMAKE) -E rm -R -f build
+	$(CMAKE) -E rm -R -f build unikraft/.unikraft
 
 # For NMake, which doesn't support .PHONY
 .always:
