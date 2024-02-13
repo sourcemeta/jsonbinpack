@@ -1,12 +1,19 @@
-#include "mapper_states.h"
+#ifndef SOURCEMETA_JSONBINPACK_COMPILER_STATES_H_
+#define SOURCEMETA_JSONBINPACK_COMPILER_STATES_H_
 
-#include <cassert> // assert
-#include <cmath>   // std::abs, std::ceil, std::floor
-#include <vector>  // std::vector
+#include <sourcemeta/jsontoolkit/json.h>
 
-auto sourcemeta::jsonbinpack::mapper::states::integer(
-    const sourcemeta::jsontoolkit::JSON &schema,
-    const std::set<std::string> &vocabularies)
+#include <cassert>  // assert
+#include <cmath>    // std::abs, std::ceil, std::floor
+#include <optional> // std::optional
+#include <set>      // std::set
+#include <vector>   // std::vector
+
+namespace sourcemeta::jsonbinpack {
+
+// No value means infinite
+auto states_integer(const sourcemeta::jsontoolkit::JSON &schema,
+                    const std::set<std::string> &vocabularies)
     -> std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> {
   assert(schema.is_object());
   assert(schema.defines("type"));
@@ -56,3 +63,7 @@ auto sourcemeta::jsonbinpack::mapper::states::integer(
 
   return states;
 }
+
+} // namespace sourcemeta::jsonbinpack
+
+#endif

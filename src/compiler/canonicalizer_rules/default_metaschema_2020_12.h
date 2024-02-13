@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_implicit
 ///
 /// ### JSON Schema 2020-12
@@ -41,5 +39,3 @@ public:
                            "https://json-schema.org/draft/2020-12/schema"});
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

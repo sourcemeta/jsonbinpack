@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_heterogeneous
 ///
 /// ### JSON Schema 2020-12
@@ -55,4 +53,3 @@ private:
   const std::set<std::string> BLACKLIST_UNEVALUATED{"unevaluatedItems",
                                                     "unevaluatedProperties"};
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 // TODO: Unit test this mapping once we have container encodings
 /// @ingroup mapper_rules
 class EnumArbitrary final
@@ -28,5 +26,3 @@ public:
     make_encoding(transformer, "LARGE_CHOICE_INDEX", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

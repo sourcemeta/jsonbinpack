@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_implicit
 ///
 /// ### JSON Schema 2020-12
@@ -43,5 +41,3 @@ public:
     transformer.assign("multipleOf", sourcemeta::jsontoolkit::JSON{1});
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

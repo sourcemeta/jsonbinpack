@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_syntax_sugar
 ///
 /// ### JSON Schema 2020-12
@@ -43,5 +41,3 @@ public:
     }
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

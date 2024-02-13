@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_superfluous
 ///
 /// ### JSON Schema 2020-12
@@ -41,5 +39,3 @@ public:
     transformer.erase("dependentRequired");
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

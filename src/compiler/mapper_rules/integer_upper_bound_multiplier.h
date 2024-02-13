@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerUpperBoundMultiplier final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -33,5 +31,3 @@ public:
     make_encoding(transformer, "ROOF_MULTIPLE_MIRROR_ENUM_VARINT", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper
