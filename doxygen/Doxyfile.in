@@ -875,7 +875,6 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = @PROJECT_SOURCE_DIR@/src
-INPUT                  += @PROJECT_SOURCE_DIR@/doxygen/architecture.markdown
 INPUT                  += @PROJECT_SOURCE_DIR@/doxygen/todo.markdown
 INPUT                  += @PROJECT_SOURCE_DIR@/doxygen/schemas.markdown
 
@@ -1030,7 +1029,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/doxygen/architecture.markdown
+USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/doxygen/todo.markdown
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing

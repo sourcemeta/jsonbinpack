@@ -82,5 +82,4 @@ Other
 -----
 
 - Support for recursive schemas
-- Make JSON BinPack installable and findable using CMake
 - Deploy an online web playground
