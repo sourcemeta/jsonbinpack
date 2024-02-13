@@ -8,41 +8,15 @@ missing. If you want to fund JSON BinPack's development, please consider
 Canonicalizer
 -------------
 
-These are documented and implemented in @ref canonicalizer.
+Defined in @ref compiler.
 
-| Rule                                                        | Category                                | Notes                  |
-|-------------------------------------------------------------|-----------------------------------------|------------------------|
-| @ref sourcemeta::jsonbinpack::canonicalizer::TypeUnionAnyOf | @ref canonicalizer_rules_heterogeneous  | Missing documentation  |
-| @ref sourcemeta::jsonbinpack::canonicalizer::TypeUnionAnyOf | @ref canonicalizer_rules_heterogeneous  | Resolve known bugs     |
-| SchemaBundling                                              | @ref canonicalizer_rules_simplification | Missing implementation |
-
-Encodings
----------
-
-These are declared and document in @ref encoding, and implemented in @ref
-encoder and and @ref decoder.
-
-| Encoding                                                      | Type                 | Notes                  |
-|---------------------------------------------------------------|----------------------|------------------------|
-| @ref sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX | @ref encoding_any    | Missing documentation  |
-| `ONEOF_CHOICE_INDEX_PREFIX`                                   | @ref encoding_any    | Missing implementation |
-| `BOUNDED_TYPED_LENGTH_PREFIX`                                 | @ref encoding_array  | Missing implementation |
-| `REQUIRED_ONLY_BOUNDED_TYPED_OBJECT`                          | @ref encoding_object | Missing implementation |
-| `NON_REQUIRED_BOUNDED_TYPED_OBJECT`                           | @ref encoding_object | Missing implementation |
-| `MIXED_BOUNDED_TYPED_OBJECT`                                  | @ref encoding_object | Missing implementation |
-| `REQUIRED_UNBOUNDED_TYPED_OBJECT`                             | @ref encoding_object | Missing implementation |
-| `OPTIONAL_UNBOUNDED_TYPED_OBJECT`                             | @ref encoding_object | Missing implementation |
-| `MIXED_UNBOUNDED_TYPED_OBJECT`                                | @ref encoding_object | Missing implementation |
-| `PACKED_BOUNDED_REQUIRED_OBJECT`                              | @ref encoding_object | Missing implementation |
-| `PACKED_UNBOUNDED_OBJECT`                                     | @ref encoding_object | Missing implementation |
-| `URL_PROTOCOL_HOST_REST`                                      | @ref encoding_string | Missing implementation |
-| `STRING_BROTLI`                                               | @ref encoding_string | Missing implementation |
-| `STRING_DICTIONARY_COMPRESSOR`                                | @ref encoding_string | Missing implementation |
+- `TypeUnionAnyOf`: Resolve known bugs
+- Perform JSON Schema bundling
 
 Mapper
 ------
 
-These are documented and implemented in @ref mapper.
+Defined in @ref compiler.
 
 | Category | Status                           |
 |----------|----------------------------------|
@@ -50,6 +24,27 @@ These are documented and implemented in @ref mapper.
 | Array    | Missing implementation           |
 | Object   | Missing implementation           |
 | String   | Missing implementation           |
+
+Encodings
+---------
+
+Defined in @ref runtime.
+
+| Encoding                             | Type             | Notes                  |
+|--------------------------------------|------------------|------------------------|
+| `ONEOF_CHOICE_INDEX_PREFIX`          | @ref plan_any    | Missing implementation |
+| `BOUNDED_TYPED_LENGTH_PREFIX`        | @ref plan_array  | Missing implementation |
+| `REQUIRED_ONLY_BOUNDED_TYPED_OBJECT` | @ref plan_object | Missing implementation |
+| `NON_REQUIRED_BOUNDED_TYPED_OBJECT`  | @ref plan_object | Missing implementation |
+| `MIXED_BOUNDED_TYPED_OBJECT`         | @ref plan_object | Missing implementation |
+| `REQUIRED_UNBOUNDED_TYPED_OBJECT`    | @ref plan_object | Missing implementation |
+| `OPTIONAL_UNBOUNDED_TYPED_OBJECT`    | @ref plan_object | Missing implementation |
+| `MIXED_UNBOUNDED_TYPED_OBJECT`       | @ref plan_object | Missing implementation |
+| `PACKED_BOUNDED_REQUIRED_OBJECT`     | @ref plan_object | Missing implementation |
+| `PACKED_UNBOUNDED_OBJECT`            | @ref plan_object | Missing implementation |
+| `URL_PROTOCOL_HOST_REST`             | @ref plan_string | Missing implementation |
+| `STRING_BROTLI`                      | @ref plan_string | Missing implementation |
+| `STRING_DICTIONARY_COMPRESSOR`       | @ref plan_string | Missing implementation |
 
 JSON Schema keywords
 --------------------

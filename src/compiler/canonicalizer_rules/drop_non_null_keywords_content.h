@@ -1,31 +1,9 @@
-/// @ingroup canonicalizer_rules_heterogeneous
-///
-/// ### JSON Schema 2020-12
-///
-/// | Vocabulary URI                                         | Required |
-/// |--------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/content    | Y        |
-/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
-///
-/// If the `type` keyword from the Validation vocabulary is set to `null` and
-/// the Content vocabulary is also in use, then keywords from the
-/// Content vocabulary that do not apply to null JSON instances
-/// can be removed.
-///
-/// \f[\frac{S.type = null \land K \cap S \not\in \emptyset }{S
-/// \mapsto S \setminus K }\f]
-///
-/// Where:
-///
-/// \f[K = \{contentEncoding, contentMediaType, contentSchema\}\f]
-
 class DropNonNullKeywordsContent final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNullKeywordsContent()
       : SchemaTransformRule("drop_non_null_keywords_content"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -39,7 +17,6 @@ public:
                               this->BLACKLIST_CONTENT.cend());
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_CONTENT.cbegin(),

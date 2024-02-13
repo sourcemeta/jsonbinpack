@@ -1,5 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_CONTEXT_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_CONTEXT_H_
+#ifndef DOXYGEN
 
 #include <cassert>   // assert
 #include <iterator>  // std::cbegin, std::cend
@@ -21,7 +22,6 @@ static constexpr auto MAXIMUM_BYTE_SIZE{20971520};
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup encoder
 template <typename CharT> class Context {
 public:
   enum class Type { Standalone, PrefixLengthVarintPlusOne };
@@ -100,4 +100,5 @@ private:
 
 } // namespace sourcemeta::jsonbinpack
 
+#endif
 #endif

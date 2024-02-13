@@ -1,4 +1,3 @@
-/// @ingroup mapper_rules
 class IntegerBoundedMultiplierGreaterThan8Bit final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

@@ -1,31 +1,9 @@
-/// @ingroup canonicalizer_rules_heterogeneous
-///
-/// ### JSON Schema 2020-12
-///
-/// | Vocabulary URI                                          | Required |
-/// |---------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/unevaluated | Y        |
-/// | https://json-schema.org/draft/2020-12/vocab/validation  | Y        |
-///
-/// If the `type` keyword from the Validation vocabulary is set to `boolean` and
-/// the Unevaluated vocabulary is in use, then keywords from the
-/// Unevaluated vocabulary that do not apply to boolean JSON instances can be
-/// removed.
-///
-/// \f[\frac{S.type = boolean \land K \subseteq dom(S) }{S
-/// \mapsto S \setminus K }\f]
-///
-/// Where:
-///
-/// \f[K = \{ unevaluatedItems, unevaluatedProperties \}\f]
-
 class DropNonBooleanKeywordsUnevaluated final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonBooleanKeywordsUnevaluated()
       : SchemaTransformRule("drop_non_boolean_keywords_unevaluated"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -39,7 +17,6 @@ public:
                               this->BLACKLIST_UNEVALUATED.cend());
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_UNEVALUATED.cbegin(),

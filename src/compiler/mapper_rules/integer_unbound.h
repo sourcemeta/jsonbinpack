@@ -1,4 +1,3 @@
-/// @ingroup mapper_rules
 class IntegerUnbound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

@@ -1,24 +1,8 @@
-/// @ingroup canonicalizer_rules_simplification
-///
-/// ### JSON Schema 2020-12
-///
-/// | Vocabulary URI                                         | Required |
-/// |--------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
-///
-/// The `anyOf` keyword from the Applicator vocabulary represents a logical
-/// disjunction. As such, duplicate branches do not affect the result and can be
-/// removed.
-///
-/// \f[\frac{anyOf \in dom(S) \land \#S.anyOf \neq \#\{ x \mid S.anyOf \}}{S
-/// \mapsto S \cup \{ anyOf \mapsto seq \; \{ x \mid S.anyOf \} \} }\f]
-
 class DuplicateAnyOfBranches final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DuplicateAnyOfBranches() : SchemaTransformRule("duplicate_anyof_branches"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -31,7 +15,6 @@ public:
            schema.at("anyOf").is_array() && !is_unique(schema.at("anyOf"));
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     auto collection = transformer.schema().at("anyOf");

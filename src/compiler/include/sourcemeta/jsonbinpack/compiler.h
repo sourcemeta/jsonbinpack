@@ -7,6 +7,9 @@
 #include "compiler_export.h"
 #endif
 
+/// @defgroup compiler Compiler
+/// @brief The built-time schema compiler of JSON BinPack
+
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
@@ -15,6 +18,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
+/// @ingroup compiler
 SOURCEMETA_JSONBINPACK_COMPILER_EXPORT
 auto compile(sourcemeta::jsontoolkit::JSON &schema,
              const sourcemeta::jsontoolkit::SchemaWalker &walker,
@@ -22,6 +26,7 @@ auto compile(sourcemeta::jsontoolkit::JSON &schema,
              const std::optional<std::string> &default_dialect = std::nullopt)
     -> void;
 
+/// @ingroup compiler
 SOURCEMETA_JSONBINPACK_COMPILER_EXPORT
 auto canonicalize(
     sourcemeta::jsontoolkit::JSON &schema,
@@ -29,6 +34,7 @@ auto canonicalize(
     const sourcemeta::jsontoolkit::SchemaResolver &resolver,
     const std::optional<std::string> &default_dialect = std::nullopt) -> void;
 
+/// @ingroup compiler
 SOURCEMETA_JSONBINPACK_COMPILER_EXPORT
 auto plan(sourcemeta::jsontoolkit::JSON &schema,
           const sourcemeta::jsontoolkit::SchemaWalker &walker,

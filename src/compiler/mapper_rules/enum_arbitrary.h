@@ -1,5 +1,4 @@
 // TODO: Unit test this mapping once we have container encodings
-/// @ingroup mapper_rules
 class EnumArbitrary final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

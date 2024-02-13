@@ -1,13 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_COMPILER_MAPPER_H_
 #define SOURCEMETA_JSONBINPACK_COMPILER_MAPPER_H_
 
-/// @defgroup mapper Mapper
-/// @brief A pure and deterministic function that converts a Canonical JSON
-/// Schema into a JSON BinPack Encoding Schema
-///
-/// @defgroup mapper_rules Rules
-/// @ingroup mapper
-
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
@@ -73,7 +66,6 @@ constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup mapper
 class Mapper {
 public:
   Mapper() {

@@ -1,11 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 
-/// @defgroup encoding Plans
-///
-/// @see sourcemeta::jsonbinpack::Encoder
-/// @see sourcemeta::jsonbinpack::Decoder
-
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -24,8 +19,8 @@ struct __internal_encoding_wrapper;
 using SinglePlan = std::shared_ptr<__internal_encoding_wrapper>;
 using MultiplePlans = std::vector<__internal_encoding_wrapper>;
 
-/// @ingroup encoding
-/// @defgroup encoding_integer Integer
+/// @ingroup runtime
+/// @defgroup plan_integer Integer Encodings
 /// @{
 
 // clang-format off
@@ -182,8 +177,8 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_number Number
+/// @ingroup runtime
+/// @defgroup plan_number Number Encodings
 /// @{
 
 // clang-format off
@@ -229,8 +224,8 @@ struct DOUBLE_VARINT_TUPLE {};
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_enum Enumeration
+/// @ingroup runtime
+/// @defgroup plan_enum Enumeration Encodings
 /// @{
 
 // clang-format off
@@ -373,8 +368,8 @@ struct CONST_NONE {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_string String
+/// @ingroup runtime
+/// @defgroup plan_string String Encodings
 /// @{
 
 // clang-format off
@@ -664,8 +659,8 @@ struct PREFIX_VARINT_LENGTH_STRING_SHARED {};
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_array Array
+/// @ingroup runtime
+/// @defgroup plan_array Array Encodings
 /// @{
 
 // clang-format off
@@ -856,8 +851,8 @@ struct ROOF_TYPED_ARRAY {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_object Object
+/// @ingroup runtime
+/// @defgroup plan_object Object Encodings
 /// @{
 
 // clang-format off
@@ -957,8 +952,8 @@ struct VARINT_TYPED_ARBITRARY_OBJECT {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_any Any
+/// @ingroup runtime
+/// @defgroup plan_any Any Encodings
 /// @{
 
 // TODO: Write brief description
@@ -1017,8 +1012,8 @@ static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
 /// @}
 // clang-format on
 
-// Plan type
-
+/// @ingroup runtime
+/// Represents an encoding plan
 using Plan = std::variant<
     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
     ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,

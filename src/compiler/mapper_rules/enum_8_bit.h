@@ -1,5 +1,4 @@
 // TODO: Unit test this mapping once we have container encodings
-/// @ingroup mapper_rules
 class Enum8Bit final : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   Enum8Bit() : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit"){};

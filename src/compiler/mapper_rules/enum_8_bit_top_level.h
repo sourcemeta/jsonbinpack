@@ -1,4 +1,3 @@
-/// @ingroup mapper_rules
 class Enum8BitTopLevel final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

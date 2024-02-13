@@ -1,5 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_BASIC_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_BASIC_H_
+#ifndef DOXYGEN
 
 #include <sourcemeta/jsonbinpack/runtime_varint.h>
 #include <sourcemeta/jsonbinpack/runtime_zigzag.h>
@@ -12,7 +13,6 @@
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup decoder
 template <typename CharT, typename Traits> class BasicDecoder {
 public:
   BasicDecoder(std::basic_istream<CharT, Traits> &input) : stream{input} {
@@ -95,4 +95,5 @@ private:
 
 } // namespace sourcemeta::jsonbinpack
 
+#endif
 #endif

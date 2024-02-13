@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: sudo apt update
-      - run: sudo apt-get install --yes doxygen doxygen-latex sassc
+      - run: sudo apt-get install --yes doxygen sassc
       - run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
