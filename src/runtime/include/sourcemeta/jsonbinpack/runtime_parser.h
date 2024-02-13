@@ -13,6 +13,7 @@
 namespace sourcemeta::jsonbinpack {
 
 // TODO: Give this a better name
+/// @ingroup plan
 SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT
 auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Plan;
 

@@ -1,7 +1,9 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_H_
 
-/// @defgroup encoding Plans
+/// @ingroup runtime
+/// @defgroup plan Plans
+/// @brief The encodings supported by JSON BinPack
 ///
 /// @see sourcemeta::jsonbinpack::Encoder
 /// @see sourcemeta::jsonbinpack::Decoder
@@ -24,8 +26,8 @@ struct __internal_encoding_wrapper;
 using SinglePlan = std::shared_ptr<__internal_encoding_wrapper>;
 using MultiplePlans = std::vector<__internal_encoding_wrapper>;
 
-/// @ingroup encoding
-/// @defgroup encoding_integer Integer
+/// @ingroup plan
+/// @defgroup plan_integer Integer
 /// @{
 
 // clang-format off
@@ -182,8 +184,8 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_number Number
+/// @ingroup plan
+/// @defgroup plan_number Number
 /// @{
 
 // clang-format off
@@ -229,8 +231,8 @@ struct DOUBLE_VARINT_TUPLE {};
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_enum Enumeration
+/// @ingroup plan
+/// @defgroup plan_enum Enumeration
 /// @{
 
 // clang-format off
@@ -373,8 +375,8 @@ struct CONST_NONE {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_string String
+/// @ingroup plan
+/// @defgroup plan_string String
 /// @{
 
 // clang-format off
@@ -664,8 +666,8 @@ struct PREFIX_VARINT_LENGTH_STRING_SHARED {};
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_array Array
+/// @ingroup plan
+/// @defgroup plan_array Array
 /// @{
 
 // clang-format off
@@ -856,8 +858,8 @@ struct ROOF_TYPED_ARRAY {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_object Object
+/// @ingroup plan
+/// @defgroup plan_object Object
 /// @{
 
 // clang-format off
@@ -957,8 +959,8 @@ struct VARINT_TYPED_ARBITRARY_OBJECT {
 
 /// @}
 
-/// @ingroup encoding
-/// @defgroup encoding_any Any
+/// @ingroup plan
+/// @defgroup plan_any Any
 /// @{
 
 // TODO: Write brief description

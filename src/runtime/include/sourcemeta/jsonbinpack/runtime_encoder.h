@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_H_
 
+/// @ingroup runtime
 /// @defgroup encoder Encoder
 /// @brief A set of procedures to serialize a JSON document given a Plan
 /// Schema

@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_H_
 
+/// @ingroup runtime
 /// @defgroup decoder Decoder
 /// @brief A set of procedures to deserialize a bit-string given a Plan
 /// Schema
