@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class EnumSingleton final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -27,5 +25,3 @@ public:
     make_encoding(transformer, "CONST_NONE", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_heterogeneous
 ///
 /// ### JSON Schema 2020-12
@@ -61,4 +59,3 @@ private:
                                                    "contains",
                                                    "items"};
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_simplification
 ///
 /// ### JSON Schema 2020-12
@@ -44,5 +42,3 @@ public:
     transformer.replace({"enum"}, std::move(collection));
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

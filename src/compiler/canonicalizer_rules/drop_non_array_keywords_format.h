@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_heterogeneous
 ///
 /// ### JSON Schema 2020-12
@@ -52,4 +50,3 @@ public:
 private:
   const std::set<std::string> BLACKLIST_FORMAT{"format"};
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer

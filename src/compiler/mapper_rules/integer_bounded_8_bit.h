@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerBounded8Bit final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -35,5 +33,3 @@ public:
     make_encoding(transformer, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

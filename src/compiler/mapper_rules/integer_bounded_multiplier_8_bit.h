@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerBoundedMultiplier8Bit final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -25,7 +23,7 @@ public:
     }
 
     const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
-        states::integer(schema, vocabularies)};
+        states_integer(schema, vocabularies)};
     return states.has_value() &&
            states->size() <= std::numeric_limits<std::uint8_t>::max();
   }
@@ -43,5 +41,3 @@ public:
     make_encoding(transformer, "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

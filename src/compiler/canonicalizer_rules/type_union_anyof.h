@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 // TODO: Document this rule
 /// @ingroup canonicalizer_rules_heterogeneous
 class TypeUnionAnyOf final
@@ -46,5 +44,3 @@ public:
     transformer.replace(std::move(result));
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

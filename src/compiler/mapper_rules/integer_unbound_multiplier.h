@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerUnboundMultiplier final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -31,5 +29,3 @@ public:
     make_encoding(transformer, "ARBITRARY_MULTIPLE_ZIGZAG_VARINT", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

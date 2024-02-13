@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerLowerBound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -31,5 +29,3 @@ public:
     make_encoding(transformer, "FLOOR_MULTIPLE_ENUM_VARINT", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

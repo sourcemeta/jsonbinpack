@@ -1,11 +1,8 @@
 noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
   FOLDER "JSON BinPack/Compiler"
   SOURCES
-    canonicalizer.h canonicalizer.cc canonicalizer_utils.h
-    mapper.h mapper.cc
-    mapper_encoding.h mapper_encoding.cc
-    mapper_states.h mapper_states.cc
-    compiler.cc schemas.h
+    canonicalizer.h mapper.h states.h schemas.h
+    compiler.cc
 
     canonicalizer_rules/boolean_as_enum.h
     canonicalizer_rules/boolean_schema.h

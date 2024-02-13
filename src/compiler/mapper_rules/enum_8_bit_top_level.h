@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class Enum8BitTopLevel final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -27,5 +25,3 @@ public:
     make_encoding(transformer, "TOP_LEVEL_BYTE_CHOICE_INDEX", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

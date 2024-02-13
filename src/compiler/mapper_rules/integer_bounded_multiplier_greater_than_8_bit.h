@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class IntegerBoundedMultiplierGreaterThan8Bit final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -25,7 +23,7 @@ public:
     }
 
     const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
-        states::integer(schema, vocabularies)};
+        states_integer(schema, vocabularies)};
     return !states.has_value() || !is_byte(states->size());
   }
 
@@ -39,5 +37,3 @@ public:
     make_encoding(transformer, "FLOOR_MULTIPLE_ENUM_VARINT", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

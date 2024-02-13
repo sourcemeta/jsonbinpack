@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_heterogeneous
 ///
 /// ### JSON Schema 2020-12
@@ -86,5 +84,3 @@ public:
     transformer.assign("type", std::move(types));
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer

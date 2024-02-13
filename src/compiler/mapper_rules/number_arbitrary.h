@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 /// @ingroup mapper_rules
 class NumberArbitrary final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -25,5 +23,3 @@ public:
                   sourcemeta::jsontoolkit::JSON::make_object());
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

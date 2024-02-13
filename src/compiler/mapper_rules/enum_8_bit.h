@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::mapper {
-
 // TODO: Unit test this mapping once we have container encodings
 /// @ingroup mapper_rules
 class Enum8Bit final : public sourcemeta::jsontoolkit::SchemaTransformRule {
@@ -26,5 +24,3 @@ public:
     make_encoding(transformer, "BYTE_CHOICE_INDEX", options);
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::mapper

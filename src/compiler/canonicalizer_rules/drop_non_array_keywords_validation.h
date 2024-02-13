@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_heterogeneous
 ///
 /// ### JSON Schema 2020-12
@@ -60,4 +58,3 @@ private:
       "exclusiveMinimum",  "multipleOf",    "exclusiveMaximum", "minimum",
       "dependentRequired", "minProperties", "maxProperties",    "required"};
 };
-} // namespace sourcemeta::jsonbinpack::canonicalizer

@@ -1,5 +1,3 @@
-namespace sourcemeta::jsonbinpack::canonicalizer {
-
 /// @ingroup canonicalizer_rules_implicit
 ///
 /// ### JSON Schema 2020-12
@@ -42,5 +40,3 @@ public:
     transformer.assign("required", sourcemeta::jsontoolkit::JSON::make_array());
   }
 };
-
-} // namespace sourcemeta::jsonbinpack::canonicalizer
