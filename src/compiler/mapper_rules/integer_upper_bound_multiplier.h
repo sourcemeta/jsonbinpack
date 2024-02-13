@@ -1,4 +1,3 @@
-/// @ingroup mapper_rules
 class IntegerUpperBoundMultiplier final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

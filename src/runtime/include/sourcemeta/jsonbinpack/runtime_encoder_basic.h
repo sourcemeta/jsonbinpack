@@ -1,5 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_BASIC_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_BASIC_H_
+#ifndef DOXYGEN
 
 #include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
 #include <sourcemeta/jsonbinpack/runtime_varint.h>
@@ -15,7 +16,6 @@
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup encoder
 template <typename CharT, typename Traits> class BasicEncoder {
 public:
   BasicEncoder(std::basic_ostream<CharT, Traits> &output) : stream{output} {
@@ -66,4 +66,5 @@ private:
 
 } // namespace sourcemeta::jsonbinpack
 
+#endif
 #endif

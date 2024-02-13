@@ -1,11 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_H_
 
-/// @ingroup runtime
-/// @defgroup encoder Encoder
-/// @brief A set of procedures to serialize a JSON document given a Plan
-/// Schema
-
 #include <sourcemeta/jsonbinpack/runtime_encoder_basic.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder_real.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
@@ -23,7 +18,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup encoder
+/// @ingroup runtime
 template <typename CharT, typename Traits>
 class Encoder : private BasicEncoder<CharT, Traits> {
 public:
@@ -67,9 +62,8 @@ public:
     }
   }
 
-  /// @ingroup encoder
-  /// @defgroup encoder_integer Integer
-  /// @{
+// The methods that implement individual encodings as considered private
+#ifndef DOXYGEN
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const sourcemeta::jsontoolkit::JSON &document,
@@ -134,12 +128,6 @@ public:
                             static_cast<std::int64_t>(options.multiplier));
   }
 
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_number Number
-  /// @{
-
   auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::JSON &document,
                            const DOUBLE_VARINT_TUPLE &) -> void {
     assert(document.is_real());
@@ -150,12 +138,6 @@ public:
     this->put_varint_zigzag(integral);
     this->put_varint(point_position);
   }
-
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_enum Enumeration
-  /// @{
 
   auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &document,
                          const BYTE_CHOICE_INDEX &options) -> void {
@@ -211,12 +193,6 @@ public:
       -> void {
     assert(document == options.value);
   }
-
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_string String
-  /// @{
 
   auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::JSON &document,
                              const UTF8_STRING_NO_LENGTH &options) -> void {
@@ -366,12 +342,6 @@ public:
   // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
   // TODO: Implement URL_PROTOCOL_HOST_REST encoding
 
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_array Array
-  /// @{
-
   auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &document,
                          const FIXED_TYPED_ARRAY &options) -> void {
     assert(document.is_array());
@@ -416,12 +386,6 @@ public:
                                        std::move(options.prefix_encodings)});
   }
 
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_object Object
-  /// @{
-
   auto
   FIXED_TYPED_ARBITRARY_OBJECT(const sourcemeta::jsontoolkit::JSON &document,
                                const FIXED_TYPED_ARBITRARY_OBJECT &options)
@@ -450,12 +414,6 @@ public:
       this->encode(value, options.encoding->value);
     }
   }
-
-  /// @}
-
-  /// @ingroup encoder
-  /// @defgroup encoder_any Any
-  /// @{
 
   auto
   ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &document,
@@ -574,7 +532,7 @@ public:
     }
   }
 
-  /// @}
+#endif
 
 private:
   using ContextType = typename Context<CharT>::Type;

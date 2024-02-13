@@ -1,11 +1,6 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_H_
 
-/// @ingroup runtime
-/// @defgroup decoder Decoder
-/// @brief A set of procedures to deserialize a bit-string given a Plan
-/// Schema
-
 #include <sourcemeta/jsonbinpack/runtime_decoder_basic.h>
 #include <sourcemeta/jsonbinpack/runtime_numeric.h>
 #include <sourcemeta/jsonbinpack/runtime_plan.h>
@@ -23,7 +18,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-/// @ingroup decoder
+/// @ingroup runtime
 template <typename CharT, typename Traits>
 class Decoder : private BasicDecoder<CharT, Traits> {
 public:
@@ -65,9 +60,8 @@ public:
     }
   }
 
-  /// @ingroup decoder
-  /// @defgroup decoder_integer Integer
-  /// @{
+// The methods that implement individual encodings as considered private
+#ifndef DOXYGEN
 
   auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
       const BOUNDED_MULTIPLE_8BITS_ENUM_FIXED &options)
@@ -160,12 +154,6 @@ public:
         static_cast<std::int64_t>(options.multiplier))};
   }
 
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_number Number
-  /// @{
-
   auto DOUBLE_VARINT_TUPLE(const DOUBLE_VARINT_TUPLE &)
       -> sourcemeta::jsontoolkit::JSON {
     const std::int64_t digits{this->get_varint_zigzag()};
@@ -173,12 +161,6 @@ public:
     const double divisor{std::pow(10, static_cast<double>(point))};
     return sourcemeta::jsontoolkit::JSON{static_cast<double>(digits) / divisor};
   }
-
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_enum Enumeration
-  /// @{
 
   auto BYTE_CHOICE_INDEX(const BYTE_CHOICE_INDEX &options)
       -> sourcemeta::jsontoolkit::JSON {
@@ -214,12 +196,6 @@ public:
   auto CONST_NONE(const CONST_NONE &options) -> sourcemeta::jsontoolkit::JSON {
     return options.value;
   }
-
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_string String
-  /// @{
 
   auto UTF8_STRING_NO_LENGTH(const UTF8_STRING_NO_LENGTH &options)
       -> sourcemeta::jsontoolkit::JSON {
@@ -332,12 +308,6 @@ public:
   // TODO: Implement STRING_UNBOUNDED_SCOPED_PREFIX_LENGTH encoding
   // TODO: Implement URL_PROTOCOL_HOST_REST encoding
 
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_array Array
-  /// @{
-
   auto FIXED_TYPED_ARRAY(const FIXED_TYPED_ARRAY &options)
       -> sourcemeta::jsontoolkit::JSON {
     const auto prefix_encodings{options.prefix_encodings.size()};
@@ -384,12 +354,6 @@ public:
                                     std::move(options.prefix_encodings)});
   };
 
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_object Object
-  /// @{
-
   auto FIXED_TYPED_ARBITRARY_OBJECT(const FIXED_TYPED_ARBITRARY_OBJECT &options)
       -> sourcemeta::jsontoolkit::JSON {
     sourcemeta::jsontoolkit::JSON document =
@@ -421,12 +385,6 @@ public:
     assert(document.size() == size);
     return document;
   };
-
-  /// @}
-
-  /// @ingroup decoder
-  /// @defgroup decoder_any Any
-  /// @{
 
   auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &)
       -> sourcemeta::jsontoolkit::JSON {
@@ -531,7 +489,7 @@ public:
     }
   }
 
-  /// @}
+#endif
 };
 
 } // namespace sourcemeta::jsonbinpack

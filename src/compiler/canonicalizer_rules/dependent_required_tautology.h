@@ -1,37 +1,9 @@
-/// @ingroup canonicalizer_rules_simplification
-///
-/// ### JSON Schema 2020-12
-///
-/// | Vocabulary URI                                         | Required |
-/// |--------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/validation | Y        |
-///
-/// The `required` keyword from the Validation vocabulary declares which object
-/// properties must be present in the given JSON object. The `dependentRequired`
-/// keyword from the Validation vocabulary expresses that certain properties
-/// are required based on whether other properties from the same object are
-/// required or not. Therefore, if a property is required based on the presence
-/// of another keyword that is ensured to be required, then the requirement
-/// dependency can be elevated as an unconditional requirement.
-///
-/// \f[\frac{\{ required, dependentRequired \} \subseteq S \land S.required \cap
-/// S.dependentRequired \neq \emptyset}{S \mapsto S \cup \{ dependentRequired
-/// \mapsto D, required \mapsto R \} }\f]
-///
-/// Where:
-///
-/// \f[D = \{ (k, v) \in S.dependentRequired \mid k \not\in S.required \}\f]
-///
-/// \f[R = \bigcup \{ v \mid (k, v) \in S.dependentRequired \land k \in
-/// S.required \}\f]
-
 class DependentRequiredTautology final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DependentRequiredTautology()
       : SchemaTransformRule("dependent_required_tautology"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -52,7 +24,6 @@ public:
                        });
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     const auto &current_requirements = transformer.schema().at("required");

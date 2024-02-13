@@ -1,11 +1,8 @@
-// TODO: Document this rule
-/// @ingroup canonicalizer_rules_heterogeneous
 class TypeUnionAnyOf final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   TypeUnionAnyOf() : SchemaTransformRule("type_union_anyof"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -20,7 +17,6 @@ public:
            schema.at("type").is_array();
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     sourcemeta::jsontoolkit::JSON disjunctors =

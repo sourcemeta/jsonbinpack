@@ -1,4 +1,3 @@
-/// @ingroup mapper_rules
 class EnumSingleton final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:

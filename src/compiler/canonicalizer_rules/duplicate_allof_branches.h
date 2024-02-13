@@ -1,24 +1,8 @@
-/// @ingroup canonicalizer_rules_simplification
-///
-/// ### JSON Schema 2020-12
-///
-/// | Vocabulary URI                                         | Required |
-/// |--------------------------------------------------------|----------|
-/// | https://json-schema.org/draft/2020-12/vocab/applicator | Y        |
-///
-/// The `allOf` keyword from the Applicator vocabulary represents a logical
-/// conjunction. As such, duplicate branches do not affect the result and can be
-/// removed.
-///
-/// \f[\frac{allOf \in dom(S) \land \#S.allOf \neq \#\{ x \mid S.allOf \}}{S
-/// \mapsto S \cup \{ allOf \mapsto seq \; \{ x \mid S.allOf \} \} }\f]
-
 class DuplicateAllOfBranches final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DuplicateAllOfBranches() : SchemaTransformRule("duplicate_allof_branches"){};
 
-  /// The rule condition
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
@@ -31,7 +15,6 @@ public:
            schema.at("allOf").is_array() && !is_unique(schema.at("allOf"));
   }
 
-  /// The rule transformation
   auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
       -> void override {
     auto collection = transformer.schema().at("allOf");
