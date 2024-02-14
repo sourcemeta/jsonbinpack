@@ -17,8 +17,7 @@ SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_varint_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/decode_zigzag_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_any_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_array_test.cc
-# TODO: Re-enable these tests after fixing the std::bad_alloc errors
-# SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_context_test.cc
+SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_context_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_enum_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_integer_test.cc
 SOURCEMETA_JSONBINPACK_TEST_SRCS-y += $(TEST_BASE)/runtime/encode_number_test.cc
