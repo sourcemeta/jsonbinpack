@@ -146,4 +146,4 @@ jobs:
           rm kraftkit_0.7.5_linux_amd64.deb
 
       - run: cd unikraft && kraft build --target development --jobs 4 --log-type=basic
-      - run: cd unikraft && kraft run --target development --disable-acceleration unikraft
+      - run: cd unikraft && kraft run --target development --memory 200M --disable-acceleration unikraft

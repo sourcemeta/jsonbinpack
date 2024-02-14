@@ -47,7 +47,7 @@ doxygen: .always
 
 unikraft: .always
 	cd unikraft && $(KRAFT) build --target development --jobs 4 --log-type=basic
-	cd unikraft && $(KRAFT) run --target development
+	cd unikraft && $(KRAFT) run --memory 200M --target development
 
 website: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target website
