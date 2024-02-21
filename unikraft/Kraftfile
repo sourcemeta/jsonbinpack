@@ -7,10 +7,6 @@ targets:
   - name: development
     platform: qemu
     architecture: x86_64
-    kconfig:
-      - CONFIG_LIBJSONBINPACK=y
-      - CONFIG_LIBGOOGLETEST=y
-      - CONFIG_LIBGOOGLETEST_BUILD_MAIN=y
 
 libraries:
   libcxxabi:
@@ -25,7 +21,12 @@ libraries:
     version: stable
   googletest:
     version: stable
-  jsonbinpack:
-    source: ..
+    kconfig:
+      - CONFIG_LIBGOOGLETEST=y
+      - CONFIG_LIBGOOGLETEST_BUILD_MAIN=y
   jsontoolkit:
     source: ../vendor/jsontoolkit
+  jsonbinpack:
+    source: ..
+    kconfig:
+      - CONFIG_LIBJSONBINPACK=y
