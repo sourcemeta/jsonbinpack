@@ -27,11 +27,9 @@ Discussions](https://github.com/sourcemeta/jsonbinpack/discussions)!
 Commercial Use
 --------------
 
-This project is governed by the [AGPL-3.0](./LICENSE) license and our
+This project is governed by the [AGPL-3.0](./LICENSE) copyleft license and our
 [Contribution Agreement](https://www.sourcemeta.com/contributing/). To ensure
-the sustainability of the project, copy-left restrictions are removed by
-holding a *paid* [Patron License](./LICENSE-PATRON.markdown).
-
-If you have questions, or want to acquire a license outside the supported
-payment platforms, reach out to
-[hello@sourcemeta.com](mailto:hello@sourcemeta.com).
+the sustainability of the project, you can freely make use of this software as
+long as any modifications you make are made available under the same license
+(i.e. you contribute them back). Read more about our licensing approach
+[here](https://www.sourcemeta.com/licensing/).
