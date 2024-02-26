@@ -3,6 +3,7 @@ function(sourcemeta_jsonbinpack_add_compile_options visibility target)
     # See https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category
     target_compile_options("${target}" ${visibility}
       /options:strict
+      /permissive-
       /W4
       /WL
       /sdl)
