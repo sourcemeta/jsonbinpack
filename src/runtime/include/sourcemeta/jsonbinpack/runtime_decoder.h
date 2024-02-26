@@ -53,11 +53,11 @@ public:
       HANDLE_DECODING(20, VARINT_TYPED_ARBITRARY_OBJECT)
       HANDLE_DECODING(21, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 #undef HANDLE_DECODING
-      default:
-        // We should never get here. If so, it is definitely a bug
-        assert(false);
-        std::abort();
     }
+
+    // We should never get here. If so, it is definitely a bug
+    assert(false);
+    std::abort();
   }
 
 // The methods that implement individual encodings as considered private
@@ -422,11 +422,11 @@ public:
         case SUBTYPE_LONG_STRING_BASE_EXPONENT_10:
           return sourcemeta::jsontoolkit::JSON{
               this->get_string_utf8(this->get_varint() + 1024)};
-        default:
-          // We should never get here. If so, it is definitely a bug
-          assert(false);
-          std::abort();
       }
+
+      // We should never get here. If so, it is definitely a bug
+      assert(false);
+      std::abort();
     } else {
       switch (type) {
         case TYPE_POSITIVE_INTEGER_BYTE:
@@ -481,11 +481,11 @@ public:
                                      PREFIX_VARINT_LENGTH_STRING_SHARED{}),
                             wrap(sourcemeta::jsonbinpack::
                                      ANY_PACKED_TYPE_TAG_BYTE_PREFIX{})});
-        default:
-          // We should never get here. If so, it is definitely a bug
-          assert(false);
-          std::abort();
       }
+
+      // We should never get here. If so, it is definitely a bug
+      assert(false);
+      std::abort();
     }
   }
 
