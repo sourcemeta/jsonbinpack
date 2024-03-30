@@ -50,6 +50,21 @@ add_test(NAME cli.compile_stdin
   "${JSONBINPACK_CLI_PATH}" 0 "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED"
   compile)
 
+# For some strange reason, Windows throws weird errors on GitHub Actions
+# when running these Batch-based tests in parallel
+if(WIN32)
+  set_tests_properties(
+    cli.version
+    cli.default
+    cli.help
+    cli.unknown
+    cli.canonicalize_file
+    cli.canonicalize_stdin
+    cli.compile_file
+    cli.compile_stdin
+    PROPERTIES RUN_SERIAL TRUE)
+endif()
+
 # Encoding Schema
 
 add_test(NAME cli.encode_encoding_schema_arg
@@ -76,6 +91,17 @@ add_test(NAME cli.decode_encoding_schema_stdin
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
   decode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_encoding.json")
 
+# For some strange reason, Windows throws weird errors on GitHub Actions
+# when running these Batch-based tests in parallel
+if(WIN32)
+  set_tests_properties(
+    cli.encode_encoding_schema_arg
+    cli.decode_encoding_schema_arg
+    cli.encode_encoding_schema_stdin
+    cli.decode_encoding_schema_stdin
+    PROPERTIES RUN_SERIAL TRUE)
+endif()
+
 # JSON Schema
 
 add_test(NAME cli.encode_json_schema_arg
@@ -101,3 +127,14 @@ add_test(NAME cli.decode_json_schema_stdin
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.json"
   "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer.bin"
   decode "${CMAKE_CURRENT_SOURCE_DIR}/instance_integer_schema.json")
+
+# For some strange reason, Windows throws weird errors on GitHub Actions
+# when running these Batch-based tests in parallel
+if(WIN32)
+  set_tests_properties(
+    cli.encode_json_schema_arg
+    cli.decode_json_schema_arg
+    cli.encode_json_schema_stdin
+    cli.decode_json_schema_stdin
+    PROPERTIES RUN_SERIAL TRUE)
+endif()
