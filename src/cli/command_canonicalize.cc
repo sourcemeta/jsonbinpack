@@ -9,8 +9,8 @@
 #include <filesystem> // std::filesystem
 #include <iostream>   // std::cin, std::cout, std::endl;
 
-static auto canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema)
-    -> int {
+static auto
+canonicalize_from_json(sourcemeta::jsontoolkit::JSON &schema) -> int {
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,

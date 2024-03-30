@@ -28,8 +28,8 @@ constexpr auto correct_ieee764(const Real value) -> Real {
 }
 
 template <std::integral Integer, std::floating_point Real>
-constexpr auto real_digits(Real value, std::uint64_t *point_position)
-    -> Integer {
+constexpr auto real_digits(Real value,
+                           std::uint64_t *point_position) -> Integer {
   assert(std::isfinite(value));
   Real integral;
   std::uint64_t shifts{0};

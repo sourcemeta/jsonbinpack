@@ -59,9 +59,8 @@ jobs:
       CC: ${{ matrix.platform.cc }}
       CXX: ${{ matrix.platform.cxx }}
     steps:
-      - name: Install dependencies (GNU/Linux)
-        if: runner.os == 'linux'
-        run: sudo apt-get install --yes clang-format
+      - name: Install ClangFormat
+        run: pip install clang-format==18.1.0
 
       # See https://github.com/actions/runner-images/issues/8659
       - name: Workaround Clang issue (GNU/Linux)

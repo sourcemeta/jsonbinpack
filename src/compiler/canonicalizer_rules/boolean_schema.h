@@ -3,11 +3,10 @@ class BooleanSchema final
 public:
   BooleanSchema() : SchemaTransformRule("boolean_schema"){};
 
-  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
-                               const std::string &,
-                               const std::set<std::string> &,
-                               const sourcemeta::jsontoolkit::Pointer &) const
-      -> bool override {
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON &schema, const std::string &,
+            const std::set<std::string> &,
+            const sourcemeta::jsontoolkit::Pointer &) const -> bool override {
     return schema.is_boolean();
   }
 

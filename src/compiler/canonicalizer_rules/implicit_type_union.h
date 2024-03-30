@@ -3,11 +3,11 @@ class ImplicitTypeUnion final
 public:
   ImplicitTypeUnion() : SchemaTransformRule("implicit_type_union"){};
 
-  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
-                               const std::string &dialect,
-                               const std::set<std::string> &vocabularies,
-                               const sourcemeta::jsontoolkit::Pointer &) const
-      -> bool override {
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON &schema,
+            const std::string &dialect,
+            const std::set<std::string> &vocabularies,
+            const sourcemeta::jsontoolkit::Pointer &) const -> bool override {
     const bool has_core_blacklist{
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/core") &&

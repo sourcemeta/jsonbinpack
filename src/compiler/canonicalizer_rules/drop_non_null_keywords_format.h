@@ -4,11 +4,11 @@ public:
   DropNonNullKeywordsFormat()
       : SchemaTransformRule("drop_non_null_keywords_format"){};
 
-  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
-                               const std::string &dialect,
-                               const std::set<std::string> &vocabularies,
-                               const sourcemeta::jsontoolkit::Pointer &) const
-      -> bool override {
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON &schema,
+            const std::string &dialect,
+            const std::set<std::string> &vocabularies,
+            const sourcemeta::jsontoolkit::Pointer &) const -> bool override {
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            is_null_schema(schema, vocabularies) &&
            (vocabularies.contains("https://json-schema.org/draft/2020-12/vocab/"
