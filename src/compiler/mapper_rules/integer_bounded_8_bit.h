@@ -4,11 +4,11 @@ public:
   IntegerBounded8Bit()
       : sourcemeta::jsontoolkit::SchemaTransformRule("integer_bounded_8_bit"){};
 
-  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
-                               const std::string &dialect,
-                               const std::set<std::string> &vocabularies,
-                               const sourcemeta::jsontoolkit::Pointer &) const
-      -> bool override {
+  [[nodiscard]] auto
+  condition(const sourcemeta::jsontoolkit::JSON &schema,
+            const std::string &dialect,
+            const std::set<std::string> &vocabularies,
+            const sourcemeta::jsontoolkit::Pointer &) const -> bool override {
     return !is_encoding(schema) &&
            dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(

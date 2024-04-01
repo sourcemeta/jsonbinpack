@@ -15,9 +15,9 @@
 #include <istream>    // std::basic_istream
 
 template <typename CharT, typename Traits>
-static auto decode_from_stream(sourcemeta::jsontoolkit::JSON &schema,
-                               std::basic_istream<CharT, Traits> &stream)
-    -> int {
+static auto
+decode_from_stream(sourcemeta::jsontoolkit::JSON &schema,
+                   std::basic_istream<CharT, Traits> &stream) -> int {
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,
