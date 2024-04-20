@@ -1,8 +1,6 @@
 name: website
 on:
-  push:
-    branches-ignore:
-      - main
+  pull_request:
 
 concurrency:
   group: website-build-${{ github.ref }}
