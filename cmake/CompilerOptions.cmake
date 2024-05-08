@@ -6,6 +6,7 @@ function(sourcemeta_jsonbinpack_add_compile_options visibility target)
       /permissive-
       /W4
       /WL
+      /MP
       /sdl)
   else()
     target_compile_options("${target}" ${visibility}
