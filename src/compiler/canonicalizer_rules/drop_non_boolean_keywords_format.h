@@ -2,7 +2,7 @@ class DropNonBooleanKeywordsFormat final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonBooleanKeywordsFormat()
-      : SchemaTransformRule("drop_non_boolean_keywords_format"){};
+      : SchemaTransformRule("drop_non_boolean_keywords_format") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

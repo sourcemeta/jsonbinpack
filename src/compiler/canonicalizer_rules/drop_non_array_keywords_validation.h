@@ -2,7 +2,7 @@ class DropNonArrayKeywordsValidation final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonArrayKeywordsValidation()
-      : SchemaTransformRule("drop_non_array_keywords_validation"){};
+      : SchemaTransformRule("drop_non_array_keywords_validation") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

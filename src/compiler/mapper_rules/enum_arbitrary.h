@@ -3,7 +3,7 @@ class EnumArbitrary final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   EnumArbitrary()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_arbitrary"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_arbitrary") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

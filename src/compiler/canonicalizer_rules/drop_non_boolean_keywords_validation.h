@@ -2,7 +2,7 @@ class DropNonBooleanKeywordsValidation final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonBooleanKeywordsValidation()
-      : SchemaTransformRule("drop_non_boolean_keywords_validation"){};
+      : SchemaTransformRule("drop_non_boolean_keywords_validation") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

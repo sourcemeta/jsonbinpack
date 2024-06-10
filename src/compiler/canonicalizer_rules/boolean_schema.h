@@ -1,7 +1,7 @@
 class BooleanSchema final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  BooleanSchema() : SchemaTransformRule("boolean_schema"){};
+  BooleanSchema() : SchemaTransformRule("boolean_schema") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema, const std::string &,

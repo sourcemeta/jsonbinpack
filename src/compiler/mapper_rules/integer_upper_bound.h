@@ -2,7 +2,7 @@ class IntegerUpperBound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   IntegerUpperBound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_upper_bound"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_upper_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -1,7 +1,7 @@
 class EmptyDependentRequired final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyDependentRequired() : SchemaTransformRule("empty_dependent_required"){};
+  EmptyDependentRequired() : SchemaTransformRule("empty_dependent_required") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

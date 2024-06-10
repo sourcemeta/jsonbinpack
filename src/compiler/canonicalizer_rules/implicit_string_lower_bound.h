@@ -2,7 +2,7 @@ class ImplicitStringLowerBound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ImplicitStringLowerBound()
-      : SchemaTransformRule("implicit_string_lower_bound"){};
+      : SchemaTransformRule("implicit_string_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

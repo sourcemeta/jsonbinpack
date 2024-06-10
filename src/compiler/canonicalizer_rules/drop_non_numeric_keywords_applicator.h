@@ -2,7 +2,7 @@ class DropNonNumericKeywordsApplicator final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNumericKeywordsApplicator()
-      : SchemaTransformRule("drop_non_numeric_keywords_applicator"){};
+      : SchemaTransformRule("drop_non_numeric_keywords_applicator") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -1,4 +1,4 @@
-function(sourcemeta_jsonbinpack_add_compile_options visibility target)
+function(noa_add_default_options visibility target)
   if(NOA_COMPILER_MSVC)
     # See https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category
     target_compile_options("${target}" ${visibility}
@@ -35,8 +35,7 @@ function(sourcemeta_jsonbinpack_add_compile_options visibility target)
       -Wfloat-conversion
       -Wimplicit-fallthrough
       -Wsign-compare
-      # TODO: Enable this flag for safety
-      -Wno-sign-conversion
+      -Wsign-conversion
       -Wunknown-pragmas
       -Wnon-virtual-dtor
       -Woverloaded-virtual

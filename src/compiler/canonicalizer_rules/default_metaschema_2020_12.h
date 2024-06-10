@@ -2,7 +2,7 @@ class DefaultMetaschema_2020_12 final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DefaultMetaschema_2020_12()
-      : SchemaTransformRule("default_metaschema_2020_12"){};
+      : SchemaTransformRule("default_metaschema_2020_12") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

@@ -1,7 +1,7 @@
 // TODO: Unit test this mapping once we have container encodings
 class Enum8Bit final : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  Enum8Bit() : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit"){};
+  Enum8Bit() : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

@@ -2,7 +2,7 @@ class EnumSingleton final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   EnumSingleton()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_singleton"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_singleton") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

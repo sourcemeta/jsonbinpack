@@ -2,7 +2,7 @@ class EqualNumericBoundsAsConst final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   EqualNumericBoundsAsConst()
-      : SchemaTransformRule("equal_numeric_bounds_as_const"){};
+      : SchemaTransformRule("equal_numeric_bounds_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

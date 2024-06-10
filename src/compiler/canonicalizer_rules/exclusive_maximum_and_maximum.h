@@ -2,7 +2,7 @@ class ExclusiveMaximumAndMaximum final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ExclusiveMaximumAndMaximum()
-      : SchemaTransformRule("exclusive_maximum_and_maximum"){};
+      : SchemaTransformRule("exclusive_maximum_and_maximum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
