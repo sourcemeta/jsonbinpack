@@ -2,7 +2,7 @@ class DropNonArrayKeywordsApplicator final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonArrayKeywordsApplicator()
-      : SchemaTransformRule("drop_non_array_keywords_applicator"){};
+      : SchemaTransformRule("drop_non_array_keywords_applicator") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

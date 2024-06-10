@@ -1,7 +1,7 @@
 class TypeUnionAnyOf final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  TypeUnionAnyOf() : SchemaTransformRule("type_union_anyof"){};
+  TypeUnionAnyOf() : SchemaTransformRule("type_union_anyof") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

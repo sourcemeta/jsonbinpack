@@ -1,7 +1,7 @@
 class BooleanAsEnum final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  BooleanAsEnum() : SchemaTransformRule("boolean_as_enum"){};
+  BooleanAsEnum() : SchemaTransformRule("boolean_as_enum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

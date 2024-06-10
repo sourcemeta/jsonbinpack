@@ -1,7 +1,7 @@
 class MaximumRealForInteger final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  MaximumRealForInteger() : SchemaTransformRule("maximum_real_for_integer"){};
+  MaximumRealForInteger() : SchemaTransformRule("maximum_real_for_integer") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

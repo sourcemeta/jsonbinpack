@@ -1,7 +1,8 @@
 class ImplicitUnitMultipleOf final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ImplicitUnitMultipleOf() : SchemaTransformRule("implicit_unit_multiple_of"){};
+  ImplicitUnitMultipleOf()
+      : SchemaTransformRule("implicit_unit_multiple_of") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

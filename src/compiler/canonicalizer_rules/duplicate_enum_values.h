@@ -1,7 +1,7 @@
 class DuplicateEnumValues final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DuplicateEnumValues() : SchemaTransformRule("duplicate_enum_values"){};
+  DuplicateEnumValues() : SchemaTransformRule("duplicate_enum_values") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

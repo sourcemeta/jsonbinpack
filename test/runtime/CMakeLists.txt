@@ -38,8 +38,7 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   v1_number_parser_test.cc
   v1_string_parser_test.cc)
 
-sourcemeta_jsonbinpack_add_compile_options(
-  PRIVATE sourcemeta_jsonbinpack_runtime_unit)
+noa_add_default_options(PRIVATE sourcemeta_jsonbinpack_runtime_unit)
 
 target_link_libraries(sourcemeta_jsonbinpack_runtime_unit
   PRIVATE GTest::gtest GTest::gtest_main)

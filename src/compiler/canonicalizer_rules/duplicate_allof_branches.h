@@ -1,7 +1,7 @@
 class DuplicateAllOfBranches final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  DuplicateAllOfBranches() : SchemaTransformRule("duplicate_allof_branches"){};
+  DuplicateAllOfBranches() : SchemaTransformRule("duplicate_allof_branches") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

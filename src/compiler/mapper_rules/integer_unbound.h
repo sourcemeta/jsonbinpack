@@ -2,7 +2,7 @@ class IntegerUnbound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   IntegerUnbound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_unbound"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_unbound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

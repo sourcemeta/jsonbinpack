@@ -2,7 +2,7 @@ class DropNonNullKeywordsValidation final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNullKeywordsValidation()
-      : SchemaTransformRule("drop_non_null_keywords_validation"){};
+      : SchemaTransformRule("drop_non_null_keywords_validation") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

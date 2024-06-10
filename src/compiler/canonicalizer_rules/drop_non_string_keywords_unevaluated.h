@@ -2,7 +2,7 @@ class DropNonStringKeywordsUnevaluated final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonStringKeywordsUnevaluated()
-      : SchemaTransformRule("drop_non_string_keywords_unevaluated"){};
+      : SchemaTransformRule("drop_non_string_keywords_unevaluated") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -2,7 +2,7 @@ class IntegerLowerBound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   IntegerLowerBound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_lower_bound"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

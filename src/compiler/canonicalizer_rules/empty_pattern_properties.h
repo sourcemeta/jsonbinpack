@@ -1,7 +1,7 @@
 class EmptyPatternProperties final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyPatternProperties() : SchemaTransformRule("empty_pattern_properties"){};
+  EmptyPatternProperties() : SchemaTransformRule("empty_pattern_properties") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

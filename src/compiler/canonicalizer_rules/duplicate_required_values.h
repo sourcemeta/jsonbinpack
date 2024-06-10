@@ -2,7 +2,7 @@ class DuplicateRequiredValues final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DuplicateRequiredValues()
-      : SchemaTransformRule("duplicate_required_values"){};
+      : SchemaTransformRule("duplicate_required_values") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

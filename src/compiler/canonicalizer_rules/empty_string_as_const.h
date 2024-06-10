@@ -1,7 +1,7 @@
 class EmptyStringAsConst final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyStringAsConst() : SchemaTransformRule("empty_string_as_const"){};
+  EmptyStringAsConst() : SchemaTransformRule("empty_string_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
