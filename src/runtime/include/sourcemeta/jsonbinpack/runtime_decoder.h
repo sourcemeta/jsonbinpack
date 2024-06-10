@@ -9,7 +9,7 @@
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <cassert> // assert
-#include <cmath>   // std::pow, std::abs
+#include <cmath>   // std::pow
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint32_t, std::int64_t, std::uint64_t
 #include <cstdlib> // std::abort
 #include <iomanip> // std::setw, std::setfill
@@ -78,9 +78,8 @@ public:
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
           (byte * options.multiplier) + closest_minimum_multiple)};
     } else {
-      const std::uint64_t closest_minimum_multiple{
-          static_cast<std::uint32_t>(std::abs(closest_minimum)) *
-          options.multiplier};
+      const std::uint64_t closest_minimum_multiple{abs(closest_minimum) *
+                                                   options.multiplier};
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
@@ -102,9 +101,8 @@ public:
           static_cast<std::int64_t>((this->get_varint() * options.multiplier) +
                                     closest_minimum_multiple)};
     } else {
-      const std::uint64_t closest_minimum_multiple{
-          static_cast<std::uint32_t>(std::abs(closest_minimum)) *
-          options.multiplier};
+      const std::uint64_t closest_minimum_multiple{abs(closest_minimum) *
+                                                   options.multiplier};
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{
@@ -125,20 +123,17 @@ public:
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
-          -(static_cast<std::int64_t>(
-              this->get_varint() *
-              static_cast<std::int64_t>(options.multiplier))) +
+          -(static_cast<std::int64_t>(this->get_varint() *
+                                      options.multiplier)) +
           static_cast<std::int64_t>(closest_maximum_multiple))};
     } else {
-      const std::uint64_t closest_maximum_multiple{
-          static_cast<std::uint32_t>(std::abs(closest_maximum)) *
-          options.multiplier};
+      const std::uint64_t closest_maximum_multiple{abs(closest_maximum) *
+                                                   options.multiplier};
       // We trust the encoder that the data we are seeing
       // corresponds to a valid 64-bit signed integer.
       return sourcemeta::jsontoolkit::JSON{static_cast<std::int64_t>(
-          -(static_cast<std::int64_t>(
-              this->get_varint() *
-              static_cast<std::int64_t>(options.multiplier))) -
+          -(static_cast<std::int64_t>(this->get_varint() *
+                                      options.multiplier)) -
           static_cast<std::int64_t>(closest_maximum_multiple))};
     }
   }

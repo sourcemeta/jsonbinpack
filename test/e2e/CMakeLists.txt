@@ -1,4 +1,5 @@
 add_executable(jsonbinpack_e2e_test_runner runner.cc)
+noa_add_default_options(PRIVATE jsonbinpack_e2e_test_runner)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsontoolkit::json)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::compiler)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::runtime)

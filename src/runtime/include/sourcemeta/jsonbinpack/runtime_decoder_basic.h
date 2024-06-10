@@ -25,11 +25,11 @@ public:
   auto operator=(const BasicDecoder &) -> BasicDecoder & = delete;
 
   inline auto position() const noexcept -> std::uint64_t {
-    return this->stream.tellg();
+    return static_cast<std::uint64_t>(this->stream.tellg());
   }
 
   inline auto seek(const std::uint64_t offset) -> void {
-    this->stream.seekg(offset);
+    this->stream.seekg(static_cast<std::streamoff>(offset));
   }
 
   // Seek backwards given a relative offset

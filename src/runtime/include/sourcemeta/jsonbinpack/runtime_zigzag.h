@@ -18,7 +18,7 @@ zigzag_encode(const std::int64_t value) noexcept -> std::uint64_t {
 constexpr auto
 zigzag_decode(const std::uint64_t value) noexcept -> std::int64_t {
   if (value % 2 == 0) {
-    return value / 2;
+    return static_cast<std::int64_t>(value / 2);
   }
 
   return -(static_cast<std::int64_t>((value + 1) / 2));

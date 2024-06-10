@@ -4,6 +4,9 @@ add_executable(sourcemeta_jsonbinpack_cli main.cc commands.h
   command_canonicalize.cc command_compile.cc
   command_encode.cc command_decode.cc
   defaults.h version.h.in)
+
+noa_add_default_options(PRIVATE sourcemeta_jsonbinpack_cli)
+
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::compiler)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(sourcemeta_jsonbinpack_cli PRIVATE sourcemeta::jsontoolkit::json)

@@ -7,7 +7,6 @@ both schema-driven and schema-less support."
   HOMEPAGE_URL "https://jsonbinpack.sourcemeta.com")
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include(vendor/noa/cmake/noa.cmake)
-include(cmake/CompilerOptions.cmake)
 
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)

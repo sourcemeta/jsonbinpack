@@ -28,7 +28,7 @@ public:
   auto operator=(const BasicEncoder &) -> BasicEncoder & = delete;
 
   inline auto position() const noexcept -> std::uint64_t {
-    return this->stream.tellp();
+    return static_cast<std::uint64_t>(this->stream.tellp());
   }
 
   inline auto put_byte(const std::uint8_t byte) -> void {
