@@ -10,7 +10,6 @@ on:
   pull_request:
 
 jobs:
-  # TODO: Add Unikraft job too
   test:
     strategy:
       fail-fast: false
@@ -136,9 +135,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install KraftKit
         run: |
-          wget https://github.com/unikraft/kraftkit/releases/download/v0.7.5/kraftkit_0.7.5_linux_amd64.deb
-          sudo dpkg -i kraftkit_0.7.5_linux_amd64.deb
-          rm kraftkit_0.7.5_linux_amd64.deb
+          wget https://github.com/unikraft/kraftkit/releases/download/v0.8.7/kraftkit_0.8.7_linux_amd64.deb
+          sudo dpkg -i kraftkit_0.8.7_linux_amd64.deb
+          rm kraftkit_0.8.7_linux_amd64.deb
 
       - run: cd unikraft && kraft build --target development --jobs 4 --log-type=basic
       - run: cd unikraft && kraft run --target development --memory 200M --disable-acceleration unikraft
