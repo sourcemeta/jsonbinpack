@@ -198,13 +198,16 @@
           JSON BinPack is space-efficient, but what about runtime-efficiency?
         </h4>
         <p>
-          When transmitting data over the Internet, time is the bottleneck, making
-          computation essentially free in comparison. JSON BinPack particularly
-          excels at improving network performance when transmitting data through
-          unreliable and low-bandwidth connections on mobile and IoT systems.
+          When transmitting data over the Internet, time is the bottleneck,
+          making computation much cheaper in comparison. Leaving extremely
+          low-powered devices aside, trading more CPU cycles for better
+          compression is a sensible choice. JSON BinPack particularly excels at
+          improving network performance when transmitting data through unreliable and
+          low-bandwidth connections on mobile and IoT systems, and it is still optimized
+          to deliver the best runtime efficiency possible.
         </p>
         <p>
-          If your use-case demands runtime-efficiency or zero-copy serialization,
+          If your use-case demands extreme runtime-efficiency or zero-copy serialization,
           such as in the case of intra-service or inter-process communication, we
           suggest you consider alternative serialization formats such as
           <a href="https://google.github.io/flatbuffers/">FlatBuffers</a> and
