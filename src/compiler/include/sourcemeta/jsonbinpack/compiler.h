@@ -1,11 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_COMPILER_H_
 #define SOURCEMETA_JSONBINPACK_COMPILER_H_
 
-#if defined(__EMSCRIPTEN__) || defined(__Unikraft__)
-#define SOURCEMETA_JSONBINPACK_COMPILER_EXPORT
-#else
 #include "compiler_export.h"
-#endif
 
 /// @defgroup compiler Compiler
 /// @brief The built-time schema compiler of JSON BinPack

@@ -235,5 +235,3 @@ dist
 .DS_Store
 CMakeUserPresets.json
 Brewfile.lock.json
-/unikraft/.unikraft
-/unikraft/.config.*

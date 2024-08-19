@@ -1,3 +1,2 @@
 --ignore-dir=vendor
 --ignore-dir=build
---ignore-dir=unikraft/.unikraft
