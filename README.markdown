@@ -7,11 +7,8 @@ encode any [JSON](https://www.json.org) document given a matching [JSON Schema
 
 ***
 
-**This is a work-in-progress. You can watch the repository or [join the
-wait-list on the official website](https://jsonbinpack.sourcemeta.com) to get a
-notification when the first release is out.**
-
-In the mean-time, star the project to show your support!
+**This is a work-in-progress. Please consider starring or watching the repository 
+to stay up to date.**
 
 ***
 
