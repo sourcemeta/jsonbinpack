@@ -1,7 +1,6 @@
 # Programs
 CMAKE = cmake
 CTEST = ctest
-KRAFT = kraft
 PYTHON = python3
 
 # Options
@@ -45,16 +44,12 @@ test: .always
 doxygen: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
 
-unikraft: .always
-	cd unikraft && $(KRAFT) build --target development --jobs 4 --log-type=basic
-	cd unikraft && $(KRAFT) run --memory 200M --target development
-
 website: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target website
 	$(PYTHON) -m http.server 3000 --directory build/www
 
 clean: .always
-	$(CMAKE) -E rm -R -f build unikraft/.unikraft
+	$(CMAKE) -E rm -R -f build
 
 # For NMake, which doesn't support .PHONY
 .always:
