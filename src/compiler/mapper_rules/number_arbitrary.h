@@ -1,8 +1,6 @@
-class NumberArbitrary final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class NumberArbitrary final : public sourcemeta::alterschema::Rule {
 public:
-  NumberArbitrary()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("number_arbitrary") {};
+  NumberArbitrary() : sourcemeta::alterschema::Rule("number_arbitrary") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -16,7 +14,7 @@ public:
            schema.defines("type") && schema.at("type").to_string() == "number";
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     make_encoding(transformer, "DOUBLE_VARINT_TUPLE",
                   sourcemeta::jsontoolkit::JSON::make_object());

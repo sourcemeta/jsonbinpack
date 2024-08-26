@@ -1,8 +1,6 @@
-class ExclusiveMinimumToMinimum final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMinimumToMinimum()
-      : SchemaTransformRule("exclusive_minimum_to_minimum") {};
+  ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +15,7 @@ public:
            !schema.defines("minimum");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto new_minimum = transformer.schema().at("exclusiveMinimum");
     new_minimum += sourcemeta::jsontoolkit::JSON{1};

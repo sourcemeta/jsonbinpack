@@ -1,8 +1,6 @@
-class IntegerLowerBound final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class IntegerLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerLowerBound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_lower_bound") {};
+  IntegerLowerBound() : sourcemeta::alterschema::Rule("integer_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -19,7 +17,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();

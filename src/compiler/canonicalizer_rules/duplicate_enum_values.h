@@ -1,7 +1,6 @@
-class DuplicateEnumValues final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DuplicateEnumValues final : public sourcemeta::alterschema::Rule {
 public:
-  DuplicateEnumValues() : SchemaTransformRule("duplicate_enum_values") {};
+  DuplicateEnumValues() : Rule("duplicate_enum_values") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -15,7 +14,7 @@ public:
            schema.at("enum").is_array() && !is_unique(schema.at("enum"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto collection = transformer.schema().at("enum");
     std::sort(collection.as_array().begin(), collection.as_array().end());

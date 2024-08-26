@@ -1,7 +1,6 @@
-class TypeUnionAnyOf final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
-  TypeUnionAnyOf() : SchemaTransformRule("type_union_anyof") {};
+  TypeUnionAnyOf() : Rule("type_union_anyof") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +16,7 @@ public:
            schema.at("type").is_array();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     sourcemeta::jsontoolkit::JSON disjunctors =
         sourcemeta::jsontoolkit::JSON::make_array();

@@ -1,7 +1,6 @@
-class EmptyObjectAsConst final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EmptyObjectAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyObjectAsConst() : SchemaTransformRule("empty_object_as_const") {};
+  EmptyObjectAsConst() : Rule("empty_object_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -19,7 +18,7 @@ public:
            schema.at("maxProperties").to_integer() == 0;
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("const", sourcemeta::jsontoolkit::JSON::make_object());
     transformer.erase("maxProperties");

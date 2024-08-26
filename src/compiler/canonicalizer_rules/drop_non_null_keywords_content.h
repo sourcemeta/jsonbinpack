@@ -1,8 +1,6 @@
-class DropNonNullKeywordsContent final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DropNonNullKeywordsContent final : public sourcemeta::alterschema::Rule {
 public:
-  DropNonNullKeywordsContent()
-      : SchemaTransformRule("drop_non_null_keywords_content") {};
+  DropNonNullKeywordsContent() : Rule("drop_non_null_keywords_content") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +15,7 @@ public:
                               this->BLACKLIST_CONTENT.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_CONTENT.cbegin(),
                            this->BLACKLIST_CONTENT.cend());

@@ -1,6 +1,6 @@
-class NullAsConst final : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class NullAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  NullAsConst() : SchemaTransformRule("null_as_const") {};
+  NullAsConst() : Rule("null_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -15,7 +15,7 @@ public:
            schema.at("type").to_string() == "null";
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("const", sourcemeta::jsontoolkit::JSON{nullptr});
     transformer.erase("type");

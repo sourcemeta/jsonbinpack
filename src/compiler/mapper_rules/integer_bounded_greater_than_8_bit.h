@@ -1,9 +1,8 @@
 class IntegerBoundedGreaterThan8Bit final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   IntegerBoundedGreaterThan8Bit()
-      : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_bounded_greater_than_8_bit") {};
+      : sourcemeta::alterschema::Rule("integer_bounded_greater_than_8_bit") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -22,7 +21,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();

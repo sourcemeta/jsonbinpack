@@ -1,8 +1,6 @@
-class DependentRequiredTautology final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DependentRequiredTautology final : public sourcemeta::alterschema::Rule {
 public:
-  DependentRequiredTautology()
-      : SchemaTransformRule("dependent_required_tautology") {};
+  DependentRequiredTautology() : Rule("dependent_required_tautology") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -24,7 +22,7 @@ public:
                        });
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     const auto &current_requirements = transformer.schema().at("required");
     sourcemeta::jsontoolkit::JSON new_requirements = current_requirements;

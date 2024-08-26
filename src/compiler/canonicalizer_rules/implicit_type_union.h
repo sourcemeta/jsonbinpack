@@ -1,7 +1,6 @@
-class ImplicitTypeUnion final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitTypeUnion() : SchemaTransformRule("implicit_type_union") {};
+  ImplicitTypeUnion() : Rule("implicit_type_union") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -29,7 +28,7 @@ public:
            !has_applicator_blacklist && !has_validation_blacklist;
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     sourcemeta::jsontoolkit::JSON types =
         sourcemeta::jsontoolkit::JSON::make_array();

@@ -1,9 +1,8 @@
 class IntegerBoundedMultiplier8Bit final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   IntegerBoundedMultiplier8Bit()
-      : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_bounded_multiplier_8_bit") {};
+      : sourcemeta::alterschema::Rule("integer_bounded_multiplier_8_bit") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -27,7 +26,7 @@ public:
            states->size() <= std::numeric_limits<std::uint8_t>::max();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto maximum = transformer.schema().at("maximum");

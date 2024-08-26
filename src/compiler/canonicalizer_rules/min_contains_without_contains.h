@@ -1,8 +1,6 @@
-class MinContainsWithoutContains final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class MinContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
-  MinContainsWithoutContains()
-      : SchemaTransformRule("min_contains_without_contains") {};
+  MinContainsWithoutContains() : Rule("min_contains_without_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            !schema.defines("contains");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase("minContains");
   }

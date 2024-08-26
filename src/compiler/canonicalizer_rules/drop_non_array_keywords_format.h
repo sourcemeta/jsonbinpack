@@ -1,8 +1,6 @@
-class DropNonArrayKeywordsFormat final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DropNonArrayKeywordsFormat final : public sourcemeta::alterschema::Rule {
 public:
-  DropNonArrayKeywordsFormat()
-      : SchemaTransformRule("drop_non_array_keywords_format") {};
+  DropNonArrayKeywordsFormat() : Rule("drop_non_array_keywords_format") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -22,7 +20,7 @@ public:
                               this->BLACKLIST_FORMAT.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_FORMAT.cbegin(),
                            this->BLACKLIST_FORMAT.cend());

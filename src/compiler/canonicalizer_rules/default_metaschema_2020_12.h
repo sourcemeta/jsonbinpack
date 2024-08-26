@@ -1,8 +1,6 @@
-class DefaultMetaschema_2020_12 final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DefaultMetaschema_2020_12 final : public sourcemeta::alterschema::Rule {
 public:
-  DefaultMetaschema_2020_12()
-      : SchemaTransformRule("default_metaschema_2020_12") {};
+  DefaultMetaschema_2020_12() : Rule("default_metaschema_2020_12") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,
@@ -14,7 +12,7 @@ public:
            schema.is_object() && !schema.defines("$schema") && level.empty();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("$schema",
                        sourcemeta::jsontoolkit::JSON{

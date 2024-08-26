@@ -1,8 +1,6 @@
-class IntegerUnbound final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class IntegerUnbound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerUnbound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_unbound") {};
+  IntegerUnbound() : sourcemeta::alterschema::Rule("integer_unbound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -19,7 +17,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("multiplier", sourcemeta::jsontoolkit::JSON{1});

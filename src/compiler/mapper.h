@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_COMPILER_MAPPER_H_
 #define SOURCEMETA_JSONBINPACK_COMPILER_MAPPER_H_
 
+#include <sourcemeta/alterschema/engine.h>
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
@@ -31,7 +32,7 @@ auto is_encoding(const sourcemeta::jsontoolkit::JSON &document) -> bool {
          dialect.value() == sourcemeta::jsonbinpack::schemas::encoding::v1::id;
 }
 
-auto make_encoding(sourcemeta::jsontoolkit::SchemaTransformer &document,
+auto make_encoding(sourcemeta::alterschema::Transformer &document,
                    const std::string &encoding,
                    const sourcemeta::jsontoolkit::JSON &options) -> void {
   document.replace(sourcemeta::jsontoolkit::JSON::make_object());
@@ -127,7 +128,7 @@ public:
 
     // The "any" encoding is always the last resort
     if (!is_encoding(document)) {
-      sourcemeta::jsontoolkit::SchemaTransformer transformer{document};
+      sourcemeta::alterschema::Transformer transformer{document};
       make_encoding(transformer, "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
                     sourcemeta::jsontoolkit::JSON::make_object());
     }
@@ -136,7 +137,7 @@ public:
   }
 
 private:
-  sourcemeta::jsontoolkit::SchemaTransformBundle bundle;
+  sourcemeta::alterschema::Bundle bundle;
 };
 
 } // namespace sourcemeta::jsonbinpack

@@ -1,8 +1,6 @@
-class ExclusiveMinimumAndMinimum final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ExclusiveMinimumAndMinimum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMinimumAndMinimum()
-      : SchemaTransformRule("exclusive_minimum_and_minimum") {};
+  ExclusiveMinimumAndMinimum() : Rule("exclusive_minimum_and_minimum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            schema.at("exclusiveMinimum").is_number();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     if (transformer.schema().at("exclusiveMinimum") <
         transformer.schema().at("minimum")) {

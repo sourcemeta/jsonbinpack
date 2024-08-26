@@ -1,8 +1,6 @@
-class EnumSingleton final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EnumSingleton final : public sourcemeta::alterschema::Rule {
 public:
-  EnumSingleton()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_singleton") {};
+  EnumSingleton() : sourcemeta::alterschema::Rule("enum_singleton") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +15,7 @@ public:
            schema.at("enum").size() == 1;
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("value", transformer.schema().at("enum").at(0));

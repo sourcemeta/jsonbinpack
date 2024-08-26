@@ -1,8 +1,6 @@
-class UnsatisfiableMaxContains final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
 public:
-  UnsatisfiableMaxContains()
-      : SchemaTransformRule("unsatisfiable_max_contains") {};
+  UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -19,7 +17,7 @@ public:
                schema.at("maxItems").to_integer();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase("maxContains");
   }

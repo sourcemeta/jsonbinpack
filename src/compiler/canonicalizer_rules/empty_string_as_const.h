@@ -1,7 +1,6 @@
-class EmptyStringAsConst final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EmptyStringAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyStringAsConst() : SchemaTransformRule("empty_string_as_const") {};
+  EmptyStringAsConst() : Rule("empty_string_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +17,7 @@ public:
            schema.at("maxLength").to_integer() == 0;
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("const", sourcemeta::jsontoolkit::JSON{""});
     transformer.erase("maxLength");

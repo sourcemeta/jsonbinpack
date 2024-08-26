@@ -1,8 +1,8 @@
 class MinPropertiesRequiredTautology final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   MinPropertiesRequiredTautology()
-      : SchemaTransformRule("min_properties_required_tautology") {};
+      : Rule("min_properties_required_tautology") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -21,7 +21,7 @@ public:
                    schema.at("minProperties").to_integer());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("minProperties",
                        sourcemeta::jsontoolkit::JSON{

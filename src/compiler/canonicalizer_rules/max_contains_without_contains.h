@@ -1,8 +1,6 @@
-class MaxContainsWithoutContains final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class MaxContainsWithoutContains final : public sourcemeta::alterschema::Rule {
 public:
-  MaxContainsWithoutContains()
-      : SchemaTransformRule("max_contains_without_contains") {};
+  MaxContainsWithoutContains() : Rule("max_contains_without_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            !schema.defines("contains");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase("maxContains");
   }

@@ -1,7 +1,6 @@
-class EmptyPatternProperties final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EmptyPatternProperties final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyPatternProperties() : SchemaTransformRule("empty_pattern_properties") {};
+  EmptyPatternProperties() : Rule("empty_pattern_properties") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -16,7 +15,7 @@ public:
            schema.at("patternProperties").empty();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase("patternProperties");
   }

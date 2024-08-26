@@ -1,7 +1,6 @@
-class DuplicateAnyOfBranches final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DuplicateAnyOfBranches final : public sourcemeta::alterschema::Rule {
 public:
-  DuplicateAnyOfBranches() : SchemaTransformRule("duplicate_anyof_branches") {};
+  DuplicateAnyOfBranches() : Rule("duplicate_anyof_branches") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -15,7 +14,7 @@ public:
            schema.at("anyOf").is_array() && !is_unique(schema.at("anyOf"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto collection = transformer.schema().at("anyOf");
     std::sort(collection.as_array().begin(), collection.as_array().end());

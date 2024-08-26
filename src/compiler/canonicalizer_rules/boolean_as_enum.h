@@ -1,7 +1,6 @@
-class BooleanAsEnum final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class BooleanAsEnum final : public sourcemeta::alterschema::Rule {
 public:
-  BooleanAsEnum() : SchemaTransformRule("boolean_as_enum") {};
+  BooleanAsEnum() : Rule("boolean_as_enum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +16,7 @@ public:
            !schema.defines("enum");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto choices = sourcemeta::jsontoolkit::JSON::make_array();
     choices.push_back(sourcemeta::jsontoolkit::JSON{false});

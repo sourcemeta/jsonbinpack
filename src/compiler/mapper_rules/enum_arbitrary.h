@@ -1,9 +1,7 @@
 // TODO: Unit test this mapping once we have container encodings
-class EnumArbitrary final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EnumArbitrary final : public sourcemeta::alterschema::Rule {
 public:
-  EnumArbitrary()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_arbitrary") {};
+  EnumArbitrary() : sourcemeta::alterschema::Rule("enum_arbitrary") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,
@@ -18,7 +16,7 @@ public:
            !is_byte(schema.at("enum").size() - 1);
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto options = sourcemeta::jsontoolkit::JSON::make_object();
     options.assign("choices", transformer.schema().at("enum"));

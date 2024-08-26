@@ -1,9 +1,7 @@
-class IntegerLowerBoundMultiplier final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class IntegerLowerBoundMultiplier final : public sourcemeta::alterschema::Rule {
 public:
   IntegerLowerBoundMultiplier()
-      : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_lower_bound_multiplier") {};
+      : sourcemeta::alterschema::Rule("integer_lower_bound_multiplier") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -20,7 +18,7 @@ public:
            schema.defines("multipleOf") && schema.at("multipleOf").is_integer();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto multiplier = transformer.schema().at("multipleOf");

@@ -1,8 +1,6 @@
-class EqualNumericBoundsAsConst final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EqualNumericBoundsAsConst()
-      : SchemaTransformRule("equal_numeric_bounds_as_const") {};
+  EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -21,7 +19,7 @@ public:
            schema.at("minimum") == schema.at("maximum");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("const", transformer.schema().at("minimum"));
     transformer.erase("minimum");

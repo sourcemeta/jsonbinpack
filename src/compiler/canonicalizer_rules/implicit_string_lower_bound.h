@@ -1,8 +1,6 @@
-class ImplicitStringLowerBound final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitStringLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitStringLowerBound()
-      : SchemaTransformRule("implicit_string_lower_bound") {};
+  ImplicitStringLowerBound() : Rule("implicit_string_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            !schema.defines("minLength");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("minLength", sourcemeta::jsontoolkit::JSON{0});
   }
