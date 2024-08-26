@@ -18,9 +18,7 @@ private:
       typename std::vector<GenericPointer<CharT, Traits, Allocator>>;
 
 public:
-  GenericPointerWalker(const GenericValue<CharT, Traits, Allocator> &document) {
-    this->walk(document, {});
-  }
+  GenericPointerWalker(const JSON &document) { this->walk(document, {}); }
 
   using const_iterator = typename internal::const_iterator;
   auto begin() const -> const_iterator { return this->pointers.begin(); };
@@ -29,7 +27,7 @@ public:
   auto cend() const -> const_iterator { return this->pointers.cend(); };
 
 private:
-  auto walk(const GenericValue<CharT, Traits, Allocator> &document,
+  auto walk(const JSON &document,
             const GenericPointer<CharT, Traits, Allocator> &pointer) -> void {
     this->pointers.push_back(pointer);
     if (document.is_array()) {

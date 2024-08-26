@@ -163,4 +163,8 @@ auto to_uri(const Pointer &pointer) -> URI {
   return URI::from_fragment(result.str());
 }
 
+auto to_uri(const Pointer &pointer, const URI &base) -> URI {
+  return to_uri(pointer).resolve_from_if_absolute(base).canonicalize();
+}
+
 } // namespace sourcemeta::jsontoolkit

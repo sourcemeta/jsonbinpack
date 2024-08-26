@@ -1,43 +1,46 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_VALUE_H_
 
+#include "json_export.h"
+
 #include <sourcemeta/jsontoolkit/json_array.h>
 #include <sourcemeta/jsontoolkit/json_object.h>
 
-#include <algorithm>        // std::find, std::any_of
+#include <algorithm>        // std::any_of
 #include <cassert>          // assert
-#include <cmath>            // std::isinf, std::isnan
 #include <cstdint>          // std::int64_t, std::uint8_t
-#include <functional>       // std::less
+#include <functional>       // std::less, std::reference_wrapper
 #include <initializer_list> // std::initializer_list
+#include <memory>           // std::allocator
 #include <set>              // std::set
 #include <sstream>          // std::basic_istringstream
-#include <stdexcept>        // std::invalid_argument
-#include <string>           // std::basic_string, std::to_string
+#include <string>           // std::basic_string, std::char_traits
 #include <string_view>      // std::basic_string_view
 #include <type_traits>      // std::enable_if_t, std::is_same_v
-#include <utility>          // std::in_place_type, std::pair, std::move
-#include <variant>          // std::variant, std::holds_alternative, std::get
+#include <utility>          // std::in_place_type, std::pair
+#include <variant>          // std::variant
 
 namespace sourcemeta::jsontoolkit {
 
 /// @ingroup json
-template <typename CharT, typename Traits,
-          template <typename T> typename Allocator>
-class GenericValue {
+class SOURCEMETA_JSONTOOLKIT_JSON_EXPORT JSON {
 public:
-  /// The character traits used by the JSON document.
-  using CharTraits = Traits;
   /// The character type used by the JSON document.
-  using Char = typename CharTraits::char_type;
+  using Char = char;
+  /// The character traits used by the JSON document.
+  using CharTraits = std::char_traits<Char>;
+  /// The integer type used by the JSON document.
+  using Integer = std::int64_t;
+  /// The real type used by the JSON document.
+  using Real = double;
+  /// The allocator used by the JSON document.
+  template <typename T> using Allocator = std::allocator<T>;
   /// The string type used by the JSON document.
-  using String = std::basic_string<CharT, Traits, Allocator<CharT>>;
+  using String = std::basic_string<Char, CharTraits, Allocator<Char>>;
   /// The array type used by the JSON document.
-  using Array = GenericArray<GenericValue, Allocator<GenericValue>>;
+  using Array = JSONArray<JSON>;
   /// The object type used by the JSON document.
-  using Object =
-      GenericObject<String, GenericValue,
-                    Allocator<std::pair<const String, GenericValue>>>;
+  using Object = JSONObject<String, JSON>;
 
   /*
    * Constructors
@@ -51,8 +54,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_integer{4};
   /// ```
-  explicit GenericValue(const std::int64_t value)
-      : data{std::in_place_type<std::int64_t>, value} {}
+  explicit JSON(const std::int64_t value);
 
   /// This constructor creates a JSON document from an integer type. For
   /// example:
@@ -62,8 +64,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_integer{4};
   /// ```
-  explicit GenericValue(const std::size_t value)
-      : data{std::in_place_type<std::int64_t>, value} {}
+  explicit JSON(const std::size_t value);
 
   /// This constructor creates a JSON document from an integer type. For
   /// example:
@@ -73,14 +74,12 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_integer{4};
   /// ```
-  explicit GenericValue(const int value)
-      : data{std::in_place_type<std::int64_t>, value} {}
+  explicit JSON(const int value);
 
   // On some systems, `std::int64_t` might be equal to `long`
   template <typename T = std::int64_t,
             typename = std::enable_if_t<!std::is_same_v<T, std::int64_t>>>
-  explicit GenericValue(const long value)
-      : data{std::in_place_type<std::int64_t>, value} {}
+  explicit JSON(const long value) : data{std::in_place_type<Integer>, value} {}
 
   /// This constructor creates a JSON document from an real number type. For
   /// example:
@@ -90,15 +89,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_real{3.14};
   /// ```
-  explicit GenericValue(const double value)
-      : data{std::in_place_type<double>, value} {
-    // Numeric values that cannot be represented as sequences of digits (such as
-    // Infinity and NaN) are not permitted. See
-    // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    if (std::isinf(value) || std::isnan(value)) {
-      throw std::invalid_argument("JSON does not support Infinity or NaN");
-    }
-  }
+  explicit JSON(const double value);
 
   /// This constructor creates a JSON document from an real number type. For
   /// example:
@@ -108,8 +99,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_real{3.14};
   /// ```
-  explicit GenericValue(const float value)
-      : GenericValue(static_cast<double>(value)) {}
+  explicit JSON(const float value);
 
   /// This constructor creates a JSON document from a boolean type. For example:
   ///
@@ -118,8 +108,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_boolean{true};
   /// ```
-  explicit GenericValue(const bool value)
-      : data{std::in_place_type<bool>, value} {}
+  explicit JSON(const bool value);
 
   /// This constructor creates a JSON document from a null type. For example:
   ///
@@ -128,8 +117,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_null{nullptr};
   /// ```
-  explicit GenericValue(const std::nullptr_t)
-      : data{std::in_place_type<std::nullptr_t>, nullptr} {}
+  explicit JSON(const std::nullptr_t);
 
   /// This constructor creates a JSON document from a string type. For example:
   ///
@@ -138,8 +126,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_string{"foo"};
   /// ```
-  explicit GenericValue(const String &value)
-      : data{std::in_place_type<String>, value} {}
+  explicit JSON(const String &value);
 
   /// This constructor creates a JSON document from a string type. For example:
   ///
@@ -148,8 +135,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_string{"foo"};
   /// ```
-  explicit GenericValue(const std::basic_string_view<CharT, Traits> &value)
-      : data{std::in_place_type<String>, value} {}
+  explicit JSON(const std::basic_string_view<Char, CharTraits> &value);
 
   /// This constructor creates a JSON document from a string type. For example:
   ///
@@ -158,8 +144,7 @@ public:
   ///
   /// const sourcemeta::jsontoolkit::JSON my_string{"foo"};
   /// ```
-  explicit GenericValue(const CharT *const value)
-      : data{std::in_place_type<String>, value} {}
+  explicit JSON(const Char *const value);
 
   /// This constructor creates a JSON array from a set of other JSON documents.
   /// For example:
@@ -175,12 +160,10 @@ public:
   ///
   /// assert(my_array.is_array());
   /// ```
-  explicit GenericValue(std::initializer_list<GenericValue> values)
-      : data{std::in_place_type<Array>, values} {}
+  explicit JSON(std::initializer_list<JSON> values);
 
   /// A copy constructor for the array type.
-  explicit GenericValue(const Array &value)
-      : data{std::in_place_type<Array>, value} {}
+  explicit JSON(const Array &value);
 
   /// This constructor creates a JSON object from a pair of other JSON
   /// documents. For example:
@@ -196,13 +179,11 @@ public:
   ///
   /// assert(my_object.is_object());
   /// ```
-  explicit GenericValue(
-      std::initializer_list<typename Object::Container::value_type> values)
-      : data{std::in_place_type<Object>, values} {}
+  explicit JSON(
+      std::initializer_list<typename Object::Container::value_type> values);
 
   /// A copy constructor for the object type.
-  explicit GenericValue(const Object &value)
-      : data{std::in_place_type<Object>, value} {}
+  explicit JSON(const Object &value);
 
   /// This function creates an empty JSON array. For example:
   ///
@@ -218,7 +199,7 @@ public:
   ///
   /// This function is particularly handy for programatically constructing
   /// arrays.
-  static auto make_array() -> GenericValue { return GenericValue{Array{}}; }
+  static auto make_array() -> JSON;
 
   /// This function creates an empty JSON object. For example:
   ///
@@ -234,58 +215,52 @@ public:
   ///
   /// This function is particularly handy for programatically constructing
   /// objects.
-  static auto make_object() -> GenericValue { return GenericValue{Object{}}; }
+  static auto make_object() -> JSON;
 
   /*
    * Operators
    */
 
-  /// Overload to support ordering of JSON documents. Typically for sorting
-  /// reasons.
-  auto
-  operator<(const GenericValue<CharT, Traits, Allocator> &other) const noexcept
-      -> bool {
-    if (this->type() == Type::Integer && other.type() == Type::Real) {
-      return static_cast<double>(this->to_integer()) < other.to_real();
-    } else if (this->type() == Type::Real && other.type() == Type::Integer) {
-      return this->to_real() < static_cast<double>(other.to_integer());
-    }
+  auto operator<(const JSON &other) const noexcept -> bool;
+  auto operator<=(const JSON &other) const noexcept -> bool;
+  auto operator>(const JSON &other) const noexcept -> bool;
+  auto operator>=(const JSON &other) const noexcept -> bool;
+  auto operator==(const JSON &other) const noexcept -> bool;
+  auto operator!=(const JSON &) const noexcept -> bool = default;
 
-    if (this->type() != other.type()) {
-      return this->data.index() < other.data.index();
-    }
+  /// Add two numeric JSON instances and get a new instance with the result. For
+  /// example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON left{5};
+  /// const sourcemeta::jsontoolkit::JSON right{3};
+  /// const sourcemeta::jsontoolkit::JSON result{left + right};
+  /// assert(result.is_integer());
+  /// assert(document.to_integer() == 8);
+  /// ```
+  auto operator+(const JSON &other) const -> JSON;
 
-    switch (this->type()) {
-      case Type::Null:
-        return false;
-      case Type::Boolean:
-        return this->to_boolean() < other.to_boolean();
-      case Type::Integer:
-        return this->to_integer() < other.to_integer();
-      case Type::Real:
-        return this->to_real() < other.to_real();
-      case Type::String:
-        return this->to_string() < other.to_string();
-      case Type::Array:
-        return this->as_array() < other.as_array();
-      case Type::Object:
-        return this->as_object() < other.as_object();
-      default:
-        return false;
-    }
-  }
+  /// Substract two numeric JSON instances and get a new instance with the
+  /// result. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON left{5};
+  /// const sourcemeta::jsontoolkit::JSON right{3};
+  /// const sourcemeta::jsontoolkit::JSON result{left - right};
+  /// assert(result.is_integer());
+  /// assert(document.to_integer() == 2);
+  /// ```
+  auto operator-(const JSON &other) const -> JSON;
 
-  /// Overload to support deep equality of JSON documents.
-  auto
-  operator==(const GenericValue<CharT, Traits, Allocator> &other) const noexcept
-      -> bool {
-    return this->data == other.data;
-  }
-
-  // TODO: Support passing integer and real literals too.
-  /// This overload adds a numeric JSON instance to another numeric JSON
+  /// This operator adds a numeric JSON instance to another numeric JSON
   /// instance. For example, a numeric JSON instance 3.2 can be added to a
-  /// numeric JSON instance 5 as follows::
+  /// numeric JSON instance 5 as follows:
   ///
   /// ```cpp
   /// #include <sourcemeta/jsontoolkit/json.h>
@@ -297,24 +272,23 @@ public:
   /// assert(document.is_real());
   /// assert(document.to_real() == 8.2);
   /// ```
-  auto operator+=(const GenericValue &additive) -> GenericValue & {
-    assert(this->is_number());
-    assert(additive.is_number());
-    if (this->is_integer() && additive.is_integer()) {
-      this->data.template emplace<std::int64_t>(this->to_integer() +
-                                                additive.to_integer());
-    } else if (this->is_integer() && additive.is_real()) {
-      this->data.template emplace<double>(
-          static_cast<double>(this->to_integer()) + additive.to_real());
-    } else if (this->is_real() && additive.is_integer()) {
-      this->data.template emplace<double>(
-          this->to_real() + static_cast<double>(additive.to_integer()));
-    } else {
-      this->data.template emplace<double>(this->to_real() + additive.to_real());
-    }
+  auto operator+=(const JSON &additive) -> JSON &;
 
-    return *this;
-  }
+  /// This operator substracts a numeric JSON instance from another numeric JSON
+  /// instance. For example, a numeric JSON instance 3.2 can be substracted from
+  /// a numeric JSON instance 5 as follows:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::jsontoolkit::JSON document{5};
+  /// const sourcemeta::jsontoolkit::JSON substractive{3.2};
+  /// document -= substractive;
+  /// assert(document.is_real());
+  /// assert(document.to_real() == 1.8);
+  /// ```
+  auto operator-=(const JSON &substractive) -> JSON &;
 
   /*
    * Type checking
@@ -329,9 +303,7 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{true};
   /// assert(document.is_boolean());
   /// ```
-  [[nodiscard]] auto is_boolean() const noexcept -> bool {
-    return std::holds_alternative<bool>(this->data);
-  }
+  [[nodiscard]] auto is_boolean() const noexcept -> bool;
 
   /// Check if the input JSON document is null. For example:
   ///
@@ -342,9 +314,7 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{nullptr};
   /// assert(document.is_null());
   /// ```
-  [[nodiscard]] auto is_null() const noexcept -> bool {
-    return std::holds_alternative<std::nullptr_t>(this->data);
-  }
+  [[nodiscard]] auto is_null() const noexcept -> bool;
 
   /// Check if the input JSON document is an integer. For example:
   ///
@@ -355,9 +325,7 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{5};
   /// assert(document.is_integer());
   /// ```
-  [[nodiscard]] auto is_integer() const noexcept -> bool {
-    return std::holds_alternative<std::int64_t>(this->data);
-  }
+  [[nodiscard]] auto is_integer() const noexcept -> bool;
 
   /// Check if the input JSON document is a real type. For example:
   ///
@@ -368,9 +336,19 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{3.14};
   /// assert(document.is_real());
   /// ```
-  [[nodiscard]] auto is_real() const noexcept -> bool {
-    return std::holds_alternative<double>(this->data);
-  }
+  [[nodiscard]] auto is_real() const noexcept -> bool;
+
+  /// Check if the input JSON document is a real number that represents an
+  /// integer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON document{5.0};
+  /// assert(document.is_integer_real());
+  /// ```
+  [[nodiscard]] auto is_integer_real() const noexcept -> bool;
 
   /// Check if the input JSON document is either an integer or a real type. For
   /// example:
@@ -384,9 +362,7 @@ public:
   /// assert(real.is_number());
   /// assert(integer.is_number());
   /// ```
-  [[nodiscard]] auto is_number() const noexcept -> bool {
-    return this->is_integer() || this->is_real();
-  }
+  [[nodiscard]] auto is_number() const noexcept -> bool;
 
   /// Check if the input JSON document is either a positive integer or a
   /// positive real number. Zero is considered to be positive. For example:
@@ -400,16 +376,7 @@ public:
   /// assert(real.is_positive());
   /// assert(!integer.is_positive());
   /// ```
-  [[nodiscard]] auto is_positive() const noexcept -> bool {
-    switch (this->type()) {
-      case Type::Integer:
-        return this->to_integer() >= 0;
-      case Type::Real:
-        return this->to_real() >= static_cast<double>(0.0);
-      default:
-        return false;
-    }
-  }
+  [[nodiscard]] auto is_positive() const noexcept -> bool;
 
   /// Check if the input JSON document is a string. For example:
   ///
@@ -420,9 +387,7 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{"foo"};
   /// assert(document.is_string());
   /// ```
-  [[nodiscard]] auto is_string() const noexcept -> bool {
-    return std::holds_alternative<String>(this->data);
-  }
+  [[nodiscard]] auto is_string() const noexcept -> bool;
 
   /// Check if the input JSON document is an array. For example:
   ///
@@ -434,9 +399,7 @@ public:
   /// document=sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// assert(document.is_array());
   /// ```
-  [[nodiscard]] auto is_array() const noexcept -> bool {
-    return std::holds_alternative<Array>(this->data);
-  }
+  [[nodiscard]] auto is_array() const noexcept -> bool;
 
   /// Check if the input JSON document is an object. For example:
   ///
@@ -448,9 +411,7 @@ public:
   /// document=sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
   /// assert(document.is_object());
   /// ```
-  [[nodiscard]] auto is_object() const noexcept -> bool {
-    return std::holds_alternative<Object>(this->data);
-  }
+  [[nodiscard]] auto is_object() const noexcept -> bool;
 
   // The enumeration indexes must stay in sync with the internal variant
   /// The different types of a JSON instance.
@@ -473,9 +434,7 @@ public:
   /// const sourcemeta::jsontoolkit::JSON document{true};
   /// assert(document.type() == sourcemeta::jsontoolkit::JSON::Type::Boolean);
   /// ```
-  [[nodiscard]] auto type() const noexcept -> Type {
-    return static_cast<Type>(this->data.index());
-  }
+  [[nodiscard]] auto type() const noexcept -> Type;
 
   /*
    * Type conversion
@@ -492,10 +451,7 @@ public:
   /// assert(document.is_boolean());
   /// assert(document.to_boolean());
   /// ```
-  [[nodiscard]] auto to_boolean() const noexcept -> bool {
-    assert(this->is_boolean());
-    return std::get<bool>(this->data);
-  }
+  [[nodiscard]] auto to_boolean() const noexcept -> bool;
 
   /// Convert a JSON instance into a signed integer value. The result of this
   /// method is undefined unless the JSON instance holds an integer value. For
@@ -509,10 +465,7 @@ public:
   /// assert(document.is_integer());
   /// assert(document.to_integer() == 5);
   /// ```
-  [[nodiscard]] auto to_integer() const noexcept -> std::int64_t {
-    assert(this->is_integer());
-    return std::get<std::int64_t>(this->data);
-  }
+  [[nodiscard]] auto to_integer() const noexcept -> Integer;
 
   /// Convert a JSON instance into an IEEE 64-bit floating-point value. The
   /// result of this method is undefined unless the JSON instance holds a real
@@ -526,10 +479,7 @@ public:
   /// assert(document.is_real());
   /// assert(document.to_real() == 3.14);
   /// ```
-  [[nodiscard]] auto to_real() const noexcept -> double {
-    assert(this->is_real());
-    return std::get<double>(this->data);
-  }
+  [[nodiscard]] auto to_real() const noexcept -> Real;
 
   /// Convert a JSON instance into a standard string value. The result of this
   /// method is undefined unless the JSON instance holds a string value. For
@@ -543,10 +493,7 @@ public:
   /// assert(document.is_string());
   /// assert(document.to_string() == "foo");
   /// ```
-  [[nodiscard]] auto to_string() const noexcept -> const String & {
-    assert(this->is_string());
-    return std::get<String>(this->data);
-  }
+  [[nodiscard]] auto to_string() const noexcept -> const String &;
 
   /// Convert a JSON instance into a standard string value. The result of this
   /// method is undefined unless the JSON instance holds a string value. For
@@ -560,10 +507,7 @@ public:
   /// assert(document.is_string());
   /// assert(document.to_string() == "foo");
   /// ```
-  [[nodiscard]] auto to_string() noexcept -> String & {
-    assert(this->is_string());
-    return std::get<String>(this->data);
-  }
+  [[nodiscard]] auto to_string() noexcept -> String &;
 
   /// Get a standard input string stream from a JSON string. The result of this
   /// method is undefined unless the JSON instance holds a string value. For
@@ -579,10 +523,7 @@ public:
   /// assert(stream.get() == 'f');
   /// ```
   [[nodiscard]] auto to_stringstream() const
-      -> std::basic_istringstream<CharT, Traits, Allocator<CharT>> {
-    return std::basic_istringstream<CharT, Traits, Allocator<CharT>>{
-        std::get<String>(this->data)};
-  }
+      -> std::basic_istringstream<Char, CharTraits, Allocator<Char>>;
 
   /// Get the JSON document as an array instance. This is convenient
   /// for using constant iterators on the array. For example:
@@ -602,10 +543,7 @@ public:
   ///                           << "\n";
   ///               });
   /// ```
-  [[nodiscard]] auto as_array() const noexcept -> const Array & {
-    assert(this->is_array());
-    return std::get<Array>(this->data);
-  }
+  [[nodiscard]] auto as_array() const noexcept -> const Array &;
 
   /// Get the JSON document as an array instance. This is convenient
   /// for using mutable iterators on the array. For example:
@@ -619,10 +557,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// std::sort(document.as_array().begin(), document.as_array().end());
   /// ```
-  [[nodiscard]] auto as_array() noexcept -> Array & {
-    assert(this->is_array());
-    return std::get<Array>(this->data);
-  }
+  [[nodiscard]] auto as_array() noexcept -> Array &;
 
   /// Get the JSON document as an object instance. This is convenient
   /// for using constant iterators on the object. For example:
@@ -646,10 +581,7 @@ public:
   ///                           << "\n";
   ///               });
   /// ```
-  [[nodiscard]] auto as_object() noexcept -> Object & {
-    assert(this->is_object());
-    return std::get<Object>(this->data);
-  }
+  [[nodiscard]] auto as_object() noexcept -> Object &;
 
   /// Get the JSON document as an object instance. This is convenient
   /// for using mutable iterators on the object. For example:
@@ -669,10 +601,32 @@ public:
   ///   value += sourcemeta::jsontoolkit::JSON{1};
   /// }
   /// ```
-  [[nodiscard]] auto as_object() const noexcept -> const Object & {
-    assert(this->is_object());
-    return std::get<Object>(this->data);
-  }
+  [[nodiscard]] auto as_object() const noexcept -> const Object &;
+
+  /// Get the JSON numeric document as a real number if it is not one already.
+  /// For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON document{5};
+  /// assert(document.as_real() == 5.0);
+  /// ```
+  [[nodiscard]] auto as_real() const noexcept -> Real;
+
+  /// Get the JSON numeric document as an integer number if it is not one
+  /// already. If the number is a real number, truncation will take place. For
+  /// example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON document{5.3};
+  /// assert(document.as_integer() == 5);
+  /// ```
+  [[nodiscard]] auto as_integer() const noexcept -> Integer;
 
   /*
    * Getters
@@ -693,21 +647,11 @@ public:
   /// assert(my_array.at(1).to_integer() == 2);
   ///
   /// const sourcemeta::jsontoolkit::JSON my_object =
-  ///   sourcemeta::jsontoolkit::parse_json("{ \"1\": "foo" }");
+  ///   sourcemeta::jsontoolkit::parse("{ \"1\": "foo" }");
   /// assert(my_array.at(1).to_string() == "foo");
   /// ```
-  [[nodiscard]] auto at(const typename Array::size_type index) const
-      -> const GenericValue & {
-    // In practice, this case only applies in some edge cases when
-    // using JSON Pointers
-    if (this->is_object()) [[unlikely]] {
-      return this->at(std::to_string(index));
-    }
-
-    assert(this->is_array());
-    assert(index < this->size());
-    return std::get<Array>(this->data).data.at(index);
-  }
+  [[nodiscard]] auto
+  at(const typename Array::size_type index) const -> const JSON &;
 
   /// This method retrieves a element by its index. If the input JSON instance
   /// is an object, a property that corresponds to the stringified integer will
@@ -724,21 +668,10 @@ public:
   /// assert(my_array.at(1).to_integer() == 2);
   ///
   /// sourcemeta::jsontoolkit::JSON my_object =
-  ///   sourcemeta::jsontoolkit::parse_json("{ \"1\": "foo" }");
+  ///   sourcemeta::jsontoolkit::parse("{ \"1\": "foo" }");
   /// assert(my_array.at(1).to_string() == "foo");
   /// ```
-  [[nodiscard]] auto at(const typename Array::size_type index)
-      -> GenericValue & {
-    // In practice, this case only applies in some edge cases when
-    // using JSON Pointers
-    if (this->is_object()) [[unlikely]] {
-      return this->at(std::to_string(index));
-    }
-
-    assert(this->is_array());
-    assert(index < this->size());
-    return std::get<Array>(this->data).data.at(index);
-  }
+  [[nodiscard]] auto at(const typename Array::size_type index) -> JSON &;
 
   /// This method retrieves an object element.
   ///
@@ -752,11 +685,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("{ \"foo\": 1, \"bar\": 2 }");
   /// assert(my_object.at("bar").to_integer() == 2);
   /// ```
-  [[nodiscard]] auto at(const String &key) const -> const GenericValue & {
-    assert(this->is_object());
-    assert(this->defines(key));
-    return std::get<Object>(this->data).data.at(key);
-  }
+  [[nodiscard]] auto at(const String &key) const -> const JSON &;
 
   /// This method retrieves an object element.
   ///
@@ -770,11 +699,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("{ \"foo\": 1, \"bar\": 2 }");
   /// assert(my_object.at("bar").to_integer() == 2);
   /// ```
-  [[nodiscard]] auto at(const String &key) -> GenericValue & {
-    assert(this->is_object());
-    assert(this->defines(key));
-    return std::get<Object>(this->data).data.at(key);
-  }
+  [[nodiscard]] auto at(const String &key) -> JSON &;
 
   /// This method retrieves a reference to the first element of a JSON array.
   /// This method is undefined if the input JSON instance is an empty array. For
@@ -788,11 +713,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// assert(document.front().to_integer() == 1);
   /// ```
-  [[nodiscard]] auto front() -> GenericValue & {
-    assert(this->is_array());
-    assert(!this->empty());
-    return std::get<Array>(this->data).data.front();
-  }
+  [[nodiscard]] auto front() -> JSON &;
 
   /// This method retrieves a reference to the first element of a JSON array.
   /// This method is undefined if the input JSON instance is an empty array. For
@@ -806,11 +727,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// assert(document.front().to_integer() == 1);
   /// ```
-  [[nodiscard]] auto front() const -> const GenericValue & {
-    assert(this->is_array());
-    assert(!this->empty());
-    return std::get<Array>(this->data).data.front();
-  }
+  [[nodiscard]] auto front() const -> const JSON &;
 
   /// This method retrieves a reference to the last element of a JSON array.
   /// This method is undefined if the input JSON instance is an empty array. For
@@ -824,11 +741,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// assert(document.back().to_integer() == 3);
   /// ```
-  [[nodiscard]] auto back() -> GenericValue & {
-    assert(this->is_array());
-    assert(!this->empty());
-    return std::get<Array>(this->data).data.back();
-  }
+  [[nodiscard]] auto back() -> JSON &;
 
   /// This method retrieves a reference to the last element of a JSON array.
   /// This method is undefined if the input JSON instance is an empty array. For
@@ -842,11 +755,7 @@ public:
   ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
   /// assert(document.back().to_integer() == 3);
   /// ```
-  [[nodiscard]] auto back() const -> const GenericValue & {
-    assert(this->is_array());
-    assert(!this->empty());
-    return std::get<Array>(this->data).data.back();
-  }
+  [[nodiscard]] auto back() const -> const JSON &;
 
   /*
    * Read operations
@@ -854,7 +763,7 @@ public:
 
   /// If the input JSON instance is an object, return its number of pairs. If
   /// the input JSON instance is an array, return its number of elements. If the
-  /// input JSON instance is a string, return its length.
+  /// input JSON instance is a string, return its logical length.
   ///
   /// For example:
   ///
@@ -872,15 +781,50 @@ public:
   /// assert(my_array.size() == 2);
   /// assert(my_string.size() == 3);
   /// ```
-  [[nodiscard]] auto size() const -> std::size_t {
-    if (this->is_object()) {
-      return std::get<Object>(this->data).data.size();
-    } else if (this->is_array()) {
-      return std::get<Array>(this->data).data.size();
-    } else {
-      return std::get<String>(this->data).size();
-    }
-  }
+  [[nodiscard]] auto size() const -> std::size_t;
+
+  /// If the input JSON instance is string, input JSON instance is a string,
+  /// return its number of bytes. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON my_string{
+  ///   sourcemeta::jsontoolkit::parse("\"\\uD83D\\uDCA9\"")};
+  /// assert(my_string.size() == 2);
+  /// ```
+  [[nodiscard]] auto byte_size() const -> std::size_t;
+
+  /// Estimate the byte size occupied by the given parsed JSON instance (not its
+  /// stringified representation). Keep in mind that as the method name implies,
+  /// this is just a rough estimate. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON value =
+  ///   sourcemeta::jsontoolkit::parse("{ \"foo\": 1 }");
+  ///
+  /// // Byte length of "foo" (3) + byte length of 1 (8)
+  /// assert(value.estimated_byte_size() == 11);
+  /// ```
+  [[nodiscard]] auto estimated_byte_size() const -> std::uint64_t;
+
+  /// Check whether a numeric instance is divisible by another numeric instance.
+  /// For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON dividend{6};
+  /// const sourcemeta::jsontoolkit::JSON divisor{1.5};
+  ///
+  /// assert(dividend.divisible_by(divisor));
+  /// ```
+  [[nodiscard]] auto divisible_by(const JSON &divisor) const -> bool;
 
   /// A convenience method to check whether the input JSON document is an empty
   /// object, empty array or empty string.
@@ -901,15 +845,7 @@ public:
   /// assert(my_array.empty());
   /// assert(my_string.empty());
   /// ```
-  [[nodiscard]] auto empty() const -> bool {
-    if (this->is_object()) {
-      return std::get<Object>(this->data).data.empty();
-    } else if (this->is_array()) {
-      return std::get<Array>(this->data).data.empty();
-    } else {
-      return std::get<String>(this->data).empty();
-    }
-  }
+  [[nodiscard]] auto empty() const -> bool;
 
   /// This method checks whether an input JSON object defines a specific key.
   /// For example:
@@ -923,10 +859,7 @@ public:
   /// assert(document.defines("foo"));
   /// assert(!document.defines("bar"));
   /// ```
-  [[nodiscard]] auto defines(const String &key) const -> bool {
-    assert(this->is_object());
-    return std::get<Object>(this->data).data.contains(key);
-  }
+  [[nodiscard]] auto defines(const String &key) const -> bool;
 
   /// This method checks whether an input JSON object defines a specific integer
   /// key. For example:
@@ -936,14 +869,12 @@ public:
   /// #include <cassert>
   ///
   /// const sourcemeta::jsontoolkit::JSON document =
-  ///   sourcemeta::jsontoolkit::parse_json("{ \"0\": 1 }");
+  ///   sourcemeta::jsontoolkit::parse("{ \"0\": 1 }");
   /// assert(document.defines(0));
   /// assert(!document.defines(1));
   /// ```
-  [[nodiscard]] auto defines(const typename Array::size_type index) const
-      -> bool {
-    return this->defines(std::to_string(index));
-  }
+  [[nodiscard]] auto
+  defines(const typename Array::size_type index) const -> bool;
 
   /// This method checks whether an input JSON object defines at least one given
   /// key.
@@ -979,10 +910,8 @@ public:
   ///
   /// assert(document.defines_any({ "foo", "qux" }));
   /// ```
-  [[nodiscard]] auto defines_any(std::initializer_list<String> keys) const
-      -> bool {
-    return this->defines_any(keys.begin(), keys.end());
-  }
+  [[nodiscard]] auto
+  defines_any(std::initializer_list<String> keys) const -> bool;
 
   /// This method checks if an JSON array contains a given JSON instance. For
   /// example:
@@ -996,11 +925,20 @@ public:
   /// assert(document.contains(sourcemeta::jsontoolkit::JSON{2}));
   /// assert(!document.contains(sourcemeta::jsontoolkit::JSON{4}));
   /// ```
-  [[nodiscard]] auto contains(const GenericValue &element) const -> bool {
-    assert(this->is_array());
-    return std::find(this->as_array().cbegin(), this->as_array().cend(),
-                     element) != this->as_array().cend();
-  }
+  [[nodiscard]] auto contains(const JSON &element) const -> bool;
+
+  /// This method checks if an JSON array does not contain duplicated items. For
+  /// example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::JSON document =
+  ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
+  /// assert(document.unique());
+  /// ```
+  [[nodiscard]] auto unique() const -> bool;
 
   /*
    * Write operations
@@ -1020,10 +958,7 @@ public:
   /// assert(document.size() == 4);
   /// assert(document.back().to_integer() == 4);
   /// ```
-  auto push_back(const GenericValue &value) -> void {
-    assert(this->is_array());
-    return std::get<Array>(this->data).data.push_back(value);
-  }
+  auto push_back(const JSON &value) -> void;
 
   /// This method inserts a new element to the end of the given array. For
   /// example:
@@ -1038,10 +973,46 @@ public:
   /// assert(document.size() == 4);
   /// assert(document.back().to_integer() == 4);
   /// ```
-  auto push_back(GenericValue &&value) -> void {
-    assert(this->is_array());
-    return std::get<Array>(this->data).data.push_back(std::move(value));
-  }
+  auto push_back(JSON &&value) -> void;
+
+  /// This method inserts a new element to the end of the given array if an
+  /// equal element is not already present in the array. The return value is a
+  /// pair consisting of a reference to the element in question and whether the
+  /// element was inserted or not. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::jsontoolkit::JSON document =
+  ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
+  /// const sourcemeta::jsontoolkit::JSON new_element{3};
+  /// const auto result{document.push_back_if_unique(new_element)};
+  /// assert(result.first.get().to_integer() == 3);
+  /// assert(!result.second);
+  /// ```
+  auto push_back_if_unique(const JSON &value)
+      -> std::pair<std::reference_wrapper<const JSON>, bool>;
+
+  /// This method inserts a new element to the end of the given array if an
+  /// equal element is not already present in the array. The return value is a
+  /// pair consisting of a reference to the element in question and whether the
+  /// element was inserted or not. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/json.h>
+  /// #include <cassert>
+  /// #include <utility>
+  ///
+  /// sourcemeta::jsontoolkit::JSON document =
+  ///   sourcemeta::jsontoolkit::parse("[ 1, 2, 3 ]");
+  /// sourcemeta::jsontoolkit::JSON new_element{3};
+  /// const auto result{document.push_back_if_unique(std::move(new_element)};
+  /// assert(result.first.get().to_integer() == 3);
+  /// assert(!result.second);
+  /// ```
+  auto push_back_if_unique(JSON &&value)
+      -> std::pair<std::reference_wrapper<const JSON>, bool>;
 
   /// This method sets or updates an object key. For example, an object can be
   /// updated to contain a new `bar` boolean member as follows:
@@ -1057,10 +1028,7 @@ public:
   /// assert(document.defines("foo"));
   /// assert(document.defines("bar"));
   /// ```
-  auto assign(const String &key, const GenericValue &value) -> void {
-    assert(this->is_object());
-    std::get<Object>(this->data).data.insert_or_assign(key, value);
-  }
+  auto assign(const String &key, const JSON &value) -> void;
 
   /// This method sets or updates an object key. For example, an object can be
   /// updated to contain a new `bar` boolean member as follows:
@@ -1075,10 +1043,7 @@ public:
   /// assert(document.defines("foo"));
   /// assert(document.defines("bar"));
   /// ```
-  auto assign(const String &key, GenericValue &&value) -> void {
-    assert(this->is_object());
-    std::get<Object>(this->data).data.insert_or_assign(key, std::move(value));
-  }
+  auto assign(const String &key, JSON &&value) -> void;
 
   /// This method sets an object key if it is not already defined. For example:
   ///
@@ -1100,12 +1065,7 @@ public:
   /// assert(document.defines("bar"));
   /// assert(document.at("bar").is_integer());
   /// ```
-  auto assign_if_missing(const String &key, const GenericValue &value) -> void {
-    assert(this->is_object());
-    if (!this->defines(key)) {
-      this->assign(key, value);
-    }
-  }
+  auto assign_if_missing(const String &key, const JSON &value) -> void;
 
   /// This method sets an object key if it is not already defined. For example:
   ///
@@ -1124,12 +1084,7 @@ public:
   /// assert(document.defines("bar"));
   /// assert(document.at("bar").is_integer());
   /// ```
-  auto assign_if_missing(const String &key, GenericValue &&value) -> void {
-    assert(this->is_object());
-    if (!this->defines(key)) {
-      this->assign(key, std::move(value));
-    }
-  }
+  auto assign_if_missing(const String &key, JSON &&value) -> void;
 
   /// This method deletes an object key. For example:
   ///
@@ -1142,10 +1097,7 @@ public:
   /// document.erase("foo");
   /// assert(!document.defines("foo"));
   /// ```
-  auto erase(const String &key) -> typename Object::size_type {
-    assert(this->is_object());
-    return std::get<Object>(this->data).data.erase(key);
-  }
+  auto erase(const String &key) -> typename Object::size_type;
 
   /// This method deletes a set of object keys. For example:
   ///
@@ -1194,9 +1146,7 @@ public:
   /// assert(!document.defines("bar"));
   /// assert(document.defines("baz"));
   /// ```
-  auto erase_keys(std::initializer_list<String> keys) -> void {
-    this->erase_keys(keys.begin(), keys.end());
-  }
+  auto erase_keys(std::initializer_list<String> keys) -> void;
 
   /// This method deletes an array element using an iterator. For example:
   ///
@@ -1213,10 +1163,7 @@ public:
   /// assert(array.at(1), 3);
   /// ```
   auto erase(typename Array::const_iterator position) ->
-      typename Array::iterator {
-    assert(this->is_array());
-    return std::get<Array>(this->data).data.erase(position);
-  }
+      typename Array::iterator;
 
   /// This method deletes a set of array elements using iterators. For example:
   ///
@@ -1232,10 +1179,7 @@ public:
   /// assert(array.at(0), 1);
   /// ```
   auto erase(typename Array::const_iterator first,
-             typename Array::const_iterator last) -> typename Array::iterator {
-    assert(this->is_array());
-    return std::get<Array>(this->data).data.erase(first, last);
-  }
+             typename Array::const_iterator last) -> typename Array::iterator;
 
   /// This method deletes all members of an object or all elements of an array,
   /// leaving them empty. For example:
@@ -1253,13 +1197,7 @@ public:
   /// assert(my_object.empty());
   /// assert(my_array.empty());
   /// ```
-  auto clear() -> void {
-    if (this->is_object()) {
-      std::get<Object>(this->data).data.clear();
-    } else {
-      std::get<Array>(this->data).data.clear();
-    }
-  }
+  auto clear() -> void;
 
   /// This method deletes all members of an object except for the JSON keys
   /// declares as the second argument. For example:
@@ -1320,9 +1258,7 @@ public:
   /// assert(!document.defines("bar"));
   /// assert(!document.defines("baz"));
   /// ```
-  auto clear_except(std::initializer_list<String> keys) -> void {
-    this->clear_except(keys.begin(), keys.end());
-  }
+  auto clear_except(std::initializer_list<String> keys) -> void;
 
   /*
    * Transform operations
@@ -1342,7 +1278,7 @@ public:
   /// document.at("foo").into(value);
   /// assert(document.at("foo").is_integer());
   /// ```
-  auto into(const GenericValue &other) -> void { this->data = other.data; }
+  auto into(const JSON &other) -> void;
 
   /// This method sets a value to another JSON value. For example, the member of
   /// a JSON document can be transformed from a boolean to an integer as
@@ -1357,9 +1293,7 @@ public:
   /// document.at("foo").into(sourcemeta::jsontoolkit::JSON{2});
   /// assert(document.at("foo").is_integer());
   /// ```
-  auto into(GenericValue &&other) noexcept -> void {
-    this->data = std::move(other.data);
-  }
+  auto into(JSON &&other) noexcept -> void;
 
   /// This method converts an existing JSON instance into an empty array. For
   /// example:
@@ -1374,9 +1308,7 @@ public:
   /// assert(document.is_array());
   /// assert(document.empty());
   /// ```
-  auto into_array() -> void {
-    this->into(GenericValue<CharT, Traits, Allocator>::make_array());
-  }
+  auto into_array() -> void;
 
   /// This method converts an existing JSON instance into an empty object. For
   /// example:
@@ -1391,9 +1323,7 @@ public:
   /// assert(document.is_object());
   /// assert(document.empty());
   /// ```
-  auto into_object() -> void {
-    this->into(GenericValue<CharT, Traits, Allocator>::make_object());
-  }
+  auto into_object() -> void;
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered
@@ -1402,9 +1332,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  std::variant<std::nullptr_t, bool, std::int64_t, double, String, Array,
-               Object>
-      data;
+  std::variant<std::nullptr_t, bool, Integer, Real, String, Array, Object> data;
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif

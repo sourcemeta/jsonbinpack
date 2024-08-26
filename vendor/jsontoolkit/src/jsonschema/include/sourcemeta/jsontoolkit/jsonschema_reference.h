@@ -1,11 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_REFERENCE_H_
 #define SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_REFERENCE_H_
 
-#if defined(__EMSCRIPTEN__) || defined(__Unikraft__)
-#define SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_EXPORT
-#else
 #include "jsonschema_export.h"
-#endif
 
 #include <sourcemeta/jsontoolkit/jsonpointer.h>
 #include <sourcemeta/jsontoolkit/jsonschema_resolver.h>
@@ -24,12 +20,27 @@ namespace sourcemeta::jsontoolkit {
 /// The reference type
 enum class ReferenceType { Static, Dynamic };
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+// GCC believes that a member of an enum class (which is namespaced by
+// definition), can shadow an alias defined even on a different namespace.
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+/// @ingroup jsonschema
+/// The reference entry type
+enum class ReferenceEntryType { Resource, Anchor, Pointer };
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 /// @ingroup jsonschema
 /// A single frame in a JSON Schema reference frame
 struct ReferenceFrameEntry {
+  const ReferenceEntryType type;
   const std::optional<std::string> root;
   const std::string base;
   const Pointer pointer;
+  const Pointer relative_pointer;
   const std::string dialect;
 };
 

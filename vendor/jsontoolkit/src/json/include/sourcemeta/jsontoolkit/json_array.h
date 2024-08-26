@@ -7,19 +7,34 @@
 namespace sourcemeta::jsontoolkit {
 
 /// @ingroup json
-template <typename Value, typename Allocator> class GenericArray {
+template <typename Value> class JSONArray {
 public:
-  using Container = std::vector<Value, Allocator>;
-  GenericArray() : data{} {}
-  GenericArray(std::initializer_list<Value> values) : data{values} {}
-  auto operator<(const GenericArray<Value, Allocator> &other) const noexcept
-      -> bool {
+  // Constructors
+  using Container =
+      std::vector<Value, typename Value::template Allocator<Value>>;
+  JSONArray() : data{} {}
+  JSONArray(std::initializer_list<Value> values) : data{values} {}
+
+  // Operators
+  // We cannot default given that this class references
+  // a JSON "value" as an incomplete type
+  auto operator<(const JSONArray<Value> &other) const noexcept -> bool {
     return this->data < other.data;
   }
-  /// Compare array instances
-  auto operator==(const GenericArray<Value, Allocator> &other) const noexcept
-      -> bool {
+  auto operator<=(const JSONArray<Value> &other) const noexcept -> bool {
+    return this->data <= other.data;
+  }
+  auto operator>(const JSONArray<Value> &other) const noexcept -> bool {
+    return this->data > other.data;
+  }
+  auto operator>=(const JSONArray<Value> &other) const noexcept -> bool {
+    return this->data >= other.data;
+  }
+  auto operator==(const JSONArray<Value> &other) const noexcept -> bool {
     return this->data == other.data;
+  }
+  auto operator!=(const JSONArray<Value> &other) const noexcept -> bool {
+    return this->data != other.data;
   }
 
   // Member types

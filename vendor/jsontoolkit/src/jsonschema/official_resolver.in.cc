@@ -103,13 +103,16 @@ auto sourcemeta::jsontoolkit::official_resolver(std::string_view identifier)
         R"EOF(@METASCHEMA_HYPERSCHEMA_2019_09_OUTPUT@)EOF"));
 
     // JSON Schema Draft7
-  } else if (identifier == "http://json-schema.org/draft-07/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-07/schema#" ||
+             identifier == "http://json-schema.org/draft-07/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT7@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-07/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-07/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-07/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT7@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-07/links#") {
+  } else if (identifier == "http://json-schema.org/draft-07/links#" ||
+             identifier == "http://json-schema.org/draft-07/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT7@)EOF"));
   } else if (identifier ==
@@ -118,80 +121,102 @@ auto sourcemeta::jsontoolkit::official_resolver(std::string_view identifier)
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT7_OUTPUT@)EOF"));
 
     // JSON Schema Draft6
-  } else if (identifier == "http://json-schema.org/draft-06/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-06/schema#" ||
+             identifier == "http://json-schema.org/draft-06/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT6@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-06/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-06/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-06/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT6@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-06/links#") {
+  } else if (identifier == "http://json-schema.org/draft-06/links#" ||
+             identifier == "http://json-schema.org/draft-06/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT6@)EOF"));
 
     // JSON Schema Draft4
-  } else if (identifier == "http://json-schema.org/draft-04/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-04/schema#" ||
+             identifier == "http://json-schema.org/draft-04/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT4@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-04/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-04/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-04/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT4@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-04/links#") {
+  } else if (identifier == "http://json-schema.org/draft-04/links#" ||
+             identifier == "http://json-schema.org/draft-04/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT4@)EOF"));
 
     // JSON Schema Draft3
-  } else if (identifier == "http://json-schema.org/draft-03/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-03/schema#" ||
+             identifier == "http://json-schema.org/draft-03/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT3@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-03/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-03/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-03/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT3@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-03/links#") {
+  } else if (identifier == "http://json-schema.org/draft-03/links#" ||
+             identifier == "http://json-schema.org/draft-03/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT3@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-03/json-ref#") {
+  } else if (identifier == "http://json-schema.org/draft-03/json-ref#" ||
+             identifier == "http://json-schema.org/draft-03/json-ref") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSON_REF_DRAFT3@)EOF"));
 
     // JSON Schema Draft2
-  } else if (identifier == "http://json-schema.org/draft-02/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-02/schema#" ||
+             identifier == "http://json-schema.org/draft-02/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT2@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-02/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-02/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-02/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT2@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-02/links#") {
+  } else if (identifier == "http://json-schema.org/draft-02/links#" ||
+             identifier == "http://json-schema.org/draft-02/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT2@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-02/json-ref#") {
+  } else if (identifier == "http://json-schema.org/draft-02/json-ref#" ||
+             identifier == "http://json-schema.org/draft-02/json-ref") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSON_REF_DRAFT2@)EOF"));
 
     // JSON Schema Draft1
-  } else if (identifier == "http://json-schema.org/draft-01/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-01/schema#" ||
+             identifier == "http://json-schema.org/draft-01/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT1@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-01/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-01/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-01/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT1@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-01/links#") {
+  } else if (identifier == "http://json-schema.org/draft-01/links#" ||
+             identifier == "http://json-schema.org/draft-01/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT1@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-01/json-ref#") {
+  } else if (identifier == "http://json-schema.org/draft-01/json-ref#" ||
+             identifier == "http://json-schema.org/draft-01/json-ref") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSON_REF_DRAFT1@)EOF"));
 
     // JSON Schema Draft0
-  } else if (identifier == "http://json-schema.org/draft-00/schema#") {
+  } else if (identifier == "http://json-schema.org/draft-00/schema#" ||
+             identifier == "http://json-schema.org/draft-00/schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSONSCHEMA_DRAFT0@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-00/hyper-schema#") {
+  } else if (identifier == "http://json-schema.org/draft-00/hyper-schema#" ||
+             identifier == "http://json-schema.org/draft-00/hyper-schema") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_HYPERSCHEMA_DRAFT0@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-00/links#") {
+  } else if (identifier == "http://json-schema.org/draft-00/links#" ||
+             identifier == "http://json-schema.org/draft-00/links") {
     promise.set_value(
         sourcemeta::jsontoolkit::parse(R"EOF(@METASCHEMA_LINKS_DRAFT0@)EOF"));
-  } else if (identifier == "http://json-schema.org/draft-00/json-ref#") {
+  } else if (identifier == "http://json-schema.org/draft-00/json-ref#" ||
+             identifier == "http://json-schema.org/draft-00/json-ref") {
     promise.set_value(sourcemeta::jsontoolkit::parse(
         R"EOF(@METASCHEMA_JSON_REF_DRAFT0@)EOF"));
 

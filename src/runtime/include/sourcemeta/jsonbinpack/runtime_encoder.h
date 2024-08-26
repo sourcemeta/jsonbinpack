@@ -457,7 +457,7 @@ public:
       }
     } else if (document.is_string()) {
       const std::basic_string<CharT> value{document.to_string()};
-      const auto size{document.size()};
+      const auto size{document.byte_size()};
       const bool is_shared{this->context().has(value, ContextType::Standalone)};
       if (size < uint_max<5>) {
         const std::uint8_t type{is_shared ? TYPE_SHARED_STRING : TYPE_STRING};
