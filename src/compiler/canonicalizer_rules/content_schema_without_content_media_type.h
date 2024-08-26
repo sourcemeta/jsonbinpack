@@ -2,7 +2,7 @@ class ContentSchemaWithoutContentMediaType final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ContentSchemaWithoutContentMediaType()
-      : SchemaTransformRule("content_schema_without_content_media_type"){};
+      : SchemaTransformRule("content_schema_without_content_media_type") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

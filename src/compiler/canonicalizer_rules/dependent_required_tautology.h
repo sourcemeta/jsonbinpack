@@ -2,7 +2,7 @@ class DependentRequiredTautology final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DependentRequiredTautology()
-      : SchemaTransformRule("dependent_required_tautology"){};
+      : SchemaTransformRule("dependent_required_tautology") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -3,7 +3,7 @@ class IntegerUnboundMultiplier final
 public:
   IntegerUnboundMultiplier()
       : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_unbound_multiplier"){};
+            "integer_unbound_multiplier") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -1,6 +1,6 @@
 class ConstAsEnum final : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ConstAsEnum() : SchemaTransformRule("const_as_enum"){};
+  ConstAsEnum() : SchemaTransformRule("const_as_enum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

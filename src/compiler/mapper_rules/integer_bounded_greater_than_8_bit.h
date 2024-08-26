@@ -3,7 +3,7 @@ class IntegerBoundedGreaterThan8Bit final
 public:
   IntegerBoundedGreaterThan8Bit()
       : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_bounded_greater_than_8_bit"){};
+            "integer_bounded_greater_than_8_bit") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

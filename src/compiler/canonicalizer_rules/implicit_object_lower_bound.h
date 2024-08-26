@@ -2,7 +2,7 @@ class ImplicitObjectLowerBound final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ImplicitObjectLowerBound()
-      : SchemaTransformRule("implicit_object_lower_bound"){};
+      : SchemaTransformRule("implicit_object_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

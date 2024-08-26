@@ -1,7 +1,7 @@
 class IfWithoutThenElse final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  IfWithoutThenElse() : SchemaTransformRule("if_without_then_else"){};
+  IfWithoutThenElse() : SchemaTransformRule("if_without_then_else") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

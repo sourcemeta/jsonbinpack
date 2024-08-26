@@ -2,7 +2,7 @@ class MinContainsWithoutContains final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   MinContainsWithoutContains()
-      : SchemaTransformRule("min_contains_without_contains"){};
+      : SchemaTransformRule("min_contains_without_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

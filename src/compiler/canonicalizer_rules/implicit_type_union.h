@@ -1,7 +1,7 @@
 class ImplicitTypeUnion final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  ImplicitTypeUnion() : SchemaTransformRule("implicit_type_union"){};
+  ImplicitTypeUnion() : SchemaTransformRule("implicit_type_union") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

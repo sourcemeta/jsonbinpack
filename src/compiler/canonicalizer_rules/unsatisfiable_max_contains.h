@@ -2,7 +2,7 @@ class UnsatisfiableMaxContains final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   UnsatisfiableMaxContains()
-      : SchemaTransformRule("unsatisfiable_max_contains"){};
+      : SchemaTransformRule("unsatisfiable_max_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

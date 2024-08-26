@@ -3,7 +3,7 @@ class IntegerLowerBoundMultiplier final
 public:
   IntegerLowerBoundMultiplier()
       : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_lower_bound_multiplier"){};
+            "integer_lower_bound_multiplier") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

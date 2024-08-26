@@ -3,7 +3,7 @@ class IntegerBoundedMultiplierGreaterThan8Bit final
 public:
   IntegerBoundedMultiplierGreaterThan8Bit()
       : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_bounded_multiplier_greater_than_8_bit"){};
+            "integer_bounded_multiplier_greater_than_8_bit") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

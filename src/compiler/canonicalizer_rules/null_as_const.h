@@ -1,6 +1,6 @@
 class NullAsConst final : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  NullAsConst() : SchemaTransformRule("null_as_const"){};
+  NullAsConst() : SchemaTransformRule("null_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

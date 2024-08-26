@@ -2,7 +2,7 @@ class DropNonNumericKeywordsFormat final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNumericKeywordsFormat()
-      : SchemaTransformRule("drop_non_numeric_keywords_format"){};
+      : SchemaTransformRule("drop_non_numeric_keywords_format") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

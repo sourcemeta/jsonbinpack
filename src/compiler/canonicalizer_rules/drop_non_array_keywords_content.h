@@ -2,7 +2,7 @@ class DropNonArrayKeywordsContent final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonArrayKeywordsContent()
-      : SchemaTransformRule("drop_non_array_keywords_content"){};
+      : SchemaTransformRule("drop_non_array_keywords_content") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

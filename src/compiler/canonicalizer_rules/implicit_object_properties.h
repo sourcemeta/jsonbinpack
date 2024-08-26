@@ -2,7 +2,7 @@ class ImplicitObjectProperties final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ImplicitObjectProperties()
-      : SchemaTransformRule("implicit_object_properties"){};
+      : SchemaTransformRule("implicit_object_properties") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

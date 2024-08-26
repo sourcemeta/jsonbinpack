@@ -1,7 +1,7 @@
 class MinimumRealForInteger final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  MinimumRealForInteger() : SchemaTransformRule("minimum_real_for_integer"){};
+  MinimumRealForInteger() : SchemaTransformRule("minimum_real_for_integer") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

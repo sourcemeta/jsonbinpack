@@ -1,7 +1,7 @@
 class EmptyArrayAsConst final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
-  EmptyArrayAsConst() : SchemaTransformRule("empty_array_as_const"){};
+  EmptyArrayAsConst() : SchemaTransformRule("empty_array_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

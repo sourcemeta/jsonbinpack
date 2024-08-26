@@ -2,7 +2,7 @@ class DropNonBooleanKeywordsApplicator final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonBooleanKeywordsApplicator()
-      : SchemaTransformRule("drop_non_boolean_keywords_applicator"){};
+      : SchemaTransformRule("drop_non_boolean_keywords_applicator") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
