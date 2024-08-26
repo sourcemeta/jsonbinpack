@@ -42,7 +42,8 @@ auto make_encoding(sourcemeta::jsontoolkit::SchemaTransformer &document,
   document.assign(keywords::options, options);
 }
 
-constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
+// TODO: Re-use from numeric library
+template <typename T> constexpr auto is_byte(const T value) noexcept -> bool {
   return value <= std::numeric_limits<std::uint8_t>::max();
 }
 
