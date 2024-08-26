@@ -1,11 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_ANCHOR_H_
 #define SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_ANCHOR_H_
 
-#if defined(__EMSCRIPTEN__) || defined(__Unikraft__)
-#define SOURCEMETA_JSONTOOLKIT_JSONSCHEMA_EXPORT
-#else
 #include "jsonschema_export.h"
-#endif
 
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema_resolver.h>
@@ -23,7 +19,8 @@ enum class AnchorType { Static, Dynamic, All };
 
 /// @ingroup jsonschema
 ///
-/// This function returns the anchors of the given schema, if any. A given
+/// This function returns the anchors of the given schema, if any. This function
+/// also supports the old pre 2019-09 `id` and `$id` anchor form. A given
 /// subschema might have more than two anchors if, for example, declares both
 /// `$anchor` and `$dynamicAnchor` (in 2020-12). For example:
 ///

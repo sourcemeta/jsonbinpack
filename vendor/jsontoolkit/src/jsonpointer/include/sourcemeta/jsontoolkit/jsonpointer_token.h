@@ -14,7 +14,7 @@ template <typename CharT, typename Traits,
           template <typename T> typename Allocator>
 class GenericToken {
 public:
-  using Value = GenericValue<CharT, Traits, Allocator>;
+  using Value = JSON;
   using Property = typename Value::String;
   using Index = typename Value::Array::size_type;
 
@@ -183,18 +183,40 @@ public:
     return std::get<Index>(this->data);
   }
 
+  /// Convert a JSON Pointer token into a JSON document, whether it represents a
+  /// property or an index. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::Pointer::Token index{1};
+  /// const sourcemeta::jsontoolkit::Pointer::Token property{"foo"};
+  ///
+  /// const sourcemeta::jsontoolkit::JSON json_index{index.to_json()};
+  /// const sourcemeta::jsontoolkit::JSON json_property{property.to_json()};
+  ///
+  /// assert(json_index.is_integer());
+  /// assert(json_property.is_string());
+  /// ```
+  [[nodiscard]] auto to_json() const -> JSON {
+    if (this->is_property()) {
+      return JSON{this->to_property()};
+    } else {
+      return JSON{this->to_index()};
+    }
+  }
+
   /// Compare JSON Pointer tokens
-  auto
-  operator==(const GenericToken<CharT, Traits, Allocator> &other) const noexcept
-      -> bool {
+  auto operator==(const GenericToken<CharT, Traits, Allocator> &other)
+      const noexcept -> bool {
     return this->data == other.data;
   }
 
   /// Overload to support ordering of JSON Pointer token. Typically for sorting
   /// reasons.
-  auto
-  operator<(const GenericToken<CharT, Traits, Allocator> &other) const noexcept
-      -> bool {
+  auto operator<(const GenericToken<CharT, Traits, Allocator> &other)
+      const noexcept -> bool {
     return this->data < other.data;
   }
 

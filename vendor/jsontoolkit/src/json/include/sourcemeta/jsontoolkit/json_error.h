@@ -1,14 +1,11 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSON_ERROR_H_
 #define SOURCEMETA_JSONTOOLKIT_JSON_ERROR_H_
 
-#if defined(__EMSCRIPTEN__) || defined(__Unikraft__)
-#define SOURCEMETA_JSONTOOLKIT_JSON_EXPORT
-#else
 #include "json_export.h"
-#endif
 
-#include <cstdint>   // std::uint64_t
-#include <exception> // std::exception
+#include <cstdint>    // std::uint64_t
+#include <exception>  // std::exception
+#include <filesystem> // std::filesystem::path
 
 namespace sourcemeta::jsontoolkit {
 
@@ -20,7 +17,7 @@ namespace sourcemeta::jsontoolkit {
 #endif
 
 /// @ingroup json
-/// This class represents a parsing error.
+/// This class represents a parsing error
 class SOURCEMETA_JSONTOOLKIT_JSON_EXPORT ParseError : public std::exception {
 public:
   /// Create a parsing error
@@ -28,7 +25,7 @@ public:
       : line_{line}, column_{column} {}
 
   [[nodiscard]] auto what() const noexcept -> const char * override {
-    return "The input is not a valid JSON document";
+    return "Failed to parse the JSON document";
   }
 
   /// Get the line number of the error
@@ -42,6 +39,28 @@ public:
 private:
   std::uint64_t line_;
   std::uint64_t column_;
+};
+
+/// @ingroup json
+/// This class represents a parsing error occurring from parsing a file
+class SOURCEMETA_JSONTOOLKIT_JSON_EXPORT FileParseError : public ParseError {
+public:
+  /// Create a file parsing error
+  FileParseError(const std::filesystem::path &path, const std::uint64_t line,
+                 const std::uint64_t column)
+      : ParseError{line, column}, path_{path} {}
+
+  /// Create a file parsing error from a parse error
+  FileParseError(const std::filesystem::path &path, const ParseError &parent)
+      : ParseError{parent.line(), parent.column()}, path_{path} {}
+
+  /// Get the fiel path of the error
+  [[nodiscard]] auto path() const noexcept -> const std::filesystem::path {
+    return path_;
+  }
+
+private:
+  std::filesystem::path path_;
 };
 
 #if defined(_MSC_VER)

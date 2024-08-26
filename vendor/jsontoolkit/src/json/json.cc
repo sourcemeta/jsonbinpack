@@ -3,54 +3,82 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <fstream> // std::ifstream
-#include <ios>     // std::ios_base
+#include <cassert>      // assert
+#include <fstream>      // std::ifstream
+#include <system_error> // std::make_error_code, std::errc
 
 namespace sourcemeta::jsontoolkit {
 
 auto parse(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
            std::uint64_t &line, std::uint64_t &column) -> JSON {
-  return parse<JSON::Char, JSON::CharTraits, std::allocator>(stream, line,
-                                                             column);
+  return internal_parse(stream, line, column);
 }
 
 auto parse(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
            std::uint64_t &line, std::uint64_t &column) -> JSON {
-  return parse<JSON::Char, JSON::CharTraits, std::allocator>(input, line,
-                                                             column);
+  return internal_parse(input, line, column);
 }
 
 auto parse(std::basic_istream<JSON::Char, JSON::CharTraits> &stream) -> JSON {
   std::uint64_t line{1};
   std::uint64_t column{0};
-  return parse<JSON::Char, JSON::CharTraits, std::allocator>(stream, line,
-                                                             column);
+  return parse(stream, line, column);
 }
 
 auto parse(const std::basic_string<JSON::Char, JSON::CharTraits> &input)
     -> JSON {
   std::uint64_t line{1};
   std::uint64_t column{0};
-  return parse<JSON::Char, JSON::CharTraits, std::allocator>(input, line,
-                                                             column);
+  return parse(input, line, column);
+}
+
+auto read_file(const std::filesystem::path &path)
+    -> std::basic_ifstream<JSON::Char, JSON::CharTraits> {
+  if (std::filesystem::is_directory(path)) {
+    throw std::filesystem::filesystem_error(
+        "Cannot parse a directory as JSON", path,
+        std::make_error_code(std::errc::is_a_directory));
+  }
+
+  std::ifstream stream{std::filesystem::canonical(path)};
+  stream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+  assert(!stream.fail());
+  assert(stream.is_open());
+  return stream;
 }
 
 auto from_file(const std::filesystem::path &path) -> JSON {
-  std::ifstream stream{path};
-  stream.exceptions(std::ios_base::badbit);
-  return parse(stream);
+  auto stream{read_file(path)};
+  try {
+    return parse(stream);
+  } catch (const ParseError &error) {
+    // For producing better error messages
+    throw FileParseError(path, error);
+  }
 }
 
 auto stringify(const JSON &document,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(document, stream);
+  stringify<std::allocator>(document, stream, nullptr);
 }
 
 auto prettify(const JSON &document,
               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
-  prettify<JSON::Char, JSON::CharTraits, std::allocator>(document, stream);
+  prettify<std::allocator>(document, stream, nullptr);
+}
+
+auto stringify(const JSON &document,
+               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
+               const KeyComparison &compare) -> void {
+  stringify<std::allocator>(document, stream, compare);
+}
+
+auto prettify(const JSON &document,
+              std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
+              const KeyComparison &compare) -> void {
+  prettify<std::allocator>(document, stream, compare);
 }
 
 auto operator<<(std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
@@ -62,6 +90,31 @@ auto operator<<(std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
   prettify(document, stream);
 #endif
   return stream;
+}
+
+auto operator<<(std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
+                const JSON::Type type)
+    -> std::basic_ostream<JSON::Char, JSON::CharTraits> & {
+  switch (type) {
+    case sourcemeta::jsontoolkit::JSON::Type::Null:
+      return stream << "null";
+    case sourcemeta::jsontoolkit::JSON::Type::Boolean:
+      return stream << "boolean";
+    case sourcemeta::jsontoolkit::JSON::Type::Integer:
+      return stream << "integer";
+    case sourcemeta::jsontoolkit::JSON::Type::Real:
+      return stream << "real";
+    case sourcemeta::jsontoolkit::JSON::Type::String:
+      return stream << "string";
+    case sourcemeta::jsontoolkit::JSON::Type::Array:
+      return stream << "array";
+    case sourcemeta::jsontoolkit::JSON::Type::Object:
+      return stream << "object";
+    default:
+      // Should never happen, but some compilers are not happy without this
+      assert(false);
+      return stream;
+  }
 }
 
 } // namespace sourcemeta::jsontoolkit

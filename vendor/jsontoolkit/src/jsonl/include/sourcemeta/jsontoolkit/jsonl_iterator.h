@@ -1,11 +1,7 @@
 #ifndef SOURCEMETA_JSONTOOLKIT_JSONL_ITERATOR_H_
 #define SOURCEMETA_JSONTOOLKIT_JSONL_ITERATOR_H_
 
-#if defined(__EMSCRIPTEN__) || defined(__Unikraft__)
-#define SOURCEMETA_JSONTOOLKIT_JSONL_EXPORT
-#else
 #include "jsonl_export.h"
-#endif
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -34,8 +30,8 @@ public:
   auto operator++() -> ConstJSONLIterator &;
 
   SOURCEMETA_JSONTOOLKIT_JSONL_EXPORT friend auto
-  operator==(const ConstJSONLIterator &left, const ConstJSONLIterator &right)
-      -> bool;
+  operator==(const ConstJSONLIterator &left,
+             const ConstJSONLIterator &right) -> bool;
 
 private:
   std::uint64_t line{1};

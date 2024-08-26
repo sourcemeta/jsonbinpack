@@ -64,17 +64,23 @@ auto stringify(const GenericPointer<CharT, Traits, Allocator> &pointer,
           // (%x5C), and control (%x00-1F) characters MUST be escaped. See
           // https://www.rfc-editor.org/rfc/rfc6901#section-5
           case internal::token_pointer_quote<CharT>:
-            write_character<CharT, Traits, Allocator>(
-                stream, internal::token_pointer_reverse_solidus<CharT>,
-                perform_uri_escaping);
+            if (!perform_uri_escaping) {
+              write_character<CharT, Traits, Allocator>(
+                  stream, internal::token_pointer_reverse_solidus<CharT>,
+                  perform_uri_escaping);
+            }
+
             write_character<CharT, Traits, Allocator>(
                 stream, internal::token_pointer_quote<CharT>,
                 perform_uri_escaping);
             break;
           case internal::token_pointer_reverse_solidus<CharT>:
-            write_character<CharT, Traits, Allocator>(
-                stream, internal::token_pointer_reverse_solidus<CharT>,
-                perform_uri_escaping);
+            if (!perform_uri_escaping) {
+              write_character<CharT, Traits, Allocator>(
+                  stream, internal::token_pointer_reverse_solidus<CharT>,
+                  perform_uri_escaping);
+            }
+
             write_character<CharT, Traits, Allocator>(
                 stream, internal::token_pointer_reverse_solidus<CharT>,
                 perform_uri_escaping);
