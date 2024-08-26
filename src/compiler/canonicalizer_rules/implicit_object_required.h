@@ -1,7 +1,6 @@
-class ImplicitObjectRequired final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitObjectRequired() : SchemaTransformRule("implicit_object_required") {};
+  ImplicitObjectRequired() : Rule("implicit_object_required") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +16,7 @@ public:
            !schema.defines("required");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("required", sourcemeta::jsontoolkit::JSON::make_array());
   }

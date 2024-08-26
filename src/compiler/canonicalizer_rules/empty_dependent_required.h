@@ -1,7 +1,6 @@
-class EmptyDependentRequired final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EmptyDependentRequired final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyDependentRequired() : SchemaTransformRule("empty_dependent_required") {};
+  EmptyDependentRequired() : Rule("empty_dependent_required") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -16,7 +15,7 @@ public:
            schema.at("dependentRequired").empty();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase("dependentRequired");
   }

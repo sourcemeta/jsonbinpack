@@ -1,6 +1,6 @@
-class ConstAsEnum final : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ConstAsEnum final : public sourcemeta::alterschema::Rule {
 public:
-  ConstAsEnum() : SchemaTransformRule("const_as_enum") {};
+  ConstAsEnum() : Rule("const_as_enum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -13,7 +13,7 @@ public:
            schema.is_object() && schema.defines("const");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     sourcemeta::jsontoolkit::JSON values =
         sourcemeta::jsontoolkit::JSON::make_array();

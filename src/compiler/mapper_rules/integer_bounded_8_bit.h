@@ -1,9 +1,7 @@
-class IntegerBounded8Bit final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class IntegerBounded8Bit final : public sourcemeta::alterschema::Rule {
 public:
   IntegerBounded8Bit()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_bounded_8_bit") {
-        };
+      : sourcemeta::alterschema::Rule("integer_bounded_8_bit") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -22,7 +20,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto maximum = transformer.schema().at("maximum");

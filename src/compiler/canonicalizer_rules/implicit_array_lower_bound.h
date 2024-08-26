@@ -1,8 +1,6 @@
-class ImplicitArrayLowerBound final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitArrayLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitArrayLowerBound()
-      : SchemaTransformRule("implicit_array_lower_bound") {};
+  ImplicitArrayLowerBound() : Rule("implicit_array_lower_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            !schema.defines("minItems");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("minItems", sourcemeta::jsontoolkit::JSON{0});
   }

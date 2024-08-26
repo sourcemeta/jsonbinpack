@@ -1,6 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_COMPILER_CANONICALIZER_H_
 #define SOURCEMETA_JSONBINPACK_COMPILER_CANONICALIZER_H_
 
+#include <sourcemeta/alterschema/engine.h>
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
@@ -120,8 +121,7 @@ auto is_unique(const sourcemeta::jsontoolkit::JSON &document) -> bool {
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup canonicalizer
-class Canonicalizer final
-    : public sourcemeta::jsontoolkit::SchemaTransformBundle {
+class Canonicalizer final : public sourcemeta::alterschema::Bundle {
 public:
   Canonicalizer() {
     this->add<BooleanAsEnum>();

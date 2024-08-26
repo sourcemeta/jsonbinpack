@@ -1,8 +1,6 @@
-class ImplicitUnitMultipleOf final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitUnitMultipleOf()
-      : SchemaTransformRule("implicit_unit_multiple_of") {};
+  ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("multipleOf", sourcemeta::jsontoolkit::JSON{1});
   }

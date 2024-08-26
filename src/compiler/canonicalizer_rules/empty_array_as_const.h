@@ -1,7 +1,6 @@
-class EmptyArrayAsConst final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class EmptyArrayAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyArrayAsConst() : SchemaTransformRule("empty_array_as_const") {};
+  EmptyArrayAsConst() : Rule("empty_array_as_const") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +17,7 @@ public:
            schema.at("maxItems").to_integer() == 0;
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("const", sourcemeta::jsontoolkit::JSON::make_array());
     transformer.erase("maxItems");

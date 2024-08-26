@@ -1,8 +1,8 @@
 class DropNonObjectKeywordsValidation final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   DropNonObjectKeywordsValidation()
-      : SchemaTransformRule("drop_non_object_keywords_validation") {};
+      : Rule("drop_non_object_keywords_validation") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +18,7 @@ public:
                               this->BLACKLIST_VALIDATION.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_VALIDATION.cbegin(),
                            this->BLACKLIST_VALIDATION.cend());

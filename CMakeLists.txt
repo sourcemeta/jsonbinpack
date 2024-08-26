@@ -38,6 +38,7 @@ endif()
 
 # Dependencies
 find_package(JSONToolkit REQUIRED)
+find_package(AlterSchema REQUIRED)
 
 # Runtime
 if(JSONBINPACK_RUNTIME OR JSONBINPACK_CLI OR JSONBINPACK_COMPILER)

@@ -1,7 +1,6 @@
-class MinimumRealForInteger final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class MinimumRealForInteger final : public sourcemeta::alterschema::Rule {
 public:
-  MinimumRealForInteger() : SchemaTransformRule("minimum_real_for_integer") {};
+  MinimumRealForInteger() : Rule("minimum_real_for_integer") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +16,7 @@ public:
            schema.defines("minimum") && schema.at("minimum").is_real();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     const auto current{transformer.schema().at("minimum").to_real()};
     const auto new_value{static_cast<std::int64_t>(std::ceil(current))};

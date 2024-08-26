@@ -1,8 +1,8 @@
 class DropNonNumericKeywordsContent final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   DropNonNumericKeywordsContent()
-      : SchemaTransformRule("drop_non_numeric_keywords_content") {};
+      : Rule("drop_non_numeric_keywords_content") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -21,7 +21,7 @@ public:
                               this->BLACKLIST_CONTENT.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_CONTENT.cbegin(),
                            this->BLACKLIST_CONTENT.cend());

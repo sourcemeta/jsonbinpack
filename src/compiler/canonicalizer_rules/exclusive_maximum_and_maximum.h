@@ -1,8 +1,6 @@
-class ExclusiveMaximumAndMaximum final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ExclusiveMaximumAndMaximum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMaximumAndMaximum()
-      : SchemaTransformRule("exclusive_maximum_and_maximum") {};
+  ExclusiveMaximumAndMaximum() : Rule("exclusive_maximum_and_maximum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -18,7 +16,7 @@ public:
            schema.at("exclusiveMaximum").is_number();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     if (transformer.schema().at("maximum") <
         transformer.schema().at("exclusiveMaximum")) {

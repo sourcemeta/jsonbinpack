@@ -10,6 +10,7 @@ endif()
 
 include(CMakeFindDependencyMacro)
 find_dependency(JSONToolkit COMPONENTS uri json jsonpointer jsonschema)
+find_dependency(AlterSchema COMPONENTS engine)
 
 include("${CMAKE_CURRENT_LIST_DIR}/sourcemeta_jsonbinpack_runtime.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/sourcemeta_jsonbinpack_compiler.cmake")

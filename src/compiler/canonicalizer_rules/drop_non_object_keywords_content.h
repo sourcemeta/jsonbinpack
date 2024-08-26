@@ -1,8 +1,7 @@
 class DropNonObjectKeywordsContent final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
-  DropNonObjectKeywordsContent()
-      : SchemaTransformRule("drop_non_object_keywords_content") {};
+  DropNonObjectKeywordsContent() : Rule("drop_non_object_keywords_content") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -20,7 +19,7 @@ public:
                               this->BLACKLIST_CONTENT.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_CONTENT.cbegin(),
                            this->BLACKLIST_CONTENT.cend());

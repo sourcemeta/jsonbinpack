@@ -1,8 +1,6 @@
-class IntegerUpperBound final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class IntegerUpperBound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerUpperBound()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_upper_bound") {};
+  IntegerUpperBound() : sourcemeta::alterschema::Rule("integer_upper_bound") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -19,7 +17,7 @@ public:
            !schema.defines("multipleOf");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto maximum = transformer.schema().at("maximum");
     auto options = sourcemeta::jsontoolkit::JSON::make_object();

@@ -1,8 +1,6 @@
-class DuplicateRequiredValues final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class DuplicateRequiredValues final : public sourcemeta::alterschema::Rule {
 public:
-  DuplicateRequiredValues()
-      : SchemaTransformRule("duplicate_required_values") {};
+  DuplicateRequiredValues() : Rule("duplicate_required_values") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +15,7 @@ public:
            !is_unique(schema.at("required"));
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto collection = transformer.schema().at("required");
     std::sort(collection.as_array().begin(), collection.as_array().end());

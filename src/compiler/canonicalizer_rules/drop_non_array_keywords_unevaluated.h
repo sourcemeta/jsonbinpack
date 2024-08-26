@@ -1,8 +1,8 @@
 class DropNonArrayKeywordsUnevaluated final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   DropNonArrayKeywordsUnevaluated()
-      : SchemaTransformRule("drop_non_array_keywords_unevaluated") {};
+      : Rule("drop_non_array_keywords_unevaluated") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -20,7 +20,7 @@ public:
                               this->BLACKLIST_UNEVALUATED.cend());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.erase_keys(this->BLACKLIST_UNEVALUATED.cbegin(),
                            this->BLACKLIST_UNEVALUATED.cend());

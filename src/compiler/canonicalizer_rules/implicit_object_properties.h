@@ -1,8 +1,6 @@
-class ImplicitObjectProperties final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitObjectProperties()
-      : SchemaTransformRule("implicit_object_properties") {};
+  ImplicitObjectProperties() : Rule("implicit_object_properties") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -20,7 +18,7 @@ public:
            !schema.defines("properties");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     transformer.assign("properties",
                        sourcemeta::jsontoolkit::JSON::make_object());

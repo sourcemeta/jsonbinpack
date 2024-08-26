@@ -29,6 +29,10 @@ compile: .always
 	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
 		--component sourcemeta_jsontoolkit_dev
 	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
+		--component sourcemeta_alterschema
+	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
+		--component sourcemeta_alterschema_dev
+	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
 		--component sourcemeta_jsonbinpack
 	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
 		--component sourcemeta_jsonbinpack_dev

@@ -1,7 +1,6 @@
-class BooleanSchema final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
-  BooleanSchema() : SchemaTransformRule("boolean_schema") {};
+  BooleanSchema() : Rule("boolean_schema") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema, const std::string &,
@@ -10,7 +9,7 @@ public:
     return schema.is_boolean();
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     const bool current_value{transformer.schema().to_boolean()};
     transformer.replace(sourcemeta::jsontoolkit::JSON::make_object());

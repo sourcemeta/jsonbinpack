@@ -1,8 +1,6 @@
-class ExclusiveMaximumToMaximum final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMaximumToMaximum()
-      : SchemaTransformRule("exclusive_maximum_to_maximum") {};
+  ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
@@ -17,7 +15,7 @@ public:
            !schema.defines("maximum");
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto new_maximum = transformer.schema().at("exclusiveMaximum");
     new_maximum += sourcemeta::jsontoolkit::JSON{-1};

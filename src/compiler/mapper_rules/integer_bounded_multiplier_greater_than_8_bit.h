@@ -1,8 +1,8 @@
 class IntegerBoundedMultiplierGreaterThan8Bit final
-    : public sourcemeta::jsontoolkit::SchemaTransformRule {
+    : public sourcemeta::alterschema::Rule {
 public:
   IntegerBoundedMultiplierGreaterThan8Bit()
-      : sourcemeta::jsontoolkit::SchemaTransformRule(
+      : sourcemeta::alterschema::Rule(
             "integer_bounded_multiplier_greater_than_8_bit") {};
 
   [[nodiscard]] auto
@@ -26,7 +26,7 @@ public:
     return !states.has_value() || !is_byte(states->size());
   }
 
-  auto transform(sourcemeta::jsontoolkit::SchemaTransformer &transformer) const
+  auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
     auto minimum = transformer.schema().at("minimum");
     auto multiplier = transformer.schema().at("multipleOf");
