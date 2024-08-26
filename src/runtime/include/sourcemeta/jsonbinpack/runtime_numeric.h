@@ -10,13 +10,33 @@ namespace sourcemeta::jsonbinpack {
 
 template <unsigned int T> constexpr auto uint_max = (2 << (T - 1)) - 1;
 
-constexpr auto is_byte(const std::int64_t value) noexcept -> bool {
+template <typename T> constexpr auto is_byte(const T value) noexcept -> bool {
   return value <= std::numeric_limits<std::uint8_t>::max();
 }
 
-constexpr auto is_within(const std::int64_t value, const std::int64_t lower,
+template <typename T>
+constexpr auto is_within(const T value, const std::int64_t lower,
                          const std::int64_t higher) noexcept -> bool {
   return value >= lower && value <= higher;
+}
+
+template <typename T>
+constexpr auto is_within(const T value, const std::uint64_t lower,
+                         const std::uint64_t higher) noexcept -> bool {
+  if (value >= 0) {
+    return static_cast<std::uint64_t>(value) >= lower &&
+           static_cast<std::uint64_t>(value) <= higher;
+  } else {
+    return false;
+  }
+}
+
+constexpr auto abs(const std::int64_t value) noexcept -> std::uint64_t {
+  if (value < 0) {
+    return static_cast<std::uint64_t>(value * -1);
+  } else {
+    return static_cast<std::uint64_t>(value);
+  }
 }
 
 constexpr auto

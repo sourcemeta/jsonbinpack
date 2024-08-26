@@ -11,7 +11,5 @@ if(JSONBINPACK_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime)
 endif()
 
-sourcemeta_jsonbinpack_add_compile_options(PUBLIC sourcemeta_jsonbinpack_runtime)
-
 target_link_libraries(sourcemeta_jsonbinpack_runtime PUBLIC
   sourcemeta::jsontoolkit::json)

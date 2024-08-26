@@ -9,7 +9,6 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <cmath>   // std::abs
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
 #include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
@@ -72,7 +71,7 @@ public:
     const std::int64_t value{document.to_integer()};
     assert(is_within(value, options.minimum, options.maximum));
     assert(options.multiplier > 0);
-    assert(std::abs(value) % options.multiplier == 0);
+    assert(abs(value) % options.multiplier == 0);
     const std::int64_t enum_minimum{
         divide_ceil(options.minimum, options.multiplier)};
 #ifndef NDEBUG
@@ -92,13 +91,16 @@ public:
     const std::int64_t value{document.to_integer()};
     assert(options.minimum <= value);
     assert(options.multiplier > 0);
-    assert(std::abs(value) % options.multiplier == 0);
+    assert(abs(value) % options.multiplier == 0);
     if (options.multiplier == 1) {
-      return this->put_varint(value - options.minimum);
+      return this->put_varint(
+          static_cast<std::uint64_t>(value - options.minimum));
     }
 
-    return this->put_varint((value / options.multiplier) -
-                            divide_ceil(options.minimum, options.multiplier));
+    return this->put_varint(
+        (static_cast<std::uint64_t>(value) / options.multiplier) -
+        static_cast<std::uint64_t>(divide_ceil(
+            options.minimum, static_cast<std::uint64_t>(options.multiplier))));
   }
 
   auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
@@ -108,13 +110,16 @@ public:
     const std::int64_t value{document.to_integer()};
     assert(value <= options.maximum);
     assert(options.multiplier > 0);
-    assert(std::abs(value) % options.multiplier == 0);
+    assert(abs(value) % options.multiplier == 0);
     if (options.multiplier == 1) {
-      return this->put_varint(options.maximum - value);
+      return this->put_varint(
+          static_cast<std::uint64_t>(options.maximum - value));
     }
 
-    return this->put_varint(divide_floor(options.maximum, options.multiplier) -
-                            (value / options.multiplier));
+    return this->put_varint(
+        static_cast<std::uint64_t>(
+            divide_floor(options.maximum, options.multiplier)) -
+        (static_cast<std::uint64_t>(value) / options.multiplier));
   }
 
   auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
@@ -123,7 +128,7 @@ public:
     assert(document.is_integer());
     const std::int64_t value{document.to_integer()};
     assert(options.multiplier > 0);
-    assert(std::abs(value) % options.multiplier == 0);
+    assert(abs(value) % options.multiplier == 0);
     this->put_varint_zigzag(value /
                             static_cast<std::int64_t>(options.multiplier));
   }
@@ -161,8 +166,9 @@ public:
         [&document](const auto &choice) { return choice == document; })};
     assert(iterator != std::cend(options.choices));
     const auto cursor{std::distance(std::cbegin(options.choices), iterator)};
-    assert(is_within(cursor, 0, options.choices.size() - 1));
-    this->put_varint(cursor);
+    assert(is_within(cursor, static_cast<std::uint64_t>(0),
+                     options.choices.size() - 1));
+    this->put_varint(static_cast<std::uint64_t>(cursor));
   }
 
   auto TOP_LEVEL_BYTE_CHOICE_INDEX(
@@ -429,9 +435,8 @@ public:
     } else if (document.is_integer()) {
       const std::int64_t value{document.to_integer()};
       const bool is_positive{value >= 0};
-      const std::uint64_t absolute{is_positive
-                                       ? static_cast<std::uint64_t>(value)
-                                       : std::abs(value) - 1};
+      const std::uint64_t absolute{
+          is_positive ? static_cast<std::uint64_t>(value) : abs(value) - 1};
       if (is_byte(absolute)) {
         const std::uint8_t type{is_positive ? TYPE_POSITIVE_INTEGER_BYTE
                                             : TYPE_NEGATIVE_INTEGER_BYTE};
@@ -478,7 +483,8 @@ public:
             SUBTYPE_LONG_STRING_BASE_EXPONENT_10)};
         this->put_byte(
             static_cast<std::uint8_t>(TYPE_OTHER | (exponent << type_size)));
-        this->put_varint(size - (2 << (exponent - 1)));
+        this->put_varint(size -
+                         static_cast<std::uint64_t>(2 << (exponent - 1)));
         this->put_string_utf8(value, size);
       } else {
         // Exploit the fact that a shared string always starts

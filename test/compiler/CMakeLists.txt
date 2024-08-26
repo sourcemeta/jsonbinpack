@@ -14,6 +14,7 @@ add_executable(sourcemeta_jsonbinpack_compiler_unit
   2020_12_compiler_integer_test.cc
   2020_12_compiler_number_test.cc)
 
+noa_add_default_options(PRIVATE sourcemeta_jsonbinpack_compiler_unit)
 target_link_libraries(sourcemeta_jsonbinpack_compiler_unit
   PRIVATE GTest::gtest GTest::gtest_main)
 target_link_libraries(sourcemeta_jsonbinpack_compiler_unit
