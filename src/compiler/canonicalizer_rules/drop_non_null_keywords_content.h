@@ -2,7 +2,7 @@ class DropNonNullKeywordsContent final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNullKeywordsContent()
-      : SchemaTransformRule("drop_non_null_keywords_content"){};
+      : SchemaTransformRule("drop_non_null_keywords_content") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

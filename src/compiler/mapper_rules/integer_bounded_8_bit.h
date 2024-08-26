@@ -2,7 +2,8 @@ class IntegerBounded8Bit final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   IntegerBounded8Bit()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_bounded_8_bit"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("integer_bounded_8_bit") {
+        };
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -2,7 +2,7 @@ class DropNonNullKeywordsApplicator final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNullKeywordsApplicator()
-      : SchemaTransformRule("drop_non_null_keywords_applicator"){};
+      : SchemaTransformRule("drop_non_null_keywords_applicator") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -2,7 +2,7 @@ class MaxContainsWithoutContains final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   MaxContainsWithoutContains()
-      : SchemaTransformRule("max_contains_without_contains"){};
+      : SchemaTransformRule("max_contains_without_contains") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

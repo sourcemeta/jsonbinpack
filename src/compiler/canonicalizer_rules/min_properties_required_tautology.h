@@ -2,7 +2,7 @@ class MinPropertiesRequiredTautology final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   MinPropertiesRequiredTautology()
-      : SchemaTransformRule("min_properties_required_tautology"){};
+      : SchemaTransformRule("min_properties_required_tautology") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -2,7 +2,7 @@ class DropNonNumericKeywordsValidation final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonNumericKeywordsValidation()
-      : SchemaTransformRule("drop_non_numeric_keywords_validation"){};
+      : SchemaTransformRule("drop_non_numeric_keywords_validation") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

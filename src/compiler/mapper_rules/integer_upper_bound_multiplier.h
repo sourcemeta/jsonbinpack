@@ -3,7 +3,7 @@ class IntegerUpperBoundMultiplier final
 public:
   IntegerUpperBoundMultiplier()
       : sourcemeta::jsontoolkit::SchemaTransformRule(
-            "integer_upper_bound_multiplier"){};
+            "integer_upper_bound_multiplier") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

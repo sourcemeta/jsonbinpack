@@ -2,7 +2,7 @@ class Enum8BitTopLevel final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   Enum8BitTopLevel()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit_top_level"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("enum_8_bit_top_level") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

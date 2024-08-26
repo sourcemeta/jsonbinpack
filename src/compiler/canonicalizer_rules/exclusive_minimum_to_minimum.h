@@ -2,7 +2,7 @@ class ExclusiveMinimumToMinimum final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   ExclusiveMinimumToMinimum()
-      : SchemaTransformRule("exclusive_minimum_to_minimum"){};
+      : SchemaTransformRule("exclusive_minimum_to_minimum") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

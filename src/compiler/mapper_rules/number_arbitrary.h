@@ -2,7 +2,7 @@ class NumberArbitrary final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   NumberArbitrary()
-      : sourcemeta::jsontoolkit::SchemaTransformRule("number_arbitrary"){};
+      : sourcemeta::jsontoolkit::SchemaTransformRule("number_arbitrary") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

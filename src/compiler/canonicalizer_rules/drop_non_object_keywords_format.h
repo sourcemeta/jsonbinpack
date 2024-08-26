@@ -2,7 +2,7 @@ class DropNonObjectKeywordsFormat final
     : public sourcemeta::jsontoolkit::SchemaTransformRule {
 public:
   DropNonObjectKeywordsFormat()
-      : SchemaTransformRule("drop_non_object_keywords_format"){};
+      : SchemaTransformRule("drop_non_object_keywords_format") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
