@@ -14,7 +14,6 @@
     {
       "minProperties": 0,
       "properties": {},
-      "required": [],
       "type": "object"
     },
     {

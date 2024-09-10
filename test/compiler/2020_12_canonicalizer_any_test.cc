@@ -21,7 +21,6 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, if_without_then_else_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": [],
     "properties": {}
   })JSON");
 
@@ -46,7 +45,6 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, then_else_without_if_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": [],
     "properties": {}
   })JSON");
 
@@ -247,8 +245,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_1) {
       {
         "type": "object",
         "minProperties": 0,
-        "properties": {},
-        "required": []
+        "properties": {}
       },
       {
         "type": "array",
@@ -280,7 +277,6 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_2) {
         "type": "object",
         "minProperties": 0,
         "properties": {},
-        "required": [],
         "maxProperties": 3
       },
       {
@@ -314,15 +310,13 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_3) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": [],
     "properties": {
       "foo": {
         "anyOf": [
           {
             "type": "object",
             "minProperties": 0,
-            "properties": {},
-            "required": []
+            "properties": {}
           },
           {
             "type": "array",
@@ -355,8 +349,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, implicit_type_union_1) {
       {
         "type": "object",
         "minProperties": 0,
-        "properties": {},
-        "required": []
+        "properties": {}
       },
       {
         "type": "array",
@@ -395,8 +388,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, boolean_schema_1) {
       {
         "type": "object",
         "minProperties": 0,
-        "properties": {},
-        "required": []
+        "properties": {}
       },
       {
         "type": "array",
@@ -436,8 +428,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, boolean_schema_2) {
         {
           "type": "object",
           "minProperties": 0,
-          "properties": {},
-          "required": []
+          "properties": {}
         },
         {
           "type": "array",
