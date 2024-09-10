@@ -5,9 +5,6 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
     compiler.cc
 
     canonicalizer_rules/boolean_schema.h
-    canonicalizer_rules/empty_array_as_const.h
-    canonicalizer_rules/empty_object_as_const.h
-    canonicalizer_rules/empty_string_as_const.h
     canonicalizer_rules/equal_numeric_bounds_as_const.h
 
     canonicalizer_rules/drop_non_array_keywords_validation.h
