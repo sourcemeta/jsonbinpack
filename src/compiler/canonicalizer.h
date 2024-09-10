@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_COMPILER_CANONICALIZER_H_
 
 #include <sourcemeta/alterschema/engine.h>
+#include <sourcemeta/alterschema/linter.h>
+
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
@@ -25,8 +27,6 @@ namespace sourcemeta::jsonbinpack {
 #include "canonicalizer_rules/null_as_const.h"
 
 #include "canonicalizer_rules/drop_non_array_keywords_validation.h"
-#include "canonicalizer_rules/maximum_real_for_integer.h"
-#include "canonicalizer_rules/minimum_real_for_integer.h"
 
 #include "canonicalizer_rules/exclusive_maximum_to_maximum.h"
 #include "canonicalizer_rules/exclusive_minimum_to_minimum.h"
@@ -50,6 +50,11 @@ namespace sourcemeta::jsonbinpack {
 class Canonicalizer final : public sourcemeta::alterschema::Bundle {
 public:
   Canonicalizer() {
+    sourcemeta::alterschema::add(
+        *this, sourcemeta::alterschema::LinterCategory::AntiPattern);
+    sourcemeta::alterschema::add(
+        *this, sourcemeta::alterschema::LinterCategory::Simplify);
+
     this->add<DefaultMetaschema_2020_12>();
     this->add<BooleanAsEnum>();
     this->add<BooleanSchema>();
@@ -61,8 +66,6 @@ public:
     this->add<EqualNumericBoundsAsConst>();
 
     // TODO: Check these
-    this->add<MaximumRealForInteger>();
-    this->add<MinimumRealForInteger>();
     this->add<DropNonArrayKeywordsValidation>();
 
     this->add<ExclusiveMaximumToMaximum>();

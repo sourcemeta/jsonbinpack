@@ -65,7 +65,6 @@ TEST(JSONBinPack_Canonicalizer_String_2020_12, empty_string_as_const_1) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "string",
     "enum": [ "" ],
     "minLength": 0
   })JSON");
