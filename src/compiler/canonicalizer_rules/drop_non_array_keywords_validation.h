@@ -12,7 +12,8 @@ public:
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.defines("type") && schema.at("type").is_string() &&
+           schema.is_object() && schema.defines("type") &&
+           schema.at("type").is_string() &&
            schema.at("type").to_string() == "array" &&
            schema.defines_any(this->BLACKLIST_VALIDATION.cbegin(),
                               this->BLACKLIST_VALIDATION.cend());
