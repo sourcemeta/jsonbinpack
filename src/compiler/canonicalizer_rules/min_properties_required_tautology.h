@@ -15,7 +15,7 @@ public:
            schema.is_object() && schema.defines("minProperties") &&
            schema.at("minProperties").is_integer() &&
            schema.defines("required") && schema.at("required").is_array() &&
-           is_unique(schema.at("required")) &&
+           schema.at("required").unique() &&
            schema.at("required").size() >
                static_cast<std::uint64_t>(
                    schema.at("minProperties").to_integer());
