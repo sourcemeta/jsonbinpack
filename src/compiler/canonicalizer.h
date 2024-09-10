@@ -16,7 +16,7 @@
 namespace sourcemeta::jsonbinpack {
 
 // Rules
-#include "canonicalizer_rules/boolean_schema.h"
+#include "canonicalizer_rules/boolean_schema_true.h"
 #include "canonicalizer_rules/equal_numeric_bounds_as_const.h"
 
 #include "canonicalizer_rules/drop_non_array_keywords_validation.h"
@@ -46,7 +46,7 @@ public:
     sourcemeta::alterschema::add(
         *this, sourcemeta::alterschema::LinterCategory::Desugar);
 
-    this->add<BooleanSchema>();
+    this->add<BooleanSchemaTrue>();
     this->add<EqualNumericBoundsAsConst>();
 
     // TODO: Check these

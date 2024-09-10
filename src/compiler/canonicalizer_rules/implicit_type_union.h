@@ -10,16 +10,17 @@ public:
     const bool has_core_blacklist{
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/core") &&
-        schema.defines_any({"$ref", "$dynamicRef"})};
+        schema.is_object() && schema.defines_any({"$ref", "$dynamicRef"})};
     const bool has_applicator_blacklist{
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/applicator") &&
+        schema.is_object() &&
         schema.defines_any(
             {"anyOf", "allOf", "oneOf", "not", "if", "then", "else"})};
     const bool has_validation_blacklist{
         vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") &&
-        schema.defines_any({"type", "const", "enum"})};
+        schema.is_object() && schema.defines_any({"type", "const", "enum"})};
 
     return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(

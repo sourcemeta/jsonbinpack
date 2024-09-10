@@ -419,35 +419,6 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, boolean_schema_2) {
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "not": {
-      "anyOf": [
-        { "enum": [ null ] },
-        { "enum": [ false, true ] },
-        {
-          "type": "object",
-          "minProperties": 0,
-          "properties": {}
-        },
-        {
-          "type": "array",
-          "minItems": 0
-        },
-        {
-          "type": "string",
-          "minLength": 0
-        },
-        {
-          "type": "number"
-        },
-        {
-          "type": "integer",
-          "multipleOf": 1
-        }
-      ]
-    }
-  })JSON");
-
+  const sourcemeta::jsontoolkit::JSON expected{false};
   EXPECT_EQ(schema, expected);
 }
