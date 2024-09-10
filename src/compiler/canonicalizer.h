@@ -34,9 +34,6 @@ namespace sourcemeta::jsonbinpack {
 #include "canonicalizer_rules/implicit_unit_multiple_of.h"
 #include "canonicalizer_rules/type_union_anyof.h"
 
-#include "canonicalizer_rules/min_properties_required_tautology.h"
-#include "canonicalizer_rules/unsatisfiable_max_contains.h"
-
 } // namespace sourcemeta::jsonbinpack
 
 namespace sourcemeta::jsonbinpack {
@@ -60,9 +57,9 @@ public:
 
     // TODO: Check these
     this->add<DropNonArrayKeywordsValidation>();
-
     this->add<ExclusiveMaximumToMaximum>();
     this->add<ExclusiveMinimumToMinimum>();
+
     this->add<ImplicitArrayLowerBound>();
     this->add<ImplicitObjectLowerBound>();
     this->add<ImplicitObjectProperties>();
@@ -70,9 +67,6 @@ public:
     this->add<ImplicitTypeUnion>();
     this->add<ImplicitUnitMultipleOf>();
     this->add<TypeUnionAnyOf>();
-    // TODO: Port upstream
-    this->add<UnsatisfiableMaxContains>();
-    this->add<MinPropertiesRequiredTautology>();
   }
 };
 

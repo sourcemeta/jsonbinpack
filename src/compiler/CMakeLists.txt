@@ -11,9 +11,9 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
     canonicalizer_rules/equal_numeric_bounds_as_const.h
 
     canonicalizer_rules/drop_non_array_keywords_validation.h
-
     canonicalizer_rules/exclusive_maximum_to_maximum.h
     canonicalizer_rules/exclusive_minimum_to_minimum.h
+
     canonicalizer_rules/implicit_array_lower_bound.h
     canonicalizer_rules/implicit_object_lower_bound.h
     canonicalizer_rules/implicit_object_properties.h
@@ -21,9 +21,6 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
     canonicalizer_rules/implicit_type_union.h
     canonicalizer_rules/implicit_unit_multiple_of.h
     canonicalizer_rules/type_union_anyof.h
-
-    canonicalizer_rules/min_properties_required_tautology.h
-    canonicalizer_rules/unsatisfiable_max_contains.h
 
     mapper_rules/enum_8_bit.h
     mapper_rules/enum_8_bit_top_level.h
