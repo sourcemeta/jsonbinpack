@@ -99,7 +99,6 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": [],
     "properties": {}
   })JSON");
 
@@ -122,7 +121,6 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
-    "required": [],
     "properties": {}
   })JSON");
 
@@ -146,8 +144,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_object_as_const_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ {} ],
     "minProperties": 0,
-    "properties": {},
-    "required": []
+    "properties": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -172,8 +169,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
     "type": "object",
     "maxProperties": 4,
     "minProperties": 0,
-    "properties": {},
-    "required": []
+    "properties": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
