@@ -1,6 +1,9 @@
-class BooleanSchemaTrue final : public sourcemeta::alterschema::Rule {
+class BooleanTrue final : public Rule {
 public:
-  BooleanSchemaTrue() : Rule("boolean_schema_true", "TODO") {};
+  BooleanTrue()
+      : Rule{"boolean_true",
+             "The boolean schema `true` is syntax sugar for the empty schema"} {
+        };
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema, const std::string &,
@@ -9,8 +12,7 @@ public:
     return schema.is_boolean() && schema.to_boolean();
   }
 
-  auto transform(sourcemeta::alterschema::Transformer &transformer) const
-      -> void override {
+  auto transform(Transformer &transformer) const -> void override {
     transformer.replace(sourcemeta::jsontoolkit::JSON::make_object());
   }
 };
