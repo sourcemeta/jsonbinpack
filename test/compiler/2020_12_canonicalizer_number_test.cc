@@ -550,29 +550,6 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Canonicalizer_Number_2020_12,
-     equal_numeric_bounds_as_const_4) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "number",
-    "exclusiveMaximum": 5,
-    "exclusiveMinimum": 3
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ 4 ]
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
 TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
