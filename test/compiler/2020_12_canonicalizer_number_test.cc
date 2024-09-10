@@ -65,7 +65,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_maximum_to_maximum_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 4
+    "maximum": 5
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -258,7 +258,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "maximum": 4
+    "maximum": 5
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -304,7 +304,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 7
+    "minimum": 6
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -448,7 +448,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, exclusive_minimum_to_minimum_8) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 7
+    "minimum": 6
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -497,7 +497,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 1,
-    "minimum": 7
+    "minimum": 6
   })JSON");
 
   EXPECT_EQ(schema, expected);

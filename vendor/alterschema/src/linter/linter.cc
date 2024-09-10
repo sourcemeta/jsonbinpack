@@ -41,6 +41,8 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "syntax_sugar/enum_to_const.h"
 // Desugar
 #include "desugar/const_as_enum.h"
+#include "desugar/exclusive_maximum_integer_to_maximum.h"
+#include "desugar/exclusive_minimum_integer_to_minimum.h"
 #include "desugar/type_boolean_as_enum.h"
 #include "desugar/type_null_as_enum.h"
 // Redundant
@@ -156,6 +158,7 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "redundant/then_without_if.h"
 #include "redundant/unevaluated_items_default.h"
 #include "redundant/unevaluated_properties_default.h"
+#include "redundant/unsatisfiable_max_contains.h"
 } // namespace sourcemeta::alterschema
 
 namespace sourcemeta::alterschema {
@@ -182,6 +185,8 @@ auto add(Bundle &bundle, const LinterCategory category) -> void {
       break;
     case LinterCategory::Desugar:
       bundle.add<ConstAsEnum>();
+      bundle.add<ExclusiveMaximumIntegerToMaximum>();
+      bundle.add<ExclusiveMinimumIntegerToMinimum>();
       bundle.add<TypeBooleanAsEnum>();
       bundle.add<TypeNullAsEnum>();
       break;
@@ -298,6 +303,7 @@ auto add(Bundle &bundle, const LinterCategory category) -> void {
       bundle.add<ThenWithoutIf>();
       bundle.add<UnevaluatedItemsDefault>();
       bundle.add<UnevaluatedPropertiesDefault>();
+      bundle.add<UnsatisfiableMaxContains>();
       break;
     default:
       // We should never get here

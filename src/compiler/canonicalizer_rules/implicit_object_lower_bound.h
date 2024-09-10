@@ -18,6 +18,13 @@ public:
 
   auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
-    transformer.assign("minProperties", sourcemeta::jsontoolkit::JSON{0});
+    if (transformer.schema().defines("required") &&
+        transformer.schema().at("required").is_array()) {
+      transformer.assign("minProperties",
+                         sourcemeta::jsontoolkit::JSON{
+                             transformer.schema().at("required").size()});
+    } else {
+      transformer.assign("minProperties", sourcemeta::jsontoolkit::JSON{0});
+    }
   }
 };

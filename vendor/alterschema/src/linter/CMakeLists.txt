@@ -21,6 +21,8 @@ noa_library(NAMESPACE sourcemeta PROJECT alterschema NAME linter
 
     # Desugar
     desugar/const_as_enum.h
+    desugar/exclusive_maximum_integer_to_maximum.h
+    desugar/exclusive_minimum_integer_to_minimum.h
     desugar/type_boolean_as_enum.h
     desugar/type_null_as_enum.h
 
@@ -136,7 +138,8 @@ noa_library(NAMESPACE sourcemeta PROJECT alterschema NAME linter
     redundant/properties_default.h
     redundant/then_without_if.h
     redundant/unevaluated_items_default.h
-    redundant/unevaluated_properties_default.h)
+    redundant/unevaluated_properties_default.h
+    redundant/unsatisfiable_max_contains.h)
 
 if(ALTERSCHEMA_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT alterschema NAME linter)
