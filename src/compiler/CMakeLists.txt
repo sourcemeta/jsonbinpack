@@ -7,7 +7,6 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
     canonicalizer_rules/boolean_as_enum.h
     canonicalizer_rules/boolean_schema.h
     canonicalizer_rules/const_as_enum.h
-    canonicalizer_rules/default_metaschema_2020_12.h
     canonicalizer_rules/empty_array_as_const.h
     canonicalizer_rules/empty_object_as_const.h
     canonicalizer_rules/empty_string_as_const.h

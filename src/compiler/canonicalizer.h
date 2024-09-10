@@ -19,7 +19,6 @@ namespace sourcemeta::jsonbinpack {
 #include "canonicalizer_rules/boolean_as_enum.h"
 #include "canonicalizer_rules/boolean_schema.h"
 #include "canonicalizer_rules/const_as_enum.h"
-#include "canonicalizer_rules/default_metaschema_2020_12.h"
 #include "canonicalizer_rules/empty_array_as_const.h"
 #include "canonicalizer_rules/empty_object_as_const.h"
 #include "canonicalizer_rules/empty_string_as_const.h"
@@ -55,7 +54,6 @@ public:
     sourcemeta::alterschema::add(
         *this, sourcemeta::alterschema::LinterCategory::Simplify);
 
-    this->add<DefaultMetaschema_2020_12>();
     this->add<BooleanAsEnum>();
     this->add<BooleanSchema>();
     this->add<ConstAsEnum>();
