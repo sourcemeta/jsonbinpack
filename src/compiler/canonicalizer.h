@@ -16,14 +16,11 @@
 namespace sourcemeta::jsonbinpack {
 
 // Rules
-#include "canonicalizer_rules/boolean_as_enum.h"
 #include "canonicalizer_rules/boolean_schema.h"
-#include "canonicalizer_rules/const_as_enum.h"
 #include "canonicalizer_rules/empty_array_as_const.h"
 #include "canonicalizer_rules/empty_object_as_const.h"
 #include "canonicalizer_rules/empty_string_as_const.h"
 #include "canonicalizer_rules/equal_numeric_bounds_as_const.h"
-#include "canonicalizer_rules/null_as_const.h"
 
 #include "canonicalizer_rules/drop_non_array_keywords_validation.h"
 
@@ -53,11 +50,10 @@ public:
         *this, sourcemeta::alterschema::LinterCategory::AntiPattern);
     sourcemeta::alterschema::add(
         *this, sourcemeta::alterschema::LinterCategory::Simplify);
+    sourcemeta::alterschema::add(
+        *this, sourcemeta::alterschema::LinterCategory::Desugar);
 
-    this->add<BooleanAsEnum>();
     this->add<BooleanSchema>();
-    this->add<ConstAsEnum>();
-    this->add<NullAsConst>();
     this->add<EmptyArrayAsConst>();
     this->add<EmptyObjectAsConst>();
     this->add<EmptyStringAsConst>();

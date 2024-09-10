@@ -2,7 +2,8 @@ class IntegerBoundedGreaterThan8Bit final
     : public sourcemeta::alterschema::Rule {
 public:
   IntegerBoundedGreaterThan8Bit()
-      : sourcemeta::alterschema::Rule("integer_bounded_greater_than_8_bit") {};
+      : sourcemeta::alterschema::Rule("integer_bounded_greater_than_8_bit",
+                                      "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

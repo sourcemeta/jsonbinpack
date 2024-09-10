@@ -3,7 +3,7 @@ class IntegerBoundedMultiplierGreaterThan8Bit final
 public:
   IntegerBoundedMultiplierGreaterThan8Bit()
       : sourcemeta::alterschema::Rule(
-            "integer_bounded_multiplier_greater_than_8_bit") {};
+            "integer_bounded_multiplier_greater_than_8_bit", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

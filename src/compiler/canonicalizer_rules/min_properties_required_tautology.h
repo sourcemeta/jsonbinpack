@@ -2,7 +2,7 @@ class MinPropertiesRequiredTautology final
     : public sourcemeta::alterschema::Rule {
 public:
   MinPropertiesRequiredTautology()
-      : Rule("min_properties_required_tautology") {};
+      : Rule("min_properties_required_tautology", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

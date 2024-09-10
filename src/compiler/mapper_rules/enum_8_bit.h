@@ -1,7 +1,7 @@
 // TODO: Unit test this mapping once we have container encodings
 class Enum8Bit final : public sourcemeta::alterschema::Rule {
 public:
-  Enum8Bit() : sourcemeta::alterschema::Rule("enum_8_bit") {};
+  Enum8Bit() : sourcemeta::alterschema::Rule("enum_8_bit", "TODO") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

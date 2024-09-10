@@ -24,8 +24,6 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
                      [](const auto &element) { return element.is_boolean(); });
 }
 
-// Modernize
-#include "modernize/enum_to_const.h"
 // AntiPattern
 #include "antipattern/const_with_type.h"
 #include "antipattern/duplicate_enum_values.h"
@@ -39,6 +37,12 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "simplify/maximum_real_for_integer.h"
 #include "simplify/minimum_real_for_integer.h"
 #include "simplify/single_type_array.h"
+// Syntax sugar
+#include "syntax_sugar/enum_to_const.h"
+// Desugar
+#include "desugar/const_as_enum.h"
+#include "desugar/type_boolean_as_enum.h"
+#include "desugar/type_null_as_enum.h"
 // Redundant
 #include "redundant/additional_properties_default.h"
 #include "redundant/content_media_type_without_encoding.h"
@@ -158,9 +162,6 @@ namespace sourcemeta::alterschema {
 
 auto add(Bundle &bundle, const LinterCategory category) -> void {
   switch (category) {
-    case LinterCategory::Modernize:
-      bundle.add<EnumToConst>();
-      break;
     case LinterCategory::AntiPattern:
       bundle.add<EnumWithType>();
       bundle.add<DuplicateEnumValues>();
@@ -175,6 +176,14 @@ auto add(Bundle &bundle, const LinterCategory category) -> void {
       bundle.add<MaximumRealForInteger>();
       bundle.add<MinimumRealForInteger>();
       bundle.add<SingleTypeArray>();
+      break;
+    case LinterCategory::SyntaxSugar:
+      bundle.add<EnumToConst>();
+      break;
+    case LinterCategory::Desugar:
+      bundle.add<ConstAsEnum>();
+      bundle.add<TypeBooleanAsEnum>();
+      bundle.add<TypeNullAsEnum>();
       break;
     case LinterCategory::Redundant:
       bundle.add<AdditionalPropertiesDefault>();

@@ -1,6 +1,6 @@
 class ImplicitStringLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitStringLowerBound() : Rule("implicit_string_lower_bound") {};
+  ImplicitStringLowerBound() : Rule("implicit_string_lower_bound", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

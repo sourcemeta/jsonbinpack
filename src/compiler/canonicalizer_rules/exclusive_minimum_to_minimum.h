@@ -1,6 +1,6 @@
 class ExclusiveMinimumToMinimum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum") {};
+  ExclusiveMinimumToMinimum() : Rule("exclusive_minimum_to_minimum", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

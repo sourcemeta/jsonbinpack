@@ -1,6 +1,6 @@
 class ImplicitArrayLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitArrayLowerBound() : Rule("implicit_array_lower_bound") {};
+  ImplicitArrayLowerBound() : Rule("implicit_array_lower_bound", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

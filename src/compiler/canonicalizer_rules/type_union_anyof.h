@@ -1,6 +1,6 @@
 class TypeUnionAnyOf final : public sourcemeta::alterschema::Rule {
 public:
-  TypeUnionAnyOf() : Rule("type_union_anyof") {};
+  TypeUnionAnyOf() : Rule("type_union_anyof", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

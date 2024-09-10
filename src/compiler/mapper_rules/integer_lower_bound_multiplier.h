@@ -1,7 +1,8 @@
 class IntegerLowerBoundMultiplier final : public sourcemeta::alterschema::Rule {
 public:
   IntegerLowerBoundMultiplier()
-      : sourcemeta::alterschema::Rule("integer_lower_bound_multiplier") {};
+      : sourcemeta::alterschema::Rule("integer_lower_bound_multiplier",
+                                      "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

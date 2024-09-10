@@ -1,7 +1,7 @@
 class IntegerBounded8Bit final : public sourcemeta::alterschema::Rule {
 public:
   IntegerBounded8Bit()
-      : sourcemeta::alterschema::Rule("integer_bounded_8_bit") {};
+      : sourcemeta::alterschema::Rule("integer_bounded_8_bit", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

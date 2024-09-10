@@ -1,6 +1,7 @@
 class NumberArbitrary final : public sourcemeta::alterschema::Rule {
 public:
-  NumberArbitrary() : sourcemeta::alterschema::Rule("number_arbitrary") {};
+  NumberArbitrary()
+      : sourcemeta::alterschema::Rule("number_arbitrary", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

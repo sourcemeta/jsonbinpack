@@ -1,6 +1,6 @@
 class EmptyStringAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyStringAsConst() : Rule("empty_string_as_const") {};
+  EmptyStringAsConst() : Rule("empty_string_as_const", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

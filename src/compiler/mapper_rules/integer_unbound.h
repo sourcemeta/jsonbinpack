@@ -1,6 +1,7 @@
 class IntegerUnbound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerUnbound() : sourcemeta::alterschema::Rule("integer_unbound") {};
+  IntegerUnbound()
+      : sourcemeta::alterschema::Rule("integer_unbound", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

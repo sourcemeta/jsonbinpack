@@ -1,6 +1,7 @@
 class Enum8BitTopLevel final : public sourcemeta::alterschema::Rule {
 public:
-  Enum8BitTopLevel() : sourcemeta::alterschema::Rule("enum_8_bit_top_level") {};
+  Enum8BitTopLevel()
+      : sourcemeta::alterschema::Rule("enum_8_bit_top_level", "TODO") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

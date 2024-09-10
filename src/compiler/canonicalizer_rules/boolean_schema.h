@@ -1,6 +1,6 @@
 class BooleanSchema final : public sourcemeta::alterschema::Rule {
 public:
-  BooleanSchema() : Rule("boolean_schema") {};
+  BooleanSchema() : Rule("boolean_schema", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema, const std::string &,

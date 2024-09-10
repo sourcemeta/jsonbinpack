@@ -1,6 +1,6 @@
 class EnumSingleton final : public sourcemeta::alterschema::Rule {
 public:
-  EnumSingleton() : sourcemeta::alterschema::Rule("enum_singleton") {};
+  EnumSingleton() : sourcemeta::alterschema::Rule("enum_singleton", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

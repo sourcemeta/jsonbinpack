@@ -2,7 +2,7 @@ class DropNonArrayKeywordsValidation final
     : public sourcemeta::alterschema::Rule {
 public:
   DropNonArrayKeywordsValidation()
-      : Rule("drop_non_array_keywords_validation") {};
+      : Rule("drop_non_array_keywords_validation", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
