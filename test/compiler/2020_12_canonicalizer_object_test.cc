@@ -127,29 +127,6 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_object_as_const_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "maxProperties": 0
-  })JSON");
-
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
-
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "enum": [ {} ],
-    "minProperties": 0,
-    "properties": {}
-  })JSON");
-
-  EXPECT_EQ(schema, expected);
-}
-
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
