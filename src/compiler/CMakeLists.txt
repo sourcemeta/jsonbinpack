@@ -15,8 +15,6 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
     canonicalizer_rules/null_as_const.h
 
     canonicalizer_rules/drop_non_array_keywords_validation.h
-    canonicalizer_rules/maximum_real_for_integer.h
-    canonicalizer_rules/minimum_real_for_integer.h
 
     canonicalizer_rules/exclusive_maximum_to_maximum.h
     canonicalizer_rules/exclusive_minimum_to_minimum.h

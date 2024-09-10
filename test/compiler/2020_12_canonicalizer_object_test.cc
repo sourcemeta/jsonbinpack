@@ -144,7 +144,6 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_object_as_const_1) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
     "enum": [ {} ],
     "minProperties": 0,
     "properties": {},
