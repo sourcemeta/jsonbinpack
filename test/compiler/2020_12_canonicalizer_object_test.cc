@@ -226,7 +226,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
-    "required": [ "foo", "bar", "qux", "baz" ],
+    "required": [ "bar", "baz", "foo", "qux" ],
     "minProperties": 4,
     "properties": {}
   })JSON");

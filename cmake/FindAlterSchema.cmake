@@ -5,7 +5,6 @@ if(NOT Alterschema_FOUND)
     set(ALTERSCHEMA_INSTALL OFF CACHE BOOL "disable AlterSchema installation")
   endif()
 
-  set(ALTERSCHEMA_LINTER OFF CACHE BOOL "disable linter support")
   add_subdirectory("${PROJECT_SOURCE_DIR}/vendor/alterschema")
   set(Alterschema_FOUND ON)
 endif()
