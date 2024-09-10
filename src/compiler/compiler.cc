@@ -38,7 +38,7 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON &schema,
 
   sourcemeta::alterschema::Bundle bundle;
   sourcemeta::alterschema::add(
-      bundle, sourcemeta::alterschema::LinterCategory::Modernize);
+      bundle, sourcemeta::alterschema::LinterCategory::Desugar);
   sourcemeta::alterschema::add(
       bundle, sourcemeta::alterschema::LinterCategory::AntiPattern);
   sourcemeta::alterschema::add(

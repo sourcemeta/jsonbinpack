@@ -1,7 +1,7 @@
 class IntegerUnboundMultiplier final : public sourcemeta::alterschema::Rule {
 public:
   IntegerUnboundMultiplier()
-      : sourcemeta::alterschema::Rule("integer_unbound_multiplier") {};
+      : sourcemeta::alterschema::Rule("integer_unbound_multiplier", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

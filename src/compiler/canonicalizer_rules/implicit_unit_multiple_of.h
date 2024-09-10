@@ -1,6 +1,6 @@
 class ImplicitUnitMultipleOf final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of") {};
+  ImplicitUnitMultipleOf() : Rule("implicit_unit_multiple_of", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

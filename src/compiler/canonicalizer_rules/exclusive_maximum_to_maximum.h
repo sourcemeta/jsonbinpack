@@ -1,6 +1,6 @@
 class ExclusiveMaximumToMaximum final : public sourcemeta::alterschema::Rule {
 public:
-  ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum") {};
+  ExclusiveMaximumToMaximum() : Rule("exclusive_maximum_to_maximum", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -1,7 +1,7 @@
 // TODO: Unit test this mapping once we have container encodings
 class EnumArbitrary final : public sourcemeta::alterschema::Rule {
 public:
-  EnumArbitrary() : sourcemeta::alterschema::Rule("enum_arbitrary") {};
+  EnumArbitrary() : sourcemeta::alterschema::Rule("enum_arbitrary", "TODO") {};
 
   [[nodiscard]] auto condition(
       const sourcemeta::jsontoolkit::JSON &schema, const std::string &dialect,

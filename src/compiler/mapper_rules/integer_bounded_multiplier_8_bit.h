@@ -2,7 +2,8 @@ class IntegerBoundedMultiplier8Bit final
     : public sourcemeta::alterschema::Rule {
 public:
   IntegerBoundedMultiplier8Bit()
-      : sourcemeta::alterschema::Rule("integer_bounded_multiplier_8_bit") {};
+      : sourcemeta::alterschema::Rule("integer_bounded_multiplier_8_bit",
+                                      "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

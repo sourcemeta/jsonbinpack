@@ -1,6 +1,7 @@
 class IntegerUpperBound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerUpperBound() : sourcemeta::alterschema::Rule("integer_upper_bound") {};
+  IntegerUpperBound()
+      : sourcemeta::alterschema::Rule("integer_upper_bound", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

@@ -1,7 +1,8 @@
 class IntegerUpperBoundMultiplier final : public sourcemeta::alterschema::Rule {
 public:
   IntegerUpperBoundMultiplier()
-      : sourcemeta::alterschema::Rule("integer_upper_bound_multiplier") {};
+      : sourcemeta::alterschema::Rule("integer_upper_bound_multiplier",
+                                      "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

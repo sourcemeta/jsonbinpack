@@ -1,6 +1,6 @@
 class EmptyArrayAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyArrayAsConst() : Rule("empty_array_as_const") {};
+  EmptyArrayAsConst() : Rule("empty_array_as_const", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

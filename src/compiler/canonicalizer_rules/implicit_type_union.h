@@ -1,6 +1,6 @@
 class ImplicitTypeUnion final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitTypeUnion() : Rule("implicit_type_union") {};
+  ImplicitTypeUnion() : Rule("implicit_type_union", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

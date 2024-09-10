@@ -1,6 +1,7 @@
 class IntegerLowerBound final : public sourcemeta::alterschema::Rule {
 public:
-  IntegerLowerBound() : sourcemeta::alterschema::Rule("integer_lower_bound") {};
+  IntegerLowerBound()
+      : sourcemeta::alterschema::Rule("integer_lower_bound", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

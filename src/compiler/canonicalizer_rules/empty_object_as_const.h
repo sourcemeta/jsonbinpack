@@ -1,6 +1,6 @@
 class EmptyObjectAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EmptyObjectAsConst() : Rule("empty_object_as_const") {};
+  EmptyObjectAsConst() : Rule("empty_object_as_const", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

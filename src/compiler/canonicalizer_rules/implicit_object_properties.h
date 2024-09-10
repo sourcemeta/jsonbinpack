@@ -1,6 +1,6 @@
 class ImplicitObjectProperties final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitObjectProperties() : Rule("implicit_object_properties") {};
+  ImplicitObjectProperties() : Rule("implicit_object_properties", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

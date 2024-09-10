@@ -1,6 +1,6 @@
 class ImplicitObjectRequired final : public sourcemeta::alterschema::Rule {
 public:
-  ImplicitObjectRequired() : Rule("implicit_object_required") {};
+  ImplicitObjectRequired() : Rule("implicit_object_required", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

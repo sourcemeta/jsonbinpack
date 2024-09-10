@@ -1,6 +1,7 @@
 class EqualNumericBoundsAsConst final : public sourcemeta::alterschema::Rule {
 public:
-  EqualNumericBoundsAsConst() : Rule("equal_numeric_bounds_as_const") {};
+  EqualNumericBoundsAsConst()
+      : Rule("equal_numeric_bounds_as_const", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,

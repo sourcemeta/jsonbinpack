@@ -1,6 +1,6 @@
 class UnsatisfiableMaxContains final : public sourcemeta::alterschema::Rule {
 public:
-  UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains") {};
+  UnsatisfiableMaxContains() : Rule("unsatisfiable_max_contains", "TODO") {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::jsontoolkit::JSON &schema,
