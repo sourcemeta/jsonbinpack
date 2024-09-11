@@ -34,6 +34,7 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 // Simplify
 #include "simplify/dependencies_property_tautology.h"
 #include "simplify/dependent_required_tautology.h"
+#include "simplify/equal_numeric_bounds_to_enum.h"
 #include "simplify/maximum_real_for_integer.h"
 #include "simplify/minimum_real_for_integer.h"
 #include "simplify/single_type_array.h"
@@ -70,6 +71,7 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "implicit/min_properties_implicit.h"
 #include "implicit/multiple_of_implicit.h"
 #include "implicit/properties_implicit.h"
+#include "implicit/type_union_implicit.h"
 // Superfluous
 #include "superfluous/content_media_type_without_encoding.h"
 #include "superfluous/content_schema_without_media_type.h"
@@ -189,6 +191,7 @@ auto add(Bundle &bundle, const LinterCategory category) -> void {
     case LinterCategory::Simplify:
       bundle.add<DependenciesPropertyTautology>();
       bundle.add<DependentRequiredTautology>();
+      bundle.add<EqualNumericBoundsToEnum>();
       bundle.add<MaximumRealForInteger>();
       bundle.add<MinimumRealForInteger>();
       bundle.add<SingleTypeArray>();
@@ -228,6 +231,7 @@ auto add(Bundle &bundle, const LinterCategory category) -> void {
       bundle.add<MinPropertiesImplicit>();
       bundle.add<MultipleOfImplicit>();
       bundle.add<PropertiesImplicit>();
+      bundle.add<TypeUnionImplicit>();
       break;
     case LinterCategory::Superfluous:
       bundle.add<ContentMediaTypeWithoutEncoding>();
