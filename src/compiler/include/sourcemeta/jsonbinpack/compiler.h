@@ -30,14 +30,6 @@ auto canonicalize(
     const sourcemeta::jsontoolkit::SchemaResolver &resolver,
     const std::optional<std::string> &default_dialect = std::nullopt) -> void;
 
-/// @ingroup compiler
-SOURCEMETA_JSONBINPACK_COMPILER_EXPORT
-auto plan(sourcemeta::jsontoolkit::JSON &schema,
-          const sourcemeta::jsontoolkit::SchemaWalker &walker,
-          const sourcemeta::jsontoolkit::SchemaResolver &resolver,
-          const std::optional<std::string> &default_dialect = std::nullopt)
-    -> void;
-
 } // namespace sourcemeta::jsonbinpack
 
 #endif

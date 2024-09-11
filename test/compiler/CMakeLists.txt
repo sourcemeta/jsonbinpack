@@ -1,5 +1,5 @@
 add_executable(sourcemeta_jsonbinpack_compiler_unit
-  canonicalizer_test.cc plan_test.cc
+  canonicalizer_test.cc compiler_test.cc
 
   2020_12_canonicalizer_any_test.cc
   2020_12_canonicalizer_array_test.cc
