@@ -520,7 +520,6 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "multipleOf": 1,
     "enum": [ 5 ]
   })JSON");
 
@@ -544,7 +543,6 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "multipleOf": 1,
     "enum": [ 5.2 ]
   })JSON");
 

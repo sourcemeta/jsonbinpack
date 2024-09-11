@@ -1,12 +1,7 @@
 noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
   FOLDER "JSON BinPack/Compiler"
   SOURCES
-    canonicalizer.h mapper.h states.h schemas.h
-    compiler.cc
-
-    canonicalizer_rules/equal_numeric_bounds_as_const.h
-    canonicalizer_rules/implicit_type_union.h
-
+    mapper.h states.h schemas.h compiler.cc
     mapper_rules/enum_8_bit.h
     mapper_rules/enum_8_bit_top_level.h
     mapper_rules/enum_arbitrary.h

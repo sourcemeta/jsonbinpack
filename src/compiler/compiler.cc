@@ -1,7 +1,8 @@
+#include <sourcemeta/alterschema/engine.h>
+#include <sourcemeta/alterschema/linter.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-#include "canonicalizer.h"
 #include "mapper.h"
 #include "schemas.h"
 
@@ -33,7 +34,7 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON &schema,
     return promise.get_future();
   };
 
-  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
+  sourcemeta::alterschema::Bundle canonicalizer;
   sourcemeta::alterschema::add(
       canonicalizer, sourcemeta::alterschema::LinterCategory::AntiPattern);
   sourcemeta::alterschema::add(
