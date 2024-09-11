@@ -25,6 +25,7 @@
       "type": "string"
     },
     {
+      "multipleOf": 1,
       "type": "number"
     },
     {

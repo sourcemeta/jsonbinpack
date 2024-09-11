@@ -70,7 +70,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_1) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -97,7 +97,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_2) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -131,7 +131,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_3) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -158,7 +158,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_1) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -185,7 +185,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_2) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -219,7 +219,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_3) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
-      { "type": "number" },
+      { "type": "number", "multipleOf": 1 },
       { "type": "string", "minLength": 0 }
     ]
   })JSON");
@@ -360,7 +360,8 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, implicit_type_union_1) {
         "minLength": 0
       },
       {
-        "type": "number"
+        "type": "number",
+        "multipleOf": 1
       },
       {
         "type": "integer",
@@ -399,7 +400,8 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, boolean_schema_1) {
         "minLength": 0
       },
       {
-        "type": "number"
+        "type": "number",
+        "multipleOf": 1
       },
       {
         "type": "integer",

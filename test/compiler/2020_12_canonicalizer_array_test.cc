@@ -98,7 +98,7 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, min_contains_without_contains_2) {
       "minLength": 0
     },
     "minContains": 2,
-    "minItems": 0
+    "minItems": 2
   })JSON");
 
   EXPECT_EQ(schema, expected);

@@ -544,6 +544,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12,
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "multipleOf": 1,
     "enum": [ 5.2 ]
   })JSON");
 
@@ -568,6 +569,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_1) {
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
+    "multipleOf": 1,
     "maximum": 4
   })JSON");
 
@@ -600,7 +602,7 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Number_2020_12,
-     equal_numeric_bounds_without_numeric_type) {
+     equal_numeric_bounds_without_numeric_type_1) {
   sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
