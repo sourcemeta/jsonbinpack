@@ -47,8 +47,8 @@ auto main(int argc, char *argv[]) -> int {
   canonical_output_stream.flush();
   canonical_output_stream.close();
 
-  // Plan
-  sourcemeta::jsonbinpack::plan(
+  // Compile
+  sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
 
