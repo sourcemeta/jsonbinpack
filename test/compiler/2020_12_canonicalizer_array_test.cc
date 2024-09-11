@@ -127,6 +127,7 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, unsatisfiable_max_contains_1) {
       "minLength": 0
     },
     "maxItems": 2,
+    "maxContains": 2,
     "minItems": 0
   })JSON");
 

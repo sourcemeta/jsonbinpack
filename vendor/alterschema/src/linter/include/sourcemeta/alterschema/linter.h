@@ -16,6 +16,8 @@
 
 namespace sourcemeta::alterschema {
 
+// TODO: Revise the category names to make incompatibilities more obvious
+
 /// @ingroup linter
 /// The category of a built-in transformation rule
 enum class LinterCategory {
@@ -37,8 +39,18 @@ enum class LinterCategory {
   /// As its name implies, this category is incompatible with `SyntaxSugar`.
   Desugar,
 
-  /// Rules that remove schema redundancies that do not contribute to the schema
-  Redundant
+  /// Rules that remove schema redundancies that do not contribute to the
+  /// schema.
+  /// This category is incompatible with `Implicit`
+  Redundant,
+
+  /// Rules that surface implicit constraints. This category is incompatible
+  /// with `Redundant`
+  Implicit,
+
+  /// Rules that remove keywords that are superfluous and take no effect on the
+  /// given schema
+  Superfluous
 };
 
 /// @ingroup linter

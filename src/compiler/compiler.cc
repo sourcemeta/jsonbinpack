@@ -1,9 +1,6 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-#include <sourcemeta/alterschema/engine.h>
-#include <sourcemeta/alterschema/linter.h>
-
 #include "canonicalizer.h"
 #include "mapper.h"
 #include "schemas.h"
@@ -36,20 +33,17 @@ auto canonicalize(sourcemeta::jsontoolkit::JSON &schema,
     return promise.get_future();
   };
 
-  sourcemeta::alterschema::Bundle bundle;
+  sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
   sourcemeta::alterschema::add(
-      bundle, sourcemeta::alterschema::LinterCategory::Desugar);
+      canonicalizer, sourcemeta::alterschema::LinterCategory::AntiPattern);
   sourcemeta::alterschema::add(
-      bundle, sourcemeta::alterschema::LinterCategory::AntiPattern);
+      canonicalizer, sourcemeta::alterschema::LinterCategory::Simplify);
   sourcemeta::alterschema::add(
-      bundle, sourcemeta::alterschema::LinterCategory::Simplify);
+      canonicalizer, sourcemeta::alterschema::LinterCategory::Desugar);
   sourcemeta::alterschema::add(
-      bundle, sourcemeta::alterschema::LinterCategory::Redundant);
-  bundle.apply(schema, walker, canonicalizer_resolver,
-               sourcemeta::jsontoolkit::empty_pointer, default_dialect);
-
-  static sourcemeta::jsonbinpack::Canonicalizer canonicalizer;
-
+      canonicalizer, sourcemeta::alterschema::LinterCategory::Implicit);
+  sourcemeta::alterschema::add(
+      canonicalizer, sourcemeta::alterschema::LinterCategory::Superfluous);
   canonicalizer.apply(schema, walker, canonicalizer_resolver,
                       sourcemeta::jsontoolkit::empty_pointer, default_dialect);
 }

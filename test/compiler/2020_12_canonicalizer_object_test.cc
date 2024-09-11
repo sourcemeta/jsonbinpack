@@ -99,6 +99,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
+    "patternProperties": {},
     "properties": {}
   })JSON");
 
@@ -172,6 +173,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar", "baz" ],
+    "dependentRequired": {},
     "minProperties": 3,
     "properties": {}
   })JSON");
@@ -200,6 +202,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
     "type": "object",
     "required": [ "bar", "baz", "foo", "qux" ],
     "minProperties": 4,
+    "dependentRequired": {},
     "properties": {}
   })JSON");
 

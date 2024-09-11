@@ -1,7 +1,7 @@
-class EmptyDependentRequired final : public Rule {
+class DependentRequiredDefault final : public Rule {
 public:
-  EmptyDependentRequired()
-      : Rule{"empty_dependent_required",
+  DependentRequiredDefault()
+      : Rule{"dependent_required_default",
              "Setting the `dependentRequired` keyword to an empty object "
              "does not add any further constraint"} {};
 
