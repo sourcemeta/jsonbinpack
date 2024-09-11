@@ -1,7 +1,7 @@
-class MinPropertiesCoveredByRequired final : public Rule {
+class UnsatisfiableMinProperties final : public Rule {
 public:
-  MinPropertiesCoveredByRequired()
-      : Rule{"min_properties_covered_by_required",
+  UnsatisfiableMinProperties()
+      : Rule{"unsatisfiable_min_properties",
              "Setting `minProperties` to a number less than `required` does "
              "not add any further constraint"} {};
 

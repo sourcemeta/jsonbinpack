@@ -1,7 +1,7 @@
-class EmptyDependencies final : public Rule {
+class DependenciesDefault final : public Rule {
 public:
-  EmptyDependencies()
-      : Rule{"empty_dependencies",
+  DependenciesDefault()
+      : Rule{"dependencies_default",
              "Setting the `dependencies` keyword to an empty object "
              "does not add any further constraint"} {};
 

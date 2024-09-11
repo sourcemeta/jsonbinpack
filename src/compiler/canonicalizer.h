@@ -8,8 +8,6 @@
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
 namespace sourcemeta::jsonbinpack {
-
-// Rules
 #include "canonicalizer_rules/equal_numeric_bounds_as_const.h"
 #include "canonicalizer_rules/implicit_array_lower_bound.h"
 #include "canonicalizer_rules/implicit_object_lower_bound.h"
@@ -18,21 +16,9 @@ namespace sourcemeta::jsonbinpack {
 #include "canonicalizer_rules/implicit_type_union.h"
 #include "canonicalizer_rules/implicit_unit_multiple_of.h"
 
-} // namespace sourcemeta::jsonbinpack
-
-namespace sourcemeta::jsonbinpack {
-
-/// @ingroup canonicalizer
 class Canonicalizer final : public sourcemeta::alterschema::Bundle {
 public:
   Canonicalizer() {
-    sourcemeta::alterschema::add(
-        *this, sourcemeta::alterschema::LinterCategory::AntiPattern);
-    sourcemeta::alterschema::add(
-        *this, sourcemeta::alterschema::LinterCategory::Simplify);
-    sourcemeta::alterschema::add(
-        *this, sourcemeta::alterschema::LinterCategory::Desugar);
-
     // TODO: Upstream this one
     this->add<EqualNumericBoundsAsConst>();
 
