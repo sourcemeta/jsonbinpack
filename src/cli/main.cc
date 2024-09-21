@@ -8,10 +8,10 @@
 #include <stdexcept> // std::runtime_error
 #include <vector>    // std::vector
 
-static auto
-assert_arguments(const std::string &command,
-                 const std::vector<std::string> &arguments,
-                 const std::vector<std::string>::size_type count) -> void {
+static auto assert_arguments(const std::string &command,
+                             const std::vector<std::string> &arguments,
+                             const std::vector<std::string>::size_type count)
+    -> void {
   if (arguments.size() >= count) {
     return;
   }

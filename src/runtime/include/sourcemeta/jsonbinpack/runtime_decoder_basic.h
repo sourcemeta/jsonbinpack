@@ -74,8 +74,8 @@ public:
            this->stream.rdbuf()->sgetc() == '\0';
   }
 
-  inline auto
-  get_string_utf8(const std::uint64_t length) -> std::basic_string<CharT> {
+  inline auto get_string_utf8(const std::uint64_t length)
+      -> std::basic_string<CharT> {
     std::basic_string<CharT> result;
     result.reserve(length);
     std::uint64_t counter = 0;

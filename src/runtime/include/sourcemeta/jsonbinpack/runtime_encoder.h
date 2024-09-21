@@ -171,9 +171,10 @@ public:
     this->put_varint(static_cast<std::uint64_t>(cursor));
   }
 
-  auto TOP_LEVEL_BYTE_CHOICE_INDEX(
-      const sourcemeta::jsontoolkit::JSON &document,
-      const TOP_LEVEL_BYTE_CHOICE_INDEX &options) -> void {
+  auto
+  TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &document,
+                              const TOP_LEVEL_BYTE_CHOICE_INDEX &options)
+      -> void {
     assert(options.choices.size() > 0);
     assert(is_byte(options.choices.size()));
     const auto iterator{std::find_if(
@@ -361,9 +362,9 @@ public:
     }
   }
 
-  auto
-  BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &document,
-                            const BOUNDED_8BITS_TYPED_ARRAY &options) -> void {
+  auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &document,
+                                 const BOUNDED_8BITS_TYPED_ARRAY &options)
+      -> void {
     assert(options.maximum >= options.minimum);
     const auto size{document.size()};
     assert(is_within(size, options.minimum, options.maximum));
@@ -391,9 +392,10 @@ public:
                                        std::move(options.prefix_encodings)});
   }
 
-  auto FIXED_TYPED_ARBITRARY_OBJECT(
-      const sourcemeta::jsontoolkit::JSON &document,
-      const FIXED_TYPED_ARBITRARY_OBJECT &options) -> void {
+  auto
+  FIXED_TYPED_ARBITRARY_OBJECT(const sourcemeta::jsontoolkit::JSON &document,
+                               const FIXED_TYPED_ARBITRARY_OBJECT &options)
+      -> void {
     assert(document.is_object());
     assert(document.size() == options.size);
 
@@ -404,9 +406,10 @@ public:
     }
   }
 
-  auto VARINT_TYPED_ARBITRARY_OBJECT(
-      const sourcemeta::jsontoolkit::JSON &document,
-      const VARINT_TYPED_ARBITRARY_OBJECT &options) -> void {
+  auto
+  VARINT_TYPED_ARBITRARY_OBJECT(const sourcemeta::jsontoolkit::JSON &document,
+                                const VARINT_TYPED_ARBITRARY_OBJECT &options)
+      -> void {
     assert(document.is_object());
     const auto size{document.size()};
     this->put_varint(size);
@@ -418,9 +421,10 @@ public:
     }
   }
 
-  auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
-      const sourcemeta::jsontoolkit::JSON &document,
-      const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &) -> void {
+  auto
+  ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &document,
+                                  const ANY_PACKED_TYPE_TAG_BYTE_PREFIX &)
+      -> void {
     using namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
     if (document.is_null()) {
       this->put_byte(TYPE_OTHER | (SUBTYPE_NULL << type_size));

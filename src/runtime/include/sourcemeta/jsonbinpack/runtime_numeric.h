@@ -39,9 +39,9 @@ constexpr auto abs(const std::int64_t value) noexcept -> std::uint64_t {
   }
 }
 
-constexpr auto
-divide_ceil(const std::int64_t dividend,
-            const std::uint64_t divisor) noexcept -> std::int64_t {
+constexpr auto divide_ceil(const std::int64_t dividend,
+                           const std::uint64_t divisor) noexcept
+    -> std::int64_t {
   // Division by zero is invalid
   assert(divisor > 0);
 
@@ -66,9 +66,9 @@ divide_ceil(const std::int64_t dividend,
   }
 }
 
-constexpr auto
-divide_floor(const std::int64_t dividend,
-             const std::uint64_t divisor) noexcept -> std::int64_t {
+constexpr auto divide_floor(const std::int64_t dividend,
+                            const std::uint64_t divisor) noexcept
+    -> std::int64_t {
   // Division by zero is invalid
   assert(divisor > 0);
 
@@ -86,10 +86,11 @@ divide_floor(const std::int64_t dividend,
   }
 }
 
-constexpr auto
-closest_smallest_exponent(const std::uint64_t value, const std::uint8_t base,
-                          const std::uint8_t exponent_start,
-                          const std::uint8_t exponent_end) -> std::uint8_t {
+constexpr auto closest_smallest_exponent(const std::uint64_t value,
+                                         const std::uint8_t base,
+                                         const std::uint8_t exponent_start,
+                                         const std::uint8_t exponent_end)
+    -> std::uint8_t {
   assert(exponent_start <= exponent_end);
   std::uint64_t result{base};
   for (std::uint8_t exponent = 1; exponent < exponent_end; exponent++) {

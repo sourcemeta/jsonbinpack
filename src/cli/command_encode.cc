@@ -11,9 +11,9 @@
 #include <filesystem> // std::filesystem
 #include <iostream>   // std::cin, std::cout
 
-static auto
-encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
-                 const sourcemeta::jsontoolkit::JSON &instance) -> int {
+static auto encode_from_json(sourcemeta::jsontoolkit::JSON &schema,
+                             const sourcemeta::jsontoolkit::JSON &instance)
+    -> int {
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
       sourcemeta::jsontoolkit::official_resolver,

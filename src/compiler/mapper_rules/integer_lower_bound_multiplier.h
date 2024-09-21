@@ -4,11 +4,11 @@ public:
       : sourcemeta::alterschema::Rule("integer_lower_bound_multiplier",
                                       "TODO") {};
 
-  [[nodiscard]] auto
-  condition(const sourcemeta::jsontoolkit::JSON &schema,
-            const std::string &dialect,
-            const std::set<std::string> &vocabularies,
-            const sourcemeta::jsontoolkit::Pointer &) const -> bool override {
+  [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
+                               const std::string &dialect,
+                               const std::set<std::string> &vocabularies,
+                               const sourcemeta::jsontoolkit::Pointer &) const
+      -> bool override {
     return !is_encoding(schema) &&
            dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
