@@ -76,13 +76,13 @@ public:
     this->offsets.erase(iterator);
   }
 
-  auto has(const std::basic_string<CharT> &value,
-           const Type type) const -> bool {
+  auto has(const std::basic_string<CharT> &value, const Type type) const
+      -> bool {
     return this->strings.contains(std::make_pair(value, type));
   }
 
-  auto offset(const std::basic_string<CharT> &value,
-              const Type type) const -> std::uint64_t {
+  auto offset(const std::basic_string<CharT> &value, const Type type) const
+      -> std::uint64_t {
     // This method assumes the value indeed exists for performance reasons
     assert(this->has(value, type));
     return this->strings.at(std::make_pair(value, type));
