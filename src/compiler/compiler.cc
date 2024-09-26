@@ -101,17 +101,6 @@ auto compile(sourcemeta::jsontoolkit::JSON &schema,
              const std::optional<std::string> &default_dialect) -> void {
   canonicalize(schema, walker, resolver, default_dialect);
 
-  const auto mapper_resolver{make_resolver(resolver)};
-  const auto base_dialect{sourcemeta::jsontoolkit::base_dialect(
-                              schema, mapper_resolver, default_dialect)
-                              .get()};
-
-  // TODO: Use a custom error here
-  if (!base_dialect.has_value() ||
-      base_dialect.value() != "https://json-schema.org/draft/2020-12/schema") {
-    throw std::domain_error("Only JSON Schema 2020-12 is supported");
-  }
-
   sourcemeta::alterschema::Bundle mapper;
 
   // Enums
@@ -135,7 +124,7 @@ auto compile(sourcemeta::jsontoolkit::JSON &schema,
   // Numbers
   mapper.add<NumberArbitrary>();
 
-  mapper.apply(schema, walker, mapper_resolver,
+  mapper.apply(schema, walker, make_resolver(resolver),
                sourcemeta::jsontoolkit::empty_pointer, default_dialect);
 
   // The "any" encoding is always the last resort
