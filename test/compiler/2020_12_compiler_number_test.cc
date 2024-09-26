@@ -16,7 +16,7 @@ TEST(JSONBinPack_Compiler_Number_2020_12, arbitrary) {
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "DOUBLE_VARINT_TUPLE",
     "options": {}
   })JSON");

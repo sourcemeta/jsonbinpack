@@ -3,20 +3,14 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-#include <cassert>   // assert
-#include <cstdint>   // std::int64_t
-#include <future>    // std::future
-#include <limits>    // std::numeric_limits
-#include <optional>  // std::optional
-#include <stdexcept> // std::domain_error
-#include <string>    // std::string
+#include <cassert> // assert
+#include <future>  // std::future
+#include <limits>  // std::numeric_limits
 
 #include "states.h"
 
 namespace {
-// TODO: Turn this into a URN
-constexpr auto ENCODING_V1{
-    "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json"};
+constexpr auto ENCODING_V1{"tag:sourcemeta.com,2024:jsonbinpack/encoding/v1"};
 auto make_resolver(const sourcemeta::jsontoolkit::SchemaResolver &fallback)
     -> auto {
   return [&fallback](std::string_view identifier)
@@ -24,7 +18,7 @@ auto make_resolver(const sourcemeta::jsontoolkit::SchemaResolver &fallback)
     std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
     if (identifier == ENCODING_V1) {
       promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
-        "$id": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+        "$id": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$vocabulary": { "https://json-schema.org/draft/2020-12/vocab/core": true }
       })JSON"));
