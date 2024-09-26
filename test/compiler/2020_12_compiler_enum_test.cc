@@ -16,7 +16,7 @@ TEST(JSONBinPack_Compiler_Enum_2020_12, enum_singleton) {
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "CONST_NONE",
     "options": {
       "value": 2
@@ -39,7 +39,7 @@ TEST(JSONBinPack_Compiler_Enum_2020_12, const_scalar) {
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "CONST_NONE",
     "options": {
       "value": 2
@@ -62,7 +62,7 @@ TEST(JSONBinPack_Compiler_Enum_2020_12, enum_small_top_level) {
 
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "TOP_LEVEL_BYTE_CHOICE_INDEX",
     "options": {
       "choices": [ 1, 2, 3 ]

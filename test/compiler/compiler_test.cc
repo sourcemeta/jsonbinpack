@@ -15,7 +15,7 @@ TEST(JSONBinPack_Compiler, dialect_2020_12) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -33,7 +33,7 @@ TEST(JSONBinPack_Compiler, dialect_2019_09) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -51,7 +51,7 @@ TEST(JSONBinPack_Compiler, dialect_draft7) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -69,7 +69,7 @@ TEST(JSONBinPack_Compiler, dialect_draft6) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -87,7 +87,7 @@ TEST(JSONBinPack_Compiler, dialect_draft4) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -105,7 +105,7 @@ TEST(JSONBinPack_Compiler, dialect_draft3) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -123,7 +123,7 @@ TEST(JSONBinPack_Compiler, dialect_draft2) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -141,7 +141,7 @@ TEST(JSONBinPack_Compiler, dialect_draft1) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -159,7 +159,7 @@ TEST(JSONBinPack_Compiler, dialect_draft0) {
       sourcemeta::jsontoolkit::official_resolver);
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "options": {}
   })JSON");
@@ -178,7 +178,7 @@ TEST(JSONBinPack_Compiler, unknown_dialect_default) {
       "https://json-schema.org/draft/2020-12/schema");
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
-    "$schema": "https://jsonbinpack.sourcemeta.com/schemas/encoding/v1.json",
+    "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "options": {
       "multiplier": 1
