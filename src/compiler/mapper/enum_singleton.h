@@ -1,23 +1,23 @@
-class NumberArbitrary final : public sourcemeta::alterschema::Rule {
+class EnumSingleton final : public sourcemeta::alterschema::Rule {
 public:
-  NumberArbitrary()
-      : sourcemeta::alterschema::Rule("number_arbitrary", "TODO") {};
+  EnumSingleton() : sourcemeta::alterschema::Rule{"enum_singleton", ""} {};
 
   [[nodiscard]] auto condition(const sourcemeta::jsontoolkit::JSON &schema,
                                const std::string &dialect,
                                const std::set<std::string> &vocabularies,
                                const sourcemeta::jsontoolkit::Pointer &) const
       -> bool override {
-    return !is_encoding(schema) &&
-           dialect == "https://json-schema.org/draft/2020-12/schema" &&
+    return dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/validation") &&
-           schema.defines("type") && schema.at("type").to_string() == "number";
+           schema.defines("enum") && schema.at("enum").is_array() &&
+           schema.at("enum").size() == 1;
   }
 
   auto transform(sourcemeta::alterschema::Transformer &transformer) const
       -> void override {
-    make_encoding(transformer, "DOUBLE_VARINT_TUPLE",
-                  sourcemeta::jsontoolkit::JSON::make_object());
+    auto options = sourcemeta::jsontoolkit::JSON::make_object();
+    options.assign("value", transformer.schema().at("enum").at(0));
+    make_encoding(transformer, "CONST_NONE", options);
   }
 };
