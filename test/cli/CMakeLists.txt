@@ -28,17 +28,6 @@ add_test(NAME cli.unknown
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 1 "Unknown command" foobarbaz)
 
-add_test(NAME cli.canonicalize_file
-  COMMAND "${RUNNER_BIN}"
-  "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
-  canonicalize "${CMAKE_CURRENT_SOURCE_DIR}/schema_boolean.json")
-
-add_test(NAME cli.canonicalize_stdin
-  COMMAND "${RUNNER_STDIN_BIN}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/schema_boolean.json"
-  "${JSONBINPACK_CLI_PATH}" 0 "\"enum\":"
-  canonicalize)
-
 add_test(NAME cli.compile_file
   COMMAND "${RUNNER_BIN}"
   "${JSONBINPACK_CLI_PATH}" 0 "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED"
@@ -58,8 +47,6 @@ if(WIN32)
     cli.default
     cli.help
     cli.unknown
-    cli.canonicalize_file
-    cli.canonicalize_stdin
     cli.compile_file
     cli.compile_stdin
     PROPERTIES RUN_SERIAL TRUE)

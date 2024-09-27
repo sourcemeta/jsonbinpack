@@ -8,11 +8,6 @@ static const char *USAGE_DETAILS = R"EOF(
 
    help                              Print this help information and quit.
 
-   canonicalize [schema.json]        Canonicalize a given JSON Schema definition
-                                     and print the result to stdout. If a path to
-                                     a schema is not provided, the schema will
-                                     be read from standard input.
-
    compile [schema.json]             Compile a given JSON Schema definition
                                      into an encoding schema and print the result to
                                      stdout. If a path to a schema is not provided,
