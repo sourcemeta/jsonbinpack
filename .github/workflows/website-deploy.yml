@@ -27,7 +27,6 @@ jobs:
       - run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
-          -DJSONBINPACK_CLI:BOOL=OFF
           -DJSONBINPACK_NUMERIC:BOOL=OFF
           -DJSONBINPACK_RUNTIME:BOOL=OFF
           -DJSONBINPACK_COMPILER:BOOL=OFF
