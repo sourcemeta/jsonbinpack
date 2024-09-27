@@ -14,16 +14,16 @@ public:
         !vocabularies.contains(
             "https://json-schema.org/draft/2020-12/vocab/validation") ||
         !schema.defines("type") || schema.at("type").to_string() != "integer" ||
-        !schema.defines("minimum") || !schema.defines("maximum") ||
+        !schema.defines("minimum") || !schema.at("minimum").is_integer() ||
+        !schema.defines("maximum") || !schema.at("maximum").is_integer() ||
         !schema.defines("multipleOf") ||
         !schema.at("multipleOf").is_integer()) {
       return false;
     }
 
-    const std::optional<std::vector<sourcemeta::jsontoolkit::JSON>> states{
-        states_integer(schema, vocabularies)};
-    return states.has_value() &&
-           states->size() <= std::numeric_limits<std::uint8_t>::max();
+    return is_byte(count_multiples(schema.at("minimum").to_integer(),
+                                   schema.at("maximum").to_integer(),
+                                   schema.at("multipleOf").to_integer()));
   }
 
   auto transform(sourcemeta::alterschema::Transformer &transformer) const
