@@ -4,18 +4,16 @@
 #include <sourcemeta/jsontoolkit/json.h>
 
 TEST(JSONBinPack_Compiler_Enum_2020_12, enum_singleton) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 2 ]
   })JSON");
 
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "CONST_NONE",
     "binpackOptions": {
@@ -27,18 +25,16 @@ TEST(JSONBinPack_Compiler_Enum_2020_12, enum_singleton) {
 }
 
 TEST(JSONBinPack_Compiler_Enum_2020_12, const_scalar) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "const": 2
   })JSON");
 
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "CONST_NONE",
     "binpackOptions": {
@@ -50,18 +46,16 @@ TEST(JSONBinPack_Compiler_Enum_2020_12, const_scalar) {
 }
 
 TEST(JSONBinPack_Compiler_Enum_2020_12, enum_small_top_level) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 1, 2, 3 ]
   })JSON");
 
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "TOP_LEVEL_BYTE_CHOICE_INDEX",
     "binpackOptions": {

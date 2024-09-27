@@ -6,7 +6,7 @@
 
 TEST(JSONBinPack_Canonicalizer_String_2020_12,
      content_schema_without_content_media_type_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "contentSchema": {
@@ -16,11 +16,9 @@ TEST(JSONBinPack_Canonicalizer_String_2020_12,
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "minLength": 0
@@ -30,18 +28,16 @@ TEST(JSONBinPack_Canonicalizer_String_2020_12,
 }
 
 TEST(JSONBinPack_Canonicalizer_String_2020_12, implicit_string_lower_bound_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string"
   })JSON");
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "minLength": 0
@@ -51,7 +47,7 @@ TEST(JSONBinPack_Canonicalizer_String_2020_12, implicit_string_lower_bound_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_String_2020_12, drop_non_string_keywords_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "maxLength": 4,
@@ -61,11 +57,9 @@ TEST(JSONBinPack_Canonicalizer_String_2020_12, drop_non_string_keywords_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "string",
     "maxLength": 4,
