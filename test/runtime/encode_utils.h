@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>        // std::transform
+#include <cassert>          // assert
 #include <cstddef>          // std::byte
 #include <cstdint>          // std::uint8_t
 #include <initializer_list> // std::initializer_list
@@ -41,6 +42,25 @@ auto EXPECT_BYTES(const OutputByteStream<CharT> &stream,
                    return to_byte(static_cast<std::uint8_t>(character));
                  });
   EXPECT_EQ(actual, expected);
+}
+
+template <typename CharT>
+auto EXPECT_BYTES_STARTS_WITH(const OutputByteStream<CharT> &stream,
+                              const std::size_t total,
+                              std::initializer_list<std::uint8_t> bytes)
+    -> void {
+  const std::vector<std::byte> actual{stream.bytes()};
+  EXPECT_EQ(actual.size(), total);
+  std::vector<std::byte> expected{};
+  std::transform(bytes.begin(), bytes.end(), std::back_inserter(expected),
+                 [](const auto character) {
+                   return to_byte(static_cast<std::uint8_t>(character));
+                 });
+  assert(total > expected.size());
+  auto iterator{actual.cbegin()};
+  std::advance(iterator, expected.size());
+  const std::vector<std::byte> prefix{actual.cbegin(), iterator};
+  EXPECT_EQ(prefix, expected);
 }
 
 #endif

@@ -13,19 +13,14 @@
 #include <utility>     // std::move
 
 namespace {
-template <template <typename T> typename Allocator, typename V>
-auto traverse(V &document,
-              typename sourcemeta::jsontoolkit::GenericPointer<
-                  typename V::Char, typename V::CharTraits,
-                  Allocator>::const_iterator begin,
-              typename sourcemeta::jsontoolkit::GenericPointer<
-                  typename V::Char, typename V::CharTraits,
-                  Allocator>::const_iterator end) -> V & {
-  using Pointer = sourcemeta::jsontoolkit::GenericPointer<
-      typename V::Char, typename V::CharTraits, Allocator>;
+template <template <typename T> typename Allocator, typename V,
+          typename PointerT =
+              sourcemeta::jsontoolkit::GenericPointer<typename V::String>>
+auto traverse(V &document, typename PointerT::const_iterator begin,
+              typename PointerT::const_iterator end) -> V & {
   // Make sure types match
   static_assert(
-      std::is_same_v<typename Pointer::Value, std::remove_const_t<V>>);
+      std::is_same_v<typename PointerT::Value, std::remove_const_t<V>>);
 
   std::reference_wrapper<V> current{document};
 
@@ -59,6 +54,38 @@ auto traverse(V &document,
   return current.get();
 }
 
+template <typename PointerT>
+auto try_traverse(const sourcemeta::jsontoolkit::JSON &document,
+                  typename PointerT::const_iterator begin,
+                  typename PointerT::const_iterator end)
+    -> std::optional<
+        std::reference_wrapper<const sourcemeta::jsontoolkit::JSON>> {
+  std::reference_wrapper<const sourcemeta::jsontoolkit::JSON> current{document};
+  for (auto iterator = begin; iterator != end; ++iterator) {
+    const auto &token{*iterator};
+    const auto &instance{current.get()};
+    if (token.is_property()) {
+      const auto &property{token.to_property()};
+      auto json_value{instance.try_at(property)};
+      if (json_value.has_value()) {
+        current = std::move(json_value.value());
+
+      } else {
+        return std::nullopt;
+      }
+    } else {
+      const auto index{token.to_index()};
+      if (index < instance.size()) {
+        current = instance.at(index);
+      } else {
+        return std::nullopt;
+      }
+    }
+  }
+
+  return current;
+}
+
 } // namespace
 
 namespace sourcemeta::jsontoolkit {
@@ -68,9 +95,51 @@ auto get(const JSON &document, const Pointer &pointer) -> const JSON & {
                                               std::cend(pointer));
 }
 
+auto get(const JSON &document, const WeakPointer &pointer) -> const JSON & {
+  return traverse<std::allocator, const JSON, WeakPointer>(
+      document, std::cbegin(pointer), std::cend(pointer));
+}
+
 auto get(JSON &document, const Pointer &pointer) -> JSON & {
   return traverse<std::allocator, JSON>(document, std::cbegin(pointer),
                                         std::cend(pointer));
+}
+
+auto try_get(const JSON &document, const Pointer &pointer)
+    -> std::optional<std::reference_wrapper<const JSON>> {
+  return try_traverse<Pointer>(document, std::cbegin(pointer),
+                               std::cend(pointer));
+}
+
+auto try_get(const JSON &document, const WeakPointer &pointer)
+    -> std::optional<std::reference_wrapper<const JSON>> {
+  return try_traverse<WeakPointer>(document, std::cbegin(pointer),
+                                   std::cend(pointer));
+}
+
+auto get(const JSON &document, const Pointer::Token &token) -> const JSON & {
+  if (token.is_property()) {
+    return document.at(token.to_property());
+  } else {
+    return document.at(token.to_index());
+  }
+}
+
+auto get(const JSON &document, const WeakPointer::Token &token)
+    -> const JSON & {
+  if (token.is_property()) {
+    return document.at(token.to_property());
+  } else {
+    return document.at(token.to_index());
+  }
+}
+
+auto get(JSON &document, const Pointer::Token &token) -> JSON & {
+  if (token.is_property()) {
+    return document.at(token.to_property());
+  } else {
+    return document.at(token.to_index());
+  }
 }
 
 auto set(JSON &document, const Pointer &pointer, const JSON &value) -> void {
@@ -122,7 +191,7 @@ auto set(JSON &document, const Pointer &pointer, JSON &&value) -> void {
 auto to_pointer(const JSON &document) -> Pointer {
   assert(document.is_string());
   auto stream{document.to_stringstream()};
-  return parse_pointer<JSON::Char, JSON::CharTraits, std::allocator>(stream);
+  return parse_pointer(stream);
 }
 
 auto to_pointer(const std::basic_string<JSON::Char, JSON::CharTraits,
@@ -144,7 +213,24 @@ auto stringify(const Pointer &pointer,
                                                           false);
 }
 
+auto stringify(const WeakPointer &pointer,
+               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
+    -> void {
+  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream,
+                                                          false);
+}
+
 auto to_string(const Pointer &pointer)
+    -> std::basic_string<JSON::Char, JSON::CharTraits,
+                         std::allocator<JSON::Char>> {
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits,
+                           std::allocator<JSON::Char>>
+      result;
+  stringify(pointer, result);
+  return result.str();
+}
+
+auto to_string(const WeakPointer &pointer)
     -> std::basic_string<JSON::Char, JSON::CharTraits,
                          std::allocator<JSON::Char>> {
   std::basic_ostringstream<JSON::Char, JSON::CharTraits,

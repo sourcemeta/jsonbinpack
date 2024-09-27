@@ -12,25 +12,25 @@
       ]
     },
     {
+      "type": "object",
       "minProperties": 0,
-      "properties": {},
-      "type": "object"
+      "properties": {}
     },
     {
-      "minItems": 0,
-      "type": "array"
+      "type": "array",
+      "minItems": 0
     },
     {
-      "minLength": 0,
-      "type": "string"
+      "type": "string",
+      "minLength": 0
     },
     {
-      "multipleOf": 1,
-      "type": "number"
+      "type": "number",
+      "multipleOf": 1
     },
     {
-      "multipleOf": 1,
-      "type": "integer"
+      "type": "integer",
+      "multipleOf": 1
     }
   ]
 }

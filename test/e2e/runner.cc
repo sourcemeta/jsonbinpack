@@ -42,7 +42,9 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::prettify(schema, canonical_output_stream);
+  sourcemeta::jsontoolkit::prettify(
+      schema, canonical_output_stream,
+      sourcemeta::jsontoolkit::schema_format_compare);
   canonical_output_stream << "\n";
   canonical_output_stream.flush();
   canonical_output_stream.close();
@@ -54,7 +56,9 @@ auto main(int argc, char *argv[]) -> int {
 
   std::ofstream plan_output_stream(directory / "plan.json", std::ios::binary);
   plan_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::prettify(schema, plan_output_stream);
+  sourcemeta::jsontoolkit::prettify(
+      schema, plan_output_stream,
+      sourcemeta::jsontoolkit::schema_format_compare);
   plan_output_stream << "\n";
   plan_output_stream.flush();
   plan_output_stream.close();

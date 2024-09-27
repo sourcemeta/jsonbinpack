@@ -721,14 +721,27 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
-  EXPECT_BYTES(stream,
-               {
-                   0x1b,                   // tag: object (with length 2)
-                   0x04, 0x62, 0x61, 0x7a, // String length 3 + 'baz'
-                   0x15,                   // Positive integer tag with value 1
-                   0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
-                   0x21, 0x62, 0x61, 0x72  // String tag + length + 'bar'
-               });
+
+  // Deal with object property non-determinism
+  if (document.as_object().cbegin()->first == "foo") {
+    EXPECT_BYTES(stream,
+                 {
+                     0x1b,                   // tag: object (with length 2)
+                     0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
+                     0x21, 0x62, 0x61, 0x72, // String tag + length + 'bar'
+                     0x04, 0x62, 0x61, 0x7a, // String length 3 + 'baz'
+                     0x15 // Positive integer tag with value 1
+                 });
+  } else {
+    EXPECT_BYTES(stream,
+                 {
+                     0x1b,                   // tag: object (with length 2)
+                     0x04, 0x62, 0x61, 0x7a, // String length 3 + 'baz'
+                     0x15, // Positive integer tag with value 1
+                     0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
+                     0x21, 0x62, 0x61, 0x72  // String tag + length + 'bar'
+                 });
+  }
 }
 
 TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
@@ -774,42 +787,13 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
 
   Encoder encoder{stream};
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
-  EXPECT_BYTES(stream, {
-                           0xfb, // Object with size 30
-
-                           0x03, 0x30, 0x30, 0x0f, // Key "00" = true
-                           0x03, 0x30, 0x31, 0x0f, // Key "01" = true
-                           0x03, 0x30, 0x32, 0x0f, // Key "02" = true
-                           0x03, 0x30, 0x33, 0x0f, // Key "03" = true
-                           0x03, 0x30, 0x34, 0x0f, // Key "04" = true
-                           0x03, 0x30, 0x35, 0x0f, // Key "05" = true
-                           0x03, 0x30, 0x36, 0x0f, // Key "06" = true
-                           0x03, 0x30, 0x37, 0x0f, // Key "07" = true
-                           0x03, 0x30, 0x38, 0x0f, // Key "08" = true
-                           0x03, 0x30, 0x39, 0x0f, // Key "09" = true
-
-                           0x03, 0x31, 0x30, 0x0f, // Key "10" = true
-                           0x03, 0x31, 0x31, 0x0f, // Key "11" = true
-                           0x03, 0x31, 0x32, 0x0f, // Key "12" = true
-                           0x03, 0x31, 0x33, 0x0f, // Key "13" = true
-                           0x03, 0x31, 0x34, 0x0f, // Key "14" = true
-                           0x03, 0x31, 0x35, 0x0f, // Key "15" = true
-                           0x03, 0x31, 0x36, 0x0f, // Key "16" = true
-                           0x03, 0x31, 0x37, 0x0f, // Key "17" = true
-                           0x03, 0x31, 0x38, 0x0f, // Key "18" = true
-                           0x03, 0x31, 0x39, 0x0f, // Key "19" = true
-
-                           0x03, 0x32, 0x30, 0x0f, // Key "20" = true
-                           0x03, 0x32, 0x31, 0x0f, // Key "21" = true
-                           0x03, 0x32, 0x32, 0x0f, // Key "22" = true
-                           0x03, 0x32, 0x33, 0x0f, // Key "23" = true
-                           0x03, 0x32, 0x34, 0x0f, // Key "24" = true
-                           0x03, 0x32, 0x35, 0x0f, // Key "25" = true
-                           0x03, 0x32, 0x36, 0x0f, // Key "26" = true
-                           0x03, 0x32, 0x37, 0x0f, // Key "27" = true
-                           0x03, 0x32, 0x38, 0x0f, // Key "28" = true
-                           0x03, 0x32, 0x39, 0x0f  // Key "29" = true
-                       });
+  // JSON object ordering is non-deterministic, so its
+  // impractical to validate the actual payload
+  EXPECT_BYTES_STARTS_WITH(stream,
+                           121, // prefix (1) + (30 properties * 4 bytes each)
+                           {
+                               0xfb // Object with size 30
+                           });
 }
 
 TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
@@ -857,45 +841,15 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
 
   Encoder encoder{stream};
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
-  EXPECT_BYTES(stream, {
-                           0x03, // tag: object
-                           0x00, // length 31 - uint5_max
 
-                           0x03, 0x30, 0x30, 0x0f, // Key "00" = true
-                           0x03, 0x30, 0x31, 0x0f, // Key "01" = true
-                           0x03, 0x30, 0x32, 0x0f, // Key "02" = true
-                           0x03, 0x30, 0x33, 0x0f, // Key "03" = true
-                           0x03, 0x30, 0x34, 0x0f, // Key "04" = true
-                           0x03, 0x30, 0x35, 0x0f, // Key "05" = true
-                           0x03, 0x30, 0x36, 0x0f, // Key "06" = true
-                           0x03, 0x30, 0x37, 0x0f, // Key "07" = true
-                           0x03, 0x30, 0x38, 0x0f, // Key "08" = true
-                           0x03, 0x30, 0x39, 0x0f, // Key "09" = true
-
-                           0x03, 0x31, 0x30, 0x0f, // Key "10" = true
-                           0x03, 0x31, 0x31, 0x0f, // Key "11" = true
-                           0x03, 0x31, 0x32, 0x0f, // Key "12" = true
-                           0x03, 0x31, 0x33, 0x0f, // Key "13" = true
-                           0x03, 0x31, 0x34, 0x0f, // Key "14" = true
-                           0x03, 0x31, 0x35, 0x0f, // Key "15" = true
-                           0x03, 0x31, 0x36, 0x0f, // Key "16" = true
-                           0x03, 0x31, 0x37, 0x0f, // Key "17" = true
-                           0x03, 0x31, 0x38, 0x0f, // Key "18" = true
-                           0x03, 0x31, 0x39, 0x0f, // Key "19" = true
-
-                           0x03, 0x32, 0x30, 0x0f, // Key "20" = true
-                           0x03, 0x32, 0x31, 0x0f, // Key "21" = true
-                           0x03, 0x32, 0x32, 0x0f, // Key "22" = true
-                           0x03, 0x32, 0x33, 0x0f, // Key "23" = true
-                           0x03, 0x32, 0x34, 0x0f, // Key "24" = true
-                           0x03, 0x32, 0x35, 0x0f, // Key "25" = true
-                           0x03, 0x32, 0x36, 0x0f, // Key "26" = true
-                           0x03, 0x32, 0x37, 0x0f, // Key "27" = true
-                           0x03, 0x32, 0x38, 0x0f, // Key "28" = true
-                           0x03, 0x32, 0x39, 0x0f, // Key "29" = true
-
-                           0x03, 0x33, 0x30, 0x0f // Key "30" = true
-                       });
+  // JSON object ordering is non-deterministic, so its
+  // impractical to validate the actual payload
+  EXPECT_BYTES_STARTS_WITH(stream,
+                           126, // prefix (2) + (31 properties * 4 bytes each)
+                           {
+                               0x03, // tag: object
+                               0x00  // length 31 - uint5_max
+                           });
 }
 
 TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
@@ -944,46 +898,15 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
 
   Encoder encoder{stream};
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
-  EXPECT_BYTES(stream, {
-                           0x03, // tag: object
-                           0x01, // length 32 - uint5_max
 
-                           0x03, 0x30, 0x30, 0x0f, // Key "00" = true
-                           0x03, 0x30, 0x31, 0x0f, // Key "01" = true
-                           0x03, 0x30, 0x32, 0x0f, // Key "02" = true
-                           0x03, 0x30, 0x33, 0x0f, // Key "03" = true
-                           0x03, 0x30, 0x34, 0x0f, // Key "04" = true
-                           0x03, 0x30, 0x35, 0x0f, // Key "05" = true
-                           0x03, 0x30, 0x36, 0x0f, // Key "06" = true
-                           0x03, 0x30, 0x37, 0x0f, // Key "07" = true
-                           0x03, 0x30, 0x38, 0x0f, // Key "08" = true
-                           0x03, 0x30, 0x39, 0x0f, // Key "09" = true
-
-                           0x03, 0x31, 0x30, 0x0f, // Key "10" = true
-                           0x03, 0x31, 0x31, 0x0f, // Key "11" = true
-                           0x03, 0x31, 0x32, 0x0f, // Key "12" = true
-                           0x03, 0x31, 0x33, 0x0f, // Key "13" = true
-                           0x03, 0x31, 0x34, 0x0f, // Key "14" = true
-                           0x03, 0x31, 0x35, 0x0f, // Key "15" = true
-                           0x03, 0x31, 0x36, 0x0f, // Key "16" = true
-                           0x03, 0x31, 0x37, 0x0f, // Key "17" = true
-                           0x03, 0x31, 0x38, 0x0f, // Key "18" = true
-                           0x03, 0x31, 0x39, 0x0f, // Key "19" = true
-
-                           0x03, 0x32, 0x30, 0x0f, // Key "20" = true
-                           0x03, 0x32, 0x31, 0x0f, // Key "21" = true
-                           0x03, 0x32, 0x32, 0x0f, // Key "22" = true
-                           0x03, 0x32, 0x33, 0x0f, // Key "23" = true
-                           0x03, 0x32, 0x34, 0x0f, // Key "24" = true
-                           0x03, 0x32, 0x35, 0x0f, // Key "25" = true
-                           0x03, 0x32, 0x36, 0x0f, // Key "26" = true
-                           0x03, 0x32, 0x37, 0x0f, // Key "27" = true
-                           0x03, 0x32, 0x38, 0x0f, // Key "28" = true
-                           0x03, 0x32, 0x39, 0x0f, // Key "29" = true
-
-                           0x03, 0x33, 0x30, 0x0f, // Key "30" = true
-                           0x03, 0x33, 0x31, 0x0f  // Key "31" = true
-                       });
+  // JSON object ordering is non-deterministic, so its
+  // impractical to validate the actual payload
+  EXPECT_BYTES_STARTS_WITH(stream,
+                           130, // prefix (2) + (32 properties * 4 bytes each)
+                           {
+                               0x03, // tag: object
+                               0x01  // length 32 - uint5_max
+                           });
 }
 
 TEST(JSONBinPack_Encoder,
@@ -999,25 +922,51 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
-  EXPECT_BYTES(stream,
-               {
-                   0x1b,                   // tag: object (with length 2)
-                   0x04, 0x62, 0x61, 0x72, // String tag + length + 'bar'
-                   0x01,                   // tag: string
-                   0x01, // length 62 (with uint5_max as minimum)
 
-                   // 62 "x"s
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                   0x78, 0x78,
+  // Deal with object property non-determinism
+  if (document.as_object().cbegin()->first == "foo") {
+    EXPECT_BYTES(stream,
+                 {
+                     0x1b,                   // tag: object (with length 2)
+                     0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
+                     0x01,                   // tag: string
+                     0x01, // length 62 (with uint5_max as minimum)
 
-                   0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
-                   0x00,                   // tag: shared string
-                   0x01, // length 62 (with uint5_max as minimum)
-                   0x44  // pointer: 75 - 7 = 68
-               });
+                     // 62 "x"s
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78,
+
+                     0x04, 0x62, 0x61, 0x72, // String tag + length + 'bar'
+                     0x00,                   // tag: shared string
+                     0x01, // length 62 (with uint5_max as minimum)
+                     0x44  // pointer: 75 - 7 = 68
+                 });
+  } else {
+    EXPECT_BYTES(stream,
+                 {
+                     0x1b,                   // tag: object (with length 2)
+                     0x04, 0x62, 0x61, 0x72, // String tag + length + 'bar'
+                     0x01,                   // tag: string
+                     0x01, // length 62 (with uint5_max as minimum)
+
+                     // 62 "x"s
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+                     0x78, 0x78,
+
+                     0x04, 0x66, 0x6f, 0x6f, // String length 3 + "foo"
+                     0x00,                   // tag: shared string
+                     0x01, // length 62 (with uint5_max as minimum)
+                     0x44  // pointer: 75 - 7 = 68
+                 });
+  }
 }
