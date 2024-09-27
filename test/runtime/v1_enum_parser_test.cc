@@ -9,8 +9,8 @@ TEST(JSONBinPack_Parser_v1, BYTE_CHOICE_INDEX_scalars) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "BYTE_CHOICE_INDEX",
-    "options": {
+    "binpackEncoding": "BYTE_CHOICE_INDEX",
+    "binpackOptions": {
       "choices": [ 1, 2, 3 ]
     }
   })JSON");
@@ -32,8 +32,8 @@ TEST(JSONBinPack_Parser_v1, LARGE_CHOICE_INDEX_scalars) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "LARGE_CHOICE_INDEX",
-    "options": {
+    "binpackEncoding": "LARGE_CHOICE_INDEX",
+    "binpackOptions": {
       "choices": [ 1, 2, 3 ]
     }
   })JSON");
@@ -55,8 +55,8 @@ TEST(JSONBinPack_Parser_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "TOP_LEVEL_BYTE_CHOICE_INDEX",
-    "options": {
+    "binpackEncoding": "TOP_LEVEL_BYTE_CHOICE_INDEX",
+    "binpackOptions": {
       "choices": [ 1, 2, 3 ]
     }
   })JSON");
@@ -78,8 +78,8 @@ TEST(JSONBinPack_Parser_v1, CONST_NONE_scalar) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "CONST_NONE",
-    "options": {
+    "binpackEncoding": "CONST_NONE",
+    "binpackOptions": {
       "value": 1
     }
   })JSON");

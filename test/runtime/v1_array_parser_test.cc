@@ -9,23 +9,23 @@ TEST(JSONBinPack_Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FIXED_TYPED_ARRAY",
-    "options": {
+    "binpackEncoding": "FIXED_TYPED_ARRAY",
+    "binpackOptions": {
       "size": 3,
       "encoding": {
-        "name": "DOUBLE_VARINT_TUPLE",
-        "options": {}
+        "binpackEncoding": "DOUBLE_VARINT_TUPLE",
+        "binpackOptions": {}
       },
       "prefixEncodings": [
         {
-          "name": "BYTE_CHOICE_INDEX",
-          "options": {
+          "binpackEncoding": "BYTE_CHOICE_INDEX",
+          "binpackOptions": {
             "choices": [ 1, 2 ]
           }
         },
         {
-          "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-          "options": {
+          "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+          "binpackOptions": {
             "multiplier": 1
           }
         }
@@ -73,24 +73,24 @@ TEST(JSONBinPack_Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "BOUNDED_8BITS_TYPED_ARRAY",
-    "options": {
+    "binpackEncoding": "BOUNDED_8BITS_TYPED_ARRAY",
+    "binpackOptions": {
       "minimum": 1,
       "maximum": 3,
       "encoding": {
-        "name": "DOUBLE_VARINT_TUPLE",
-        "options": {}
+        "binpackEncoding": "DOUBLE_VARINT_TUPLE",
+        "binpackOptions": {}
       },
       "prefixEncodings": [
         {
-          "name": "BYTE_CHOICE_INDEX",
-          "options": {
+          "binpackEncoding": "BYTE_CHOICE_INDEX",
+          "binpackOptions": {
             "choices": [ 1, 2 ]
           }
         },
         {
-          "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-          "options": {
+          "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+          "binpackOptions": {
             "multiplier": 1
           }
         }
@@ -148,23 +148,23 @@ TEST(JSONBinPack_Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_TYPED_ARRAY",
-    "options": {
+    "binpackEncoding": "FLOOR_TYPED_ARRAY",
+    "binpackOptions": {
       "minimum": 1,
       "encoding": {
-        "name": "DOUBLE_VARINT_TUPLE",
-        "options": {}
+        "binpackEncoding": "DOUBLE_VARINT_TUPLE",
+        "binpackOptions": {}
       },
       "prefixEncodings": [
         {
-          "name": "BYTE_CHOICE_INDEX",
-          "options": {
+          "binpackEncoding": "BYTE_CHOICE_INDEX",
+          "binpackOptions": {
             "choices": [ 1, 2 ]
           }
         },
         {
-          "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-          "options": {
+          "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+          "binpackOptions": {
             "multiplier": 1
           }
         }
@@ -212,23 +212,23 @@ TEST(JSONBinPack_Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ROOF_TYPED_ARRAY",
-    "options": {
+    "binpackEncoding": "ROOF_TYPED_ARRAY",
+    "binpackOptions": {
       "maximum": 3,
       "encoding": {
-        "name": "DOUBLE_VARINT_TUPLE",
-        "options": {}
+        "binpackEncoding": "DOUBLE_VARINT_TUPLE",
+        "binpackOptions": {}
       },
       "prefixEncodings": [
         {
-          "name": "BYTE_CHOICE_INDEX",
-          "options": {
+          "binpackEncoding": "BYTE_CHOICE_INDEX",
+          "binpackOptions": {
             "choices": [ 1, 2 ]
           }
         },
         {
-          "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-          "options": {
+          "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+          "binpackOptions": {
             "multiplier": 1
           }
         }

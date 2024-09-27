@@ -19,8 +19,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
-    "options": {
+    "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "binpackOptions": {
       "minimum": -100,
       "maximum": 100,
       "multiplier": 1
@@ -47,8 +47,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
-    "options": {
+    "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
+    "binpackOptions": {
       "minimum": -100,
       "maximum": 100,
       "multiplier": 5
@@ -74,8 +74,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "binpackOptions": {
       "minimum": -100,
       "multiplier": 1
     }
@@ -102,8 +102,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12,
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "binpackOptions": {
       "minimum": -100,
       "multiplier": 5
     }
@@ -127,8 +127,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "binpackOptions": {
       "minimum": 0,
       "multiplier": 1
     }
@@ -153,8 +153,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_MULTIPLE_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
+    "binpackOptions": {
       "minimum": 0,
       "multiplier": 5
     }
@@ -178,8 +178,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "binpackOptions": {
       "maximum": 100,
       "multiplier": 1
     }
@@ -204,8 +204,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
-    "options": {
+    "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
+    "binpackOptions": {
       "maximum": 100,
       "multiplier": 5
     }
@@ -228,8 +228,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-    "options": {
+    "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "binpackOptions": {
       "multiplier": 1
     }
   })JSON");
@@ -252,8 +252,8 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded_multiplier) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-    "options": {
+    "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "binpackOptions": {
       "multiplier": 5
     }
   })JSON");

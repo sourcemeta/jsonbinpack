@@ -31,8 +31,8 @@ auto make_encoding(sourcemeta::alterschema::Transformer &document,
                    const sourcemeta::jsontoolkit::JSON &options) -> void {
   document.replace(sourcemeta::jsontoolkit::JSON::make_object());
   document.assign("$schema", sourcemeta::jsontoolkit::JSON{ENCODING_V1});
-  document.assign("name", sourcemeta::jsontoolkit::JSON{encoding});
-  document.assign("options", options);
+  document.assign("binpackEncoding", sourcemeta::jsontoolkit::JSON{encoding});
+  document.assign("binpackOptions", options);
 }
 
 // TODO: Re-use from numeric library

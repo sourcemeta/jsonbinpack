@@ -9,10 +9,10 @@
 namespace sourcemeta::jsonbinpack {
 
 auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Plan {
-  assert(input.defines("name"));
-  assert(input.defines("options"));
-  const auto encoding{input.at("name").to_string()};
-  const auto &options{input.at("options")};
+  assert(input.defines("binpackEncoding"));
+  assert(input.defines("binpackOptions"));
+  const auto encoding{input.at("binpackEncoding").to_string()};
+  const auto &options{input.at("binpackOptions")};
 
 #define PARSE_ENCODING(version, name)                                          \
   if (encoding == #name)                                                       \
