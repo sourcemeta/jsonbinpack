@@ -4,6 +4,8 @@
 #include <cmath>   // std::abs
 #include <cstdint> // std::uint64_t, std::int64_t
 
+// TODO: Move to src/numeric
+
 namespace sourcemeta::jsonbinpack {
 
 constexpr auto zigzag_encode(const std::int64_t value) noexcept

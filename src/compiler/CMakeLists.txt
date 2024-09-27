@@ -22,6 +22,8 @@ if(JSONBINPACK_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler)
 endif()
 
+target_link_libraries(sourcemeta_jsonbinpack_compiler PRIVATE
+  sourcemeta::jsonbinpack::numeric)
 target_link_libraries(sourcemeta_jsonbinpack_compiler PUBLIC
   sourcemeta::jsontoolkit::json)
 target_link_libraries(sourcemeta_jsonbinpack_compiler PUBLIC

@@ -10,6 +10,7 @@ include(vendor/noa/cmake/noa.cmake)
 
 # Options
 option(JSONBINPACK_CLI "Build the JSON BinPack CLI" ON)
+option(JSONBINPACK_NUMERIC "Build the JSON BinPack numeric library" ON)
 option(JSONBINPACK_RUNTIME "Build the JSON BinPack runtime" ON)
 option(JSONBINPACK_COMPILER "Build the JSON BinPack compiler" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
@@ -40,13 +41,18 @@ endif()
 find_package(JSONToolkit REQUIRED)
 find_package(AlterSchema REQUIRED)
 
+# Numeric
+if(JSONBINPACK_NUMERIC)
+  add_subdirectory(src/numeric)
+endif()
+
 # Runtime
-if(JSONBINPACK_RUNTIME OR JSONBINPACK_CLI OR JSONBINPACK_COMPILER)
+if(JSONBINPACK_RUNTIME)
   add_subdirectory(src/runtime)
 endif()
 
 # Compiler
-if(JSONBINPACK_COMPILER OR JSONBINPACK_CLI)
+if(JSONBINPACK_COMPILER)
   add_subdirectory(src/compiler)
 endif()
 
@@ -83,11 +89,11 @@ if(JSONBINPACK_TESTS)
   find_package(GoogleTest REQUIRED)
   enable_testing()
 
-  if(JSONBINPACK_RUNTIME OR JSONBINPACK_CLI OR JSONBINPACK_COMPILER)
+  if(JSONBINPACK_RUNTIME)
     add_subdirectory(test/runtime)
   endif()
 
-  if(JSONBINPACK_COMPILER OR JSONBINPACK_CLI)
+  if(JSONBINPACK_COMPILER)
     add_subdirectory(test/compiler)
   endif()
 

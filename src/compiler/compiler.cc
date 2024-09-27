@@ -1,10 +1,8 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
+#include <sourcemeta/jsonbinpack/numeric.h>
 
 #include <sourcemeta/alterschema/engine.h>
 #include <sourcemeta/alterschema/linter.h>
-
-#include <cassert> // assert
-#include <limits>  // std::numeric_limits
 
 #include "encoding.h"
 #include "states.h"
@@ -33,11 +31,6 @@ auto make_encoding(sourcemeta::alterschema::Transformer &document,
   document.assign("$schema", sourcemeta::jsontoolkit::JSON{ENCODING_V1});
   document.assign("binpackEncoding", sourcemeta::jsontoolkit::JSON{encoding});
   document.assign("binpackOptions", options);
-}
-
-// TODO: Re-use from numeric library
-template <typename T> constexpr auto is_byte(const T value) noexcept -> bool {
-  return value <= std::numeric_limits<std::uint8_t>::max();
 }
 
 #include "mapper/enum_8_bit.h"

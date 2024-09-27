@@ -5,6 +5,8 @@
 #include <cmath>    // std::modf, std::floor, std::isfinite
 #include <concepts> // std::floating_point, std::integral
 
+// TODO: Move to src/numeric
+
 namespace sourcemeta::jsonbinpack {
 
 // IEEE764 floating-point encoding is not precise. Some real numbers
