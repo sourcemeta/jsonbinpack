@@ -5,7 +5,7 @@
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, if_without_then_else_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "if": { "minProperties": 2 }
@@ -13,11 +13,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, if_without_then_else_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
@@ -28,7 +26,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, if_without_then_else_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, then_else_without_if_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "then": { "minProperties": 2 },
@@ -37,11 +35,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, then_else_without_if_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
@@ -52,7 +48,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, then_else_without_if_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number" },
@@ -63,11 +59,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number", "multipleOf": 1 },
@@ -79,7 +73,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_2) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number" },
@@ -90,11 +84,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_2) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number", "multipleOf": 1 },
@@ -106,7 +98,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_3) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number" },
@@ -124,11 +116,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_3) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "allOf": [
       { "type": "number", "multipleOf": 1 },
@@ -140,7 +130,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_allof_branches_3) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number" },
@@ -151,11 +141,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number", "multipleOf": 1 },
@@ -167,7 +155,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_2) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number" },
@@ -178,11 +166,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_2) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number", "multipleOf": 1 },
@@ -194,7 +180,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_3) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number" },
@@ -212,11 +198,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_3) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "type": "number", "multipleOf": 1 },
@@ -228,18 +212,16 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, duplicate_anyof_branches_3) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": [ "object", "array" ]
   })JSON");
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       {
@@ -258,7 +240,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_2) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": [ "object", "array" ],
     "maxProperties": 3
@@ -266,11 +248,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_2) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       {
@@ -290,7 +270,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_3) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {
@@ -302,11 +282,9 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_3) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
@@ -331,17 +309,15 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_3) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Any_2020_12, implicit_type_union_1) {
-  sourcemeta::jsontoolkit::JSON schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "anyOf": [
       { "enum": [ null ] },
@@ -381,8 +357,7 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, boolean_schema_1) {
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsontoolkit::JSON expected =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "anyOf": [
       { "enum": [ null ] },
       { "enum": [ false, true ] },
