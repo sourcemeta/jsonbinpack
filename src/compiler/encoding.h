@@ -19,7 +19,10 @@ make_resolver(const sourcemeta::jsontoolkit::SchemaResolver &fallback) -> auto {
       promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
         "$id": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$vocabulary": { "https://json-schema.org/draft/2020-12/vocab/core": true }
+        "$vocabulary": {
+          "https://json-schema.org/draft/2020-12/vocab/core": true,
+          "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1": true
+        }
       })JSON"));
     } else {
       promise.set_value(fallback(identifier).get());
