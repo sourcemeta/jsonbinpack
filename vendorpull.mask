@@ -9,6 +9,10 @@ vendor/bootstrap
 vendor/googletest.mask
 vendor/googletest
 vendor/vendorpull
+vendor/alterschema
+vendor/bootstrap
+vendor/googletest
+vendor/jsontoolkit
 www
 .editorconfig
 .ackrc
