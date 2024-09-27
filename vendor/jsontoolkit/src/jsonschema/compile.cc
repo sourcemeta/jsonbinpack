@@ -26,9 +26,9 @@ auto compile_subschema(
     if (schema_context.schema.to_boolean()) {
       return {};
     } else {
-      return {make<SchemaCompilerAssertionFail>(
-          context, schema_context, dynamic_context, SchemaCompilerValueNone{},
-          {}, SchemaCompilerTargetType::Instance)};
+      return {make<SchemaCompilerAssertionFail>(true, context, schema_context,
+                                                dynamic_context,
+                                                SchemaCompilerValueNone{})};
     }
   }
 
@@ -43,7 +43,7 @@ auto compile_subschema(
              {schema_context.relative_pointer.concat({keyword}),
               schema_context.schema, entry.vocabularies, schema_context.base,
               // TODO: This represents a copy
-              schema_context.labels},
+              schema_context.labels, schema_context.references},
              {keyword, dynamic_context.base_schema_location,
               dynamic_context.base_instance_location})) {
       // Just a sanity check to ensure every keyword location is indeed valid
@@ -70,9 +70,8 @@ auto compile(const JSON &schema, const SchemaWalker &walker,
 
   // Make sure the input schema is bundled, otherwise we won't be able to
   // resolve remote references here
-  const JSON result{
-      bundle(schema, walker, resolver, BundleOptions::Default, default_dialect)
-          .get()};
+  const JSON result{bundle(schema, walker, resolver, BundleOptions::Default,
+                           default_dialect)};
 
   // Perform framing to resolve references later on
   ReferenceFrame frame;
@@ -112,6 +111,7 @@ auto compile(const JSON &schema, const SchemaWalker &walker,
       result,
       vocabularies(schema, resolver, root_frame_entry.dialect).get(),
       root_frame_entry.base,
+      {},
       {}};
   const sourcemeta::jsontoolkit::SchemaCompilerDynamicContext dynamic_context{
       relative_dynamic_context};
@@ -147,10 +147,11 @@ auto compile(const JSON &schema, const SchemaWalker &walker,
                                 std::move(subschema),
                                 std::move(nested_vocabularies),
                                 entry.second.base,
+                                {},
                                 {}};
 
       compiler_template.push_back(make<SchemaCompilerControlMark>(
-          context, nested_schema_context, dynamic_context,
+          true, context, nested_schema_context, dynamic_context,
           SchemaCompilerValueUnsignedInteger{label},
           compile(context, nested_schema_context, relative_dynamic_context,
                   empty_pointer, empty_pointer, entry.first.second)));
@@ -183,6 +184,22 @@ auto compile(const SchemaCompilerContext &context,
                 .canonicalize()
                 .recompose()};
 
+  // Otherwise the recursion attempt is non-sense
+  if (!context.frame.contains({ReferenceType::Static, destination})) {
+    throw SchemaReferenceError(
+        destination, schema_context.relative_pointer,
+        "The target of the reference does not exist in the schema");
+  }
+
+  const auto &entry{context.frame.at({ReferenceType::Static, destination})};
+  const auto &new_schema{get(context.root, entry.pointer)};
+
+  if (!is_schema(new_schema)) {
+    throw SchemaReferenceError(
+        destination, schema_context.relative_pointer,
+        "The target of the reference is not a valid schema");
+  }
+
   const Pointer destination_pointer{
       dynamic_context.keyword.empty()
           ? dynamic_context.base_schema_location.concat(schema_suffix)
@@ -190,30 +207,20 @@ auto compile(const SchemaCompilerContext &context,
                 .concat({dynamic_context.keyword})
                 .concat(schema_suffix)};
 
-  // Otherwise the recursion attempt is non-sense
-  if (!context.frame.contains({ReferenceType::Static, destination})) {
-    throw SchemaReferenceError(
-        destination, destination_pointer,
-        "The target of the reference does not exist in the schema");
-  }
-
-  const auto &entry{context.frame.at({ReferenceType::Static, destination})};
-
-  const auto &new_schema{get(context.root, entry.pointer)};
   return compile_subschema(
       context,
       {entry.relative_pointer, new_schema,
        vocabularies(new_schema, context.resolver, entry.dialect).get(),
        entry.base,
        // TODO: This represents a copy
-       schema_context.labels},
+       schema_context.labels, schema_context.references},
       {dynamic_context.keyword, destination_pointer,
        dynamic_context.base_instance_location.concat(instance_suffix)},
       entry.dialect);
 }
 
 SchemaCompilerErrorTraceOutput::SchemaCompilerErrorTraceOutput(
-    const JSON &instance, const Pointer &base)
+    const JSON &instance, const WeakPointer &base)
     : instance_{instance}, base_{base} {}
 
 auto SchemaCompilerErrorTraceOutput::begin() const -> const_iterator {
@@ -235,7 +242,7 @@ auto SchemaCompilerErrorTraceOutput::cend() const -> const_iterator {
 auto SchemaCompilerErrorTraceOutput::operator()(
     const SchemaCompilerEvaluationType type, const bool result,
     const SchemaCompilerTemplate::value_type &step,
-    const Pointer &evaluate_path, const Pointer &instance_location,
+    const WeakPointer &evaluate_path, const WeakPointer &instance_location,
     const JSON &annotation) -> void {
   assert(!evaluate_path.empty());
   assert(evaluate_path.back().is_property());

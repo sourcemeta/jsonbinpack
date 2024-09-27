@@ -3,6 +3,7 @@
 
 #include <sourcemeta/jsontoolkit/jsonschema_compile.h>
 
+#include <cassert> // assert
 #include <utility> // std::declval, std::move
 
 namespace sourcemeta::jsontoolkit {
@@ -10,127 +11,84 @@ namespace sourcemeta::jsontoolkit {
 static const SchemaCompilerDynamicContext relative_dynamic_context{
     "", empty_pointer, empty_pointer};
 
-inline auto keyword_location(const SchemaCompilerSchemaContext &schema_context)
-    -> std::string {
-  return to_uri(schema_context.relative_pointer, schema_context.base)
-      .recompose();
-}
-
-inline auto relative_schema_location(
-    const SchemaCompilerDynamicContext &context) -> Pointer {
-  return context.keyword.empty()
-             ? context.base_schema_location
-             : context.base_schema_location.concat({context.keyword});
-}
-
 // Instantiate a value-oriented step
 template <typename Step>
-auto make(const SchemaCompilerContext &context,
+auto make(const bool report, const SchemaCompilerContext &context,
           const SchemaCompilerSchemaContext &schema_context,
           const SchemaCompilerDynamicContext &dynamic_context,
           // Take the value type from the "type" property of the step struct
-          decltype(std::declval<Step>().value) &&value,
-          SchemaCompilerTemplate &&condition,
-          const SchemaCompilerTargetType target_type,
-          const std::optional<Pointer> &target_location = std::nullopt)
-    -> Step {
-  return {{target_type, target_location.value_or(empty_pointer)},
-          relative_schema_location(dynamic_context),
-          dynamic_context.base_instance_location,
-          keyword_location(schema_context),
-          schema_context.base.recompose(),
-          context.uses_dynamic_scopes,
-          std::move(value),
-          std::move(condition)};
-}
-
-// Instantiate a value-oriented step with data
-template <typename Step>
-auto make(const SchemaCompilerContext &context,
-          const SchemaCompilerSchemaContext &schema_context,
-          const SchemaCompilerDynamicContext &dynamic_context,
-          // Take the value type from the "type" property of the step struct
-          decltype(std::declval<Step>().value) &&value,
-          SchemaCompilerTemplate &&condition,
-          const SchemaCompilerTargetType target_type,
-          // Take the value type from the "data" property of the step struct
-          decltype(std::declval<Step>().data) &&data,
-          const std::optional<Pointer> &target_location = std::nullopt)
-    -> Step {
-  return {{target_type, target_location.value_or(empty_pointer)},
-          relative_schema_location(dynamic_context),
-          dynamic_context.base_instance_location,
-          keyword_location(schema_context),
-          schema_context.base.recompose(),
-          context.uses_dynamic_scopes,
-          std::move(value),
-          std::move(condition),
-          std::move(data)};
+          const decltype(std::declval<Step>().value) &value) -> Step {
+  return {
+      dynamic_context.keyword.empty()
+          ? dynamic_context.base_schema_location
+          : dynamic_context.base_schema_location.concat(
+                {dynamic_context.keyword}),
+      dynamic_context.base_instance_location,
+      to_uri(schema_context.relative_pointer, schema_context.base).recompose(),
+      schema_context.base.recompose(),
+      context.uses_dynamic_scopes,
+      report,
+      value};
 }
 
 // Instantiate an applicator step
 template <typename Step>
-auto make(const SchemaCompilerContext &context,
+auto make(const bool report, const SchemaCompilerContext &context,
           const SchemaCompilerSchemaContext &schema_context,
           const SchemaCompilerDynamicContext &dynamic_context,
           // Take the value type from the "value" property of the step struct
           decltype(std::declval<Step>().value) &&value,
-          SchemaCompilerTemplate &&children,
-          SchemaCompilerTemplate &&condition) -> Step {
-  return {{SchemaCompilerTargetType::Instance, empty_pointer},
-          relative_schema_location(dynamic_context),
-          dynamic_context.base_instance_location,
-          keyword_location(schema_context),
-          schema_context.base.recompose(),
-          context.uses_dynamic_scopes,
-          std::move(value),
-          std::move(children),
-          std::move(condition)};
-}
-
-// Instantiate a control step
-template <typename Step>
-auto make(const SchemaCompilerContext &context,
-          const SchemaCompilerSchemaContext &schema_context,
-          const SchemaCompilerDynamicContext &dynamic_context,
-          // Take the value type from the "id" property of the step struct
-          decltype(std::declval<Step>().id) &&id,
           SchemaCompilerTemplate &&children) -> Step {
-  return {relative_schema_location(dynamic_context),
-          dynamic_context.base_instance_location,
-          keyword_location(schema_context),
-          schema_context.base.recompose(),
-          context.uses_dynamic_scopes,
-          std::move(id),
-          std::move(children)};
+  return {
+      dynamic_context.keyword.empty()
+          ? dynamic_context.base_schema_location
+          : dynamic_context.base_schema_location.concat(
+                {dynamic_context.keyword}),
+      dynamic_context.base_instance_location,
+      to_uri(schema_context.relative_pointer, schema_context.base).recompose(),
+      schema_context.base.recompose(),
+      context.uses_dynamic_scopes,
+      report,
+      std::move(value),
+      std::move(children)};
 }
 
-inline auto type_condition(const SchemaCompilerContext &context,
-                           const SchemaCompilerSchemaContext &schema_context,
-                           const JSON::Type type) -> SchemaCompilerTemplate {
-  // As an optimization
-  if (schema_context.schema.is_object() &&
-      schema_context.schema.defines("type") &&
-      schema_context.schema.at("type").is_string()) {
-    const auto &type_string{schema_context.schema.at("type").to_string()};
-    if (type == JSON::Type::Null && type_string == "null") {
-      return {};
-    } else if (type == JSON::Type::Boolean && type_string == "boolean") {
-      return {};
-    } else if (type == JSON::Type::Integer && type_string == "integer") {
-      return {};
-    } else if (type == JSON::Type::String && type_string == "string") {
-      return {};
-    } else if (type == JSON::Type::Array && type_string == "array") {
-      return {};
-    } else if (type == JSON::Type::Object && type_string == "object") {
-      return {};
-    }
+template <typename Type, typename Step>
+auto unroll(const SchemaCompilerDynamicContext &dynamic_context,
+            const Step &step,
+            const Pointer &base_instance_location = empty_pointer) -> Type {
+  assert(std::holds_alternative<Type>(step));
+  return {dynamic_context.keyword.empty()
+              ? std::get<Type>(step).relative_schema_location
+              : dynamic_context.base_schema_location
+                    .concat({dynamic_context.keyword})
+                    .concat(std::get<Type>(step).relative_schema_location),
+          base_instance_location.concat(
+              std::get<Type>(step).relative_instance_location),
+          std::get<Type>(step).keyword_location,
+          std::get<Type>(step).schema_resource,
+          std::get<Type>(step).dynamic,
+          std::get<Type>(step).report,
+          std::get<Type>(step).value};
+}
+
+inline auto unsigned_integer_property(const JSON &document,
+                                      const JSON::String &property)
+    -> std::optional<std::size_t> {
+  if (document.defines(property) && document.at(property).is_integer()) {
+    const auto value{document.at(property).to_integer()};
+    assert(value >= 0);
+    return static_cast<std::size_t>(value);
   }
 
-  return {make<SchemaCompilerAssertionTypeStrict>(
-      context, schema_context, relative_dynamic_context, type, {},
-      SchemaCompilerTargetType::Instance)};
+  return std::nullopt;
+}
+
+inline auto unsigned_integer_property(const JSON &document,
+                                      const JSON::String &property,
+                                      const std::size_t otherwise)
+    -> std::size_t {
+  return unsigned_integer_property(document, property).value_or(otherwise);
 }
 
 } // namespace sourcemeta::jsontoolkit
