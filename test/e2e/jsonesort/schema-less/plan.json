@@ -1,5 +1,5 @@
 {
   "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-  "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-  "options": {}
+  "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+  "binpackOptions": {}
 }

@@ -9,8 +9,8 @@ TEST(JSONBinPack_Parser_v1, UTF8_STRING_NO_LENGTH_3) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "UTF8_STRING_NO_LENGTH",
-    "options": {
+    "binpackEncoding": "UTF8_STRING_NO_LENGTH",
+    "binpackOptions": {
       "size": 3
     }
   })JSON");
@@ -26,8 +26,8 @@ TEST(JSONBinPack_Parser_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED",
-    "options": {
+    "binpackEncoding": "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED",
+    "binpackOptions": {
       "minimum": 3
     }
   })JSON");
@@ -45,8 +45,8 @@ TEST(JSONBinPack_Parser_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED",
-    "options": {
+    "binpackEncoding": "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED",
+    "binpackOptions": {
       "maximum": 3
     }
   })JSON");
@@ -63,8 +63,8 @@ TEST(JSONBinPack_Parser_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED",
-    "options": {
+    "binpackEncoding": "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED",
+    "binpackOptions": {
       "minimum": 1,
       "maximum": 3
     }
@@ -85,8 +85,8 @@ TEST(JSONBinPack_Parser_v1, RFC3339_DATE_INTEGER_TRIPLET) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "RFC3339_DATE_INTEGER_TRIPLET",
-    "options": {}
+    "binpackEncoding": "RFC3339_DATE_INTEGER_TRIPLET",
+    "binpackOptions": {}
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
@@ -99,8 +99,8 @@ TEST(JSONBinPack_Parser_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "PREFIX_VARINT_LENGTH_STRING_SHARED",
-    "options": {}
+    "binpackEncoding": "PREFIX_VARINT_LENGTH_STRING_SHARED",
+    "binpackOptions": {}
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{

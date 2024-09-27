@@ -16,8 +16,8 @@ TEST(JSONBinPack_Compiler, dialect_2020_12) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -34,8 +34,8 @@ TEST(JSONBinPack_Compiler, dialect_2019_09) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -52,8 +52,8 @@ TEST(JSONBinPack_Compiler, dialect_draft7) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -70,8 +70,8 @@ TEST(JSONBinPack_Compiler, dialect_draft6) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -88,8 +88,8 @@ TEST(JSONBinPack_Compiler, dialect_draft4) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -106,8 +106,8 @@ TEST(JSONBinPack_Compiler, dialect_draft3) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -124,8 +124,8 @@ TEST(JSONBinPack_Compiler, dialect_draft2) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -142,8 +142,8 @@ TEST(JSONBinPack_Compiler, dialect_draft1) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -160,8 +160,8 @@ TEST(JSONBinPack_Compiler, dialect_draft0) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -179,8 +179,8 @@ TEST(JSONBinPack_Compiler, unknown_dialect_default) {
 
   const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
-    "options": {
+    "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
+    "binpackOptions": {
       "multiplier": 1
     }
   })JSON");

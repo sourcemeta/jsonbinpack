@@ -16,8 +16,8 @@ TEST(JSONBinPack_Compiler_Any_2020_12, only_metaschema) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -34,8 +34,8 @@ TEST(JSONBinPack_Compiler_Any_2020_12, empty) {
   const sourcemeta::jsontoolkit::JSON expected =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "name": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
-    "options": {}
+    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackOptions": {}
   })JSON");
 
   EXPECT_EQ(schema, expected);
