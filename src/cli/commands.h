@@ -7,8 +7,6 @@
 namespace sourcemeta::jsonbinpack::cli {
 auto help(const std::string &program) -> int;
 auto version() -> int;
-auto canonicalize(const std::filesystem::path &schema_path) -> int;
-auto canonicalize() -> int;
 auto compile(const std::filesystem::path &schema_path) -> int;
 auto compile() -> int;
 auto encode(const std::filesystem::path &schema_path,

@@ -1,7 +1,7 @@
 configure_file(version.h.in version.h @ONLY)
 add_executable(sourcemeta_jsonbinpack_cli main.cc commands.h
   command_help.cc command_version.cc
-  command_canonicalize.cc command_compile.cc
+  command_compile.cc
   command_encode.cc command_decode.cc
   defaults.h version.h.in)
 
