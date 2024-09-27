@@ -1,9 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <cstdint>
-#include <limits>
-
-#include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/numeric.h>
 
 TEST(JSONBinPack_numeric, divide_ceil_simple_positive) {
   const std::int64_t dividend{10};
