@@ -5,7 +5,6 @@
 #include <sourcemeta/alterschema/linter.h>
 
 #include "encoding.h"
-#include "states.h"
 
 namespace sourcemeta::jsonbinpack {
 

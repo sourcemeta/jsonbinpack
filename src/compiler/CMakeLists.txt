@@ -1,7 +1,7 @@
 noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
   FOLDER "JSON BinPack/Compiler"
   SOURCES
-    states.h encoding.h compiler.cc
+    encoding.h compiler.cc
     mapper/enum_8_bit.h
     mapper/enum_8_bit_top_level.h
     mapper/enum_arbitrary.h
