@@ -6,6 +6,8 @@
 #include <cstdint> // std::uint8_t, std::int64_t, std::uint64_t
 #include <limits>  // std::numeric_limits
 
+// TODO: Move to src/numeric
+
 namespace sourcemeta::jsonbinpack {
 
 template <unsigned int T> constexpr auto uint_max = (2 << (T - 1)) - 1;
