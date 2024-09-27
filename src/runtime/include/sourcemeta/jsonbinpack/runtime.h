@@ -3,6 +3,12 @@
 
 /// @defgroup runtime Runtime
 /// @brief The encoder/decoder parts of JSON BinPack
+///
+/// This functionality is included as follows:
+///
+/// ```cpp
+/// #include <sourcemeta/jsonbinpack/runtime.h>
+/// ```
 
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>

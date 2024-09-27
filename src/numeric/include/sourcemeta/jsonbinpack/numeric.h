@@ -6,6 +6,12 @@
 
 /// @defgroup numeric Numeric
 /// @brief A comprehensive numeric library for JSON BinPack
+///
+/// This functionality is included as follows:
+///
+/// ```cpp
+/// #include <sourcemeta/jsonbinpack/numeric.h>
+/// ```
 
 namespace sourcemeta::jsonbinpack {
 
