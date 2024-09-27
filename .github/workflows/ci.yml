@@ -82,7 +82,6 @@ jobs:
         run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
-          -DJSONBINPACK_CLI:BOOL=ON
           -DJSONBINPACK_NUMERIC:BOOL=ON
           -DJSONBINPACK_RUNTIME:BOOL=ON
           -DJSONBINPACK_COMPILER:BOOL=ON
@@ -97,7 +96,6 @@ jobs:
         run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
-          -DJSONBINPACK_CLI:BOOL=ON
           -DJSONBINPACK_NUMERIC:BOOL=ON
           -DJSONBINPACK_RUNTIME:BOOL=ON
           -DJSONBINPACK_COMPILER:BOOL=ON

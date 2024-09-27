@@ -1,7 +1,0 @@
-{
-  "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-  "binpackEncoding": "TOP_LEVEL_BYTE_CHOICE_INDEX",
-  "binpackOptions": {
-    "choices": [ 1, 2, 3 ]
-  }
-}
