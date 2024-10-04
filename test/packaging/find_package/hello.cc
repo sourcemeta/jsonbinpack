@@ -21,7 +21,7 @@ auto main() -> int {
       "https://json-schema.org/draft/2020-12/schema");
 
   const sourcemeta::jsonbinpack::Plan plan{
-      sourcemeta::jsonbinpack::parse(schema)};
+      sourcemeta::jsonbinpack::load(schema)};
 
   const sourcemeta::jsontoolkit::JSON instance{5};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};

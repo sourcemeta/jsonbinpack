@@ -1,8 +1,7 @@
-#ifndef SOURCEMETA_JSONBINPACK_PARSER_V1_H_
-#define SOURCEMETA_JSONBINPACK_PARSER_V1_H_
+#ifndef SOURCEMETA_JSONBINPACK_LOADER_V1_H_
+#define SOURCEMETA_JSONBINPACK_LOADER_V1_H_
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_parser.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <algorithm> // std::transform
@@ -190,11 +189,11 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
-                 [](const auto &element) { return parse(element); });
+                 [](const auto &element) { return load(element); });
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::FIXED_TYPED_ARRAY{
-      static_cast<std::uint64_t>(size.to_integer()),
-      wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      static_cast<std::uint64_t>(size.to_integer()), wrap(load(array_encoding)),
+      wrap(encodings.begin(), encodings.end())};
 }
 
 auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
@@ -217,12 +216,12 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
-                 [](const auto &element) { return parse(element); });
+                 [](const auto &element) { return load(element); });
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::BOUNDED_8BITS_TYPED_ARRAY{
       static_cast<std::uint64_t>(minimum.to_integer()),
       static_cast<std::uint64_t>(maximum.to_integer()),
-      wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
 auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
@@ -240,11 +239,11 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
-                 [](const auto &element) { return parse(element); });
+                 [](const auto &element) { return load(element); });
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::FLOOR_TYPED_ARRAY{
       static_cast<std::uint64_t>(minimum.to_integer()),
-      wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
 auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
@@ -262,11 +261,11 @@ auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
-                 [](const auto &element) { return parse(element); });
+                 [](const auto &element) { return load(element); });
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::ROOF_TYPED_ARRAY{
       static_cast<std::uint64_t>(maximum.to_integer()),
-      wrap(parse(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
 // Any
