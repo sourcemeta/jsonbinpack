@@ -3,8 +3,7 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   PRIVATE_HEADERS
     decoder.h decoder_basic.h
     encoder.h encoder_basic.h encoder_context.h
-    plan.h plan_wrap.h loader.h
-    varint.h
+    plan.h plan_wrap.h varint.h
   SOURCES loader.cc loader_v1.h)
 
 if(JSONBINPACK_INSTALL)
