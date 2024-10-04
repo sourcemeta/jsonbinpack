@@ -12,7 +12,7 @@
 #include <cstdint> // std::uint8_t, std::uint16_t, std::int64_t, std::uint64_t
 #include <cstdlib> // std::abort
 #include <ostream> // std::basic_ostream
-#include <string>  // std::basic_string, std::stoul
+#include <string>  // std::stoul
 #include <utility> // std::move
 
 namespace sourcemeta::jsonbinpack {
@@ -203,8 +203,7 @@ public:
   auto UTF8_STRING_NO_LENGTH(const sourcemeta::jsontoolkit::JSON &document,
                              const UTF8_STRING_NO_LENGTH &options) -> void {
     assert(document.is_string());
-    const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-        document.to_string()};
+    const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     this->put_string_utf8(value, options.size);
   }
 
@@ -212,8 +211,7 @@ public:
       const sourcemeta::jsontoolkit::JSON &document,
       const FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(document.is_string());
-    const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-        document.to_string()};
+    const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{value.size()};
     assert(document.size() == size);
     const bool is_shared{this->context().has(value, Context::Type::Standalone)};
@@ -242,8 +240,7 @@ public:
       const sourcemeta::jsontoolkit::JSON &document,
       const ROOF_VARINT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(document.is_string());
-    const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-        document.to_string()};
+    const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{value.size()};
     assert(document.size() == size);
     assert(size <= options.maximum);
@@ -273,8 +270,7 @@ public:
       const sourcemeta::jsontoolkit::JSON &document,
       const BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED &options) -> void {
     assert(document.is_string());
-    const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-        document.to_string()};
+    const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{value.size()};
     assert(document.size() == size);
     assert(options.minimum <= options.maximum);
@@ -330,8 +326,7 @@ public:
       const sourcemeta::jsontoolkit::JSON &document,
       const PREFIX_VARINT_LENGTH_STRING_SHARED &) -> void {
     assert(document.is_string());
-    const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-        document.to_string()};
+    const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
 
     if (this->context().has(value, Context::Type::PrefixLengthVarintPlusOne)) {
       const auto new_offset{this->position()};
@@ -472,8 +467,7 @@ public:
         this->put_varint(absolute);
       }
     } else if (document.is_string()) {
-      const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> value{
-          document.to_string()};
+      const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
       const auto size{document.byte_size()};
       const bool is_shared{
           this->context().has(value, Context::Type::Standalone)};
