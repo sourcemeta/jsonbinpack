@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_CONTEXT_H_
 #ifndef DOXYGEN
 
+#include <sourcemeta/jsontoolkit/json.h>
+
 #include <cassert>   // assert
 #include <iterator>  // std::cbegin, std::cend
 #include <map>       // std::map
@@ -22,12 +24,13 @@ static constexpr auto MAXIMUM_BYTE_SIZE{20971520};
 
 namespace sourcemeta::jsonbinpack {
 
-template <typename CharT> class Context {
+class Context {
 public:
   enum class Type { Standalone, PrefixLengthVarintPlusOne };
 
-  auto record(const std::basic_string<CharT> &value, const std::uint64_t offset,
-              const Type type) -> void {
+  auto
+  record(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
+         const std::uint64_t offset, const Type type) -> void {
     const auto value_size{value.size()};
     if (value_size < MINIMUM_STRING_LENGTH) {
       return;
@@ -76,25 +79,32 @@ public:
     this->offsets.erase(iterator);
   }
 
-  auto has(const std::basic_string<CharT> &value, const Type type) const
-      -> bool {
+  auto has(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
+           const Type type) const -> bool {
     return this->strings.contains(std::make_pair(value, type));
   }
 
-  auto offset(const std::basic_string<CharT> &value, const Type type) const
-      -> std::uint64_t {
+  auto
+  offset(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
+         const Type type) const -> std::uint64_t {
     // This method assumes the value indeed exists for performance reasons
     assert(this->has(value, type));
     return this->strings.at(std::make_pair(value, type));
   }
 
 private:
-  std::map<std::pair<std::basic_string<CharT>, Type>, std::uint64_t> strings;
+  std::map<
+      std::pair<std::basic_string<sourcemeta::jsontoolkit::JSON::Char>, Type>,
+      std::uint64_t>
+      strings;
   // A mirror of the above map to be able to sort by offset.
   // While this means we need 2x the amount of memory to keep track
   // of strings, it allows us to efficiently put an upper bound
   // on the amount of memory being consumed by this class.
-  std::map<std::uint64_t, std::pair<std::basic_string<CharT>, Type>> offsets;
+  std::map<
+      std::uint64_t,
+      std::pair<std::basic_string<sourcemeta::jsontoolkit::JSON::Char>, Type>>
+      offsets;
   std::uint64_t byte_size = 0;
 };
 

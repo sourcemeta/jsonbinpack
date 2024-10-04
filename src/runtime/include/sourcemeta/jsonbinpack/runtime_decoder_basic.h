@@ -3,6 +3,7 @@
 #ifndef DOXYGEN
 
 #include <sourcemeta/jsonbinpack/numeric.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <sourcemeta/jsonbinpack/runtime_varint.h>
 
@@ -14,9 +15,13 @@
 
 namespace sourcemeta::jsonbinpack {
 
-template <typename CharT, typename Traits> class BasicDecoder {
+/// @ingroup runtime
+class BasicDecoder {
 public:
-  BasicDecoder(std::basic_istream<CharT, Traits> &input) : stream{input} {
+  BasicDecoder(
+      std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
+                         sourcemeta::jsontoolkit::JSON::CharTraits> &input)
+      : stream{input} {
     this->stream.exceptions(std::ios_base::badbit | std::ios_base::failbit |
                             std::ios_base::eofbit);
   }
@@ -76,12 +81,13 @@ public:
   }
 
   inline auto get_string_utf8(const std::uint64_t length)
-      -> std::basic_string<CharT> {
-    std::basic_string<CharT> result;
+      -> std::basic_string<sourcemeta::jsontoolkit::JSON::Char> {
+    std::basic_string<sourcemeta::jsontoolkit::JSON::Char> result;
     result.reserve(length);
     std::uint64_t counter = 0;
     while (counter < length) {
-      result += static_cast<CharT>(this->get_byte());
+      result +=
+          static_cast<sourcemeta::jsontoolkit::JSON::Char>(this->get_byte());
       counter += 1;
     }
 
@@ -91,7 +97,8 @@ public:
   }
 
 private:
-  std::basic_istream<CharT, Traits> &stream;
+  std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
+                     sourcemeta::jsontoolkit::JSON::CharTraits> &stream;
 };
 
 } // namespace sourcemeta::jsonbinpack

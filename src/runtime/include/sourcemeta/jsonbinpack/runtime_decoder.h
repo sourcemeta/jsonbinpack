@@ -20,11 +20,11 @@
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
-template <typename CharT, typename Traits>
-class Decoder : private BasicDecoder<CharT, Traits> {
+class Decoder : private BasicDecoder {
 public:
-  Decoder(std::basic_istream<CharT, Traits> &input)
-      : BasicDecoder<CharT, Traits>{input} {}
+  Decoder(std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
+                             sourcemeta::jsontoolkit::JSON::CharTraits> &input)
+      : BasicDecoder{input} {}
 
   auto decode(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON {
     switch (encoding.index()) {
@@ -272,7 +272,9 @@ public:
     assert(month >= 1 && month <= 12);
     assert(day >= 1 && day <= 31);
 
-    std::basic_ostringstream<CharT, Traits> output;
+    std::basic_ostringstream<sourcemeta::jsontoolkit::JSON::Char,
+                             sourcemeta::jsontoolkit::JSON::CharTraits>
+        output;
     output << std::setfill('0');
     output << std::setw(4) << year;
     output << "-";

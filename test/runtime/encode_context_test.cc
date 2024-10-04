@@ -7,8 +7,8 @@
 #include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
 
 TEST(JSONBinPack_Encoder, context_record_string) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   EXPECT_FALSE(context.has("foo", ContextType::Standalone));
   context.record("foo", 2, ContextType::Standalone);
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
@@ -16,38 +16,38 @@ TEST(JSONBinPack_Encoder, context_record_string) {
 }
 
 TEST(JSONBinPack_Encoder, context_record_string_too_short) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   EXPECT_FALSE(context.has("fo", ContextType::Standalone));
   context.record("fo", 2, ContextType::Standalone);
   EXPECT_FALSE(context.has("fo", ContextType::Standalone));
 }
 
 TEST(JSONBinPack_Encoder, context_record_string_empty) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   EXPECT_FALSE(context.has("", ContextType::Standalone));
   context.record("", 2, ContextType::Standalone);
   EXPECT_FALSE(context.has("", ContextType::Standalone));
 }
 
 TEST(JSONBinPack_Encoder, context_has_on_unknown_string) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   EXPECT_FALSE(context.has("foobarbaz", ContextType::Standalone));
 }
 
 TEST(JSONBinPack_Encoder, context_increase_offset) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record("foo", 2, ContextType::Standalone);
   context.record("foo", 4, ContextType::Standalone);
   EXPECT_EQ(context.offset("foo", ContextType::Standalone), 4);
 }
 
 TEST(JSONBinPack_Encoder, context_do_not_decrease_offset) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record("foo", 4, ContextType::Standalone);
   context.record("foo", 2, ContextType::Standalone);
   EXPECT_EQ(context.offset("foo", ContextType::Standalone), 4);
@@ -57,15 +57,15 @@ TEST(JSONBinPack_Encoder, context_not_record_too_big) {
   const auto length{25000000};
   const std::string too_big(length, 'x');
   EXPECT_EQ(too_big.size(), length);
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record(too_big, 1, ContextType::Standalone);
   EXPECT_FALSE(context.has(too_big, ContextType::Standalone));
 }
 
 TEST(JSONBinPack_Encoder, context_remove_oldest) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record("foo", 10, ContextType::Standalone);
   context.record("bar", 3, ContextType::Standalone);
   context.record("baz", 7, ContextType::PrefixLengthVarintPlusOne);
@@ -109,8 +109,8 @@ TEST(JSONBinPack_Encoder, context_is_a_circular_buffer) {
   EXPECT_EQ(string_5.size(), length);
   EXPECT_EQ(string_6.size(), length);
 
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
 
   context.record(string_1, length * 0, ContextType::Standalone);
   context.record(string_2, length * 1, ContextType::Standalone);
@@ -141,8 +141,8 @@ TEST(JSONBinPack_Encoder, context_is_a_circular_buffer) {
 }
 
 TEST(JSONBinPack_Encoder, context_same_string_different_type) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record("foo", 10, ContextType::Standalone);
   context.record("foo", 20, ContextType::PrefixLengthVarintPlusOne);
 
@@ -154,8 +154,8 @@ TEST(JSONBinPack_Encoder, context_same_string_different_type) {
 }
 
 TEST(JSONBinPack_Encoder, context_no_fallback_type) {
-  sourcemeta::jsonbinpack::Context<char> context;
-  using ContextType = sourcemeta::jsonbinpack::Context<char>::Type;
+  sourcemeta::jsonbinpack::Context context;
+  using ContextType = sourcemeta::jsonbinpack::Context::Type;
   context.record("foo", 10, ContextType::Standalone);
   EXPECT_TRUE(context.has("foo", ContextType::Standalone));
   EXPECT_FALSE(context.has("foo", ContextType::PrefixLengthVarintPlusOne));

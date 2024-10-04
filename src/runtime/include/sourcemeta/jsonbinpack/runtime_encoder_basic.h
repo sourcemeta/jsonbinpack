@@ -3,6 +3,7 @@
 #ifndef DOXYGEN
 
 #include <sourcemeta/jsonbinpack/numeric.h>
+#include <sourcemeta/jsontoolkit/json.h>
 
 #include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
 #include <sourcemeta/jsonbinpack/runtime_varint.h>
@@ -17,9 +18,13 @@
 
 namespace sourcemeta::jsonbinpack {
 
-template <typename CharT, typename Traits> class BasicEncoder {
+/// @ingroup runtime
+class BasicEncoder {
 public:
-  BasicEncoder(std::basic_ostream<CharT, Traits> &output) : stream{output} {
+  BasicEncoder(
+      std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,
+                         sourcemeta::jsontoolkit::JSON::CharTraits> &output)
+      : stream{output} {
     this->stream.exceptions(std::ios_base::badbit | std::ios_base::failbit |
                             std::ios_base::eofbit);
   }
@@ -33,11 +38,13 @@ public:
   }
 
   inline auto put_byte(const std::uint8_t byte) -> void {
-    this->stream.put(static_cast<CharT>(byte));
+    this->stream.put(static_cast<sourcemeta::jsontoolkit::JSON::Char>(byte));
   }
 
   inline auto put_bytes(const std::uint16_t bytes) -> void {
-    this->stream.write(reinterpret_cast<const CharT *>(&bytes), sizeof bytes);
+    this->stream.write(
+        reinterpret_cast<const sourcemeta::jsontoolkit::JSON::Char *>(&bytes),
+        sizeof bytes);
   }
 
   inline auto put_varint(const std::uint64_t value) -> void {
@@ -48,8 +55,9 @@ public:
     varint_encode(this->stream, zigzag_encode(value));
   }
 
-  inline auto put_string_utf8(const std::basic_string<CharT> &string,
-                              const std::uint64_t length) -> void {
+  inline auto put_string_utf8(
+      const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &string,
+      const std::uint64_t length) -> void {
     assert(string.size() == length);
     // Do a manual for-loop based on the provided length instead of a range
     // loop based on the string value to avoid accidental overflows
@@ -58,11 +66,12 @@ public:
     }
   }
 
-  inline auto context() -> Context<CharT> & { return this->context_; }
+  inline auto context() -> Context & { return this->context_; }
 
 private:
-  std::basic_ostream<CharT, Traits> &stream;
-  Context<CharT> context_;
+  std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,
+                     sourcemeta::jsontoolkit::JSON::CharTraits> &stream;
+  Context context_;
 };
 
 } // namespace sourcemeta::jsonbinpack
