@@ -1,4 +1,4 @@
-#include <sourcemeta/jsonbinpack/runtime_loader.h>
+#include <sourcemeta/jsonbinpack/runtime.h>
 
 #include "loader_v1.h"
 

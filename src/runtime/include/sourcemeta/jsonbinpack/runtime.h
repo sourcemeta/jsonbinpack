@@ -10,9 +10,20 @@
 /// #include <sourcemeta/jsonbinpack/runtime.h>
 /// ```
 
+#include "runtime_export.h"
+
+#include <sourcemeta/jsontoolkit/json.h>
+
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
-#include <sourcemeta/jsonbinpack/runtime_loader.h>
 #include <sourcemeta/jsonbinpack/runtime_plan.h>
+
+namespace sourcemeta::jsonbinpack {
+
+/// @ingroup runtime
+SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT
+auto load(const sourcemeta::jsontoolkit::JSON &input) -> Plan;
+
+} // namespace sourcemeta::jsonbinpack
 
 #endif
