@@ -14,7 +14,6 @@
 #include <ios>       // std::ios_base
 #include <iterator>  // std::cbegin, std::cend, std::distance
 #include <ostream>   // std::basic_ostream
-#include <string>    // std::basic_string
 
 namespace sourcemeta::jsonbinpack {
 
@@ -55,9 +54,9 @@ public:
     varint_encode(this->stream, zigzag_encode(value));
   }
 
-  inline auto put_string_utf8(
-      const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &string,
-      const std::uint64_t length) -> void {
+  inline auto
+  put_string_utf8(const sourcemeta::jsontoolkit::JSON::String &string,
+                  const std::uint64_t length) -> void {
     assert(string.size() == length);
     // Do a manual for-loop based on the provided length instead of a range
     // loop based on the string value to avoid accidental overflows

@@ -81,8 +81,8 @@ public:
   }
 
   inline auto get_string_utf8(const std::uint64_t length)
-      -> std::basic_string<sourcemeta::jsontoolkit::JSON::Char> {
-    std::basic_string<sourcemeta::jsontoolkit::JSON::Char> result;
+      -> sourcemeta::jsontoolkit::JSON::String {
+    sourcemeta::jsontoolkit::JSON::String result;
     result.reserve(length);
     std::uint64_t counter = 0;
     while (counter < length) {

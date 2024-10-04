@@ -8,7 +8,6 @@
 #include <iterator>  // std::cbegin, std::cend
 #include <map>       // std::map
 #include <stdexcept> // std::logic_error
-#include <string>    // std::basic_string
 #include <utility>   // std::pair, std::make_pair
 
 // Encoding a shared string has some overhead, such as the
@@ -28,9 +27,8 @@ class Context {
 public:
   enum class Type { Standalone, PrefixLengthVarintPlusOne };
 
-  auto
-  record(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
-         const std::uint64_t offset, const Type type) -> void {
+  auto record(const sourcemeta::jsontoolkit::JSON::String &value,
+              const std::uint64_t offset, const Type type) -> void {
     const auto value_size{value.size()};
     if (value_size < MINIMUM_STRING_LENGTH) {
       return;
@@ -79,31 +77,28 @@ public:
     this->offsets.erase(iterator);
   }
 
-  auto has(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
+  auto has(const sourcemeta::jsontoolkit::JSON::String &value,
            const Type type) const -> bool {
     return this->strings.contains(std::make_pair(value, type));
   }
 
-  auto
-  offset(const std::basic_string<sourcemeta::jsontoolkit::JSON::Char> &value,
-         const Type type) const -> std::uint64_t {
+  auto offset(const sourcemeta::jsontoolkit::JSON::String &value,
+              const Type type) const -> std::uint64_t {
     // This method assumes the value indeed exists for performance reasons
     assert(this->has(value, type));
     return this->strings.at(std::make_pair(value, type));
   }
 
 private:
-  std::map<
-      std::pair<std::basic_string<sourcemeta::jsontoolkit::JSON::Char>, Type>,
-      std::uint64_t>
+  std::map<std::pair<sourcemeta::jsontoolkit::JSON::String, Type>,
+           std::uint64_t>
       strings;
   // A mirror of the above map to be able to sort by offset.
   // While this means we need 2x the amount of memory to keep track
   // of strings, it allows us to efficiently put an upper bound
   // on the amount of memory being consumed by this class.
-  std::map<
-      std::uint64_t,
-      std::pair<std::basic_string<sourcemeta::jsontoolkit::JSON::Char>, Type>>
+  std::map<std::uint64_t,
+           std::pair<sourcemeta::jsontoolkit::JSON::String, Type>>
       offsets;
   std::uint64_t byte_size = 0;
 };
