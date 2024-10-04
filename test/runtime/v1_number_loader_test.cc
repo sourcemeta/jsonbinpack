@@ -5,16 +5,16 @@
 
 #include <variant>
 
-TEST(JSONBinPack_Parser_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
+TEST(JSONBinPack_Loader_v1, DOUBLE_VARINT_TUPLE) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
+    "binpackEncoding": "DOUBLE_VARINT_TUPLE",
     "binpackOptions": {}
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
-      sourcemeta::jsonbinpack::parse(input)};
+      sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
-  EXPECT_TRUE(std::holds_alternative<ANY_PACKED_TYPE_TAG_BYTE_PREFIX>(result));
+  EXPECT_TRUE(std::holds_alternative<DOUBLE_VARINT_TUPLE>(result));
 }

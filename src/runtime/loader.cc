@@ -1,6 +1,6 @@
-#include <sourcemeta/jsonbinpack/runtime_parser.h>
+#include <sourcemeta/jsonbinpack/runtime_loader.h>
 
-#include "runtime_parser_v1.h"
+#include "loader_v1.h"
 
 #include <cassert>   // assert
 #include <sstream>   // std::ostringstream
@@ -8,7 +8,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-auto parse(const sourcemeta::jsontoolkit::JSON &input) -> Plan {
+auto load(const sourcemeta::jsontoolkit::JSON &input) -> Plan {
   assert(input.defines("binpackEncoding"));
   assert(input.defines("binpackOptions"));
   const auto encoding{input.at("binpackEncoding").to_string()};

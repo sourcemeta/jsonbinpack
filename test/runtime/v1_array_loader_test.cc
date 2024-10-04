@@ -5,7 +5,7 @@
 
 #include <variant>
 
-TEST(JSONBinPack_Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
+TEST(JSONBinPack_Loader_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -34,7 +34,7 @@ TEST(JSONBinPack_Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
-      sourcemeta::jsonbinpack::parse(input)};
+      sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<FIXED_TYPED_ARRAY>(result));
   EXPECT_EQ(std::get<FIXED_TYPED_ARRAY>(result).size, 3);
@@ -69,7 +69,7 @@ TEST(JSONBinPack_Parser_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
       1);
 }
 
-TEST(JSONBinPack_Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
+TEST(JSONBinPack_Loader_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -99,7 +99,7 @@ TEST(JSONBinPack_Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
-      sourcemeta::jsonbinpack::parse(input)};
+      sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<BOUNDED_8BITS_TYPED_ARRAY>(result));
   EXPECT_EQ(std::get<BOUNDED_8BITS_TYPED_ARRAY>(result).minimum, 1);
@@ -144,7 +144,7 @@ TEST(JSONBinPack_Parser_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
             1);
 }
 
-TEST(JSONBinPack_Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
+TEST(JSONBinPack_Loader_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -173,7 +173,7 @@ TEST(JSONBinPack_Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
-      sourcemeta::jsonbinpack::parse(input)};
+      sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<FLOOR_TYPED_ARRAY>(result));
   EXPECT_EQ(std::get<FLOOR_TYPED_ARRAY>(result).minimum, 1);
@@ -208,7 +208,7 @@ TEST(JSONBinPack_Parser_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
       1);
 }
 
-TEST(JSONBinPack_Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
+TEST(JSONBinPack_Loader_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::jsontoolkit::JSON input =
       sourcemeta::jsontoolkit::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -237,7 +237,7 @@ TEST(JSONBinPack_Parser_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
   })JSON");
 
   const sourcemeta::jsonbinpack::Plan result{
-      sourcemeta::jsonbinpack::parse(input)};
+      sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<ROOF_TYPED_ARRAY>(result));
   EXPECT_EQ(std::get<ROOF_TYPED_ARRAY>(result).maximum, 3);

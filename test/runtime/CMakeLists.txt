@@ -25,12 +25,12 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   encode_varint_test.cc
   plan_traits_test.cc
   plan_wrap_test.cc
-  v1_any_parser_test.cc
-  v1_array_parser_test.cc
-  v1_enum_parser_test.cc
-  v1_integer_parser_test.cc
-  v1_number_parser_test.cc
-  v1_string_parser_test.cc)
+  v1_any_loader_test.cc
+  v1_array_loader_test.cc
+  v1_enum_loader_test.cc
+  v1_integer_loader_test.cc
+  v1_number_loader_test.cc
+  v1_string_loader_test.cc)
 
 noa_add_default_options(PRIVATE sourcemeta_jsonbinpack_runtime_unit)
 
