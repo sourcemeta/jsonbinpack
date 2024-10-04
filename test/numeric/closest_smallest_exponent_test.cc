@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/numeric.h>
 
 TEST(JSONBinPack_numeric, closest_smallest_exponent_2_2_1_2) {
   EXPECT_EQ(sourcemeta::jsonbinpack::closest_smallest_exponent(2, 2, 1, 2), 1);

@@ -83,6 +83,10 @@ if(JSONBINPACK_TESTS)
   find_package(GoogleTest REQUIRED)
   enable_testing()
 
+  if(JSONBINPACK_NUMERIC)
+    add_subdirectory(test/numeric)
+  endif()
+
   if(JSONBINPACK_RUNTIME)
     add_subdirectory(test/runtime)
   endif()

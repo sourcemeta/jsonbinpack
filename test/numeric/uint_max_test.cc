@@ -1,9 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <cstdint> // std::uint8_t
-#include <limits>  // std::numeric_limits
-
-#include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/numeric.h>
 
 TEST(JSONBinPack_numeric, uint_max_8) {
   EXPECT_EQ(sourcemeta::jsonbinpack::uint_max<8>,

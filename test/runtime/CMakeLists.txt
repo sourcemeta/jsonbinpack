@@ -10,7 +10,6 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   decode_traits_test.cc
   decode_utils.h
   decode_varint_test.cc
-  decode_zigzag_test.cc
   encode_any_test.cc
   encode_array_test.cc
   encode_context_test.cc
@@ -24,13 +23,8 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   encode_traits_test.cc
   encode_utils.h
   encode_varint_test.cc
-  encode_zigzag_test.cc
   plan_traits_test.cc
   plan_wrap_test.cc
-  numeric_closest_smallest_exponent_test.cc
-  numeric_divide_ceil_test.cc
-  numeric_divide_floor_test.cc
-  numeric_uint_max_test.cc
   v1_any_parser_test.cc
   v1_array_parser_test.cc
   v1_enum_parser_test.cc
