@@ -8,6 +8,8 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
     plan.h plan_wrap.h varint.h
   SOURCES
     loader.cc loader_v1.h
+    input_stream.cc
+    output_stream.cc
     decoder_any.cc
     decoder_array.cc
     decoder_common.cc
