@@ -6,7 +6,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-Decoder::Decoder(Stream &input) : BasicDecoder{input} {}
+Decoder::Decoder(Stream &input) : InputStream{input} {}
 
 auto Decoder::read(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON {
   switch (encoding.index()) {

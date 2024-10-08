@@ -3,7 +3,7 @@
 
 #include "runtime_export.h"
 
-#include <sourcemeta/jsonbinpack/runtime_encoder_basic.h>
+#include <sourcemeta/jsonbinpack/runtime_output_stream.h>
 #include <sourcemeta/jsonbinpack/runtime_plan.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
@@ -13,7 +13,7 @@
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
-class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Encoder : private BasicEncoder {
+class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Encoder : private OutputStream {
 public:
   using Stream = std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,
                                     sourcemeta::jsontoolkit::JSON::CharTraits>;

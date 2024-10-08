@@ -1,8 +1,10 @@
 noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   FOLDER "JSON BinPack/Runtime"
   PRIVATE_HEADERS
-    decoder.h decoder_basic.h
-    encoder.h encoder_basic.h encoder_context.h
+    decoder.h encoder.h
+    input_stream.h
+    output_stream.h
+    encoder_context.h
     plan.h plan_wrap.h varint.h
   SOURCES
     loader.cc loader_v1.h

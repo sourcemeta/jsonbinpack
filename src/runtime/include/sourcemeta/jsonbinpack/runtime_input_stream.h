@@ -1,5 +1,5 @@
-#ifndef SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_BASIC_H_
-#define SOURCEMETA_JSONBINPACK_RUNTIME_DECODER_BASIC_H_
+#ifndef SOURCEMETA_JSONBINPACK_RUNTIME_INPUT_STREAM_H_
+#define SOURCEMETA_JSONBINPACK_RUNTIME_INPUT_STREAM_H_
 #ifndef DOXYGEN
 
 #include "runtime_export.h"
@@ -18,9 +18,9 @@
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
-class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT BasicDecoder {
+class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT InputStream {
 public:
-  BasicDecoder(
+  InputStream(
       std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
                          sourcemeta::jsontoolkit::JSON::CharTraits> &input)
       : stream{input} {
@@ -29,8 +29,8 @@ public:
   }
 
   // Prevent copying, as this class is tied to a stream resource
-  BasicDecoder(const BasicDecoder &) = delete;
-  auto operator=(const BasicDecoder &) -> BasicDecoder & = delete;
+  InputStream(const InputStream &) = delete;
+  auto operator=(const InputStream &) -> InputStream & = delete;
 
   inline auto position() const noexcept -> std::uint64_t {
     return static_cast<std::uint64_t>(this->stream.tellg());
