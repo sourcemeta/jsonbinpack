@@ -22,6 +22,7 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   input_stream_varint_test.cc
   output_stream_varint_test.cc
   encoding_traits_test.cc
+  v1_loader_test.cc
   v1_any_loader_test.cc
   v1_array_loader_test.cc
   v1_integer_loader_test.cc

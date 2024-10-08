@@ -52,10 +52,9 @@ auto load(const sourcemeta::jsontoolkit::JSON &input) -> Encoding {
 
 #undef PARSE_ENCODING
 
-  // TODO: Have a custom error for this
   std::ostringstream error;
   error << "Unrecognized encoding: " << encoding;
-  throw std::runtime_error(error.str());
+  throw EncodingError(error.str());
 }
 
 } // namespace sourcemeta::jsonbinpack
