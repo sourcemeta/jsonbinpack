@@ -5,9 +5,9 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
     input_stream.h
     output_stream.h
     encoder_context.h
-    plan.h plan_wrap.h varint.h
+    plan.h plan_wrap.h
   SOURCES
-    loader.cc loader_v1.h
+    loader.cc loader_v1.h varint.h
     input_stream.cc
     output_stream.cc
     decoder_any.cc
