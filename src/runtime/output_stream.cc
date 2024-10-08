@@ -46,6 +46,4 @@ auto OutputStream::put_string_utf8(
   }
 }
 
-auto OutputStream::context() -> Context & { return this->context_; }
-
 } // namespace sourcemeta::jsonbinpack

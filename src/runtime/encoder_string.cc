@@ -21,7 +21,7 @@ auto Encoder::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
   const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
   const auto size{value.size()};
   assert(document.size() == size);
-  const bool is_shared{this->context().has(value, Context::Type::Standalone)};
+  const bool is_shared{this->context_.has(value, Context::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (is_shared) {
@@ -34,9 +34,9 @@ auto Encoder::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
   // (3) Write relative offset if shared, else write plain string
   if (is_shared) {
     this->put_varint(this->position() -
-                     this->context().offset(value, Context::Type::Standalone));
+                     this->context_.offset(value, Context::Type::Standalone));
   } else {
-    this->context().record(value, this->position(), Context::Type::Standalone);
+    this->context_.record(value, this->position(), Context::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -49,7 +49,7 @@ auto Encoder::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
   const auto size{value.size()};
   assert(document.size() == size);
   assert(size <= options.maximum);
-  const bool is_shared{this->context().has(value, Context::Type::Standalone)};
+  const bool is_shared{this->context_.has(value, Context::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (is_shared) {
@@ -62,9 +62,9 @@ auto Encoder::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
   // (3) Write relative offset if shared, else write plain string
   if (is_shared) {
     this->put_varint(this->position() -
-                     this->context().offset(value, Context::Type::Standalone));
+                     this->context_.offset(value, Context::Type::Standalone));
   } else {
-    this->context().record(value, this->position(), Context::Type::Standalone);
+    this->context_.record(value, this->position(), Context::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -79,7 +79,7 @@ auto Encoder::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
   assert(options.minimum <= options.maximum);
   assert(is_byte(options.maximum - options.minimum + 1));
   assert(is_within(size, options.minimum, options.maximum));
-  const bool is_shared{this->context().has(value, Context::Type::Standalone)};
+  const bool is_shared{this->context_.has(value, Context::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (is_shared) {
@@ -92,9 +92,9 @@ auto Encoder::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
   // (3) Write relative offset if shared, else write plain string
   if (is_shared) {
     this->put_varint(this->position() -
-                     this->context().offset(value, Context::Type::Standalone));
+                     this->context_.offset(value, Context::Type::Standalone));
   } else {
-    this->context().record(value, this->position(), Context::Type::Standalone);
+    this->context_.record(value, this->position(), Context::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -129,23 +129,23 @@ auto Encoder::PREFIX_VARINT_LENGTH_STRING_SHARED(
   assert(document.is_string());
   const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
 
-  if (this->context().has(value, Context::Type::PrefixLengthVarintPlusOne)) {
+  if (this->context_.has(value, Context::Type::PrefixLengthVarintPlusOne)) {
     const auto new_offset{this->position()};
     this->put_byte(0);
-    this->put_varint(this->position() -
-                     this->context().offset(
-                         value, Context::Type::PrefixLengthVarintPlusOne));
+    this->put_varint(
+        this->position() -
+        this->context_.offset(value, Context::Type::PrefixLengthVarintPlusOne));
     // Bump the context cache for locality purposes
-    this->context().record(value, new_offset,
-                           Context::Type::PrefixLengthVarintPlusOne);
+    this->context_.record(value, new_offset,
+                          Context::Type::PrefixLengthVarintPlusOne);
   } else {
     const auto size{value.size()};
     assert(document.size() == size);
-    this->context().record(value, this->position(),
-                           Context::Type::PrefixLengthVarintPlusOne);
+    this->context_.record(value, this->position(),
+                          Context::Type::PrefixLengthVarintPlusOne);
     this->put_varint(size + 1);
     // Also record a standalone variant of it
-    this->context().record(value, this->position(), Context::Type::Standalone);
+    this->context_.record(value, this->position(), Context::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }

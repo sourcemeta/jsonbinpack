@@ -98,6 +98,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251 4275)
 #endif
+  // TODO: Keep a reference to the string instead of copying it
   std::map<std::pair<sourcemeta::jsontoolkit::JSON::String, Type>,
            std::uint64_t>
       strings;

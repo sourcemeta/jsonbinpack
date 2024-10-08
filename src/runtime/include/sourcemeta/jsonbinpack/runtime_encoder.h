@@ -3,6 +3,7 @@
 
 #include "runtime_export.h"
 
+#include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
 #include <sourcemeta/jsonbinpack/runtime_output_stream.h>
 #include <sourcemeta/jsonbinpack/runtime_plan.h>
 
@@ -63,6 +64,9 @@ public:
 
 #undef DECLARE_ENCODING
 #endif
+
+private:
+  Context context_;
 };
 
 } // namespace sourcemeta::jsonbinpack
