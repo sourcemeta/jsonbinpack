@@ -8,15 +8,11 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <ostream> // std::basic_ostream
-
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
 class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Encoder : private OutputStream {
 public:
-  using Stream = std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,
-                                    sourcemeta::jsontoolkit::JSON::CharTraits>;
   Encoder(Stream &output);
   auto write(const sourcemeta::jsontoolkit::JSON &document,
              const Plan &encoding) -> void;

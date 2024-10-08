@@ -8,15 +8,11 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <istream> // std::basic_istream
-
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
 class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Decoder : private InputStream {
 public:
-  using Stream = std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
-                                    sourcemeta::jsontoolkit::JSON::CharTraits>;
   Decoder(Stream &input);
   auto read(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON;
 
