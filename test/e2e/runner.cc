@@ -69,7 +69,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream output_stream(directory / "output.bin", std::ios::binary);
   output_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Encoder encoder{output_stream};
-  encoder.encode(instance, plan);
+  encoder.write(instance, plan);
   output_stream.flush();
   const auto size{output_stream.tellp()};
   output_stream.close();
@@ -83,7 +83,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ifstream data_stream{directory / "output.bin", std::ios::binary};
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Decoder decoder{data_stream};
-  const sourcemeta::jsontoolkit::JSON result = decoder.decode(plan);
+  const sourcemeta::jsontoolkit::JSON result = decoder.read(plan);
 
   // Report results
   if (result == instance) {

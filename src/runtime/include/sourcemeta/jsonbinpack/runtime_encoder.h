@@ -18,8 +18,8 @@ public:
   using Stream = std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,
                                     sourcemeta::jsontoolkit::JSON::CharTraits>;
   Encoder(Stream &output);
-  auto encode(const sourcemeta::jsontoolkit::JSON &document,
-              const Plan &encoding) -> void;
+  auto write(const sourcemeta::jsontoolkit::JSON &document,
+             const Plan &encoding) -> void;
 
 // The methods that implement individual encodings as considered private
 #ifndef DOXYGEN

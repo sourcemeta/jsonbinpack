@@ -18,7 +18,7 @@ public:
   using Stream = std::basic_istream<sourcemeta::jsontoolkit::JSON::Char,
                                     sourcemeta::jsontoolkit::JSON::CharTraits>;
   Decoder(Stream &input);
-  auto decode(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON;
+  auto read(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON;
 
 // The methods that implement individual encodings as considered private
 #ifndef DOXYGEN
