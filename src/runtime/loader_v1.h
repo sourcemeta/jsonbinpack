@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_LOADER_V1_H_
 
 #include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <algorithm> // std::transform

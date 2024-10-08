@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_CONTEXT_H_
 #ifndef DOXYGEN
 
+#include "runtime_export.h"
+
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <cassert>   // assert
@@ -23,7 +25,7 @@ static constexpr auto MAXIMUM_BYTE_SIZE{20971520};
 
 namespace sourcemeta::jsonbinpack {
 
-class Context {
+class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Context {
 public:
   enum class Type { Standalone, PrefixLengthVarintPlusOne };
 
@@ -90,6 +92,12 @@ public:
   }
 
 private:
+// Exporting symbols that depends on the standard C++ library is considered
+// safe.
+// https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-2-c4275?view=msvc-170&redirectedfrom=MSDN
+#if defined(_MSC_VER)
+#pragma warning(disable : 4251 4275)
+#endif
   std::map<std::pair<sourcemeta::jsontoolkit::JSON::String, Type>,
            std::uint64_t>
       strings;
@@ -101,6 +109,9 @@ private:
            std::pair<sourcemeta::jsontoolkit::JSON::String, Type>>
       offsets;
   std::uint64_t byte_size = 0;
+#if defined(_MSC_VER)
+#pragma warning(default : 4251 4275)
+#endif
 };
 
 } // namespace sourcemeta::jsonbinpack

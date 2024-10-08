@@ -2,6 +2,8 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODER_BASIC_H_
 #ifndef DOXYGEN
 
+#include "runtime_export.h"
+
 #include <sourcemeta/jsonbinpack/numeric.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -18,7 +20,7 @@
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
-class BasicEncoder {
+class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT BasicEncoder {
 public:
   BasicEncoder(
       std::basic_ostream<sourcemeta::jsontoolkit::JSON::Char,

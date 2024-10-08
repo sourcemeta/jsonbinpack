@@ -1,8 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "encode_utils.h"
 #include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+
 #include <sourcemeta/jsontoolkit/json.h>
+
+#include "encode_utils.h"
 
 TEST(JSONBinPack_Encoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
