@@ -1,7 +1,8 @@
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
 
+#include "unreachable.h"
+
 #include <cassert> // assert
-#include <cstdlib> // std::abort
 #include <variant> // std::get
 
 namespace sourcemeta::jsonbinpack {
@@ -41,8 +42,7 @@ auto Encoder::write(const sourcemeta::jsontoolkit::JSON &document,
   }
 
   // We should never get here. If so, it is definitely a bug
-  assert(false);
-  std::abort();
+  unreachable();
 }
 
 } // namespace sourcemeta::jsonbinpack

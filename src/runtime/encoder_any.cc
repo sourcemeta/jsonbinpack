@@ -2,6 +2,8 @@
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
 #include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
 
+#include "unreachable.h"
+
 #include <algorithm> // std::find_if
 #include <cassert>   // assert
 #include <cstdint>   // std::uint8_t, std::int64_t, std::uint64_t
@@ -177,9 +179,8 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
         document,
         {size, wrap(std::move(key_encoding)), wrap(std::move(value_encoding))});
   } else {
-    // We should never get here.
-    assert(false);
-    std::abort();
+    // We should never get here
+    unreachable();
   }
 }
 

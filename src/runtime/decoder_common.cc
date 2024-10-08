@@ -1,7 +1,8 @@
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 
+#include "unreachable.h"
+
 #include <cassert> // assert
-#include <cstdlib> // std::abort
 #include <variant> // std::get
 
 namespace sourcemeta::jsonbinpack {
@@ -39,8 +40,7 @@ auto Decoder::read(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON {
   }
 
   // We should never get here. If so, it is definitely a bug
-  assert(false);
-  std::abort();
+  unreachable();
 }
 
 } // namespace sourcemeta::jsonbinpack
