@@ -3,6 +3,7 @@
 #include "decode_utils.h"
 
 #include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <vector>

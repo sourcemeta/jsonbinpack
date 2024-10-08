@@ -2,9 +2,12 @@
 
 #include <vector>
 
-#include "encode_utils.h"
 #include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+
 #include <sourcemeta/jsontoolkit/json.h>
+
+#include "encode_utils.h"
 
 TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;

@@ -1,10 +1,13 @@
-#include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsontoolkit/json.h>
-
 #include <gtest/gtest.h>
+
 #include <utility>
 #include <variant>
 #include <vector>
+
+#include <sourcemeta/jsonbinpack/runtime.h>
+#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+
+#include <sourcemeta/jsontoolkit/json.h>
 
 TEST(JSONBinPack_Plan, wrap_single_encoding) {
   using namespace sourcemeta::jsonbinpack;

@@ -4,7 +4,22 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
     decoder.h decoder_basic.h
     encoder.h encoder_basic.h encoder_context.h
     plan.h plan_wrap.h varint.h
-  SOURCES loader.cc loader_v1.h)
+  SOURCES
+    loader.cc loader_v1.h
+    decoder_any.cc
+    decoder_array.cc
+    decoder_common.cc
+    decoder_integer.cc
+    decoder_number.cc
+    decoder_object.cc
+    decoder_string.cc
+    encoder_any.cc
+    encoder_array.cc
+    encoder_common.cc
+    encoder_integer.cc
+    encoder_number.cc
+    encoder_object.cc
+    encoder_string.cc)
 
 if(JSONBINPACK_INSTALL)
   noa_library_install(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime)
