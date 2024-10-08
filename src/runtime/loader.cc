@@ -1,6 +1,10 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-#include "loader_v1.h"
+#include "loader_v1_any.h"
+#include "loader_v1_array.h"
+#include "loader_v1_integer.h"
+#include "loader_v1_number.h"
+#include "loader_v1_string.h"
 
 #include <cassert>   // assert
 #include <sstream>   // std::ostringstream
@@ -42,6 +46,7 @@ auto load(const sourcemeta::jsontoolkit::JSON &input) -> Plan {
   PARSE_ENCODING(v1, BOUNDED_8BITS_TYPED_ARRAY)
   PARSE_ENCODING(v1, FLOOR_TYPED_ARRAY)
   PARSE_ENCODING(v1, ROOF_TYPED_ARRAY)
+  // TODO: Handle object encodings
   // Any
   PARSE_ENCODING(v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX)
 
