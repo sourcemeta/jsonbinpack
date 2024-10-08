@@ -33,7 +33,7 @@ TEST(JSONBinPack_Loader_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Plan result{
+  const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<FIXED_TYPED_ARRAY>(result));
@@ -98,7 +98,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Plan result{
+  const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<BOUNDED_8BITS_TYPED_ARRAY>(result));
@@ -172,7 +172,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Plan result{
+  const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<FLOOR_TYPED_ARRAY>(result));
@@ -236,7 +236,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Plan result{
+  const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<ROOF_TYPED_ARRAY>(result));

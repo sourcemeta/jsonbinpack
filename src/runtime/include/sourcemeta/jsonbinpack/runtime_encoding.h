@@ -12,16 +12,16 @@
 
 namespace sourcemeta::jsonbinpack {
 
-// We cannot directly create an Plan variant type whose values potentially
-// include other Plan instances.  As a workaround, we have a helper
+// We cannot directly create an Encoding variant type whose values potentially
+// include other Encoding instances.  As a workaround, we have a helper
 // encoding wrapper that we can use as an incomplete type
 struct __internal_encoding_wrapper;
 // Use these alias types. Never use the internal wrapper type directly
-using SinglePlan = std::shared_ptr<__internal_encoding_wrapper>;
-using MultiplePlans = std::vector<__internal_encoding_wrapper>;
+using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
+using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
 
 /// @ingroup runtime
-/// @defgroup plan_integer Integer Encodings
+/// @defgroup encoding_integer Integer Encodings
 /// @{
 
 // clang-format off
@@ -179,7 +179,7 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_number Number Encodings
+/// @defgroup encoding_number Number Encodings
 /// @{
 
 // clang-format off
@@ -226,7 +226,7 @@ struct DOUBLE_VARINT_TUPLE {};
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_enum Enumeration Encodings
+/// @defgroup encoding_enum Enumeration Encodings
 /// @{
 
 // clang-format off
@@ -370,7 +370,7 @@ struct CONST_NONE {
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_string String Encodings
+/// @defgroup encoding_string String Encodings
 /// @{
 
 // clang-format off
@@ -661,7 +661,7 @@ struct PREFIX_VARINT_LENGTH_STRING_SHARED {};
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_array Array Encodings
+/// @defgroup encoding_array Array Encodings
 /// @{
 
 // clang-format off
@@ -703,9 +703,9 @@ struct FIXED_TYPED_ARRAY {
   /// The array length
   const std::uint64_t size;
   /// Element encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
   /// Positional encodings
-  const MultiplePlans prefix_encodings;
+  const MultipleEncodings prefix_encodings;
 };
 
 // clang-format off
@@ -754,9 +754,9 @@ struct BOUNDED_8BITS_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
   /// Positional encodings
-  const MultiplePlans prefix_encodings;
+  const MultipleEncodings prefix_encodings;
 };
 
 // clang-format off
@@ -800,9 +800,9 @@ struct FLOOR_TYPED_ARRAY {
   /// The minimum length of the array
   const std::uint64_t minimum;
   /// Element encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
   /// Positional encodings
-  const MultiplePlans prefix_encodings;
+  const MultipleEncodings prefix_encodings;
 };
 
 // clang-format off
@@ -845,15 +845,15 @@ struct ROOF_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
   /// Positional encodings
-  const MultiplePlans prefix_encodings;
+  const MultipleEncodings prefix_encodings;
 };
 
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_object Object Encodings
+/// @defgroup encoding_object Object Encodings
 /// @{
 
 // clang-format off
@@ -902,9 +902,9 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
   /// The object size
   const std::uint64_t size;
   /// Key encoding
-  const SinglePlan key_encoding;
+  const SingleEncoding key_encoding;
   /// Value encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
 };
 
 // clang-format off
@@ -946,15 +946,15 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
 // clang-format on
 struct VARINT_TYPED_ARBITRARY_OBJECT {
   /// Key encoding
-  const SinglePlan key_encoding;
+  const SingleEncoding key_encoding;
   /// Value encoding
-  const SinglePlan encoding;
+  const SingleEncoding encoding;
 };
 
 /// @}
 
 /// @ingroup runtime
-/// @defgroup plan_any Any Encodings
+/// @defgroup encoding_any Any Encodings
 /// @{
 
 // TODO: Write brief description
@@ -1014,8 +1014,8 @@ static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
 // clang-format on
 
 /// @ingroup runtime
-/// Represents an encoding plan
-using Plan = std::variant<
+/// Represents an encoding
+using Encoding = std::variant<
     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
     ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
     DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
@@ -1028,11 +1028,11 @@ using Plan = std::variant<
     FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
     ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
 
-// Helper definitions that rely on the Plan data type
+// Helper definitions that rely on the Encoding data type
 #ifndef DOXYGEN
 // Ignore this definition on the documentation
 struct __internal_encoding_wrapper {
-  const Plan value;
+  const Encoding value;
 };
 #endif
 

@@ -11,7 +11,8 @@
 
 namespace sourcemeta::jsonbinpack::v1 {
 
-auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
+    -> Encoding {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -21,7 +22,8 @@ auto BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   return sourcemeta::jsonbinpack::BYTE_CHOICE_INDEX({std::move(elements)});
 }
 
-auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
+    -> Encoding {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -32,7 +34,7 @@ auto LARGE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
 }
 
 auto TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
-    -> Plan {
+    -> Encoding {
   assert(options.defines("choices"));
   const auto &choices{options.at("choices")};
   assert(choices.is_array());
@@ -43,13 +45,13 @@ auto TOP_LEVEL_BYTE_CHOICE_INDEX(const sourcemeta::jsontoolkit::JSON &options)
       {std::move(elements)});
 }
 
-auto CONST_NONE(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto CONST_NONE(const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
   assert(options.defines("value"));
   return sourcemeta::jsonbinpack::CONST_NONE({options.at("value")});
 }
 
 auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::jsontoolkit::JSON &)
-    -> Plan {
+    -> Encoding {
   return sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{};
 }
 

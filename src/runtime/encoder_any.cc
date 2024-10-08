@@ -1,6 +1,6 @@
 #include <sourcemeta/jsonbinpack/numeric.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include "unreachable.h"
 
@@ -159,7 +159,8 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
           static_cast<std::uint8_t>(TYPE_ARRAY | ((size + 1) << type_size)));
     }
 
-    Plan encoding{sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
+    Encoding encoding{
+        sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
     this->FIXED_TYPED_ARRAY(document, {size, wrap(std::move(encoding)), {}});
   } else if (document.is_object()) {
     const auto size{document.size()};
@@ -171,9 +172,9 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
           static_cast<std::uint8_t>(TYPE_OBJECT | ((size + 1) << type_size)));
     }
 
-    Plan key_encoding{
+    Encoding key_encoding{
         sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{}};
-    Plan value_encoding{
+    Encoding value_encoding{
         sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
     this->FIXED_TYPED_ARBITRARY_OBJECT(
         document,

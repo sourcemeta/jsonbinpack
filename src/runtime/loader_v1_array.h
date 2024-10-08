@@ -2,7 +2,7 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_LOADER_V1_ARRAY_H_
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -14,7 +14,8 @@
 
 namespace sourcemeta::jsonbinpack::v1 {
 
-auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
+    -> Encoding {
   assert(options.defines("size"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -25,7 +26,7 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(size.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Plan> encodings;
+  std::vector<Encoding> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -37,7 +38,7 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
 }
 
 auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
-    -> Plan {
+    -> Encoding {
   assert(options.defines("minimum"));
   assert(options.defines("maximum"));
   assert(options.defines("encoding"));
@@ -52,7 +53,7 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(maximum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Plan> encodings;
+  std::vector<Encoding> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -64,7 +65,8 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
       wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
-auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
+    -> Encoding {
   assert(options.defines("minimum"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -75,7 +77,7 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(minimum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Plan> encodings;
+  std::vector<Encoding> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),
@@ -86,7 +88,8 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
       wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
 }
 
-auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
+    -> Encoding {
   assert(options.defines("maximum"));
   assert(options.defines("encoding"));
   assert(options.defines("prefixEncodings"));
@@ -97,7 +100,7 @@ auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options) -> Plan {
   assert(maximum.is_positive());
   assert(array_encoding.is_object());
   assert(prefix_encodings.is_array());
-  std::vector<Plan> encodings;
+  std::vector<Encoding> encodings;
   std::transform(prefix_encodings.as_array().cbegin(),
                  prefix_encodings.as_array().cend(),
                  std::back_inserter(encodings),

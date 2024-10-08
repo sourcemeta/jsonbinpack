@@ -64,7 +64,7 @@ auto main(int argc, char *argv[]) -> int {
   plan_output_stream.close();
 
   // Encoder
-  const sourcemeta::jsonbinpack::Plan plan{
+  const sourcemeta::jsonbinpack::Encoding plan{
       sourcemeta::jsonbinpack::load(schema)};
   std::ofstream output_stream(directory / "output.bin", std::ios::binary);
   output_stream.exceptions(std::ios_base::badbit);

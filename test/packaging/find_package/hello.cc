@@ -20,7 +20,7 @@ auto main() -> int {
       sourcemeta::jsontoolkit::official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
-  const sourcemeta::jsonbinpack::Plan plan{
+  const sourcemeta::jsonbinpack::Encoding plan{
       sourcemeta::jsonbinpack::load(schema)};
 
   const sourcemeta::jsontoolkit::JSON instance{5};

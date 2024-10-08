@@ -11,7 +11,7 @@
 namespace sourcemeta::jsonbinpack::v1 {
 
 auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
-    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
   assert(options.defines("minimum"));
   assert(options.defines("maximum"));
   assert(options.defines("multiplier"));
@@ -28,7 +28,7 @@ auto BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
 }
 
 auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &options)
-    -> Plan {
+    -> Encoding {
   assert(options.defines("minimum"));
   assert(options.defines("multiplier"));
   const auto &minimum{options.at("minimum")};
@@ -42,7 +42,7 @@ auto FLOOR_MULTIPLE_ENUM_VARINT(const sourcemeta::jsontoolkit::JSON &options)
 }
 
 auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
-    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
   assert(options.defines("maximum"));
   assert(options.defines("multiplier"));
   const auto &maximum{options.at("maximum")};
@@ -56,7 +56,7 @@ auto ROOF_MULTIPLE_MIRROR_ENUM_VARINT(
 }
 
 auto ARBITRARY_MULTIPLE_ZIGZAG_VARINT(
-    const sourcemeta::jsontoolkit::JSON &options) -> Plan {
+    const sourcemeta::jsontoolkit::JSON &options) -> Encoding {
   assert(options.defines("multiplier"));
   const auto &multiplier{options.at("multiplier")};
   assert(multiplier.is_integer());

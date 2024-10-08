@@ -4,8 +4,8 @@
 #include "runtime_export.h"
 
 #include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding.h>
 #include <sourcemeta/jsonbinpack/runtime_output_stream.h>
-#include <sourcemeta/jsonbinpack/runtime_plan.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -16,7 +16,7 @@ class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Encoder : private OutputStream {
 public:
   Encoder(Stream &output);
   auto write(const sourcemeta::jsontoolkit::JSON &document,
-             const Plan &encoding) -> void;
+             const Encoding &encoding) -> void;
 
 // The methods that implement individual encodings as considered private
 #ifndef DOXYGEN

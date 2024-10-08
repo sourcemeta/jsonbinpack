@@ -1,7 +1,7 @@
 #ifndef SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_WRAP_H_
 #define SOURCEMETA_JSONBINPACK_RUNTIME_ENCODING_WRAP_H_
 
-#include <sourcemeta/jsonbinpack/runtime_plan.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding.h>
 
 #include <algorithm>        // std::transform
 #include <initializer_list> // std::initializer_list
@@ -27,7 +27,7 @@ namespace sourcemeta::jsonbinpack {
 // as we want to avoid including their definitions in if the user
 // doesn't import this header.
 
-inline auto wrap(Plan &&encoding) -> SinglePlan {
+inline auto wrap(Encoding &&encoding) -> SingleEncoding {
   return std::make_shared<aggregate_adapter<__internal_encoding_wrapper>>(
       std::move(encoding));
 }
@@ -36,15 +36,16 @@ inline auto wrap(Plan &&encoding) -> SinglePlan {
 template <typename Iterator>
 requires std::forward_iterator<Iterator>
 // clang-format on
-inline auto wrap(Iterator begin, Iterator end) -> MultiplePlans {
-  MultiplePlans result;
-  std::transform(begin, end, std::back_inserter(result), [](Plan encoding) {
+inline auto wrap(Iterator begin, Iterator end) -> MultipleEncodings {
+  MultipleEncodings result;
+  std::transform(begin, end, std::back_inserter(result), [](Encoding encoding) {
     return __internal_encoding_wrapper{std::move(encoding)};
   });
   return result;
 }
 
-inline auto wrap(std::initializer_list<Plan> encodings) -> MultiplePlans {
+inline auto wrap(std::initializer_list<Encoding> encodings)
+    -> MultipleEncodings {
   return wrap(encodings.begin(), encodings.end());
 }
 

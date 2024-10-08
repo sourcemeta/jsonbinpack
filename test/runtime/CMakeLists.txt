@@ -23,8 +23,7 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   encode_utils.h
   input_stream_varint_test.cc
   output_stream_varint_test.cc
-  plan_traits_test.cc
-  plan_wrap_test.cc
+  encoding_traits_test.cc
   v1_any_loader_test.cc
   v1_array_loader_test.cc
   v1_enum_loader_test.cc

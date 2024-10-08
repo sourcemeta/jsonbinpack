@@ -7,7 +7,7 @@
 
 namespace sourcemeta::jsonbinpack::v1 {
 
-auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::JSON &) -> Plan {
+auto DOUBLE_VARINT_TUPLE(const sourcemeta::jsontoolkit::JSON &) -> Encoding {
   return sourcemeta::jsonbinpack::DOUBLE_VARINT_TUPLE{};
 }
 
