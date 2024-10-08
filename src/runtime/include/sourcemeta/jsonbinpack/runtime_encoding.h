@@ -12,13 +12,47 @@
 
 namespace sourcemeta::jsonbinpack {
 
-// We cannot directly create an Encoding variant type whose values potentially
-// include other Encoding instances.  As a workaround, we have a helper
-// encoding wrapper that we can use as an incomplete type
-struct __internal_encoding_wrapper;
-// Use these alias types. Never use the internal wrapper type directly
-using SingleEncoding = std::shared_ptr<__internal_encoding_wrapper>;
-using MultipleEncodings = std::vector<__internal_encoding_wrapper>;
+// Forward declarations for the sole purpose of being bale to define circular
+// structures
+#ifndef DOXYGEN
+struct BOUNDED_MULTIPLE_8BITS_ENUM_FIXED;
+struct FLOOR_MULTIPLE_ENUM_VARINT;
+struct ROOF_MULTIPLE_MIRROR_ENUM_VARINT;
+struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT;
+struct DOUBLE_VARINT_TUPLE;
+struct BYTE_CHOICE_INDEX;
+struct LARGE_CHOICE_INDEX;
+struct TOP_LEVEL_BYTE_CHOICE_INDEX;
+struct CONST_NONE;
+struct UTF8_STRING_NO_LENGTH;
+struct FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED;
+struct ROOF_VARINT_PREFIX_UTF8_STRING_SHARED;
+struct BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED;
+struct RFC3339_DATE_INTEGER_TRIPLET;
+struct PREFIX_VARINT_LENGTH_STRING_SHARED;
+struct FIXED_TYPED_ARRAY;
+struct BOUNDED_8BITS_TYPED_ARRAY;
+struct FLOOR_TYPED_ARRAY;
+struct ROOF_TYPED_ARRAY;
+struct FIXED_TYPED_ARBITRARY_OBJECT;
+struct VARINT_TYPED_ARBITRARY_OBJECT;
+struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
+#endif
+
+/// @ingroup runtime
+/// Represents an encoding
+using Encoding = std::variant<
+    BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
+    ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
+    DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
+    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
+    FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
+    ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
+    BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
+    PREFIX_VARINT_LENGTH_STRING_SHARED, FIXED_TYPED_ARRAY,
+    BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY, ROOF_TYPED_ARRAY,
+    FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
+    ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
 
 /// @ingroup runtime
 /// @defgroup encoding_integer Integer Encodings
@@ -703,9 +737,9 @@ struct FIXED_TYPED_ARRAY {
   /// The array length
   const std::uint64_t size;
   /// Element encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const std::vector<Encoding> prefix_encodings;
 };
 
 // clang-format off
@@ -754,9 +788,9 @@ struct BOUNDED_8BITS_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const std::vector<Encoding> prefix_encodings;
 };
 
 // clang-format off
@@ -800,9 +834,9 @@ struct FLOOR_TYPED_ARRAY {
   /// The minimum length of the array
   const std::uint64_t minimum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const std::vector<Encoding> prefix_encodings;
 };
 
 // clang-format off
@@ -845,9 +879,9 @@ struct ROOF_TYPED_ARRAY {
   /// The maximum length of the array
   const std::uint64_t maximum;
   /// Element encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
   /// Positional encodings
-  const MultipleEncodings prefix_encodings;
+  const std::vector<Encoding> prefix_encodings;
 };
 
 /// @}
@@ -902,9 +936,9 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
   /// The object size
   const std::uint64_t size;
   /// Key encoding
-  const SingleEncoding key_encoding;
+  const std::shared_ptr<Encoding> key_encoding;
   /// Value encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
 };
 
 // clang-format off
@@ -946,9 +980,9 @@ struct FIXED_TYPED_ARBITRARY_OBJECT {
 // clang-format on
 struct VARINT_TYPED_ARBITRARY_OBJECT {
   /// Key encoding
-  const SingleEncoding key_encoding;
+  const std::shared_ptr<Encoding> key_encoding;
   /// Value encoding
-  const SingleEncoding encoding;
+  const std::shared_ptr<Encoding> encoding;
 };
 
 /// @}
@@ -1012,29 +1046,6 @@ static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
 
 /// @}
 // clang-format on
-
-/// @ingroup runtime
-/// Represents an encoding
-using Encoding = std::variant<
-    BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
-    ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
-    DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
-    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
-    FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
-    ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
-    BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
-    PREFIX_VARINT_LENGTH_STRING_SHARED, FIXED_TYPED_ARRAY,
-    BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY, ROOF_TYPED_ARRAY,
-    FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
-    ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
-
-// Helper definitions that rely on the Encoding data type
-#ifndef DOXYGEN
-// Ignore this definition on the documentation
-struct __internal_encoding_wrapper {
-  const Encoding value;
-};
-#endif
 
 } // namespace sourcemeta::jsonbinpack
 

@@ -2,7 +2,6 @@
 #define SOURCEMETA_JSONBINPACK_RUNTIME_LOADER_V1_ARRAY_H_
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -10,6 +9,7 @@
 #include <cassert>   // assert
 #include <cstdint>   // std::uint64_t
 #include <iterator>  // std::back_inserter
+#include <memory>    // std::make_shared
 #include <vector>    // std::vector
 
 namespace sourcemeta::jsonbinpack::v1 {
@@ -33,8 +33,8 @@ auto FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
                  [](const auto &element) { return load(element); });
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::FIXED_TYPED_ARRAY{
-      static_cast<std::uint64_t>(size.to_integer()), wrap(load(array_encoding)),
-      wrap(encodings.begin(), encodings.end())};
+      static_cast<std::uint64_t>(size.to_integer()),
+      std::make_shared<Encoding>(load(array_encoding)), std::move(encodings)};
 }
 
 auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
@@ -62,7 +62,7 @@ auto BOUNDED_8BITS_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   return sourcemeta::jsonbinpack::BOUNDED_8BITS_TYPED_ARRAY{
       static_cast<std::uint64_t>(minimum.to_integer()),
       static_cast<std::uint64_t>(maximum.to_integer()),
-      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      std::make_shared<Encoding>(load(array_encoding)), std::move(encodings)};
 }
 
 auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
@@ -85,7 +85,7 @@ auto FLOOR_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::FLOOR_TYPED_ARRAY{
       static_cast<std::uint64_t>(minimum.to_integer()),
-      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      std::make_shared<Encoding>(load(array_encoding)), std::move(encodings)};
 }
 
 auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
@@ -108,7 +108,7 @@ auto ROOF_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &options)
   assert(encodings.size() == prefix_encodings.size());
   return sourcemeta::jsonbinpack::ROOF_TYPED_ARRAY{
       static_cast<std::uint64_t>(maximum.to_integer()),
-      wrap(load(array_encoding)), wrap(encodings.begin(), encodings.end())};
+      std::make_shared<Encoding>(load(array_encoding)), std::move(encodings)};
 }
 
 } // namespace sourcemeta::jsonbinpack::v1
