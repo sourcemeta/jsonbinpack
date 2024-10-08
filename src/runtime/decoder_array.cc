@@ -14,8 +14,8 @@ auto Decoder::FIXED_TYPED_ARRAY(const struct FIXED_TYPED_ARRAY &options)
       sourcemeta::jsontoolkit::JSON::make_array();
   for (std::size_t index = 0; index < options.size; index++) {
     const Encoding &encoding{prefix_encodings > index
-                                 ? options.prefix_encodings[index].value
-                                 : options.encoding->value};
+                                 ? options.prefix_encodings[index]
+                                 : *(options.encoding)};
     result.push_back(this->read(encoding));
   }
 

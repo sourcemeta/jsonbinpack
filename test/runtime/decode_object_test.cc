@@ -3,7 +3,6 @@
 #include "decode_utils.h"
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -19,8 +18,9 @@ TEST(JSONBinPack_Decoder,
   Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
       decoder.FIXED_TYPED_ARBITRARY_OBJECT(
-          {2, wrap(UTF8_STRING_NO_LENGTH{3}),
-           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+          {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+           std::make_shared<Encoding>(
+               BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));
@@ -46,8 +46,9 @@ TEST(JSONBinPack_Decoder,
   Decoder decoder{stream};
   const sourcemeta::jsontoolkit::JSON result =
       decoder.VARINT_TYPED_ARBITRARY_OBJECT(
-          {wrap(UTF8_STRING_NO_LENGTH{3}),
-           wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+          {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+           std::make_shared<Encoding>(
+               BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));

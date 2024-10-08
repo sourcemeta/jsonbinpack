@@ -1,6 +1,5 @@
 #include <sourcemeta/jsonbinpack/numeric.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include "unreachable.h"
 
@@ -8,6 +7,7 @@
 #include <cassert>   // assert
 #include <cstdint>   // std::uint8_t, std::int64_t, std::uint64_t
 #include <iterator>  // std::cbegin, std::cend, std::distance
+#include <memory>    // std::make_shared
 #include <utility>   // std::move
 
 namespace sourcemeta::jsonbinpack {
@@ -161,7 +161,8 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
 
     Encoding encoding{
         sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
-    this->FIXED_TYPED_ARRAY(document, {size, wrap(std::move(encoding)), {}});
+    this->FIXED_TYPED_ARRAY(
+        document, {size, std::make_shared<Encoding>(std::move(encoding)), {}});
   } else if (document.is_object()) {
     const auto size{document.size()};
     if (size >= uint_max<5>) {
@@ -177,8 +178,8 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
     Encoding value_encoding{
         sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{}};
     this->FIXED_TYPED_ARBITRARY_OBJECT(
-        document,
-        {size, wrap(std::move(key_encoding)), wrap(std::move(value_encoding))});
+        document, {size, std::make_shared<Encoding>(std::move(key_encoding)),
+                   std::make_shared<Encoding>(std::move(value_encoding))});
   } else {
     // We should never get here
     unreachable();

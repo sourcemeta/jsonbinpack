@@ -7,7 +7,6 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
     output_stream.h
     encoder_context.h
     encoding.h
-    encoding_wrap.h
   SOURCES
     input_stream.cc
     output_stream.cc

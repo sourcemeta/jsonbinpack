@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -16,8 +15,9 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARBITRARY_OBJECT(
-      document, {2, wrap(UTF8_STRING_NO_LENGTH{3}),
-                 wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      document, {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+                 std::make_shared<Encoding>(
+                     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {
@@ -46,8 +46,9 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.VARINT_TYPED_ARBITRARY_OBJECT(
-      document, {wrap(UTF8_STRING_NO_LENGTH{3}),
-                 wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      document, {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+                 std::make_shared<Encoding>(
+                     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {

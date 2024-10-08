@@ -16,8 +16,8 @@ auto Encoder::FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &document,
   assert(prefix_encodings <= document.size());
   for (std::size_t index = 0; index < options.size; index++) {
     const Encoding &encoding{prefix_encodings > index
-                                 ? options.prefix_encodings[index].value
-                                 : options.encoding->value};
+                                 ? options.prefix_encodings[index]
+                                 : *(options.encoding)};
     this->write(document.at(index), encoding);
   }
 }

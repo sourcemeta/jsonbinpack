@@ -12,9 +12,9 @@ auto Decoder::FIXED_TYPED_ARBITRARY_OBJECT(
       sourcemeta::jsontoolkit::JSON::make_object();
   for (std::size_t index = 0; index < options.size; index++) {
     const sourcemeta::jsontoolkit::JSON key =
-        this->read(options.key_encoding->value);
+        this->read(*(options.key_encoding));
     assert(key.is_string());
-    document.assign(key.to_string(), this->read(options.encoding->value));
+    document.assign(key.to_string(), this->read(*(options.encoding)));
   }
 
   assert(document.size() == options.size);
@@ -29,9 +29,9 @@ auto Decoder::VARINT_TYPED_ARBITRARY_OBJECT(
       sourcemeta::jsontoolkit::JSON::make_object();
   for (std::size_t index = 0; index < size; index++) {
     const sourcemeta::jsontoolkit::JSON key =
-        this->read(options.key_encoding->value);
+        this->read(*(options.key_encoding));
     assert(key.is_string());
-    document.assign(key.to_string(), this->read(options.encoding->value));
+    document.assign(key.to_string(), this->read(*(options.encoding)));
   }
 
   assert(document.size() == size);

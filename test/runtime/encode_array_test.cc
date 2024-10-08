@@ -3,7 +3,6 @@
 #include <vector>
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -17,7 +16,10 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARRAY(
-      document, {3, wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}), {}});
+      document,
+      {3,
+       std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}),
+       {}});
   EXPECT_BYTES(stream, {0x00, 0x01, 0x02});
 }
 
@@ -35,9 +37,11 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   Encoding second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
 
   Encoder encoder{stream};
-  encoder.FIXED_TYPED_ARRAY(document,
-                            {3, wrap(BYTE_CHOICE_INDEX{std::move(choices)}),
-                             wrap({std::move(first), std::move(second)})});
+  encoder.FIXED_TYPED_ARRAY(
+      document,
+      {3,
+       std::make_shared<Encoding>(BYTE_CHOICE_INDEX{std::move(choices)}),
+       {std::move(first), std::move(second)}});
   EXPECT_BYTES(stream, {0x00, 0x01, 0x01});
 }
 
@@ -49,7 +53,10 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARRAY(
-      document, {0, wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}), {}});
+      document,
+      {0,
+       std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}),
+       {}});
   EXPECT_BYTES(stream, {});
 }
 
@@ -66,7 +73,11 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.BOUNDED_8BITS_TYPED_ARRAY(
-      document, {0, 3, wrap(BYTE_CHOICE_INDEX{std::move(choices)}), {}});
+      document,
+      {0,
+       3,
+       std::make_shared<Encoding>(BYTE_CHOICE_INDEX{std::move(choices)}),
+       {}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
@@ -83,7 +94,11 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.BOUNDED_8BITS_TYPED_ARRAY(
-      document, {3, 3, wrap(BYTE_CHOICE_INDEX{std::move(choices)}), {}});
+      document,
+      {3,
+       3,
+       std::make_shared<Encoding>(BYTE_CHOICE_INDEX{std::move(choices)}),
+       {}});
   EXPECT_BYTES(stream, {0x00, 0x01, 0x00, 0x01});
 }
 
@@ -100,8 +115,10 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   Encoder encoder{stream};
   encoder.BOUNDED_8BITS_TYPED_ARRAY(
       document,
-      {1, 3, wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
-       wrap({BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}})});
+      {1,
+       3,
+       std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
+       {BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}}});
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
@@ -117,9 +134,11 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
 
   Encoder encoder{stream};
   encoder.BOUNDED_8BITS_TYPED_ARRAY(
-      document, {0, 10, wrap(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
-                 wrap({BYTE_CHOICE_INDEX{choices},
-                       FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{3}})});
+      document, {0,
+                 10,
+                 std::make_shared<Encoding>(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
+                 {BYTE_CHOICE_INDEX{choices},
+                  FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{3}}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
 }
 
@@ -136,7 +155,10 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.FLOOR_TYPED_ARRAY(
-      document, {0, wrap(BYTE_CHOICE_INDEX{std::move(choices)}), {}});
+      document,
+      {0,
+       std::make_shared<Encoding>(BYTE_CHOICE_INDEX{std::move(choices)}),
+       {}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
@@ -153,8 +175,9 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   Encoder encoder{stream};
   encoder.FLOOR_TYPED_ARRAY(
       document,
-      {1, wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
-       wrap({BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}})});
+      {1,
+       std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
+       {BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}}});
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
@@ -170,9 +193,10 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
 
   Encoder encoder{stream};
   encoder.FLOOR_TYPED_ARRAY(
-      document, {0, wrap(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
-                 wrap({BYTE_CHOICE_INDEX{choices},
-                       FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{3}})});
+      document, {0,
+                 std::make_shared<Encoding>(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
+                 {BYTE_CHOICE_INDEX{choices},
+                  FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED{3}}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
 }
 
@@ -189,7 +213,10 @@ TEST(JSONBinPack_Encoder,
 
   Encoder encoder{stream};
   encoder.ROOF_TYPED_ARRAY(
-      document, {6, wrap(BYTE_CHOICE_INDEX{std::move(choices)}), {}});
+      document,
+      {6,
+       std::make_shared<Encoding>(BYTE_CHOICE_INDEX{std::move(choices)}),
+       {}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x00, 0x01});
 }
 
@@ -206,8 +233,9 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   Encoder encoder{stream};
   encoder.ROOF_TYPED_ARRAY(
       document,
-      {5, wrap(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
-       wrap({BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}})});
+      {5,
+       std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 255, 1}),
+       {BYTE_CHOICE_INDEX{choices}, BYTE_CHOICE_INDEX{choices}}});
   EXPECT_BYTES(stream, {0x02, 0x01, 0x00, 0x05});
 }
 
@@ -222,9 +250,10 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_complex) {
   choices.push_back(sourcemeta::jsontoolkit::JSON(true));
 
   Encoder encoder{stream};
-  encoder.ROOF_TYPED_ARRAY(document,
-                           {6, wrap(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
-                            wrap({BYTE_CHOICE_INDEX{choices},
-                                  ROOF_VARINT_PREFIX_UTF8_STRING_SHARED{3}})});
+  encoder.ROOF_TYPED_ARRAY(
+      document,
+      {6,
+       std::make_shared<Encoding>(FLOOR_MULTIPLE_ENUM_VARINT{-2, 4}),
+       {BYTE_CHOICE_INDEX{choices}, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED{3}}});
   EXPECT_BYTES(stream, {0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01});
 }
