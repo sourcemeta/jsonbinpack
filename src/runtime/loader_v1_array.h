@@ -1,5 +1,5 @@
-#ifndef SOURCEMETA_JSONBINPACK_LOADER_V1_ARRAY_H_
-#define SOURCEMETA_JSONBINPACK_LOADER_V1_ARRAY_H_
+#ifndef SOURCEMETA_JSONBINPACK_RUNTIME_LOADER_V1_ARRAY_H_
+#define SOURCEMETA_JSONBINPACK_RUNTIME_LOADER_V1_ARRAY_H_
 
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
