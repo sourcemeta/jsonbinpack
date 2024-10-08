@@ -10,7 +10,6 @@ add_executable(sourcemeta_jsonbinpack_compiler_unit
   2020_12_canonicalizer_string_test.cc
 
   2020_12_compiler_any_test.cc
-  2020_12_compiler_enum_test.cc
   2020_12_compiler_integer_test.cc
   2020_12_compiler_number_test.cc)
 

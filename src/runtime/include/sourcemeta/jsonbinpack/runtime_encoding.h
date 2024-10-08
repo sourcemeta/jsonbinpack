@@ -24,6 +24,7 @@ struct BYTE_CHOICE_INDEX;
 struct LARGE_CHOICE_INDEX;
 struct TOP_LEVEL_BYTE_CHOICE_INDEX;
 struct CONST_NONE;
+struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
 struct UTF8_STRING_NO_LENGTH;
 struct FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED;
 struct ROOF_VARINT_PREFIX_UTF8_STRING_SHARED;
@@ -36,7 +37,6 @@ struct FLOOR_TYPED_ARRAY;
 struct ROOF_TYPED_ARRAY;
 struct FIXED_TYPED_ARBITRARY_OBJECT;
 struct VARINT_TYPED_ARBITRARY_OBJECT;
-struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
 #endif
 
 /// @ingroup runtime
@@ -45,14 +45,13 @@ using Encoding = std::variant<
     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED, FLOOR_MULTIPLE_ENUM_VARINT,
     ROOF_MULTIPLE_MIRROR_ENUM_VARINT, ARBITRARY_MULTIPLE_ZIGZAG_VARINT,
     DOUBLE_VARINT_TUPLE, BYTE_CHOICE_INDEX, LARGE_CHOICE_INDEX,
-    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, UTF8_STRING_NO_LENGTH,
-    FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
+    TOP_LEVEL_BYTE_CHOICE_INDEX, CONST_NONE, ANY_PACKED_TYPE_TAG_BYTE_PREFIX,
+    UTF8_STRING_NO_LENGTH, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED,
     ROOF_VARINT_PREFIX_UTF8_STRING_SHARED,
     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED, RFC3339_DATE_INTEGER_TRIPLET,
     PREFIX_VARINT_LENGTH_STRING_SHARED, FIXED_TYPED_ARRAY,
     BOUNDED_8BITS_TYPED_ARRAY, FLOOR_TYPED_ARRAY, ROOF_TYPED_ARRAY,
-    FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT,
-    ANY_PACKED_TYPE_TAG_BYTE_PREFIX>;
+    FIXED_TYPED_ARBITRARY_OBJECT, VARINT_TYPED_ARBITRARY_OBJECT>;
 
 /// @ingroup runtime
 /// @defgroup encoding_integer Integer Encodings
@@ -260,7 +259,7 @@ struct DOUBLE_VARINT_TUPLE {};
 /// @}
 
 /// @ingroup runtime
-/// @defgroup encoding_enum Enumeration Encodings
+/// @defgroup encoding_any Any Encodings
 /// @{
 
 // clang-format off
@@ -400,6 +399,59 @@ struct CONST_NONE {
   /// The constant value
   const sourcemeta::jsontoolkit::JSON value;
 };
+
+// TODO: Write brief description
+struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX {};
+#ifndef DOXYGEN
+namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX {
+constexpr auto type_size = 3;
+constexpr std::uint8_t TYPE_SHARED_STRING = 0b00000000;
+constexpr std::uint8_t TYPE_STRING = 0b00000001;
+constexpr std::uint8_t TYPE_LONG_STRING = 0b00000010;
+constexpr std::uint8_t TYPE_OBJECT = 0b00000011;
+constexpr std::uint8_t TYPE_ARRAY = 0b00000100;
+constexpr std::uint8_t TYPE_POSITIVE_INTEGER_BYTE = 0b00000101;
+constexpr std::uint8_t TYPE_NEGATIVE_INTEGER_BYTE = 0b00000110;
+constexpr std::uint8_t TYPE_OTHER = 0b00000111;
+static_assert(TYPE_SHARED_STRING <= uint_max<type_size>);
+static_assert(TYPE_STRING <= uint_max<type_size>);
+static_assert(TYPE_LONG_STRING <= uint_max<type_size>);
+static_assert(TYPE_OBJECT <= uint_max<type_size>);
+static_assert(TYPE_ARRAY <= uint_max<type_size>);
+static_assert(TYPE_POSITIVE_INTEGER_BYTE <= uint_max<type_size>);
+static_assert(TYPE_NEGATIVE_INTEGER_BYTE <= uint_max<type_size>);
+static_assert(TYPE_OTHER <= uint_max<type_size>);
+
+constexpr auto subtype_size = 5;
+constexpr std::uint8_t SUBTYPE_FALSE = 0b00000000;
+constexpr std::uint8_t SUBTYPE_TRUE = 0b00000001;
+constexpr std::uint8_t SUBTYPE_NULL = 0b00000010;
+constexpr std::uint8_t SUBTYPE_POSITIVE_INTEGER = 0b00000011;
+constexpr std::uint8_t SUBTYPE_NEGATIVE_INTEGER = 0b00000100;
+constexpr std::uint8_t SUBTYPE_NUMBER = 0b00000101;
+constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_7 = 0b00000111;
+constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_8 = 0b00001000;
+constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_9 = 0b00001001;
+constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_10 = 0b00001010;
+
+static_assert(SUBTYPE_FALSE <= uint_max<subtype_size>);
+static_assert(SUBTYPE_TRUE <= uint_max<subtype_size>);
+static_assert(SUBTYPE_NULL <= uint_max<subtype_size>);
+static_assert(SUBTYPE_POSITIVE_INTEGER <= uint_max<subtype_size>);
+static_assert(SUBTYPE_NEGATIVE_INTEGER <= uint_max<subtype_size>);
+static_assert(SUBTYPE_NUMBER <= uint_max<subtype_size>);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_7 <= uint_max<subtype_size>);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_8 <= uint_max<subtype_size>);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_9 <= uint_max<subtype_size>);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 <= uint_max<subtype_size>);
+
+// Note that the binary values actually match the declared exponents
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_7 == 7);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_8 == 8);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_9 == 9);
+static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
+} // namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX
+#endif
 
 /// @}
 
@@ -986,66 +1038,6 @@ struct VARINT_TYPED_ARBITRARY_OBJECT {
 };
 
 /// @}
-
-/// @ingroup runtime
-/// @defgroup encoding_any Any Encodings
-/// @{
-
-// TODO: Write brief description
-struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX {};
-#ifndef DOXYGEN
-namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX {
-constexpr auto type_size = 3;
-constexpr std::uint8_t TYPE_SHARED_STRING = 0b00000000;
-constexpr std::uint8_t TYPE_STRING = 0b00000001;
-constexpr std::uint8_t TYPE_LONG_STRING = 0b00000010;
-constexpr std::uint8_t TYPE_OBJECT = 0b00000011;
-constexpr std::uint8_t TYPE_ARRAY = 0b00000100;
-constexpr std::uint8_t TYPE_POSITIVE_INTEGER_BYTE = 0b00000101;
-constexpr std::uint8_t TYPE_NEGATIVE_INTEGER_BYTE = 0b00000110;
-constexpr std::uint8_t TYPE_OTHER = 0b00000111;
-static_assert(TYPE_SHARED_STRING <= uint_max<type_size>);
-static_assert(TYPE_STRING <= uint_max<type_size>);
-static_assert(TYPE_LONG_STRING <= uint_max<type_size>);
-static_assert(TYPE_OBJECT <= uint_max<type_size>);
-static_assert(TYPE_ARRAY <= uint_max<type_size>);
-static_assert(TYPE_POSITIVE_INTEGER_BYTE <= uint_max<type_size>);
-static_assert(TYPE_NEGATIVE_INTEGER_BYTE <= uint_max<type_size>);
-static_assert(TYPE_OTHER <= uint_max<type_size>);
-
-constexpr auto subtype_size = 5;
-constexpr std::uint8_t SUBTYPE_FALSE = 0b00000000;
-constexpr std::uint8_t SUBTYPE_TRUE = 0b00000001;
-constexpr std::uint8_t SUBTYPE_NULL = 0b00000010;
-constexpr std::uint8_t SUBTYPE_POSITIVE_INTEGER = 0b00000011;
-constexpr std::uint8_t SUBTYPE_NEGATIVE_INTEGER = 0b00000100;
-constexpr std::uint8_t SUBTYPE_NUMBER = 0b00000101;
-constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_7 = 0b00000111;
-constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_8 = 0b00001000;
-constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_9 = 0b00001001;
-constexpr std::uint8_t SUBTYPE_LONG_STRING_BASE_EXPONENT_10 = 0b00001010;
-
-static_assert(SUBTYPE_FALSE <= uint_max<subtype_size>);
-static_assert(SUBTYPE_TRUE <= uint_max<subtype_size>);
-static_assert(SUBTYPE_NULL <= uint_max<subtype_size>);
-static_assert(SUBTYPE_POSITIVE_INTEGER <= uint_max<subtype_size>);
-static_assert(SUBTYPE_NEGATIVE_INTEGER <= uint_max<subtype_size>);
-static_assert(SUBTYPE_NUMBER <= uint_max<subtype_size>);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_7 <= uint_max<subtype_size>);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_8 <= uint_max<subtype_size>);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_9 <= uint_max<subtype_size>);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 <= uint_max<subtype_size>);
-
-// Note that the binary values actually match the declared exponents
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_7 == 7);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_8 == 8);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_9 == 9);
-static_assert(SUBTYPE_LONG_STRING_BASE_EXPONENT_10 == 10);
-} // namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX
-#endif
-
-/// @}
-// clang-format on
 
 } // namespace sourcemeta::jsonbinpack
 
