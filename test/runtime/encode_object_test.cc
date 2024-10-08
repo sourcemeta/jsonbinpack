@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 

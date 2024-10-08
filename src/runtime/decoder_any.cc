@@ -1,7 +1,7 @@
 #include <sourcemeta/jsonbinpack/numeric.h>
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include "unreachable.h"
 

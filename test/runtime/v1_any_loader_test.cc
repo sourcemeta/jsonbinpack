@@ -13,7 +13,7 @@ TEST(JSONBinPack_Loader_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
     "binpackOptions": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Plan result{
+  const sourcemeta::jsonbinpack::Encoding result{
       sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<ANY_PACKED_TYPE_TAG_BYTE_PREFIX>(result));

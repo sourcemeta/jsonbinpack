@@ -3,7 +3,7 @@
 #include <vector>
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -31,8 +31,8 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
   choices.push_back(sourcemeta::jsontoolkit::JSON(true));
 
-  Plan first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
-  Plan second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Encoding first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Encoding second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARRAY(document,

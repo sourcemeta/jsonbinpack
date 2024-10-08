@@ -16,13 +16,13 @@
 
 #include <sourcemeta/jsonbinpack/runtime_decoder.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder.h>
-#include <sourcemeta/jsonbinpack/runtime_plan.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding.h>
 
 namespace sourcemeta::jsonbinpack {
 
 /// @ingroup runtime
 SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT
-auto load(const sourcemeta::jsontoolkit::JSON &input) -> Plan;
+auto load(const sourcemeta::jsontoolkit::JSON &input) -> Encoding;
 
 } // namespace sourcemeta::jsonbinpack
 

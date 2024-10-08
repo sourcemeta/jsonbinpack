@@ -3,7 +3,7 @@
 #include "decode_utils.h"
 
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
+#include <sourcemeta/jsonbinpack/runtime_encoding_wrap.h>
 #include <sourcemeta/jsontoolkit/json.h>
 
 #include <vector>
@@ -28,8 +28,8 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   choices.emplace_back(false);
   choices.emplace_back(true);
 
-  Plan first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
-  Plan second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Encoding first{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
+  Encoding second{BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1}};
 
   const sourcemeta::jsontoolkit::JSON result =
       decoder.FIXED_TYPED_ARRAY({3, wrap(BYTE_CHOICE_INDEX{std::move(choices)}),

@@ -3,8 +3,8 @@
 
 #include "runtime_export.h"
 
+#include <sourcemeta/jsonbinpack/runtime_encoding.h>
 #include <sourcemeta/jsonbinpack/runtime_input_stream.h>
-#include <sourcemeta/jsonbinpack/runtime_plan.h>
 
 #include <sourcemeta/jsontoolkit/json.h>
 
@@ -14,7 +14,7 @@ namespace sourcemeta::jsonbinpack {
 class SOURCEMETA_JSONBINPACK_RUNTIME_EXPORT Decoder : private InputStream {
 public:
   Decoder(Stream &input);
-  auto read(const Plan &encoding) -> sourcemeta::jsontoolkit::JSON;
+  auto read(const Encoding &encoding) -> sourcemeta::jsontoolkit::JSON;
 
 // The methods that implement individual encodings as considered private
 #ifndef DOXYGEN
