@@ -1,6 +1,7 @@
 #include <sourcemeta/jsonbinpack/numeric.h>
 #include <sourcemeta/jsonbinpack/runtime_input_stream.h>
-#include <sourcemeta/jsonbinpack/runtime_varint.h>
+
+#include "varint.h"
 
 #include <cassert> // assert
 #include <ios>     // std::ios_base
