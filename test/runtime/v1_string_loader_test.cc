@@ -15,8 +15,7 @@ TEST(JSONBinPack_Loader_v1, UTF8_STRING_NO_LENGTH_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<UTF8_STRING_NO_LENGTH>(result));
   EXPECT_EQ(std::get<UTF8_STRING_NO_LENGTH>(result).size, 3);
@@ -32,8 +31,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
       std::holds_alternative<FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED>(result));
@@ -51,8 +49,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
       std::holds_alternative<ROOF_VARINT_PREFIX_UTF8_STRING_SHARED>(result));
@@ -70,8 +67,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
       std::holds_alternative<BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED>(result));
@@ -89,8 +85,7 @@ TEST(JSONBinPack_Loader_v1, RFC3339_DATE_INTEGER_TRIPLET) {
     "binpackOptions": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<RFC3339_DATE_INTEGER_TRIPLET>(result));
 }
@@ -103,8 +98,7 @@ TEST(JSONBinPack_Loader_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
     "binpackOptions": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(
       std::holds_alternative<PREFIX_VARINT_LENGTH_STRING_SHARED>(result));

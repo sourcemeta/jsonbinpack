@@ -7,42 +7,42 @@
 #include <sourcemeta/jsonbinpack/runtime_output_stream.h>
 
 TEST(JSONBinPack_OutputStream, varint_1) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(1);
   EXPECT_BYTES(stream, {0x01});
 }
 
 TEST(JSONBinPack_OutputStream, varint_23) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(23);
   EXPECT_BYTES(stream, {0x17});
 }
 
 TEST(JSONBinPack_OutputStream, varint_300) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(300);
   EXPECT_BYTES(stream, {0xac, 0x02});
 }
 
 TEST(JSONBinPack_OutputStream, varint_50399) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(50399);
   EXPECT_BYTES(stream, {0xdf, 0x89, 0x03});
 }
 
 TEST(JSONBinPack_OutputStream, varint_4294967294) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(4294967294);
   EXPECT_BYTES(stream, {0xfe, 0xff, 0xff, 0xff, 0x0f});
 }
 
 TEST(JSONBinPack_OutputStream, varint_uint64_max) {
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
   const std::uint64_t value = std::numeric_limits<std::uint64_t>::max();
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(value);

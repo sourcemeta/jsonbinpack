@@ -9,18 +9,17 @@
 TEST(JSONBinPack_Decoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream<char> stream{
+  InputByteStream stream{
       0x66, 0x6f, 0x6f, // "foo"
       0x01,             // 1
       0x62, 0x61, 0x72, // "bar"
       0x02              // 2
   };
   Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result =
-      decoder.FIXED_TYPED_ARBITRARY_OBJECT(
-          {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-           std::make_shared<Encoding>(
-               BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+  const auto result = decoder.FIXED_TYPED_ARBITRARY_OBJECT(
+      {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       std::make_shared<Encoding>(
+           BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));
@@ -36,7 +35,7 @@ TEST(JSONBinPack_Decoder,
 TEST(JSONBinPack_Decoder,
      VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream<char> stream{
+  InputByteStream stream{
       0x02,             // length 2
       0x66, 0x6f, 0x6f, // "foo"
       0x01,             // 1
@@ -44,11 +43,10 @@ TEST(JSONBinPack_Decoder,
       0x02              // 2
   };
   Decoder decoder{stream};
-  const sourcemeta::jsontoolkit::JSON result =
-      decoder.VARINT_TYPED_ARBITRARY_OBJECT(
-          {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-           std::make_shared<Encoding>(
-               BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+  const auto result = decoder.VARINT_TYPED_ARBITRARY_OBJECT(
+      {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       std::make_shared<Encoding>(
+           BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));

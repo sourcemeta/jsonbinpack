@@ -11,7 +11,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARBITRARY_OBJECT(
@@ -42,7 +42,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.VARINT_TYPED_ARBITRARY_OBJECT(
