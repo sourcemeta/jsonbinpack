@@ -1,7 +1,6 @@
 add_executable(sourcemeta_jsonbinpack_runtime_unit
   decode_any_test.cc
   decode_array_test.cc
-  decode_enum_test.cc
   decode_integer_test.cc
   decode_number_test.cc
   decode_object_test.cc
@@ -12,7 +11,6 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   encode_any_test.cc
   encode_array_test.cc
   encode_context_test.cc
-  encode_enum_test.cc
   encode_integer_test.cc
   encode_number_test.cc
   encode_object_test.cc
@@ -26,7 +24,6 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   encoding_traits_test.cc
   v1_any_loader_test.cc
   v1_array_loader_test.cc
-  v1_enum_loader_test.cc
   v1_integer_loader_test.cc
   v1_number_loader_test.cc
   v1_string_loader_test.cc)
