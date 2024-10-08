@@ -10,6 +10,7 @@ noa_library(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
     input_stream.cc
     output_stream.cc
     varint.h
+    unreachable.h
 
     loader.cc
     loader_v1_any.h

@@ -3,6 +3,8 @@
 
 #include <sourcemeta/jsonbinpack/runtime_plan_wrap.h>
 
+#include "unreachable.h"
+
 #include <cassert> // assert
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint64_t
 
@@ -84,8 +86,7 @@ auto Decoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
     }
 
     // We should never get here. If so, it is definitely a bug
-    assert(false);
-    std::abort();
+    unreachable();
   } else {
     switch (type) {
       case TYPE_POSITIVE_INTEGER_BYTE:
@@ -142,8 +143,7 @@ auto Decoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
     }
 
     // We should never get here. If so, it is definitely a bug
-    assert(false);
-    std::abort();
+    unreachable();
   }
 }
 
