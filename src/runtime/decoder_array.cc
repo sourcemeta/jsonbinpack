@@ -16,7 +16,7 @@ auto Decoder::FIXED_TYPED_ARRAY(const struct FIXED_TYPED_ARRAY &options)
     const Plan &encoding{prefix_encodings > index
                              ? options.prefix_encodings[index].value
                              : options.encoding->value};
-    result.push_back(this->decode(encoding));
+    result.push_back(this->read(encoding));
   }
 
   assert(result.size() == options.size);

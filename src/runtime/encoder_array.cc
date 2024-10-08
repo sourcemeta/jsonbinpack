@@ -18,7 +18,7 @@ auto Encoder::FIXED_TYPED_ARRAY(const sourcemeta::jsontoolkit::JSON &document,
     const Plan &encoding{prefix_encodings > index
                              ? options.prefix_encodings[index].value
                              : options.encoding->value};
-    this->encode(document.at(index), encoding);
+    this->write(document.at(index), encoding);
   }
 }
 

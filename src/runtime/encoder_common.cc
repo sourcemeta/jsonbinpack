@@ -8,8 +8,8 @@ namespace sourcemeta::jsonbinpack {
 
 Encoder::Encoder(Stream &output) : BasicEncoder{output} {}
 
-auto Encoder::encode(const sourcemeta::jsontoolkit::JSON &document,
-                     const Plan &encoding) -> void {
+auto Encoder::write(const sourcemeta::jsontoolkit::JSON &document,
+                    const Plan &encoding) -> void {
   switch (encoding.index()) {
 #define HANDLE_ENCODING(index, name)                                           \
   case (index):                                                                \

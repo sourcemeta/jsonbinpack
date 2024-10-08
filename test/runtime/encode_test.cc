@@ -10,6 +10,6 @@ TEST(JSONBinPack_Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   OutputByteStream<char> stream{};
   Encoder encoder{stream};
   BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{-5, -1, 1};
-  encoder.encode(document, options);
+  encoder.write(document, options);
   EXPECT_BYTES(stream, {0x00});
 }

@@ -25,7 +25,7 @@ auto main() -> int {
 
   const sourcemeta::jsontoolkit::JSON instance{5};
   sourcemeta::jsonbinpack::Encoder encoder{std::cout};
-  encoder.encode(instance, plan);
+  encoder.write(instance, plan);
   std::cout << std::endl;
   return EXIT_SUCCESS;
 }

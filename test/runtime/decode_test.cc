@@ -10,7 +10,7 @@ TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   InputByteStream<char> stream{0x00};
   Decoder decoder{stream};
   BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{-5, -1, 1};
-  const sourcemeta::jsontoolkit::JSON result = decoder.decode(options);
+  const sourcemeta::jsontoolkit::JSON result = decoder.read(options);
   const sourcemeta::jsontoolkit::JSON expected{-5};
   EXPECT_EQ(result, expected);
 }
