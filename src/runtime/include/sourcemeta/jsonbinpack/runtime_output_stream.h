@@ -5,8 +5,6 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <sourcemeta/jsonbinpack/runtime_encoder_context.h>
-
 #include <cstdint> // std::uint8_t, std::uint16_t, std::uint64_t
 #include <ostream> // std::basic_ostream
 
@@ -30,11 +28,9 @@ public:
   auto put_varint_zigzag(const std::int64_t value) -> void;
   auto put_string_utf8(const sourcemeta::jsontoolkit::JSON::String &string,
                        const std::uint64_t length) -> void;
-  auto context() -> Context &;
 
 private:
   Stream &stream;
-  Context context_;
 };
 
 } // namespace sourcemeta::jsonbinpack

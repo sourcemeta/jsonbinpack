@@ -108,7 +108,7 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
   } else if (document.is_string()) {
     const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{document.byte_size()};
-    const bool is_shared{this->context().has(value, Context::Type::Standalone)};
+    const bool is_shared{this->context_.has(value, Context::Type::Standalone)};
     if (size < uint_max<5>) {
       const std::uint8_t type{is_shared ? TYPE_SHARED_STRING : TYPE_STRING};
       this->put_byte(
@@ -116,10 +116,10 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
       if (is_shared) {
         this->put_varint(
             this->position() -
-            this->context().offset(value, Context::Type::Standalone));
+            this->context_.offset(value, Context::Type::Standalone));
       } else {
-        this->context().record(value, this->position(),
-                               Context::Type::Standalone);
+        this->context_.record(value, this->position(),
+                              Context::Type::Standalone);
         this->put_string_utf8(value, size);
       }
     } else if (size >= uint_max<5> && size < uint_max<5> * 2 && !is_shared) {
