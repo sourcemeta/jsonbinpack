@@ -6,7 +6,7 @@
 
 namespace sourcemeta::jsonbinpack {
 
-Encoder::Encoder(Stream &output) : BasicEncoder{output} {}
+Encoder::Encoder(Stream &output) : OutputStream{output} {}
 
 auto Encoder::write(const sourcemeta::jsontoolkit::JSON &document,
                     const Plan &encoding) -> void {
