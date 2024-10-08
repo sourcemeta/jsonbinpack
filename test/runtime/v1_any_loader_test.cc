@@ -15,8 +15,7 @@ TEST(JSONBinPack_Loader_v1, BYTE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<BYTE_CHOICE_INDEX>(result));
   EXPECT_EQ(std::get<BYTE_CHOICE_INDEX>(result).choices.size(), 3);
@@ -38,8 +37,7 @@ TEST(JSONBinPack_Loader_v1, LARGE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<LARGE_CHOICE_INDEX>(result));
   EXPECT_EQ(std::get<LARGE_CHOICE_INDEX>(result).choices.size(), 3);
@@ -61,8 +59,7 @@ TEST(JSONBinPack_Loader_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<TOP_LEVEL_BYTE_CHOICE_INDEX>(result));
   EXPECT_EQ(std::get<TOP_LEVEL_BYTE_CHOICE_INDEX>(result).choices.size(), 3);
@@ -84,8 +81,7 @@ TEST(JSONBinPack_Loader_v1, CONST_NONE_scalar) {
     }
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<CONST_NONE>(result));
   EXPECT_EQ(std::get<CONST_NONE>(result).value,
@@ -100,8 +96,7 @@ TEST(JSONBinPack_Loader_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
     "binpackOptions": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<ANY_PACKED_TYPE_TAG_BYTE_PREFIX>(result));
 }

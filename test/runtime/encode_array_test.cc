@@ -12,7 +12,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ 0, 1, 2 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARRAY(
@@ -27,7 +27,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ 0, 1, true ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -49,7 +49,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{
       sourcemeta::jsontoolkit::JSON::Array{}};
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARRAY(
@@ -65,7 +65,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -86,7 +86,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -106,7 +106,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -126,7 +126,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -147,7 +147,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -166,7 +166,7 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -185,7 +185,7 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -205,7 +205,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, true ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -224,7 +224,7 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, false, 5 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));
@@ -243,7 +243,7 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document =
       sourcemeta::jsontoolkit::parse("[ true, \"foo\", 1000 ]");
-  OutputByteStream<char> stream{};
+  OutputByteStream stream{};
 
   std::vector<sourcemeta::jsontoolkit::JSON> choices;
   choices.push_back(sourcemeta::jsontoolkit::JSON(false));

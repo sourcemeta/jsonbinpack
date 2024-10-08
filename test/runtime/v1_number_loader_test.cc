@@ -13,8 +13,7 @@ TEST(JSONBinPack_Loader_v1, DOUBLE_VARINT_TUPLE) {
     "binpackOptions": {}
   })JSON");
 
-  const sourcemeta::jsonbinpack::Encoding result{
-      sourcemeta::jsonbinpack::load(input)};
+  const auto result{sourcemeta::jsonbinpack::load(input)};
   using namespace sourcemeta::jsonbinpack;
   EXPECT_TRUE(std::holds_alternative<DOUBLE_VARINT_TUPLE>(result));
 }
