@@ -13,3 +13,14 @@ TEST(JSONBinPack_Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   encoder.write(document, options);
   EXPECT_BYTES(stream, {0x00});
 }
+
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
+  using namespace sourcemeta::jsonbinpack;
+  OutputByteStream stream{};
+  Encoder encoder{stream};
+  ANY_PACKED_TYPE_TAG_BYTE_PREFIX options;
+  encoder.write(sourcemeta::jsontoolkit::JSON{1}, options);
+  encoder.write(sourcemeta::jsontoolkit::JSON{2}, options);
+  encoder.write(sourcemeta::jsontoolkit::JSON{3}, options);
+  EXPECT_BYTES(stream, {0x15, 0x1d, 0x25});
+}
