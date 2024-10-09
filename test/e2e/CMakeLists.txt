@@ -18,7 +18,7 @@ macro(add_jsonbinpack_e2e_test name)
   # TODO: Test schema-driven too
 endmacro()
 
-# TODO: This case regresses on real number encoding sizes
+# TODO: This case regresses. Should be 10
 add_jsonbinpack_e2e_test(circleciblank)
 add_jsonbinpack_e2e_test(circlecimatrix)
 add_jsonbinpack_e2e_test(commitlint)
@@ -26,7 +26,7 @@ add_jsonbinpack_e2e_test(commitlintbasic)
 add_jsonbinpack_e2e_test(epr)
 add_jsonbinpack_e2e_test(eslintrc)
 add_jsonbinpack_e2e_test(esmrc)
-# TODO: This case regresses on real number encoding sizes
+# TODO: This case regresses. Should be 117
 add_jsonbinpack_e2e_test(geojson)
 add_jsonbinpack_e2e_test(githubfundingblank)
 add_jsonbinpack_e2e_test(githubworkflow)
@@ -34,7 +34,9 @@ add_jsonbinpack_e2e_test(gruntcontribclean)
 add_jsonbinpack_e2e_test(imageoptimizerwebjob)
 add_jsonbinpack_e2e_test(jsonereversesort)
 add_jsonbinpack_e2e_test(jsonesort)
+# TODO: This case regresses. Should be 512
 add_jsonbinpack_e2e_test(jsonfeed)
+# TODO: This case regresses. Should be 2612
 add_jsonbinpack_e2e_test(jsonresume)
 add_jsonbinpack_e2e_test(mixed-bounded-object)
 add_jsonbinpack_e2e_test(netcoreproject)
@@ -43,6 +45,7 @@ add_jsonbinpack_e2e_test(openweathermap)
 add_jsonbinpack_e2e_test(openweatherroadrisk)
 add_jsonbinpack_e2e_test(ox-test)
 add_jsonbinpack_e2e_test(packagejson)
+# TODO: This case regresses. Should be 791
 add_jsonbinpack_e2e_test(packagejsonlintrc)
 add_jsonbinpack_e2e_test(sapcloudsdkpipeline)
 add_jsonbinpack_e2e_test(travisnotifications)
