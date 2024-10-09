@@ -17,15 +17,15 @@ auto main() -> int {
 
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver,
-      "https://json-schema.org/draft/2020-12/schema");
+      sourcemeta::jsontoolkit::official_resolver);
 
-  const sourcemeta::jsonbinpack::Encoding plan{
+  const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::load(schema)};
+  sourcemeta::jsonbinpack::Encoder encoder{std::cout};
 
   const sourcemeta::jsontoolkit::JSON instance{5};
-  sourcemeta::jsonbinpack::Encoder encoder{std::cout};
-  encoder.write(instance, plan);
+  encoder.write(instance, encoding);
+
   std::cout << std::endl;
   return EXIT_SUCCESS;
 }
