@@ -21,7 +21,7 @@ auto Encoder::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
   const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
   const auto size{value.size()};
   assert(document.size() == size);
-  const auto shared{this->context_.find(value, Context::Type::Standalone)};
+  const auto shared{this->cache_.find(value, Cache::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (shared.has_value()) {
@@ -35,7 +35,7 @@ auto Encoder::FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(
   if (shared.has_value()) {
     this->put_varint(this->position() - shared.value());
   } else {
-    this->context_.record(value, this->position(), Context::Type::Standalone);
+    this->cache_.record(value, this->position(), Cache::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -48,7 +48,7 @@ auto Encoder::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
   const auto size{value.size()};
   assert(document.size() == size);
   assert(size <= options.maximum);
-  const auto shared{this->context_.find(value, Context::Type::Standalone)};
+  const auto shared{this->cache_.find(value, Cache::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (shared.has_value()) {
@@ -62,7 +62,7 @@ auto Encoder::ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(
   if (shared.has_value()) {
     this->put_varint(this->position() - shared.value());
   } else {
-    this->context_.record(value, this->position(), Context::Type::Standalone);
+    this->cache_.record(value, this->position(), Cache::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -77,7 +77,7 @@ auto Encoder::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
   assert(options.minimum <= options.maximum);
   assert(is_byte(options.maximum - options.minimum + 1));
   assert(is_within(size, options.minimum, options.maximum));
-  const auto shared{this->context_.find(value, Context::Type::Standalone)};
+  const auto shared{this->cache_.find(value, Cache::Type::Standalone)};
 
   // (1) Write 0x00 if shared, else do nothing
   if (shared.has_value()) {
@@ -91,7 +91,7 @@ auto Encoder::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
   if (shared.has_value()) {
     this->put_varint(this->position() - shared.value());
   } else {
-    this->context_.record(value, this->position(), Context::Type::Standalone);
+    this->cache_.record(value, this->position(), Cache::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
@@ -127,22 +127,22 @@ auto Encoder::PREFIX_VARINT_LENGTH_STRING_SHARED(
   const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
 
   const auto shared{
-      this->context_.find(value, Context::Type::PrefixLengthVarintPlusOne)};
+      this->cache_.find(value, Cache::Type::PrefixLengthVarintPlusOne)};
   if (shared.has_value()) {
     const auto new_offset{this->position()};
     this->put_byte(0);
     this->put_varint(this->position() - shared.value());
     // Bump the context cache for locality purposes
-    this->context_.record(value, new_offset,
-                          Context::Type::PrefixLengthVarintPlusOne);
+    this->cache_.record(value, new_offset,
+                        Cache::Type::PrefixLengthVarintPlusOne);
   } else {
     const auto size{value.size()};
     assert(document.size() == size);
-    this->context_.record(value, this->position(),
-                          Context::Type::PrefixLengthVarintPlusOne);
+    this->cache_.record(value, this->position(),
+                        Cache::Type::PrefixLengthVarintPlusOne);
     this->put_varint(size + 1);
     // Also record a standalone variant of it
-    this->context_.record(value, this->position(), Context::Type::Standalone);
+    this->cache_.record(value, this->position(), Cache::Type::Standalone);
     this->put_string_utf8(value, size);
   }
 }
