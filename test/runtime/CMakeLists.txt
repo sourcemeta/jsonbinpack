@@ -10,7 +10,7 @@ add_executable(sourcemeta_jsonbinpack_runtime_unit
   decode_utils.h
   encode_any_test.cc
   encode_array_test.cc
-  encode_context_test.cc
+  encode_cache_test.cc
   encode_integer_test.cc
   encode_number_test.cc
   encode_object_test.cc

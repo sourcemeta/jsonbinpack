@@ -110,7 +110,7 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
   } else if (document.is_string()) {
     const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{document.byte_size()};
-    const auto shared{this->context_.find(value, Context::Type::Standalone)};
+    const auto shared{this->cache_.find(value, Cache::Type::Standalone)};
     if (size < uint_max<5>) {
       const std::uint8_t type{shared.has_value() ? TYPE_SHARED_STRING
                                                  : TYPE_STRING};
@@ -119,8 +119,7 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
       if (shared.has_value()) {
         this->put_varint(this->position() - shared.value());
       } else {
-        this->context_.record(value, this->position(),
-                              Context::Type::Standalone);
+        this->cache_.record(value, this->position(), Cache::Type::Standalone);
         this->put_string_utf8(value, size);
       }
     } else if (size >= uint_max<5> && size < uint_max<5> * 2 &&
