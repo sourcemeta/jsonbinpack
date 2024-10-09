@@ -110,26 +110,26 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
   } else if (document.is_string()) {
     const sourcemeta::jsontoolkit::JSON::String value{document.to_string()};
     const auto size{document.byte_size()};
-    const bool is_shared{this->context_.has(value, Context::Type::Standalone)};
+    const auto shared{this->context_.find(value, Context::Type::Standalone)};
     if (size < uint_max<5>) {
-      const std::uint8_t type{is_shared ? TYPE_SHARED_STRING : TYPE_STRING};
+      const std::uint8_t type{shared.has_value() ? TYPE_SHARED_STRING
+                                                 : TYPE_STRING};
       this->put_byte(
           static_cast<std::uint8_t>(type | ((size + 1) << type_size)));
-      if (is_shared) {
-        this->put_varint(
-            this->position() -
-            this->context_.offset(value, Context::Type::Standalone));
+      if (shared.has_value()) {
+        this->put_varint(this->position() - shared.value());
       } else {
         this->context_.record(value, this->position(),
                               Context::Type::Standalone);
         this->put_string_utf8(value, size);
       }
-    } else if (size >= uint_max<5> && size < uint_max<5> * 2 && !is_shared) {
+    } else if (size >= uint_max<5> && size < uint_max<5> * 2 &&
+               !shared.has_value()) {
       this->put_byte(static_cast<std::uint8_t>(
           TYPE_LONG_STRING | ((size - uint_max<5>) << type_size)));
       this->put_string_utf8(value, size);
     } else if (size >= 2 << (SUBTYPE_LONG_STRING_BASE_EXPONENT_7 - 1) &&
-               !is_shared) {
+               !shared.has_value()) {
       const std::uint8_t exponent{closest_smallest_exponent(
           size, 2, SUBTYPE_LONG_STRING_BASE_EXPONENT_7,
           SUBTYPE_LONG_STRING_BASE_EXPONENT_10)};
@@ -141,7 +141,7 @@ auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
       // Exploit the fact that a shared string always starts
       // with an impossible length marker (0) to avoid having
       // to encode an additional tag
-      if (!is_shared) {
+      if (!shared.has_value()) {
         this->put_byte(TYPE_STRING);
       }
 

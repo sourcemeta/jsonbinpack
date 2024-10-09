@@ -6,11 +6,11 @@
 
 #include <sourcemeta/jsontoolkit/json.h>
 
-#include <cassert>   // assert
-#include <iterator>  // std::cbegin, std::cend
-#include <map>       // std::map
-#include <stdexcept> // std::logic_error
-#include <utility>   // std::pair, std::make_pair
+#include <cassert>  // assert
+#include <iterator> // std::cbegin, std::cend
+#include <map>      // std::map
+#include <optional> // std::optional, std::nullopt
+#include <utility>  // std::pair, std::make_pair
 
 // Encoding a shared string has some overhead, such as the
 // shared string marker + the offset, so its not worth
@@ -47,7 +47,8 @@ public:
 
     // If the string already exists, we want to
     // bump the offset for locality purposes.
-    if (this->has(value, type)) {
+    const auto maybe_entry{this->find(value, type)};
+    if (maybe_entry.has_value()) {
       const auto key{std::make_pair(value, type)};
       const auto previous_offset{this->strings[key]};
       if (offset > previous_offset) {
@@ -79,16 +80,14 @@ public:
     this->offsets.erase(iterator);
   }
 
-  auto has(const sourcemeta::jsontoolkit::JSON::String &value,
-           const Type type) const -> bool {
-    return this->strings.contains(std::make_pair(value, type));
-  }
+  auto find(const sourcemeta::jsontoolkit::JSON::String &value,
+            const Type type) const -> std::optional<std::uint64_t> {
+    const auto result{this->strings.find(std::make_pair(value, type))};
+    if (result == this->strings.cend()) {
+      return std::nullopt;
+    }
 
-  auto offset(const sourcemeta::jsontoolkit::JSON::String &value,
-              const Type type) const -> std::uint64_t {
-    // This method assumes the value indeed exists for performance reasons
-    assert(this->has(value, type));
-    return this->strings.at(std::make_pair(value, type));
+    return result->second;
   }
 
 private:
