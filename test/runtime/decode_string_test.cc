@@ -37,6 +37,14 @@ TEST(JSONBinPack_Decoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
   EXPECT_EQ(result2, expected);
 }
 
+TEST(JSONBinPack_Decoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_1) {
+  InputByteStream stream{0x04, 0x66, 0x6f, 0xc3, 0xb8};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const auto result = decoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({1});
+  const sourcemeta::jsontoolkit::JSON expected{"foø"};
+  EXPECT_EQ(result, expected);
+}
+
 TEST(JSONBinPack_Decoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
   InputByteStream stream{0x02, 0x66, 0x6f, 0x6f};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
@@ -59,6 +67,14 @@ TEST(JSONBinPack_Decoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   const sourcemeta::jsontoolkit::JSON result2 =
       decoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED({5});
   EXPECT_EQ(result2, expected);
+}
+
+TEST(JSONBinPack_Decoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
+  InputByteStream stream{0x01, 0x66, 0x6f, 0xc3, 0xb8};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const auto result = decoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED({4});
+  const sourcemeta::jsontoolkit::JSON expected{"foø"};
+  EXPECT_EQ(result, expected);
 }
 
 TEST(JSONBinPack_Decoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
@@ -92,6 +108,14 @@ TEST(JSONBinPack_Decoder,
   const sourcemeta::jsontoolkit::JSON result2 =
       decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({3, 100});
   EXPECT_EQ(result2, expected);
+}
+
+TEST(JSONBinPack_Decoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
+  InputByteStream stream{0x05, 0x66, 0x6f, 0xc3, 0xb8};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({0, 6});
+  const sourcemeta::jsontoolkit::JSON expected{"foø"};
+  EXPECT_EQ(result, expected);
 }
 
 TEST(JSONBinPack_Decoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
@@ -154,4 +178,12 @@ TEST(JSONBinPack_Decoder,
   const sourcemeta::jsontoolkit::JSON expected{"foo"};
   EXPECT_EQ(result1, expected);
   EXPECT_EQ(result2, expected);
+}
+
+TEST(JSONBinPack_Decoder, PREFIX_VARINT_LENGTH_STRING_SHARED_unicode) {
+  InputByteStream stream{0x05, 0x66, 0x6f, 0xc3, 0xb8};
+  sourcemeta::jsonbinpack::Decoder decoder{stream};
+  const auto result = decoder.PREFIX_VARINT_LENGTH_STRING_SHARED({});
+  const sourcemeta::jsontoolkit::JSON expected{"foø"};
+  EXPECT_EQ(result, expected);
 }

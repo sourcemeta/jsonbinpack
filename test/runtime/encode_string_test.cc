@@ -29,6 +29,14 @@ TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
   EXPECT_BYTES(stream, {0x04, 0x66, 0x6f, 0x6f, 0x00, 0x01, 0x05});
 }
 
+TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_1) {
+  const sourcemeta::jsontoolkit::JSON document{"foø"};
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED(document, {1});
+  EXPECT_BYTES(stream, {0x04, 0x66, 0x6f, 0xc3, 0xb8});
+}
+
 TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
   const sourcemeta::jsontoolkit::JSON document{"foo"};
   OutputByteStream stream{};
@@ -44,6 +52,14 @@ TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {3});
   encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {5});
   EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0x6f, 0x00, 0x03, 0x05});
+}
+
+TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
+  const sourcemeta::jsontoolkit::JSON document{"foø"};
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.ROOF_VARINT_PREFIX_UTF8_STRING_SHARED(document, {4});
+  EXPECT_BYTES(stream, {0x01, 0x66, 0x6f, 0xc3, 0xb8});
 }
 
 TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
@@ -70,6 +86,14 @@ TEST(JSONBinPack_Encoder,
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6});
   encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 100});
   EXPECT_BYTES(stream, {0x04, 0x66, 0x6f, 0x6f, 0x00, 0x01, 0x05});
+}
+
+TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
+  const sourcemeta::jsontoolkit::JSON document{"foø"};
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6});
+  EXPECT_BYTES(stream, {0x05, 0x66, 0x6f, 0xc3, 0xb8});
 }
 
 TEST(JSONBinPack_Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
@@ -143,4 +167,12 @@ TEST(JSONBinPack_Encoder,
                            0x01,             // String length + 1 - 3
                            0x05              // Pointer (6 - 1 = 5)
                        });
+}
+
+TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_unicode) {
+  const sourcemeta::jsontoolkit::JSON document{"foø"};
+  OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.PREFIX_VARINT_LENGTH_STRING_SHARED(document, {});
+  EXPECT_BYTES(stream, {0x05, 0x66, 0x6f, 0xc3, 0xb8});
 }
