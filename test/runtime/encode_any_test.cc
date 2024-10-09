@@ -277,6 +277,32 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
                        });
 }
 
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{3.0};
+  OutputByteStream stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream, {
+                           0x37, // tag: positive real integer byte
+                           0x03  // 3
+                       });
+}
+
+TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::jsontoolkit::JSON document{103.0};
+  OutputByteStream stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_BYTES(stream, {
+                           0x37, // tag: positive real integer byte
+                           0x67  // 103
+                       });
+}
+
 TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::jsontoolkit::JSON document{256};

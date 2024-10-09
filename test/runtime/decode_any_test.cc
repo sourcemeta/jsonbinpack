@@ -262,6 +262,24 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   EXPECT_EQ(result, expected);
 }
 
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream stream{0x37, 0x03};
+  Decoder decoder{stream};
+  const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  const sourcemeta::jsontoolkit::JSON expected{3.0};
+  EXPECT_EQ(result, expected);
+}
+
+TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
+  using namespace sourcemeta::jsonbinpack;
+  InputByteStream stream{0x37, 0x67};
+  Decoder decoder{stream};
+  const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  const sourcemeta::jsontoolkit::JSON expected{103.0};
+  EXPECT_EQ(result, expected);
+}
+
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
   InputByteStream stream{0x1f, 0x80, 0x02};
