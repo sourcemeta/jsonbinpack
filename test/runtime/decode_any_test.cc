@@ -267,7 +267,11 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
   InputByteStream stream{0x37, 0x03};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  EXPECT_TRUE(result.is_real());
+  EXPECT_TRUE(result.is_integer_real());
   const sourcemeta::jsontoolkit::JSON expected{3.0};
+  EXPECT_TRUE(expected.is_real());
+  EXPECT_TRUE(expected.is_integer_real());
   EXPECT_EQ(result, expected);
 }
 
@@ -276,7 +280,11 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
   InputByteStream stream{0x37, 0x67};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  EXPECT_TRUE(result.is_real());
+  EXPECT_TRUE(result.is_integer_real());
   const sourcemeta::jsontoolkit::JSON expected{103.0};
+  EXPECT_TRUE(expected.is_real());
+  EXPECT_TRUE(expected.is_integer_real());
   EXPECT_EQ(result, expected);
 }
 
