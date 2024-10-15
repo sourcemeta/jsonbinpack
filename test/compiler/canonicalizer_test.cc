@@ -4,24 +4,19 @@
 #include <sourcemeta/jsontoolkit/json.h>
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 
-#include <future>   // std::promise, std::future
 #include <optional> // std::optional
 #include <string>   // std::string
 
 static auto test_resolver(std::string_view identifier)
-    -> std::future<std::optional<sourcemeta::jsontoolkit::JSON>> {
-  std::promise<std::optional<sourcemeta::jsontoolkit::JSON>> promise;
+    -> std::optional<sourcemeta::jsontoolkit::JSON> {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
-    promise.set_value(sourcemeta::jsontoolkit::parse(R"JSON({
+    return sourcemeta::jsontoolkit::parse(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
-      })JSON"));
+      })JSON");
   } else {
-    promise.set_value(
-        sourcemeta::jsontoolkit::official_resolver(identifier).get());
+    return sourcemeta::jsontoolkit::official_resolver(identifier);
   }
-
-  return promise.get_future();
 }
 
 TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
