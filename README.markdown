@@ -20,15 +20,3 @@ Refer to the project website for documentation:
 
 Do you have any questions? Open a ticket on [GitHub
 Discussions](https://github.com/sourcemeta/jsonbinpack/discussions)!
-
-Commercial Use
---------------
-
-This project is governed by the [AGPL-3.0](./LICENSE) copyleft license and our
-[Contribution
-Agreement](https://github.com/sourcemeta/.github/blob/main/CONTRIBUTING.md). To
-ensure the sustainability of the project, you can freely make use of this
-software as long the outcome is distributed under the same license. Otherwise,
-you must obtain a [commercial license](./LICENSE-COMMERCIAL) that removes such
-restrictions. Read more about our licensing approach
-[here](https://www.sourcemeta.com/licensing/).
