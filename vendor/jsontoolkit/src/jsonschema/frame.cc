@@ -3,11 +3,12 @@
 #include <sourcemeta/jsontoolkit/jsonschema.h>
 #include <sourcemeta/jsontoolkit/uri.h>
 
-#include <algorithm>  // std::sort
+#include <algorithm>  // std::sort, std::all_of
 #include <cassert>    // assert
 #include <functional> // std::less
 #include <map>        // std::map
 #include <optional>   // std::optional
+#include <set>        // std::set
 #include <sstream>    // std::ostringstream
 #include <utility>    // std::pair, std::move
 #include <vector>     // std::vector
@@ -90,24 +91,29 @@ static auto fragment_string(const sourcemeta::jsontoolkit::URI &uri)
   return std::nullopt;
 }
 
-static auto store(sourcemeta::jsontoolkit::ReferenceFrame &frame,
+static auto store(sourcemeta::jsontoolkit::Frame::Locations &frame,
                   const sourcemeta::jsontoolkit::ReferenceType type,
-                  const sourcemeta::jsontoolkit::ReferenceEntryType entry_type,
+                  const sourcemeta::jsontoolkit::Frame::LocationType entry_type,
                   const std::string &uri,
                   const std::optional<std::string> &root_id,
                   const std::string &base_id,
                   const sourcemeta::jsontoolkit::Pointer &pointer_from_root,
                   const sourcemeta::jsontoolkit::Pointer &pointer_from_base,
-                  const std::string &dialect,
+                  const std::string &dialect, const std::string &base_dialect,
                   const bool ignore_if_present = false) -> void {
   const auto canonical{
       sourcemeta::jsontoolkit::URI{uri}.canonicalize().recompose()};
-  const auto inserted{
-      frame
-          .insert({{type, canonical},
-                   {entry_type, root_id, base_id, pointer_from_root,
-                    pointer_from_base, dialect}})
-          .second};
+  const auto inserted{frame
+                          .insert({{type, canonical},
+                                   {entry_type,
+                                    root_id,
+                                    base_id,
+                                    pointer_from_root,
+                                    pointer_from_base,
+                                    dialect,
+                                    base_dialect,
+                                    {}}})
+                          .second};
   if (!ignore_if_present && !inserted) {
     std::ostringstream error;
     error << "Schema identifier already exists: " << uri;
@@ -120,18 +126,17 @@ struct InternalEntry {
   const std::optional<std::string> id;
 };
 
-// TODO: Revise this function, try to simplify it, and avoid redundant
-// operations (like resolving schemas) by adding relevant overloads
-// for the functions it consumes.
-auto sourcemeta::jsontoolkit::frame(
-    const sourcemeta::jsontoolkit::JSON &schema,
-    sourcemeta::jsontoolkit::ReferenceFrame &frame,
-    sourcemeta::jsontoolkit::ReferenceMap &references,
-    const sourcemeta::jsontoolkit::SchemaWalker &walker,
-    const sourcemeta::jsontoolkit::SchemaResolver &resolver,
-    const std::optional<std::string> &default_dialect,
-    const std::optional<std::string> &default_id) -> void {
+auto internal_analyse(const sourcemeta::jsontoolkit::JSON &schema,
+                      sourcemeta::jsontoolkit::Frame::Locations &frame,
+                      sourcemeta::jsontoolkit::Frame::References &references,
+                      const sourcemeta::jsontoolkit::SchemaWalker &walker,
+                      const sourcemeta::jsontoolkit::SchemaResolver &resolver,
+                      const std::optional<std::string> &default_dialect,
+                      const std::optional<std::string> &default_id) -> void {
+  using namespace sourcemeta::jsontoolkit;
+
   std::vector<InternalEntry> subschema_entries;
+  std::set<Pointer> subschemas;
   std::map<sourcemeta::jsontoolkit::Pointer, std::vector<std::string>>
       base_uris;
   std::map<sourcemeta::jsontoolkit::Pointer, std::vector<std::string>>
@@ -139,7 +144,9 @@ auto sourcemeta::jsontoolkit::frame(
 
   const std::optional<std::string> root_base_dialect{
       sourcemeta::jsontoolkit::base_dialect(schema, resolver, default_dialect)};
-  assert(root_base_dialect.has_value());
+  if (!root_base_dialect.has_value()) {
+    throw SchemaError("Cannot determine the base dialect of the schema");
+  }
 
   const std::optional<std::string> root_id{sourcemeta::jsontoolkit::identify(
       schema, root_base_dialect.value(), default_id)};
@@ -154,10 +161,11 @@ auto sourcemeta::jsontoolkit::frame(
                                        default_id.has_value() &&
                                        root_id.value() != default_id.value()};
   if (has_explicit_different_id) {
-    store(frame, ReferenceType::Static, ReferenceEntryType::Resource,
+    store(frame, ReferenceType::Static, Frame::LocationType::Resource,
           default_id.value(), root_id.value(), root_id.value(),
           sourcemeta::jsontoolkit::empty_pointer,
-          sourcemeta::jsontoolkit::empty_pointer, root_dialect.value());
+          sourcemeta::jsontoolkit::empty_pointer, root_dialect.value(),
+          root_base_dialect.value());
     base_uris.insert(
         {sourcemeta::jsontoolkit::empty_pointer, {default_id.value()}});
   }
@@ -178,6 +186,7 @@ auto sourcemeta::jsontoolkit::frame(
 
     // Store information
     subschema_entries.emplace_back(InternalEntry{entry, std::move(id)});
+    subschemas.insert(entry.pointer);
   }
 
   for (const auto &entry : subschema_entries) {
@@ -210,15 +219,17 @@ auto sourcemeta::jsontoolkit::frame(
           }
 
           const bool maybe_relative_is_absolute{maybe_relative.is_absolute()};
-          maybe_relative.resolve_from_if_absolute(base);
+          maybe_relative.try_resolve_from(base);
           const std::string new_id{maybe_relative.recompose()};
 
           if (!maybe_relative_is_absolute ||
               !frame.contains({ReferenceType::Static, new_id})) {
-            store(frame, ReferenceType::Static, ReferenceEntryType::Resource,
+            assert(entry.common.base_dialect.has_value());
+            store(frame, ReferenceType::Static, Frame::LocationType::Resource,
                   new_id, root_id, new_id, entry.common.pointer,
                   sourcemeta::jsontoolkit::empty_pointer,
-                  entry.common.dialect.value());
+                  entry.common.dialect.value(),
+                  entry.common.base_dialect.value());
           }
 
           if (base_uris.contains(entry.common.pointer)) {
@@ -238,16 +249,17 @@ auto sourcemeta::jsontoolkit::frame(
       const auto nearest_bases{
           find_nearest_bases(base_uris, entry.common.pointer, entry.id)};
       if (!nearest_bases.first.empty()) {
-        metaschema.resolve_from_if_absolute(nearest_bases.first.front());
+        metaschema.try_resolve_from(nearest_bases.first.front());
       }
 
       metaschema.canonicalize();
       const std::string destination{metaschema.recompose()};
       assert(entry.common.value.defines("$schema"));
-      references.insert(
-          {{ReferenceType::Static, entry.common.pointer.concat({"$schema"})},
-           {destination, metaschema.recompose_without_fragment(),
-            fragment_string(metaschema)}});
+      references.insert_or_assign(
+          {ReferenceType::Static, entry.common.pointer.concat({"$schema"})},
+          Frame::ReferencesEntry{destination,
+                                 metaschema.recompose_without_fragment(),
+                                 fragment_string(metaschema)});
     }
 
     // Handle schema anchors
@@ -263,26 +275,29 @@ auto sourcemeta::jsontoolkit::frame(
 
         if (type == sourcemeta::jsontoolkit::AnchorType::Static ||
             type == sourcemeta::jsontoolkit::AnchorType::All) {
-          store(frame, ReferenceType::Static, ReferenceEntryType::Anchor,
+          store(frame, ReferenceType::Static, Frame::LocationType::Anchor,
                 relative_anchor_uri, root_id, "", entry.common.pointer,
                 entry.common.pointer.resolve_from(bases.second),
-                entry.common.dialect.value());
+                entry.common.dialect.value(),
+                entry.common.base_dialect.value());
         }
 
         if (type == sourcemeta::jsontoolkit::AnchorType::Dynamic ||
             type == sourcemeta::jsontoolkit::AnchorType::All) {
-          store(frame, ReferenceType::Dynamic, ReferenceEntryType::Anchor,
+          store(frame, ReferenceType::Dynamic, Frame::LocationType::Anchor,
                 relative_anchor_uri, root_id, "", entry.common.pointer,
                 entry.common.pointer.resolve_from(bases.second),
-                entry.common.dialect.value());
+                entry.common.dialect.value(),
+                entry.common.base_dialect.value());
 
           // Register a dynamic anchor as a static anchor if possible too
           if (entry.common.vocabularies.contains(
                   "https://json-schema.org/draft/2020-12/vocab/core")) {
-            store(frame, ReferenceType::Static, ReferenceEntryType::Anchor,
+            store(frame, ReferenceType::Static, Frame::LocationType::Anchor,
                   relative_anchor_uri, root_id, "", entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
-                  entry.common.dialect.value(), true);
+                  entry.common.dialect.value(),
+                  entry.common.base_dialect.value(), true);
           }
         }
       } else {
@@ -309,28 +324,31 @@ auto sourcemeta::jsontoolkit::frame(
           if (type == sourcemeta::jsontoolkit::AnchorType::Static ||
               type == sourcemeta::jsontoolkit::AnchorType::All) {
             store(frame, sourcemeta::jsontoolkit::ReferenceType::Static,
-                  ReferenceEntryType::Anchor, anchor_uri, root_id, base_string,
+                  Frame::LocationType::Anchor, anchor_uri, root_id, base_string,
                   entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
-                  entry.common.dialect.value());
+                  entry.common.dialect.value(),
+                  entry.common.base_dialect.value());
           }
 
           if (type == sourcemeta::jsontoolkit::AnchorType::Dynamic ||
               type == sourcemeta::jsontoolkit::AnchorType::All) {
             store(frame, sourcemeta::jsontoolkit::ReferenceType::Dynamic,
-                  ReferenceEntryType::Anchor, anchor_uri, root_id, base_string,
+                  Frame::LocationType::Anchor, anchor_uri, root_id, base_string,
                   entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
-                  entry.common.dialect.value());
+                  entry.common.dialect.value(),
+                  entry.common.base_dialect.value());
 
             // Register a dynamic anchor as a static anchor if possible too
             if (entry.common.vocabularies.contains(
                     "https://json-schema.org/draft/2020-12/vocab/core")) {
               store(frame, sourcemeta::jsontoolkit::ReferenceType::Static,
-                    ReferenceEntryType::Anchor, anchor_uri, root_id,
+                    Frame::LocationType::Anchor, anchor_uri, root_id,
                     base_string, entry.common.pointer,
                     entry.common.pointer.resolve_from(bases.second),
-                    entry.common.dialect.value(), true);
+                    entry.common.dialect.value(),
+                    entry.common.base_dialect.value(), true);
             }
           }
 
@@ -358,7 +376,7 @@ auto sourcemeta::jsontoolkit::frame(
       auto relative_pointer_uri{
           sourcemeta::jsontoolkit::to_uri(pointer.resolve_from(base.second))};
       if (!base.first.empty()) {
-        relative_pointer_uri.resolve_from_if_absolute({base.first});
+        relative_pointer_uri.try_resolve_from({base.first});
       }
 
       relative_pointer_uri.canonicalize();
@@ -368,10 +386,24 @@ auto sourcemeta::jsontoolkit::frame(
         const auto nearest_bases{
             find_nearest_bases(base_uris, pointer, base.first)};
         assert(!nearest_bases.first.empty());
-        store(frame, ReferenceType::Static, ReferenceEntryType::Pointer, result,
-              root_id, nearest_bases.first.front(), pointer,
-              pointer.resolve_from(nearest_bases.second),
-              dialects.first.front());
+        const auto &current_base{nearest_bases.first.front()};
+        const auto maybe_base_entry{
+            frame.find({ReferenceType::Static, current_base})};
+        const auto current_base_dialect{
+            maybe_base_entry == frame.cend()
+                ? root_base_dialect.value()
+                : maybe_base_entry->second.base_dialect};
+        if (subschemas.contains(pointer)) {
+          store(frame, ReferenceType::Static, Frame::LocationType::Subschema,
+                result, root_id, current_base, pointer,
+                pointer.resolve_from(nearest_bases.second),
+                dialects.first.front(), current_base_dialect);
+        } else {
+          store(frame, ReferenceType::Static, Frame::LocationType::Pointer,
+                result, root_id, current_base, pointer,
+                pointer.resolve_from(nearest_bases.second),
+                dialects.first.front(), current_base_dialect);
+        }
       }
     }
   }
@@ -386,14 +418,15 @@ auto sourcemeta::jsontoolkit::frame(
         sourcemeta::jsontoolkit::URI ref{
             entry.common.value.at("$ref").to_string()};
         if (!nearest_bases.first.empty()) {
-          ref.resolve_from_if_absolute(nearest_bases.first.front());
+          ref.try_resolve_from(nearest_bases.first.front());
         }
 
         ref.canonicalize();
-        references.insert(
-            {{ReferenceType::Static, entry.common.pointer.concat({"$ref"})},
-             {ref.recompose(), ref.recompose_without_fragment(),
-              fragment_string(ref)}});
+        references.insert_or_assign(
+            {ReferenceType::Static, entry.common.pointer.concat({"$ref"})},
+            Frame::ReferencesEntry{ref.recompose(),
+                                   ref.recompose_without_fragment(),
+                                   fragment_string(ref)});
       }
 
       if (entry.common.vocabularies.contains(
@@ -421,10 +454,11 @@ auto sourcemeta::jsontoolkit::frame(
                                       : ReferenceType::Dynamic};
         const sourcemeta::jsontoolkit::URI anchor_uri{
             std::move(anchor_uri_string)};
-        references.insert(
-            {{reference_type, entry.common.pointer.concat({"$recursiveRef"})},
-             {anchor_uri.recompose(), anchor_uri.recompose_without_fragment(),
-              fragment_string(anchor_uri)}});
+        references.insert_or_assign(
+            {reference_type, entry.common.pointer.concat({"$recursiveRef"})},
+            Frame::ReferencesEntry{anchor_uri.recompose(),
+                                   anchor_uri.recompose_without_fragment(),
+                                   fragment_string(anchor_uri)});
       }
 
       if (entry.common.vocabularies.contains(
@@ -453,13 +487,200 @@ auto sourcemeta::jsontoolkit::frame(
                                      (has_fragment &&
                                       maybe_static_frame != frame.end() &&
                                       maybe_dynamic_frame == frame.end())};
-        references.insert(
-            {{behaves_as_static ? ReferenceType::Static
-                                : ReferenceType::Dynamic,
-              entry.common.pointer.concat({"$dynamicRef"})},
-             {std::move(ref_string), ref.recompose_without_fragment(),
-              fragment_string(ref)}});
+        references.insert_or_assign(
+            {behaves_as_static ? ReferenceType::Static : ReferenceType::Dynamic,
+             entry.common.pointer.concat({"$dynamicRef"})},
+            Frame::ReferencesEntry{std::move(ref_string),
+                                   ref.recompose_without_fragment(),
+                                   fragment_string(ref)});
       }
     }
   }
+
+  // A schema is standalone if all references can be resolved within itself
+  const bool standalone{std::all_of(
+      references.cbegin(), references.cend(), [&frame](const auto &reference) {
+        assert(!reference.first.second.empty());
+        assert(reference.first.second.back().is_property());
+        // TODO: This check might need to be more elaborate given
+        // https://github.com/sourcemeta/jsontoolkit/issues/1390
+        return reference.first.second.back().to_property() == "$schema" ||
+               frame.contains(
+                   {ReferenceType::Static, reference.second.destination}) ||
+               frame.contains(
+                   {ReferenceType::Dynamic, reference.second.destination});
+      })};
+
+  if (standalone) {
+    // Find all dynamic anchors
+    std::map<std::string, std::vector<std::string>> dynamic_anchors;
+    for (const auto &entry : frame) {
+      if (entry.first.first != ReferenceType::Dynamic ||
+          entry.second.type != Frame::LocationType::Anchor) {
+        continue;
+      }
+
+      const URI anchor_uri{entry.first.second};
+      const std::string fragment{anchor_uri.fragment().value_or("")};
+      if (!dynamic_anchors.contains(fragment)) {
+        dynamic_anchors.emplace(fragment, std::vector<std::string>{});
+      }
+
+      dynamic_anchors[fragment].push_back(entry.first.second);
+    }
+
+    // If there is a dynamic reference that only has one possible
+    // dynamic anchor destination, then that dynamic reference
+    // is a static reference in disguise
+    std::vector<Frame::References::key_type> to_delete;
+    std::vector<Frame::References::value_type> to_insert;
+    for (const auto &reference : references) {
+      if (reference.first.first != ReferenceType::Dynamic ||
+          !reference.second.fragment.has_value()) {
+        continue;
+      }
+
+      const auto match{dynamic_anchors.find(reference.second.fragment.value())};
+      assert(match != dynamic_anchors.cend());
+      // Otherwise we can assume there is only one possible target for the
+      // dynamic reference
+      if (match->second.size() != 1) {
+        continue;
+      }
+
+      to_delete.push_back(reference.first);
+      const URI new_destination{match->second.front()};
+      to_insert.emplace_back(
+          Frame::References::key_type{ReferenceType::Static,
+                                      reference.first.second},
+          Frame::References::mapped_type{
+              match->second.front(),
+              new_destination.recompose_without_fragment(),
+              fragment_string(new_destination)});
+    }
+
+    // Because we can't mutate a map as we are traversing it
+
+    for (const auto &key : to_delete) {
+      references.erase(key);
+    }
+
+    for (auto &&entry : to_insert) {
+      references.emplace(std::move(entry));
+    }
+  }
+
+  for (const auto &reference : references) {
+    auto match{
+        frame.find({reference.first.first, reference.second.destination})};
+    if (match == frame.cend()) {
+      continue;
+    }
+
+    for (auto &entry : frame) {
+      if (entry.second.pointer != match->second.pointer ||
+          // Don't count the same origin twice
+          std::any_of(entry.second.destination_of.cbegin(),
+                      entry.second.destination_of.cend(),
+                      [&reference](const auto &destination) {
+                        return destination.get() == reference.first;
+                      })) {
+        continue;
+      }
+
+      entry.second.destination_of.emplace_back(reference.first);
+    }
+  }
 }
+
+namespace sourcemeta::jsontoolkit {
+
+auto Frame::analyse(const JSON &schema, const SchemaWalker &walker,
+                    const SchemaResolver &resolver,
+                    const std::optional<std::string> &default_dialect,
+                    const std::optional<std::string> &default_id) -> void {
+  internal_analyse(schema, this->locations_, this->references_, walker,
+                   resolver, default_dialect, default_id);
+}
+
+auto Frame::locations() const noexcept -> const Locations & {
+  return this->locations_;
+}
+
+auto Frame::references() const noexcept -> const References & {
+  return this->references_;
+}
+
+auto Frame::vocabularies(const LocationsEntry &location,
+                         const SchemaResolver &resolver) const
+    -> std::map<std::string, bool> {
+  return sourcemeta::jsontoolkit::vocabularies(resolver, location.base_dialect,
+                                               location.dialect);
+}
+
+auto Frame::uri(const LocationsEntry &location,
+                const Pointer &relative_schema_location) const -> std::string {
+  return to_uri(location.relative_pointer.concat(relative_schema_location),
+                location.base)
+      .recompose();
+}
+
+auto Frame::traverse(const LocationsEntry &location,
+                     const Pointer &relative_schema_location) const
+    -> const LocationsEntry & {
+  const auto new_uri{this->uri(location, relative_schema_location)};
+  const auto static_match{
+      this->locations_.find({ReferenceType::Static, new_uri})};
+  if (static_match != this->locations_.cend()) {
+    return static_match->second;
+  }
+
+  const auto dynamic_match{
+      this->locations_.find({ReferenceType::Dynamic, new_uri})};
+  assert(dynamic_match != this->locations_.cend());
+  return dynamic_match->second;
+}
+
+auto Frame::traverse(const std::string &uri) const
+    -> std::optional<std::reference_wrapper<const LocationsEntry>> {
+  const auto static_result{this->locations_.find({ReferenceType::Static, uri})};
+  if (static_result != this->locations_.cend()) {
+    return static_result->second;
+  }
+
+  const auto dynamic_result{
+      this->locations_.find({ReferenceType::Dynamic, uri})};
+  if (dynamic_result != this->locations_.cend()) {
+    return dynamic_result->second;
+  }
+
+  return std::nullopt;
+}
+
+auto Frame::dereference(const LocationsEntry &location,
+                        const Pointer &relative_schema_location) const
+    -> std::pair<ReferenceType,
+                 std::optional<std::reference_wrapper<const LocationsEntry>>> {
+  const auto effective_location{
+      location.pointer.concat({relative_schema_location})};
+  const auto maybe_reference_entry{
+      this->references_.find({ReferenceType::Static, effective_location})};
+  if (maybe_reference_entry == this->references_.cend()) {
+    // If static dereferencing failed but we know the reference
+    // is dynamic, then report so, but without a location, as by
+    // definition we can't know the destination until at runtime
+    if (this->references_.contains(
+            {ReferenceType::Dynamic, effective_location})) {
+      return {ReferenceType::Dynamic, std::nullopt};
+    }
+
+    return {ReferenceType::Static, std::nullopt};
+  }
+
+  const auto destination{this->locations_.find(
+      {ReferenceType::Static, maybe_reference_entry->second.destination})};
+  assert(destination != this->locations_.cend());
+  return {ReferenceType::Static, destination->second};
+}
+
+} // namespace sourcemeta::jsontoolkit

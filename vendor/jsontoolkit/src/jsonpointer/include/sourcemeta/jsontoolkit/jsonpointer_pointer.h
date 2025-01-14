@@ -19,7 +19,7 @@ namespace sourcemeta::jsontoolkit {
 /// @ingroup jsonpointer
 template <typename PropertyT> class GenericPointer {
 public:
-  using Token = GenericToken<PropertyT>;
+  using Token = GenericToken<PropertyT, Hash>;
   using Value = typename Token::Value;
   using Container = std::vector<Token>;
 
@@ -174,6 +174,18 @@ public:
     return this->data.emplace_back(args...);
   }
 
+  /// Reserve capacity for a JSON Pointer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/jsonpointer.h>
+  ///
+  /// sourcemeta::jsontoolkit::Pointer pointer;
+  /// pointer.reserve(1024);
+  /// ```
+  auto reserve(const typename Container::size_type capacity) -> void {
+    this->data.reserve(capacity);
+  }
+
   /// Push a copy of a JSON Pointer into the back of a JSON Pointer.
   /// For example:
   ///
@@ -202,7 +214,7 @@ public:
       return;
     }
 
-    this->data.reserve(this->data.size() + other.size());
+    this->reserve(this->data.size() + other.size());
     std::copy(other.data.cbegin(), other.data.cend(),
               std::back_inserter(this->data));
   }
@@ -235,7 +247,7 @@ public:
       return;
     }
 
-    this->data.reserve(this->data.size() + other.size());
+    this->reserve(this->data.size() + other.size());
     std::move(other.data.begin(), other.data.end(),
               std::back_inserter(this->data));
   }
@@ -271,15 +283,17 @@ public:
     } else if (other.size() == 1) {
       const auto &token{other.back()};
       if (token.is_property()) {
-        this->data.emplace_back(token.to_property());
+        // We should make sure to re-use the existing hash
+        this->data.emplace_back(token.to_property(), token.property_hash());
       } else {
         this->data.emplace_back(token.to_index());
       }
     } else {
-      this->data.reserve(this->data.size() + other.size());
+      this->reserve(this->data.size() + other.size());
       for (const auto &token : other) {
         if (token.is_property()) {
-          this->data.emplace_back(token.to_property());
+          // We should make sure to re-use the existing hash
+          this->data.emplace_back(token.to_property(), token.property_hash());
         } else {
           this->data.emplace_back(token.to_index());
         }
@@ -449,6 +463,57 @@ public:
     return other.data.size() <= this->data.size() &&
            std::equal(other.data.cbegin(), other.data.cend(),
                       this->data.cbegin());
+  }
+
+  /// Check whether a JSON Pointer plus a given tail starts with another JSON
+  /// Pointer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::Pointer pointer{"foo", "bar"};
+  /// const sourcemeta::jsontoolkit::Pointer::Token tail{"baz"};
+  /// const sourcemeta::jsontoolkit::Pointer prefix{"foo", "bar", "baz"};
+  /// assert(pointer.starts_with(prefix, tail));
+  /// ```
+  auto starts_with(const GenericPointer<PropertyT> &other,
+                   const Token &tail) const -> bool {
+    if (other.size() == this->size() + 1) {
+      assert(!other.empty());
+      return other.starts_with(*this) && other.back() == tail;
+    } else {
+      return this->starts_with(other);
+    }
+  }
+
+  /// Check whether a JSON Pointer starts with the initial part of another JSON
+  /// Pointer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/jsontoolkit/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::jsontoolkit::Pointer pointer{"foo", "bar", "baz"};
+  /// const sourcemeta::jsontoolkit::Pointer prefix{"foo", "bar", "qux"};
+  /// assert(pointer.starts_with_initial(prefix));
+  /// ```
+  auto starts_with_initial(const GenericPointer<PropertyT> &other) const
+      -> bool {
+    const auto prefix_size{other.size()};
+    if (prefix_size == 0) {
+      return true;
+    } else if (this->size() < prefix_size - 1) {
+      return false;
+    }
+
+    for (std::size_t index = 0; index < prefix_size - 1; index++) {
+      if (this->data[index] != other.data[index]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /// Replace a base of a JSON Pointer with another JSON Pointer. For example:
