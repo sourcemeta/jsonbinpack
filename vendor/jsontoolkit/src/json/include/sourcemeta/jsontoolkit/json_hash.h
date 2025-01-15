@@ -47,8 +47,9 @@ template <typename T> struct FastHash {
       // This case is specifically designed to be constant with regards to
       // string length, and to exploit the fact that most JSON objects don't
       // have a lot of entries, so hash collision is not as common
-      return {(size + static_cast<property_hash_type::type>(value.front()) +
-               static_cast<property_hash_type::type>(value.back())) %
+      return {(size +
+               static_cast<typename property_hash_type::type>(value.front()) +
+               static_cast<typename property_hash_type::type>(value.back())) %
               // Make sure the property hash can never exceed 8 bits
               256};
     }
