@@ -340,7 +340,7 @@ auto schema_format_compare(const JSON::String &left, const JSON::String &right)
 /// })JSON");
 ///
 /// sourcemeta::jsontoolkit::relativize(schema,
-///   sourcemeta::jsontoolkit::default_walker,
+///   sourcemeta::jsontoolkit::default_schema_walker,
 ///   sourcemeta::jsontoolkit::official_resolver);
 ///
 /// const sourcemeta::jsontoolkit::JSON expected =
@@ -376,7 +376,7 @@ auto relativize(
 /// })JSON");
 ///
 /// sourcemeta::jsontoolkit::unidentify(schema,
-///   sourcemeta::jsontoolkit::default_walker,
+///   sourcemeta::jsontoolkit::default_schema_walker,
 ///   sourcemeta::jsontoolkit::official_resolver);
 ///
 /// const sourcemeta::jsontoolkit::JSON expected =
