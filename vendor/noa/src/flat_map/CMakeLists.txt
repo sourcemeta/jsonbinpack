@@ -1,5 +1,3 @@
-include(noa)
-
 noa_library(NAMESPACE sourcemeta PROJECT noa NAME flat_map FOLDER "Noa/Flat Map")
 
 if(NOA_INSTALL)
