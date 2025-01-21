@@ -1,5 +1,3 @@
-include(noa)
-
 noa_library(NAMESPACE sourcemeta PROJECT noa NAME regex
   FOLDER "Noa/Regex")
 

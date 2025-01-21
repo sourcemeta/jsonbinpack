@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 project(noa VERSION 0.0.0 LANGUAGES CXX
   DESCRIPTION "A set of re-usable and opinionated utilities for Sourcemeta projects")
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/noa")
 include(noa)
 
 # Options
