@@ -1,56 +1,56 @@
 # Standards (sane modern defaults)
 if("CXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 20 PARENT_SCOPE)
 endif()
 if("C" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_C_STANDARD 11)
+  set(CMAKE_C_STANDARD 11 PARENT_SCOPE)
 endif()
 if("OBJCXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_OBJCXX_STANDARD "${CMAKE_CXX_STANDARD}")
+  set(CMAKE_OBJCXX_STANDARD "${CMAKE_CXX_STANDARD}" PARENT_SCOPE)
 endif()
 
 # Hide symbols from shared libraries by default
 # In certain compilers, like GCC and Clang,
 # symbols are visible by default.
-set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN YES PARENT_SCOPE)
 if("CXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+  set(CMAKE_CXX_VISIBILITY_PRESET hidden PARENT_SCOPE)
 endif()
 if("C" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_C_VISIBILITY_PRESET hidden)
+  set(CMAKE_C_VISIBILITY_PRESET hidden PARENT_SCOPE)
 endif()
 if("OBJCXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_OBJCXX_VISIBILITY_PRESET hidden)
+  set(CMAKE_OBJCXX_VISIBILITY_PRESET hidden PARENT_SCOPE)
 endif()
 
 # By default, stay within ISO C++
 if("CXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-  set(CMAKE_CXX_EXTENSIONS OFF)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON PARENT_SCOPE)
+  set(CMAKE_CXX_EXTENSIONS OFF PARENT_SCOPE)
 endif()
 if("C" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_C_STANDARD_REQUIRED ON)
-  set(CMAKE_C_EXTENSIONS OFF)
+  set(CMAKE_C_STANDARD_REQUIRED ON PARENT_SCOPE)
+  set(CMAKE_C_EXTENSIONS OFF PARENT_SCOPE)
 endif()
 if("OBJCXX" IN_LIST NOA_LANGUAGES)
-  set(CMAKE_OBJCXX_STANDARD_REQUIRED ON)
-  set(CMAKE_OBJCXX_EXTENSIONS OFF)
+  set(CMAKE_OBJCXX_STANDARD_REQUIRED ON PARENT_SCOPE)
+  set(CMAKE_OBJCXX_EXTENSIONS OFF PARENT_SCOPE)
 endif()
 
 # Export compile commands by default.
 # It is very useful for IDE integration, linting, etc
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON PARENT_SCOPE)
 
 # Prevent DT_RPATH/DT_RUNPATH problem
 # This problem is not present on Apple platforms.
 # See https://www.youtube.com/watch?v=m0DwB4OvDXk
 if(NOT APPLE)
-  set(CMAKE_INSTALL_RPATH $ORIGIN)
+  set(CMAKE_INSTALL_RPATH $ORIGIN PARENT_SCOPE)
 endif()
 
 # Delay GoogleTest discovery until before running the tests
 # See https://discourse.cmake.org/t/default-value-for-new-discovery-mode-option-for-gtest-discover-tests/1422
-set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
+set(CMAKE_GTEST_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST PARENT_SCOPE)
 
 # Always use folders in IDE
 # See https://cmake.org/cmake/help/latest/prop_gbl/USE_FOLDERS.html
@@ -73,22 +73,23 @@ endif()
 # Enable IPO/LTO to help the compiler optimize across modules.
 # Only do so in release, given these optimizations can significantly
 # increase build times.
-# See: https://cmake.org/cmake/help/latest/module/CheckIPOSupported.html
-if(CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT BUILD_SHARED_LIBS)
-  include(CheckIPOSupported)
-  check_ipo_supported(RESULT ipo_supported OUTPUT ipo_supported_error)
-  if(ipo_supported)
-    # TODO: Make IPO/LTO work on Linux + LLVM
-    if(APPLE OR NOT NOA_COMPILER_LLVM)
-      message(STATUS "Enabling IPO")
-      cmake_policy(SET CMP0069 NEW)
-      set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
-    else()
-      message(WARNING "Avoiding IPO on this configuration")
-    endif()
-  else()
-    message(WARNING "IPO not supported: ${ipo_supported_error}")
-  endif()
-  unset(ipo_supported)
-  unset(ipo_supported_error)
+
+# Note we don't use CheckIPOSupported and CMAKE_INTERPROCEDURAL_OPTIMIZATION,
+# as those CMake features can only enable thin LTO. For Fat LTO, see:
+# - https://gcc.gnu.org/onlinedocs/gccint/LTO-Overview.html
+# - https://llvm.org/docs/FatLTO.html
+
+if(NOA_COMPILER_GCC AND CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT BUILD_SHARED_LIBS)
+  message(STATUS "Enabling Fat LTO")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -ffat-lto-objects" PARENT_SCOPE)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto" PARENT_SCOPE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto" PARENT_SCOPE)
+endif()
+
+# TODO: Make this work on Linux on LLVM
+if(NOA_COMPILER_LLVM AND CMAKE_BUILD_TYPE STREQUAL "Release" AND NOT BUILD_SHARED_LIBS AND APPLE)
+  message(STATUS "Enabling Fat LTO")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full" PARENT_SCOPE)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto=full" PARENT_SCOPE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto=full" PARENT_SCOPE)
 endif()
