@@ -13,6 +13,7 @@ vendor/alterschema
 vendor/bootstrap
 vendor/googletest
 vendor/jsontoolkit
+vendor/noa
 www
 .editorconfig
 .ackrc
@@ -20,5 +21,3 @@ www
 .cirrus.yml
 Brewfile
 Brewfile.lock.json
-vendor/noa/vendor/googletest
-vendor/noa/vendor/googlebenchmark
