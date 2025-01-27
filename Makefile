@@ -17,7 +17,6 @@ configure: .always
 		-DJSONBINPACK_RUNTIME:BOOL=ON \
 		-DJSONBINPACK_COMPILER:BOOL=ON \
 		-DJSONBINPACK_TESTS:BOOL=ON \
-		-DJSONBINPACK_WEBSITE:BOOL=ON \
 		-DJSONBINPACK_DOCS:BOOL=ON \
 		-DBUILD_SHARED_LIBS:BOOL=$(SHARED)
 
@@ -51,10 +50,6 @@ test: .always
 
 doxygen: .always
 	$(CMAKE) --build ./build --config $(PRESET) --target doxygen
-
-website: .always
-	$(CMAKE) --build ./build --config $(PRESET) --target website
-	$(PYTHON) -m http.server 3000 --directory build/www
 
 clean: .always
 	$(CMAKE) -E rm -R -f build
