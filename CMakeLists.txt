@@ -13,7 +13,6 @@ option(JSONBINPACK_RUNTIME "Build the JSON BinPack runtime" ON)
 option(JSONBINPACK_COMPILER "Build the JSON BinPack compiler" ON)
 option(JSONBINPACK_TESTS "Build the JSON BinPack tests" OFF)
 option(JSONBINPACK_INSTALL "Install the JSON BinPack library" ON)
-option(JSONBINPACK_WEBSITE "Build the JSON BinPack website" OFF)
 option(JSONBINPACK_DOCS "Build the JSON BinPack documentation" OFF)
 option(JSONBINPACK_ADDRESS_SANITIZER "Build JSON BinPack with an address sanitizer" OFF)
 option(JSONBINPACK_UNDEFINED_SANITIZER "Build JSON BinPack with an undefined behavior sanitizer" OFF)
@@ -62,13 +61,9 @@ elseif(JSONBINPACK_UNDEFINED_SANITIZER)
   noa_sanitizer(TYPE undefined)
 endif()
 
-if(JSONBINPACK_WEBSITE)
-  add_subdirectory(www)
-endif()
-
 if(JSONBINPACK_DOCS)
   noa_target_doxygen(CONFIG "${PROJECT_SOURCE_DIR}/doxygen/Doxyfile.in"
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/www/api")
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/www")
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)

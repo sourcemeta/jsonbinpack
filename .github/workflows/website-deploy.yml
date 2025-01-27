@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - run: sudo apt update
-      - run: sudo apt-get install --yes doxygen sassc
+      - run: sudo apt-get install --yes doxygen
       - run: >
           cmake -S . -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Release
@@ -31,10 +31,8 @@ jobs:
           -DJSONBINPACK_RUNTIME:BOOL=OFF
           -DJSONBINPACK_COMPILER:BOOL=OFF
           -DJSONBINPACK_TESTS:BOOL=OFF
-          -DJSONBINPACK_WEBSITE:BOOL=ON
           -DJSONBINPACK_DOCS:BOOL=ON
 
-      - run: cmake --build ./build --config Release --target website
       - run: cmake --build ./build --config Release --target doxygen
 
       - name: Setup Pages
