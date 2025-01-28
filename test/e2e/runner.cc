@@ -1,8 +1,8 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-#include <sourcemeta/jsontoolkit/json.h>
-#include <sourcemeta/jsontoolkit/jsonschema.h>
+#include <sourcemeta/core/json.h>
+#include <sourcemeta/core/jsonschema.h>
 
 #include <cassert>    // assert
 #include <cstdlib>    // EXIT_SUCCESS, EXIT_FAILURE
@@ -23,43 +23,40 @@ auto main(int argc, char *argv[]) -> int {
 
   const std::filesystem::path instance_path{argv[1]};
   assert(std::filesystem::is_regular_file(instance_path));
-  const sourcemeta::jsontoolkit::JSON instance =
-      sourcemeta::jsontoolkit::from_file(instance_path);
+  const sourcemeta::core::JSON instance =
+      sourcemeta::core::from_file(instance_path);
   const std::filesystem::path directory{argv[2]};
   assert(std::filesystem::is_directory(directory));
 
   // Schema
   const std::filesystem::path schema_path{directory / "schema.json"};
   assert(std::filesystem::is_regular_file(schema_path));
-  sourcemeta::jsontoolkit::JSON schema =
-      sourcemeta::jsontoolkit::from_file(schema_path);
+  sourcemeta::core::JSON schema = sourcemeta::core::from_file(schema_path);
 
   // Canonicalize
   sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
+      schema, sourcemeta::core::default_schema_walker,
+      sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::prettify(
-      schema, canonical_output_stream,
-      sourcemeta::jsontoolkit::schema_format_compare);
+  sourcemeta::core::prettify(schema, canonical_output_stream,
+                             sourcemeta::core::schema_format_compare);
   canonical_output_stream << "\n";
   canonical_output_stream.flush();
   canonical_output_stream.close();
 
   // Compile
   sourcemeta::jsonbinpack::compile(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver, DEFAULT_METASCHEMA);
+      schema, sourcemeta::core::default_schema_walker,
+      sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream encoding_output_stream(directory / "encoding.json",
                                        std::ios::binary);
   encoding_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::jsontoolkit::prettify(
-      schema, encoding_output_stream,
-      sourcemeta::jsontoolkit::schema_format_compare);
+  sourcemeta::core::prettify(schema, encoding_output_stream,
+                             sourcemeta::core::schema_format_compare);
   encoding_output_stream << "\n";
   encoding_output_stream.flush();
   encoding_output_stream.close();
@@ -84,16 +81,16 @@ auto main(int argc, char *argv[]) -> int {
   std::ifstream data_stream{directory / "output.bin", std::ios::binary};
   data_stream.exceptions(std::ios_base::badbit);
   sourcemeta::jsonbinpack::Decoder decoder{data_stream};
-  const sourcemeta::jsontoolkit::JSON result = decoder.read(encoding);
+  const sourcemeta::core::JSON result = decoder.read(encoding);
 
   // Report results
   if (result == instance) {
     return EXIT_SUCCESS;
   } else {
     std::cerr << "GOT:\n";
-    sourcemeta::jsontoolkit::prettify(result, std::cerr);
+    sourcemeta::core::prettify(result, std::cerr);
     std::cerr << "\nEXPECTED:\n";
-    sourcemeta::jsontoolkit::prettify(instance, std::cerr);
+    sourcemeta::core::prettify(instance, std::cerr);
     std::cerr << "\n";
     return EXIT_FAILURE;
   }

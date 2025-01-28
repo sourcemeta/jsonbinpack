@@ -1,5 +1,5 @@
+#include <sourcemeta/core/json.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsontoolkit/json.h>
 
 #include <gtest/gtest.h>
 #include <type_traits>

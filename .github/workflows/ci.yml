@@ -108,22 +108,10 @@ jobs:
       - run: cmake --build ./build --config Release --parallel 4
       - run: >
           cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_noa
+          --component sourcemeta_core
       - run: >
           cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_noa_dev
-      - run: >
-          cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_jsontoolkit
-      - run: >
-          cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_jsontoolkit_dev
-      - run: >
-          cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_alterschema
-      - run: >
-          cmake --install ./build --prefix ./build/dist --config Release --verbose
-          --component sourcemeta_alterschema_dev
+          --component sourcemeta_core_dev
       - run: >
           cmake --install ./build --prefix ./build/dist --config Release --verbose
           --component sourcemeta_jsonbinpack

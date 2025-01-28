@@ -1,43 +1,43 @@
 #include <gtest/gtest.h>
 
+#include <sourcemeta/core/json.h>
+#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
-#include <sourcemeta/jsontoolkit/json.h>
-#include <sourcemeta/jsontoolkit/jsonschema.h>
 
 #include <optional> // std::optional
 #include <string>   // std::string
 
 static auto test_resolver(std::string_view identifier)
-    -> std::optional<sourcemeta::jsontoolkit::JSON> {
+    -> std::optional<sourcemeta::core::JSON> {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
-    return sourcemeta::jsontoolkit::parse(R"JSON({
+    return sourcemeta::core::parse(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON");
   } else {
-    return sourcemeta::jsontoolkit::official_resolver(identifier);
+    return sourcemeta::core::official_resolver(identifier);
   }
 }
 
 TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
   })JSON");
 
-  EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::jsontoolkit::default_schema_walker,
-                   test_resolver),
-               sourcemeta::jsontoolkit::SchemaError);
+  EXPECT_THROW(
+      sourcemeta::jsonbinpack::canonicalize(
+          schema, sourcemeta::core::default_schema_walker, test_resolver),
+      sourcemeta::core::SchemaError);
 }
 
 TEST(JSONBinPack_Canonicalizer, unknown_draft) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "type": "boolean"
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::jsontoolkit::default_schema_walker,
+                   schema, sourcemeta::core::default_schema_walker,
                    test_resolver, "https://example.com/invalid"),
-               sourcemeta::jsontoolkit::SchemaResolutionError);
+               sourcemeta::core::SchemaResolutionError);
 }

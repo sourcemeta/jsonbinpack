@@ -4,16 +4,9 @@ assets
 Makefile
 README.markdown
 test
-vendor/bootstrap.mask
-vendor/bootstrap
-vendor/googletest.mask
-vendor/googletest
 vendor/vendorpull
-vendor/alterschema
 vendor/bootstrap
-vendor/googletest
-vendor/jsontoolkit
-vendor/noa
+vendor/core
 www
 .editorconfig
 .ackrc

@@ -1,4 +1,4 @@
-noa_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME numeric
+sourcemeta_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME numeric
   FOLDER "JSON BinPack/Numeric"
   SOURCES
     zigzag_test.cc

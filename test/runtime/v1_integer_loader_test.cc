@@ -1,13 +1,12 @@
 #include <gtest/gtest.h>
 
+#include <sourcemeta/core/json.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
-#include <sourcemeta/jsontoolkit/json.h>
 
 #include <variant>
 
 TEST(JSONBinPack_Loader_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
-  const sourcemeta::jsontoolkit::JSON input =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "binpackOptions": {
@@ -27,8 +26,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
-  const sourcemeta::jsontoolkit::JSON input =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -45,8 +43,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
-  const sourcemeta::jsontoolkit::JSON input =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "binpackOptions": {
@@ -63,8 +60,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, ARBITRARY_MULTIPLE_ZIGZAG_VARINT_unit_multiplier) {
-  const sourcemeta::jsontoolkit::JSON input =
-      sourcemeta::jsontoolkit::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "binpackOptions": {

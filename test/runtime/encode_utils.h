@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/core/json.h>
 
 #include <algorithm>        // std::transform
 #include <cassert>          // assert
@@ -19,12 +19,12 @@ static inline auto to_byte(const std::uint8_t input) -> std::byte {
 }
 
 class OutputByteStream
-    : public std::basic_ostringstream<sourcemeta::jsontoolkit::JSON::Char> {
+    : public std::basic_ostringstream<sourcemeta::core::JSON::Char> {
 public:
   // Convert the stream into an array of bytes
   auto bytes() const -> const std::vector<std::byte> {
     std::vector<std::byte> result{};
-    const sourcemeta::jsontoolkit::JSON::String string{this->str()};
+    const sourcemeta::core::JSON::String string{this->str()};
     std::transform(string.cbegin(), string.cend(), std::back_inserter(result),
                    [](const auto character) {
                      return to_byte(static_cast<std::uint8_t>(character));
