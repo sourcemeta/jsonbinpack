@@ -1,4 +1,4 @@
-noa_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
+sourcemeta_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   FOLDER "JSON BinPack/Runtime"
   SOURCES
     decode_any_test.cc
@@ -34,4 +34,4 @@ noa_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
 target_link_libraries(sourcemeta_jsonbinpack_runtime_unit
   PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(sourcemeta_jsonbinpack_runtime_unit
-  PRIVATE sourcemeta::jsontoolkit::json)
+  PRIVATE sourcemeta::core::json)

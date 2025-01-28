@@ -1,23 +1,23 @@
 #include <gtest/gtest.h>
 
+#include <sourcemeta/core/json.h>
+#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
-#include <sourcemeta/jsontoolkit/json.h>
-#include <sourcemeta/jsontoolkit/jsonschema.h>
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12,
      min_properties_required_tautology_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
@@ -30,18 +30,18 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12,
      min_properties_required_tautology_2) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
@@ -54,18 +54,18 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12,
      min_properties_required_tautology_3) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "foo", "bar", "bar" ],
     "minProperties": 1
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "foo" ],
@@ -77,17 +77,17 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "patternProperties": {}
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
@@ -99,16 +99,16 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "minProperties": 0,
@@ -119,18 +119,18 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "maxProperties": 4,
     "maxItems": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "maxProperties": 4,
@@ -142,7 +142,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar" ],
@@ -151,11 +151,11 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar", "baz" ],
@@ -168,7 +168,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar", "qux" ],
@@ -177,11 +177,11 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
     }
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "baz", "foo", "qux" ],
@@ -194,17 +194,17 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_1) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "foo" ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo" ],
@@ -216,17 +216,17 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
-  auto schema = sourcemeta::jsontoolkit::parse(R"JSON({
+  auto schema = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar", "bar", "baz", "bar" ]
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::jsontoolkit::default_schema_walker,
-      sourcemeta::jsontoolkit::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema,
+                                        sourcemeta::core::default_schema_walker,
+                                        sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::jsontoolkit::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "baz", "foo" ],

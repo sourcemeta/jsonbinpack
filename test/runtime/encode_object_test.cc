@@ -2,15 +2,15 @@
 
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/core/json.h>
 
 #include "encode_utils.h"
 
 TEST(JSONBinPack_Encoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  const sourcemeta::jsontoolkit::JSON document =
-      sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");
+  const sourcemeta::core::JSON document =
+      sourcemeta::core::parse("{\"foo\":1,\"bar\":2}");
   OutputByteStream stream{};
 
   Encoder encoder{stream};
@@ -40,8 +40,8 @@ TEST(JSONBinPack_Encoder,
 TEST(JSONBinPack_Encoder,
      VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  const sourcemeta::jsontoolkit::JSON document =
-      sourcemeta::jsontoolkit::parse("{\"foo\":1,\"bar\":2}");
+  const sourcemeta::core::JSON document =
+      sourcemeta::core::parse("{\"foo\":1,\"bar\":2}");
   OutputByteStream stream{};
 
   Encoder encoder{stream};

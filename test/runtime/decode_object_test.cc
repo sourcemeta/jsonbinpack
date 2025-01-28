@@ -4,7 +4,7 @@
 
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-#include <sourcemeta/jsontoolkit/json.h>
+#include <sourcemeta/core/json.h>
 
 TEST(JSONBinPack_Decoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
