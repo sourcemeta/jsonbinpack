@@ -6,7 +6,7 @@
 #include <variant>
 
 TEST(JSONBinPack_Loader_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "binpackOptions": {
@@ -26,7 +26,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_MULTIPLE_8BITS_ENUM_FIXED_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -43,7 +43,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_MULTIPLE_ENUM_VARINT_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "binpackOptions": {
@@ -60,7 +60,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_MULTIPLE_MIRROR_ENUM_VARINT_positive) {
 }
 
 TEST(JSONBinPack_Loader_v1, ARBITRARY_MULTIPLE_ZIGZAG_VARINT_unit_multiplier) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "binpackOptions": {

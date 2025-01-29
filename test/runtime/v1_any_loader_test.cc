@@ -6,7 +6,7 @@
 #include <variant>
 
 TEST(JSONBinPack_Loader_v1, BYTE_CHOICE_INDEX_scalars) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BYTE_CHOICE_INDEX",
     "binpackOptions": {
@@ -27,7 +27,7 @@ TEST(JSONBinPack_Loader_v1, BYTE_CHOICE_INDEX_scalars) {
 }
 
 TEST(JSONBinPack_Loader_v1, LARGE_CHOICE_INDEX_scalars) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "LARGE_CHOICE_INDEX",
     "binpackOptions": {
@@ -48,7 +48,7 @@ TEST(JSONBinPack_Loader_v1, LARGE_CHOICE_INDEX_scalars) {
 }
 
 TEST(JSONBinPack_Loader_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "TOP_LEVEL_BYTE_CHOICE_INDEX",
     "binpackOptions": {
@@ -69,7 +69,7 @@ TEST(JSONBinPack_Loader_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
 }
 
 TEST(JSONBinPack_Loader_v1, CONST_NONE_scalar) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "CONST_NONE",
     "binpackOptions": {
@@ -84,7 +84,7 @@ TEST(JSONBinPack_Loader_v1, CONST_NONE_scalar) {
 }
 
 TEST(JSONBinPack_Loader_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",
     "binpackOptions": {}

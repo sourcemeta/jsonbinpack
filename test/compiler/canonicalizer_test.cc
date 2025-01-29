@@ -10,7 +10,7 @@
 static auto test_resolver(std::string_view identifier)
     -> std::optional<sourcemeta::core::JSON> {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
-    return sourcemeta::core::parse(R"JSON({
+    return sourcemeta::core::parse_json(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON");
@@ -20,24 +20,24 @@ static auto test_resolver(std::string_view identifier)
 }
 
 TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
     "type": "boolean"
   })JSON");
 
   EXPECT_THROW(
       sourcemeta::jsonbinpack::canonicalize(
-          schema, sourcemeta::core::default_schema_walker, test_resolver),
+          schema, sourcemeta::core::schema_official_walker, test_resolver),
       sourcemeta::core::SchemaError);
 }
 
 TEST(JSONBinPack_Canonicalizer, unknown_draft) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "type": "boolean"
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::core::default_schema_walker,
+                   schema, sourcemeta::core::schema_official_walker,
                    test_resolver, "https://example.com/invalid"),
                sourcemeta::core::SchemaResolutionError);
 }

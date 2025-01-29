@@ -6,12 +6,10 @@
 #endif
 
 #include <sourcemeta/core/json.h>
-#include <sourcemeta/core/jsonschema_anchor.h>
 #include <sourcemeta/core/jsonschema_bundle.h>
 #include <sourcemeta/core/jsonschema_error.h>
 #include <sourcemeta/core/jsonschema_frame.h>
 #include <sourcemeta/core/jsonschema_keywords.h>
-#include <sourcemeta/core/jsonschema_reference.h>
 #include <sourcemeta/core/jsonschema_resolver.h>
 #include <sourcemeta/core/jsonschema_transform.h>
 #include <sourcemeta/core/jsonschema_unevaluated.h>
@@ -50,7 +48,7 @@ auto is_schema(const JSON &schema) -> bool;
 
 /// @ingroup jsonschema
 /// The strategy to follow when attempting to identify a schema
-enum class IdentificationStrategy : std::uint8_t {
+enum class SchemaIdentificationStrategy : std::uint8_t {
   /// Only proceed if we can guarantee the identifier is valid
   Strict,
 
@@ -69,7 +67,7 @@ enum class IdentificationStrategy : std::uint8_t {
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///     sourcemeta::core::parse(R"JSON({
+///     sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$id": "https://sourcemeta.com/example-schema"
 /// })JSON");
@@ -84,11 +82,11 @@ enum class IdentificationStrategy : std::uint8_t {
 /// guessing game. Often useful if you have a schema without a dialect and you
 /// want to at least try to get something.
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto identify(
-    const JSON &schema, const SchemaResolver &resolver,
-    const IdentificationStrategy strategy = IdentificationStrategy::Strict,
-    const std::optional<std::string> &default_dialect = std::nullopt,
-    const std::optional<std::string> &default_id = std::nullopt)
+auto identify(const JSON &schema, const SchemaResolver &resolver,
+              const SchemaIdentificationStrategy strategy =
+                  SchemaIdentificationStrategy::Strict,
+              const std::optional<std::string> &default_dialect = std::nullopt,
+              const std::optional<std::string> &default_id = std::nullopt)
     -> std::optional<std::string>;
 
 /// @ingroup jsonschema
@@ -113,7 +111,7 @@ auto identify(const JSON &schema, const std::string &base_dialect,
 /// #include <cassert>
 ///
 /// sourcemeta::core::JSON document =
-///     sourcemeta::core::parse(R"JSON({
+///     sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$id": "https://sourcemeta.com/example-schema"
 /// })JSON");
@@ -139,7 +137,7 @@ auto anonymize(JSON &schema, const std::string &base_dialect) -> void;
 /// #include <cassert>
 ///
 /// sourcemeta::core::JSON document =
-///     sourcemeta::core::parse(R"JSON({
+///     sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$id": "https://sourcemeta.com/example-schema"
 /// })JSON");
@@ -178,7 +176,7 @@ auto reidentify(JSON &schema, const std::string &new_identifier,
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "type": "object"
 /// })JSON");
@@ -204,7 +202,7 @@ auto dialect(const JSON &schema,
 /// #include <iostream>
 ///
 /// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "type": "object"
 /// })JSON");
@@ -236,7 +234,7 @@ auto metaschema(
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "type": "object"
 /// })JSON");
@@ -269,7 +267,7 @@ auto base_dialect(const JSON &schema, const SchemaResolver &resolver,
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "type": "object"
 /// })JSON");
@@ -312,7 +310,7 @@ auto vocabularies(const SchemaResolver &resolver,
 /// #include <sstream>
 ///
 /// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse(
+///   sourcemeta::core::parse_json(
 ///     "{ \"type\": \"string\", \"minLength\": 3 }");
 /// std::ostringstream stream;
 /// sourcemeta::core::prettify(document, stream,
@@ -334,18 +332,18 @@ auto schema_format_compare(const JSON::String &left, const JSON::String &right)
 /// #include <cassert>
 ///
 /// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$id": "https://www.example.com/schema",
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$ref": "https://www.example.com/another",
 /// })JSON");
 ///
 /// sourcemeta::core::relativize(schema,
-///   sourcemeta::core::default_schema_walker,
+///   sourcemeta::core::schema_official_walker,
 ///   sourcemeta::core::official_resolver);
 ///
 /// const sourcemeta::core::JSON expected =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$id": "https://www.example.com/schema",
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$ref": "another",
@@ -370,18 +368,18 @@ auto relativize(
 /// #include <cassert>
 ///
 /// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$id": "https://www.example.com/schema",
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$ref": "another",
 /// })JSON");
 ///
 /// sourcemeta::core::unidentify(schema,
-///   sourcemeta::core::default_schema_walker,
+///   sourcemeta::core::schema_official_walker,
 ///   sourcemeta::core::official_resolver);
 ///
 /// const sourcemeta::core::JSON expected =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "$ref": "https://www.example.com/another",
 /// })JSON");

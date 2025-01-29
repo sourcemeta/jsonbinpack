@@ -61,13 +61,13 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 2 }"));
-  choices.push_back(sourcemeta::core::parse("{}"));
-  choices.push_back(sourcemeta::core::parse("[ 1, 2, 3 ]"));
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 1 }"));
-  choices.push_back(sourcemeta::core::parse("{ \"bar\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::core::parse_json("{}"));
+  choices.push_back(sourcemeta::core::parse_json("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"bar\": 1 }"));
   const auto result = decoder.BYTE_CHOICE_INDEX({std::move(choices)});
-  const auto expected = sourcemeta::core::parse("{ \"foo\": 1 }");
+  const auto expected = sourcemeta::core::parse_json("{ \"foo\": 1 }");
   EXPECT_EQ(result, expected);
 }
 
@@ -123,13 +123,13 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 2 }"));
-  choices.push_back(sourcemeta::core::parse("{}"));
-  choices.push_back(sourcemeta::core::parse("[ 1, 2, 3 ]"));
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 1 }"));
-  choices.push_back(sourcemeta::core::parse("{ \"bar\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::core::parse_json("{}"));
+  choices.push_back(sourcemeta::core::parse_json("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"bar\": 1 }"));
   const auto result = decoder.LARGE_CHOICE_INDEX({std::move(choices)});
-  const auto expected = sourcemeta::core::parse("{ \"foo\": 1 }");
+  const auto expected = sourcemeta::core::parse_json("{ \"foo\": 1 }");
   EXPECT_EQ(result, expected);
 }
 
@@ -199,13 +199,13 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   InputByteStream stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 2 }"));
-  choices.push_back(sourcemeta::core::parse("{}"));
-  choices.push_back(sourcemeta::core::parse("[ 1, 2, 3 ]"));
-  choices.push_back(sourcemeta::core::parse("{ \"foo\": 1 }"));
-  choices.push_back(sourcemeta::core::parse("{ \"bar\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
+  choices.push_back(sourcemeta::core::parse_json("{}"));
+  choices.push_back(sourcemeta::core::parse_json("[ 1, 2, 3 ]"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 1 }"));
+  choices.push_back(sourcemeta::core::parse_json("{ \"bar\": 1 }"));
   const auto result = decoder.TOP_LEVEL_BYTE_CHOICE_INDEX({std::move(choices)});
-  const auto expected = sourcemeta::core::parse("{ \"foo\": 1 }");
+  const auto expected = sourcemeta::core::parse_json("{ \"foo\": 1 }");
   EXPECT_EQ(result, expected);
 }
 
@@ -221,8 +221,8 @@ TEST(JSONBinPack_Decoder, CONST_NONE_complex) {
   InputByteStream stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result =
-      decoder.CONST_NONE({sourcemeta::core::parse("{ \"foo\": 1 }")});
-  const auto expected = sourcemeta::core::parse("{ \"foo\": 1 }");
+      decoder.CONST_NONE({sourcemeta::core::parse_json("{ \"foo\": 1 }")});
+  const auto expected = sourcemeta::core::parse_json("{ \"foo\": 1 }");
   EXPECT_EQ(result, expected);
 }
 

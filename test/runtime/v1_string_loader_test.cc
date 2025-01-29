@@ -6,7 +6,7 @@
 #include <variant>
 
 TEST(JSONBinPack_Loader_v1, UTF8_STRING_NO_LENGTH_3) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "UTF8_STRING_NO_LENGTH",
     "binpackOptions": {
@@ -21,7 +21,7 @@ TEST(JSONBinPack_Loader_v1, UTF8_STRING_NO_LENGTH_3) {
 }
 
 TEST(JSONBinPack_Loader_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED",
     "binpackOptions": {
@@ -38,7 +38,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
 }
 
 TEST(JSONBinPack_Loader_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED",
     "binpackOptions": {
@@ -54,7 +54,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
 }
 
 TEST(JSONBinPack_Loader_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED",
     "binpackOptions": {
@@ -74,7 +74,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
 }
 
 TEST(JSONBinPack_Loader_v1, RFC3339_DATE_INTEGER_TRIPLET) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "RFC3339_DATE_INTEGER_TRIPLET",
     "binpackOptions": {}
@@ -86,7 +86,7 @@ TEST(JSONBinPack_Loader_v1, RFC3339_DATE_INTEGER_TRIPLET) {
 }
 
 TEST(JSONBinPack_Loader_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "PREFIX_VARINT_LENGTH_STRING_SHARED",
     "binpackOptions": {}

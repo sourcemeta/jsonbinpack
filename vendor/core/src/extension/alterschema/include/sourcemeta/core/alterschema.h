@@ -68,7 +68,7 @@ enum class AlterSchemaCategory {
 /// sourcemeta::core::add(bundle,
 ///   sourcemeta::core::AlterSchemaCategory::SyntaxSugar);
 ///
-/// auto schema = sourcemeta::core::parse(R"JSON({
+/// auto schema = sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "foo": 1,
 ///   "items": {
@@ -77,7 +77,7 @@ enum class AlterSchemaCategory {
 ///   }
 /// })JSON");
 ///
-/// bundle.apply(schema, sourcemeta::core::default_schema_walker,
+/// bundle.apply(schema, sourcemeta::core::schema_official_walker,
 ///              sourcemeta::core::official_resolver);
 /// ```
 SOURCEMETA_CORE_ALTERSCHEMA_EXPORT

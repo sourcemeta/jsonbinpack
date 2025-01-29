@@ -8,7 +8,7 @@
 #include <iostream> // std::cout
 
 auto main() -> int {
-  sourcemeta::core::JSON schema = sourcemeta::core::parse(R"JSON({
+  sourcemeta::core::JSON schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": -100,
@@ -16,7 +16,7 @@ auto main() -> int {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
   const sourcemeta::jsonbinpack::Encoding encoding{

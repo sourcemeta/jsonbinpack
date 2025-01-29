@@ -19,7 +19,7 @@
 namespace sourcemeta::core {
 
 /// @ingroup jsonschema
-struct UnevaluatedEntry {
+struct SchemaUnevaluatedEntry {
   /// The absolute pointers of the static keyword dependencies
   std::set<Pointer> static_dependencies;
   /// The absolute pointers of the static keyword dependencies
@@ -31,7 +31,7 @@ struct UnevaluatedEntry {
 
 /// @ingroup jsonschema
 /// The flattened set of unevaluated cases in the schema by absolute URI
-using UnevaluatedEntries = std::map<std::string, UnevaluatedEntry>;
+using SchemaUnevaluatedEntries = std::map<std::string, SchemaUnevaluatedEntry>;
 
 // TODO: Eventually generalize this to list every cross-dependency between
 // keywords, supporting extensibility of custom vocabularies too
@@ -49,27 +49,27 @@ using UnevaluatedEntries = std::map<std::string, UnevaluatedEntry>;
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///     sourcemeta::core::parse(R"JSON({
+///     sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "unevaluatedProperties": false
 /// })JSON");
 ///
-/// sourcemeta::core::Frame frame;
+/// sourcemeta::core::SchemaSchemaFrame frame;
 /// frame.analyse(document,
-///   sourcemeta::core::default_schema_walker,
+///   sourcemeta::core::schema_official_walker,
 ///   sourcemeta::core::official_resolver);
 /// const auto result{sourcemeta::core::unevaluated(
 ///     schema, frame,
-///     sourcemeta::core::default_schema_walker,
+///     sourcemeta::core::schema_official_walker,
 ///     sourcemeta::core::official_resolver)};
 ///
 /// assert(result.contains("#/unevaluatedProperties"));
 /// assert(!result.at("#/unevaluatedProperties").dynamic);
 /// assert(result.at("#/unevaluatedProperties").dependencies.empty());
 /// ```
-auto SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-unevaluated(const JSON &schema, const Frame &frame, const SchemaWalker &walker,
-            const SchemaResolver &resolver) -> UnevaluatedEntries;
+auto SOURCEMETA_CORE_JSONSCHEMA_EXPORT unevaluated(
+    const JSON &schema, const SchemaFrame &frame, const SchemaWalker &walker,
+    const SchemaResolver &resolver) -> SchemaUnevaluatedEntries;
 
 } // namespace sourcemeta::core
 

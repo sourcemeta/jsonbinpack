@@ -1,11 +1,13 @@
 #include <sourcemeta/core/jsonschema_walker.h>
 
-auto sourcemeta::core::default_schema_walker(
+auto sourcemeta::core::schema_official_walker(
     std::string_view keyword, const std::map<std::string, bool> &vocabularies)
     -> sourcemeta::core::SchemaWalkerResult {
 #define WALK(vocabulary, _keyword, strategy, ...)                              \
   if (vocabularies.contains(vocabulary) && keyword == _keyword)                \
-    return {sourcemeta::core::KeywordType::strategy, vocabulary, {__VA_ARGS__}};
+    return {sourcemeta::core::SchemaKeywordType::strategy,                     \
+            vocabulary,                                                        \
+            {__VA_ARGS__}};
 
 #define WALK_ANY(vocabulary_1, vocabulary_2, _keyword, strategy, ...)          \
   WALK(vocabulary_1, _keyword, strategy, __VA_ARGS__)                          \
@@ -306,7 +308,8 @@ auto sourcemeta::core::default_schema_walker(
   if ((vocabularies.contains(HTTP_BASE "draft-07/schema#") ||
        vocabularies.contains(HTTP_BASE "draft-07/hyper-schema#")) &&
       keyword != "$ref") {
-    return {sourcemeta::core::KeywordType::Unknown, std::nullopt, {"$ref"}};
+    return {
+        sourcemeta::core::SchemaKeywordType::Unknown, std::nullopt, {"$ref"}};
   }
 
   // Draft6
@@ -410,7 +413,8 @@ auto sourcemeta::core::default_schema_walker(
   if ((vocabularies.contains(HTTP_BASE "draft-06/schema#") ||
        vocabularies.contains(HTTP_BASE "draft-06/hyper-schema#")) &&
       keyword != "$ref") {
-    return {sourcemeta::core::KeywordType::Unknown, std::nullopt, {"$ref"}};
+    return {
+        sourcemeta::core::SchemaKeywordType::Unknown, std::nullopt, {"$ref"}};
   }
 
   // Draft4
@@ -494,7 +498,8 @@ auto sourcemeta::core::default_schema_walker(
   if ((vocabularies.contains(HTTP_BASE "draft-04/schema#") ||
        vocabularies.contains(HTTP_BASE "draft-04/hyper-schema#")) &&
       keyword != "$ref") {
-    return {sourcemeta::core::KeywordType::Unknown, std::nullopt, {"$ref"}};
+    return {
+        sourcemeta::core::SchemaKeywordType::Unknown, std::nullopt, {"$ref"}};
   }
 
   // Draft3
@@ -538,7 +543,8 @@ auto sourcemeta::core::default_schema_walker(
   // $ref also takes precedence over any unknown keyword
   if (vocabularies.contains(HTTP_BASE "draft-03/schema#") &&
       keyword != "$ref") {
-    return {sourcemeta::core::KeywordType::Unknown, std::nullopt, {"$ref"}};
+    return {
+        sourcemeta::core::SchemaKeywordType::Unknown, std::nullopt, {"$ref"}};
   }
 
   // Draft2
@@ -662,5 +668,5 @@ auto sourcemeta::core::default_schema_walker(
 #undef WALK
 #undef WALK_ANY
 #undef WALK_MAYBE_DEPENDENT
-  return {sourcemeta::core::KeywordType::Unknown, std::nullopt, {}};
+  return {sourcemeta::core::SchemaKeywordType::Unknown, std::nullopt, {}};
 }

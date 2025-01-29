@@ -57,7 +57,7 @@ static auto id_keyword(const std::string &base_dialect) -> std::string {
 
 auto sourcemeta::core::identify(
     const sourcemeta::core::JSON &schema, const SchemaResolver &resolver,
-    const IdentificationStrategy strategy,
+    const SchemaIdentificationStrategy strategy,
     const std::optional<std::string> &default_dialect,
     const std::optional<std::string> &default_id)
     -> std::optional<std::string> {
@@ -70,7 +70,7 @@ auto sourcemeta::core::identify(
         sourcemeta::core::base_dialect(schema, resolver, default_dialect);
   } catch (const SchemaResolutionError &) {
     // Attempt to play a heuristic guessing game before giving up
-    if (strategy == IdentificationStrategy::Loose && schema.is_object()) {
+    if (strategy == SchemaIdentificationStrategy::Loose && schema.is_object()) {
       const auto keyword{id_keyword_guess(schema)};
       if (keyword.has_value()) {
         return schema.at(keyword.value()).to_string();
@@ -84,7 +84,7 @@ auto sourcemeta::core::identify(
 
   if (!maybe_base_dialect.has_value()) {
     // Attempt to play a heuristic guessing game before giving up
-    if (strategy == IdentificationStrategy::Loose && schema.is_object()) {
+    if (strategy == SchemaIdentificationStrategy::Loose && schema.is_object()) {
       const auto keyword{id_keyword_guess(schema)};
       if (keyword.has_value()) {
         return schema.at(keyword.value()).to_string();

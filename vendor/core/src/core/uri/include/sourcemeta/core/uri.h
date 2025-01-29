@@ -383,7 +383,7 @@ public:
 
 private:
   bool parsed = false;
-  auto parse() -> void;
+  auto parse_json() -> void;
 
 // Exporting symbols that depends on the standard C++ library is considered
 // safe.

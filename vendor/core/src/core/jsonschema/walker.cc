@@ -6,7 +6,7 @@
 #include <cassert>   // assert
 #include <numeric>   // std::accumulate
 
-auto sourcemeta::core::keyword_priority(
+auto sourcemeta::core::schema_keyword_priority(
     std::string_view keyword, const std::map<std::string, bool> &vocabularies,
     const sourcemeta::core::SchemaWalker &walker) -> std::uint64_t {
   const auto result{walker(keyword, vocabularies)};
@@ -14,8 +14,9 @@ auto sourcemeta::core::keyword_priority(
       result.dependencies.cbegin(), result.dependencies.cend(),
       static_cast<std::uint64_t>(0),
       [&vocabularies, &walker](const auto accumulator, const auto &dependency) {
-        return std::max(accumulator,
-                        keyword_priority(dependency, vocabularies, walker) + 1);
+        return std::max(
+            accumulator,
+            schema_keyword_priority(dependency, vocabularies, walker) + 1);
       });
 }
 
@@ -61,21 +62,21 @@ auto walk(sourcemeta::core::Pointer &pointer,
 
   for (auto &pair : subschema.as_object()) {
     switch (walker(pair.first, vocabularies).type) {
-      case sourcemeta::core::KeywordType::ApplicatorValue:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorValue:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorValueOther:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorValueOther:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorValueInPlace: {
+      case sourcemeta::core::SchemaKeywordType::ApplicatorValueInPlace: {
         sourcemeta::core::Pointer new_pointer{pointer};
         new_pointer.emplace_back(pair.first);
         walk(new_pointer, subschemas, pair.second, walker, resolver,
              new_dialect, type, level + 1);
       } break;
-      case sourcemeta::core::KeywordType::ApplicatorElements:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorElements:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorElementsInline:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorElementsInline:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorElementsInPlace:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorElementsInPlace:
         if (pair.second.is_array()) {
           for (std::size_t index = 0; index < pair.second.size(); index++) {
             sourcemeta::core::Pointer new_pointer{pointer};
@@ -87,11 +88,11 @@ auto walk(sourcemeta::core::Pointer &pointer,
         }
 
         break;
-      case sourcemeta::core::KeywordType::ApplicatorMembers:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorMembers:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorMembersInPlace:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorMembersInPlace:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::LocationMembers:
+      case sourcemeta::core::SchemaKeywordType::LocationMembers:
         if (pair.second.is_object()) {
           for (auto &subpair : pair.second.as_object()) {
             sourcemeta::core::Pointer new_pointer{pointer};
@@ -103,9 +104,10 @@ auto walk(sourcemeta::core::Pointer &pointer,
         }
 
         break;
-      case sourcemeta::core::KeywordType::ApplicatorValueOrElements:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorValueOrElements:
         [[fallthrough]];
-      case sourcemeta::core::KeywordType::ApplicatorValueOrElementsInPlace:
+      case sourcemeta::core::SchemaKeywordType::
+          ApplicatorValueOrElementsInPlace:
         if (pair.second.is_array()) {
           for (std::size_t index = 0; index < pair.second.size(); index++) {
             sourcemeta::core::Pointer new_pointer{pointer};
@@ -122,7 +124,7 @@ auto walk(sourcemeta::core::Pointer &pointer,
         }
 
         break;
-      case sourcemeta::core::KeywordType::ApplicatorElementsOrMembers:
+      case sourcemeta::core::SchemaKeywordType::ApplicatorElementsOrMembers:
         if (pair.second.is_array()) {
           for (std::size_t index = 0; index < pair.second.size(); index++) {
             sourcemeta::core::Pointer new_pointer{pointer};
@@ -142,17 +144,17 @@ auto walk(sourcemeta::core::Pointer &pointer,
         }
 
         break;
-      case sourcemeta::core::KeywordType::Assertion:
+      case sourcemeta::core::SchemaKeywordType::Assertion:
         break;
-      case sourcemeta::core::KeywordType::Annotation:
+      case sourcemeta::core::SchemaKeywordType::Annotation:
         break;
-      case sourcemeta::core::KeywordType::Reference:
+      case sourcemeta::core::SchemaKeywordType::Reference:
         break;
-      case sourcemeta::core::KeywordType::Other:
+      case sourcemeta::core::SchemaKeywordType::Other:
         break;
-      case sourcemeta::core::KeywordType::Comment:
+      case sourcemeta::core::SchemaKeywordType::Comment:
         break;
-      case sourcemeta::core::KeywordType::Unknown:
+      case sourcemeta::core::SchemaKeywordType::Unknown:
         break;
     }
   }
@@ -232,9 +234,9 @@ sourcemeta::core::SchemaKeywordIterator::SchemaKeywordIterator(
         assert(!left.pointer.empty() && left.pointer.back().is_property());
         assert(!right.pointer.empty() && right.pointer.back().is_property());
 
-        const auto left_priority = keyword_priority(
+        const auto left_priority = schema_keyword_priority(
             left.pointer.back().to_property(), vocabularies, walker);
-        const auto right_priority = keyword_priority(
+        const auto right_priority = schema_keyword_priority(
             right.pointer.back().to_property(), vocabularies, walker);
 
         // Sort first on priority, second on actual keywords. The latter is to

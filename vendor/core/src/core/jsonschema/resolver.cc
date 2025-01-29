@@ -8,12 +8,12 @@
 
 namespace sourcemeta::core {
 
-MapSchemaResolver::MapSchemaResolver() {}
+SchemaMapResolver::SchemaMapResolver() {}
 
-MapSchemaResolver::MapSchemaResolver(const SchemaResolver &resolver)
+SchemaMapResolver::SchemaMapResolver(const SchemaResolver &resolver)
     : default_resolver{resolver} {}
 
-auto MapSchemaResolver::add(const JSON &schema,
+auto SchemaMapResolver::add(const JSON &schema,
                             const std::optional<std::string> &default_dialect,
                             const std::optional<std::string> &default_id)
     -> void {
@@ -21,12 +21,12 @@ auto MapSchemaResolver::add(const JSON &schema,
 
   // Registering the top-level schema is not enough. We need to check
   // and register every embedded schema resource too
-  Frame frame;
-  frame.analyse(schema, default_schema_walker, *this, default_dialect,
+  SchemaFrame frame;
+  frame.analyse(schema, schema_official_walker, *this, default_dialect,
                 default_id);
 
   for (const auto &[key, entry] : frame.locations()) {
-    if (entry.type != Frame::LocationType::Resource) {
+    if (entry.type != SchemaFrame::LocationType::Resource) {
       continue;
     }
 
@@ -62,7 +62,7 @@ auto MapSchemaResolver::add(const JSON &schema,
   }
 }
 
-auto MapSchemaResolver::operator()(std::string_view identifier) const
+auto SchemaMapResolver::operator()(std::string_view identifier) const
     -> std::optional<JSON> {
   const std::string string_identifier{identifier};
   if (this->schemas.contains(string_identifier)) {
@@ -76,9 +76,9 @@ auto MapSchemaResolver::operator()(std::string_view identifier) const
   return std::nullopt;
 }
 
-FlatFileSchemaResolver::FlatFileSchemaResolver() {}
+SchemaFlatFileResolver::SchemaFlatFileResolver() {}
 
-FlatFileSchemaResolver::FlatFileSchemaResolver(const SchemaResolver &resolver)
+SchemaFlatFileResolver::SchemaFlatFileResolver(const SchemaResolver &resolver)
     : default_resolver{resolver} {}
 
 static auto to_lowercase(const std::string_view input) -> std::string {
@@ -90,7 +90,7 @@ static auto to_lowercase(const std::string_view input) -> std::string {
   return result;
 }
 
-auto FlatFileSchemaResolver::add(
+auto SchemaFlatFileResolver::add(
     const std::filesystem::path &path,
     const std::optional<std::string> &default_dialect,
     const std::optional<std::string> &default_id, const Reader &reader)
@@ -98,9 +98,9 @@ auto FlatFileSchemaResolver::add(
   const auto canonical{std::filesystem::weakly_canonical(path)};
   const auto schema{reader(canonical)};
   assert(sourcemeta::core::is_schema(schema));
-  const auto identifier{
-      sourcemeta::core::identify(schema, *this, IdentificationStrategy::Loose,
-                                 default_dialect, default_id)};
+  const auto identifier{sourcemeta::core::identify(
+      schema, *this, SchemaIdentificationStrategy::Loose, default_dialect,
+      default_id)};
   if (!identifier.has_value()) {
     std::ostringstream error;
     error << "Cannot identify schema: " << canonical.string();
@@ -124,7 +124,7 @@ auto FlatFileSchemaResolver::add(
   return result.first->first;
 }
 
-auto FlatFileSchemaResolver::reidentify(const std::string &schema,
+auto SchemaFlatFileResolver::reidentify(const std::string &schema,
                                         const std::string &new_identifier)
     -> void {
   const auto result{this->schemas.find(to_lowercase(schema))};
@@ -134,7 +134,7 @@ auto FlatFileSchemaResolver::reidentify(const std::string &schema,
   this->schemas.erase(result);
 }
 
-auto FlatFileSchemaResolver::operator()(std::string_view identifier) const
+auto SchemaFlatFileResolver::operator()(std::string_view identifier) const
     -> std::optional<JSON> {
   const std::string string_identifier{to_lowercase(identifier)};
   const auto result{this->schemas.find(string_identifier)};
@@ -150,7 +150,7 @@ auto FlatFileSchemaResolver::operator()(std::string_view identifier) const
                                  *this, result->second.default_dialect);
     // Because we allow re-identification, we can get into issues unless we
     // always try to relativize references
-    sourcemeta::core::relativize(schema, default_schema_walker, *this,
+    sourcemeta::core::relativize(schema, schema_official_walker, *this,
                                  result->second.default_dialect,
                                  result->second.original_identifier);
     sourcemeta::core::reidentify(schema, result->first, *this,

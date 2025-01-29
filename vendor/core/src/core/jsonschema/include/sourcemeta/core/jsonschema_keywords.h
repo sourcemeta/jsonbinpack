@@ -5,6 +5,10 @@
 
 namespace sourcemeta::core {
 
+/// @ingroup jsonschema
+/// The reference type
+enum class SchemaReferenceType : std::uint8_t { Static, Dynamic };
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 // For some strange reason, GCC on Debian 11 believes that a member of
@@ -14,7 +18,7 @@ namespace sourcemeta::core {
 #endif
 /// @ingroup jsonschema
 /// Determines the type of a JSON Schema keyword
-enum class KeywordType : std::uint8_t {
+enum class SchemaKeywordType : std::uint8_t {
   /// The JSON Schema keyword is unknown
   Unknown,
   /// The JSON Schema keyword is a non-applicator assertion

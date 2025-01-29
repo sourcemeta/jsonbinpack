@@ -1,5 +1,4 @@
 sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME jsonpointer
-  FOLDER "Core/JSON Pointer"
   PRIVATE_HEADERS pointer.h position.h error.h token.h
     walker.h subpointer_walker.h proxy.h
   SOURCES jsonpointer.cc stringify.h parser.h grammar.h position.cc)
