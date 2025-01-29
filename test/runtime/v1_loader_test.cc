@@ -4,7 +4,7 @@
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 TEST(JSONBinPack_Loader_v1, invalid_encoding_name) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FOO_BAR",
     "binpackOptions": {}

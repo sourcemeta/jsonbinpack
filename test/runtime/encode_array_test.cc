@@ -10,7 +10,7 @@
 
 TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  sourcemeta::core::JSON document = sourcemeta::core::parse("[ 0, 1, 2 ]");
+  sourcemeta::core::JSON document = sourcemeta::core::parse_json("[ 0, 1, 2 ]");
   OutputByteStream stream{};
 
   Encoder encoder{stream};
@@ -24,7 +24,8 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
 
 TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
-  sourcemeta::core::JSON document = sourcemeta::core::parse("[ 0, 1, true ]");
+  sourcemeta::core::JSON document =
+      sourcemeta::core::parse_json("[ 0, 1, true ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -61,7 +62,7 @@ TEST(JSONBinPack_Encoder,
      BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, true ]");
+      sourcemeta::core::parse_json("[ true, false, true ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -82,7 +83,7 @@ TEST(JSONBinPack_Encoder,
      BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, true ]");
+      sourcemeta::core::parse_json("[ true, false, true ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -102,7 +103,7 @@ TEST(JSONBinPack_Encoder,
 TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, 5 ]");
+      sourcemeta::core::parse_json("[ true, false, 5 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -122,7 +123,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
 TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, \"foo\", 1000 ]");
+      sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -143,7 +144,7 @@ TEST(JSONBinPack_Encoder,
      FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, true ]");
+      sourcemeta::core::parse_json("[ true, false, true ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -162,7 +163,7 @@ TEST(JSONBinPack_Encoder,
 TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, 5 ]");
+      sourcemeta::core::parse_json("[ true, false, 5 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -181,7 +182,7 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
 TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, \"foo\", 1000 ]");
+      sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -201,7 +202,7 @@ TEST(JSONBinPack_Encoder,
      ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, true ]");
+      sourcemeta::core::parse_json("[ true, false, true ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -220,7 +221,7 @@ TEST(JSONBinPack_Encoder,
 TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, false, 5 ]");
+      sourcemeta::core::parse_json("[ true, false, 5 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -239,7 +240,7 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
 TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
-      sourcemeta::core::parse("[ true, \"foo\", 1000 ]");
+      sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");
   OutputByteStream stream{};
 
   std::vector<sourcemeta::core::JSON> choices;

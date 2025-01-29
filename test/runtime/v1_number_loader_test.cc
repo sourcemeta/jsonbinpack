@@ -6,7 +6,7 @@
 #include <variant>
 
 TEST(JSONBinPack_Loader_v1, DOUBLE_VARINT_TUPLE) {
-  const sourcemeta::core::JSON input = sourcemeta::core::parse(R"JSON({
+  const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "DOUBLE_VARINT_TUPLE",
     "binpackOptions": {}

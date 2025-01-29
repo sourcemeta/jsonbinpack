@@ -10,13 +10,14 @@ using namespace sourcemeta::core;
 // TODO: Extract all of this into a public utility to traverse
 // adjacent subschemas
 auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
-                                const Frame &frame, const SchemaWalker &walker,
+                                const SchemaFrame &frame,
+                                const SchemaWalker &walker,
                                 const SchemaResolver &resolver,
                                 const std::set<JSON::String> &keywords,
-                                const Frame::LocationsEntry &root,
-                                const Frame::LocationsEntry &entry,
-                                const bool is_static, UnevaluatedEntry &result)
-    -> void {
+                                const SchemaFrame::LocationsEntry &root,
+                                const SchemaFrame::LocationsEntry &entry,
+                                const bool is_static,
+                                SchemaUnevaluatedEntry &result) -> void {
   const auto &subschema{get(schema, entry.pointer)};
   if (!subschema.is_object()) {
     return;
@@ -48,14 +49,14 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
 
     switch (walker(property.first, subschema_vocabularies).type) {
       // References
-      case KeywordType::Reference: {
+      case SchemaKeywordType::Reference: {
         const auto reference{frame.dereference(entry, {property.first})};
-        if (reference.first == ReferenceType::Static &&
+        if (reference.first == SchemaReferenceType::Static &&
             reference.second.has_value()) {
           find_adjacent_dependencies(
               current, schema, frame, walker, resolver, keywords, root,
               reference.second.value().get(), is_static, result);
-        } else if (reference.first == ReferenceType::Dynamic) {
+        } else if (reference.first == SchemaReferenceType::Dynamic) {
           result.unresolved = true;
         }
 
@@ -63,7 +64,7 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
       }
 
       // Static
-      case KeywordType::ApplicatorElementsInline:
+      case SchemaKeywordType::ApplicatorElementsInline:
         for (std::size_t index = 0; index < property.second.size(); index++) {
           find_adjacent_dependencies(
               current, schema, frame, walker, resolver, keywords, root,
@@ -74,7 +75,7 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
         break;
 
       // Dynamic
-      case KeywordType::ApplicatorElementsInPlace:
+      case SchemaKeywordType::ApplicatorElementsInPlace:
         if (property.second.is_array()) {
           for (std::size_t index = 0; index < property.second.size(); index++) {
             find_adjacent_dependencies(
@@ -84,7 +85,7 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
         }
 
         break;
-      case KeywordType::ApplicatorValueInPlace:
+      case SchemaKeywordType::ApplicatorValueInPlace:
         if (is_schema(property.second)) {
           find_adjacent_dependencies(
               current, schema, frame, walker, resolver, keywords, root,
@@ -92,7 +93,7 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
         }
 
         break;
-      case KeywordType::ApplicatorValueOrElementsInPlace:
+      case SchemaKeywordType::ApplicatorValueOrElementsInPlace:
         if (property.second.is_array()) {
           for (std::size_t index = 0; index < property.second.size(); index++) {
             find_adjacent_dependencies(
@@ -106,7 +107,7 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
         }
 
         break;
-      case KeywordType::ApplicatorMembersInPlace:
+      case SchemaKeywordType::ApplicatorMembersInPlace:
         if (property.second.is_object()) {
           for (const auto &pair : property.second.as_object()) {
             find_adjacent_dependencies(
@@ -129,14 +130,14 @@ auto find_adjacent_dependencies(const JSON::String &current, const JSON &schema,
 
 namespace sourcemeta::core {
 
-auto unevaluated(const JSON &schema, const Frame &frame,
+auto unevaluated(const JSON &schema, const SchemaFrame &frame,
                  const SchemaWalker &walker, const SchemaResolver &resolver)
-    -> UnevaluatedEntries {
-  UnevaluatedEntries result;
+    -> SchemaUnevaluatedEntries {
+  SchemaUnevaluatedEntries result;
 
   for (const auto &entry : frame.locations()) {
-    if (entry.second.type != Frame::LocationType::Subschema &&
-        entry.second.type != Frame::LocationType::Resource) {
+    if (entry.second.type != SchemaFrame::LocationType::Subschema &&
+        entry.second.type != SchemaFrame::LocationType::Resource) {
       continue;
     }
 
@@ -150,7 +151,7 @@ auto unevaluated(const JSON &schema, const Frame &frame,
         frame.vocabularies(entry.second, resolver)};
     for (const auto &pair : subschema.as_object()) {
       const auto keyword_uri{frame.uri(entry.second, {pair.first})};
-      UnevaluatedEntry unevaluated;
+      SchemaUnevaluatedEntry unevaluated;
       if ((subschema_vocabularies.contains(
                "https://json-schema.org/draft/2020-12/vocab/unevaluated") &&
            subschema_vocabularies.contains(

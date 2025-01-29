@@ -153,7 +153,7 @@ private:
 ///
 /// // The input schema to transform
 /// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse(R"JSON({
+///   sourcemeta::core::parse_json(R"JSON({
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "foo": 1,
 ///   "items": {
@@ -163,7 +163,7 @@ private:
 /// })JSON");
 ///
 /// // Apply the transformation bundle to the schema
-/// bundle.apply(schema, sourcemeta::core::default_schema_walker,
+/// bundle.apply(schema, sourcemeta::core::schema_official_walker,
 ///              sourcemeta::core::official_resolver);
 ///
 /// // `foo` keywords are gone

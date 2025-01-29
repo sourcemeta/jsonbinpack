@@ -48,6 +48,8 @@ auto SchemaTransformer::apply(
 
   // (2) Transform its sub-schemas
   for (const auto &entry :
+       // TODO: Replace `SchemaIteratorFlat` with framing and then just get
+       // rid of the idea of flat iterators, as we don't need it anywhere else
        SchemaIteratorFlat{current, walker, resolver, effective_dialect}) {
     apply(schema, walker, resolver, pointer.concat(entry.pointer),
           effective_dialect);

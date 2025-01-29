@@ -45,7 +45,7 @@ static auto uri_text_range(const UriTextRangeA *const range)
                               range->afterLast - range->first)};
 }
 
-static auto uri_parse(const std::string &data, UriUriA *uri) -> void {
+static auto uri_parse_json(const std::string &data, UriUriA *uri) -> void {
   const char *error_position;
   switch (uriParseSingleUriA(uri, data.c_str(), &error_position)) {
     case URI_ERROR_SYNTAX:
@@ -117,14 +117,14 @@ struct URI::Internal {
 };
 
 URI::URI(std::string input) : data{std::move(input)}, internal{new Internal} {
-  this->parse();
+  this->parse_json();
 }
 
 URI::URI(std::istream &input) : internal{new Internal} {
   std::ostringstream output;
   output << input.rdbuf();
   this->data = output.str();
-  this->parse();
+  this->parse_json();
 }
 
 URI::~URI() { uriFreeUriMembersA(&this->internal->uri); }
@@ -146,7 +146,7 @@ URI::URI(URI &&other)
   other.internal = nullptr;
 }
 
-auto URI::parse() -> void {
+auto URI::parse_json() -> void {
   if (this->parsed) {
     // clean
     this->path_ = std::nullopt;
@@ -163,7 +163,7 @@ auto URI::parse() -> void {
   // NOTE: we don't skip this line for fast path
   // as the internal structure of uriparser could still
   // be used by resolve_from and relative_to methods
-  uri_parse(this->data, &this->internal->uri);
+  uri_parse_json(this->data, &this->internal->uri);
 
   // Fast path for the root path
   if (this->data == "/") {
@@ -487,7 +487,7 @@ auto URI::resolve_from(const URI &base) -> URI & {
     uri_normalize(&absoluteDest);
     this->data = uri_to_string(&absoluteDest);
     uriFreeUriMembersA(&absoluteDest);
-    this->parse();
+    this->parse_json();
     return *this;
   } catch (...) {
     uriFreeUriMembersA(&absoluteDest);
@@ -530,7 +530,7 @@ auto URI::relative_to(const URI &base) -> URI & {
     copy.data.erase(0, 1);
   }
 
-  copy.parse();
+  copy.parse_json();
 
   // `uriparser` has this weird thing where it will only look at scheme and
   // authority, incorrectly thinking that a certain URI is a base of another one
@@ -538,7 +538,7 @@ auto URI::relative_to(const URI &base) -> URI & {
   // workaround to prevent this non-sense.
   if (!copy.recompose().empty() || base.recompose() == this->recompose()) {
     this->data = std::move(copy.data);
-    this->parse();
+    this->parse_json();
   }
 
   return *this;

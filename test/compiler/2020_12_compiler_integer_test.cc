@@ -4,7 +4,7 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": -100,
@@ -12,10 +12,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "binpackOptions": {
@@ -29,7 +29,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": -100,
@@ -38,10 +38,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_MULTIPLE_8BITS_ENUM_FIXED",
     "binpackOptions": {
@@ -55,7 +55,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": -100,
@@ -63,10 +63,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -80,7 +80,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
 
 TEST(JSONBinPack_Compiler_Integer_2020_12,
      maximum_minimum_multiplier_greater_than_8_bit) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": -100,
@@ -89,10 +89,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12,
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -105,17 +105,17 @@ TEST(JSONBinPack_Compiler_Integer_2020_12,
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, minimum) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": 0
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -128,7 +128,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "minimum": 0,
@@ -136,10 +136,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_MULTIPLE_ENUM_VARINT",
     "binpackOptions": {
@@ -152,17 +152,17 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, maximum) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "maximum": 100
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "binpackOptions": {
@@ -175,7 +175,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "maximum": 100,
@@ -183,10 +183,10 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_MULTIPLE_MIRROR_ENUM_VARINT",
     "binpackOptions": {
@@ -199,16 +199,16 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer"
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "binpackOptions": {
@@ -220,17 +220,17 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded) {
 }
 
 TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded_multiplier) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
     "multipleOf": 5
   })JSON");
 
   sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::default_schema_walker,
+                                   sourcemeta::core::schema_official_walker,
                                    sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ARBITRARY_MULTIPLE_ZIGZAG_VARINT",
     "binpackOptions": {

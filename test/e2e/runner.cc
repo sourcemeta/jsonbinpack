@@ -24,18 +24,18 @@ auto main(int argc, char *argv[]) -> int {
   const std::filesystem::path instance_path{argv[1]};
   assert(std::filesystem::is_regular_file(instance_path));
   const sourcemeta::core::JSON instance =
-      sourcemeta::core::from_file(instance_path);
+      sourcemeta::core::read_json(instance_path);
   const std::filesystem::path directory{argv[2]};
   assert(std::filesystem::is_directory(directory));
 
   // Schema
   const std::filesystem::path schema_path{directory / "schema.json"};
   assert(std::filesystem::is_regular_file(schema_path));
-  sourcemeta::core::JSON schema = sourcemeta::core::from_file(schema_path);
+  sourcemeta::core::JSON schema = sourcemeta::core::read_json(schema_path);
 
   // Canonicalize
   sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::default_schema_walker,
+      schema, sourcemeta::core::schema_official_walker,
       sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
@@ -49,7 +49,7 @@ auto main(int argc, char *argv[]) -> int {
 
   // Compile
   sourcemeta::jsonbinpack::compile(
-      schema, sourcemeta::core::default_schema_walker,
+      schema, sourcemeta::core::schema_official_walker,
       sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream encoding_output_stream(directory / "encoding.json",

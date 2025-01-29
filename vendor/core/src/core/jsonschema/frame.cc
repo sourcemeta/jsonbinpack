@@ -13,6 +13,92 @@
 #include <utility>    // std::pair, std::move
 #include <vector>     // std::vector
 
+enum class AnchorType : std::uint8_t { Static, Dynamic, All };
+
+static auto find_anchors(const sourcemeta::core::JSON &schema,
+                         const std::map<std::string, bool> &vocabularies)
+    -> std::map<std::string, AnchorType> {
+  std::map<std::string, AnchorType> result;
+
+  // 2020-12
+  if (schema.is_object() &&
+      vocabularies.contains(
+          "https://json-schema.org/draft/2020-12/vocab/core")) {
+    if (schema.defines("$dynamicAnchor")) {
+      const auto &anchor{schema.at("$dynamicAnchor")};
+      assert(anchor.is_string());
+      result.insert({anchor.to_string(), AnchorType::Dynamic});
+    }
+
+    if (schema.defines("$anchor")) {
+      const auto &anchor{schema.at("$anchor")};
+      assert(anchor.is_string());
+      const auto anchor_string{anchor.to_string()};
+      const auto success = result.insert({anchor_string, AnchorType::Static});
+      assert(success.second || result.contains(anchor_string));
+      if (!success.second) {
+        result[anchor_string] = AnchorType::All;
+      }
+    }
+  }
+
+  // 2019-09
+  if (schema.is_object() &&
+      vocabularies.contains(
+          "https://json-schema.org/draft/2019-09/vocab/core")) {
+    if (schema.defines("$recursiveAnchor")) {
+      const auto &anchor{schema.at("$recursiveAnchor")};
+      assert(anchor.is_boolean());
+      if (anchor.to_boolean()) {
+        // We store a 2019-09 recursive anchor as an empty anchor
+        result.insert({"", AnchorType::Dynamic});
+      }
+    }
+
+    if (schema.defines("$anchor")) {
+      const auto &anchor{schema.at("$anchor")};
+      assert(anchor.is_string());
+      const auto anchor_string{anchor.to_string()};
+      const auto success = result.insert({anchor_string, AnchorType::Static});
+      assert(success.second || result.contains(anchor_string));
+      if (!success.second) {
+        result[anchor_string] = AnchorType::All;
+      }
+    }
+  }
+
+  // Draft 7 and 6
+  // Old `$id` anchor form
+  if (schema.is_object() &&
+      (vocabularies.contains("http://json-schema.org/draft-07/schema#") ||
+       vocabularies.contains("http://json-schema.org/draft-06/schema#"))) {
+    if (schema.defines("$id")) {
+      assert(schema.at("$id").is_string());
+      const sourcemeta::core::URI identifier(schema.at("$id").to_string());
+      if (identifier.is_fragment_only()) {
+        result.insert(
+            {std::string{identifier.fragment().value()}, AnchorType::Static});
+      }
+    }
+  }
+
+  // Draft 4
+  // Old `id` anchor form
+  if (schema.is_object() &&
+      vocabularies.contains("http://json-schema.org/draft-04/schema#")) {
+    if (schema.defines("id")) {
+      assert(schema.at("id").is_string());
+      const sourcemeta::core::URI identifier(schema.at("id").to_string());
+      if (identifier.is_fragment_only()) {
+        result.insert(
+            {std::string{identifier.fragment().value()}, AnchorType::Static});
+      }
+    }
+  }
+
+  return result;
+}
+
 static auto find_nearest_bases(
     const std::map<sourcemeta::core::Pointer, std::vector<std::string>> &bases,
     const sourcemeta::core::Pointer &pointer,
@@ -89,9 +175,9 @@ static auto fragment_string(const sourcemeta::core::URI &uri)
   return std::nullopt;
 }
 
-static auto store(sourcemeta::core::Frame::Locations &frame,
-                  const sourcemeta::core::ReferenceType type,
-                  const sourcemeta::core::Frame::LocationType entry_type,
+static auto store(sourcemeta::core::SchemaFrame::Locations &frame,
+                  const sourcemeta::core::SchemaReferenceType type,
+                  const sourcemeta::core::SchemaFrame::LocationType entry_type,
                   const std::string &uri,
                   const std::optional<std::string> &root_id,
                   const std::string &base_id,
@@ -124,8 +210,8 @@ struct InternalEntry {
 };
 
 auto internal_analyse(const sourcemeta::core::JSON &schema,
-                      sourcemeta::core::Frame::Locations &frame,
-                      sourcemeta::core::Frame::References &references,
+                      sourcemeta::core::SchemaFrame::Locations &frame,
+                      sourcemeta::core::SchemaFrame::References &references,
                       const sourcemeta::core::SchemaWalker &walker,
                       const sourcemeta::core::SchemaResolver &resolver,
                       const std::optional<std::string> &default_dialect,
@@ -156,10 +242,11 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
                                        default_id.has_value() &&
                                        root_id.value() != default_id.value()};
   if (has_explicit_different_id) {
-    store(frame, ReferenceType::Static, Frame::LocationType::Resource,
-          default_id.value(), root_id.value(), root_id.value(),
-          sourcemeta::core::empty_pointer, sourcemeta::core::empty_pointer,
-          root_dialect.value(), root_base_dialect.value());
+    store(frame, SchemaReferenceType::Static,
+          SchemaFrame::LocationType::Resource, default_id.value(),
+          root_id.value(), root_id.value(), sourcemeta::core::empty_pointer,
+          sourcemeta::core::empty_pointer, root_dialect.value(),
+          root_base_dialect.value());
     base_uris.insert({sourcemeta::core::empty_pointer, {default_id.value()}});
   }
 
@@ -216,11 +303,12 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
           const std::string new_id{maybe_relative.recompose()};
 
           if (!maybe_relative_is_absolute ||
-              !frame.contains({ReferenceType::Static, new_id})) {
+              !frame.contains({SchemaReferenceType::Static, new_id})) {
             assert(entry.common.base_dialect.has_value());
-            store(frame, ReferenceType::Static, Frame::LocationType::Resource,
-                  new_id, root_id, new_id, entry.common.pointer,
-                  sourcemeta::core::empty_pointer, entry.common.dialect.value(),
+            store(frame, SchemaReferenceType::Static,
+                  SchemaFrame::LocationType::Resource, new_id, root_id, new_id,
+                  entry.common.pointer, sourcemeta::core::empty_pointer,
+                  entry.common.dialect.value(),
                   entry.common.base_dialect.value());
           }
 
@@ -247,15 +335,16 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
       const std::string destination{metaschema.recompose()};
       assert(entry.common.value.defines("$schema"));
       references.insert_or_assign(
-          {ReferenceType::Static, entry.common.pointer.concat({"$schema"})},
-          Frame::ReferencesEntry{destination,
-                                 metaschema.recompose_without_fragment(),
-                                 fragment_string(metaschema)});
+          {SchemaReferenceType::Static,
+           entry.common.pointer.concat({"$schema"})},
+          SchemaFrame::ReferencesEntry{destination,
+                                       metaschema.recompose_without_fragment(),
+                                       fragment_string(metaschema)});
     }
 
     // Handle schema anchors
-    for (const auto &[name, type] : sourcemeta::core::anchors(
-             entry.common.value, entry.common.vocabularies)) {
+    for (const auto &[name, type] :
+         find_anchors(entry.common.value, entry.common.vocabularies)) {
       const auto bases{
           find_nearest_bases(base_uris, entry.common.pointer, entry.id)};
 
@@ -263,19 +352,19 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
         const auto anchor_uri{sourcemeta::core::URI::from_fragment(name)};
         const auto relative_anchor_uri{anchor_uri.recompose()};
 
-        if (type == sourcemeta::core::AnchorType::Static ||
-            type == sourcemeta::core::AnchorType::All) {
-          store(frame, ReferenceType::Static, Frame::LocationType::Anchor,
-                relative_anchor_uri, root_id, "", entry.common.pointer,
+        if (type == AnchorType::Static || type == AnchorType::All) {
+          store(frame, SchemaReferenceType::Static,
+                SchemaFrame::LocationType::Anchor, relative_anchor_uri, root_id,
+                "", entry.common.pointer,
                 entry.common.pointer.resolve_from(bases.second),
                 entry.common.dialect.value(),
                 entry.common.base_dialect.value());
         }
 
-        if (type == sourcemeta::core::AnchorType::Dynamic ||
-            type == sourcemeta::core::AnchorType::All) {
-          store(frame, ReferenceType::Dynamic, Frame::LocationType::Anchor,
-                relative_anchor_uri, root_id, "", entry.common.pointer,
+        if (type == AnchorType::Dynamic || type == AnchorType::All) {
+          store(frame, SchemaReferenceType::Dynamic,
+                SchemaFrame::LocationType::Anchor, relative_anchor_uri, root_id,
+                "", entry.common.pointer,
                 entry.common.pointer.resolve_from(bases.second),
                 entry.common.dialect.value(),
                 entry.common.base_dialect.value());
@@ -283,8 +372,9 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
           // Register a dynamic anchor as a static anchor if possible too
           if (entry.common.vocabularies.contains(
                   "https://json-schema.org/draft/2020-12/vocab/core")) {
-            store(frame, ReferenceType::Static, Frame::LocationType::Anchor,
-                  relative_anchor_uri, root_id, "", entry.common.pointer,
+            store(frame, SchemaReferenceType::Static,
+                  SchemaFrame::LocationType::Anchor, relative_anchor_uri,
+                  root_id, "", entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
                   entry.common.dialect.value(),
                   entry.common.base_dialect.value(), true);
@@ -306,25 +396,23 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
                                     .recompose()};
 
           if (!is_first &&
-              frame.contains({ReferenceType::Static, anchor_uri})) {
+              frame.contains({SchemaReferenceType::Static, anchor_uri})) {
             continue;
           }
 
-          if (type == sourcemeta::core::AnchorType::Static ||
-              type == sourcemeta::core::AnchorType::All) {
-            store(frame, sourcemeta::core::ReferenceType::Static,
-                  Frame::LocationType::Anchor, anchor_uri, root_id, base_string,
-                  entry.common.pointer,
+          if (type == AnchorType::Static || type == AnchorType::All) {
+            store(frame, sourcemeta::core::SchemaReferenceType::Static,
+                  SchemaFrame::LocationType::Anchor, anchor_uri, root_id,
+                  base_string, entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
                   entry.common.dialect.value(),
                   entry.common.base_dialect.value());
           }
 
-          if (type == sourcemeta::core::AnchorType::Dynamic ||
-              type == sourcemeta::core::AnchorType::All) {
-            store(frame, sourcemeta::core::ReferenceType::Dynamic,
-                  Frame::LocationType::Anchor, anchor_uri, root_id, base_string,
-                  entry.common.pointer,
+          if (type == AnchorType::Dynamic || type == AnchorType::All) {
+            store(frame, sourcemeta::core::SchemaReferenceType::Dynamic,
+                  SchemaFrame::LocationType::Anchor, anchor_uri, root_id,
+                  base_string, entry.common.pointer,
                   entry.common.pointer.resolve_from(bases.second),
                   entry.common.dialect.value(),
                   entry.common.base_dialect.value());
@@ -332,8 +420,8 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
             // Register a dynamic anchor as a static anchor if possible too
             if (entry.common.vocabularies.contains(
                     "https://json-schema.org/draft/2020-12/vocab/core")) {
-              store(frame, sourcemeta::core::ReferenceType::Static,
-                    Frame::LocationType::Anchor, anchor_uri, root_id,
+              store(frame, sourcemeta::core::SchemaReferenceType::Static,
+                    SchemaFrame::LocationType::Anchor, anchor_uri, root_id,
                     base_string, entry.common.pointer,
                     entry.common.pointer.resolve_from(bases.second),
                     entry.common.dialect.value(),
@@ -371,25 +459,27 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
       relative_pointer_uri.canonicalize();
       const auto result{relative_pointer_uri.recompose()};
 
-      if (!frame.contains({ReferenceType::Static, result})) {
+      if (!frame.contains({SchemaReferenceType::Static, result})) {
         const auto nearest_bases{
             find_nearest_bases(base_uris, pointer, base.first)};
         assert(!nearest_bases.first.empty());
         const auto &current_base{nearest_bases.first.front()};
         const auto maybe_base_entry{
-            frame.find({ReferenceType::Static, current_base})};
+            frame.find({SchemaReferenceType::Static, current_base})};
         const auto current_base_dialect{
             maybe_base_entry == frame.cend()
                 ? root_base_dialect.value()
                 : maybe_base_entry->second.base_dialect};
         if (subschemas.contains(pointer)) {
-          store(frame, ReferenceType::Static, Frame::LocationType::Subschema,
-                result, root_id, current_base, pointer,
+          store(frame, SchemaReferenceType::Static,
+                SchemaFrame::LocationType::Subschema, result, root_id,
+                current_base, pointer,
                 pointer.resolve_from(nearest_bases.second),
                 dialects.first.front(), current_base_dialect);
         } else {
-          store(frame, ReferenceType::Static, Frame::LocationType::Pointer,
-                result, root_id, current_base, pointer,
+          store(frame, SchemaReferenceType::Static,
+                SchemaFrame::LocationType::Pointer, result, root_id,
+                current_base, pointer,
                 pointer.resolve_from(nearest_bases.second),
                 dialects.first.front(), current_base_dialect);
         }
@@ -411,10 +501,11 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
 
         ref.canonicalize();
         references.insert_or_assign(
-            {ReferenceType::Static, entry.common.pointer.concat({"$ref"})},
-            Frame::ReferencesEntry{ref.recompose(),
-                                   ref.recompose_without_fragment(),
-                                   fragment_string(ref)});
+            {SchemaReferenceType::Static,
+             entry.common.pointer.concat({"$ref"})},
+            SchemaFrame::ReferencesEntry{ref.recompose(),
+                                         ref.recompose_without_fragment(),
+                                         fragment_string(ref)});
       }
 
       if (entry.common.vocabularies.contains(
@@ -436,16 +527,16 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
         auto anchor_uri_string{
             nearest_bases.first.empty() ? "" : nearest_bases.first.front()};
         const auto recursive_anchor{
-            frame.find({ReferenceType::Dynamic, anchor_uri_string})};
+            frame.find({SchemaReferenceType::Dynamic, anchor_uri_string})};
         const auto reference_type{recursive_anchor == frame.end()
-                                      ? ReferenceType::Static
-                                      : ReferenceType::Dynamic};
+                                      ? SchemaReferenceType::Static
+                                      : SchemaReferenceType::Dynamic};
         const sourcemeta::core::URI anchor_uri{std::move(anchor_uri_string)};
         references.insert_or_assign(
             {reference_type, entry.common.pointer.concat({"$recursiveRef"})},
-            Frame::ReferencesEntry{anchor_uri.recompose(),
-                                   anchor_uri.recompose_without_fragment(),
-                                   fragment_string(anchor_uri)});
+            SchemaFrame::ReferencesEntry{
+                anchor_uri.recompose(), anchor_uri.recompose_without_fragment(),
+                fragment_string(anchor_uri)});
       }
 
       if (entry.common.vocabularies.contains(
@@ -467,19 +558,20 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
 
         const auto has_fragment{ref.fragment().has_value()};
         const auto maybe_static_frame{
-            frame.find({ReferenceType::Static, ref_string})};
+            frame.find({SchemaReferenceType::Static, ref_string})};
         const auto maybe_dynamic_frame{
-            frame.find({ReferenceType::Dynamic, ref_string})};
+            frame.find({SchemaReferenceType::Dynamic, ref_string})};
         const auto behaves_as_static{!has_fragment ||
                                      (has_fragment &&
                                       maybe_static_frame != frame.end() &&
                                       maybe_dynamic_frame == frame.end())};
         references.insert_or_assign(
-            {behaves_as_static ? ReferenceType::Static : ReferenceType::Dynamic,
+            {behaves_as_static ? SchemaReferenceType::Static
+                               : SchemaReferenceType::Dynamic,
              entry.common.pointer.concat({"$dynamicRef"})},
-            Frame::ReferencesEntry{std::move(ref_string),
-                                   ref.recompose_without_fragment(),
-                                   fragment_string(ref)});
+            SchemaFrame::ReferencesEntry{std::move(ref_string),
+                                         ref.recompose_without_fragment(),
+                                         fragment_string(ref)});
       }
     }
   }
@@ -492,18 +584,18 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
         // TODO: This check might need to be more elaborate given
         // https://github.com/sourcemeta/core/issues/1390
         return reference.first.second.back().to_property() == "$schema" ||
-               frame.contains(
-                   {ReferenceType::Static, reference.second.destination}) ||
-               frame.contains(
-                   {ReferenceType::Dynamic, reference.second.destination});
+               frame.contains({SchemaReferenceType::Static,
+                               reference.second.destination}) ||
+               frame.contains({SchemaReferenceType::Dynamic,
+                               reference.second.destination});
       })};
 
   if (standalone) {
     // Find all dynamic anchors
     std::map<std::string, std::vector<std::string>> dynamic_anchors;
     for (const auto &entry : frame) {
-      if (entry.first.first != ReferenceType::Dynamic ||
-          entry.second.type != Frame::LocationType::Anchor) {
+      if (entry.first.first != SchemaReferenceType::Dynamic ||
+          entry.second.type != SchemaFrame::LocationType::Anchor) {
         continue;
       }
 
@@ -519,10 +611,10 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
     // If there is a dynamic reference that only has one possible
     // dynamic anchor destination, then that dynamic reference
     // is a static reference in disguise
-    std::vector<Frame::References::key_type> to_delete;
-    std::vector<Frame::References::value_type> to_insert;
+    std::vector<SchemaFrame::References::key_type> to_delete;
+    std::vector<SchemaFrame::References::value_type> to_insert;
     for (const auto &reference : references) {
-      if (reference.first.first != ReferenceType::Dynamic ||
+      if (reference.first.first != SchemaReferenceType::Dynamic ||
           !reference.second.fragment.has_value()) {
         continue;
       }
@@ -538,9 +630,9 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
       to_delete.push_back(reference.first);
       const URI new_destination{match->second.front()};
       to_insert.emplace_back(
-          Frame::References::key_type{ReferenceType::Static,
-                                      reference.first.second},
-          Frame::References::mapped_type{
+          SchemaFrame::References::key_type{SchemaReferenceType::Static,
+                                            reference.first.second},
+          SchemaFrame::References::mapped_type{
               match->second.front(),
               new_destination.recompose_without_fragment(),
               fragment_string(new_destination)});
@@ -582,61 +674,64 @@ auto internal_analyse(const sourcemeta::core::JSON &schema,
 
 namespace sourcemeta::core {
 
-auto Frame::analyse(const JSON &schema, const SchemaWalker &walker,
-                    const SchemaResolver &resolver,
-                    const std::optional<std::string> &default_dialect,
-                    const std::optional<std::string> &default_id) -> void {
+auto SchemaFrame::analyse(const JSON &schema, const SchemaWalker &walker,
+                          const SchemaResolver &resolver,
+                          const std::optional<std::string> &default_dialect,
+                          const std::optional<std::string> &default_id)
+    -> void {
   internal_analyse(schema, this->locations_, this->references_, walker,
                    resolver, default_dialect, default_id);
 }
 
-auto Frame::locations() const noexcept -> const Locations & {
+auto SchemaFrame::locations() const noexcept -> const Locations & {
   return this->locations_;
 }
 
-auto Frame::references() const noexcept -> const References & {
+auto SchemaFrame::references() const noexcept -> const References & {
   return this->references_;
 }
 
-auto Frame::vocabularies(const LocationsEntry &location,
-                         const SchemaResolver &resolver) const
+auto SchemaFrame::vocabularies(const LocationsEntry &location,
+                               const SchemaResolver &resolver) const
     -> std::map<std::string, bool> {
   return sourcemeta::core::vocabularies(resolver, location.base_dialect,
                                         location.dialect);
 }
 
-auto Frame::uri(const LocationsEntry &location,
-                const Pointer &relative_schema_location) const -> std::string {
+auto SchemaFrame::uri(const LocationsEntry &location,
+                      const Pointer &relative_schema_location) const
+    -> std::string {
   return to_uri(location.relative_pointer.concat(relative_schema_location),
                 location.base)
       .recompose();
 }
 
-auto Frame::traverse(const LocationsEntry &location,
-                     const Pointer &relative_schema_location) const
+auto SchemaFrame::traverse(const LocationsEntry &location,
+                           const Pointer &relative_schema_location) const
     -> const LocationsEntry & {
   const auto new_uri{this->uri(location, relative_schema_location)};
   const auto static_match{
-      this->locations_.find({ReferenceType::Static, new_uri})};
+      this->locations_.find({SchemaReferenceType::Static, new_uri})};
   if (static_match != this->locations_.cend()) {
     return static_match->second;
   }
 
   const auto dynamic_match{
-      this->locations_.find({ReferenceType::Dynamic, new_uri})};
+      this->locations_.find({SchemaReferenceType::Dynamic, new_uri})};
   assert(dynamic_match != this->locations_.cend());
   return dynamic_match->second;
 }
 
-auto Frame::traverse(const std::string &uri) const
+auto SchemaFrame::traverse(const std::string &uri) const
     -> std::optional<std::reference_wrapper<const LocationsEntry>> {
-  const auto static_result{this->locations_.find({ReferenceType::Static, uri})};
+  const auto static_result{
+      this->locations_.find({SchemaReferenceType::Static, uri})};
   if (static_result != this->locations_.cend()) {
     return static_result->second;
   }
 
   const auto dynamic_result{
-      this->locations_.find({ReferenceType::Dynamic, uri})};
+      this->locations_.find({SchemaReferenceType::Dynamic, uri})};
   if (dynamic_result != this->locations_.cend()) {
     return dynamic_result->second;
   }
@@ -644,30 +739,31 @@ auto Frame::traverse(const std::string &uri) const
   return std::nullopt;
 }
 
-auto Frame::dereference(const LocationsEntry &location,
-                        const Pointer &relative_schema_location) const
-    -> std::pair<ReferenceType,
+auto SchemaFrame::dereference(const LocationsEntry &location,
+                              const Pointer &relative_schema_location) const
+    -> std::pair<SchemaReferenceType,
                  std::optional<std::reference_wrapper<const LocationsEntry>>> {
   const auto effective_location{
       location.pointer.concat({relative_schema_location})};
-  const auto maybe_reference_entry{
-      this->references_.find({ReferenceType::Static, effective_location})};
+  const auto maybe_reference_entry{this->references_.find(
+      {SchemaReferenceType::Static, effective_location})};
   if (maybe_reference_entry == this->references_.cend()) {
     // If static dereferencing failed but we know the reference
     // is dynamic, then report so, but without a location, as by
     // definition we can't know the destination until at runtime
     if (this->references_.contains(
-            {ReferenceType::Dynamic, effective_location})) {
-      return {ReferenceType::Dynamic, std::nullopt};
+            {SchemaReferenceType::Dynamic, effective_location})) {
+      return {SchemaReferenceType::Dynamic, std::nullopt};
     }
 
-    return {ReferenceType::Static, std::nullopt};
+    return {SchemaReferenceType::Static, std::nullopt};
   }
 
-  const auto destination{this->locations_.find(
-      {ReferenceType::Static, maybe_reference_entry->second.destination})};
+  const auto destination{
+      this->locations_.find({SchemaReferenceType::Static,
+                             maybe_reference_entry->second.destination})};
   assert(destination != this->locations_.cend());
-  return {ReferenceType::Static, destination->second};
+  return {SchemaReferenceType::Static, destination->second};
 }
 
 } // namespace sourcemeta::core

@@ -6,7 +6,7 @@
 #endif
 
 #include <sourcemeta/core/jsonpointer.h>
-#include <sourcemeta/core/jsonschema_reference.h>
+#include <sourcemeta/core/jsonschema_keywords.h>
 #include <sourcemeta/core/jsonschema_resolver.h>
 #include <sourcemeta/core/jsonschema_walker.h>
 
@@ -34,7 +34,7 @@ namespace sourcemeta::core {
 /// #include <cassert>
 ///
 /// const sourcemeta::core::JSON document =
-///     sourcemeta::core::parse(R"JSON({
+///     sourcemeta::core::parse_json(R"JSON({
 ///   "$id": "https://www.example.com/schema",
 ///   "$schema": "https://json-schema.org/draft/2020-12/schema",
 ///   "items": { "$id": "foo", "type": "string" },
@@ -44,59 +44,59 @@ namespace sourcemeta::core {
 ///   }
 /// })JSON");
 ///
-/// sourcemeta::core::Frame frame;
+/// sourcemeta::core::SchemaSchemaFrame frame;
 /// frame.analyse(document,
-///   sourcemeta::core::default_schema_walker,
+///   sourcemeta::core::schema_official_walker,
 ///   sourcemeta::core::official_resolver);
 ///
 /// // IDs
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/foo"}));
 ///
 /// // Anchors
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#test"}));
 ///
 /// // Root Pointers
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/$id"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/$schema"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/items"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/items/$id"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/items/type"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties/foo"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties/foo/$anchor"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties/foo/type"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties/bar"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/schema#/properties/bar/$ref"}));
 ///
 /// // Subpointers
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/foo#/$id"}));
-/// assert(frame.locations().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   "https://www.example.com/foo#/type"}));
 ///
 /// // References
-/// assert(frame.references().contains({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.references().contains({sourcemeta::core::SchemaReferenceType::Static,
 ///   { "properties", "bar", "$ref" }}));
-/// assert(frame.references().at({sourcemeta::core::ReferenceType::Static,
+/// assert(frame.references().at({sourcemeta::core::SchemaReferenceType::Static,
 ///   { "properties", "bar", "$ref" }}).destination ==
 ///     "https://www.example.com/schema#/properties/foo");
 /// ```
-class SOURCEMETA_CORE_JSONSCHEMA_EXPORT Frame {
+class SOURCEMETA_CORE_JSONSCHEMA_EXPORT SchemaFrame {
 public:
   /// A single entry in a JSON Schema reference map
   struct ReferencesEntry {
@@ -113,7 +113,7 @@ public:
   /// have a static and a dynamic reference to the same location
   /// on the same schema object.
   using References =
-      std::map<std::pair<ReferenceType, Pointer>, ReferencesEntry>;
+      std::map<std::pair<SchemaReferenceType, Pointer>, ReferencesEntry>;
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
@@ -150,7 +150,7 @@ public:
   /// JSON Pointers within the schema, and subschemas dialects. We call it
   /// reference frame as this mapping is essential for resolving references.
   using Locations =
-      std::map<std::pair<ReferenceType, std::string>, LocationsEntry>;
+      std::map<std::pair<SchemaReferenceType, std::string>, LocationsEntry>;
 
   /// Analyse a given schema
   auto analyse(const JSON &schema, const SchemaWalker &walker,
@@ -188,7 +188,7 @@ public:
   auto
   dereference(const LocationsEntry &location,
               const Pointer &relative_schema_location = empty_pointer) const
-      -> std::pair<ReferenceType,
+      -> std::pair<SchemaReferenceType,
                    std::optional<std::reference_wrapper<const LocationsEntry>>>;
 
 private:

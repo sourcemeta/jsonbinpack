@@ -5,16 +5,16 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 
 TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, type_boolean) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "boolean"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(schema,
-                                        sourcemeta::core::default_schema_walker,
-                                        sourcemeta::core::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::core::schema_official_walker,
+      sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ false, true ]
   })JSON");
@@ -23,18 +23,18 @@ TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, type_boolean) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, drop_non_boolean_keywords_1) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "boolean",
     "maxItems": 4,
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(schema,
-                                        sourcemeta::core::default_schema_walker,
-                                        sourcemeta::core::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::core::schema_official_walker,
+      sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ false, true ]
   })JSON");
@@ -43,18 +43,18 @@ TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, drop_non_boolean_keywords_1) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, drop_non_boolean_keywords_2) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ true, false, true ],
     "maxItems": 4,
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(schema,
-                                        sourcemeta::core::default_schema_walker,
-                                        sourcemeta::core::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::core::schema_official_walker,
+      sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ false, true ]
   })JSON");
@@ -63,17 +63,17 @@ TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, drop_non_boolean_keywords_2) {
 }
 
 TEST(JSONBinPack_Canonicalizer_Boolean_2020_12, drop_non_boolean_keywords_3) {
-  auto schema = sourcemeta::core::parse(R"JSON({
+  auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "boolean",
     "format": "uri"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(schema,
-                                        sourcemeta::core::default_schema_walker,
-                                        sourcemeta::core::official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(
+      schema, sourcemeta::core::schema_official_walker,
+      sourcemeta::core::official_resolver);
 
-  const auto expected = sourcemeta::core::parse(R"JSON({
+  const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ false, true ]
   })JSON");

@@ -6,12 +6,12 @@ auto relativize(JSON &schema, const SchemaWalker &walker,
                 const SchemaResolver &resolver,
                 const std::optional<std::string> &default_dialect,
                 const std::optional<std::string> &default_id) -> void {
-  Frame frame;
+  SchemaFrame frame;
   frame.analyse(schema, walker, resolver, default_dialect, default_id);
 
   for (const auto &entry : frame.locations()) {
-    if (entry.second.type != Frame::LocationType::Resource &&
-        entry.second.type != Frame::LocationType::Subschema) {
+    if (entry.second.type != SchemaFrame::LocationType::Resource &&
+        entry.second.type != SchemaFrame::LocationType::Subschema) {
       continue;
     }
 
@@ -24,7 +24,7 @@ auto relativize(JSON &schema, const SchemaWalker &walker,
     const auto base{URI{entry.second.base}.canonicalize()};
     for (const auto &property : subschema.as_object()) {
       if (walker(property.first, frame.vocabularies(entry.second, resolver))
-                  .type != KeywordType::Reference ||
+                  .type != SchemaKeywordType::Reference ||
           !property.second.is_string()) {
         continue;
       }

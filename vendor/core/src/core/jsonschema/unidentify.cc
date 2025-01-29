@@ -6,7 +6,7 @@ auto unidentify(JSON &schema, const SchemaWalker &walker,
                 const SchemaResolver &resolver,
                 const std::optional<std::string> &default_dialect) -> void {
   // (1) Re-frame before changing anything
-  Frame frame;
+  SchemaFrame frame;
   frame.analyse(schema, walker, resolver, default_dialect);
 
   // (2) Remove all identifiers and anchors
