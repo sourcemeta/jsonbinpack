@@ -36,7 +36,7 @@ auto main(int argc, char *argv[]) -> int {
   // Canonicalize
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
+      sourcemeta::core::schema_official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
@@ -50,7 +50,7 @@ auto main(int argc, char *argv[]) -> int {
   // Compile
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::official_resolver, DEFAULT_METASCHEMA);
+      sourcemeta::core::schema_official_resolver, DEFAULT_METASCHEMA);
 
   std::ofstream encoding_output_stream(directory / "encoding.json",
                                        std::ios::binary);

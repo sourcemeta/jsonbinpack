@@ -97,7 +97,7 @@ struct SchemaIteratorEntry {
 /// for (const auto &entry :
 ///          sourcemeta::core::SchemaIterator{
 ///          document, sourcemeta::core::schema_official_walker,
-///          sourcemeta::core::official_resolver}) {
+///          sourcemeta::core::schema_official_resolver}) {
 ///   sourcemeta::core::prettify(
 ///     sourcemeta::core::get(document, entry.pointer), std::cout);
 ///   std::cout << "\n";
@@ -164,7 +164,7 @@ private:
 /// for (const auto &entry :
 ///          sourcemeta::core::SchemaIteratorFlat{
 ///          document, sourcemeta::core::schema_official_walker,
-///          sourcemeta::core::official_resolver}) {
+///          sourcemeta::core::schema_official_resolver}) {
 ///   sourcemeta::core::prettify(
 ///     sourcemeta::core::get(document, entry.pointer), std::cout);
 ///   std::cout << "\n";
@@ -222,7 +222,7 @@ private:
 ///
 /// const auto vocabularies{
 ///   sourcemeta::core::vocabularies(
-///     document, sourcemeta::core::official_resolver)};
+///     document, sourcemeta::core::schema_official_resolver)};
 ///
 /// assert(sourcemeta::core::schema_keyword_priority(
 ///   "prefixItems", vocabularies,
@@ -261,7 +261,7 @@ auto SOURCEMETA_CORE_JSONSCHEMA_EXPORT schema_keyword_priority(
 /// for (const auto &entry :
 ///          sourcemeta::core::SchemaKeywordIterator{
 ///          document, sourcemeta::core::schema_official_walker,
-///          sourcemeta::core::official_resolver}) {
+///          sourcemeta::core::schema_official_resolver}) {
 ///   sourcemeta::core::stringify(entry.pointer, std::cout);
 ///   std::cout << "\n";
 /// }

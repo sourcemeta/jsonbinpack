@@ -14,7 +14,7 @@ TEST(JSONBinPack_Canonicalizer_Null_2020_12, drop_non_null_keywords_1) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::official_resolver);
+      sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -34,7 +34,7 @@ TEST(JSONBinPack_Canonicalizer_Null_2020_12, drop_non_null_keywords_2) {
 
   sourcemeta::jsonbinpack::canonicalize(
       schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::official_resolver);
+      sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",

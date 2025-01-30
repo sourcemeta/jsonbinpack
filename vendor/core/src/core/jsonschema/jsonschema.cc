@@ -9,6 +9,8 @@
 #include <type_traits> // std::remove_reference_t
 #include <utility>     // std::move
 
+#include <iostream>
+
 auto sourcemeta::core::is_schema(const sourcemeta::core::JSON &schema) -> bool {
   return schema.is_object() || schema.is_boolean();
 }
@@ -96,7 +98,17 @@ auto sourcemeta::core::identify(
     return default_id;
   }
 
-  return identify(schema, maybe_base_dialect.value(), default_id);
+  const auto result{identify(schema, maybe_base_dialect.value(), default_id)};
+
+  // A last shot supporting identifiers alongside `$ref` in loose mode
+  if (!result.has_value() && strategy == SchemaIdentificationStrategy::Loose) {
+    const auto keyword{id_keyword(maybe_base_dialect.value())};
+    if (schema.defines(keyword) && schema.at(keyword).is_string()) {
+      return schema.at(keyword).to_string();
+    }
+  }
+
+  return result;
 }
 
 auto sourcemeta::core::identify(const JSON &schema,
@@ -108,6 +120,7 @@ auto sourcemeta::core::identify(const JSON &schema,
   }
 
   const auto keyword{id_keyword(base_dialect)};
+
   if (!schema.defines(keyword)) {
     return default_id;
   }
@@ -545,5 +558,70 @@ auto sourcemeta::core::schema_format_compare(
   } else {
     // For unknown keywords, go alphabetically
     return left < right;
+  }
+}
+
+auto sourcemeta::core::reference_visit(
+    sourcemeta::core::JSON &schema,
+    const sourcemeta::core::SchemaWalker &walker,
+    const sourcemeta::core::SchemaResolver &resolver,
+    const sourcemeta::core::SchemaVisitorReference &callback,
+    const std::optional<std::string> &default_dialect,
+    const std::optional<std::string> &default_id) -> void {
+  sourcemeta::core::SchemaFrame frame;
+  frame.analyse(schema, walker, resolver, default_dialect, default_id);
+  for (const auto &entry : frame.locations()) {
+    if (entry.second.type !=
+            sourcemeta::core::SchemaFrame::LocationType::Resource &&
+        entry.second.type !=
+            sourcemeta::core::SchemaFrame::LocationType::Subschema) {
+      continue;
+    }
+
+    auto &subschema{sourcemeta::core::get(schema, entry.second.pointer)};
+    assert(sourcemeta::core::is_schema(subschema));
+    if (!subschema.is_object()) {
+      continue;
+    }
+
+    const sourcemeta::core::URI base{entry.second.base};
+    // Assume the base is canonicalized already
+    assert(
+        sourcemeta::core::URI{entry.second.base}.canonicalize().recompose() ==
+        base.recompose());
+    for (const auto &property : subschema.as_object()) {
+      const auto walker_result{
+          walker(property.first, frame.vocabularies(entry.second, resolver))};
+      if (walker_result.type !=
+              sourcemeta::core::SchemaKeywordType::Reference ||
+          !property.second.is_string()) {
+        continue;
+      }
+
+      assert(property.second.is_string());
+      assert(walker_result.vocabulary.has_value());
+      sourcemeta::core::URI reference{property.second.to_string()};
+      callback(subschema, base, walker_result.vocabulary.value(),
+               property.first, reference);
+    }
+  }
+}
+
+auto sourcemeta::core::reference_visitor_relativize(
+    sourcemeta::core::JSON &subschema, const sourcemeta::core::URI &base,
+    const sourcemeta::core::JSON::String &vocabulary,
+    const sourcemeta::core::JSON::String &keyword, URI &reference) -> void {
+  // In 2019-09, `$recursiveRef` can only be `#`, so there
+  // is nothing else we can possibly do
+  if (vocabulary == "https://json-schema.org/draft/2019-09/vocab/core" &&
+      keyword == "$recursiveRef") {
+    return;
+  }
+
+  reference.relative_to(base);
+  reference.canonicalize();
+
+  if (reference.is_relative()) {
+    subschema.assign(keyword, sourcemeta::core::JSON{reference.recompose()});
   }
 }

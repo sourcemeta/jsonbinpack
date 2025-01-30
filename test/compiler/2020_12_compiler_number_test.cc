@@ -11,7 +11,7 @@ TEST(JSONBinPack_Compiler_Number_2020_12, arbitrary) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",

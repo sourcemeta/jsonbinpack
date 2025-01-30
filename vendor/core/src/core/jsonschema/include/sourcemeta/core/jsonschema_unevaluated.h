@@ -57,11 +57,11 @@ using SchemaUnevaluatedEntries = std::map<std::string, SchemaUnevaluatedEntry>;
 /// sourcemeta::core::SchemaSchemaFrame frame;
 /// frame.analyse(document,
 ///   sourcemeta::core::schema_official_walker,
-///   sourcemeta::core::official_resolver);
+///   sourcemeta::core::schema_official_resolver);
 /// const auto result{sourcemeta::core::unevaluated(
 ///     schema, frame,
 ///     sourcemeta::core::schema_official_walker,
-///     sourcemeta::core::official_resolver)};
+///     sourcemeta::core::schema_official_resolver)};
 ///
 /// assert(result.contains("#/unevaluatedProperties"));
 /// assert(!result.at("#/unevaluatedProperties").dynamic);
