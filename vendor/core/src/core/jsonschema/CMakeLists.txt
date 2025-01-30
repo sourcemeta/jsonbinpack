@@ -8,7 +8,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME jsonschema
     keywords.h transform.h
   SOURCES jsonschema.cc default_walker.cc frame.cc
     resolver.cc walker.cc bundle.cc
-    unevaluated.cc relativize.cc unidentify.cc
+    unevaluated.cc unidentify.cc
     transform_rule.cc transformer.cc
     "${CMAKE_CURRENT_BINARY_DIR}/official_resolver.cc")
 

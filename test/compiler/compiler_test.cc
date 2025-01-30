@@ -12,7 +12,7 @@ TEST(JSONBinPack_Compiler, dialect_2020_12) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -30,7 +30,7 @@ TEST(JSONBinPack_Compiler, dialect_2019_09) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -48,7 +48,7 @@ TEST(JSONBinPack_Compiler, dialect_draft7) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -66,7 +66,7 @@ TEST(JSONBinPack_Compiler, dialect_draft6) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -84,7 +84,7 @@ TEST(JSONBinPack_Compiler, dialect_draft4) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -102,7 +102,7 @@ TEST(JSONBinPack_Compiler, dialect_draft3) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -120,7 +120,7 @@ TEST(JSONBinPack_Compiler, dialect_draft2) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -138,7 +138,7 @@ TEST(JSONBinPack_Compiler, dialect_draft1) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -156,7 +156,7 @@ TEST(JSONBinPack_Compiler, dialect_draft0) {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -174,7 +174,7 @@ TEST(JSONBinPack_Compiler, unknown_dialect_default) {
 
   sourcemeta::jsonbinpack::compile(
       schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::official_resolver,
+      sourcemeta::core::schema_official_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
@@ -195,7 +195,7 @@ TEST(JSONBinPack_Compiler, unknown_dialect_without_default) {
 
   EXPECT_THROW(sourcemeta::jsonbinpack::compile(
                    schema, sourcemeta::core::schema_official_walker,
-                   sourcemeta::core::official_resolver),
+                   sourcemeta::core::schema_official_resolver),
                sourcemeta::core::SchemaError);
 }
 
@@ -207,6 +207,6 @@ TEST(JSONBinPack_Compiler, invalid_dialect) {
 
   EXPECT_THROW(sourcemeta::jsonbinpack::compile(
                    schema, sourcemeta::core::schema_official_walker,
-                   sourcemeta::core::official_resolver),
+                   sourcemeta::core::schema_official_resolver),
                sourcemeta::core::SchemaResolutionError);
 }

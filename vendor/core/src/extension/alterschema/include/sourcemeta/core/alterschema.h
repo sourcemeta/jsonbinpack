@@ -78,7 +78,7 @@ enum class AlterSchemaCategory {
 /// })JSON");
 ///
 /// bundle.apply(schema, sourcemeta::core::schema_official_walker,
-///              sourcemeta::core::official_resolver);
+///              sourcemeta::core::schema_official_resolver);
 /// ```
 SOURCEMETA_CORE_ALTERSCHEMA_EXPORT
 auto add(SchemaTransformer &bundle, const AlterSchemaCategory category) -> void;

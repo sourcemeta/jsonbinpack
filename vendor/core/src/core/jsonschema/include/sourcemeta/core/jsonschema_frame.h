@@ -47,7 +47,7 @@ namespace sourcemeta::core {
 /// sourcemeta::core::SchemaSchemaFrame frame;
 /// frame.analyse(document,
 ///   sourcemeta::core::schema_official_walker,
-///   sourcemeta::core::official_resolver);
+///   sourcemeta::core::schema_official_resolver);
 ///
 /// // IDs
 /// assert(frame.locations().contains({sourcemeta::core::SchemaReferenceType::Static,

@@ -101,7 +101,7 @@ auto SchemaFlatFileResolver::add(
   const auto identifier{sourcemeta::core::identify(
       schema, *this, SchemaIdentificationStrategy::Loose, default_dialect,
       default_id)};
-  if (!identifier.has_value()) {
+  if (!identifier.has_value() && !default_id.has_value()) {
     std::ostringstream error;
     error << "Cannot identify schema: " << canonical.string();
     throw SchemaError(error.str());
@@ -109,7 +109,9 @@ auto SchemaFlatFileResolver::add(
 
   // Filesystems behave differently with regards to casing. To unify
   // them, assume they are case-insensitive.
-  const auto effective_identifier{to_lowercase(identifier.value())};
+  const auto effective_identifier{to_lowercase(
+      default_id.has_value() ? identifier.value_or(default_id.value())
+                             : identifier.value())};
 
   const auto result{this->schemas.emplace(
       effective_identifier,
@@ -117,7 +119,7 @@ auto SchemaFlatFileResolver::add(
   if (!result.second && result.first->second.path != canonical) {
     std::ostringstream error;
     error << "Cannot register the same identifier twice: "
-          << identifier.value();
+          << effective_identifier;
     throw SchemaError(error.str());
   }
 
@@ -150,9 +152,10 @@ auto SchemaFlatFileResolver::operator()(std::string_view identifier) const
                                  *this, result->second.default_dialect);
     // Because we allow re-identification, we can get into issues unless we
     // always try to relativize references
-    sourcemeta::core::relativize(schema, schema_official_walker, *this,
-                                 result->second.default_dialect,
-                                 result->second.original_identifier);
+    sourcemeta::core::reference_visit(
+        schema, schema_official_walker, *this,
+        sourcemeta::core::reference_visitor_relativize,
+        result->second.default_dialect, result->second.original_identifier);
     sourcemeta::core::reidentify(schema, result->first, *this,
                                  result->second.default_dialect);
 

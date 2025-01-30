@@ -38,7 +38,7 @@ namespace sourcemeta::core {
 ///       "type": "string"
 ///     })JSON");
 ///   } else {
-///     return sourcemeta::core::official_resolver(identifier);
+///     return sourcemeta::core::schema_official_resolver(identifier);
 ///   }
 /// }
 ///
@@ -94,7 +94,7 @@ auto bundle(sourcemeta::core::JSON &schema, const SchemaWalker &walker,
 ///       "type": "string"
 ///     })JSON");
 ///   } else {
-///     return sourcemeta::core::official_resolver(identifier);
+///     return sourcemeta::core::schema_official_resolver(identifier);
 ///   }
 /// }
 ///

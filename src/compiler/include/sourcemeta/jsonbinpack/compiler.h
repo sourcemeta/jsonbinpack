@@ -41,7 +41,7 @@ namespace sourcemeta::jsonbinpack {
 ///
 /// sourcemeta::jsonbinpack::compile(
 ///     schema, sourcemeta::core::schema_official_walker,
-///     sourcemeta::core::official_resolver);
+///     sourcemeta::core::schema_official_resolver);
 ///
 /// sourcemeta::core::prettify(schema, std::cout);
 /// std::cout << std::endl;
@@ -74,7 +74,7 @@ auto compile(sourcemeta::core::JSON &schema,
 ///
 /// sourcemeta::jsonbinpack::canonicalize(
 ///     schema, sourcemeta::core::schema_official_walker,
-///     sourcemeta::core::official_resolver);
+///     sourcemeta::core::schema_official_resolver);
 ///
 /// sourcemeta::core::prettify(schema, std::cout);
 /// std::cout << std::endl;

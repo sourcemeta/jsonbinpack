@@ -24,7 +24,7 @@ namespace sourcemeta::core {
 ///
 /// For convenience, we provide the following default resolvers:
 ///
-/// - sourcemeta::core::official_resolver
+/// - sourcemeta::core::schema_official_resolver
 ///
 /// You can implement resolvers to read from a local storage, to send HTTP
 /// requests, or anything your application might require. Unless your resolver
@@ -35,7 +35,7 @@ using SchemaResolver = std::function<std::optional<JSON>(std::string_view)>;
 /// @ingroup jsonschema
 /// A default resolver that relies on built-in official schemas.
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto official_resolver(std::string_view identifier)
+auto schema_official_resolver(std::string_view identifier)
     -> std::optional<sourcemeta::core::JSON>;
 
 /// @ingroup jsonschema
@@ -48,7 +48,7 @@ auto official_resolver(std::string_view identifier)
 ///
 /// // (1) Create a map resolver that falls back to the official resolver
 /// sourcemeta::core::SchemaMapResolver
-///   resolver{sourcemeta::core::official_resolver};
+///   resolver{sourcemeta::core::schema_official_resolver};
 ///
 /// const sourcemeta::core::JSON schema =
 ///   sourcemeta::core::parse_json(R"JSON({
@@ -105,7 +105,7 @@ private:
 ///
 /// // (1) Create a flat file resolver that falls back to the official resolver
 /// sourcemeta::core::SchemaFlatFileResolver
-///   resolver{sourcemeta::core::official_resolver};
+///   resolver{sourcemeta::core::schema_official_resolver};
 ///
 /// // (2) Register a schema by path
 /// resolver.add("path/to/example.schema.json");

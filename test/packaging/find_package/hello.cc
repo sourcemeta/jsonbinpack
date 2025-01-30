@@ -17,7 +17,7 @@ auto main() -> int {
 
   sourcemeta::jsonbinpack::compile(schema,
                                    sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::official_resolver);
+                                   sourcemeta::core::schema_official_resolver);
 
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::load(schema)};

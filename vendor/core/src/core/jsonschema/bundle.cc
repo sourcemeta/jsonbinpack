@@ -48,7 +48,7 @@ auto is_official_metaschema_reference(const sourcemeta::core::Pointer &pointer,
                                       const std::string &destination) -> bool {
   return !pointer.empty() && pointer.back().is_property() &&
          pointer.back().to_property() == "$schema" &&
-         sourcemeta::core::official_resolver(destination).has_value();
+         sourcemeta::core::schema_official_resolver(destination).has_value();
 }
 
 auto bundle_schema(sourcemeta::core::JSON &root, const std::string &container,
