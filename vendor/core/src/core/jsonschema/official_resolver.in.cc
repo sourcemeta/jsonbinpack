@@ -1,4 +1,4 @@
-#include <sourcemeta/core/jsonschema_resolver.h>
+#include <sourcemeta/core/jsonschema.h>
 
 auto sourcemeta::core::schema_official_resolver(std::string_view identifier)
     -> std::optional<sourcemeta::core::JSON> {

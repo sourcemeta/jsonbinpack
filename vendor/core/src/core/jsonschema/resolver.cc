@@ -1,5 +1,4 @@
 #include <sourcemeta/core/jsonschema.h>
-#include <sourcemeta/core/jsonschema_resolver.h>
 
 #include <algorithm> // std::transform
 #include <cassert>   // assert
@@ -21,7 +20,7 @@ auto SchemaMapResolver::add(const JSON &schema,
 
   // Registering the top-level schema is not enough. We need to check
   // and register every embedded schema resource too
-  SchemaFrame frame;
+  SchemaFrame frame{SchemaFrame::Mode::References};
   frame.analyse(schema, schema_official_walker, *this, default_dialect,
                 default_id);
 
@@ -93,8 +92,8 @@ static auto to_lowercase(const std::string_view input) -> std::string {
 auto SchemaFlatFileResolver::add(
     const std::filesystem::path &path,
     const std::optional<std::string> &default_dialect,
-    const std::optional<std::string> &default_id, const Reader &reader)
-    -> const std::string & {
+    const std::optional<std::string> &default_id, const Reader &reader,
+    SchemaVisitorReference &&reference_visitor) -> const std::string & {
   const auto canonical{std::filesystem::weakly_canonical(path)};
   const auto schema{reader(canonical)};
   assert(sourcemeta::core::is_schema(schema));
@@ -115,7 +114,9 @@ auto SchemaFlatFileResolver::add(
 
   const auto result{this->schemas.emplace(
       effective_identifier,
-      Entry{canonical, default_dialect, effective_identifier, reader})};
+      Entry{canonical, default_dialect, effective_identifier, reader,
+            reference_visitor ? std::move(reference_visitor)
+                              : reference_visitor_relativize})};
   if (!result.second && result.first->second.path != canonical) {
     std::ostringstream error;
     error << "Cannot register the same identifier twice: "
@@ -153,8 +154,7 @@ auto SchemaFlatFileResolver::operator()(std::string_view identifier) const
     // Because we allow re-identification, we can get into issues unless we
     // always try to relativize references
     sourcemeta::core::reference_visit(
-        schema, schema_official_walker, *this,
-        sourcemeta::core::reference_visitor_relativize,
+        schema, schema_official_walker, *this, result->second.reference_visitor,
         result->second.default_dialect, result->second.original_identifier);
     sourcemeta::core::reidentify(schema, result->first, *this,
                                  result->second.default_dialect);

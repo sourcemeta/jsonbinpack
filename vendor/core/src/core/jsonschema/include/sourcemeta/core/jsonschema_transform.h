@@ -22,6 +22,7 @@
 #include <vector>      // std::vector
 
 namespace sourcemeta::core {
+
 /// @ingroup jsonschema
 ///
 /// A class that represents a transformation rule. Clients of this class

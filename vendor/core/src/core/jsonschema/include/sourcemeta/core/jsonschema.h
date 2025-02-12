@@ -6,19 +6,19 @@
 #endif
 
 #include <sourcemeta/core/json.h>
-#include <sourcemeta/core/jsonschema_bundle.h>
 #include <sourcemeta/core/jsonschema_error.h>
 #include <sourcemeta/core/jsonschema_frame.h>
-#include <sourcemeta/core/jsonschema_keywords.h>
 #include <sourcemeta/core/jsonschema_resolver.h>
 #include <sourcemeta/core/jsonschema_transform.h>
-#include <sourcemeta/core/jsonschema_unevaluated.h>
+#include <sourcemeta/core/jsonschema_types.h>
 #include <sourcemeta/core/jsonschema_walker.h>
 
-#include <functional> // std::function
-#include <map>        // std::map
-#include <optional>   // std::optional
-#include <string>     // std::string
+#include <cstdint>     // std::uint8_t
+#include <functional>  // std::function
+#include <map>         // std::map
+#include <optional>    // std::optional, std::nullopt
+#include <string>      // std::string
+#include <string_view> // std::string_view
 
 /// @defgroup jsonschema JSON Schema
 /// @brief A set of JSON Schema utilities across draft versions.
@@ -30,6 +30,59 @@
 /// ```
 
 namespace sourcemeta::core {
+
+/// @ingroup jsonschema
+/// A default resolver that relies on built-in official schemas.
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto schema_official_resolver(std::string_view identifier)
+    -> std::optional<JSON>;
+
+/// @ingroup jsonschema
+/// A default schema walker with support for a wide range of drafs
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto schema_official_walker(std::string_view keyword,
+                            const std::map<std::string, bool> &vocabularies)
+    -> SchemaWalkerResult;
+
+/// @ingroup jsonschema
+///
+/// Calculate the priority of a keyword that determines the ordering in which a
+/// JSON Schema implementation should evaluate keyword on a subschema. It does
+/// so based on the keyword dependencies expressed in the schema walker. The
+/// higher the priority, the more the evaluation of such keyword must be
+/// delayed.
+///
+/// For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/jsonschema.h>
+/// #include <cassert>
+///
+/// const sourcemeta::core::JSON document =
+///   sourcemeta::core::parse_json(R"JSON({
+///   "$schema": "https://json-schema.org/draft/2020-12/schema",
+///   "prefixItems": [ true, true ],
+///   "items": false
+/// })JSON");
+///
+/// const auto vocabularies{
+///   sourcemeta::core::vocabularies(
+///     document, sourcemeta::core::schema_official_resolver)};
+///
+/// assert(sourcemeta::core::schema_keyword_priority(
+///   "prefixItems", vocabularies,
+///   sourcemeta::core::schema_official_walker) == 0);
+///
+/// // The "items" keyword must be evaluated after the "prefixItems" keyword
+/// assert(sourcemeta::core::schema_keyword_priority(
+///   "items", vocabularies,
+///   sourcemeta::core::schema_official_walker) == 1);
+/// ```
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto schema_keyword_priority(std::string_view keyword,
+                             const std::map<std::string, bool> &vocabularies,
+                             const SchemaWalker &walker) -> std::uint64_t;
 
 /// @ingroup jsonschema
 ///
@@ -46,16 +99,6 @@ namespace sourcemeta::core {
 /// ```
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto is_schema(const JSON &schema) -> bool;
-
-/// @ingroup jsonschema
-/// The strategy to follow when attempting to identify a schema
-enum class SchemaIdentificationStrategy : std::uint8_t {
-  /// Only proceed if we can guarantee the identifier is valid
-  Strict,
-
-  /// Attempt to guess even if we don't know the base dialect
-  Loose
-};
 
 /// @ingroup jsonschema
 ///
@@ -358,18 +401,6 @@ auto unidentify(
 
 /// @ingroup jsonschema
 ///
-/// Visit every reference in a schema. The arguments are as follows:
-///
-/// - The current subschema
-/// - The base URI of the current subschema
-/// - The reference vocabulary
-/// - The reference keyword name
-/// - The reference reference destination
-using SchemaVisitorReference = std::function<void(
-    JSON &, const URI &, const JSON::String &, const JSON::String &, URI &)>;
-
-/// @ingroup jsonschema
-///
 /// A reference visitor to try to turn every possible absolute reference in a
 /// schema into a relative one. For example:
 ///
@@ -446,6 +477,120 @@ auto reference_visit(
     const SchemaVisitorReference &callback,
     const std::optional<std::string> &default_dialect = std::nullopt,
     const std::optional<std::string> &default_id = std::nullopt) -> void;
+
+// TODO: Optionally let users bundle the metaschema too
+
+/// @ingroup jsonschema
+///
+/// This function bundles a JSON Schema (starting from Draft 4) by embedding
+/// every remote reference into the top level schema resource, handling circular
+/// dependencies and more. This overload mutates the input schema.  For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/jsonschema.h>
+/// #include <cassert>
+///
+/// // A custom resolver that knows about an additional schema
+/// static auto test_resolver(std::string_view identifier)
+///     -> std::optional<sourcemeta::core::JSON> {
+///   if (identifier == "https://www.example.com/test") {
+///     return sourcemeta::core::parse_json(R"JSON({
+///       "$id": "https://www.example.com/test",
+///       "$schema": "https://json-schema.org/draft/2020-12/schema",
+///       "type": "string"
+///     })JSON");
+///   } else {
+///     return sourcemeta::core::schema_official_resolver(identifier);
+///   }
+/// }
+///
+/// sourcemeta::core::JSON document =
+///     sourcemeta::core::parse_json(R"JSON({
+///   "$schema": "https://json-schema.org/draft/2020-12/schema",
+///   "items": { "$ref": "https://www.example.com/test" }
+/// })JSON");
+///
+/// sourcemeta::core::bundle(document,
+///   sourcemeta::core::schema_official_walker, test_resolver);
+///
+/// const sourcemeta::core::JSON expected =
+///     sourcemeta::core::parse_json(R"JSON({
+///   "$schema": "https://json-schema.org/draft/2020-12/schema",
+///   "items": { "$ref": "https://www.example.com/test" },
+///   "$defs": {
+///     "https://www.example.com/test": {
+///       "$id": "https://www.example.com/test",
+///       "$schema": "https://json-schema.org/draft/2020-12/schema",
+///       "type": "string"
+///     }
+///   }
+/// })JSON");
+///
+/// assert(document == expected);
+/// ```
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto bundle(JSON &schema, const SchemaWalker &walker,
+            const SchemaResolver &resolver,
+            const std::optional<std::string> &default_dialect = std::nullopt)
+    -> void;
+
+/// @ingroup jsonschema
+///
+/// This function bundles a JSON Schema (starting from Draft 4) by embedding
+/// every remote reference into the top level schema resource, handling circular
+/// dependencies and more. This overload returns a new schema, without mutating
+/// the input schema. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/jsonschema.h>
+/// #include <cassert>
+///
+/// // A custom resolver that knows about an additional schema
+/// static auto test_resolver(std::string_view identifier)
+///     -> std::optional<sourcemeta::core::JSON> {
+///   if (identifier == "https://www.example.com/test") {
+///     return sourcemeta::core::parse_json(R"JSON({
+///       "$id": "https://www.example.com/test",
+///       "$schema": "https://json-schema.org/draft/2020-12/schema",
+///       "type": "string"
+///     })JSON");
+///   } else {
+///     return sourcemeta::core::schema_official_resolver(identifier);
+///   }
+/// }
+///
+/// const sourcemeta::core::JSON document =
+///     sourcemeta::core::parse_json(R"JSON({
+///   "$schema": "https://json-schema.org/draft/2020-12/schema",
+///   "items": { "$ref": "https://www.example.com/test" }
+/// })JSON");
+///
+/// const sourcemeta::core::JSON result =
+///   sourcemeta::core::bundle(document,
+///     sourcemeta::core::schema_official_walker, test_resolver);
+///
+/// const sourcemeta::core::JSON expected =
+///     sourcemeta::core::parse_json(R"JSON({
+///   "$schema": "https://json-schema.org/draft/2020-12/schema",
+///   "items": { "$ref": "https://www.example.com/test" },
+///   "$defs": {
+///     "https://www.example.com/test": {
+///       "$id": "https://www.example.com/test",
+///       "$schema": "https://json-schema.org/draft/2020-12/schema",
+///       "type": "string"
+///     }
+///   }
+/// })JSON");
+///
+/// assert(result == expected);
+/// ```
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto bundle(const JSON &schema, const SchemaWalker &walker,
+            const SchemaResolver &resolver,
+            const std::optional<std::string> &default_dialect = std::nullopt)
+    -> JSON;
 
 } // namespace sourcemeta::core
 

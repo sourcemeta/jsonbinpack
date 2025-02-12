@@ -1,15 +1,13 @@
-#include <sourcemeta/core/json.h>
 #include <sourcemeta/core/jsonschema.h>
 
 #include <cassert>     // assert
 #include <cstdint>     // std::uint64_t
 #include <functional>  // std::less
 #include <limits>      // std::numeric_limits
+#include <numeric>     // std::accumulate
 #include <sstream>     // std::ostringstream
 #include <type_traits> // std::remove_reference_t
 #include <utility>     // std::move
-
-#include <iostream>
 
 auto sourcemeta::core::is_schema(const sourcemeta::core::JSON &schema) -> bool {
   return schema.is_object() || schema.is_boolean();
@@ -568,7 +566,8 @@ auto sourcemeta::core::reference_visit(
     const sourcemeta::core::SchemaVisitorReference &callback,
     const std::optional<std::string> &default_dialect,
     const std::optional<std::string> &default_id) -> void {
-  sourcemeta::core::SchemaFrame frame;
+  sourcemeta::core::SchemaFrame frame{
+      sourcemeta::core::SchemaFrame::Mode::Locations};
   frame.analyse(schema, walker, resolver, default_dialect, default_id);
   for (const auto &entry : frame.locations()) {
     if (entry.second.type !=
@@ -623,5 +622,70 @@ auto sourcemeta::core::reference_visitor_relativize(
 
   if (reference.is_relative()) {
     subschema.assign(keyword, sourcemeta::core::JSON{reference.recompose()});
+  }
+}
+
+auto sourcemeta::core::schema_keyword_priority(
+    std::string_view keyword, const std::map<std::string, bool> &vocabularies,
+    const sourcemeta::core::SchemaWalker &walker) -> std::uint64_t {
+  const auto result{walker(keyword, vocabularies)};
+  return std::accumulate(
+      result.dependencies.cbegin(), result.dependencies.cend(),
+      static_cast<std::uint64_t>(0),
+      [&vocabularies, &walker](const auto accumulator, const auto &dependency) {
+        return std::max(
+            accumulator,
+            schema_keyword_priority(dependency, vocabularies, walker) + 1);
+      });
+}
+
+auto sourcemeta::core::unidentify(
+    sourcemeta::core::JSON &schema,
+    const sourcemeta::core::SchemaWalker &walker,
+    const sourcemeta::core::SchemaResolver &resolver,
+    const std::optional<std::string> &default_dialect) -> void {
+  // (1) Re-frame before changing anything
+  sourcemeta::core::SchemaFrame frame{
+      sourcemeta::core::SchemaFrame::Mode::References};
+  frame.analyse(schema, walker, resolver, default_dialect);
+
+  // (2) Remove all identifiers and anchors
+  for (const auto &entry : sourcemeta::core::SchemaIterator{
+           schema, walker, resolver, default_dialect}) {
+    auto &subschema{sourcemeta::core::get(schema, entry.pointer)};
+    if (subschema.is_boolean()) {
+      continue;
+    }
+
+    assert(entry.base_dialect.has_value());
+    sourcemeta::core::anonymize(subschema, entry.base_dialect.value());
+
+    if (entry.vocabularies.contains(
+            "https://json-schema.org/draft/2020-12/vocab/core")) {
+      subschema.erase("$anchor");
+      subschema.erase("$dynamicAnchor");
+    }
+
+    if (entry.vocabularies.contains(
+            "https://json-schema.org/draft/2019-09/vocab/core")) {
+      subschema.erase("$anchor");
+      subschema.erase("$recursiveAnchor");
+    }
+  }
+
+  // (3) Fix-up reference based on pointers from the root
+  for (const auto &[key, reference] : frame.references()) {
+    const auto result{frame.traverse(reference.destination)};
+    if (result.has_value()) {
+      sourcemeta::core::set(
+          schema, key.second,
+          sourcemeta::core::JSON{
+              sourcemeta::core::to_uri(result.value().get().pointer)
+                  .recompose()});
+    } else if (!key.second.empty() && key.second.back().is_property() &&
+               key.second.back().to_property() != "$schema") {
+      sourcemeta::core::set(schema, key.second,
+                            sourcemeta::core::JSON{reference.destination});
+    }
   }
 }
