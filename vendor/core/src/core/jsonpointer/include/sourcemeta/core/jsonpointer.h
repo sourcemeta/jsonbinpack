@@ -14,6 +14,7 @@
 #include <sourcemeta/core/jsonpointer_position.h>
 #include <sourcemeta/core/jsonpointer_proxy.h>
 #include <sourcemeta/core/jsonpointer_subpointer_walker.h>
+#include <sourcemeta/core/jsonpointer_template.h>
 #include <sourcemeta/core/jsonpointer_walker.h>
 
 #include <functional> // std::reference_wrapper
@@ -46,6 +47,10 @@ const Pointer empty_pointer;
 /// @ingroup jsonpointer
 /// A global constant instance of the empty JSON WeakPointer.
 const WeakPointer empty_weak_pointer;
+
+/// @ingroup jsonpointer
+/// A JSON Pointer with unresolved wildcards
+using PointerTemplate = GenericPointerTemplate<Pointer>;
 
 /// @ingroup jsonpointer
 using PointerProxy = GenericPointerProxy<Pointer>;
@@ -370,6 +375,27 @@ auto stringify(const Pointer &pointer,
 /// ```
 SOURCEMETA_CORE_JSONPOINTER_EXPORT
 auto stringify(const WeakPointer &pointer,
+               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
+    -> void;
+
+/// @ingroup jsonpointer
+///
+/// Stringify the input JSON Pointer template into a given C++ standard output
+/// stream. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/jsonpointer.h>
+/// #include <iostream>
+/// #include <sstream>
+///
+/// const sourcemeta::core::Pointer base{"foo", "bar"};
+/// const sourcemeta::core::PointerTemplate pointer{base};
+/// std::ostringstream stream;
+/// sourcemeta::core::stringify(pointer, stream);
+/// std::cout << stream.str() << std::endl;
+/// ```
+SOURCEMETA_CORE_JSONPOINTER_EXPORT
+auto stringify(const PointerTemplate &pointer,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void;
 

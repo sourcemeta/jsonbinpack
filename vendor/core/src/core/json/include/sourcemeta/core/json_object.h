@@ -400,7 +400,7 @@ public:
   }
 
   // Hash an object property
-  inline auto hash(const Key &property) const -> Container::hash_type {
+  inline auto hash(const Key &property) const -> typename Container::hash_type {
     return this->data.hasher(property);
   }
 

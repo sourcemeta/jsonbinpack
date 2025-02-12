@@ -45,7 +45,7 @@ static auto uri_text_range(const UriTextRangeA *const range)
                               range->afterLast - range->first)};
 }
 
-static auto uri_parse_json(const std::string &data, UriUriA *uri) -> void {
+static auto uri_parse(const std::string &data, UriUriA *uri) -> void {
   const char *error_position;
   switch (uriParseSingleUriA(uri, data.c_str(), &error_position)) {
     case URI_ERROR_SYNTAX:
@@ -117,14 +117,14 @@ struct URI::Internal {
 };
 
 URI::URI(std::string input) : data{std::move(input)}, internal{new Internal} {
-  this->parse_json();
+  this->parse();
 }
 
 URI::URI(std::istream &input) : internal{new Internal} {
   std::ostringstream output;
   output << input.rdbuf();
   this->data = output.str();
-  this->parse_json();
+  this->parse();
 }
 
 URI::~URI() { uriFreeUriMembersA(&this->internal->uri); }
@@ -146,7 +146,7 @@ URI::URI(URI &&other)
   other.internal = nullptr;
 }
 
-auto URI::parse_json() -> void {
+auto URI::parse() -> void {
   if (this->parsed) {
     // clean
     this->path_ = std::nullopt;
@@ -163,7 +163,7 @@ auto URI::parse_json() -> void {
   // NOTE: we don't skip this line for fast path
   // as the internal structure of uriparser could still
   // be used by resolve_from and relative_to methods
-  uri_parse_json(this->data, &this->internal->uri);
+  uri_parse(this->data, &this->internal->uri);
 
   // Fast path for the root path
   if (this->data == "/") {
@@ -432,7 +432,11 @@ auto URI::canonicalize() -> URI & {
   if (result_path.has_value()) {
     const auto canonical_path{canonicalize_path(result_path.value())};
     if (canonical_path.has_value()) {
-      this->path_ = canonical_path.value();
+      if (result_path.value().ends_with('/')) {
+        this->path_ = canonical_path.value() + "/";
+      } else {
+        this->path_ = canonical_path.value();
+      }
     }
   }
 
@@ -487,7 +491,7 @@ auto URI::resolve_from(const URI &base) -> URI & {
     uri_normalize(&absoluteDest);
     this->data = uri_to_string(&absoluteDest);
     uriFreeUriMembersA(&absoluteDest);
-    this->parse_json();
+    this->parse();
     return *this;
   } catch (...) {
     uriFreeUriMembersA(&absoluteDest);
@@ -530,7 +534,7 @@ auto URI::relative_to(const URI &base) -> URI & {
     copy.data.erase(0, 1);
   }
 
-  copy.parse_json();
+  copy.parse();
 
   // `uriparser` has this weird thing where it will only look at scheme and
   // authority, incorrectly thinking that a certain URI is a base of another one
@@ -538,9 +542,32 @@ auto URI::relative_to(const URI &base) -> URI & {
   // workaround to prevent this non-sense.
   if (!copy.recompose().empty() || base.recompose() == this->recompose()) {
     this->data = std::move(copy.data);
-    this->parse_json();
+    this->parse();
   }
 
+  return *this;
+}
+
+auto URI::rebase(const URI &base, const URI &new_base) -> URI & {
+  this->relative_to(base);
+  if (!this->is_relative()) {
+    return *this;
+  }
+
+  // TODO: We should be able to this with `resolve_from`,
+  // however that methow can't take a relative base yet
+  std::ostringstream new_uri;
+  const auto new_base_string{new_base.recompose()};
+  const auto new_uri_string{this->recompose()};
+
+  new_uri << new_base_string;
+  if (!new_base_string.ends_with('/') && !new_uri_string.empty()) {
+    new_uri << '/';
+  }
+  new_uri << new_uri_string;
+
+  this->data = std::move(URI{new_uri.str()}.data);
+  this->parse();
   return *this;
 }
 
