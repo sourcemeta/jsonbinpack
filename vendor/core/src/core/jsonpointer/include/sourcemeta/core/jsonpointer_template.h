@@ -4,10 +4,13 @@
 #include <sourcemeta/core/jsonpointer_pointer.h>
 #include <sourcemeta/core/jsonpointer_token.h>
 
-#include <algorithm> // std::copy
+#include <sourcemeta/core/regex.h>
+
+#include <algorithm> // std::copy, std::all_of
 #include <cassert>   // assert
 #include <iterator>  // std::back_inserter
-#include <variant>   // std::variant
+#include <optional>  // std::optional, std::nullopt
+#include <variant>   // std::variant, std::holds_alternative, std::get
 #include <vector>    // std::vector
 
 namespace sourcemeta::core {
@@ -15,12 +18,20 @@ namespace sourcemeta::core {
 /// @ingroup jsonpointer
 template <typename PointerT> class GenericPointerTemplate {
 public:
-  /// The type of wildcard
   enum class Wildcard { Property, Item, Key };
-
+  struct Condition {
+    auto operator==(const Condition &) const noexcept -> bool = default;
+    auto operator<(const Condition &) const noexcept -> bool { return false; }
+    std::optional<typename PointerT::Value::String> suffix = std::nullopt;
+  };
+  struct Negation {
+    auto operator==(const Negation &) const noexcept -> bool = default;
+    auto operator<(const Negation &) const noexcept -> bool { return false; }
+  };
   using Regex = typename PointerT::Value::String;
   using Token = typename PointerT::Token;
-  using Container = std::vector<std::variant<Token, Wildcard, Regex>>;
+  using Container =
+      std::vector<std::variant<Wildcard, Condition, Negation, Regex, Token>>;
 
   /// This constructor creates an empty JSON Pointer template. For example:
   ///
@@ -114,10 +125,6 @@ public:
   /// pointer.emplace_back(sourcemeta::core::PointerTemplate::Wildcard::Property);
   /// ```
   template <class... Args> auto emplace_back(Args &&...args) -> reference {
-    // It is a logical error to push a token after a key wildcard
-    assert(this->empty() ||
-           !std::holds_alternative<Wildcard>(this->data.back()) ||
-           std::get<Wildcard>(this->data.back()) != Wildcard::Key);
     return this->data.emplace_back(args...);
   }
 
@@ -132,10 +139,6 @@ public:
   /// result.push_back(pointer);
   /// ```
   auto push_back(const PointerT &other) -> void {
-    // It is a logical error to push a token after a key wildcard
-    assert(this->empty() ||
-           !std::holds_alternative<Wildcard>(this->data.back()) ||
-           std::get<Wildcard>(this->data.back()) != Wildcard::Key);
     this->data.reserve(this->data.size() + other.size());
     std::copy(other.cbegin(), other.cend(), std::back_inserter(this->data));
   }
@@ -194,6 +197,123 @@ public:
   /// ```
   [[nodiscard]] auto empty() const noexcept -> bool {
     return this->data.empty();
+  }
+
+  /// Check if a JSON Pointer template only consists in normal non-templated
+  /// tokens. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::core::PointerTemplate pointer;
+  /// pointer.emplace_back(sourcemeta::core::PointerTemplate::Wildcard::Property);
+  /// pointer.emplace_back(sourcemeta::core::Pointer::Token{"foo"});
+  /// assert(!pointer.trivial());
+  /// ```
+  [[nodiscard]] auto trivial() const noexcept -> bool {
+    return std::all_of(
+        this->data.cbegin(), this->data.cend(),
+        [](const auto &token) { return std::holds_alternative<Token>(token); });
+  }
+
+  /// Check if a JSON Pointer template matches another JSON Pointer template.
+  /// For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::core::PointerTemplate left{
+  ///     sourcemeta::core::PointerTemplate::Condition{},
+  ///     sourcemeta::core::Pointer::Token{"foo"}};
+  /// const sourcemeta::core::PointerTemplate right{
+  ///     sourcemeta::core::Pointer::Token{"foo"}};
+  ///
+  /// assert(left.matches(right));
+  /// assert(right.matches(left));
+  /// ```
+  [[nodiscard]] auto
+  matches(const GenericPointerTemplate<PointerT> &other) const noexcept
+      -> bool {
+    // TODO: Find a way to simplify this long method
+    auto iterator_this = this->data.cbegin();
+    auto iterator_that = other.data.cbegin();
+
+    while (iterator_this != this->data.cend() &&
+           iterator_that != other.data.cend()) {
+      while (iterator_this != this->data.cend() &&
+             std::holds_alternative<Condition>(*iterator_this)) {
+        iterator_this += 1;
+      }
+
+      while (iterator_that != other.data.cend() &&
+             std::holds_alternative<Condition>(*iterator_that)) {
+        iterator_that += 1;
+      }
+
+      if (iterator_this == this->data.cend() ||
+          iterator_that == other.data.cend()) {
+        break;
+      } else if (*iterator_this != *iterator_that) {
+        // Handle regular expressions
+        if (std::holds_alternative<Token>(*iterator_this) &&
+            std::holds_alternative<Regex>(*iterator_that)) {
+          const auto &token{std::get<Token>(*iterator_this)};
+          if (!token.is_property() ||
+              !sourcemeta::core::matches_if_valid(
+                  std::get<Regex>(*iterator_that), token.to_property())) {
+            return false;
+          }
+        } else if (std::holds_alternative<Regex>(*iterator_this) &&
+                   std::holds_alternative<Token>(*iterator_that)) {
+          const auto &token{std::get<Token>(*iterator_that)};
+          if (!token.is_property() ||
+              !sourcemeta::core::matches_if_valid(
+                  std::get<Regex>(*iterator_this), token.to_property())) {
+            return false;
+          }
+
+          // Handle wildcards
+        } else if (std::holds_alternative<Wildcard>(*iterator_this) &&
+                   std::holds_alternative<Token>(*iterator_that)) {
+          const auto &token{std::get<Token>(*iterator_that)};
+          const auto wildcard{std::get<Wildcard>(*iterator_this)};
+          if (wildcard == Wildcard::Key ||
+              (wildcard == Wildcard::Property && !token.is_property()) ||
+              (wildcard == Wildcard::Item && !token.is_index())) {
+            return false;
+          }
+        } else if (std::holds_alternative<Token>(*iterator_this) &&
+                   std::holds_alternative<Wildcard>(*iterator_that)) {
+          const auto &token{std::get<Token>(*iterator_this)};
+          const auto wildcard{std::get<Wildcard>(*iterator_that)};
+          if (wildcard == Wildcard::Key ||
+              (wildcard == Wildcard::Property && !token.is_property()) ||
+              (wildcard == Wildcard::Item && !token.is_index())) {
+            return false;
+          }
+        } else if (std::holds_alternative<Regex>(*iterator_this) &&
+                   std::holds_alternative<Wildcard>(*iterator_that)) {
+          if (std::get<Wildcard>(*iterator_that) != Wildcard::Property) {
+            return false;
+          }
+        } else if (std::holds_alternative<Wildcard>(*iterator_this) &&
+                   std::holds_alternative<Regex>(*iterator_that)) {
+          if (std::get<Wildcard>(*iterator_this) != Wildcard::Property) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+
+      iterator_this += 1;
+      iterator_that += 1;
+    }
+
+    return iterator_this == this->data.cend() &&
+           iterator_that == other.data.cend();
   }
 
   /// Compare JSON Pointer template instances

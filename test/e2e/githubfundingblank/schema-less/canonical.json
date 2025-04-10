@@ -1,15 +1,10 @@
 {
   "anyOf": [
     {
-      "enum": [
-        null
-      ]
+      "enum": [ null ]
     },
     {
-      "enum": [
-        false,
-        true
-      ]
+      "enum": [ false, true ]
     },
     {
       "type": "object",
