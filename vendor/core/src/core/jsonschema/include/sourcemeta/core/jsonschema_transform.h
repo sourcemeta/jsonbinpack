@@ -18,7 +18,8 @@
 #include <set>         // std::set
 #include <string>      // std::string
 #include <string_view> // std::string_view
-#include <utility>     // std::move
+#include <utility>     // std::move, std::forward
+#include <variant>     // std::variant
 #include <vector>      // std::vector
 
 namespace sourcemeta::core {
@@ -47,7 +48,7 @@ namespace sourcemeta::core {
 ///                                const sourcemeta::core::SchemaFrame &,
 ///                                const sourcemeta::core::SchemaFrame::Location
 ///                                &)
-///       const -> bool override
+///       const -> sourcemeta::core::SchemaTransformRule::Result override
 ///     return schema.defines("foo");
 ///   }
 ///
@@ -80,17 +81,20 @@ public:
   /// Fetch the message of a rule
   [[nodiscard]] auto message() const -> const std::string &;
 
+  /// The result of evaluating a rule
+  using Result = std::variant<bool, std::string>;
+
   /// Apply the rule to a schema
   auto apply(JSON &schema, const JSON &root, const Vocabularies &vocabularies,
              const SchemaWalker &walker, const SchemaResolver &resolver,
              const SchemaFrame &frame,
-             const SchemaFrame::Location &location) const -> bool;
+             const SchemaFrame::Location &location) const -> Result;
 
   /// Check if the rule applies to a schema
   auto check(const JSON &schema, const JSON &root,
              const Vocabularies &vocabularies, const SchemaWalker &walker,
              const SchemaResolver &resolver, const SchemaFrame &frame,
-             const SchemaFrame::Location &location) const -> bool;
+             const SchemaFrame::Location &location) const -> Result;
 
 private:
   /// The rule condition
@@ -98,7 +102,10 @@ private:
   condition(const JSON &schema, const JSON &root,
             const Vocabularies &vocabularies, const SchemaFrame &frame,
             const SchemaFrame::Location &location, const SchemaWalker &walker,
-            const SchemaResolver &resolver) const -> bool = 0;
+            const SchemaResolver &resolver) const -> Result = 0;
+
+  // TODO: Allow this method to not be overriden, as a way to signify
+  // that a rule does not support auto-fixing
 
   /// The rule transformation
   virtual auto transform(JSON &schema) const -> void = 0;
@@ -138,7 +145,7 @@ private:
 ///                                const sourcemeta::core::SchemaFrame &,
 ///                                const sourcemeta::core::SchemaFrame::Location
 ///                                &)
-///       const -> bool override {
+///       const -> sourcemeta::core::SchemaTransformRule::Result override {
 ///     return schema.defines("foo");
 ///   }
 ///
@@ -193,8 +200,9 @@ public:
 #endif
 
   /// Add a rule to the bundle
-  template <std::derived_from<SchemaTransformRule> T> auto add() -> void {
-    auto rule{std::make_unique<T>()};
+  template <std::derived_from<SchemaTransformRule> T, typename... Args>
+  auto add(Args &&...args) -> void {
+    auto rule{std::make_unique<T>(std::forward<Args>(args)...)};
     // Rules must only be defined once
     assert(!this->rules.contains(rule->name()));
     this->rules.emplace(rule->name(), std::move(rule));
@@ -219,8 +227,9 @@ public:
   /// - The JSON Pointer to the given subschema
   /// - The name of the rule
   /// - The message of the rule
-  using CheckCallback = std::function<void(
-      const Pointer &, const std::string_view, const std::string_view)>;
+  using CheckCallback =
+      std::function<void(const Pointer &, const std::string_view,
+                         const std::string_view, const std::string_view)>;
 
   /// Report back the rules from the bundle that need to be applied to a schema
   auto
