@@ -6,6 +6,8 @@
 #endif
 
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/jsonpointer.h>
+
 #include <sourcemeta/core/jsonschema_error.h>
 #include <sourcemeta/core/jsonschema_frame.h>
 #include <sourcemeta/core/jsonschema_resolver.h>
@@ -16,6 +18,7 @@
 #include <cstdint>     // std::uint8_t
 #include <functional>  // std::function
 #include <optional>    // std::optional, std::nullopt
+#include <set>         // std::set
 #include <string>      // std::string
 #include <string_view> // std::string_view
 
@@ -367,7 +370,14 @@ auto schema_format_compare(const JSON::String &left, const JSON::String &right)
 /// @ingroup jsonschema
 ///
 /// Remove every identifer from a schema, rephrasing references (if any) as
-/// needed. For example:
+/// needed.
+///
+/// As a big caveat, unidentifying a schema with embedded schema
+/// resources will result in standalone instances of the `$schema` keyword,
+/// which will not be valid according to the specification (the `$schema`
+/// keyword must only occur within schema resources). We advise against using
+/// unidentified schema for anything other than serving non-compliant JSON
+/// Schema implementations that do not support identifier.
 ///
 /// ```cpp
 /// #include <sourcemeta/core/json.h>
@@ -531,8 +541,9 @@ auto reference_visit(
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto bundle(JSON &schema, const SchemaWalker &walker,
             const SchemaResolver &resolver,
-            const std::optional<std::string> &default_dialect = std::nullopt)
-    -> void;
+            const std::optional<std::string> &default_dialect = std::nullopt,
+            const std::optional<Pointer> &default_container = std::nullopt,
+            const SchemaFrame::Paths &paths = {empty_pointer}) -> void;
 
 /// @ingroup jsonschema
 ///
@@ -588,8 +599,9 @@ auto bundle(JSON &schema, const SchemaWalker &walker,
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto bundle(const JSON &schema, const SchemaWalker &walker,
             const SchemaResolver &resolver,
-            const std::optional<std::string> &default_dialect = std::nullopt)
-    -> JSON;
+            const std::optional<std::string> &default_dialect = std::nullopt,
+            const std::optional<Pointer> &default_container = std::nullopt,
+            const SchemaFrame::Paths &paths = {empty_pointer}) -> JSON;
 
 /// @ingroup jsonschema
 ///
