@@ -196,7 +196,7 @@ TEST(JSONBinPack_Compiler, unknown_dialect_without_default) {
   EXPECT_THROW(sourcemeta::jsonbinpack::compile(
                    schema, sourcemeta::core::schema_official_walker,
                    sourcemeta::core::schema_official_resolver),
-               sourcemeta::core::SchemaError);
+               sourcemeta::core::SchemaUnknownBaseDialectError);
 }
 
 TEST(JSONBinPack_Compiler, invalid_dialect) {
