@@ -4,9 +4,7 @@ assets
 Makefile
 README.markdown
 test
-vendor/vendorpull
-vendor/bootstrap
-vendor/core
+vendor
 www
 .editorconfig
 .ackrc
