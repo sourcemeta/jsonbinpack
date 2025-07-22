@@ -32,9 +32,6 @@ compile: .always
 	$(CMAKE) --install ./build --prefix ./build/dist --config $(PRESET) --verbose \
 		--component sourcemeta_jsonbinpack_dev
 
-lint: .always
-	$(CMAKE) --build ./build --config $(PRESET) --target clang_tidy
-
 test: .always
 	$(CMAKE) -E env UBSAN_OPTIONS=print_stacktrace=1 \
 		$(CTEST) --test-dir ./build --build-config $(PRESET) \

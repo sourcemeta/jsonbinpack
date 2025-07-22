@@ -46,7 +46,7 @@ public:
   SchemaMapResolver();
 
   /// Construct an empty resolver that has another schema resolver as a fallback
-  SchemaMapResolver(const SchemaResolver &resolver);
+  SchemaMapResolver(SchemaResolver resolver);
 
   /// Register a schema to the map resolver. Returns whether at least one
   /// schema was imported into the resolver
@@ -66,7 +66,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  std::map<std::string, JSON> schemas;
+  std::map<std::string, JSON> schemas{};
   SchemaResolver default_resolver = nullptr;
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)

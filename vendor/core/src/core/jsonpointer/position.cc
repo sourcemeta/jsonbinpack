@@ -1,5 +1,5 @@
 #include <sourcemeta/core/json_value.h>
-#include <sourcemeta/core/jsonpointer_position.h>
+#include <sourcemeta/core/jsonpointer.h>
 
 #include <cassert>  // assert
 #include <cstddef>  // std::size_t
@@ -14,7 +14,7 @@ auto PointerPositionTracker::operator()(const JSON::ParsePhase phase,
                                         const std::uint64_t column,
                                         const JSON &value) -> void {
   if (phase == JSON::ParsePhase::Pre) {
-    this->stack.push({line, column});
+    this->stack.emplace(line, column);
     if (value.is_string()) {
       this->current.push_back(value.to_string());
     } else if (value.is_integer()) {
@@ -42,6 +42,15 @@ auto PointerPositionTracker::get(const Pointer &pointer) const
 
 auto PointerPositionTracker::size() const -> std::size_t {
   return this->data.size();
+}
+
+auto PointerPositionTracker::to_json() const -> JSON {
+  auto result{JSON::make_object()};
+  for (const auto &entry : this->data) {
+    result.assign(to_string(entry.first),
+                  sourcemeta::core::to_json(entry.second));
+  }
+  return result;
 }
 
 } // namespace sourcemeta::core

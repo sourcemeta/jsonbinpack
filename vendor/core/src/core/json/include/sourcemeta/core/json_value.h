@@ -45,7 +45,7 @@ public:
   /// The object type used by the JSON document.
   using Object = JSONObject<String, JSON, PropertyHashJSON<JSON::String>>;
   /// The parsing phase of a JSON document.
-  enum class ParsePhase { Pre, Post };
+  enum class ParsePhase : std::uint8_t { Pre, Post };
   // The enumeration indexes must stay in sync with the internal variant
   /// The different types of a JSON instance.
   enum class Type : std::uint8_t {
@@ -104,9 +104,10 @@ public:
   explicit JSON(const int value);
 
   // On some systems, `std::int64_t` might be equal to `long`
-  template <typename T = std::int64_t,
-            typename = std::enable_if_t<!std::is_same_v<T, std::int64_t>>>
-  explicit JSON(const long value) : current_type{Type::Integer} {
+  template <typename T = std::int64_t>
+  explicit JSON(const long value)
+    requires(!std::is_same_v<T, std::int64_t>)
+      : current_type{Type::Integer} {
     this->data_integer = value;
   }
 
@@ -208,17 +209,16 @@ public:
   ///
   /// assert(my_object.is_object());
   /// ```
-  explicit JSON(
-      std::initializer_list<typename Object::Container::value_type> values);
+  explicit JSON(std::initializer_list<typename Object::pair_value_type> values);
 
   /// A copy constructor for the object type.
   explicit JSON(const Object &value);
 
   /// Misc constructors
   JSON(const JSON &);
-  JSON(JSON &&);
+  JSON(JSON &&) noexcept;
   auto operator=(const JSON &) -> JSON &;
-  auto operator=(JSON &&) -> JSON &;
+  auto operator=(JSON &&) noexcept -> JSON &;
 
   /// Destructor
   ~JSON();
@@ -726,7 +726,7 @@ public:
   ///  my_object.as_object().hash("bar")).to_integer() == 2);
   /// ```
   [[nodiscard]] auto at(const String &key,
-                        const typename Object::Container::hash_type hash) const
+                        const typename Object::hash_type hash) const
       -> const JSON &;
 
   /// This method retrieves an object element.
@@ -758,8 +758,7 @@ public:
   ///   my_object.as_object().hash("bar")).to_integer() == 2);
   /// ```
   [[nodiscard]] auto at(const String &key,
-                        const typename Object::Container::hash_type hash)
-      -> JSON &;
+                        const typename Object::hash_type hash) -> JSON &;
 
   /// This method retrieves an object property or a user provided value if such
   /// property is not defined.
@@ -795,8 +794,19 @@ public:
   ///   default_value).to_integer() == 1);
   /// ```
   [[nodiscard]] auto at_or(const String &key,
-                           const typename Object::Container::hash_type hash,
+                           const typename Object::hash_type hash,
                            const JSON &otherwise) const -> const JSON &;
+
+  // Constant reference parameters can accept xvalues which will be destructed
+  // after the call. When the function returns such a parameter also as constant
+  // reference, then the returned reference can be used after the object it
+  // refers to has been destroyed.
+  // https://clang.llvm.org/extra/clang-tidy/checks/bugprone/return-const-ref-from-parameter.html
+  // This overload avoids mis-uses of retuning const reference parameter as
+  // constant reference.
+  [[nodiscard]] auto at_or(const String &key,
+                           const typename Object::hash_type hash,
+                           JSON &&otherwise) const -> const JSON & = delete;
 
   /// This method retrieves a reference to the first element of a JSON array.
   /// This method is undefined if the input JSON instance is an empty array. For
@@ -1032,9 +1042,8 @@ public:
   ///   document.as_object().hash("foo"));
   /// EXPECT_TRUE(result);
   /// EXPECT_EQ(result->to_integer(), 1);
-  [[nodiscard]] auto
-  try_at(const String &key,
-         const typename Object::Container::hash_type hash) const
+  [[nodiscard]] auto try_at(const String &key,
+                            const typename Object::hash_type hash) const
       -> const JSON *;
 
   /// This method checks whether an input JSON object defines a specific key.
@@ -1065,9 +1074,9 @@ public:
   /// assert(document.defines("bar",
   ///   document.as_object().hash("bar")));
   /// ```
-  [[nodiscard]] auto
-  defines(const String &key,
-          const typename Object::Container::hash_type hash) const -> bool;
+  [[nodiscard]] auto defines(const String &key,
+                             const typename Object::hash_type hash) const
+      -> bool;
 
   /// This method checks whether an input JSON object defines a specific integer
   /// key. For example:
@@ -1279,6 +1288,22 @@ public:
   /// ```
   auto assign(const String &key, JSON &&value) -> void;
 
+  /// This method sets or updates an object key. However, it will try to insert
+  /// the key _before_ the given one if possible.
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/json.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::core::JSON document =
+  ///   sourcemeta::core::parse_json("{ \"foo\": true }");
+  /// const sourcemeta::core::JSON value{false};
+  /// document.try_assign_before("bar", value, "foo");
+  /// assert(document.as_object().cbegin()->first == "bar");
+  /// ```
+  auto try_assign_before(const String &key, const JSON &value,
+                         const String &other) -> void;
+
   /// This method sets an object key if it is not already defined. For example:
   ///
   /// ```cpp
@@ -1358,7 +1383,7 @@ public:
   auto erase_keys(Iterator first, Iterator last) -> void {
     assert(this->is_object());
     for (auto iterator = first; iterator != last; ++iterator) {
-      this->data_object.data.erase(*iterator);
+      this->data_object.erase(*iterator);
     }
   }
 
@@ -1415,6 +1440,23 @@ public:
   auto erase(typename Array::const_iterator first,
              typename Array::const_iterator last) -> typename Array::iterator;
 
+  /// This method deletes a set of array elements given a predicate. For
+  /// example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/json.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::core::JSON array =
+  ///   sourcemeta::core::parse_json("[ 1, 2, 3 ]");
+  /// array.erase_if(array,
+  ///   [](const auto &item) { return item.to_integer() % 2 == 0; });
+  /// assert(array.size(), 2);
+  /// assert(array.at(0), 1);
+  /// assert(array.at(1), 3);
+  /// ```
+  auto erase_if(const std::function<bool(const JSON &)> &predicate) -> void;
+
   /// This method deletes all members of an object or all elements of an array,
   /// leaving them empty. For example:
   ///
@@ -1458,12 +1500,12 @@ public:
   template <typename Iterator>
   auto clear_except(Iterator first, Iterator last) -> void {
     assert(this->is_object());
-    std::set<String, std::less<String>, Allocator<String>> whitelist;
+    std::set<String, std::less<>, Allocator<String>> whitelist;
     for (auto iterator = first; iterator != last; ++iterator) {
       whitelist.insert(*iterator);
     }
 
-    std::set<String, std::less<String>, Allocator<String>> blacklist;
+    std::set<String, std::less<>, Allocator<String>> blacklist;
     for (const auto &pair : this->as_object()) {
       if (!whitelist.contains(pair.first)) {
         blacklist.insert(pair.first);

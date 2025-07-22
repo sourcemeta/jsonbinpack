@@ -65,10 +65,10 @@ public:
       const JSON &input, const SchemaWalker &walker,
       const SchemaResolver &resolver,
       const std::optional<std::string> &default_dialect = std::nullopt);
-  auto begin() const -> const_iterator;
-  auto end() const -> const_iterator;
-  auto cbegin() const -> const_iterator;
-  auto cend() const -> const_iterator;
+  [[nodiscard]] auto begin() const -> const_iterator;
+  [[nodiscard]] auto end() const -> const_iterator;
+  [[nodiscard]] auto cbegin() const -> const_iterator;
+  [[nodiscard]] auto cend() const -> const_iterator;
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered
@@ -77,7 +77,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  internal subschemas;
+  internal subschemas{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif
@@ -132,10 +132,10 @@ public:
       const JSON &input, const SchemaWalker &walker,
       const SchemaResolver &resolver,
       const std::optional<std::string> &default_dialect = std::nullopt);
-  auto begin() const -> const_iterator;
-  auto end() const -> const_iterator;
-  auto cbegin() const -> const_iterator;
-  auto cend() const -> const_iterator;
+  [[nodiscard]] auto begin() const -> const_iterator;
+  [[nodiscard]] auto end() const -> const_iterator;
+  [[nodiscard]] auto cbegin() const -> const_iterator;
+  [[nodiscard]] auto cend() const -> const_iterator;
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered
@@ -144,7 +144,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  internal subschemas;
+  internal subschemas{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif
@@ -189,10 +189,10 @@ public:
       const JSON &input, const SchemaWalker &walker,
       const SchemaResolver &resolver,
       const std::optional<std::string> &default_dialect = std::nullopt);
-  auto begin() const -> const_iterator;
-  auto end() const -> const_iterator;
-  auto cbegin() const -> const_iterator;
-  auto cend() const -> const_iterator;
+  [[nodiscard]] auto begin() const -> const_iterator;
+  [[nodiscard]] auto end() const -> const_iterator;
+  [[nodiscard]] auto cbegin() const -> const_iterator;
+  [[nodiscard]] auto cend() const -> const_iterator;
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered
@@ -201,7 +201,7 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  internal entries;
+  internal entries{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif

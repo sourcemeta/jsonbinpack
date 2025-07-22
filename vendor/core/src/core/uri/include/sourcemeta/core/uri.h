@@ -11,6 +11,8 @@
 // NOLINTEND(misc-include-cleaner)
 
 #include <cstdint>     // std::uint32_t
+#include <filesystem>  // std::filesystem
+#include <istream>     // std::istream
 #include <memory>      // std::unique_ptr
 #include <optional>    // std::optional
 #include <span>        // std::span
@@ -61,7 +63,7 @@ public:
   URI(const URI &other);
 
   /// Move constructor
-  URI(URI &&other);
+  URI(URI &&other) noexcept;
 
   /// Check if the URI is absolute. For example:
   ///
@@ -83,7 +85,7 @@ public:
   /// const sourcemeta::core::URI uri{"urn:example:schema"};
   /// assert(uri.is_urn());
   /// ```
-  auto is_urn() const -> bool;
+  [[nodiscard]] auto is_urn() const -> bool;
 
   /// Check if the URI is a tag as described by RFC 4151. For example:
   ///
@@ -94,7 +96,7 @@ public:
   /// const sourcemeta::core::URI uri{"tag:yaml.org,2002:int"};
   /// assert(uri.is_tag());
   /// ```
-  auto is_tag() const -> bool;
+  [[nodiscard]] auto is_tag() const -> bool;
 
   /// Check if the URI has the `mailto` scheme. For example:
   ///
@@ -105,7 +107,7 @@ public:
   /// const sourcemeta::core::URI uri{"mailto:joe@example.com"};
   /// assert(uri.is_mailto());
   /// ```
-  auto is_mailto() const -> bool;
+  [[nodiscard]] auto is_mailto() const -> bool;
 
   /// Check if the URI only consists of a fragment. For example:
   ///
@@ -116,7 +118,7 @@ public:
   /// const sourcemeta::core::URI uri{"#foo"};
   /// assert(uri.is_fragment_only());
   /// ```
-  auto is_fragment_only() const -> bool;
+  [[nodiscard]] auto is_fragment_only() const -> bool;
 
   /// Check if the URI is relative. For example:
   ///
@@ -127,7 +129,7 @@ public:
   /// sourcemeta::core::URI uri{"./foo"};
   /// assert(uri.is_relative());
   /// ```
-  auto is_relative() const -> bool;
+  [[nodiscard]] auto is_relative() const -> bool;
 
   /// Check if the host is an ipv6 address. For example:
   ///
@@ -138,7 +140,7 @@ public:
   /// sourcemeta::core::URI uri{"http://[::1]"};
   /// assert(uri.is_ipv6());
   /// ```
-  auto is_ipv6() const -> bool;
+  [[nodiscard]] auto is_ipv6() const -> bool;
 
   /// Check if the URI corresponds to the empty URI. For example:
   ///
@@ -149,7 +151,7 @@ public:
   /// sourcemeta::core::URI uri{""};
   /// assert(uri.empty());
   /// ```
-  auto empty() const -> bool;
+  [[nodiscard]] auto empty() const -> bool;
 
   /// Get the scheme part of the URI, if any. For example:
   ///
@@ -439,6 +441,19 @@ public:
   /// ```
   static auto from_fragment(std::string_view fragment) -> URI;
 
+  /// Create a URI from a file system path. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/uri.h>
+  /// #include <cassert>
+  /// #include <filesystem>
+  ///
+  /// const std::filesystem::path path{"/foo/bar"};
+  /// const sourcemeta::core::URI uri{sourcemeta::core::URI::from_path(path)};
+  /// assert(uri.recompose() == "file:///foo/bar");
+  /// ```
+  static auto from_path(const std::filesystem::path &path) -> URI;
+
   /// A convenient method to canonicalize and recompose a URI from a string. For
   /// example:
   ///
@@ -462,20 +477,20 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  std::string data;
+  std::string data{};
 
-  std::optional<std::string> path_;
-  std::optional<std::string> userinfo_;
-  std::optional<std::string> host_;
-  std::optional<std::uint32_t> port_;
-  std::optional<std::string> scheme_;
-  std::optional<std::string> fragment_;
-  std::optional<std::string> query_;
+  std::optional<std::string> path_{};
+  std::optional<std::string> userinfo_{};
+  std::optional<std::string> host_{};
+  std::optional<std::uint32_t> port_{};
+  std::optional<std::string> scheme_{};
+  std::optional<std::string> fragment_{};
+  std::optional<std::string> query_{};
   bool is_ipv6_ = false;
 
   // Use PIMPL idiom to hide `uriparser`
   struct Internal;
-  std::unique_ptr<Internal> internal;
+  std::unique_ptr<Internal> internal{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif
