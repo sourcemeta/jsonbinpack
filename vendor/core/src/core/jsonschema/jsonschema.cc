@@ -13,6 +13,14 @@ auto sourcemeta::core::is_schema(const sourcemeta::core::JSON &schema) -> bool {
   return schema.is_object() || schema.is_boolean();
 }
 
+// TODO: Make this function detect schemas only using identifier/comment
+// keywords, etc
+auto sourcemeta::core::is_empty_schema(const sourcemeta::core::JSON &schema)
+    -> bool {
+  return (schema.is_boolean() && schema.to_boolean()) ||
+         (schema.is_object() && schema.empty());
+}
+
 namespace {
 
 auto id_keyword_guess(const sourcemeta::core::JSON &schema)
@@ -100,7 +108,7 @@ auto sourcemeta::core::identify(
     return default_id;
   }
 
-  const auto result{identify(schema, maybe_base_dialect.value(), default_id)};
+  auto result{identify(schema, maybe_base_dialect.value(), default_id)};
 
   // A last shot supporting identifiers alongside `$ref` in loose mode
   if (!result.has_value() && strategy == SchemaIdentificationStrategy::Loose) {
@@ -310,7 +318,7 @@ auto sourcemeta::core::base_dialect(
       resolver(effective_dialect)};
   if (!metaschema.has_value()) {
     throw sourcemeta::core::SchemaResolutionError(
-        effective_dialect, "Could not resolve the requested schema");
+        effective_dialect, "Could not resolve the metaschema of the schema");
   }
 
   return base_dialect(metaschema.value(), resolver, effective_dialect);
@@ -383,7 +391,24 @@ auto sourcemeta::core::vocabularies(const SchemaResolver &resolver,
   }
 
   /*
-   * (1) If the base dialect is pre-vocabularies, then the
+   * (1) If the dialect is pre-vocabularies, then the
+   * dialect itself is conceptually the only vocabulary
+   */
+
+  // This is an exhaustive list of all official dialects in the pre-vocabulary
+  // world
+  if (dialect == "http://json-schema.org/draft-07/schema#" ||
+      dialect == "http://json-schema.org/draft-06/schema#" ||
+      dialect == "http://json-schema.org/draft-04/schema#" ||
+      dialect == "http://json-schema.org/draft-03/schema#" ||
+      dialect == "http://json-schema.org/draft-02/schema#" ||
+      dialect == "http://json-schema.org/draft-01/schema#" ||
+      dialect == "http://json-schema.org/draft-00/schema#") {
+    return {{dialect, true}};
+  }
+
+  /*
+   * (2) If the base dialect is pre-vocabularies, then the
    * base dialect itself is conceptually the only vocabulary
    */
 
@@ -403,14 +428,14 @@ auto sourcemeta::core::vocabularies(const SchemaResolver &resolver,
   }
 
   /*
-   * (2) If the dialect is vocabulary aware, then fetch such dialect
+   * (3) If the dialect is vocabulary aware, then fetch such dialect
    */
 
   const std::optional<sourcemeta::core::JSON> maybe_schema_dialect{
       resolver(dialect)};
   if (!maybe_schema_dialect.has_value()) {
     throw sourcemeta::core::SchemaResolutionError(
-        dialect, "Could not resolve the requested schema");
+        dialect, "Could not resolve the metaschema of the schema");
   }
   const sourcemeta::core::JSON &schema_dialect{maybe_schema_dialect.value()};
   // At this point we are sure that the dialect is vocabulary aware and the
@@ -418,10 +443,11 @@ auto sourcemeta::core::vocabularies(const SchemaResolver &resolver,
   // complexity of the generic `id` function.
   assert(schema_dialect.defines("$id") &&
          schema_dialect.at("$id").is_string() &&
-         schema_dialect.at("$id").to_string() == dialect);
+         URI::canonicalize(schema_dialect.at("$id").to_string()) ==
+             URI::canonicalize(dialect));
 
   /*
-   * (3) Retrieve the vocabularies explicitly or implicitly declared by the
+   * (4) Retrieve the vocabularies explicitly or implicitly declared by the
    * dialect
    */
 
@@ -454,7 +480,7 @@ auto sourcemeta::core::schema_format_compare(
     const sourcemeta::core::JSON::String &left,
     const sourcemeta::core::JSON::String &right) -> bool {
   using Rank =
-      std::map<JSON::String, std::uint64_t, std::less<JSON::String>,
+      std::map<JSON::String, std::uint64_t, std::less<>,
                JSON::Allocator<std::pair<const JSON::String, std::uint64_t>>>;
   static Rank rank{// Most core keywords tend to come first
                    {"$schema", 0},

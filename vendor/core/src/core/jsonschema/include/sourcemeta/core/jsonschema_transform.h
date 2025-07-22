@@ -93,10 +93,11 @@ public:
       -> std::pair<bool, Result>;
 
   /// Check if the rule applies to a schema
-  auto check(const JSON &schema, const JSON &root,
-             const Vocabularies &vocabularies, const SchemaWalker &walker,
-             const SchemaResolver &resolver, const SchemaFrame &frame,
-             const SchemaFrame::Location &location) const -> Result;
+  [[nodiscard]] auto
+  check(const JSON &schema, const JSON &root, const Vocabularies &vocabularies,
+        const SchemaWalker &walker, const SchemaResolver &resolver,
+        const SchemaFrame &frame, const SchemaFrame::Location &location) const
+      -> Result;
 
   /// A method to optionally fix any reference location that was affected by the
   /// transformation.
@@ -122,8 +123,8 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  const std::string name_;
-  const std::string message_;
+  const std::string name_{};
+  const std::string message_{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif
@@ -229,18 +230,22 @@ public:
                          const std::string_view, const std::string_view)>;
 
   /// Apply the bundle of rules to a schema
-  auto
-  apply(JSON &schema, const SchemaWalker &walker,
-        const SchemaResolver &resolver, const Callback &callback,
-        const std::optional<std::string> &default_dialect = std::nullopt) const
+  auto apply(JSON &schema, const SchemaWalker &walker,
+             const SchemaResolver &resolver, const Callback &callback,
+             const std::optional<JSON::String> &default_dialect = std::nullopt,
+             const std::optional<JSON::String> &default_id = std::nullopt) const
       -> bool;
 
   /// Report back the rules from the bundle that need to be applied to a schema
-  auto
+  [[nodiscard]] auto
   check(const JSON &schema, const SchemaWalker &walker,
         const SchemaResolver &resolver, const Callback &callback,
-        const std::optional<std::string> &default_dialect = std::nullopt) const
+        const std::optional<JSON::String> &default_dialect = std::nullopt,
+        const std::optional<JSON::String> &default_id = std::nullopt) const
       -> bool;
+
+  [[nodiscard]] auto begin() const -> auto { return this->rules.cbegin(); }
+  [[nodiscard]] auto end() const -> auto { return this->rules.cend(); }
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered

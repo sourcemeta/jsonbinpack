@@ -6,24 +6,14 @@
 #include <algorithm>
 #include <cmath>
 #include <iterator>
+#include <utility>
 namespace sourcemeta::core {
-auto contains_any(const Vocabularies &container,
-                  const std::set<typename Vocabularies::key_type> &values)
-    -> bool {
-  return std::any_of(std::cbegin(container), std::cend(container),
-                     [&values](const auto &element) {
-                       return values.contains(element.first);
-                     });
-}
-
-template <typename T> auto every_item_is_null(const T &container) -> bool {
-  return std::all_of(std::cbegin(container), std::cend(container),
-                     [](const auto &element) { return element.is_null(); });
-}
-
-template <typename T> auto every_item_is_boolean(const T &container) -> bool {
-  return std::all_of(std::cbegin(container), std::cend(container),
-                     [](const auto &element) { return element.is_boolean(); });
+static auto
+contains_any(const Vocabularies &container,
+             const std::set<typename Vocabularies::key_type> &values) -> bool {
+  return std::ranges::any_of(container, [&values](const auto &element) {
+    return values.contains(element.first);
+  });
 }
 
 // Canonicalizer
@@ -45,6 +35,7 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "canonicalizer/type_union_implicit.h"
 
 // Linter
+#include "linter/additional_items_with_schema_items.h"
 #include "linter/additional_properties_default.h"
 #include "linter/const_with_type.h"
 #include "linter/content_media_type_without_encoding.h"
@@ -54,102 +45,12 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "linter/dependencies_property_tautology.h"
 #include "linter/dependent_required_default.h"
 #include "linter/dependent_required_tautology.h"
-#include "linter/drop_non_array_keywords_applicator_2019_09.h"
-#include "linter/drop_non_array_keywords_applicator_2020_12.h"
-#include "linter/drop_non_array_keywords_content_2019_09.h"
-#include "linter/drop_non_array_keywords_content_2020_12.h"
-#include "linter/drop_non_array_keywords_draft0.h"
-#include "linter/drop_non_array_keywords_draft1.h"
-#include "linter/drop_non_array_keywords_draft2.h"
-#include "linter/drop_non_array_keywords_draft3.h"
-#include "linter/drop_non_array_keywords_draft4.h"
-#include "linter/drop_non_array_keywords_draft6.h"
-#include "linter/drop_non_array_keywords_draft7.h"
-#include "linter/drop_non_array_keywords_format_2019_09.h"
-#include "linter/drop_non_array_keywords_format_2020_12.h"
-#include "linter/drop_non_array_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_array_keywords_validation_2019_09.h"
-#include "linter/drop_non_array_keywords_validation_2020_12.h"
-#include "linter/drop_non_boolean_keywords_applicator_2019_09.h"
-#include "linter/drop_non_boolean_keywords_applicator_2020_12.h"
-#include "linter/drop_non_boolean_keywords_content_2019_09.h"
-#include "linter/drop_non_boolean_keywords_content_2020_12.h"
-#include "linter/drop_non_boolean_keywords_draft0.h"
-#include "linter/drop_non_boolean_keywords_draft1.h"
-#include "linter/drop_non_boolean_keywords_draft2.h"
-#include "linter/drop_non_boolean_keywords_draft3.h"
-#include "linter/drop_non_boolean_keywords_draft4.h"
-#include "linter/drop_non_boolean_keywords_draft6.h"
-#include "linter/drop_non_boolean_keywords_draft7.h"
-#include "linter/drop_non_boolean_keywords_format_2019_09.h"
-#include "linter/drop_non_boolean_keywords_format_2020_12.h"
-#include "linter/drop_non_boolean_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_boolean_keywords_validation_2019_09.h"
-#include "linter/drop_non_boolean_keywords_validation_2020_12.h"
-#include "linter/drop_non_null_keywords_applicator_2019_09.h"
-#include "linter/drop_non_null_keywords_applicator_2020_12.h"
-#include "linter/drop_non_null_keywords_content_2019_09.h"
-#include "linter/drop_non_null_keywords_content_2020_12.h"
-#include "linter/drop_non_null_keywords_draft0.h"
-#include "linter/drop_non_null_keywords_draft1.h"
-#include "linter/drop_non_null_keywords_draft2.h"
-#include "linter/drop_non_null_keywords_draft3.h"
-#include "linter/drop_non_null_keywords_draft4.h"
-#include "linter/drop_non_null_keywords_draft6.h"
-#include "linter/drop_non_null_keywords_draft7.h"
-#include "linter/drop_non_null_keywords_format_2019_09.h"
-#include "linter/drop_non_null_keywords_format_2020_12.h"
-#include "linter/drop_non_null_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_null_keywords_validation_2019_09.h"
-#include "linter/drop_non_null_keywords_validation_2020_12.h"
-#include "linter/drop_non_numeric_keywords_applicator_2019_09.h"
-#include "linter/drop_non_numeric_keywords_applicator_2020_12.h"
-#include "linter/drop_non_numeric_keywords_content_2019_09.h"
-#include "linter/drop_non_numeric_keywords_content_2020_12.h"
-#include "linter/drop_non_numeric_keywords_draft0.h"
-#include "linter/drop_non_numeric_keywords_draft1.h"
-#include "linter/drop_non_numeric_keywords_draft2.h"
-#include "linter/drop_non_numeric_keywords_draft3.h"
-#include "linter/drop_non_numeric_keywords_draft4.h"
-#include "linter/drop_non_numeric_keywords_draft6.h"
-#include "linter/drop_non_numeric_keywords_draft7.h"
-#include "linter/drop_non_numeric_keywords_format_2019_09.h"
-#include "linter/drop_non_numeric_keywords_format_2020_12.h"
-#include "linter/drop_non_numeric_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_numeric_keywords_validation_2019_09.h"
-#include "linter/drop_non_numeric_keywords_validation_2020_12.h"
-#include "linter/drop_non_object_keywords_applicator_2019_09.h"
-#include "linter/drop_non_object_keywords_applicator_2020_12.h"
-#include "linter/drop_non_object_keywords_content_2019_09.h"
-#include "linter/drop_non_object_keywords_content_2020_12.h"
-#include "linter/drop_non_object_keywords_draft0.h"
-#include "linter/drop_non_object_keywords_draft1.h"
-#include "linter/drop_non_object_keywords_draft2.h"
-#include "linter/drop_non_object_keywords_draft3.h"
-#include "linter/drop_non_object_keywords_draft4.h"
-#include "linter/drop_non_object_keywords_draft6.h"
-#include "linter/drop_non_object_keywords_draft7.h"
-#include "linter/drop_non_object_keywords_format_2019_09.h"
-#include "linter/drop_non_object_keywords_format_2020_12.h"
-#include "linter/drop_non_object_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_object_keywords_validation_2019_09.h"
-#include "linter/drop_non_object_keywords_validation_2020_12.h"
-#include "linter/drop_non_string_keywords_applicator_2019_09.h"
-#include "linter/drop_non_string_keywords_applicator_2020_12.h"
-#include "linter/drop_non_string_keywords_draft0.h"
-#include "linter/drop_non_string_keywords_draft1.h"
-#include "linter/drop_non_string_keywords_draft2.h"
-#include "linter/drop_non_string_keywords_draft3.h"
-#include "linter/drop_non_string_keywords_draft4.h"
-#include "linter/drop_non_string_keywords_draft6.h"
-#include "linter/drop_non_string_keywords_draft7.h"
-#include "linter/drop_non_string_keywords_unevaluated_2020_12.h"
-#include "linter/drop_non_string_keywords_validation_2019_09.h"
-#include "linter/drop_non_string_keywords_validation_2020_12.h"
+#include "linter/draft_official_dialect_without_empty_fragment.h"
 #include "linter/duplicate_allof_branches.h"
 #include "linter/duplicate_anyof_branches.h"
 #include "linter/duplicate_enum_values.h"
 #include "linter/duplicate_required_values.h"
+#include "linter/else_empty.h"
 #include "linter/else_without_if.h"
 #include "linter/enum_to_const.h"
 #include "linter/enum_with_type.h"
@@ -163,13 +64,19 @@ template <typename T> auto every_item_is_boolean(const T &container) -> bool {
 #include "linter/maximum_real_for_integer.h"
 #include "linter/min_contains_without_contains.h"
 #include "linter/minimum_real_for_integer.h"
+#include "linter/modern_official_dialect_with_empty_fragment.h"
+#include "linter/multiple_of_default.h"
+#include "linter/non_applicable_type_specific_keywords.h"
 #include "linter/pattern_properties_default.h"
 #include "linter/properties_default.h"
 #include "linter/single_type_array.h"
+#include "linter/then_empty.h"
 #include "linter/then_without_if.h"
 #include "linter/unevaluated_items_default.h"
 #include "linter/unevaluated_properties_default.h"
-#include "linter/unnecessary_allof_ref_wrapper.h"
+#include "linter/unnecessary_allof_wrapper_draft.h"
+#include "linter/unnecessary_allof_wrapper_modern.h"
+#include "linter/unnecessary_allof_wrapper_properties.h"
 #include "linter/unsatisfiable_max_contains.h"
 #include "linter/unsatisfiable_min_properties.h"
 } // namespace sourcemeta::core
@@ -182,105 +89,19 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode)
   // Common rules that apply to all modes
   bundle.add<ContentMediaTypeWithoutEncoding>();
   bundle.add<ContentSchemaWithoutMediaType>();
-  bundle.add<DropNonArrayKeywordsApplicator_2019_09>();
-  bundle.add<DropNonArrayKeywordsApplicator_2020_12>();
-  bundle.add<DropNonArrayKeywordsContent_2019_09>();
-  bundle.add<DropNonArrayKeywordsContent_2020_12>();
-  bundle.add<DropNonArrayKeywords_Draft0>();
-  bundle.add<DropNonArrayKeywords_Draft1>();
-  bundle.add<DropNonArrayKeywords_Draft2>();
-  bundle.add<DropNonArrayKeywords_Draft3>();
-  bundle.add<DropNonArrayKeywords_Draft4>();
-  bundle.add<DropNonArrayKeywords_Draft6>();
-  bundle.add<DropNonArrayKeywords_Draft7>();
-  bundle.add<DropNonArrayKeywordsFormat_2019_09>();
-  bundle.add<DropNonArrayKeywordsFormat_2020_12>();
-  bundle.add<DropNonArrayKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonArrayKeywordsValidation_2019_09>();
-  bundle.add<DropNonArrayKeywordsValidation_2020_12>();
-  bundle.add<DropNonBooleanKeywordsApplicator_2019_09>();
-  bundle.add<DropNonBooleanKeywordsApplicator_2020_12>();
-  bundle.add<DropNonBooleanKeywordsContent_2019_09>();
-  bundle.add<DropNonBooleanKeywordsContent_2020_12>();
-  bundle.add<DropNonBooleanKeywords_Draft0>();
-  bundle.add<DropNonBooleanKeywords_Draft1>();
-  bundle.add<DropNonBooleanKeywords_Draft2>();
-  bundle.add<DropNonBooleanKeywords_Draft3>();
-  bundle.add<DropNonBooleanKeywords_Draft4>();
-  bundle.add<DropNonBooleanKeywords_Draft6>();
-  bundle.add<DropNonBooleanKeywords_Draft7>();
-  bundle.add<DropNonBooleanKeywordsFormat_2019_09>();
-  bundle.add<DropNonBooleanKeywordsFormat_2020_12>();
-  bundle.add<DropNonBooleanKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonBooleanKeywordsValidation_2019_09>();
-  bundle.add<DropNonBooleanKeywordsValidation_2020_12>();
-  bundle.add<DropNonNullKeywordsApplicator_2019_09>();
-  bundle.add<DropNonNullKeywordsApplicator_2020_12>();
-  bundle.add<DropNonNullKeywordsContent_2019_09>();
-  bundle.add<DropNonNullKeywordsContent_2020_12>();
-  bundle.add<DropNonNullKeywords_Draft0>();
-  bundle.add<DropNonNullKeywords_Draft1>();
-  bundle.add<DropNonNullKeywords_Draft2>();
-  bundle.add<DropNonNullKeywords_Draft3>();
-  bundle.add<DropNonNullKeywords_Draft4>();
-  bundle.add<DropNonNullKeywords_Draft6>();
-  bundle.add<DropNonNullKeywords_Draft7>();
-  bundle.add<DropNonNullKeywordsFormat_2019_09>();
-  bundle.add<DropNonNullKeywordsFormat_2020_12>();
-  bundle.add<DropNonNullKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonNullKeywordsValidation_2019_09>();
-  bundle.add<DropNonNullKeywordsValidation_2020_12>();
-  bundle.add<DropNonNumericKeywordsApplicator_2019_09>();
-  bundle.add<DropNonNumericKeywordsApplicator_2020_12>();
-  bundle.add<DropNonNumericKeywordsContent_2019_09>();
-  bundle.add<DropNonNumericKeywordsContent_2020_12>();
-  bundle.add<DropNonNumericKeywords_Draft0>();
-  bundle.add<DropNonNumericKeywords_Draft1>();
-  bundle.add<DropNonNumericKeywords_Draft2>();
-  bundle.add<DropNonNumericKeywords_Draft3>();
-  bundle.add<DropNonNumericKeywords_Draft4>();
-  bundle.add<DropNonNumericKeywords_Draft6>();
-  bundle.add<DropNonNumericKeywords_Draft7>();
-  bundle.add<DropNonNumericKeywordsFormat_2019_09>();
-  bundle.add<DropNonNumericKeywordsFormat_2020_12>();
-  bundle.add<DropNonNumericKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonNumericKeywordsValidation_2019_09>();
-  bundle.add<DropNonNumericKeywordsValidation_2020_12>();
-  bundle.add<DropNonObjectKeywordsApplicator_2019_09>();
-  bundle.add<DropNonObjectKeywordsApplicator_2020_12>();
-  bundle.add<DropNonObjectKeywordsContent_2019_09>();
-  bundle.add<DropNonObjectKeywordsContent_2020_12>();
-  bundle.add<DropNonObjectKeywords_Draft0>();
-  bundle.add<DropNonObjectKeywords_Draft1>();
-  bundle.add<DropNonObjectKeywords_Draft2>();
-  bundle.add<DropNonObjectKeywords_Draft3>();
-  bundle.add<DropNonObjectKeywords_Draft4>();
-  bundle.add<DropNonObjectKeywords_Draft6>();
-  bundle.add<DropNonObjectKeywords_Draft7>();
-  bundle.add<DropNonObjectKeywordsFormat_2019_09>();
-  bundle.add<DropNonObjectKeywordsFormat_2020_12>();
-  bundle.add<DropNonObjectKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonObjectKeywordsValidation_2019_09>();
-  bundle.add<DropNonObjectKeywordsValidation_2020_12>();
-  bundle.add<DropNonStringKeywordsApplicator_2019_09>();
-  bundle.add<DropNonStringKeywordsApplicator_2020_12>();
-  bundle.add<DropNonStringKeywords_Draft0>();
-  bundle.add<DropNonStringKeywords_Draft1>();
-  bundle.add<DropNonStringKeywords_Draft2>();
-  bundle.add<DropNonStringKeywords_Draft3>();
-  bundle.add<DropNonStringKeywords_Draft4>();
-  bundle.add<DropNonStringKeywords_Draft6>();
-  bundle.add<DropNonStringKeywords_Draft7>();
-  bundle.add<DropNonStringKeywordsUnevaluated_2020_12>();
-  bundle.add<DropNonStringKeywordsValidation_2019_09>();
-  bundle.add<DropNonStringKeywordsValidation_2020_12>();
-  bundle.add<UnnecessaryAllOfRefWrapper>();
+  bundle.add<DraftOfficialDialectWithoutEmptyFragment>();
+  bundle.add<NonApplicableTypeSpecificKeywords>();
+  bundle.add<UnnecessaryAllOfWrapperModern>();
+  bundle.add<UnnecessaryAllOfWrapperDraft>();
+  bundle.add<UnnecessaryAllOfWrapperProperties>();
   bundle.add<DuplicateAllOfBranches>();
   bundle.add<DuplicateAnyOfBranches>();
   bundle.add<ElseWithoutIf>();
   bundle.add<IfWithoutThenElse>();
   bundle.add<MaxContainsWithoutContains>();
   bundle.add<MinContainsWithoutContains>();
+  bundle.add<ThenEmpty>();
+  bundle.add<ElseEmpty>();
   bundle.add<ThenWithoutIf>();
   bundle.add<DependenciesPropertyTautology>();
   bundle.add<DependentRequiredTautology>();
@@ -292,6 +113,8 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode)
   bundle.add<DuplicateEnumValues>();
   bundle.add<DuplicateRequiredValues>();
   bundle.add<ConstWithType>();
+  bundle.add<AdditionalItemsWithSchemaItems>();
+  bundle.add<ModernOfficialDialectWithEmptyFragment>();
   bundle.add<ExclusiveMaximumNumberAndMaximum>();
   bundle.add<ExclusiveMinimumNumberAndMinimum>();
 
@@ -321,6 +144,7 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode)
       bundle.add<DependentRequiredDefault>();
       bundle.add<ItemsArrayDefault>();
       bundle.add<ItemsSchemaDefault>();
+      bundle.add<MultipleOfDefault>();
       bundle.add<PatternPropertiesDefault>();
       bundle.add<PropertiesDefault>();
       bundle.add<UnevaluatedItemsDefault>();

@@ -2,141 +2,72 @@
 
 #include <sourcemeta/core/uri_escape.h>
 
-#include <algorithm> // std::copy
-#include <cassert>   // assert
-#include <cctype>    // std::isalnum
-#include <sstream>   // std::ostringstream
+#include <cctype>   // std::isalnum
+#include <istream>  // std::istream
+#include <iterator> // std::istream_iterator
+#include <ostream>  // std::ostream
+#include <string>   // std::string
 
 namespace sourcemeta::core {
 
 auto uri_escape(const char character, std::ostream &output,
                 const URIEscapeMode mode) -> void {
-  constexpr char HEX[] = "0123456789ABCDEF";
-
   // unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
   // See https://www.rfc-editor.org/rfc/rfc3986#appendix-A
-  if (std::isalnum(character)) {
-    output.put(character);
+  if (std::isalnum(character) || character == '-' || character == '.' ||
+      character == '_' || character == '~') {
+    output << character;
+    return;
+  }
 
+  if (mode == URIEscapeMode::SkipSubDelims) {
     // sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" /
     // "=" See https://www.rfc-editor.org/rfc/rfc3986#appendix-A
-  } else if (mode == URIEscapeMode::SkipSubDelims) {
-    switch (character) {
-      case '!':
-        output.put(character);
-        break;
-      case '$':
-        output.put(character);
-        break;
-      case '&':
-        output.put(character);
-        break;
-      case '\'':
-        output.put(character);
-        break;
-      case '(':
-        output.put(character);
-        break;
-      case ')':
-        output.put(character);
-        break;
-      case '*':
-        output.put(character);
-        break;
-      case '+':
-        output.put(character);
-        break;
-      case ',':
-        output.put(character);
-        break;
-      case ';':
-        output.put(character);
-        break;
-      case '=':
-        output.put(character);
-        break;
-
-      // unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
-      // See https://www.rfc-editor.org/rfc/rfc3986#appendix-A
-      case '-':
-        output.put(character);
-        break;
-      case '_':
-        output.put(character);
-        break;
-      case '.':
-        output.put(character);
-        break;
-      case '~':
-        output.put(character);
-        break;
-      default:
-        output.put('%');
-        output.put(HEX[static_cast<unsigned char>(character) >> 4]);
-        output.put(HEX[static_cast<unsigned char>(character) & 0x0F]);
-        break;
-    }
-  } else {
-    assert(mode == URIEscapeMode::SkipUnreserved);
-    // unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
-    // See https://www.rfc-editor.org/rfc/rfc3986#appendix-A
-    switch (character) {
-      case '-':
-        output.put(character);
-        break;
-      case '_':
-        output.put(character);
-        break;
-      case '.':
-        output.put(character);
-        break;
-      case '~':
-        output.put(character);
-        break;
-      default:
-        output.put('%');
-        output.put(HEX[static_cast<unsigned char>(character) >> 4]);
-        output.put(HEX[static_cast<unsigned char>(character) & 0x0F]);
-        break;
+    if (character == '!' || character == '$' || character == '&' ||
+        character == '\'' || character == '(' || character == ')' ||
+        character == '*' || character == '+' || character == ',' ||
+        character == ';' || character == '=') {
+      output << character;
+      return;
     }
   }
+  // percent encode -> % followed by the hex code of the character
+  output << '%' << std::hex << std::uppercase
+         << +(static_cast<unsigned char>(character));
+  return;
 }
 
 auto uri_escape(std::istream &input, std::ostream &output,
                 const URIEscapeMode mode) -> void {
-  char character;
+  char character = 0;
   while (input.get(character)) {
     uri_escape(character, output, mode);
   }
 }
 
-// TODO: Not very efficient. Can be better if we implement it from scratch
 auto uri_unescape(std::istream &input, std::ostream &output) -> void {
-  std::ostringstream input_stream;
-  while (!input.eof()) {
-    input_stream.put(static_cast<std::ostringstream::char_type>(input.get()));
-  }
+  std::istream_iterator<char> iterator(input);
+  std::istream_iterator<char> end;
+  auto plus_1 = std::ranges::next(iterator, 1, end);
+  auto plus_2 = std::ranges::next(plus_1, 1, end);
+  const int hex_base = 16;
 
-  const std::string input_string{input_stream.str()};
-  std::string::value_type *const buffer =
-      new std::string::value_type[input_string.size() + 1];
-  try {
-    std::copy(input_string.cbegin(), input_string.cend(), buffer);
-  } catch (...) {
-    delete[] buffer;
-    throw;
-  }
+  while (iterator != end) {
+    if (*iterator == '%' && plus_1 != end && plus_2 != end &&
+        std::isxdigit(*(plus_1)) && std::isxdigit(*(plus_2))) {
+      std::string hex{*plus_1, *plus_2};
+      char decoded_char = static_cast<char>(std::stoi(hex, nullptr, hex_base));
+      output << decoded_char;
 
-  buffer[input_string.size()] = '\0';
-  const std::string::value_type *const new_end =
-      uriUnescapeInPlaceExA(buffer, URI_FALSE, URI_BR_DONT_TOUCH);
-
-  try {
-    output.write(buffer, new_end - buffer - 1);
-    delete[] buffer;
-  } catch (...) {
-    delete[] buffer;
-    throw;
+      iterator = std::ranges::next(plus_2, 1, end);
+      plus_1 = std::ranges::next(iterator, 1, end);
+      plus_2 = std::ranges::next(plus_1, 1, end);
+    } else {
+      output << *iterator;
+      iterator = plus_1;
+      plus_1 = plus_2;
+      plus_2 = std::ranges::next(plus_1, 1, end);
+    }
   }
 }
 

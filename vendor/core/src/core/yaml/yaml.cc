@@ -1,6 +1,7 @@
 // See https://pyyaml.org/wiki/LibYAML for basic documentation
 #include <yaml.h>
 
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json_error.h>
 #include <sourcemeta/core/yaml.h>
 
@@ -109,6 +110,7 @@ auto internal_parse_json(yaml_parser_t *parser) -> sourcemeta::core::JSON {
 
 namespace sourcemeta::core {
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 auto parse_yaml(std::basic_istream<JSON::Char, JSON::CharTraits> &stream)
     -> JSON {
   std::basic_ostringstream<JSON::Char, JSON::CharTraits> buffer;

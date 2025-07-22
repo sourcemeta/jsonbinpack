@@ -29,6 +29,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/dependent_required_tautology.h
     linter/equal_numeric_bounds_to_enum.h
     linter/maximum_real_for_integer.h
+    linter/draft_official_dialect_without_empty_fragment.h
     linter/minimum_real_for_integer.h
     linter/single_type_array.h
     linter/enum_to_const.h
@@ -38,6 +39,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/dependent_required_default.h
     linter/items_array_default.h
     linter/items_schema_default.h
+    linter/multiple_of_default.h
     linter/pattern_properties_default.h
     linter/properties_default.h
     linter/unevaluated_items_default.h
@@ -46,105 +48,20 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/unsatisfiable_min_properties.h
     linter/content_media_type_without_encoding.h
     linter/content_schema_without_media_type.h
-    linter/drop_non_array_keywords_applicator_2019_09.h
-    linter/drop_non_array_keywords_applicator_2020_12.h
-    linter/drop_non_array_keywords_content_2019_09.h
-    linter/drop_non_array_keywords_content_2020_12.h
-    linter/drop_non_array_keywords_draft0.h
-    linter/drop_non_array_keywords_draft1.h
-    linter/drop_non_array_keywords_draft2.h
-    linter/drop_non_array_keywords_draft3.h
-    linter/drop_non_array_keywords_draft4.h
-    linter/drop_non_array_keywords_draft6.h
-    linter/drop_non_array_keywords_draft7.h
-    linter/drop_non_array_keywords_format_2019_09.h
-    linter/drop_non_array_keywords_format_2020_12.h
-    linter/drop_non_array_keywords_unevaluated_2020_12.h
-    linter/drop_non_array_keywords_validation_2019_09.h
-    linter/drop_non_array_keywords_validation_2020_12.h
-    linter/drop_non_boolean_keywords_applicator_2019_09.h
-    linter/drop_non_boolean_keywords_applicator_2020_12.h
-    linter/drop_non_boolean_keywords_content_2019_09.h
-    linter/drop_non_boolean_keywords_content_2020_12.h
-    linter/drop_non_boolean_keywords_draft0.h
-    linter/drop_non_boolean_keywords_draft1.h
-    linter/drop_non_boolean_keywords_draft2.h
-    linter/drop_non_boolean_keywords_draft3.h
-    linter/drop_non_boolean_keywords_draft4.h
-    linter/drop_non_boolean_keywords_draft6.h
-    linter/drop_non_boolean_keywords_draft7.h
-    linter/drop_non_boolean_keywords_format_2019_09.h
-    linter/drop_non_boolean_keywords_format_2020_12.h
-    linter/drop_non_boolean_keywords_unevaluated_2020_12.h
-    linter/drop_non_boolean_keywords_validation_2019_09.h
-    linter/drop_non_boolean_keywords_validation_2020_12.h
-    linter/drop_non_null_keywords_applicator_2019_09.h
-    linter/drop_non_null_keywords_applicator_2020_12.h
-    linter/drop_non_null_keywords_content_2019_09.h
-    linter/drop_non_null_keywords_content_2020_12.h
-    linter/drop_non_null_keywords_draft0.h
-    linter/drop_non_null_keywords_draft1.h
-    linter/drop_non_null_keywords_draft2.h
-    linter/drop_non_null_keywords_draft3.h
-    linter/drop_non_null_keywords_draft4.h
-    linter/drop_non_null_keywords_draft6.h
-    linter/drop_non_null_keywords_draft7.h
-    linter/drop_non_null_keywords_format_2019_09.h
-    linter/drop_non_null_keywords_format_2020_12.h
-    linter/drop_non_null_keywords_unevaluated_2020_12.h
-    linter/drop_non_null_keywords_validation_2019_09.h
-    linter/drop_non_null_keywords_validation_2020_12.h
-    linter/drop_non_numeric_keywords_applicator_2019_09.h
-    linter/drop_non_numeric_keywords_applicator_2020_12.h
-    linter/drop_non_numeric_keywords_content_2019_09.h
-    linter/drop_non_numeric_keywords_content_2020_12.h
-    linter/drop_non_numeric_keywords_draft0.h
-    linter/drop_non_numeric_keywords_draft1.h
-    linter/drop_non_numeric_keywords_draft2.h
-    linter/drop_non_numeric_keywords_draft3.h
-    linter/drop_non_numeric_keywords_draft4.h
-    linter/drop_non_numeric_keywords_draft6.h
-    linter/drop_non_numeric_keywords_draft7.h
-    linter/drop_non_numeric_keywords_format_2019_09.h
-    linter/drop_non_numeric_keywords_format_2020_12.h
-    linter/drop_non_numeric_keywords_unevaluated_2020_12.h
-    linter/drop_non_numeric_keywords_validation_2019_09.h
-    linter/drop_non_numeric_keywords_validation_2020_12.h
-    linter/drop_non_object_keywords_applicator_2019_09.h
-    linter/drop_non_object_keywords_applicator_2020_12.h
-    linter/drop_non_object_keywords_content_2019_09.h
-    linter/drop_non_object_keywords_content_2020_12.h
-    linter/drop_non_object_keywords_draft0.h
-    linter/drop_non_object_keywords_draft1.h
-    linter/drop_non_object_keywords_draft2.h
-    linter/drop_non_object_keywords_draft3.h
-    linter/drop_non_object_keywords_draft4.h
-    linter/drop_non_object_keywords_draft6.h
-    linter/drop_non_object_keywords_draft7.h
-    linter/drop_non_object_keywords_format_2019_09.h
-    linter/drop_non_object_keywords_format_2020_12.h
-    linter/drop_non_object_keywords_unevaluated_2020_12.h
-    linter/drop_non_object_keywords_validation_2019_09.h
-    linter/drop_non_object_keywords_validation_2020_12.h
-    linter/drop_non_string_keywords_applicator_2019_09.h
-    linter/drop_non_string_keywords_applicator_2020_12.h
-    linter/drop_non_string_keywords_draft0.h
-    linter/drop_non_string_keywords_draft1.h
-    linter/drop_non_string_keywords_draft2.h
-    linter/drop_non_string_keywords_draft3.h
-    linter/drop_non_string_keywords_draft4.h
-    linter/drop_non_string_keywords_draft6.h
-    linter/drop_non_string_keywords_draft7.h
-    linter/drop_non_string_keywords_unevaluated_2020_12.h
-    linter/drop_non_string_keywords_validation_2019_09.h
-    linter/drop_non_string_keywords_validation_2020_12.h
-    linter/unnecessary_allof_ref_wrapper.h
+    linter/additional_items_with_schema_items.h
+    linter/non_applicable_type_specific_keywords.h
+    linter/unnecessary_allof_wrapper_modern.h
+    linter/unnecessary_allof_wrapper_draft.h
+    linter/unnecessary_allof_wrapper_properties.h
     linter/duplicate_allof_branches.h
     linter/duplicate_anyof_branches.h
     linter/else_without_if.h
     linter/if_without_then_else.h
     linter/max_contains_without_contains.h
     linter/min_contains_without_contains.h
+    linter/modern_official_dialect_with_empty_fragment.h
+    linter/then_empty.h
+    linter/else_empty.h
     linter/then_without_if.h)
 
 if(SOURCEMETA_CORE_INSTALL)

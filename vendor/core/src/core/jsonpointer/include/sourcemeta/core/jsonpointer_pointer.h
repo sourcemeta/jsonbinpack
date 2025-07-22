@@ -9,7 +9,7 @@
 #include <functional>       // std::reference_wrapper
 #include <initializer_list> // std::initializer_list
 #include <iterator>         // std::advance, std::back_inserter
-#include <type_traits>      // std::enable_if_t, std::is_same_v
+#include <type_traits>      // std::enable_if_t, std::is_same_v, std::false_type
 #include <utility>          // std::move
 #include <vector>           // std::vector
 
@@ -21,6 +21,8 @@ public:
   using Token = GenericToken<PropertyT, Hash>;
   using Value = typename Token::Value;
   using Container = std::vector<Token>;
+  // We manually provide a JSON transformer
+  using json_auto = std::false_type;
 
   /// This constructor creates an empty JSON Pointer. For example:
   ///
@@ -66,31 +68,39 @@ public:
   /// Get a mutable end iterator on the pointer
   auto end() noexcept -> iterator { return this->data.end(); }
   /// Get a constant begin iterator on the pointer
-  auto begin() const noexcept -> const_iterator { return this->data.begin(); }
+  [[nodiscard]] auto begin() const noexcept -> const_iterator {
+    return this->data.begin();
+  }
   /// Get a constant end iterator on the pointer
-  auto end() const noexcept -> const_iterator { return this->data.end(); }
+  [[nodiscard]] auto end() const noexcept -> const_iterator {
+    return this->data.end();
+  }
   /// Get a constant begin iterator on the pointer
-  auto cbegin() const noexcept -> const_iterator { return this->data.cbegin(); }
+  [[nodiscard]] auto cbegin() const noexcept -> const_iterator {
+    return this->data.cbegin();
+  }
   /// Get a constant end iterator on the pointer
-  auto cend() const noexcept -> const_iterator { return this->data.cend(); }
+  [[nodiscard]] auto cend() const noexcept -> const_iterator {
+    return this->data.cend();
+  }
   /// Get a mutable reverse begin iterator on the pointer
   auto rbegin() noexcept -> reverse_iterator { return this->data.rbegin(); }
   /// Get a mutable reverse end iterator on the pointer
   auto rend() noexcept -> reverse_iterator { return this->data.rend(); }
   /// Get a constant reverse begin iterator on the pointer
-  auto rbegin() const noexcept -> const_reverse_iterator {
+  [[nodiscard]] auto rbegin() const noexcept -> const_reverse_iterator {
     return this->data.rbegin();
   }
   /// Get a constant reverse end iterator on the pointer
-  auto rend() const noexcept -> const_reverse_iterator {
+  [[nodiscard]] auto rend() const noexcept -> const_reverse_iterator {
     return this->data.rend();
   }
   /// Get a constant reverse begin iterator on the pointer
-  auto crbegin() const noexcept -> const_reverse_iterator {
+  [[nodiscard]] auto crbegin() const noexcept -> const_reverse_iterator {
     return this->data.crbegin();
   }
   /// Get a constant reverse end iterator on the pointer
-  auto crend() const noexcept -> const_reverse_iterator {
+  [[nodiscard]] auto crend() const noexcept -> const_reverse_iterator {
     return this->data.crend();
   }
 
@@ -273,10 +283,10 @@ public:
   /// assert(pointer.at(1).to_property() == "bar");
   /// assert(pointer.at(2).to_property() == "baz");
   /// ```
-  template <typename OtherT,
-            typename = std::enable_if_t<std::is_same_v<
-                PropertyT, std::reference_wrapper<const OtherT>>>>
-  auto push_back(const GenericPointer<OtherT, Hash> &other) -> void {
+  template <typename OtherT>
+  auto push_back(const GenericPointer<OtherT, Hash> &other) -> void
+    requires std::is_same_v<PropertyT, std::reference_wrapper<const OtherT>>
+  {
     if (other.empty()) {
       return;
     } else if (other.size() == 1) {
@@ -435,7 +445,7 @@ public:
   /// assert(left.concat(right) ==
   ///   sourcemeta::core::Pointer{"foo", "bar", "baz"});
   /// ```
-  auto concat(const GenericPointer<PropertyT, Hash> &other) const
+  [[nodiscard]] auto concat(const GenericPointer<PropertyT, Hash> &other) const
       -> GenericPointer<PropertyT, Hash> {
     GenericPointer<PropertyT, Hash> result{*this};
     result.push_back(other);
@@ -453,7 +463,8 @@ public:
   /// const sourcemeta::core::Pointer prefix{"foo", "bar"};
   /// assert(pointer.starts_with(prefix));
   /// ```
-  auto starts_with(const GenericPointer<PropertyT, Hash> &other) const -> bool {
+  [[nodiscard]] auto
+  starts_with(const GenericPointer<PropertyT, Hash> &other) const -> bool {
     return other.data.size() <= this->data.size() &&
            std::equal(other.data.cbegin(), other.data.cend(),
                       this->data.cbegin());
@@ -471,8 +482,8 @@ public:
   /// const sourcemeta::core::Pointer prefix{"foo", "bar", "baz"};
   /// assert(pointer.starts_with(prefix, tail));
   /// ```
-  auto starts_with(const GenericPointer<PropertyT, Hash> &other,
-                   const Token &tail) const -> bool {
+  [[nodiscard]] auto starts_with(const GenericPointer<PropertyT, Hash> &other,
+                                 const Token &tail) const -> bool {
     if (other.size() == this->size() + 1) {
       assert(!other.empty());
       return other.starts_with(*this) && other.back() == tail;
@@ -492,7 +503,8 @@ public:
   /// const sourcemeta::core::Pointer prefix{"foo", "bar", "qux"};
   /// assert(pointer.starts_with_initial(prefix));
   /// ```
-  auto starts_with_initial(const GenericPointer<PropertyT, Hash> &other) const
+  [[nodiscard]] auto
+  starts_with_initial(const GenericPointer<PropertyT, Hash> &other) const
       -> bool {
     const auto prefix_size{other.size()};
     if (prefix_size == 0) {
@@ -523,8 +535,9 @@ public:
   /// assert(pointer.rebase(prefix, replacement) ==
   ///   sourcemeta::core::Pointer{"qux", "baz"});
   /// ```
-  auto rebase(const GenericPointer<PropertyT, Hash> &prefix,
-              const GenericPointer<PropertyT, Hash> &replacement) const
+  [[nodiscard]] auto
+  rebase(const GenericPointer<PropertyT, Hash> &prefix,
+         const GenericPointer<PropertyT, Hash> &replacement) const
       -> GenericPointer<PropertyT, Hash> {
     typename Container::size_type index{0};
     while (index < prefix.size()) {
@@ -558,7 +571,8 @@ public:
   ///
   /// If the JSON Pointer is not relative to the base, a copy of the original
   /// input pointer is returned.
-  auto resolve_from(const GenericPointer<PropertyT, Hash> &base) const
+  [[nodiscard]] auto
+  resolve_from(const GenericPointer<PropertyT, Hash> &base) const
       -> GenericPointer<PropertyT, Hash> {
     typename Container::size_type index{0};
     while (index < base.size()) {
@@ -578,14 +592,16 @@ public:
   }
 
   /// Compare JSON Pointer instances
-  auto operator==(const GenericPointer<PropertyT, Hash> &other) const noexcept
+  [[nodiscard]] auto
+  operator==(const GenericPointer<PropertyT, Hash> &other) const noexcept
       -> bool {
     return this->data == other.data;
   }
 
   /// Overload to support ordering of JSON Pointers. Typically for sorting
   /// reasons.
-  auto operator<(const GenericPointer<PropertyT, Hash> &other) const noexcept
+  [[nodiscard]] auto
+  operator<(const GenericPointer<PropertyT, Hash> &other) const noexcept
       -> bool {
     return this->data < other.data;
   }

@@ -106,6 +106,22 @@ auto is_schema(const JSON &schema) -> bool;
 
 /// @ingroup jsonschema
 ///
+/// This function returns true if the given JSON instance is a schema
+/// semantically equivalent to the empty schema. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/jsonschema.h>
+/// #include <cassert>
+///
+/// const sourcemeta::core::JSON document{true};
+/// assert(sourcemeta::core::is_empty_schema(document));
+/// ```
+SOURCEMETA_CORE_JSONSCHEMA_EXPORT
+auto is_empty_schema(const JSON &schema) -> bool;
+
+/// @ingroup jsonschema
+///
 /// This function returns the URI identifier of the given schema, if any. For
 /// example:
 ///
@@ -492,6 +508,16 @@ auto reference_visit(
 // TODO: Optionally let users bundle the metaschema too
 
 /// @ingroup jsonschema
+/// A callback to get runtime reporting out of schema bundling:
+/// - Origin URI
+/// - Pointer (reference keyword from the origin)
+/// - Target URI
+/// - Embed pointer
+using BundleCallback =
+    std::function<void(const std::optional<JSON::String> &, const Pointer &,
+                       const JSON::String &, const Pointer &)>;
+
+/// @ingroup jsonschema
 ///
 /// This function bundles a JSON Schema (starting from Draft 4) by embedding
 /// every remote reference into the top level schema resource, handling circular
@@ -544,8 +570,10 @@ SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto bundle(JSON &schema, const SchemaWalker &walker,
             const SchemaResolver &resolver,
             const std::optional<std::string> &default_dialect = std::nullopt,
+            const std::optional<std::string> &default_id = std::nullopt,
             const std::optional<Pointer> &default_container = std::nullopt,
-            const SchemaFrame::Paths &paths = {empty_pointer}) -> void;
+            const SchemaFrame::Paths &paths = {empty_pointer},
+            const BundleCallback &callback = nullptr) -> void;
 
 /// @ingroup jsonschema
 ///
@@ -602,8 +630,10 @@ SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto bundle(const JSON &schema, const SchemaWalker &walker,
             const SchemaResolver &resolver,
             const std::optional<std::string> &default_dialect = std::nullopt,
+            const std::optional<std::string> &default_id = std::nullopt,
             const std::optional<Pointer> &default_container = std::nullopt,
-            const SchemaFrame::Paths &paths = {empty_pointer}) -> JSON;
+            const SchemaFrame::Paths &paths = {empty_pointer},
+            const BundleCallback &callback = nullptr) -> JSON;
 
 /// @ingroup jsonschema
 ///
