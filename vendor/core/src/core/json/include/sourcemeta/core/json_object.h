@@ -183,8 +183,7 @@ public:
   [[nodiscard]] inline auto empty() const -> bool { return this->data.empty(); }
 
   /// Access an object entry by its underlying positional index
-  [[nodiscard]] inline auto at(const size_type index) const noexcept
-      -> const Entry & {
+  [[nodiscard]] inline auto at(const size_type index) const -> const Entry & {
     return this->data.at(index);
   }
 
