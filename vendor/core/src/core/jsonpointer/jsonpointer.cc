@@ -10,7 +10,7 @@
 #include "stringify.h"
 
 #include <cassert>     // assert
-#include <iterator>    // std::cbegin, std::cend, std::prev
+#include <iterator>    // std::cbegin, std::cend, std::prev, std::advance
 #include <memory>      // std::allocator
 #include <ostream>     // std::basic_ostream
 #include <sstream>     // std::basic_ostringstream, std::basic_stringstream
@@ -245,6 +245,52 @@ auto set(JSON &document, const Pointer &pointer, JSON &&value) -> void {
   }
 }
 
+template <typename PointerT>
+auto remove_pointer(JSON &document, const PointerT &pointer) -> bool {
+  // Current implementation doesn't support removing an empty JSON pointer
+  // because we don't have a reference to the parent JSON object and there may
+  // be none (i.e. current object is the root JSON object). Here we are copying
+  // RapidJSON by making this a noop.
+  // https://github.com/Tencent/rapidjson/blob/24b5e7a8b27f42fa16b96fc70aade9106cf7102f/include/rapidjson/pointer.h#L835C9-L835C55
+  if (pointer.empty()) {
+    return false;
+  }
+
+  JSON &current{traverse<std::allocator, JSON, PointerT>(
+      document, std::cbegin(pointer), std::prev(std::cend(pointer)))};
+  const auto &last{pointer.back()};
+
+  if (last.is_property()) {
+    const auto current_size{current.size()};
+    return current.erase(last.to_property()) < current_size;
+  } else {
+    if (current.is_object()) {
+      const auto current_size{current.size()};
+      return current.erase(std::to_string(last.to_index())) < current_size;
+    } else {
+      const auto index{last.to_index()};
+      const auto &array{current.as_array()};
+
+      if (index >= array.size()) {
+        return false;
+      }
+
+      auto iterator{array.cbegin()};
+      std::advance(iterator, index);
+      current.erase(iterator);
+      return true;
+    }
+  }
+}
+
+auto remove(JSON &document, const Pointer &pointer) -> bool {
+  return remove_pointer(document, pointer);
+}
+
+auto remove(JSON &document, const WeakPointer &pointer) -> bool {
+  return remove_pointer(document, pointer);
+}
+
 auto to_pointer(const JSON &document) -> Pointer {
   assert(document.is_string());
   auto stream{document.to_stringstream()};
@@ -292,22 +338,19 @@ auto to_weak_pointer(const Pointer &pointer) -> WeakPointer {
 auto stringify(const Pointer &pointer,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream,
-                                                          false);
+  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream);
 }
 
 auto stringify(const WeakPointer &pointer,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream,
-                                                          false);
+  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream);
 }
 
 auto stringify(const PointerTemplate &pointer,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream,
-                                                          false);
+  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream);
 }
 
 auto to_string(const Pointer &pointer)
@@ -334,8 +377,7 @@ auto to_uri(const Pointer &pointer) -> URI {
   std::basic_ostringstream<JSON::Char, JSON::CharTraits,
                            std::allocator<JSON::Char>>
       result;
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, result,
-                                                          true);
+  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, result);
   return URI::from_fragment(result.str());
 }
 
