@@ -7,7 +7,6 @@
 
 // NOLINTBEGIN(misc-include-cleaner)
 #include <sourcemeta/core/uri_error.h>
-#include <sourcemeta/core/uri_escape.h>
 // NOLINTEND(misc-include-cleaner)
 
 #include <cstdint>     // std::uint32_t
@@ -108,6 +107,17 @@ public:
   /// assert(uri.is_mailto());
   /// ```
   [[nodiscard]] auto is_mailto() const -> bool;
+
+  /// Check if the URI is a file URI. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/uri.h>
+  /// #include <cassert>
+  ///
+  /// sourcemeta::core::URI uri{"file:///home/jviotti/foo.txt"};
+  /// assert(uri.is_file());
+  /// ```
+  [[nodiscard]] auto is_file() const -> bool;
 
   /// Check if the URI only consists of a fragment. For example:
   ///
@@ -345,6 +355,18 @@ public:
   /// assert(uri.recompose() == "http://example.com/TEST");
   /// ```
   auto canonicalize() -> URI &;
+
+  /// Convert a URI into a filesystem path. If the URI is not under the `file`
+  /// scheme, get the URI path component as a filesystem path. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/uri.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::core::URI uri{"file:///home/jviotti/foo.txt"};
+  /// assert(uri.to_path() == "/home/jviotti/foo.txt");
+  /// ```
+  [[nodiscard]] auto to_path() const -> std::filesystem::path;
 
   /// Resolve a relative URI against a base URI as established by RFC 3986. For
   /// example:
