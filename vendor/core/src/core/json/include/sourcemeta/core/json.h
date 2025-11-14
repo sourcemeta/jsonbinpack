@@ -156,7 +156,7 @@ auto stringify(const JSON &document,
 /// @ingroup json
 ///
 /// Stringify the input JSON document into a given C++ standard output stream in
-/// pretty mode, indenting the output using 4 spaces. For example:
+/// pretty mode. For example:
 ///
 /// ```cpp
 /// #include <sourcemeta/core/json.h>
@@ -171,62 +171,8 @@ auto stringify(const JSON &document,
 /// ```
 SOURCEMETA_CORE_JSON_EXPORT
 auto prettify(const JSON &document,
-              std::basic_ostream<JSON::Char, JSON::CharTraits> &stream) -> void;
-
-/// @ingroup json
-///
-/// Stringify the input JSON document into a given C++ standard output stream in
-/// compact mode, sorting object properties on a specific criteria. For example:
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <iostream>
-/// #include <sstream>
-///
-/// auto key_compare(const sourcemeta::core::JSON::String &left,
-///                  const sourcemeta::core::JSON::String &right)
-///   -> bool {
-///   return left < right;
-/// }
-///
-/// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse_json("{ \"foo\": 1, \"bar\": 2, \"baz\": 3 }");
-/// std::ostringstream stream;
-/// sourcemeta::core::stringify(document, stream, key_compare);
-/// std::cout << stream.str() << std::endl;
-/// ```
-SOURCEMETA_CORE_JSON_EXPORT
-auto stringify(const JSON &document,
-               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
-               const JSON::KeyComparison &compare) -> void;
-
-/// @ingroup json
-///
-/// Stringify the input JSON document into a given C++ standard output stream in
-/// pretty mode, indenting the output using 4 spaces and sorting object
-/// properties on a specific criteria. For example:
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <iostream>
-/// #include <sstream>
-///
-/// auto key_compare(const sourcemeta::core::JSON::String &left,
-///                  const sourcemeta::core::JSON::String &right)
-///   -> bool {
-///   return left < right;
-/// }
-///
-/// const sourcemeta::core::JSON document =
-///   sourcemeta::core::parse_json("{ \"foo\": 1, \"bar\": 2, \"baz\": 3 }");
-/// std::ostringstream stream;
-/// sourcemeta::core::prettify(document, stream, key_compare);
-/// std::cout << stream.str() << std::endl;
-/// ```
-SOURCEMETA_CORE_JSON_EXPORT
-auto prettify(const JSON &document,
               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
-              const JSON::KeyComparison &compare) -> void;
+              const std::size_t spaces = 2) -> void;
 
 /// @ingroup json
 ///

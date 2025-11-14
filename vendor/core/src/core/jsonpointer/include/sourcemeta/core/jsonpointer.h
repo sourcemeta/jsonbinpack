@@ -12,7 +12,6 @@
 #include <sourcemeta/core/jsonpointer_error.h>
 #include <sourcemeta/core/jsonpointer_pointer.h>
 #include <sourcemeta/core/jsonpointer_position.h>
-#include <sourcemeta/core/jsonpointer_subpointer_walker.h>
 #include <sourcemeta/core/jsonpointer_template.h>
 #include <sourcemeta/core/jsonpointer_walker.h>
 // NOLINTEND(misc-include-cleaner)
@@ -593,32 +592,6 @@ auto to_uri(const Pointer &pointer, const URI &base) -> URI;
 using PointerWalker = GenericPointerWalker<Pointer>;
 
 /// @ingroup jsonpointer
-///
-/// Walk over every subpointer of a JSON Pointer, from the current pointer down
-/// to the empty pointer. For example:
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <sourcemeta/core/jsonpointer.h>
-/// #include <cassert>
-/// #include <vector>
-///
-/// const sourcemeta::core::Pointer pointer{"foo", "bar"};
-/// std::vector<sourcemeta::core::Pointer> subpointers;
-///
-/// for (const auto &subpointer :
-///   sourcemeta::core::SubPointerWalker{pointer}) {
-///   subpointers.push_back(subpointer);
-/// }
-///
-/// assert(subpointers.size() == 3);
-/// assert(subpointers.at(0) == sourcemeta::core::Pointer{"foo", "bar"});
-/// assert(subpointers.at(1) == sourcemeta::core::Pointer{"foo"});
-/// assert(subpointers.at(2) == sourcemeta::core::Pointer{});
-/// ```
-using SubPointerWalker = GenericSubPointerWalker<Pointer>;
-
-/// @ingroup jsonpointer
 /// Serialise a Pointer as JSON
 template <typename T>
   requires std::is_same_v<T, Pointer>
@@ -644,12 +617,47 @@ auto from_json(const JSON &value) -> std::optional<T> {
   }
 
   try {
-    return to_pointer(value.to_string());
+    return to_pointer(value);
   } catch (const PointerParseError &) {
     return std::nullopt;
   }
 }
 
 } // namespace sourcemeta::core
+
+// This hash specialisation is intentationally constant with a decent tolerance
+// to collisions
+namespace std {
+template <typename PropertyT>
+struct hash<sourcemeta::core::GenericPointer<
+    PropertyT,
+    sourcemeta::core::PropertyHashJSON<sourcemeta::core::JSON::String>>> {
+  auto
+  operator()(const sourcemeta::core::GenericPointer<
+             PropertyT,
+             sourcemeta::core::PropertyHashJSON<sourcemeta::core::JSON::String>>
+                 &pointer) const noexcept -> std::size_t {
+    const auto size{pointer.size()};
+    if (size == 0) {
+      return size;
+    }
+
+    const auto &first{pointer.at(0)};
+    const auto &middle{pointer.at(size / 2)};
+    const auto &last{pointer.at(size - 1)};
+
+    return size +
+           (first.is_property()
+                ? static_cast<std::size_t>(first.property_hash().a)
+                : first.to_index()) +
+           (middle.is_property()
+                ? static_cast<std::size_t>(middle.property_hash().a)
+                : middle.to_index()) +
+           (last.is_property()
+                ? static_cast<std::size_t>(last.property_hash().a)
+                : last.to_index());
+  }
+};
+} // namespace std
 
 #endif

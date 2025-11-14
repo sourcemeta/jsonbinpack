@@ -1,11 +1,10 @@
 #include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/uri.h>
 
-#include <cassert>   // assert
-#include <set>       // std::set
-#include <sstream>   // std::ostringstream
-#include <stdexcept> // std::runtime_error
-#include <utility>   // std::move, std::pair
+#include <cassert> // assert
+#include <set>     // std::set
+#include <sstream> // std::ostringstream
+#include <utility> // std::move, std::pair
 
 namespace {
 
@@ -46,8 +45,8 @@ auto SchemaTransformRule::transform(JSON &, const Result &) const -> void {
 auto SchemaTransformRule::rereference(const std::string &reference,
                                       const Pointer &origin, const Pointer &,
                                       const Pointer &) const -> Pointer {
-  throw SchemaReferenceError(reference, origin,
-                             "The reference broke after transformation");
+  throw SchemaBrokenReferenceError(reference, origin,
+                                   "The reference broke after transformation");
 }
 
 auto SchemaTransformRule::apply(JSON &schema, const JSON &root,
@@ -102,7 +101,17 @@ auto SchemaTransformer::check(
     const std::optional<JSON::String> &default_id) const
     -> std::pair<bool, std::uint8_t> {
   SchemaFrame frame{SchemaFrame::Mode::Locations};
-  frame.analyse(schema, walker, resolver, default_dialect, default_id);
+
+  // If we use the default id when there is already one, framing will duplicate
+  // the locations leading to duplicate check reports
+  if (sourcemeta::core::identify(schema, resolver,
+                                 SchemaIdentificationStrategy::Strict,
+                                 default_dialect)
+          .has_value()) {
+    frame.analyse(schema, walker, resolver, default_dialect);
+  } else {
+    frame.analyse(schema, walker, resolver, default_dialect, default_id);
+  }
 
   bool result{true};
   std::size_t subschema_count{0};
@@ -181,11 +190,8 @@ auto SchemaTransformer::apply(
 
         std::pair<const JSON *, const JSON::String *> mark{&current, &name};
         if (processed_rules.contains(mark)) {
-          // TODO: Throw a better custom error that also highlights the schema
-          // location
-          std::ostringstream error;
-          error << "Rules must only be processed once: " << name;
-          throw std::runtime_error(error.str());
+          throw SchemaTransformRuleProcessedTwiceError(name,
+                                                       entry.second.pointer);
         }
 
         // Identify and try to address broken references, if any

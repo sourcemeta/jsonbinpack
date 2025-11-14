@@ -50,9 +50,8 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/content_schema_without_media_type.h
     linter/additional_items_with_schema_items.h
     linter/non_applicable_type_specific_keywords.h
-    linter/unnecessary_allof_wrapper_modern.h
-    linter/unnecessary_allof_wrapper_draft.h
-    linter/unnecessary_allof_wrapper_properties.h
+    linter/unnecessary_allof_ref_wrapper_modern.h
+    linter/unnecessary_allof_ref_wrapper_draft.h
     linter/duplicate_allof_branches.h
     linter/duplicate_anyof_branches.h
     linter/else_without_if.h
@@ -68,6 +67,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/draft_ref_siblings.h
     linter/definitions_to_defs.h
     linter/unknown_keywords_prefix.h
+    linter/non_applicable_enum_validation_keywords.h
 
     # Strict
     strict/required_properties_in_properties.h)

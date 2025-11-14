@@ -41,8 +41,11 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::core::prettify(schema, canonical_output_stream,
-                             sourcemeta::core::schema_format_compare);
+
+  sourcemeta::core::format(schema, sourcemeta::core::schema_official_walker,
+                           sourcemeta::core::schema_official_resolver,
+                           "https://json-schema.org/draft/2020-12/schema");
+  sourcemeta::core::prettify(schema, canonical_output_stream);
   canonical_output_stream << "\n";
   canonical_output_stream.flush();
   canonical_output_stream.close();
@@ -55,8 +58,7 @@ auto main(int argc, char *argv[]) -> int {
   std::ofstream encoding_output_stream(directory / "encoding.json",
                                        std::ios::binary);
   encoding_output_stream.exceptions(std::ios_base::badbit);
-  sourcemeta::core::prettify(schema, encoding_output_stream,
-                             sourcemeta::core::schema_format_compare);
+  sourcemeta::core::prettify(schema, encoding_output_stream);
   encoding_output_stream << "\n";
   encoding_output_stream.flush();
   encoding_output_stream.close();
