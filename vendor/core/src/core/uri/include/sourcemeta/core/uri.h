@@ -20,7 +20,7 @@
 #include <vector>      // std::vector
 
 /// @defgroup uri URI
-/// @brief A RFC 3986 URI implementation based on `uriparser`.
+/// @brief A strict RFC 3986 URI implementation.
 ///
 /// This functionality is included as follows:
 ///
@@ -33,7 +33,20 @@ namespace sourcemeta::core {
 /// @ingroup uri
 class SOURCEMETA_CORE_URI_EXPORT URI {
 public:
-  // TODO: Add a constructor that takes a C++ input stream
+  /// Default constructor creates an empty URI
+  URI() = default;
+
+  /// Copy constructor
+  URI(const URI &) = default;
+
+  /// Move constructor
+  URI(URI &&) noexcept = default;
+
+  /// Copy assignment operator
+  auto operator=(const URI &) -> URI & = default;
+
+  /// Move assignment operator
+  auto operator=(URI &&) noexcept -> URI & = default;
 
   /// This constructor creates a URI from a string type. For example:
   ///
@@ -42,7 +55,7 @@ public:
   ///
   /// const sourcemeta::core::URI uri{"https://www.sourcemeta.com"};
   /// ```
-  URI(std::string input);
+  URI(const std::string &input);
 
   /// This constructor creates a URI from a C++ input stream. For example:
   ///
@@ -54,15 +67,6 @@ public:
   /// const sourcemeta::core::URI uri{input};
   /// ```
   URI(std::istream &input);
-
-  /// Destructor
-  ~URI();
-
-  /// Copy constructor
-  URI(const URI &other);
-
-  /// Move constructor
-  URI(URI &&other) noexcept;
 
   /// Check if the URI is absolute. For example:
   ///
@@ -287,20 +291,7 @@ public:
   /// assert(uri.fragment().has_value());
   /// assert(uri.fragment().value() == "foo");
   /// ```
-  auto fragment(const std::string &fragment) -> URI &;
-
-  /// Set the fragment part of the URI with move semantics. For example:
-  ///
-  /// ```cpp
-  /// #include <sourcemeta/core/uri.h>
-  /// #include <cassert>
-  ///
-  /// sourcemeta::core::URI uri{"https://www.sourcemeta.com"};
-  /// std::string fragment{"foo"};
-  /// uri.fragment(std::move(fragment));
-  /// assert(uri.fragment().has_value());
-  /// assert(uri.fragment().value() == "foo");
-  auto fragment(std::string &&fragment) -> URI &;
+  auto fragment(std::string_view fragment) -> URI &;
 
   /// Get the non-dissected query part of the URI, if any. For example:
   ///
@@ -382,24 +373,6 @@ public:
   /// ```
   auto resolve_from(const URI &base) -> URI &;
 
-  // TODO: Do we really need this `try_resolve_from` method? There shouldn't
-  // be any reason why resolution cannot happen. This is probably just an
-  // artifact of `uriparser` not supporting relative resolution
-
-  /// Resolve a relative URI against a base URI as established by RFC
-  /// 3986. If the resolution cannot happen, nothing happens. For example:
-  ///
-  /// ```cpp
-  /// #include <sourcemeta/core/uri.h>
-  /// #include <cassert>
-  ///
-  /// const sourcemeta::core::URI base{"bar"};
-  /// sourcemeta::core::URI result{"foo"};
-  /// result.try_resolve_from(base);
-  /// assert(result.recompose() == "foo");
-  /// ```
-  auto try_resolve_from(const URI &base) -> URI &;
-
   /// Attempt to resolve a URI relative to another URI. If the latter URI is not
   /// a base for the former, leave the URI intact. For example:
   ///
@@ -446,7 +419,7 @@ public:
   [[nodiscard]] auto userinfo() const -> std::optional<std::string_view>;
 
   /// To support equality of URIs
-  auto operator==(const URI &other) const noexcept -> bool;
+  auto operator==(const URI &other) const noexcept -> bool = default;
 
   /// To support ordering of URIs
   auto operator<(const URI &other) const noexcept -> bool;
@@ -490,8 +463,7 @@ public:
   static auto canonicalize(const std::string &input) -> std::string;
 
 private:
-  bool parsed = false;
-  auto parse() -> void;
+  auto parse(const std::string &input) -> void;
 
 // Exporting symbols that depends on the standard C++ library is considered
 // safe.
@@ -499,8 +471,6 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  std::string data{};
-
   std::optional<std::string> path_{};
   std::optional<std::string> userinfo_{};
   std::optional<std::string> host_{};
@@ -508,11 +478,6 @@ private:
   std::optional<std::string> scheme_{};
   std::optional<std::string> fragment_{};
   std::optional<std::string> query_{};
-  bool is_ipv6_ = false;
-
-  // Use PIMPL idiom to hide `uriparser`
-  struct Internal;
-  std::unique_ptr<Internal> internal{};
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif

@@ -85,6 +85,7 @@ inline auto APPLIES_TO_POINTERS(std::vector<Pointer> &&keywords)
 #include "linter/minimum_real_for_integer.h"
 #include "linter/modern_official_dialect_with_empty_fragment.h"
 #include "linter/multiple_of_default.h"
+#include "linter/non_applicable_enum_validation_keywords.h"
 #include "linter/non_applicable_type_specific_keywords.h"
 #include "linter/not_false.h"
 #include "linter/pattern_properties_default.h"
@@ -97,9 +98,8 @@ inline auto APPLIES_TO_POINTERS(std::vector<Pointer> &&keywords)
 #include "linter/unevaluated_items_default.h"
 #include "linter/unevaluated_properties_default.h"
 #include "linter/unknown_keywords_prefix.h"
-#include "linter/unnecessary_allof_wrapper_draft.h"
-#include "linter/unnecessary_allof_wrapper_modern.h"
-#include "linter/unnecessary_allof_wrapper_properties.h"
+#include "linter/unnecessary_allof_ref_wrapper_draft.h"
+#include "linter/unnecessary_allof_ref_wrapper_modern.h"
 #include "linter/unsatisfiable_max_contains.h"
 #include "linter/unsatisfiable_min_properties.h"
 
@@ -117,9 +117,8 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
   bundle.add<ContentSchemaWithoutMediaType>();
   bundle.add<DraftOfficialDialectWithoutEmptyFragment>();
   bundle.add<NonApplicableTypeSpecificKeywords>();
-  bundle.add<UnnecessaryAllOfWrapperModern>();
-  bundle.add<UnnecessaryAllOfWrapperDraft>();
-  bundle.add<UnnecessaryAllOfWrapperProperties>();
+  bundle.add<UnnecessaryAllOfRefWrapperModern>();
+  bundle.add<UnnecessaryAllOfRefWrapperDraft>();
   bundle.add<DuplicateAllOfBranches>();
   bundle.add<DuplicateAnyOfBranches>();
   bundle.add<ElseWithoutIf>();
@@ -137,6 +136,7 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
   bundle.add<MinimumRealForInteger>();
   bundle.add<SingleTypeArray>();
   bundle.add<EnumWithType>();
+  bundle.add<NonApplicableEnumValidationKeywords>();
   bundle.add<DuplicateEnumValues>();
   bundle.add<DuplicateRequiredValues>();
   bundle.add<ConstWithType>();

@@ -160,6 +160,8 @@ auto identify(const JSON &schema, const SchemaResolver &resolver,
 /// of the schema.
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto identify(const JSON &schema, const std::string &base_dialect,
+              const SchemaIdentificationStrategy strategy =
+                  SchemaIdentificationStrategy::Strict,
               const std::optional<std::string> &default_id = std::nullopt)
     -> std::optional<std::string>;
 
@@ -365,146 +367,30 @@ auto vocabularies(const SchemaResolver &resolver,
 
 /// @ingroup jsonschema
 ///
-/// An opinionated JSON Schema aware key comparison for use with
-/// sourcemeta::core::prettify or sourcemeta::core::stringify for
-/// formatting purposes. For example:
+/// Format a JSON Schema document by reordering all object properties throughout
+/// the entire document according to an opinionated JSON Schema aware ordering.
+/// This function modifies the schema in-place. For example:
 ///
 /// ```cpp
 /// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/jsonschema.h>
 /// #include <iostream>
 /// #include <sstream>
 ///
-/// const sourcemeta::core::JSON document =
+/// sourcemeta::core::JSON schema =
 ///   sourcemeta::core::parse_json(
 ///     "{ \"type\": \"string\", \"minLength\": 3 }");
+/// sourcemeta::core::format(schema, sourcemeta::core::schema_official_walker,
+///                          sourcemeta::core::schema_official_resolver);
 /// std::ostringstream stream;
-/// sourcemeta::core::prettify(document, stream,
-///   sourcemeta::core::schema_format_compare);
+/// sourcemeta::core::prettify(schema, stream);
 /// std::cout << stream.str() << std::endl;
 /// ```
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto schema_format_compare(const JSON::String &left, const JSON::String &right)
-    -> bool;
-
-/// @ingroup jsonschema
-///
-/// Remove every identifer from a schema, rephrasing references (if any) as
-/// needed.
-///
-/// As a big caveat, unidentifying a schema with embedded schema
-/// resources will result in standalone instances of the `$schema` keyword,
-/// which will not be valid according to the specification (the `$schema`
-/// keyword must only occur within schema resources). We advise against using
-/// unidentified schema for anything other than serving non-compliant JSON
-/// Schema implementations that do not support identifier.
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <sourcemeta/core/jsonschema.h>
-/// #include <cassert>
-///
-/// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse_json(R"JSON({
-///   "$id": "https://www.example.com/schema",
-///   "$schema": "https://json-schema.org/draft/2020-12/schema",
-///   "$ref": "another",
-/// })JSON");
-///
-/// sourcemeta::core::unidentify(schema,
-///   sourcemeta::core::schema_official_walker,
-///   sourcemeta::core::schema_official_resolver);
-///
-/// const sourcemeta::core::JSON expected =
-///   sourcemeta::core::parse_json(R"JSON({
-///   "$schema": "https://json-schema.org/draft/2020-12/schema",
-///   "$ref": "https://www.example.com/another",
-/// })JSON");
-///
-/// assert(schema == expected);
-/// ```
-SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto unidentify(
-    JSON &schema, const SchemaWalker &walker, const SchemaResolver &resolver,
-    const std::optional<std::string> &default_dialect = std::nullopt) -> void;
-
-/// @ingroup jsonschema
-///
-/// A reference visitor to try to turn every possible absolute reference in a
-/// schema into a relative one. For example:
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <sourcemeta/core/jsonschema.h>
-/// #include <cassert>
-///
-/// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse_json(R"JSON({
-///   "$id": "https://www.example.com/schema",
-///   "$schema": "https://json-schema.org/draft/2020-12/schema",
-///   "$ref": "https://www.example.com/another",
-/// })JSON");
-///
-/// sourcemeta::core::reference_visit(schema,
-///   sourcemeta::core::schema_official_walker,
-///   sourcemeta::core::schema_official_resolver,
-///   sourcemeta::core::reference_visitor_relativize);
-///
-/// const sourcemeta::core::JSON expected =
-///   sourcemeta::core::parse_json(R"JSON({
-///   "$id": "https://www.example.com/schema",
-///   "$schema": "https://json-schema.org/draft/2020-12/schema",
-///   "$ref": "another",
-/// })JSON");
-///
-/// assert(schema == expected);
-/// ```
-SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto reference_visitor_relativize(JSON &subschema, const URI &base,
-                                  const JSON::String &vocabulary,
-                                  const JSON::String &keyword, URI &value)
+auto format(JSON &schema, const SchemaWalker &walker,
+            const SchemaResolver &resolver,
+            const std::optional<JSON::String> &default_dialect = std::nullopt)
     -> void;
-
-/// @ingroup jsonschema
-///
-/// A utility function to loop over every reference in a schema, allowing
-/// modifications to their subschemas if desired. Note that the consumer is
-/// responsible for not making the schema invalid. For example:
-///
-/// ```cpp
-/// #include <sourcemeta/core/json.h>
-/// #include <sourcemeta/core/jsonschema.h>
-///
-/// sourcemeta::core::JSON schema =
-///   sourcemeta::core::parse_json(R"JSON({
-///   "$id": "https://www.example.com/schema",
-///   "$schema": "https://json-schema.org/draft/2020-12/schema",
-///   "$ref": "https://www.example.com/another",
-/// })JSON");
-///
-/// static auto visitor(JSON &subschema,
-///                     const URI &base,
-///                     const JSON::String &vocabulary,
-///                     const JSON::String &keyword,
-///                     URI &value) -> void {
-///   sourcemeta::core::prettify(subschema, std::cerr);
-///   std::cerr << "\n";
-///   std::cerr << base.recompose() << "\n";
-///   std::cerr << vocabulary << "\n";
-///   std::cerr << keyword << "\n";
-///   std::cerr << value.recompose() << "\n";
-/// }
-///
-/// sourcemeta::core::reference_visit(schema,
-///   sourcemeta::core::schema_official_walker,
-///   sourcemeta::core::schema_official_resolver,
-///   visitor);
-/// ```
-SOURCEMETA_CORE_JSONSCHEMA_EXPORT
-auto reference_visit(
-    JSON &schema, const SchemaWalker &walker, const SchemaResolver &resolver,
-    const SchemaVisitorReference &callback,
-    const std::optional<std::string> &default_dialect = std::nullopt,
-    const std::optional<std::string> &default_id = std::nullopt) -> void;
 
 /// @ingroup jsonschema
 ///
