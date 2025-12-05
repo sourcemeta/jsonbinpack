@@ -1,10 +1,11 @@
 #include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/uri.h>
 
-#include <cassert> // assert
-#include <set>     // std::set
-#include <sstream> // std::ostringstream
-#include <utility> // std::move, std::pair
+#include <cassert>       // assert
+#include <set>           // std::set
+#include <sstream>       // std::ostringstream
+#include <unordered_set> // std::unordered_set
+#include <utility>       // std::move, std::pair
 
 namespace {
 
@@ -104,15 +105,14 @@ auto SchemaTransformer::check(
 
   // If we use the default id when there is already one, framing will duplicate
   // the locations leading to duplicate check reports
-  if (sourcemeta::core::identify(schema, resolver,
-                                 SchemaIdentificationStrategy::Strict,
-                                 default_dialect)
+  if (sourcemeta::core::identify(schema, resolver, default_dialect)
           .has_value()) {
     frame.analyse(schema, walker, resolver, default_dialect);
   } else {
     frame.analyse(schema, walker, resolver, default_dialect, default_id);
   }
 
+  std::unordered_set<Pointer> visited;
   bool result{true};
   std::size_t subschema_count{0};
   std::size_t subschema_failures{0};
@@ -122,11 +122,16 @@ auto SchemaTransformer::check(
       continue;
     }
 
+    // Framing may report resource twice or more given default identifiers and
+    // nested resources, risking reporting the same errors twice
+    if (!visited.insert(entry.second.pointer).second) {
+      continue;
+    }
+
     subschema_count += 1;
 
     const auto &current{get(schema, entry.second.pointer)};
-    const auto current_vocabularies{
-        vocabularies(schema, resolver, entry.second.dialect)};
+    const auto current_vocabularies{frame.vocabularies(entry.second, resolver)};
     bool subresult{true};
     for (const auto &[name, rule] : this->rules) {
       const auto outcome{rule->check(current, schema, current_vocabularies,
@@ -160,6 +165,7 @@ auto SchemaTransformer::apply(
   while (true) {
     SchemaFrame frame{SchemaFrame::Mode::References};
     frame.analyse(schema, walker, resolver, default_dialect, default_id);
+    std::unordered_set<Pointer> visited;
 
     bool applied{false};
     for (const auto &entry : frame.locations()) {
@@ -168,9 +174,16 @@ auto SchemaTransformer::apply(
         continue;
       }
 
+      // Framing may report resource twice or more given default identifiers and
+      // nested resources, risking reporting the same errors twice
+      if (!visited.insert(entry.second.pointer).second) {
+        continue;
+      }
+
       auto &current{get(schema, entry.second.pointer)};
       const auto current_vocabularies{
-          vocabularies(schema, resolver, entry.second.dialect)};
+          frame.vocabularies(entry.second, resolver)};
+
       for (const auto &[name, rule] : this->rules) {
         const auto subresult{rule->apply(current, schema, current_vocabularies,
                                          walker, resolver, frame,
@@ -206,15 +219,15 @@ auto SchemaTransformer::apply(
             continue;
           }
 
-          const auto &target{destination.value().get().pointer};
+          const auto &target{destination.value().get()};
           // The destination still exists, so we don't have to do anything
-          if (try_get(schema, target)) {
+          if (try_get(schema, target.pointer)) {
             continue;
           }
 
           const auto new_fragment{rule->rereference(
-              reference.second.destination, reference.first.second, target,
-              entry.second.pointer)};
+              reference.second.destination, reference.first.second,
+              target.relative_pointer, entry.second.relative_pointer)};
 
           // Note we use the base from the original reference before any
           // canonicalisation takes place so that we don't overly change
