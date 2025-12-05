@@ -23,6 +23,7 @@
 #include <filesystem>    // std::filesystem
 #include <optional>      // std::optional
 #include <unordered_map> // std::unordered_map
+#include <unordered_set> // std::unordered_set
 
 namespace sourcemeta::core {
 
@@ -44,8 +45,14 @@ struct SOURCEMETA_CORE_SCHEMACONFIG_EXPORT SchemaConfig {
   std::filesystem::path absolute_path;
   JSON::String base;
   std::optional<JSON::String> default_dialect;
+  std::unordered_set<JSON::String> extension;
   std::unordered_map<JSON::String, JSON::String> resolve;
   JSON extra = JSON::make_object();
+
+  /// Check if the given path represents a schema described by this
+  /// configuration
+  [[nodiscard]]
+  auto applies_to(const std::filesystem::path &path) const -> bool;
 
   /// Parse a configuration file from its contents
   [[nodiscard]]

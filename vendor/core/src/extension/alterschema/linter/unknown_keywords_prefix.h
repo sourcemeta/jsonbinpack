@@ -4,7 +4,8 @@ public:
       : SchemaTransformRule{
             "unknown_keywords_prefix",
             "Future versions of JSON Schema will refuse to evaluate unknown "
-            "keywords that don't have an x- prefix"} {};
+            "keywords or custom keywords from optional vocabularies that don't "
+            "have an x- prefix"} {};
 
   [[nodiscard]] auto
   condition(const JSON &schema, const JSON &, const Vocabularies &vocabularies,
@@ -18,7 +19,7 @@ public:
         continue;
       }
 
-      const auto metadata = walker(entry.first, vocabularies);
+      const auto &metadata = walker(entry.first, vocabularies);
       if (metadata.type == SchemaKeywordType::Unknown) {
         locations.push_back(Pointer{entry.first});
       }

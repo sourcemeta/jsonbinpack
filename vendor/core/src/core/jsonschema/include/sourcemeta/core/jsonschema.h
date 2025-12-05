@@ -12,7 +12,6 @@
 #include <sourcemeta/core/jsonschema_bundle.h>
 #include <sourcemeta/core/jsonschema_error.h>
 #include <sourcemeta/core/jsonschema_frame.h>
-#include <sourcemeta/core/jsonschema_resolver.h>
 #include <sourcemeta/core/jsonschema_transform.h>
 #include <sourcemeta/core/jsonschema_types.h>
 #include <sourcemeta/core/jsonschema_walker.h>
@@ -47,7 +46,7 @@ auto schema_official_resolver(std::string_view identifier)
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto schema_official_walker(std::string_view keyword,
                             const Vocabularies &vocabularies)
-    -> SchemaWalkerResult;
+    -> const SchemaWalkerResult &;
 
 /// @ingroup jsonschema
 ///
@@ -142,14 +141,8 @@ auto is_empty_schema(const JSON &schema) -> bool;
 /// assert(id.has_value());
 /// assert(id.value() == "https://sourcemeta.com/example-schema");
 /// ```
-///
-/// You can opt-in to a loose identification strategy to attempt to play a
-/// guessing game. Often useful if you have a schema without a dialect and you
-/// want to at least try to get something.
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto identify(const JSON &schema, const SchemaResolver &resolver,
-              const SchemaIdentificationStrategy strategy =
-                  SchemaIdentificationStrategy::Strict,
               const std::optional<std::string> &default_dialect = std::nullopt,
               const std::optional<std::string> &default_id = std::nullopt)
     -> std::optional<std::string>;
@@ -160,8 +153,6 @@ auto identify(const JSON &schema, const SchemaResolver &resolver,
 /// of the schema.
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto identify(const JSON &schema, const std::string &base_dialect,
-              const SchemaIdentificationStrategy strategy =
-                  SchemaIdentificationStrategy::Strict,
               const std::optional<std::string> &default_id = std::nullopt)
     -> std::optional<std::string>;
 
@@ -312,7 +303,7 @@ auto metaschema(
 ///
 /// assert(base_dialect.has_value());
 /// assert(base_dialect.value() ==
-/// "https://json-schema.org/draft/2020-12/schema");
+///   "https://json-schema.org/draft/2020-12/schema");
 /// ```
 SOURCEMETA_CORE_JSONSCHEMA_EXPORT
 auto base_dialect(const JSON &schema, const SchemaResolver &resolver,

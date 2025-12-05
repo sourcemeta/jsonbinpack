@@ -19,7 +19,7 @@
 #include <sstream>    // std::basic_ostringstream, std::basic_istringstream
 #include <stack>      // std::stack
 #include <stdexcept>  // std::out_of_range
-#include <string>     // std::basic_string, std::stol, std::stod, std::stoul
+#include <string>     // std::basic_string, std::stoul
 
 namespace sourcemeta::core::internal {
 
@@ -292,36 +292,53 @@ auto parse_string(
 }
 
 template <typename CharT, typename Traits>
-auto parse_number_integer(const std::uint64_t line, const std::uint64_t column,
+auto parse_number_decimal(const std::uint64_t line, const std::uint64_t column,
                           const std::basic_string<CharT, Traits> &string)
     -> JSON {
   try {
-    return JSON{static_cast<std::int64_t>(std::stoll(string))};
-  } catch (const std::out_of_range &) {
-    try {
-      return JSON{Decimal{string}};
-    } catch (const DecimalParseError &) {
-      throw JSONParseError(line, column);
-    }
+    return JSON{Decimal{string}};
+  } catch (const DecimalParseError &) {
+    throw JSONParseError(line, column);
+  } catch (const std::invalid_argument &) {
+    throw JSONParseError(line, column);
   }
 }
 
 template <typename CharT, typename Traits>
-auto parse_number_real(const std::uint64_t line, const std::uint64_t column,
-                       const std::basic_string<CharT, Traits> &string) -> JSON {
-  try {
-    return JSON{std::stod(string)};
-  } catch (const std::out_of_range &) {
-    try {
-      return JSON{Decimal{string}};
-    } catch (const DecimalParseError &) {
-      throw JSONParseError(line, column);
-    } catch (const std::invalid_argument &) {
-      throw JSONParseError(line, column);
-    }
-  } catch (const std::invalid_argument &) {
-    throw JSONParseError(line, column);
+auto parse_number_integer_maybe_decimal(
+    const std::uint64_t line, const std::uint64_t column,
+    const std::basic_string<CharT, Traits> &string) -> JSON {
+  const auto result{sourcemeta::core::to_int64_t(string)};
+  return result.has_value() ? JSON{result.value()}
+                            : parse_number_decimal(line, column, string);
+}
+
+template <typename CharT, typename Traits>
+auto parse_number_real_maybe_decimal(
+    const std::uint64_t line, const std::uint64_t column,
+    const std::basic_string<CharT, Traits> &string,
+    const std::size_t first_nonzero_position,
+    const std::size_t decimal_position) -> JSON {
+  // We are guaranteed to not be dealing with exponential numbers here
+  assert((string.find('e') == std::basic_string<CharT, Traits>::npos));
+  assert((string.find('E') == std::basic_string<CharT, Traits>::npos));
+
+  // If the number has enough significant digits, then we risk completely losing
+  // precision of the fractional component, and thus incorrectly interpreting a
+  // fractional number as an integral value
+  const auto decimal_after_first_nonzero{
+      decimal_position != std::basic_string<CharT, Traits>::npos &&
+      decimal_position > first_nonzero_position};
+  const auto significant_digits{string.length() - first_nonzero_position -
+                                (decimal_after_first_nonzero ? 1 : 0)};
+  constexpr std::size_t MAX_SAFE_SIGNIFICANT_DIGITS{15};
+  if (significant_digits > MAX_SAFE_SIGNIFICANT_DIGITS) {
+    return parse_number_decimal(line, column, string);
   }
+
+  const auto result{sourcemeta::core::to_double(string)};
+  return result.has_value() ? JSON{result.value()}
+                            : parse_number_decimal(line, column, string);
 }
 
 auto parse_number_exponent_rest(
@@ -350,7 +367,11 @@ auto parse_number_exponent_rest(
         column += 1;
         break;
       default:
-        return parse_number_real(line, original_column, result.str());
+        // As a heuristic, if a number has exponential notation, it is almost
+        // always a big number for which `double` is typically a poor
+        // representation. If an exponent is encountered, we just always parse
+        // as a high-precision decimal
+        return parse_number_decimal(line, original_column, result.str());
     }
   }
 
@@ -431,7 +452,9 @@ auto parse_number_fractional(
     std::basic_istream<typename JSON::Char, typename JSON::CharTraits> &stream,
     std::basic_ostringstream<typename JSON::Char, typename JSON::CharTraits,
                              typename JSON::Allocator<typename JSON::Char>>
-        &result) -> JSON {
+        &result,
+    std::size_t &first_nonzero_position, const std::size_t decimal_position)
+    -> JSON {
   while (!stream.eof()) {
     const typename JSON::Char character{
         static_cast<typename JSON::Char>(stream.peek())};
@@ -448,6 +471,10 @@ auto parse_number_fractional(
                                            stream, result);
 
       case internal::token_number_zero<typename JSON::Char>:
+        result.put(character);
+        stream.ignore(1);
+        column += 1;
+        break;
       case internal::token_number_one<typename JSON::Char>:
       case internal::token_number_two<typename JSON::Char>:
       case internal::token_number_three<typename JSON::Char>:
@@ -457,12 +484,19 @@ auto parse_number_fractional(
       case internal::token_number_seven<typename JSON::Char>:
       case internal::token_number_eight<typename JSON::Char>:
       case internal::token_number_nine<typename JSON::Char>:
+        if (first_nonzero_position ==
+            std::basic_string<typename JSON::Char,
+                              typename JSON::CharTraits>::npos) {
+          first_nonzero_position = result.str().size();
+        }
         result.put(character);
         stream.ignore(1);
         column += 1;
         break;
       default:
-        return parse_number_real(line, original_column, result.str());
+        return parse_number_real_maybe_decimal(
+            line, original_column, result.str(), first_nonzero_position,
+            decimal_position);
     }
   }
 
@@ -475,7 +509,9 @@ auto parse_number_fractional_first(
     std::basic_istream<typename JSON::Char, typename JSON::CharTraits> &stream,
     std::basic_ostringstream<typename JSON::Char, typename JSON::CharTraits,
                              typename JSON::Allocator<typename JSON::Char>>
-        &result) -> JSON {
+        &result,
+    std::size_t &first_nonzero_position, const std::size_t decimal_position)
+    -> JSON {
   const typename JSON::Char character{
       static_cast<typename JSON::Char>(stream.peek())};
   switch (character) {
@@ -487,6 +523,12 @@ auto parse_number_fractional_first(
       column += 1;
       throw JSONParseError(line, column);
     case internal::token_number_zero<typename JSON::Char>:
+      result.put(character);
+      stream.ignore(1);
+      column += 1;
+      return parse_number_fractional(line, column, original_column, stream,
+                                     result, first_nonzero_position,
+                                     decimal_position);
     case internal::token_number_one<typename JSON::Char>:
     case internal::token_number_two<typename JSON::Char>:
     case internal::token_number_three<typename JSON::Char>:
@@ -496,13 +538,21 @@ auto parse_number_fractional_first(
     case internal::token_number_seven<typename JSON::Char>:
     case internal::token_number_eight<typename JSON::Char>:
     case internal::token_number_nine<typename JSON::Char>:
+      if (first_nonzero_position ==
+          std::basic_string<typename JSON::Char,
+                            typename JSON::CharTraits>::npos) {
+        first_nonzero_position = result.str().size();
+      }
       result.put(character);
       stream.ignore(1);
       column += 1;
       return parse_number_fractional(line, column, original_column, stream,
-                                     result);
+                                     result, first_nonzero_position,
+                                     decimal_position);
     default:
-      return parse_number_real(line, original_column, result.str());
+      return parse_number_real_maybe_decimal(
+          line, original_column, result.str(), first_nonzero_position,
+          decimal_position);
   }
 }
 
@@ -512,19 +562,23 @@ auto parse_number_maybe_fractional(
     std::basic_istream<typename JSON::Char, typename JSON::CharTraits> &stream,
     std::basic_ostringstream<typename JSON::Char, typename JSON::CharTraits,
                              typename JSON::Allocator<typename JSON::Char>>
-        &result) -> JSON {
+        &result,
+    std::size_t &first_nonzero_position) -> JSON {
   const typename JSON::Char character{
       static_cast<typename JSON::Char>(stream.peek())};
   switch (character) {
     // [A number] may have a fractional part prefixed by a decimal point
     // (U+002E). See
     // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-    case internal::token_number_decimal_point<typename JSON::Char>:
+    case internal::token_number_decimal_point<typename JSON::Char>: {
+      const std::size_t decimal_position{result.str().size()};
       result.put(character);
       stream.ignore(1);
       column += 1;
-      return JSON{parse_number_fractional_first(line, column, original_column,
-                                                stream, result)};
+      return JSON{parse_number_fractional_first(
+          line, column, original_column, stream, result, first_nonzero_position,
+          decimal_position)};
+    }
     case internal::token_number_exponent_uppercase<typename JSON::Char>:
     case internal::token_number_exponent_lowercase<typename JSON::Char>:
       result.put(character);
@@ -544,7 +598,8 @@ auto parse_number_maybe_fractional(
       column += 1;
       throw JSONParseError(line, column);
     default:
-      return JSON{parse_number_integer(line, original_column, result.str())};
+      return JSON{parse_number_integer_maybe_decimal(line, original_column,
+                                                     result.str())};
   }
 }
 
@@ -554,7 +609,8 @@ auto parse_number_any_rest(
     std::basic_istream<typename JSON::Char, typename JSON::CharTraits> &stream,
     std::basic_ostringstream<typename JSON::Char, typename JSON::CharTraits,
                              typename JSON::Allocator<typename JSON::Char>>
-        &result) -> JSON {
+        &result,
+    std::size_t &first_nonzero_position) -> JSON {
   while (!stream.eof()) {
     const typename JSON::Char character{
         static_cast<typename JSON::Char>(stream.peek())};
@@ -562,12 +618,15 @@ auto parse_number_any_rest(
       // [A number] may have a fractional part prefixed by a decimal point
       // (U+002E). See
       // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
-      case internal::token_number_decimal_point<typename JSON::Char>:
+      case internal::token_number_decimal_point<typename JSON::Char>: {
+        const std::size_t decimal_position{result.str().size()};
         result.put(character);
         stream.ignore(1);
         column += 1;
-        return JSON{parse_number_fractional_first(line, column, original_column,
-                                                  stream, result)};
+        return JSON{parse_number_fractional_first(
+            line, column, original_column, stream, result,
+            first_nonzero_position, decimal_position)};
+      }
       case internal::token_number_exponent_uppercase<typename JSON::Char>:
       case internal::token_number_exponent_lowercase<typename JSON::Char>:
         result.put(character);
@@ -590,7 +649,8 @@ auto parse_number_any_rest(
         column += 1;
         break;
       default:
-        return JSON{parse_number_integer(line, original_column, result.str())};
+        return JSON{parse_number_integer_maybe_decimal(line, original_column,
+                                                       result.str())};
     }
   }
 
@@ -603,7 +663,8 @@ auto parse_number_any_negative_first(
     std::basic_istream<typename JSON::Char, typename JSON::CharTraits> &stream,
     std::basic_ostringstream<typename JSON::Char, typename JSON::CharTraits,
                              typename JSON::Allocator<typename JSON::Char>>
-        &result) -> JSON {
+        &result,
+    std::size_t &first_nonzero_position) -> JSON {
   const typename JSON::Char character{
       static_cast<typename JSON::Char>(stream.get())};
   column += 1;
@@ -614,7 +675,8 @@ auto parse_number_any_negative_first(
     case internal::token_number_zero<typename JSON::Char>:
       result.put(character);
       return parse_number_maybe_fractional(line, column, original_column,
-                                           stream, result);
+                                           stream, result,
+                                           first_nonzero_position);
     case internal::token_number_one<typename JSON::Char>:
     case internal::token_number_two<typename JSON::Char>:
     case internal::token_number_three<typename JSON::Char>:
@@ -624,9 +686,10 @@ auto parse_number_any_negative_first(
     case internal::token_number_seven<typename JSON::Char>:
     case internal::token_number_eight<typename JSON::Char>:
     case internal::token_number_nine<typename JSON::Char>:
+      first_nonzero_position = result.str().size();
       result.put(character);
       return parse_number_any_rest(line, column, original_column, stream,
-                                   result);
+                                   result, first_nonzero_position);
     default:
       throw JSONParseError(line, column);
   }
@@ -641,19 +704,24 @@ auto parse_number(
       result;
   result.put(first);
 
+  std::size_t first_nonzero_position{
+      std::basic_string<typename JSON::Char, typename JSON::CharTraits>::npos};
+
   // A number is a sequence of decimal digits with no superfluous leading zero.
   // It may have a preceding minus sign (U+002D). See
   // https://www.ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf
   switch (first) {
     case internal::token_number_minus<typename JSON::Char>:
       return parse_number_any_negative_first(line, column, column, stream,
-                                             result);
+                                             result, first_nonzero_position);
     case internal::token_number_zero<typename JSON::Char>:
-      return parse_number_maybe_fractional(line, column, column, stream,
-                                           result);
+      return parse_number_maybe_fractional(line, column, column, stream, result,
+                                           first_nonzero_position);
     // Any other digit
     default:
-      return parse_number_any_rest(line, column, column, stream, result);
+      first_nonzero_position = 0;
+      return parse_number_any_rest(line, column, column, stream, result,
+                                   first_nonzero_position);
   }
 }
 
