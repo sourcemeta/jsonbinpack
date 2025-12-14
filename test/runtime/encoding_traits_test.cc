@@ -9,9 +9,9 @@ TEST(JSONBinPack_Encoding, encoding_movable) {
   EXPECT_TRUE(std::is_move_constructible_v<Encoding>);
 }
 
-TEST(JSONBinPack_Encoding, encoding_no_nothrow_movable) {
+TEST(JSONBinPack_Encoding, encoding_nothrow_movable) {
   using namespace sourcemeta::jsonbinpack;
-  EXPECT_FALSE(std::is_nothrow_move_constructible_v<Encoding>);
+  EXPECT_TRUE(std::is_nothrow_move_constructible_v<Encoding>);
 }
 
 TEST(JSONBinPack_Encoding, encoding_copyable) {

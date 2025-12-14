@@ -15,7 +15,7 @@ static auto test_resolver(std::string_view identifier)
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON");
   } else {
-    return sourcemeta::core::schema_official_resolver(identifier);
+    return sourcemeta::core::schema_resolver(identifier);
   }
 }
 
@@ -25,10 +25,9 @@ TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
     "type": "boolean"
   })JSON");
 
-  EXPECT_THROW(
-      sourcemeta::jsonbinpack::canonicalize(
-          schema, sourcemeta::core::schema_official_walker, test_resolver),
-      sourcemeta::core::SchemaBaseDialectError);
+  EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
+                   schema, sourcemeta::core::schema_walker, test_resolver),
+               sourcemeta::core::SchemaBaseDialectError);
 }
 
 TEST(JSONBinPack_Canonicalizer, unknown_draft) {
@@ -37,7 +36,7 @@ TEST(JSONBinPack_Canonicalizer, unknown_draft) {
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::core::schema_official_walker,
-                   test_resolver, "https://example.com/invalid"),
+                   schema, sourcemeta::core::schema_walker, test_resolver,
+                   "https://example.com/invalid"),
                sourcemeta::core::SchemaResolutionError);
 }
