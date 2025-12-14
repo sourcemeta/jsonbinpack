@@ -11,9 +11,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, max_contains_without_contains_1) {
     "maxContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -32,9 +31,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, max_contains_without_contains_2) {
     "maxContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -57,9 +55,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, min_contains_without_contains_1) {
     "minContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -78,9 +75,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, min_contains_without_contains_2) {
     "minContains": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -105,9 +101,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, unsatisfiable_max_contains_1) {
     "maxItems": 2
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -130,9 +125,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, implicit_array_lower_bound_1) {
     "type": "array"
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -151,9 +145,8 @@ TEST(JSONBinPack_Canonicalizer_Array_2020_12, drop_non_array_keywords_1) {
     "maxLength": 3
   })JSON");
 
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",

@@ -34,16 +34,16 @@ auto main(int argc, char *argv[]) -> int {
   sourcemeta::core::JSON schema = sourcemeta::core::read_json(schema_path);
 
   // Canonicalize
-  sourcemeta::jsonbinpack::canonicalize(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver, DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::canonicalize(schema, sourcemeta::core::schema_walker,
+                                        sourcemeta::core::schema_resolver,
+                                        DEFAULT_METASCHEMA);
 
   std::ofstream canonical_output_stream(directory / "canonical.json",
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
 
-  sourcemeta::core::format(schema, sourcemeta::core::schema_official_walker,
-                           sourcemeta::core::schema_official_resolver,
+  sourcemeta::core::format(schema, sourcemeta::core::schema_walker,
+                           sourcemeta::core::schema_resolver,
                            "https://json-schema.org/draft/2020-12/schema");
   sourcemeta::core::prettify(schema, canonical_output_stream);
   canonical_output_stream << "\n";
@@ -51,9 +51,9 @@ auto main(int argc, char *argv[]) -> int {
   canonical_output_stream.close();
 
   // Compile
-  sourcemeta::jsonbinpack::compile(
-      schema, sourcemeta::core::schema_official_walker,
-      sourcemeta::core::schema_official_resolver, DEFAULT_METASCHEMA);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver,
+                                   DEFAULT_METASCHEMA);
 
   std::ofstream encoding_output_stream(directory / "encoding.json",
                                        std::ios::binary);

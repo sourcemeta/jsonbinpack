@@ -15,9 +15,8 @@ auto main() -> int {
     "maximum": 100
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema,
-                                   sourcemeta::core::schema_official_walker,
-                                   sourcemeta::core::schema_official_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::load(schema)};
