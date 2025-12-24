@@ -495,7 +495,6 @@ TEST(JSONBinPack_Canonicalizer_Number_2020_12, drop_non_numeric_keywords_1) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number",
-    "multipleOf": 1,
     "maximum": 4
   })JSON");
 
