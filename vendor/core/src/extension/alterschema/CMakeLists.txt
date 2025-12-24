@@ -28,6 +28,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     common/dependent_required_tautology.h
     common/draft_official_dialect_without_empty_fragment.h
     common/draft_ref_siblings.h
+    common/drop_allof_empty_schemas.h
     common/duplicate_allof_branches.h
     common/duplicate_anyof_branches.h
     common/duplicate_enum_values.h
@@ -78,6 +79,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT core NAME alterschema
     linter/properties_default.h
     linter/property_names_default.h
     linter/property_names_type_default.h
+    linter/simple_properties_identifiers.h
     linter/title_description_equal.h
     linter/title_trailing_period.h
     linter/title_trim.h
@@ -95,3 +97,5 @@ endif()
 
 target_link_libraries(sourcemeta_core_alterschema PUBLIC
   sourcemeta::core::jsonschema)
+target_link_libraries(sourcemeta_core_alterschema PRIVATE
+  sourcemeta::core::regex)

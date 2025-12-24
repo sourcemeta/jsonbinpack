@@ -59,24 +59,24 @@ public:
 
       for (const auto &keyword_entry : entry.as_object()) {
         const auto &keyword{keyword_entry.first};
+        const auto &metadata{walker(keyword, vocabularies)};
+
         if (elevated.contains(keyword) ||
-            dependency_blocked.contains(keyword) ||
             (schema.defines(keyword) &&
              schema.at(keyword) != keyword_entry.second)) {
           continue;
         }
 
-        const auto &metadata{walker(keyword, vocabularies)};
+        if (dependency_blocked.contains(keyword)) {
+          continue;
+        }
+
         if (metadata.instances.any() && parent_types.any() &&
             (metadata.instances & parent_types).none()) {
           continue;
         }
 
-        // TODO: Fix the fact that the walker declares dependencies for
-        // evaluation order convenience, not semantic dependencies (i.e. many
-        // assertion keywords depend on `type`)
-        if (metadata.type != SchemaKeywordType::Assertion &&
-            std::ranges::any_of(
+        if (std::ranges::any_of(
                 metadata.dependencies, [&](const auto &dependency) {
                   return !entry.defines(std::string{dependency}) &&
                          (schema.defines(std::string{dependency}) ||
@@ -105,15 +105,9 @@ public:
       assert(location.size() == 3);
       const auto allof_index{location.at(1).to_index()};
       const auto &keyword{location.at(2).to_property()};
-      // TODO: Ideally here we could move instead of copying and then erasing
       schema.try_assign_before(
           keyword, schema.at("allOf").at(allof_index).at(keyword), "allOf");
       schema.at("allOf").at(allof_index).erase(keyword);
-    }
-
-    schema.at("allOf").erase_if(is_empty_schema);
-    if (schema.at("allOf").empty()) {
-      schema.erase("allOf");
     }
   }
 

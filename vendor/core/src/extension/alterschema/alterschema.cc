@@ -1,4 +1,5 @@
 #include <sourcemeta/core/alterschema.h>
+#include <sourcemeta/core/regex.h>
 
 // For built-in rules
 #include <algorithm>     // std::sort, std::unique
@@ -54,6 +55,7 @@ inline auto APPLIES_TO_POINTERS(std::vector<Pointer> &&keywords)
 #include "common/dependent_required_tautology.h"
 #include "common/draft_official_dialect_without_empty_fragment.h"
 #include "common/draft_ref_siblings.h"
+#include "common/drop_allof_empty_schemas.h"
 #include "common/duplicate_allof_branches.h"
 #include "common/duplicate_anyof_branches.h"
 #include "common/duplicate_enum_values.h"
@@ -105,6 +107,7 @@ inline auto APPLIES_TO_POINTERS(std::vector<Pointer> &&keywords)
 #include "linter/properties_default.h"
 #include "linter/property_names_default.h"
 #include "linter/property_names_type_default.h"
+#include "linter/simple_properties_identifiers.h"
 #include "linter/title_description_equal.h"
 #include "linter/title_trailing_period.h"
 #include "linter/title_trim.h"
@@ -214,11 +217,13 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<DescriptionTrim>();
     bundle.add<CommentTrim>();
     bundle.add<DuplicateExamples>();
+    bundle.add<SimplePropertiesIdentifiers>();
   }
 
   bundle.add<UnnecessaryAllOfRefWrapperModern>();
   bundle.add<UnnecessaryAllOfRefWrapperDraft>();
   bundle.add<UnnecessaryAllOfWrapper>();
+  bundle.add<DropAllOfEmptySchemas>();
 }
 
 } // namespace sourcemeta::core

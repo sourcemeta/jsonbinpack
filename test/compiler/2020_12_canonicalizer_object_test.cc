@@ -29,8 +29,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "bar": {
@@ -40,8 +39,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -75,8 +73,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "bar": {
@@ -86,8 +83,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -121,8 +117,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "foo": {
@@ -132,8 +127,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -231,8 +225,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "bar": {
@@ -242,8 +235,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "baz": {
@@ -253,8 +245,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -290,8 +281,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "baz": {
@@ -301,8 +291,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "foo": {
@@ -312,8 +301,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "qux": {
@@ -323,8 +311,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -356,8 +343,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_1) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
@@ -389,8 +375,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "baz": {
@@ -400,8 +385,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       },
       "foo": {
@@ -411,8 +395,7 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
           { "type": "object", "minProperties": 0, "properties": {} },
           { "type": "array", "minItems": 0 },
           { "type": "string", "minLength": 0 },
-          { "type": "number", "multipleOf": 1 },
-          { "type": "integer", "multipleOf": 1 }
+          { "type": "number" }
         ]
       }
     }
