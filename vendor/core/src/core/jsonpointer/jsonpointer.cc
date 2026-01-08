@@ -347,12 +347,6 @@ auto stringify(const WeakPointer &pointer,
   stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream);
 }
 
-auto stringify(const PointerTemplate &pointer,
-               std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
-    -> void {
-  stringify<JSON::Char, JSON::CharTraits, std::allocator>(pointer, stream);
-}
-
 auto to_string(const Pointer &pointer)
     -> std::basic_string<JSON::Char, JSON::CharTraits,
                          std::allocator<JSON::Char>> {
@@ -373,16 +367,6 @@ auto to_string(const WeakPointer &pointer)
   return result.str();
 }
 
-auto to_string(const PointerTemplate &pointer)
-    -> std::basic_string<JSON::Char, JSON::CharTraits,
-                         std::allocator<JSON::Char>> {
-  std::basic_ostringstream<JSON::Char, JSON::CharTraits,
-                           std::allocator<JSON::Char>>
-      result;
-  stringify(pointer, result);
-  return result.str();
-}
-
 auto to_uri(const Pointer &pointer) -> URI {
   std::basic_ostringstream<JSON::Char, JSON::CharTraits,
                            std::allocator<JSON::Char>>
@@ -393,6 +377,26 @@ auto to_uri(const Pointer &pointer) -> URI {
 
 auto to_uri(const Pointer &pointer, const URI &base) -> URI {
   return to_uri(pointer).resolve_from(base).canonicalize();
+}
+
+auto to_uri(const WeakPointer &pointer) -> URI {
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits,
+                           std::allocator<JSON::Char>>
+      result;
+  stringify(pointer, result);
+  return URI::from_fragment(result.str());
+}
+
+auto to_uri(const WeakPointer &pointer, const URI &base) -> URI {
+  return to_uri(pointer).resolve_from(base).canonicalize();
+}
+
+auto to_uri(const WeakPointer &pointer, const std::string_view base) -> URI {
+  if (base.empty()) {
+    return to_uri(pointer);
+  }
+
+  return to_uri(pointer).resolve_from(URI{base}).canonicalize();
 }
 
 } // namespace sourcemeta::core
