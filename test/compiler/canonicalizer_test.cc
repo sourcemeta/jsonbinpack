@@ -27,7 +27,7 @@ TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
                    schema, sourcemeta::core::schema_walker, test_resolver),
-               sourcemeta::core::SchemaBaseDialectError);
+               sourcemeta::core::SchemaUnknownBaseDialectError);
 }
 
 TEST(JSONBinPack_Canonicalizer, unknown_draft) {

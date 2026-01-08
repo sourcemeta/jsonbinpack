@@ -433,6 +433,33 @@ public:
     return result;
   }
 
+  /// Get a copy of the JSON Pointer starting from a given token index. This
+  /// method is undefined if the index is greater than the pointer size. For
+  /// example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::core::Pointer pointer{"foo", "bar", "baz"};
+  /// const sourcemeta::core::Pointer result{pointer.slice(1)};
+  /// assert(result.size() == 2);
+  /// assert(result.at(0).is_property());
+  /// assert(result.at(0).to_property() == "bar");
+  /// assert(result.at(1).is_property());
+  /// assert(result.at(1).to_property() == "baz");
+  /// ```
+  [[nodiscard]] auto slice(const std::size_t index) const
+      -> GenericPointer<PropertyT, Hash> {
+    assert(index <= this->size());
+    auto new_begin{this->data.cbegin()};
+    std::advance(new_begin, index);
+    GenericPointer<PropertyT, Hash> result;
+    result.reserve(this->size() - index);
+    std::copy(new_begin, this->data.cend(), std::back_inserter(result.data));
+    return result;
+  }
+
   /// Concatenate a JSON Pointer with another JSON Pointer, getting a new
   /// pointer as a result. For example:
   ///
@@ -490,6 +517,55 @@ public:
     } else {
       return this->starts_with(other);
     }
+  }
+
+  /// Check whether a JSON Pointer starts with another JSON Pointer followed
+  /// by a property token. This is useful for checking container membership
+  /// without allocating a new pointer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::core::Pointer pointer{"foo", "$defs", "bar"};
+  /// const sourcemeta::core::Pointer prefix{"foo"};
+  /// assert(pointer.starts_with(prefix, "$defs"));
+  /// assert(!pointer.starts_with(prefix, "other"));
+  /// ```
+  template <typename StringT>
+    requires(!std::is_same_v<std::decay_t<StringT>, Token>)
+  [[nodiscard]] auto starts_with(const GenericPointer<PropertyT, Hash> &other,
+                                 const StringT &tail) const -> bool {
+    const auto prefix_size{other.size()};
+    return this->size() > prefix_size && this->starts_with(other) &&
+           this->data[prefix_size].is_property() &&
+           this->data[prefix_size].to_property() == tail;
+  }
+
+  /// Check whether a JSON Pointer starts with another JSON Pointer followed
+  /// by two property tokens. This is useful for checking nested container
+  /// membership without allocating a new pointer. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/jsonpointer.h>
+  /// #include <cassert>
+  ///
+  /// const sourcemeta::core::Pointer pointer{"foo", "$defs", "bar", "baz"};
+  /// const sourcemeta::core::Pointer prefix{"foo"};
+  /// assert(pointer.starts_with(prefix, "$defs", "bar"));
+  /// assert(!pointer.starts_with(prefix, "$defs", "other"));
+  /// ```
+  template <typename StringLeftT, typename StringRightT>
+    requires(!std::is_same_v<std::decay_t<StringLeftT>, Token> &&
+             !std::is_same_v<std::decay_t<StringRightT>, Token>)
+  [[nodiscard]] auto starts_with(const GenericPointer<PropertyT, Hash> &other,
+                                 const StringLeftT &tail_left,
+                                 const StringRightT &tail_right) const -> bool {
+    const auto prefix_size{other.size()};
+    return this->size() > prefix_size + 1 &&
+           this->starts_with(other, tail_left) &&
+           this->data[prefix_size + 1].is_property() &&
+           this->data[prefix_size + 1].to_property() == tail_right;
   }
 
   /// Check whether a JSON Pointer starts with the initial part of another JSON
