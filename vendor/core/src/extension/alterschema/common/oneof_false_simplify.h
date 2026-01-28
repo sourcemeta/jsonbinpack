@@ -1,5 +1,6 @@
 class OneOfFalseSimplify final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   OneOfFalseSimplify()
       : SchemaTransformRule{"oneof_false_simplify",
                             "A `oneOf` of a single `false` branch is "

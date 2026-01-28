@@ -1,5 +1,6 @@
 class IntegerLowerBound final : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   IntegerLowerBound()
       : sourcemeta::core::SchemaTransformRule{"integer_lower_bound", ""} {};
 

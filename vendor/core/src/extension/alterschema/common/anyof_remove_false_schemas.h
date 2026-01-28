@@ -1,5 +1,6 @@
 class AnyOfRemoveFalseSchemas final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   AnyOfRemoveFalseSchemas()
       : SchemaTransformRule{
             "anyof_remove_false_schemas",

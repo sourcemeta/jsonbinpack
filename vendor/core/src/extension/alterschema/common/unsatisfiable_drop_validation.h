@@ -1,5 +1,6 @@
 class UnsatisfiableDropValidation final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   UnsatisfiableDropValidation()
       : SchemaTransformRule{"unsatisfiable_drop_validation",
                             "Do not place assertions or applicators next to an "

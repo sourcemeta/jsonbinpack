@@ -1,5 +1,6 @@
 class ItemsImplicit final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   ItemsImplicit()
       : SchemaTransformRule{"items_implicit",
                             "Every array has an implicit `items` "

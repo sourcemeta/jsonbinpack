@@ -1,5 +1,6 @@
 class OneOfToAnyOfDisjointTypes final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   OneOfToAnyOfDisjointTypes()
       : SchemaTransformRule{
             "oneof_to_anyof_disjoint_types",
