@@ -1,5 +1,6 @@
 class EnumSingleton final : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   EnumSingleton()
       : sourcemeta::core::SchemaTransformRule{"enum_singleton", ""} {};
 

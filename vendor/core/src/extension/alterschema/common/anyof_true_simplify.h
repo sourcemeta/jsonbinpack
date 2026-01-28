@@ -1,5 +1,6 @@
 class AnyOfTrueSimplify final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   AnyOfTrueSimplify()
       : SchemaTransformRule{
             "anyof_true_simplify",

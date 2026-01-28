@@ -1,6 +1,7 @@
 class IntegerBoundedMultiplierGreaterThan8Bit final
     : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   IntegerBoundedMultiplierGreaterThan8Bit()
       : sourcemeta::core::SchemaTransformRule{
             "integer_bounded_multiplier_greater_than_8_bit", ""} {};

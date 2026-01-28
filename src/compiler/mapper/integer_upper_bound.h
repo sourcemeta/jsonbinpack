@@ -1,5 +1,6 @@
 class IntegerUpperBound final : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   IntegerUpperBound()
       : sourcemeta::core::SchemaTransformRule{"integer_upper_bound", ""} {};
 

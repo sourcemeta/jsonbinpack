@@ -1,6 +1,7 @@
 // TODO: Unit test this mapping once we have container encodings
 class EnumArbitrary final : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   EnumArbitrary()
       : sourcemeta::core::SchemaTransformRule{"enum_arbitrary", ""} {};
 

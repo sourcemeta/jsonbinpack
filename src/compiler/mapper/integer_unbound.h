@@ -1,5 +1,6 @@
 class IntegerUnbound final : public sourcemeta::core::SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   IntegerUnbound()
       : sourcemeta::core::SchemaTransformRule{"integer_unbound", ""} {};
 

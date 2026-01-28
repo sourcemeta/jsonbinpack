@@ -1,5 +1,6 @@
 class EmptyObjectAsTrue final : public SchemaTransformRule {
 public:
+  using mutates = std::true_type;
   EmptyObjectAsTrue()
       : SchemaTransformRule{
             "empty_object_as_true",
