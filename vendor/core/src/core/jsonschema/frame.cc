@@ -281,7 +281,8 @@ auto store(sourcemeta::core::SchemaFrame::Locations &frame,
            const std::string_view dialect,
            const sourcemeta::core::SchemaBaseDialect base_dialect,
            const std::optional<sourcemeta::core::WeakPointer> &parent,
-           const bool property_name, const bool ignore_if_present = false,
+           const bool property_name, const bool orphan,
+           const bool ignore_if_present = false,
            const bool already_canonical = false) -> void {
   auto canonical{already_canonical ? std::move(uri)
                                    : sourcemeta::core::URI::canonicalize(uri)};
@@ -294,7 +295,8 @@ auto store(sourcemeta::core::SchemaFrame::Locations &frame,
                      .relative_pointer = relative_pointer_offset,
                      .dialect = dialect,
                      .base_dialect = base_dialect,
-                     .property_name = property_name}});
+                     .property_name = property_name,
+                     .orphan = orphan}});
   if (!ignore_if_present && !inserted) {
     throw_already_exists(iterator->first.second);
   }
@@ -380,6 +382,7 @@ auto SchemaFrame::to_json(
         JSON{JSON::String{to_string(location.second.base_dialect)}});
     entry.assign_assume_new("propertyName",
                             JSON{location.second.property_name});
+    entry.assign_assume_new("orphan", JSON{location.second.orphan});
 
     switch (location.first.first) {
       case SchemaReferenceType::Static:
@@ -437,8 +440,9 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                           std::string_view default_id,
                           const SchemaFrame::Paths &paths) -> void {
   this->reset();
-  assert(std::unordered_set<WeakPointer>(paths.cbegin(), paths.cend()).size() ==
-         paths.size());
+  assert((std::unordered_set<WeakPointer, WeakPointer::Hasher>(paths.cbegin(),
+                                                               paths.cend())
+              .size() == paths.size()));
   std::vector<InternalEntry> subschema_entries;
   std::map<WeakPointer, CacheSubschema> subschemas;
   std::map<WeakPointer, std::vector<JSON::String>> base_uris;
@@ -494,7 +498,7 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
       store(this->locations_, SchemaReferenceType::Static,
             SchemaFrame::LocationType::Resource, default_id_canonical,
             this->root_, path, path.size(), root_dialect,
-            root_base_dialect.value(), std::nullopt, false);
+            root_base_dialect.value(), std::nullopt, false, false);
 
       base_uris.insert({path, {root_id.value(), default_id_canonical}});
     }
@@ -612,7 +616,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                     SchemaFrame::LocationType::Resource, new_id, new_id,
                     common_pointer_weak, common_pointer_weak.size(),
                     entry.common.dialect, entry.common.base_dialect.value(),
-                    common_parent, entry.common.property_name);
+                    common_parent, entry.common.property_name,
+                    entry.common.orphan);
             }
 
             auto base_uri_match{base_uris.find(common_pointer_weak)};
@@ -682,7 +687,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                   SchemaFrame::LocationType::Anchor, relative_anchor_uri, "",
                   common_pointer_weak, bases.second.size(),
                   entry.common.dialect, entry.common.base_dialect.value(),
-                  common_parent, entry.common.property_name);
+                  common_parent, entry.common.property_name,
+                  entry.common.orphan);
           }
 
           if (type == AnchorType::Dynamic || type == AnchorType::All) {
@@ -690,7 +696,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                   SchemaFrame::LocationType::Anchor, relative_anchor_uri, "",
                   common_pointer_weak, bases.second.size(),
                   entry.common.dialect, entry.common.base_dialect.value(),
-                  common_parent, entry.common.property_name);
+                  common_parent, entry.common.property_name,
+                  entry.common.orphan);
 
             // Register a dynamic anchor as a static anchor if possible too
             if (entry.common.vocabularies.contains(
@@ -699,7 +706,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                     SchemaFrame::LocationType::Anchor, relative_anchor_uri, "",
                     common_pointer_weak, bases.second.size(),
                     entry.common.dialect, entry.common.base_dialect.value(),
-                    common_parent, entry.common.property_name, true);
+                    common_parent, entry.common.property_name,
+                    entry.common.orphan, true);
             }
           }
         } else {
@@ -729,7 +737,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                     SchemaFrame::LocationType::Anchor, anchor_uri, base_view,
                     common_pointer_weak, bases.second.size(),
                     entry.common.dialect, entry.common.base_dialect.value(),
-                    common_parent, entry.common.property_name);
+                    common_parent, entry.common.property_name,
+                    entry.common.orphan);
             }
 
             if (type == AnchorType::Dynamic || type == AnchorType::All) {
@@ -738,9 +747,9 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                     SchemaFrame::LocationType::Anchor, anchor_uri, base_view,
                     common_pointer_weak, bases.second.size(),
                     entry.common.dialect, entry.common.base_dialect.value(),
-                    common_parent, entry.common.property_name);
+                    common_parent, entry.common.property_name,
+                    entry.common.orphan);
 
-              // Register a dynamic anchor as a static anchor if possible too
               if (entry.common.vocabularies.contains(
                       Vocabularies::Known::JSON_Schema_2020_12_Core)) {
                 store(this->locations_,
@@ -748,7 +757,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                       SchemaFrame::LocationType::Anchor, anchor_uri, base_view,
                       common_pointer_weak, bases.second.size(),
                       entry.common.dialect, entry.common.base_dialect.value(),
-                      common_parent, entry.common.property_name, true);
+                      common_parent, entry.common.property_name,
+                      entry.common.orphan, true);
               }
             }
 
@@ -851,7 +861,8 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                   base_view, pointer_weak, nearest_base_depth,
                   dialect_for_pointer, current_base_dialect,
                   subschema_it->second.parent,
-                  subschema_it->second.property_name, false, true);
+                  subschema_it->second.property_name,
+                  subschema_it->second.orphan, false, true);
           } else {
             const auto &parent_pointer{combined.dialect_match.has_value()
                                            ? combined.dialect_match->second
@@ -860,12 +871,14 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
             const bool parent_property_name{
                 parent_subschema_it != subschemas.cend() &&
                 parent_subschema_it->second.property_name};
+            const bool parent_orphan{parent_subschema_it != subschemas.cend() &&
+                                     parent_subschema_it->second.orphan};
 
             store(this->locations_, SchemaReferenceType::Static,
                   SchemaFrame::LocationType::Pointer, std::move(result),
                   base_view, pointer_weak, nearest_base_depth,
                   dialect_for_pointer, current_base_dialect, parent_pointer,
-                  parent_property_name, false, true);
+                  parent_property_name, parent_orphan, false, true);
           }
         }
       }
@@ -1170,11 +1183,28 @@ auto SchemaFrame::traverse(const std::string_view uri) const
 
 auto SchemaFrame::traverse(const WeakPointer &pointer) const
     -> std::optional<std::reference_wrapper<const Location>> {
-  // TODO: This is slow. Consider adding a pointer-indexed secondary
-  // lookup structure to SchemaFrame
-  for (const auto &entry : this->locations_) {
-    if (entry.second.pointer == pointer) {
-      return entry.second;
+  this->populate_pointer_to_location();
+  const auto iterator{this->pointer_to_location_.find(std::cref(pointer))};
+  if (iterator == this->pointer_to_location_.cend() ||
+      iterator->second.empty()) {
+    return std::nullopt;
+  }
+
+  return *(iterator->second.front());
+}
+
+auto SchemaFrame::traverse(const WeakPointer &pointer,
+                           const LocationType type) const
+    -> std::optional<std::reference_wrapper<const Location>> {
+  this->populate_pointer_to_location();
+  const auto iterator{this->pointer_to_location_.find(std::cref(pointer))};
+  if (iterator == this->pointer_to_location_.cend()) {
+    return std::nullopt;
+  }
+
+  for (const auto *location : iterator->second) {
+    if (location->type == type) {
+      return *location;
     }
   }
 
@@ -1183,9 +1213,24 @@ auto SchemaFrame::traverse(const WeakPointer &pointer) const
 
 auto SchemaFrame::uri(const WeakPointer &pointer) const
     -> std::optional<std::reference_wrapper<const JSON::String>> {
-  for (const auto &entry : this->locations_) {
-    if (entry.second.pointer == pointer) {
-      return entry.first.second;
+  this->populate_pointer_to_location();
+  const auto iterator{this->pointer_to_location_.find(std::cref(pointer))};
+  if (iterator == this->pointer_to_location_.cend()) {
+    return std::nullopt;
+  }
+
+  const Location *best{nullptr};
+  for (const auto *location : iterator->second) {
+    if (best == nullptr || location->type < best->type) {
+      best = location;
+    }
+  }
+
+  if (best != nullptr) {
+    for (const auto &entry : this->locations_) {
+      if (&entry.second == best) {
+        return entry.first.second;
+      }
     }
   }
 
@@ -1341,9 +1386,274 @@ auto SchemaFrame::empty() const noexcept -> bool {
 }
 
 auto SchemaFrame::reset() -> void {
+  // Note that order of removal is important to avoid undefined behaviour
+  this->pointer_to_location_.clear();
+  this->reachability_.clear();
   this->root_.clear();
   this->locations_.clear();
   this->references_.clear();
+}
+
+auto SchemaFrame::populate_pointer_to_location() const -> void {
+  if (!this->pointer_to_location_.empty()) {
+    return;
+  }
+
+  this->pointer_to_location_.reserve(this->locations_.size());
+  for (const auto &entry : this->locations_) {
+    this->pointer_to_location_[std::cref(entry.second.pointer)].push_back(
+        &entry.second);
+  }
+}
+
+// TODO: Find a way to split or simplify this monster while preserving
+// its performance?
+auto SchemaFrame::populate_reachability(const SchemaWalker &walker,
+                                        const SchemaResolver &resolver) const
+    -> void {
+  if (!this->reachability_.empty()) {
+    return;
+  }
+
+  // ---------------------------------------------------------------------------
+  // (1) Find all unreachable pointers
+  // ---------------------------------------------------------------------------
+
+  std::vector<std::reference_wrapper<const WeakPointer>> unreachable_pointers;
+
+  if (this->pointer_to_location_.empty()) {
+    std::unordered_set<std::reference_wrapper<const WeakPointer>,
+                       WeakPointer::Hasher, WeakPointer::Comparator>
+        has_non_pointer_location;
+    std::unordered_set<std::reference_wrapper<const WeakPointer>,
+                       WeakPointer::Hasher, WeakPointer::Comparator>
+        has_non_orphan;
+
+    for (const auto &entry : this->locations_) {
+      auto [iterator, inserted] = this->pointer_to_location_.try_emplace(
+          std::cref(entry.second.pointer), std::vector<const Location *>{});
+      iterator->second.push_back(&entry.second);
+      if (entry.second.type != LocationType::Pointer) {
+        has_non_pointer_location.insert(iterator->first);
+        if (!entry.second.orphan) {
+          has_non_orphan.insert(iterator->first);
+        }
+      }
+    }
+
+    for (const auto &pointer_reference : has_non_pointer_location) {
+      const bool is_reachable = has_non_orphan.contains(pointer_reference);
+      this->reachability_.emplace(pointer_reference, is_reachable);
+      if (!is_reachable) {
+        unreachable_pointers.push_back(pointer_reference);
+      }
+    }
+  } else {
+    for (const auto &[pointer_reference, locations] :
+         this->pointer_to_location_) {
+      const auto has_non_pointer{
+          std::ranges::any_of(locations, [](const Location *location) {
+            return location->type != LocationType::Pointer;
+          })};
+      if (!has_non_pointer) {
+        continue;
+      }
+
+      const auto any_non_orphan{
+          std::ranges::any_of(locations, [](const Location *location) {
+            return location->type != LocationType::Pointer && !location->orphan;
+          })};
+      this->reachability_.emplace(pointer_reference, any_non_orphan);
+      if (!any_non_orphan) {
+        unreachable_pointers.push_back(pointer_reference);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // (2) Build a reverse mapping from reference destinations to their sources
+  // ---------------------------------------------------------------------------
+
+  std::vector<std::pair<const WeakPointer *, const WeakPointer *>>
+      reference_destinations;
+  reference_destinations.reserve(this->references_.size());
+
+  for (const auto &reference : this->references_) {
+    const auto &source_pointer{reference.first.second};
+    if (source_pointer.empty()) {
+      continue;
+    }
+
+    const WeakPointer *destination_pointer{nullptr};
+    const auto destination_location{this->locations_.find(
+        {SchemaReferenceType::Static, reference.second.destination})};
+    if (destination_location != this->locations_.cend()) {
+      destination_pointer = &destination_location->second.pointer;
+    } else {
+      const auto dynamic_destination{this->locations_.find(
+          {SchemaReferenceType::Dynamic, reference.second.destination})};
+      if (dynamic_destination != this->locations_.cend()) {
+        destination_pointer = &dynamic_destination->second.pointer;
+      }
+    }
+
+    if (destination_pointer != nullptr) {
+      reference_destinations.emplace_back(&source_pointer, destination_pointer);
+    }
+  }
+
+  std::unordered_map<std::reference_wrapper<const WeakPointer>,
+                     std::vector<const WeakPointer *>, WeakPointer::Hasher,
+                     WeakPointer::Comparator>
+      references_by_destination;
+  for (const auto &[source, destination] : reference_destinations) {
+    references_by_destination[std::cref(*destination)].push_back(source);
+  }
+
+  // ---------------------------------------------------------------------------
+  // (3) Precompute which references could make each orphan reachable
+  // ---------------------------------------------------------------------------
+
+  struct PotentialSource {
+    const WeakPointer *source_pointer;
+    bool crosses;
+  };
+  struct PotentialReach {
+    std::reference_wrapper<const WeakPointer> pointer;
+    std::vector<PotentialSource> potential_sources;
+  };
+  std::vector<PotentialReach> unreachable_with_sources;
+  unreachable_with_sources.reserve(unreachable_pointers.size());
+
+  std::unordered_map<SchemaBaseDialect, Vocabularies> vocabularies_cache;
+
+  for (const auto &pointer_reference : unreachable_pointers) {
+    const auto &pointer{pointer_reference.get()};
+    PotentialReach entry{.pointer = pointer_reference, .potential_sources = {}};
+
+    WeakPointer ancestor = pointer;
+    while (!ancestor.empty()) {
+      auto destination_iterator =
+          references_by_destination.find(std::cref(ancestor));
+      if (destination_iterator != references_by_destination.end()) {
+        bool crosses{false};
+        if (ancestor != pointer) {
+          auto check_location{this->traverse(pointer)};
+          while (check_location.has_value()) {
+            const auto &location{check_location->get()};
+            if (location.pointer == ancestor) {
+              break;
+            }
+
+            if (!location.parent.has_value()) {
+              break;
+            }
+
+            const auto parent_location{this->traverse(location.parent.value())};
+            if (!parent_location.has_value()) {
+              break;
+            }
+
+            const auto relative{
+                location.pointer.slice(location.parent.value().size())};
+            if (!relative.empty() && relative.at(0).is_property()) {
+              const auto &parent_loc{parent_location->get()};
+              auto vocab_iterator =
+                  vocabularies_cache.find(parent_loc.base_dialect);
+              if (vocab_iterator == vocabularies_cache.end()) {
+                auto [inserted_iterator, inserted] = vocabularies_cache.emplace(
+                    parent_loc.base_dialect,
+                    this->vocabularies(parent_loc, resolver));
+                vocab_iterator = inserted_iterator;
+              }
+
+              const auto &keyword_result{
+                  walker(relative.at(0).to_property(), vocab_iterator->second)};
+              if (keyword_result.type == SchemaKeywordType::LocationMembers) {
+                crosses = true;
+                break;
+              }
+            }
+
+            check_location = parent_location;
+          }
+        }
+
+        for (const auto *source_pointer : destination_iterator->second) {
+          entry.potential_sources.push_back(PotentialSource{
+              .source_pointer = source_pointer, .crosses = crosses});
+        }
+      }
+      ancestor = ancestor.initial();
+    }
+
+    if (!entry.potential_sources.empty()) {
+      unreachable_with_sources.push_back(std::move(entry));
+    }
+  }
+
+  std::ranges::sort(unreachable_with_sources, [](const PotentialReach &left,
+                                                 const PotentialReach &right) {
+    return left.pointer.get().size() < right.pointer.get().size();
+  });
+
+  // ---------------------------------------------------------------------------
+  // (4) Propagate reachability through references using fixpoint iteration
+  // ---------------------------------------------------------------------------
+
+  bool changed{true};
+  while (changed) {
+    changed = false;
+
+    auto write_iterator = unreachable_with_sources.begin();
+    for (auto read_iterator = unreachable_with_sources.begin();
+         read_iterator != unreachable_with_sources.end(); ++read_iterator) {
+      bool became_reachable = false;
+
+      for (const auto &potential_source : read_iterator->potential_sources) {
+        if (potential_source.crosses) {
+          continue;
+        }
+
+        const auto &source_parent{potential_source.source_pointer->initial()};
+        bool source_parent_reachable{source_parent.empty()};
+        if (!source_parent_reachable) {
+          const auto reachability_iterator{
+              this->reachability_.find(std::cref(source_parent))};
+          source_parent_reachable =
+              reachability_iterator != this->reachability_.end() &&
+              reachability_iterator->second;
+        }
+
+        if (source_parent_reachable) {
+          became_reachable = true;
+          break;
+        }
+      }
+
+      if (became_reachable) {
+        this->reachability_[read_iterator->pointer] = true;
+        changed = true;
+      } else {
+        if (write_iterator != read_iterator) {
+          *write_iterator = std::move(*read_iterator);
+        }
+        ++write_iterator;
+      }
+    }
+    unreachable_with_sources.erase(write_iterator,
+                                   unreachable_with_sources.end());
+  }
+}
+
+auto SchemaFrame::is_reachable(const Location &location,
+                               const SchemaWalker &walker,
+                               const SchemaResolver &resolver) const -> bool {
+  assert(location.type != LocationType::Pointer);
+  this->populate_reachability(walker, resolver);
+  const auto iterator{this->reachability_.find(std::cref(location.pointer))};
+  assert(iterator != this->reachability_.end());
+  return iterator->second;
 }
 
 } // namespace sourcemeta::core
