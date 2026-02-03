@@ -444,9 +444,14 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
                                                                paths.cend())
               .size() == paths.size()));
   std::vector<InternalEntry> subschema_entries;
-  std::map<WeakPointer, CacheSubschema> subschemas;
-  std::map<WeakPointer, std::vector<JSON::String>> base_uris;
-  std::map<WeakPointer, std::vector<std::string_view>> base_dialects;
+  std::unordered_map<WeakPointer, CacheSubschema, WeakPointer::Hasher>
+      subschemas;
+  std::unordered_map<WeakPointer, std::vector<JSON::String>,
+                     WeakPointer::Hasher>
+      base_uris;
+  std::unordered_map<WeakPointer, std::vector<std::string_view>,
+                     WeakPointer::Hasher>
+      base_dialects;
 
   for (const auto &path : paths) {
     // Passing paths that overlap is undefined behavior. No path should
@@ -1035,7 +1040,20 @@ auto SchemaFrame::analyse(const JSON &root, const SchemaWalker &walker,
   }
 
   // A schema is standalone if all references can be resolved within itself
-  if (this->standalone()) {
+  this->standalone_ =
+      std::ranges::all_of(this->references_, [&](const auto &reference) {
+        assert(!reference.first.second.empty());
+        assert(reference.first.second.back().is_property());
+        // TODO: This check might need to be more elaborate given
+        // https://github.com/sourcemeta/core/issues/1390
+        return reference.first.second.back().to_property() == "$schema" ||
+               this->locations_.contains({SchemaReferenceType::Static,
+                                          reference.second.destination}) ||
+               this->locations_.contains({SchemaReferenceType::Dynamic,
+                                          reference.second.destination});
+      });
+
+  if (this->standalone_) {
     // Find all dynamic anchors
     // Values are pointers to full URIs in locations_
     std::unordered_map<JSON::String, std::vector<const JSON::String *>>
@@ -1113,18 +1131,8 @@ auto SchemaFrame::reference(const SchemaReferenceType type,
   return std::nullopt;
 }
 
-auto SchemaFrame::standalone() const -> bool {
-  return std::ranges::all_of(this->references_, [&](const auto &reference) {
-    assert(!reference.first.second.empty());
-    assert(reference.first.second.back().is_property());
-    // TODO: This check might need to be more elaborate given
-    // https://github.com/sourcemeta/core/issues/1390
-    return reference.first.second.back().to_property() == "$schema" ||
-           this->locations_.contains(
-               {SchemaReferenceType::Static, reference.second.destination}) ||
-           this->locations_.contains(
-               {SchemaReferenceType::Dynamic, reference.second.destination});
-  });
+auto SchemaFrame::standalone() const noexcept -> bool {
+  return this->standalone_;
 }
 
 auto SchemaFrame::root() const noexcept -> const JSON::String & {
@@ -1392,6 +1400,7 @@ auto SchemaFrame::reset() -> void {
   this->root_.clear();
   this->locations_.clear();
   this->references_.clear();
+  this->standalone_ = false;
 }
 
 auto SchemaFrame::populate_pointer_to_location() const -> void {
@@ -1474,6 +1483,22 @@ auto SchemaFrame::populate_reachability(const SchemaWalker &walker,
   // (2) Build a reverse mapping from reference destinations to their sources
   // ---------------------------------------------------------------------------
 
+  std::unordered_map<std::string_view, std::vector<const WeakPointer *>>
+      dynamic_anchors_by_fragment;
+  for (const auto &location : this->locations_) {
+    if (location.first.first == SchemaReferenceType::Dynamic &&
+        location.second.type == LocationType::Anchor) {
+      const auto &uri{location.first.second};
+      const auto hash_pos{uri.rfind('#')};
+      if (hash_pos != std::string::npos) {
+        std::string_view fragment{uri.data() + hash_pos + 1,
+                                  uri.size() - hash_pos - 1};
+        dynamic_anchors_by_fragment[fragment].push_back(
+            &location.second.pointer);
+      }
+    }
+  }
+
   std::vector<std::pair<const WeakPointer *, const WeakPointer *>>
       reference_destinations;
   reference_destinations.reserve(this->references_.size());
@@ -1484,21 +1509,25 @@ auto SchemaFrame::populate_reachability(const SchemaWalker &walker,
       continue;
     }
 
-    const WeakPointer *destination_pointer{nullptr};
+    if (reference.first.first == SchemaReferenceType::Dynamic &&
+        reference.second.fragment.has_value()) {
+      const auto &fragment{reference.second.fragment.value()};
+      const auto match{dynamic_anchors_by_fragment.find(fragment)};
+      if (match != dynamic_anchors_by_fragment.cend()) {
+        for (const auto *destination_pointer : match->second) {
+          reference_destinations.emplace_back(&source_pointer,
+                                              destination_pointer);
+        }
+      }
+
+      continue;
+    }
+
     const auto destination_location{this->locations_.find(
         {SchemaReferenceType::Static, reference.second.destination})};
     if (destination_location != this->locations_.cend()) {
-      destination_pointer = &destination_location->second.pointer;
-    } else {
-      const auto dynamic_destination{this->locations_.find(
-          {SchemaReferenceType::Dynamic, reference.second.destination})};
-      if (dynamic_destination != this->locations_.cend()) {
-        destination_pointer = &dynamic_destination->second.pointer;
-      }
-    }
-
-    if (destination_pointer != nullptr) {
-      reference_destinations.emplace_back(&source_pointer, destination_pointer);
+      reference_destinations.emplace_back(
+          &source_pointer, &destination_location->second.pointer);
     }
   }
 
