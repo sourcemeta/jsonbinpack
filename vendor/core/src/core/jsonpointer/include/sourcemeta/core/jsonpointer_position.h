@@ -9,13 +9,12 @@
 
 #include <sourcemeta/core/jsonpointer_pointer.h>
 
-#include <cstddef>  // std::size_t
-#include <cstdint>  // std::uint64_t
-#include <map>      // std::map
-#include <optional> // std::optional
-#include <stack>    // std::stack
-#include <tuple>    // std::tuple
-#include <utility>  // std::pair
+#include <cstddef>       // std::size_t
+#include <cstdint>       // std::uint64_t
+#include <optional>      // std::optional
+#include <tuple>         // std::tuple
+#include <unordered_map> // std::unordered_map
+#include <vector>        // std::vector
 
 namespace sourcemeta::core {
 
@@ -30,7 +29,8 @@ namespace sourcemeta::core {
 ///
 /// const auto input{"{\n  \"foo\": \"bar\"\n}"};;
 /// sourcemeta::core::PointerPositionTracker tracker;
-/// sourcemeta::core::parse_json(stream, std::ref(tracker));
+/// sourcemeta::core::JSON document{nullptr};
+/// sourcemeta::core::parse_json(input, document, std::ref(tracker));
 /// assert(tracker.size() == 2);
 /// const auto foo{tracker.get(sourcemeta::core::Pointer{"foo"})};
 /// assert(foo.has_value());
@@ -51,22 +51,39 @@ public:
   auto operator()(const JSON::ParsePhase phase, const JSON::Type,
                   const std::uint64_t line, const std::uint64_t column,
                   const JSON::ParseContext context, const std::size_t index,
-                  const JSON::StringView property) -> void;
+                  const JSON::String &property) -> void;
   [[nodiscard]] auto get(const Pointer &pointer) const
       -> std::optional<Position>;
   [[nodiscard]] auto size() const -> std::size_t;
   [[nodiscard]] auto to_json() const -> JSON;
 
 private:
+  struct Event {
+    JSON::ParsePhase phase;
+    JSON::ParseContext context;
+    std::size_t index;
+    const JSON::String *property;
+    std::uint64_t line;
+    std::uint64_t column;
+  };
+
+  struct TrieNode {
+    std::optional<Position> position;
+    std::unordered_map<std::size_t, std::size_t> index_children;
+    std::unordered_map<std::string_view, std::size_t> property_children;
+  };
+
+  auto ensure_index() const -> void;
+
 // Exporting symbols that depends on the standard C++ library is considered
 // safe.
 // https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-level-2-c4275?view=msvc-170&redirectedfrom=MSDN
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  Pointer current;
-  std::stack<std::pair<std::uint64_t, std::uint64_t>> stack;
-  std::map<Pointer, Position> data;
+  std::vector<Event> events;
+  mutable bool indexed{false};
+  mutable std::vector<TrieNode> trie;
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif

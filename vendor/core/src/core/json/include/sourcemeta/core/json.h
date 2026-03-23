@@ -11,6 +11,8 @@
 #include <sourcemeta/core/json_value.h>
 // NOLINTEND(misc-include-cleaner)
 
+#include <sourcemeta/core/preprocessor.h>
+
 #include <cstdint>          // std::uint64_t
 #include <filesystem>       // std::filesystem
 #include <fstream>          // std::basic_ifstream
@@ -49,8 +51,8 @@ namespace sourcemeta::core {
 ///
 /// If parsing fails, sourcemeta::core::JSONParseError will be thrown.
 SOURCEMETA_CORE_JSON_EXPORT
-auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
-                const JSON::ParseCallback &callback = nullptr) -> JSON;
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream)
+    -> JSON;
 
 /// @ingroup json
 ///
@@ -68,8 +70,8 @@ auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
 ///
 /// If parsing fails, sourcemeta::core::JSONParseError will be thrown.
 SOURCEMETA_CORE_JSON_EXPORT
-auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
-                const JSON::ParseCallback &callback = nullptr) -> JSON;
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input)
+    -> JSON;
 
 /// @ingroup json
 ///
@@ -90,8 +92,7 @@ auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
 /// ```
 SOURCEMETA_CORE_JSON_EXPORT
 auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
-                std::uint64_t &line, std::uint64_t &column,
-                const JSON::ParseCallback &callback = nullptr) -> JSON;
+                std::uint64_t &line, std::uint64_t &column) -> JSON;
 
 /// @ingroup json
 ///
@@ -110,8 +111,7 @@ auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
 /// ```
 SOURCEMETA_CORE_JSON_EXPORT
 auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
-                std::uint64_t &line, std::uint64_t &column,
-                const JSON::ParseCallback &callback = nullptr) -> JSON;
+                std::uint64_t &line, std::uint64_t &column) -> JSON;
 
 /// @ingroup json
 ///
@@ -128,10 +128,74 @@ auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
 /// std::cout << std::endl;
 /// ```
 ///
+/// If parsing fails, sourcemeta::core::JSONFileParseError will be thrown.
+SOURCEMETA_CORE_JSON_EXPORT
+auto read_json(const std::filesystem::path &path) -> JSON;
+
+/// @ingroup json
+///
+/// Parse a JSON document from a C++ standard input stream into an existing
+/// JSON value, invoking the given callback during parsing. The result is
+/// constructed directly into the given reference rather than returned by value
+/// to ensure that references passed through the parse callback (such as object
+/// property names) remain valid after parsing completes.
+///
 /// If parsing fails, sourcemeta::core::JSONParseError will be thrown.
 SOURCEMETA_CORE_JSON_EXPORT
-auto read_json(const std::filesystem::path &path,
-               const JSON::ParseCallback &callback = nullptr) -> JSON;
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
+                JSON &output, const JSON::ParseCallback &callback) -> void;
+
+/// @ingroup json
+///
+/// Parse a JSON document from a JSON string into an existing JSON value,
+/// invoking the given callback during parsing. The result is constructed
+/// directly into the given reference rather than returned by value to ensure
+/// that references passed through the parse callback (such as object property
+/// names) remain valid after parsing completes.
+///
+/// If parsing fails, sourcemeta::core::JSONParseError will be thrown.
+SOURCEMETA_CORE_JSON_EXPORT
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
+                JSON &output, const JSON::ParseCallback &callback) -> void;
+
+/// @ingroup json
+///
+/// Parse a JSON document from a C++ standard input stream into an existing
+/// JSON value, passing your own `line` and `column` read/write position
+/// indicators and invoking the given callback during parsing. The result is
+/// constructed directly into the given reference rather than returned by value
+/// to ensure that references passed through the parse callback (such as object
+/// property names) remain valid after parsing completes.
+SOURCEMETA_CORE_JSON_EXPORT
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
+                std::uint64_t &line, std::uint64_t &column, JSON &output,
+                const JSON::ParseCallback &callback) -> void;
+
+/// @ingroup json
+///
+/// Parse a JSON document from a JSON string into an existing JSON value,
+/// passing your own `line` and `column` read/write position indicators and
+/// invoking the given callback during parsing. The result is constructed
+/// directly into the given reference rather than returned by value to ensure
+/// that references passed through the parse callback (such as object property
+/// names) remain valid after parsing completes.
+SOURCEMETA_CORE_JSON_EXPORT
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
+                std::uint64_t &line, std::uint64_t &column, JSON &output,
+                const JSON::ParseCallback &callback) -> void;
+
+/// @ingroup json
+///
+/// A convenience function to parse a JSON document from a file into an existing
+/// JSON value, invoking the given callback during parsing. The result is
+/// constructed directly into the given reference rather than returned by value
+/// to ensure that references passed through the parse callback (such as object
+/// property names) remain valid after parsing completes.
+///
+/// If parsing fails, sourcemeta::core::JSONFileParseError will be thrown.
+SOURCEMETA_CORE_JSON_EXPORT
+auto read_json(const std::filesystem::path &path, JSON &output,
+               const JSON::ParseCallback &callback) -> void;
 
 /// @ingroup json
 ///
@@ -228,8 +292,14 @@ auto operator<<(std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
 ///     {sourcemeta::core::JSON::Type::Object,
 ///      sourcemeta::core::JSON::Type::Array});
 /// ```
-SOURCEMETA_CORE_JSON_EXPORT
-auto make_set(std::initializer_list<JSON::Type> types) -> JSON::TypeSet;
+SOURCEMETA_FORCEINLINE inline auto
+make_set(std::initializer_list<JSON::Type> types) -> JSON::TypeSet {
+  JSON::TypeSet result;
+  for (const auto type : types) {
+    result.set(static_cast<std::size_t>(type));
+  }
+  return result;
+}
 
 } // namespace sourcemeta::core
 

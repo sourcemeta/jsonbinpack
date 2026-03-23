@@ -335,7 +335,7 @@ public:
   ///
   /// const sourcemeta::core::URI
   ///   uri{"https://www.sourcemeta.com/foo#bar"};
-  /// assert(uri.recompose_without_fragment().has_value()");
+  /// assert(uri.recompose_without_fragment().has_value());
   /// assert(uri.recompose_without_fragment().value() ==
   /// "https://sourcemeta.com/foo");
   /// ```
@@ -349,7 +349,7 @@ public:
   /// #include <cassert>
   ///
   /// sourcemeta::core::URI uri{"hTtP://exAmpLe.com:80/TEST"};
-  /// uri.canonicalize():
+  /// uri.canonicalize();
   /// assert(uri.recompose() == "http://example.com/TEST");
   /// ```
   auto canonicalize() -> URI &;
@@ -417,7 +417,7 @@ public:
   ///
   /// const sourcemeta::core::URI uri{"https://user:@host"};
   /// assert(uri.userinfo().has_value());
-  /// assert(uri.userinfo().value() == "user:);
+  /// assert(uri.userinfo().value() == "user:");
   /// ```
   ///
   /// As mentioned in RFC 3986, the format "user:password" is deprecated.
@@ -468,6 +468,34 @@ public:
   /// assert(result == "http://example.com/TEST");
   /// ```
   static auto canonicalize(std::string_view input) -> std::string;
+
+  /// Check if the given string is a valid absolute URI (has a scheme) per
+  /// RFC 3986 without constructing a full URI object. For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/uri.h>
+  /// #include <cassert>
+  ///
+  /// assert(sourcemeta::core::URI::is_uri("https://example.com/path"));
+  /// assert(!sourcemeta::core::URI::is_uri("://bad"));
+  /// assert(!sourcemeta::core::URI::is_uri("relative/path"));
+  /// ```
+  [[nodiscard]] static auto is_uri(std::string_view input) noexcept -> bool;
+
+  /// Check if the given string is a valid URI reference per RFC 3986
+  /// (absolute or relative) without constructing a full URI object.
+  /// For example:
+  ///
+  /// ```cpp
+  /// #include <sourcemeta/core/uri.h>
+  /// #include <cassert>
+  ///
+  /// assert(sourcemeta::core::URI::is_uri_reference("https://example.com"));
+  /// assert(sourcemeta::core::URI::is_uri_reference("relative/path"));
+  /// assert(!sourcemeta::core::URI::is_uri_reference("://bad"));
+  /// ```
+  [[nodiscard]] static auto is_uri_reference(std::string_view input) noexcept
+      -> bool;
 
 private:
   auto parse(std::string_view input) -> void;

@@ -3,14 +3,17 @@ project(core VERSION 0.0.0 LANGUAGES C CXX ASM_MASM DESCRIPTION "Sourcemeta Core
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Options
+option(SOURCEMETA_CORE_LANG_PREPROCESSOR "Build the Sourcemeta Core language preprocessor library" ON)
 option(SOURCEMETA_CORE_LANG_IO "Build the Sourcemeta Core language I/O library" ON)
 option(SOURCEMETA_CORE_LANG_PROCESS "Build the Sourcemeta Core language Process library" ON)
 option(SOURCEMETA_CORE_LANG_PARALLEL "Build the Sourcemeta Core language parallel library" ON)
 option(SOURCEMETA_CORE_LANG_NUMERIC "Build the Sourcemeta Core language numeric library" ON)
+option(SOURCEMETA_CORE_LANG_OPTIONS "Build the Sourcemeta Core Options library" ON)
+option(SOURCEMETA_CORE_UNICODE "Build the Sourcemeta Core Unicode library" ON)
 option(SOURCEMETA_CORE_PUNYCODE "Build the Sourcemeta Core Punycode library" ON)
 option(SOURCEMETA_CORE_TIME "Build the Sourcemeta Core time library" ON)
-option(SOURCEMETA_CORE_UUID "Build the Sourcemeta Core UUID library" ON)
-option(SOURCEMETA_CORE_MD5 "Build the Sourcemeta Core MD5 library" ON)
+option(SOURCEMETA_CORE_CRYPTO "Build the Sourcemeta Core Crypto library" ON)
+option(SOURCEMETA_CORE_CRYPTO_USE_SYSTEM_OPENSSL "Use system OpenSSL for the Sourcemeta Core Crypto library" OFF)
 option(SOURCEMETA_CORE_REGEX "Build the Sourcemeta Core Regex library" ON)
 option(SOURCEMETA_CORE_URI "Build the Sourcemeta Core URI library" ON)
 option(SOURCEMETA_CORE_URITEMPLATE "Build the Sourcemeta Core URI Template library" ON)
@@ -19,12 +22,10 @@ option(SOURCEMETA_CORE_JSONSCHEMA "Build the Sourcemeta Core JSON Schema library
 option(SOURCEMETA_CORE_JSONPOINTER "Build the Sourcemeta Core JSON Pointer library" ON)
 option(SOURCEMETA_CORE_JSONL "Build the Sourcemeta Core JSONL library" ON)
 option(SOURCEMETA_CORE_YAML "Build the Sourcemeta Core YAML library" ON)
+option(SOURCEMETA_CORE_SEMVER "Build the Sourcemeta Core SemVer library" ON)
 option(SOURCEMETA_CORE_HTML "Build the Sourcemeta Core HTML library" ON)
 option(SOURCEMETA_CORE_EXTENSION_ALTERSCHEMA "Build the Sourcemeta Core AlterSchema library" ON)
 option(SOURCEMETA_CORE_EXTENSION_EDITORSCHEMA "Build the Sourcemeta Core EditorSchema library" ON)
-option(SOURCEMETA_CORE_EXTENSION_SCHEMACONFIG "Build the Sourcemeta Core SchemaConfig library" ON)
-option(SOURCEMETA_CORE_EXTENSION_OPTIONS "Build the Sourcemeta Core Options library" ON)
-option(SOURCEMETA_CORE_EXTENSION_BUILD "Build the Sourcemeta Core Build library" ON)
 option(SOURCEMETA_CORE_TESTS "Build the Sourcemeta Core tests" OFF)
 option(SOURCEMETA_CORE_BENCHMARK "Build the Sourcemeta Core benchmarks" OFF)
 option(SOURCEMETA_CORE_DOCS "Build the Sourcemeta Core docs" OFF)
@@ -59,6 +60,10 @@ if(SOURCEMETA_CORE_INSTALL)
     COMPONENT sourcemeta_${PROJECT_NAME}_dev)
 endif()
 
+if(SOURCEMETA_CORE_LANG_PREPROCESSOR)
+  add_subdirectory(src/lang/preprocessor)
+endif()
+
 if(SOURCEMETA_CORE_LANG_IO)
   add_subdirectory(src/lang/io)
 endif()
@@ -73,8 +78,15 @@ if(SOURCEMETA_CORE_LANG_PARALLEL)
 endif()
 
 if(SOURCEMETA_CORE_LANG_NUMERIC)
-  find_package(mpdecimal REQUIRED)
   add_subdirectory(src/lang/numeric)
+endif()
+
+if(SOURCEMETA_CORE_LANG_OPTIONS)
+  add_subdirectory(src/lang/options)
+endif()
+
+if(SOURCEMETA_CORE_UNICODE)
+  add_subdirectory(src/core/unicode)
 endif()
 
 if(SOURCEMETA_CORE_PUNYCODE)
@@ -85,12 +97,11 @@ if(SOURCEMETA_CORE_TIME)
   add_subdirectory(src/core/time)
 endif()
 
-if(SOURCEMETA_CORE_UUID)
-  add_subdirectory(src/core/uuid)
-endif()
-
-if(SOURCEMETA_CORE_MD5)
-  add_subdirectory(src/core/md5)
+if(SOURCEMETA_CORE_CRYPTO)
+  if(SOURCEMETA_CORE_CRYPTO_USE_SYSTEM_OPENSSL)
+    find_package(OpenSSL REQUIRED)
+  endif()
+  add_subdirectory(src/core/crypto)
 endif()
 
 if(SOURCEMETA_CORE_REGEX)
@@ -123,8 +134,11 @@ if(SOURCEMETA_CORE_JSONL)
 endif()
 
 if(SOURCEMETA_CORE_YAML)
-  find_package(yaml REQUIRED)
   add_subdirectory(src/core/yaml)
+endif()
+
+if(SOURCEMETA_CORE_SEMVER)
+  add_subdirectory(src/core/semver)
 endif()
 
 if(SOURCEMETA_CORE_HTML)
@@ -137,18 +151,6 @@ endif()
 
 if(SOURCEMETA_CORE_EXTENSION_EDITORSCHEMA)
   add_subdirectory(src/extension/editorschema)
-endif()
-
-if(SOURCEMETA_CORE_EXTENSION_SCHEMACONFIG)
-  add_subdirectory(src/extension/schemaconfig)
-endif()
-
-if(SOURCEMETA_CORE_EXTENSION_OPTIONS)
-  add_subdirectory(src/extension/options)
-endif()
-
-if(SOURCEMETA_CORE_EXTENSION_BUILD)
-  add_subdirectory(src/extension/build)
 endif()
 
 if(SOURCEMETA_CORE_ADDRESS_SANITIZER)
@@ -198,6 +200,14 @@ if(SOURCEMETA_CORE_TESTS)
     add_subdirectory(test/numeric)
   endif()
 
+  if(SOURCEMETA_CORE_LANG_OPTIONS)
+    add_subdirectory(test/options)
+  endif()
+
+  if(SOURCEMETA_CORE_UNICODE)
+    add_subdirectory(test/unicode)
+  endif()
+
   if(SOURCEMETA_CORE_PUNYCODE)
     add_subdirectory(test/punycode)
   endif()
@@ -206,12 +216,8 @@ if(SOURCEMETA_CORE_TESTS)
     add_subdirectory(test/time)
   endif()
 
-  if(SOURCEMETA_CORE_UUID)
-    add_subdirectory(test/uuid)
-  endif()
-
-  if(SOURCEMETA_CORE_MD5)
-    add_subdirectory(test/md5)
+  if(SOURCEMETA_CORE_CRYPTO)
+    add_subdirectory(test/crypto)
   endif()
 
   if(SOURCEMETA_CORE_REGEX)
@@ -246,6 +252,10 @@ if(SOURCEMETA_CORE_TESTS)
     add_subdirectory(test/yaml)
   endif()
 
+  if(SOURCEMETA_CORE_SEMVER)
+    add_subdirectory(test/semver)
+  endif()
+
   if(SOURCEMETA_CORE_HTML)
     add_subdirectory(test/html)
   endif()
@@ -256,18 +266,6 @@ if(SOURCEMETA_CORE_TESTS)
 
   if(SOURCEMETA_CORE_EXTENSION_EDITORSCHEMA)
     add_subdirectory(test/editorschema)
-  endif()
-
-  if(SOURCEMETA_CORE_EXTENSION_SCHEMACONFIG)
-    add_subdirectory(test/schemaconfig)
-  endif()
-
-  if(SOURCEMETA_CORE_EXTENSION_OPTIONS)
-    add_subdirectory(test/options)
-  endif()
-
-  if(SOURCEMETA_CORE_EXTENSION_BUILD)
-    add_subdirectory(test/build)
   endif()
 
   if(PROJECT_IS_TOP_LEVEL)
