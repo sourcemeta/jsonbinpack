@@ -13,6 +13,8 @@
 #include <utility>          // std::move
 #include <vector>           // std::vector
 
+#include <sourcemeta/core/preprocessor.h>
+
 namespace sourcemeta::core {
 
 /// @ingroup jsonpointer
@@ -131,7 +133,7 @@ public:
   /// assert(pointer.back().is_property());
   /// assert(pointer.back().to_property() == "bar");
   /// ```
-  [[nodiscard]] auto back() const -> const_reference {
+  [[nodiscard]] SOURCEMETA_FORCEINLINE auto back() const -> const_reference {
     assert(!this->empty());
     return this->data.back();
   }
@@ -146,7 +148,7 @@ public:
   /// const sourcemeta::core::Pointer pointer{"foo", "bar"};
   /// assert(pointer.size() == 2);
   /// ```
-  [[nodiscard]] auto size() const noexcept -> size_type {
+  [[nodiscard]] SOURCEMETA_FORCEINLINE auto size() const noexcept -> size_type {
     return this->data.size();
   }
 
@@ -162,7 +164,7 @@ public:
   /// assert(empty_pointer.empty());
   /// assert(!non_empty_pointer.empty());
   /// ```
-  [[nodiscard]] auto empty() const noexcept -> bool {
+  [[nodiscard]] SOURCEMETA_FORCEINLINE auto empty() const noexcept -> bool {
     return this->data.empty();
   }
 
@@ -179,7 +181,8 @@ public:
   /// assert(!pointer.empty());
   /// assert(token.is_property());
   /// ```
-  template <class... Args> auto emplace_back(Args &&...args) -> reference {
+  template <class... Args>
+  SOURCEMETA_FORCEINLINE auto emplace_back(Args &&...args) -> reference {
     return this->data.emplace_back(std::forward<Args>(args)...);
   }
 
@@ -215,7 +218,8 @@ public:
   /// assert(pointer.at(1).to_property() == "bar");
   /// assert(pointer.at(2).to_property() == "baz");
   /// ```
-  auto push_back(const GenericPointer<PropertyT, Hash> &other) -> void {
+  SOURCEMETA_FORCEINLINE auto
+  push_back(const GenericPointer<PropertyT, Hash> &other) -> void {
     if (other.empty()) {
       return;
     } else if (other.size() == 1) {
@@ -248,7 +252,8 @@ public:
   /// assert(pointer.at(1).to_property() == "bar");
   /// assert(pointer.at(2).to_property() == "baz");
   /// ```
-  auto push_back(GenericPointer<PropertyT, Hash> &&other) -> void {
+  SOURCEMETA_FORCEINLINE auto push_back(GenericPointer<PropertyT, Hash> &&other)
+      -> void {
     if (other.empty()) {
       return;
     } else if (other.size() == 1) {
@@ -284,7 +289,8 @@ public:
   /// assert(pointer.at(2).to_property() == "baz");
   /// ```
   template <typename OtherT>
-  auto push_back(const GenericPointer<OtherT, Hash> &other) -> void
+  SOURCEMETA_FORCEINLINE auto
+  push_back(const GenericPointer<OtherT, Hash> &other) -> void
     requires std::is_same_v<PropertyT, std::reference_wrapper<const OtherT>>
   {
     if (other.empty()) {
@@ -328,7 +334,8 @@ public:
   /// assert(pointer.at(0).to_property() == "foo");
   /// assert(pointer.at(1).to_property() == "bar");
   /// ```
-  auto push_back(const typename Token::Property &property) -> void {
+  SOURCEMETA_FORCEINLINE auto
+  push_back(const typename Token::Property &property) -> void {
     this->data.emplace_back(property);
   }
 
@@ -349,7 +356,8 @@ public:
   /// assert(pointer.at(0).to_property() == "foo");
   /// assert(pointer.at(1).to_property() == "bar");
   /// ```
-  auto push_back(typename Token::Property &&property) -> void {
+  SOURCEMETA_FORCEINLINE auto push_back(typename Token::Property &&property)
+      -> void {
     this->data.emplace_back(std::move(property));
   }
 
@@ -371,7 +379,8 @@ public:
   /// assert(pointer.at(0).to_property() == "foo");
   /// assert(pointer.at(1).to_index() == 0);
   /// ```
-  auto push_back(const typename Token::Index &index) -> void {
+  SOURCEMETA_FORCEINLINE auto push_back(const typename Token::Index &index)
+      -> void {
     this->data.emplace_back(index);
   }
 
@@ -681,6 +690,10 @@ public:
   [[nodiscard]] auto
   resolve_from(const GenericPointer<PropertyT, Hash> &base) const
       -> GenericPointer<PropertyT, Hash> {
+    if (base.empty()) {
+      return *this;
+    }
+
     typename Container::size_type index{0};
     while (index < base.size()) {
       if (index >= this->size() || base.data[index] != this->data[index]) {
@@ -694,6 +707,9 @@ public:
     auto new_begin{this->data.cbegin()};
     std::advance(new_begin, index);
     GenericPointer<PropertyT, Hash> result;
+    const auto remaining{static_cast<typename Container::size_type>(
+        this->data.cend() - new_begin)};
+    result.data.reserve(remaining);
     std::copy(new_begin, this->data.cend(), std::back_inserter(result.data));
     return result;
   }
@@ -759,15 +775,12 @@ public:
     }
 
   private:
+    // Intentionally only fold hash.a for performance, as the first
+    // 16 bytes already provide sufficient entropy for bucketing
     static auto property_hash(const typename Hash::hash_type &hash) noexcept
         -> std::size_t {
-#if defined(__SIZEOF_INT128__)
-      const auto *parts =
-          reinterpret_cast<const std::uint64_t *>(&hash.a); // NOLINT
-      return parts[0] ^ parts[1];
-#else
-      return hash.a ^ hash.b;
-#endif
+      return static_cast<std::size_t>(hash.a) ^
+             static_cast<std::size_t>(hash.a >> 64);
     }
   };
 

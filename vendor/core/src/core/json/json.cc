@@ -4,6 +4,7 @@
 #include <sourcemeta/core/json_error.h>
 #include <sourcemeta/core/json_value.h>
 
+#include "construct.h"
 #include "parser.h"
 #include "stringify.h"
 
@@ -13,43 +14,169 @@
 #include <fstream>      // std::ifstream
 #include <istream>      // std::basic_istream
 #include <ostream>      // std::basic_ostream
+#include <sstream>      // std::basic_ostringstream
 #include <system_error> // std::make_error_code, std::errc
+#include <vector>       // std::vector
 
 namespace sourcemeta::core {
 
+static auto internal_parse_json(const char *&cursor, const char *end,
+                                std::uint64_t &line, std::uint64_t &column,
+                                const JSON::ParseCallback &callback,
+                                const bool track_positions, JSON &output)
+    -> void {
+  const char *buffer_start{cursor};
+  std::vector<TapeEntry> tape;
+  tape.reserve(static_cast<std::size_t>(end - cursor) / 8);
+  if (callback || track_positions) {
+    scan_json<true>(cursor, end, buffer_start, line, column, tape);
+  } else {
+    try {
+      scan_json<false>(cursor, end, buffer_start, line, column, tape);
+    } catch (const JSONParseError &) {
+      cursor = buffer_start;
+      tape.clear();
+      line = 1;
+      column = 0;
+      scan_json<true>(cursor, end, buffer_start, line, column, tape);
+    }
+  }
+  construct_json(buffer_start, tape, callback, output);
+}
+
+static auto internal_parse_json(const char *&cursor, const char *end,
+                                std::uint64_t &line, std::uint64_t &column,
+                                const bool track_positions) -> JSON {
+  JSON output{nullptr};
+  internal_parse_json(cursor, end, line, column, nullptr, track_positions,
+                      output);
+  return output;
+}
+
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
-                std::uint64_t &line, std::uint64_t &column,
-                const JSON::ParseCallback &callback) -> JSON {
-  return internal_parse_json(stream, line, column, callback);
+                std::uint64_t &line, std::uint64_t &column) -> JSON {
+  const auto start_position{stream.tellg()};
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits> buffer;
+  buffer << stream.rdbuf();
+  const auto input{buffer.str()};
+  const char *cursor{input.data()};
+  const char *end{input.data() + input.size()};
+  auto result{internal_parse_json(cursor, end, line, column, true)};
+  if (start_position != static_cast<std::streampos>(-1)) {
+    const auto consumed{static_cast<std::streamoff>(cursor - input.data())};
+    stream.clear();
+    stream.seekg(start_position + consumed);
+  }
+
+  return result;
 }
 
 auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
-                std::uint64_t &line, std::uint64_t &column,
-                const JSON::ParseCallback &callback) -> JSON {
-  return internal_parse_json(input, line, column, callback);
+                std::uint64_t &line, std::uint64_t &column) -> JSON {
+  const char *cursor{input.data()};
+  return internal_parse_json(cursor, input.data() + input.size(), line, column,
+                             true);
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
-                const JSON::ParseCallback &callback) -> JSON {
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream)
+    -> JSON {
+  const auto start_position{stream.tellg()};
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits> buffer;
+  buffer << stream.rdbuf();
+  const auto input{buffer.str()};
+  const char *cursor{input.data()};
+  const char *end{input.data() + input.size()};
   std::uint64_t line{1};
   std::uint64_t column{0};
-  return parse_json(stream, line, column, callback);
+  auto result{internal_parse_json(cursor, end, line, column, false)};
+  if (start_position != static_cast<std::streampos>(-1)) {
+    const auto consumed{static_cast<std::streamoff>(cursor - input.data())};
+    stream.clear();
+    stream.seekg(start_position + consumed);
+  }
+  return result;
 }
 
-auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
-                const JSON::ParseCallback &callback) -> JSON {
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input)
+    -> JSON {
   std::uint64_t line{1};
   std::uint64_t column{0};
-  return parse_json(input, line, column, callback);
+  const char *cursor{input.data()};
+  return internal_parse_json(cursor, input.data() + input.size(), line, column,
+                             false);
 }
 
-auto read_json(const std::filesystem::path &path,
-               const JSON::ParseCallback &callback) -> JSON {
+auto read_json(const std::filesystem::path &path) -> JSON {
   auto stream{read_file<JSON::Char, JSON::CharTraits>(path)};
   try {
-    return parse_json(stream, callback);
+    return parse_json(stream);
+  } catch (const JSONParseError &error) {
+    // For producing better error messages
+    throw JSONFileParseError(path, error);
+  }
+}
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
+                std::uint64_t &line, std::uint64_t &column, JSON &output,
+                const JSON::ParseCallback &callback) -> void {
+  const auto start_position{stream.tellg()};
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits> buffer;
+  buffer << stream.rdbuf();
+  const auto input{buffer.str()};
+  const char *cursor{input.data()};
+  const char *end{input.data() + input.size()};
+  internal_parse_json(cursor, end, line, column, callback, true, output);
+  if (start_position != static_cast<std::streampos>(-1)) {
+    const auto consumed{static_cast<std::streamoff>(cursor - input.data())};
+    stream.clear();
+    stream.seekg(start_position + consumed);
+  }
+}
+
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
+                std::uint64_t &line, std::uint64_t &column, JSON &output,
+                const JSON::ParseCallback &callback) -> void {
+  const char *cursor{input.data()};
+  internal_parse_json(cursor, input.data() + input.size(), line, column,
+                      callback, true, output);
+}
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+auto parse_json(std::basic_istream<JSON::Char, JSON::CharTraits> &stream,
+                JSON &output, const JSON::ParseCallback &callback) -> void {
+  const auto start_position{stream.tellg()};
+  std::basic_ostringstream<JSON::Char, JSON::CharTraits> buffer;
+  buffer << stream.rdbuf();
+  const auto input{buffer.str()};
+  const char *cursor{input.data()};
+  const char *end{input.data() + input.size()};
+  std::uint64_t line{1};
+  std::uint64_t column{0};
+  internal_parse_json(cursor, end, line, column, callback, false, output);
+  if (start_position != static_cast<std::streampos>(-1)) {
+    const auto consumed{static_cast<std::streamoff>(cursor - input.data())};
+    stream.clear();
+    stream.seekg(start_position + consumed);
+  }
+}
+
+auto parse_json(const std::basic_string<JSON::Char, JSON::CharTraits> &input,
+                JSON &output, const JSON::ParseCallback &callback) -> void {
+  std::uint64_t line{1};
+  std::uint64_t column{0};
+  const char *cursor{input.data()};
+  internal_parse_json(cursor, input.data() + input.size(), line, column,
+                      callback, false, output);
+}
+
+auto read_json(const std::filesystem::path &path, JSON &output,
+               const JSON::ParseCallback &callback) -> void {
+  auto stream{read_file<JSON::Char, JSON::CharTraits>(path)};
+  try {
+    parse_json(stream, output, callback);
   } catch (const JSONParseError &error) {
     // For producing better error messages
     throw JSONFileParseError(path, error);
@@ -104,14 +231,6 @@ auto operator<<(std::basic_ostream<JSON::Char, JSON::CharTraits> &stream,
       assert(false);
       return stream;
   }
-}
-
-auto make_set(std::initializer_list<JSON::Type> types) -> JSON::TypeSet {
-  JSON::TypeSet result;
-  for (const auto type : types) {
-    result.set(static_cast<std::size_t>(type));
-  }
-  return result;
 }
 
 } // namespace sourcemeta::core

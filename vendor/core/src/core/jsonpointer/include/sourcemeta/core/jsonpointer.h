@@ -415,13 +415,28 @@ auto to_pointer(const std::basic_string<JSON::Char, JSON::CharTraits,
 /// const std::string foo = "foo";
 /// const sourcemeta::core::WeakPointer pointer{std::cref(foo)};
 /// const sourcemeta::core::Pointer result{
-///   sourcemeta::core::to_pointer(pointer)}:
+///   sourcemeta::core::to_pointer(pointer)};
 /// assert(result.size() == 1);
 /// assert(result.at(0).is_property());
 /// assert(result.at(0).to_property() == "foo");
 /// ```
 SOURCEMETA_CORE_JSONPOINTER_EXPORT
 auto to_pointer(const WeakPointer &pointer) -> Pointer;
+
+/// @ingroup jsonpointer
+/// Check if the given string is a valid JSON Pointer per RFC 6901 without
+/// constructing a JSON Pointer object. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/jsonpointer.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::is_pointer("/foo/bar/0"));
+/// assert(sourcemeta::core::is_pointer(""));
+/// assert(!sourcemeta::core::is_pointer("foo"));
+/// ```
+SOURCEMETA_CORE_JSONPOINTER_EXPORT
+auto is_pointer(std::string_view input) noexcept -> bool;
 
 /// @ingroup jsonpointer
 /// Convert a JSON Pointer into a JSON WeakPointer. For example:
