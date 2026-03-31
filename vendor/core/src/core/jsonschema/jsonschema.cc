@@ -2,16 +2,16 @@
 
 #include "helpers.h"
 
+#include <algorithm>     // std::max, std::ranges::fold_left
 #include <cassert>       // assert
 #include <cstdint>       // std::uint64_t
 #include <limits>        // std::numeric_limits
-#include <numeric>       // std::accumulate
 #include <sstream>       // std::ostringstream
 #include <string_view>   // std::string_view
 #include <type_traits>   // std::remove_reference_t
 #include <unordered_map> // std::unordered_map
 #include <unordered_set> // std::unordered_set
-#include <utility>       // std::move
+#include <utility>       // std::move, std::to_underlying
 
 auto sourcemeta::core::is_schema(const sourcemeta::core::JSON &schema) -> bool {
   return schema.is_object() || schema.is_boolean();
@@ -440,6 +440,55 @@ auto is_pre_vocabulary_base_dialect(
 }
 } // namespace
 
+auto sourcemeta::core::parse_vocabularies(
+    const sourcemeta::core::JSON &schema,
+    const sourcemeta::core::SchemaBaseDialect base_dialect)
+    -> std::optional<sourcemeta::core::Vocabularies> {
+  if (base_dialect !=
+          sourcemeta::core::SchemaBaseDialect::JSON_Schema_2020_12 &&
+      base_dialect !=
+          sourcemeta::core::SchemaBaseDialect::JSON_Schema_2020_12_Hyper &&
+      base_dialect !=
+          sourcemeta::core::SchemaBaseDialect::JSON_Schema_2019_09 &&
+      base_dialect !=
+          sourcemeta::core::SchemaBaseDialect::JSON_Schema_2019_09_Hyper) {
+    return std::nullopt;
+  }
+
+  if (!schema.is_object()) {
+    return std::nullopt;
+  }
+
+  const auto *vocabulary_entry{schema.try_at("$vocabulary")};
+  if (!vocabulary_entry) {
+    return std::nullopt;
+  }
+
+  assert(vocabulary_entry->is_object());
+  sourcemeta::core::Vocabularies result;
+  for (const auto &entry : vocabulary_entry->as_object()) {
+    assert(entry.second.is_boolean());
+    result.insert(entry.first, entry.second.to_boolean());
+  }
+
+  return result;
+}
+
+auto sourcemeta::core::parse_vocabularies(
+    const sourcemeta::core::JSON &schema,
+    const sourcemeta::core::SchemaResolver &resolver,
+    std::string_view default_dialect)
+    -> std::optional<sourcemeta::core::Vocabularies> {
+  const auto schema_base_dialect{
+      sourcemeta::core::base_dialect(schema, resolver, default_dialect)};
+  if (schema_base_dialect.has_value()) {
+    return sourcemeta::core::parse_vocabularies(schema,
+                                                schema_base_dialect.value());
+  } else {
+    return std::nullopt;
+  }
+}
+
 auto sourcemeta::core::vocabularies(
     const sourcemeta::core::JSON &schema,
     const sourcemeta::core::SchemaResolver &resolver,
@@ -545,16 +594,10 @@ auto sourcemeta::core::vocabularies(const SchemaResolver &resolver,
    * dialect
    */
 
-  Vocabularies result;
   const auto core{core_vocabulary_known(base_dialect)};
-  if (schema_dialect.defines("$vocabulary")) {
-    const sourcemeta::core::JSON &vocabularies{
-        schema_dialect.at("$vocabulary")};
-    assert(vocabularies.is_object());
-    for (const auto &entry : vocabularies.as_object()) {
-      result.insert(entry.first, entry.second.to_boolean());
-    }
-  } else {
+  auto result{parse_vocabularies(schema_dialect, base_dialect)
+                  .value_or(Vocabularies{})};
+  if (result.empty()) {
     result.insert(core, true);
   }
 
@@ -578,17 +621,15 @@ auto sourcemeta::core::schema_keyword_priority(
     const sourcemeta::core::Vocabularies &vocabularies,
     const sourcemeta::core::SchemaWalker &walker) -> std::uint64_t {
   const auto &result{walker(keyword, vocabularies)};
-  const auto priority_from_dependencies{std::accumulate(
-      result.dependencies.cbegin(), result.dependencies.cend(),
-      static_cast<std::uint64_t>(0),
+  const auto priority_from_dependencies{std::ranges::fold_left(
+      result.dependencies, static_cast<std::uint64_t>(0),
       [&vocabularies, &walker](const auto accumulator, const auto &dependency) {
         return std::max(
             accumulator,
             schema_keyword_priority(dependency, vocabularies, walker) + 1);
       })};
-  const auto priority_from_order_dependencies{std::accumulate(
-      result.order_dependencies.cbegin(), result.order_dependencies.cend(),
-      static_cast<std::uint64_t>(0),
+  const auto priority_from_order_dependencies{std::ranges::fold_left(
+      result.order_dependencies, static_cast<std::uint64_t>(0),
       [&vocabularies, &walker](const auto accumulator, const auto &dependency) {
         return std::max(
             accumulator,
@@ -703,20 +744,20 @@ static auto parse_schema_type_string(const sourcemeta::core::JSON::String &type,
                                      sourcemeta::core::JSON::TypeSet &result)
     -> void {
   if (type == "null") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Null));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Null));
   } else if (type == "boolean") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Boolean));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Boolean));
   } else if (type == "object") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Object));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Object));
   } else if (type == "array") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Array));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Array));
   } else if (type == "number") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Integer));
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Real));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Integer));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Real));
   } else if (type == "integer") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::Integer));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::Integer));
   } else if (type == "string") {
-    result.set(static_cast<std::size_t>(sourcemeta::core::JSON::Type::String));
+    result.set(std::to_underlying(sourcemeta::core::JSON::Type::String));
   }
 }
 
