@@ -23,7 +23,7 @@ if(JSONBINPACK_INSTALL)
 endif()
 
 target_link_libraries(sourcemeta_jsonbinpack_compiler PRIVATE
-  sourcemeta::jsonbinpack::numeric)
+  sourcemeta::core::numeric)
 target_link_libraries(sourcemeta_jsonbinpack_compiler PUBLIC
   sourcemeta::core::json)
 target_link_libraries(sourcemeta_jsonbinpack_compiler PRIVATE

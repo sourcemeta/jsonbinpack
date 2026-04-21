@@ -20,8 +20,8 @@ public:
            schema.is_object() && schema.defines("type") &&
            schema.at("type").to_string() == "integer" &&
            schema.defines("minimum") && schema.defines("maximum") &&
-           is_byte(schema.at("maximum").to_integer() -
-                   schema.at("minimum").to_integer()) &&
+           sourcemeta::core::is_byte(schema.at("maximum").to_integer() -
+                                     schema.at("minimum").to_integer()) &&
            !schema.defines("multipleOf");
   }
 

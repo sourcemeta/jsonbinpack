@@ -28,9 +28,9 @@ public:
       return false;
     }
 
-    return !is_byte(count_multiples(schema.at("minimum").to_integer(),
-                                    schema.at("maximum").to_integer(),
-                                    schema.at("multipleOf").to_integer()));
+    return !sourcemeta::core::is_byte(sourcemeta::core::count_multiples(
+        schema.at("minimum").to_integer(), schema.at("maximum").to_integer(),
+        schema.at("multipleOf").to_integer()));
   }
 
   auto transform(sourcemeta::core::JSON &schema,

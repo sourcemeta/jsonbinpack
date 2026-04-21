@@ -1,5 +1,6 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
-#include <sourcemeta/jsonbinpack/numeric.h>
+
+#include <sourcemeta/core/numeric.h>
 
 #include <sourcemeta/blaze/alterschema.h>
 #include <sourcemeta/core/jsonpointer.h>
