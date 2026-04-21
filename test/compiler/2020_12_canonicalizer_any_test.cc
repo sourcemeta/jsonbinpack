@@ -17,6 +17,8 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, if_without_then_else_1) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 0,
     "properties": {}
   })JSON");
@@ -38,6 +40,8 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, then_else_without_if_1) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 0,
     "properties": {}
   })JSON");
@@ -138,13 +142,18 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_1) {
     "anyOf": [
       {
         "type": "object",
+        "patternProperties": {},
+        "propertyNames": true,
         "minProperties": 0,
         "properties": {}
       },
       {
         "type": "array",
-        "items": true,
-        "minItems": 0
+        "uniqueItems": false,
+        "minItems": 0,
+        "contains": true,
+        "minContains": 0,
+        "items": true
       }
     ]
   })JSON");
@@ -167,14 +176,19 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_2) {
     "anyOf": [
       {
         "type": "object",
+        "maxProperties": 3,
+        "patternProperties": {},
+        "propertyNames": true,
         "minProperties": 0,
-        "properties": {},
-        "maxProperties": 3
+        "properties": {}
       },
       {
         "type": "array",
-        "items": true,
-        "minItems": 0
+        "uniqueItems": false,
+        "minItems": 0,
+        "contains": true,
+        "minContains": 0,
+        "items": true
       }
     ]
   })JSON");
@@ -199,23 +213,30 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, type_union_anyof_3) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
-    "minProperties": 0,
     "properties": {
       "foo": {
         "anyOf": [
           {
             "type": "object",
+            "patternProperties": {},
+            "propertyNames": true,
             "minProperties": 0,
             "properties": {}
           },
           {
             "type": "array",
-            "items": true,
-            "minItems": 0
+            "uniqueItems": false,
+            "minItems": 0,
+            "contains": true,
+            "minContains": 0,
+            "items": true
           }
         ]
       }
-    }
+    },
+    "patternProperties": {},
+    "propertyNames": true,
+    "minProperties": 0
   })JSON");
 
   EXPECT_EQ(schema, expected);
@@ -236,13 +257,18 @@ TEST(JSONBinPack_Canonicalizer_Any_2020_12, implicit_type_union_1) {
       { "enum": [ false, true ] },
       {
         "type": "object",
+        "patternProperties": {},
+        "propertyNames": true,
         "minProperties": 0,
         "properties": {}
       },
       {
         "type": "array",
-        "items": true,
-        "minItems": 0
+        "uniqueItems": false,
+        "minItems": 0,
+        "contains": true,
+        "minContains": 0,
+        "items": true
       },
       {
         "type": "string",

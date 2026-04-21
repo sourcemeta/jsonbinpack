@@ -21,6 +21,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
+    "patternProperties": {},
+    "propertyNames": true,
     "properties": {
       "foo": true,
       "bar": true
@@ -47,6 +49,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
     "type": "object",
     "required": [ "foo", "bar" ],
     "minProperties": 2,
+    "patternProperties": {},
+    "propertyNames": true,
     "properties": {
       "foo": true,
       "bar": true
@@ -73,6 +77,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12,
     "type": "object",
     "required": [ "bar", "foo" ],
     "minProperties": 2,
+    "patternProperties": {},
+    "propertyNames": true,
     "properties": {
       "bar": true,
       "foo": true
@@ -95,8 +101,9 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, empty_pattern_properties_1) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
-    "minProperties": 0,
     "patternProperties": {},
+    "propertyNames": true,
+    "minProperties": 0,
     "properties": {}
   })JSON");
 
@@ -115,6 +122,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, implicit_object_lower_bound_1) {
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 0,
     "properties": {}
   })JSON");
@@ -137,6 +146,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, drop_non_object_keywords_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "maxProperties": 4,
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 0,
     "properties": {}
   })JSON");
@@ -161,7 +172,8 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo", "bar", "baz" ],
-    "dependentRequired": {},
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 3,
     "properties": {
       "foo": true,
@@ -190,8 +202,9 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, dependent_required_tautology_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "baz", "foo", "qux" ],
+    "patternProperties": {},
+    "propertyNames": true,
     "minProperties": 4,
-    "dependentRequired": {},
     "properties": {
       "bar": true,
       "baz": true,
@@ -217,7 +230,9 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_1) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "foo" ],
-    "minProperties": 1,
+    "patternProperties": {},
+    "propertyNames": true,
+    "minProperties": 2,
     "properties": {
       "foo": true
     }
@@ -240,7 +255,9 @@ TEST(JSONBinPack_Canonicalizer_Object_2020_12, duplicate_required_values_2) {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": [ "bar", "baz", "foo" ],
-    "minProperties": 3,
+    "patternProperties": {},
+    "propertyNames": true,
+    "minProperties": 5,
     "properties": {
       "bar": true,
       "baz": true,
