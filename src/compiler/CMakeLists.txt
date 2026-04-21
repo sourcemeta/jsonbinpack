@@ -31,4 +31,4 @@ target_link_libraries(sourcemeta_jsonbinpack_compiler PRIVATE
 target_link_libraries(sourcemeta_jsonbinpack_compiler PUBLIC
   sourcemeta::core::jsonschema)
 target_link_libraries(sourcemeta_jsonbinpack_compiler PRIVATE
-  sourcemeta::core::alterschema)
+  sourcemeta::blaze::alterschema)

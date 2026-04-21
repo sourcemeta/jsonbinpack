@@ -18,6 +18,7 @@ option(JSONBINPACK_ADDRESS_SANITIZER "Build JSON BinPack with an address sanitiz
 option(JSONBINPACK_UNDEFINED_SANITIZER "Build JSON BinPack with an undefined behavior sanitizer" OFF)
 
 find_package(Core REQUIRED)
+find_package(Blaze REQUIRED)
 
 if(JSONBINPACK_INSTALL)
   include(GNUInstallDirs)
@@ -35,9 +36,6 @@ if(JSONBINPACK_INSTALL)
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
     COMPONENT sourcemeta_jsonbinpack_dev)
 endif()
-
-# Dependencies
-find_package(Core REQUIRED)
 
 # Numeric
 if(JSONBINPACK_NUMERIC)

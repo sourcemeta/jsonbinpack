@@ -1,0 +1,159 @@
+#include <sourcemeta/blaze/output_simple.h>
+
+#include <sourcemeta/core/jsonschema.h>
+
+#include <algorithm> // std::any_of, std::sort
+#include <cassert>   // assert
+#include <iterator>  // std::back_inserter, std::make_move_iterator
+#include <utility>   // std::move
+
+namespace sourcemeta::blaze {
+
+SimpleOutput::SimpleOutput(const sourcemeta::core::JSON &instance,
+                           sourcemeta::core::WeakPointer base)
+    : instance_{instance}, base_{std::move(base)} {}
+
+auto SimpleOutput::begin() const -> const_iterator {
+  return this->output.begin();
+}
+
+auto SimpleOutput::end() const -> const_iterator { return this->output.end(); }
+
+auto SimpleOutput::cbegin() const -> const_iterator {
+  return this->output.cbegin();
+}
+
+auto SimpleOutput::cend() const -> const_iterator {
+  return this->output.cend();
+}
+
+auto SimpleOutput::operator()(
+    const EvaluationType type, const bool result, const Instruction &step,
+    const InstructionExtra &step_metadata,
+    const sourcemeta::core::WeakPointer &evaluate_path,
+    const sourcemeta::core::WeakPointer &instance_location,
+    const sourcemeta::core::JSON &annotation) -> void {
+  if (evaluate_path.empty()) {
+    return;
+  }
+
+  assert(evaluate_path.back().is_property());
+
+  // Fast path: passing non-annotation instructions that are not
+  // closing a mask entry can be skipped entirely
+  if (result && !is_annotation(step.type)) {
+    if (type == EvaluationType::Pre) {
+      const auto &keyword{evaluate_path.back().to_property()};
+      if (keyword == "anyOf" || keyword == "oneOf" || keyword == "not" ||
+          keyword == "if" || keyword == "contains") {
+        this->mask.emplace_back(evaluate_path, instance_location);
+      }
+    } else if (type == EvaluationType::Post && !this->mask.empty() &&
+               this->mask.back().first == evaluate_path &&
+               this->mask.back().second == instance_location) {
+      const auto mask_key{std::make_pair(evaluate_path, instance_location)};
+      this->masked_traces.erase(mask_key);
+      this->mask.pop_back();
+    }
+
+    return;
+  }
+
+  auto effective_evaluate_path{evaluate_path.resolve_from(this->base_)};
+  if (effective_evaluate_path.empty()) {
+    return;
+  }
+
+  if (is_annotation(step.type)) {
+    if (type == EvaluationType::Post) {
+      Location location{.instance_location = instance_location,
+                        .evaluate_path = std::move(effective_evaluate_path),
+                        .schema_location = step_metadata.keyword_location};
+      const auto match{this->annotations_.find(location)};
+      if (match == this->annotations_.cend()) {
+        this->annotations_[std::move(location)].push_back(annotation);
+
+        // To avoid emitting the exact same annotation more than once
+        // This is right now mostly because of `unevaluatedItems`
+      } else if (match->second.back() != annotation) {
+        match->second.push_back(annotation);
+      }
+    }
+
+    return;
+  }
+
+  const auto &keyword{evaluate_path.back().to_property()};
+
+  if (type == EvaluationType::Pre) {
+    assert(result);
+    // To ease the output
+    if (keyword == "anyOf" || keyword == "oneOf" || keyword == "not" ||
+        keyword == "if" || keyword == "contains") {
+      this->mask.emplace_back(evaluate_path, instance_location);
+    }
+  } else if (type == EvaluationType::Post) {
+    const auto mask_key{std::make_pair(evaluate_path, instance_location)};
+    const auto mask_it{std::ranges::find(this->mask, mask_key)};
+    if (mask_it != this->mask.end()) {
+      // Present unexpected traces only when needed
+      if (!result && keyword != "not" && keyword != "if") {
+        auto buffered{this->masked_traces.find(mask_key)};
+        if (buffered != this->masked_traces.end()) {
+#ifdef __cpp_lib_containers_ranges
+          this->output.append_range(std::move(buffered->second));
+#else
+          this->output.insert(this->output.end(),
+                              std::make_move_iterator(buffered->second.begin()),
+                              std::make_move_iterator(buffered->second.end()));
+#endif
+          this->masked_traces.erase(buffered);
+        }
+      } else {
+        this->masked_traces.erase(mask_key);
+      }
+
+      this->mask.erase(mask_it);
+    }
+  }
+
+  if (result) {
+    return;
+  }
+
+  if (type == EvaluationType::Post && !this->annotations_.empty()) {
+    for (auto iterator = this->annotations_.begin();
+         iterator != this->annotations_.end();) {
+      if (iterator->first.evaluate_path.starts_with_initial(evaluate_path) &&
+          iterator->first.instance_location == instance_location) {
+        iterator = this->annotations_.erase(iterator);
+      } else {
+        ++iterator;
+      }
+    }
+  }
+
+  if (keyword == "if") {
+    return;
+  } else {
+    for (const auto &mask_entry : this->mask) {
+      if (evaluate_path.starts_with(mask_entry.first)) {
+        this->masked_traces[mask_entry].push_back(
+            {describe(result, step, evaluate_path, instance_location,
+                      this->instance_, annotation),
+             instance_location, std::move(effective_evaluate_path),
+             step_metadata.keyword_location});
+
+        return;
+      }
+    }
+  }
+
+  this->output.push_back(
+      {describe(result, step, evaluate_path, instance_location, this->instance_,
+                annotation),
+       instance_location, std::move(effective_evaluate_path),
+       step_metadata.keyword_location});
+}
+
+} // namespace sourcemeta::blaze

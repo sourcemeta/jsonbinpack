@@ -111,6 +111,12 @@ jobs:
           --component sourcemeta_core_dev
       - run: >
           cmake --install ./build --prefix ./build/dist --config Release --verbose
+          --component sourcemeta_blaze
+      - run: >
+          cmake --install ./build --prefix ./build/dist --config Release --verbose
+          --component sourcemeta_blaze_dev
+      - run: >
+          cmake --install ./build --prefix ./build/dist --config Release --verbose
           --component sourcemeta_jsonbinpack
       - run: >
           cmake --install ./build --prefix ./build/dist --config Release --verbose
