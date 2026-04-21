@@ -21,7 +21,7 @@ public:
            schema.is_object() && schema.defines("enum") &&
            schema.at("enum").is_array() && !location.pointer.empty() &&
            schema.at("enum").size() > 1 &&
-           !is_byte(schema.at("enum").size() - 1);
+           !sourcemeta::core::is_byte(schema.at("enum").size() - 1);
   }
 
   auto transform(sourcemeta::core::JSON &schema,
