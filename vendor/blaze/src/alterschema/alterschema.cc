@@ -3,6 +3,7 @@
 #include <sourcemeta/blaze/evaluator.h>
 #include <sourcemeta/blaze/output.h>
 #include <sourcemeta/core/regex.h>
+#include <sourcemeta/core/uri.h>
 
 // For built-in rules
 #include <algorithm>     // std::sort, std::unique, std::ranges::none_of
@@ -108,6 +109,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
   }
 
 #include "canonicalizer/additional_items_implicit.h"
+#include "canonicalizer/allof_merge_compatible_branches.h"
 #include "canonicalizer/comment_drop.h"
 #include "canonicalizer/const_as_enum.h"
 #include "canonicalizer/dependencies_to_any_of.h"
@@ -117,6 +119,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "canonicalizer/deprecated_false_drop.h"
 #include "canonicalizer/disallow_to_array_of_schemas.h"
 #include "canonicalizer/divisible_by_implicit.h"
+#include "canonicalizer/draft3_type_any.h"
 #include "canonicalizer/empty_definitions_drop.h"
 #include "canonicalizer/empty_defs_drop.h"
 #include "canonicalizer/empty_dependencies_drop.h"
@@ -124,7 +127,6 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "canonicalizer/empty_dependent_schemas_drop.h"
 #include "canonicalizer/enum_drop_redundant_validation.h"
 #include "canonicalizer/enum_filter_by_type.h"
-#include "canonicalizer/exclusive_bounds_false_drop.h"
 #include "canonicalizer/exclusive_maximum_boolean_integer_fold.h"
 #include "canonicalizer/exclusive_maximum_integer_to_maximum.h"
 #include "canonicalizer/exclusive_minimum_boolean_integer_fold.h"
@@ -133,6 +135,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "canonicalizer/if_then_else_implicit.h"
 #include "canonicalizer/implicit_contains_keywords.h"
 #include "canonicalizer/implicit_object_keywords.h"
+#include "canonicalizer/inline_single_use_ref.h"
 #include "canonicalizer/items_implicit.h"
 #include "canonicalizer/max_contains_covered_by_max_items.h"
 #include "canonicalizer/max_decimal_implicit.h"
@@ -175,11 +178,13 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "common/content_schema_without_media_type.h"
 #include "common/dependencies_property_tautology.h"
 #include "common/dependent_required_tautology.h"
+#include "common/disallow_narrows_type.h"
 #include "common/double_negation_elimination.h"
 #include "common/draft_official_dialect_with_https.h"
 #include "common/draft_official_dialect_without_empty_fragment.h"
 #include "common/draft_ref_siblings.h"
 #include "common/drop_allof_empty_schemas.h"
+#include "common/drop_extends_empty_schemas.h"
 #include "common/duplicate_allof_branches.h"
 #include "common/duplicate_anyof_branches.h"
 #include "common/duplicate_enum_values.h"
@@ -189,10 +194,12 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "common/empty_object_as_true.h"
 #include "common/enum_with_type.h"
 #include "common/equal_numeric_bounds_to_enum.h"
+#include "common/exclusive_bounds_false_drop.h"
 #include "common/exclusive_maximum_number_and_maximum.h"
 #include "common/exclusive_minimum_number_and_minimum.h"
 #include "common/flatten_nested_allof.h"
 #include "common/flatten_nested_anyof.h"
+#include "common/flatten_nested_extends.h"
 #include "common/if_without_then_else.h"
 #include "common/ignored_metaschema.h"
 #include "common/max_contains_without_contains.h"
@@ -202,6 +209,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "common/modern_official_dialect_with_empty_fragment.h"
 #include "common/modern_official_dialect_with_http.h"
 #include "common/non_applicable_additional_items.h"
+#include "common/non_applicable_disallow_types.h"
 #include "common/non_applicable_enum_validation_keywords.h"
 #include "common/non_applicable_type_specific_keywords.h"
 #include "common/not_false.h"
@@ -214,12 +222,14 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "common/unknown_keywords_prefix.h"
 #include "common/unknown_local_ref.h"
 #include "common/unnecessary_allof_ref_wrapper_draft.h"
+#include "common/unnecessary_extends_ref_wrapper.h"
 #include "common/unsatisfiable_drop_validation.h"
 #include "common/unsatisfiable_in_place_applicator_type.h"
 #include "linter/else_empty.h"
 #include "linter/then_empty.h"
 #include "linter/unnecessary_allof_ref_wrapper_modern.h"
 #include "linter/unnecessary_allof_wrapper.h"
+#include "linter/unnecessary_extends_wrapper.h"
 
 // Linter
 #include "linter/comment_trim.h"
@@ -230,6 +240,8 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "linter/dependent_required_default.h"
 #include "linter/description_trailing_period.h"
 #include "linter/description_trim.h"
+#include "linter/disallow_default.h"
+#include "linter/divisible_by_default.h"
 #include "linter/duplicate_examples.h"
 #include "linter/enum_to_const.h"
 #include "linter/equal_numeric_bounds_to_const.h"
@@ -240,6 +252,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "linter/items_schema_default.h"
 #include "linter/multiple_of_default.h"
 #include "linter/pattern_properties_default.h"
+#include "linter/portable_anchor_names.h"
 #include "linter/properties_default.h"
 #include "linter/property_names_default.h"
 #include "linter/property_names_type_default.h"
@@ -252,10 +265,25 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "linter/top_level_title.h"
 #include "linter/unevaluated_items_default.h"
 #include "linter/unevaluated_properties_default.h"
+#include "linter/unknown_format_prefix.h"
 #include "linter/unsatisfiable_max_contains.h"
 #include "linter/unsatisfiable_min_properties.h"
 #include "linter/valid_default.h"
 #include "linter/valid_examples.h"
+
+// Upgrade
+#include "upgrade/helpers.h"
+#include "upgrade/prefix_promoted_2020_12_keywords.h"
+#include "upgrade/prefix_promoted_draft_2019_09_keywords.h"
+#include "upgrade/prefix_promoted_draft_4_keywords.h"
+#include "upgrade/prefix_promoted_draft_6_keywords.h"
+#include "upgrade/prefix_promoted_draft_7_keywords.h"
+#include "upgrade/upgrade_2019_09_to_2020_12.h"
+#include "upgrade/upgrade_dialect_override_cleanup.h"
+#include "upgrade/upgrade_draft_3_to_draft_4.h"
+#include "upgrade/upgrade_draft_4_to_draft_6.h"
+#include "upgrade/upgrade_draft_6_to_draft_7.h"
+#include "upgrade/upgrade_draft_7_to_draft_2019_09.h"
 
 #undef ONLY_CONTINUE_IF
 } // namespace sourcemeta::blaze
@@ -263,10 +291,53 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 namespace sourcemeta::blaze {
 
 auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
+  if (mode == AlterSchemaMode::UpgradeDraft4 ||
+      mode == AlterSchemaMode::UpgradeDraft6 ||
+      mode == AlterSchemaMode::UpgradeDraft7 ||
+      mode == AlterSchemaMode::Upgrade201909 ||
+      mode == AlterSchemaMode::Upgrade202012) {
+    bundle.add<DraftOfficialDialectWithHttps>();
+    bundle.add<DraftOfficialDialectWithoutEmptyFragment>();
+    bundle.add<PrefixPromotedDraft4Keywords>();
+    bundle.add<UpgradeDraft3ToDraft4>();
+
+    if (mode == AlterSchemaMode::UpgradeDraft6 ||
+        mode == AlterSchemaMode::UpgradeDraft7 ||
+        mode == AlterSchemaMode::Upgrade201909 ||
+        mode == AlterSchemaMode::Upgrade202012) {
+      bundle.add<PrefixPromotedDraft6Keywords>();
+      bundle.add<UpgradeDraft4ToDraft6>();
+      bundle.add<EmptyObjectAsTrue>();
+    }
+
+    if (mode == AlterSchemaMode::UpgradeDraft7 ||
+        mode == AlterSchemaMode::Upgrade201909 ||
+        mode == AlterSchemaMode::Upgrade202012) {
+      bundle.add<PrefixPromotedDraft7Keywords>();
+      bundle.add<UpgradeDraft6ToDraft7>();
+      bundle.add<EnumToConst>();
+    }
+
+    if (mode == AlterSchemaMode::Upgrade201909 ||
+        mode == AlterSchemaMode::Upgrade202012) {
+      bundle.add<PrefixPromoted201909Keywords>();
+      bundle.add<UpgradeDraft7To201909>();
+      bundle.add<DefinitionsToDefs>();
+    }
+
+    if (mode == AlterSchemaMode::Upgrade202012) {
+      bundle.add<PrefixPromoted202012Keywords>();
+      bundle.add<Upgrade201909To202012>();
+    }
+
+    bundle.add<UpgradeDialectOverrideCleanup>();
+
+    return;
+  }
+
   if (mode == AlterSchemaMode::Canonicalizer) {
     bundle.add<ExclusiveMinimumBooleanIntegerFold>();
     bundle.add<ExclusiveMaximumBooleanIntegerFold>();
-    bundle.add<ExclusiveBoundsFalseDrop>();
     bundle.add<UnsatisfiableExclusiveEqualBounds>();
     bundle.add<MinimumCanEqualIntegerFold>();
     bundle.add<MaximumCanEqualIntegerFold>();
@@ -285,6 +356,8 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
   }
 
   if (mode == AlterSchemaMode::Canonicalizer) {
+    bundle.add<InlineSingleUseRef>();
+    bundle.add<AllOfMergeCompatibleBranches>();
     bundle.add<TypeInheritInPlace>();
     bundle.add<TypeUnionImplicit>();
     bundle.add<TypeArrayToAnyOf>();
@@ -300,12 +373,18 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
   bundle.add<DraftOfficialDialectWithHttps>();
   bundle.add<DraftOfficialDialectWithoutEmptyFragment>();
   bundle.add<NonApplicableTypeSpecificKeywords>();
+  bundle.add<NonApplicableDisallowTypes>();
+  bundle.add<DisallowNarrowsType>();
   bundle.add<AnyOfRemoveFalseSchemas>();
   bundle.add<AnyOfTrueSimplify>();
   bundle.add<DuplicateAllOfBranches>();
   bundle.add<DuplicateAnyOfBranches>();
   bundle.add<FlattenNestedAllOf>();
+  bundle.add<FlattenNestedExtends>();
   bundle.add<FlattenNestedAnyOf>();
+  if (mode == AlterSchemaMode::Canonicalizer) {
+    bundle.add<Draft3TypeAny>();
+  }
   bundle.add<UnsatisfiableInPlaceApplicatorType>();
   bundle.add<AllOfFalseSimplify>();
   bundle.add<AnyOfFalseSimplify>();
@@ -341,6 +420,7 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
   bundle.add<ModernOfficialDialectWithHttp>();
   bundle.add<ExclusiveMaximumNumberAndMaximum>();
   bundle.add<ExclusiveMinimumNumberAndMinimum>();
+  bundle.add<ExclusiveBoundsFalseDrop>();
   bundle.add<DraftRefSiblings>();
   bundle.add<DynamicRefToStaticRef>();
   bundle.add<UnknownKeywordsPrefix>();
@@ -373,6 +453,8 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<DependentRequiredDefault>();
     bundle.add<ItemsArrayDefault>();
     bundle.add<ItemsSchemaDefault>();
+    bundle.add<DisallowDefault>();
+    bundle.add<DivisibleByDefault>();
     bundle.add<MultipleOfDefault>();
     bundle.add<PatternPropertiesDefault>();
     bundle.add<PropertiesDefault>();
@@ -396,7 +478,9 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<CommentTrim>();
     bundle.add<DuplicateExamples>();
     bundle.add<SimplePropertiesIdentifiers>();
+    bundle.add<PortableAnchorNames>();
     bundle.add<InvalidExternalRef>();
+    bundle.add<UnknownFormatPrefix>();
     bundle.add<ValidDefault>();
     bundle.add<ValidExamples>();
   }
@@ -405,12 +489,15 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<UnnecessaryAllOfRefWrapperModern>();
   }
   bundle.add<UnnecessaryAllOfRefWrapperDraft>();
+  bundle.add<UnnecessaryExtendsRefWrapper>();
 
   if (mode != AlterSchemaMode::Canonicalizer) {
     bundle.add<UnnecessaryAllOfWrapper>();
+    bundle.add<UnnecessaryExtendsWrapper>();
   }
 
   bundle.add<DropAllOfEmptySchemas>();
+  bundle.add<DropExtendsEmptySchemas>();
   bundle.add<EmptyObjectAsTrue>();
 
   if (mode == AlterSchemaMode::Canonicalizer) {

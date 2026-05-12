@@ -28,15 +28,21 @@ public:
                           Vocabularies::Known::JSON_Schema_Draft_2_Hyper,
                           Vocabularies::Known::JSON_Schema_Draft_1,
                           Vocabularies::Known::JSON_Schema_Draft_1_Hyper}) &&
-                     schema.is_object() && schema.defines("enum") &&
-                     schema.at("enum").is_array() && !schema.defines("type"));
+                     schema.is_object() && !schema.defines("type"));
+
+    const auto *enum_value{schema.try_at("enum")};
+    ONLY_CONTINUE_IF(enum_value && enum_value->is_array());
 
     sourcemeta::core::JSON::TypeSet enum_types;
-    for (const auto &value : schema.at("enum").as_array()) {
+    for (const auto &value : enum_value->as_array()) {
       enum_types.set(std::to_underlying(value.type()));
     }
 
     ONLY_CONTINUE_IF(enum_types.any());
+
+    const bool is_draft3{vocabularies.contains_any(
+        {Vocabularies::Known::JSON_Schema_Draft_3,
+         Vocabularies::Known::JSON_Schema_Draft_3_Hyper})};
 
     std::vector<Pointer> positions;
     for (const auto &entry : schema.as_object()) {
@@ -44,6 +50,10 @@ public:
 
       // If instances is empty (none set), the keyword applies to all types
       if (metadata.instances.none()) {
+        continue;
+      }
+
+      if (is_draft3 && entry.first == "required" && entry.second.is_boolean()) {
         continue;
       }
 
