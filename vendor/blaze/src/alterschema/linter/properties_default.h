@@ -24,13 +24,16 @@ public:
                           Vocabularies::Known::JSON_Schema_Draft_6,
                           Vocabularies::Known::JSON_Schema_Draft_4,
                           Vocabularies::Known::JSON_Schema_Draft_3,
+                          Vocabularies::Known::JSON_Schema_Draft_3_Hyper,
                           Vocabularies::Known::JSON_Schema_Draft_2,
                           Vocabularies::Known::JSON_Schema_Draft_2_Hyper,
                           Vocabularies::Known::JSON_Schema_Draft_1,
                           Vocabularies::Known::JSON_Schema_Draft_1_Hyper}) &&
-                     schema.is_object() && schema.defines("properties") &&
-                     schema.at("properties").is_object() &&
-                     schema.at("properties").empty());
+                     schema.is_object());
+
+    const auto *properties{schema.try_at("properties")};
+    ONLY_CONTINUE_IF(properties && properties->is_object() &&
+                     properties->empty());
     return APPLIES_TO_KEYWORDS("properties");
   }
 

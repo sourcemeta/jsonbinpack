@@ -1,0 +1,208 @@
+export const ASSERTION_FAIL = 0;
+export const ASSERTION_DEFINES = 1;
+export const ASSERTION_DEFINES_STRICT = 2;
+export const ASSERTION_DEFINES_ALL = 3;
+export const ASSERTION_DEFINES_ALL_STRICT = 4;
+export const ASSERTION_DEFINES_EXACTLY = 5;
+export const ASSERTION_DEFINES_EXACTLY_STRICT = 6;
+export const ASSERTION_DEFINES_EXACTLY_STRICT_HASH3 = 7;
+export const ASSERTION_PROPERTY_DEPENDENCIES = 8;
+export const ASSERTION_TYPE = 9;
+export const ASSERTION_TYPE_ANY = 10;
+export const ASSERTION_TYPE_STRICT = 11;
+export const ASSERTION_TYPE_STRICT_ANY = 12;
+export const ASSERTION_NOT_TYPE_STRICT_ANY = 13;
+export const ASSERTION_TYPE_STRING_BOUNDED = 14;
+export const ASSERTION_TYPE_STRING_UPPER = 15;
+export const ASSERTION_TYPE_ARRAY_BOUNDED = 16;
+export const ASSERTION_TYPE_ARRAY_UPPER = 17;
+export const ASSERTION_TYPE_OBJECT_BOUNDED = 18;
+export const ASSERTION_TYPE_OBJECT_UPPER = 19;
+export const ASSERTION_REGEX = 20;
+export const ASSERTION_STRING_SIZE_LESS = 21;
+export const ASSERTION_STRING_SIZE_GREATER = 22;
+export const ASSERTION_ARRAY_SIZE_LESS = 23;
+export const ASSERTION_ARRAY_SIZE_GREATER = 24;
+export const ASSERTION_OBJECT_SIZE_LESS = 25;
+export const ASSERTION_OBJECT_SIZE_GREATER = 26;
+export const ASSERTION_EQUAL = 27;
+export const ASSERTION_EQUALS_ANY = 28;
+export const ASSERTION_EQUALS_ANY_STRING_HASH = 29;
+export const ASSERTION_GREATER_EQUAL = 30;
+export const ASSERTION_LESS_EQUAL = 31;
+export const ASSERTION_GREATER = 32;
+export const ASSERTION_LESS = 33;
+export const ASSERTION_UNIQUE = 34;
+export const ASSERTION_DIVISIBLE = 35;
+export const ASSERTION_TYPE_INTEGER_BOUNDED = 36;
+export const ASSERTION_TYPE_INTEGER_BOUNDED_STRICT = 37;
+export const ASSERTION_TYPE_INTEGER_LOWER_BOUND = 38;
+export const ASSERTION_TYPE_INTEGER_LOWER_BOUND_STRICT = 39;
+export const ASSERTION_STRING_TYPE = 40;
+export const ASSERTION_PROPERTY_TYPE = 41;
+export const ASSERTION_PROPERTY_TYPE_EVALUATE = 42;
+export const ASSERTION_PROPERTY_TYPE_STRICT = 43;
+export const ASSERTION_PROPERTY_TYPE_STRICT_EVALUATE = 44;
+export const ASSERTION_PROPERTY_TYPE_STRICT_ANY = 45;
+export const ASSERTION_PROPERTY_TYPE_STRICT_ANY_EVALUATE = 46;
+export const ASSERTION_ARRAY_PREFIX = 47;
+export const ASSERTION_ARRAY_PREFIX_EVALUATE = 48;
+export const ASSERTION_OBJECT_PROPERTIES_SIMPLE = 49;
+export const ANNOTATION_EMIT = 50;
+export const ANNOTATION_TO_PARENT = 51;
+export const ANNOTATION_BASENAME_TO_PARENT = 52;
+export const EVALUATE = 53;
+export const LOGICAL_NOT = 54;
+export const LOGICAL_NOT_EVALUATE = 55;
+export const LOGICAL_OR = 56;
+export const LOGICAL_AND = 57;
+export const LOGICAL_XOR = 58;
+export const LOGICAL_CONDITION = 59;
+export const LOGICAL_WHEN_TYPE = 60;
+export const LOGICAL_WHEN_DEFINES = 61;
+export const LOGICAL_WHEN_ARRAY_SIZE_GREATER = 62;
+export const LOOP_PROPERTIES_UNEVALUATED = 63;
+export const LOOP_PROPERTIES_UNEVALUATED_EXCEPT = 64;
+export const LOOP_PROPERTIES_MATCH = 65;
+export const LOOP_PROPERTIES_MATCH_CLOSED = 66;
+export const LOOP_PROPERTIES = 67;
+export const LOOP_PROPERTIES_EVALUATE = 68;
+export const LOOP_PROPERTIES_REGEX = 69;
+export const LOOP_PROPERTIES_REGEX_CLOSED = 70;
+export const LOOP_PROPERTIES_STARTS_WITH = 71;
+export const LOOP_PROPERTIES_EXCEPT = 72;
+export const LOOP_PROPERTIES_TYPE = 73;
+export const LOOP_PROPERTIES_TYPE_EVALUATE = 74;
+export const LOOP_PROPERTIES_EXACTLY_TYPE_STRICT = 75;
+export const LOOP_PROPERTIES_EXACTLY_TYPE_STRICT_HASH = 76;
+export const LOOP_PROPERTIES_TYPE_STRICT = 77;
+export const LOOP_PROPERTIES_TYPE_STRICT_EVALUATE = 78;
+export const LOOP_PROPERTIES_TYPE_STRICT_ANY = 79;
+export const LOOP_PROPERTIES_TYPE_STRICT_ANY_EVALUATE = 80;
+export const LOOP_KEYS = 81;
+export const LOOP_ITEMS = 82;
+export const LOOP_ITEMS_FROM = 83;
+export const LOOP_ITEMS_UNEVALUATED = 84;
+export const LOOP_ITEMS_TYPE = 85;
+export const LOOP_ITEMS_TYPE_STRICT = 86;
+export const LOOP_ITEMS_TYPE_STRICT_ANY = 87;
+export const LOOP_ITEMS_PROPERTIES_EXACTLY_TYPE_STRICT_HASH = 88;
+export const LOOP_ITEMS_PROPERTIES_EXACTLY_TYPE_STRICT_HASH3 = 89;
+export const LOOP_ITEMS_INTEGER_BOUNDED = 90;
+export const LOOP_ITEMS_INTEGER_BOUNDED_SIZED = 91;
+export const LOOP_CONTAINS = 92;
+export const CONTROL_GROUP = 93;
+export const CONTROL_GROUP_WHEN_DEFINES = 94;
+export const CONTROL_GROUP_WHEN_DEFINES_DIRECT = 95;
+export const CONTROL_GROUP_WHEN_TYPE = 96;
+export const CONTROL_EVALUATE = 97;
+export const CONTROL_DYNAMIC_ANCHOR_JUMP = 98;
+export const CONTROL_JUMP = 99;
+
+export const INSTRUCTION_NAMES = {
+  "AssertionFail": ASSERTION_FAIL,
+  "AssertionDefines": ASSERTION_DEFINES,
+  "AssertionDefinesStrict": ASSERTION_DEFINES_STRICT,
+  "AssertionDefinesAll": ASSERTION_DEFINES_ALL,
+  "AssertionDefinesAllStrict": ASSERTION_DEFINES_ALL_STRICT,
+  "AssertionDefinesExactly": ASSERTION_DEFINES_EXACTLY,
+  "AssertionDefinesExactlyStrict": ASSERTION_DEFINES_EXACTLY_STRICT,
+  "AssertionDefinesExactlyStrictHash3": ASSERTION_DEFINES_EXACTLY_STRICT_HASH3,
+  "AssertionPropertyDependencies": ASSERTION_PROPERTY_DEPENDENCIES,
+  "AssertionType": ASSERTION_TYPE,
+  "AssertionTypeAny": ASSERTION_TYPE_ANY,
+  "AssertionTypeStrict": ASSERTION_TYPE_STRICT,
+  "AssertionTypeStrictAny": ASSERTION_TYPE_STRICT_ANY,
+  "AssertionNotTypeStrictAny": ASSERTION_NOT_TYPE_STRICT_ANY,
+  "AssertionTypeStringBounded": ASSERTION_TYPE_STRING_BOUNDED,
+  "AssertionTypeStringUpper": ASSERTION_TYPE_STRING_UPPER,
+  "AssertionTypeArrayBounded": ASSERTION_TYPE_ARRAY_BOUNDED,
+  "AssertionTypeArrayUpper": ASSERTION_TYPE_ARRAY_UPPER,
+  "AssertionTypeObjectBounded": ASSERTION_TYPE_OBJECT_BOUNDED,
+  "AssertionTypeObjectUpper": ASSERTION_TYPE_OBJECT_UPPER,
+  "AssertionRegex": ASSERTION_REGEX,
+  "AssertionStringSizeLess": ASSERTION_STRING_SIZE_LESS,
+  "AssertionStringSizeGreater": ASSERTION_STRING_SIZE_GREATER,
+  "AssertionArraySizeLess": ASSERTION_ARRAY_SIZE_LESS,
+  "AssertionArraySizeGreater": ASSERTION_ARRAY_SIZE_GREATER,
+  "AssertionObjectSizeLess": ASSERTION_OBJECT_SIZE_LESS,
+  "AssertionObjectSizeGreater": ASSERTION_OBJECT_SIZE_GREATER,
+  "AssertionEqual": ASSERTION_EQUAL,
+  "AssertionEqualsAny": ASSERTION_EQUALS_ANY,
+  "AssertionEqualsAnyStringHash": ASSERTION_EQUALS_ANY_STRING_HASH,
+  "AssertionGreaterEqual": ASSERTION_GREATER_EQUAL,
+  "AssertionLessEqual": ASSERTION_LESS_EQUAL,
+  "AssertionGreater": ASSERTION_GREATER,
+  "AssertionLess": ASSERTION_LESS,
+  "AssertionUnique": ASSERTION_UNIQUE,
+  "AssertionDivisible": ASSERTION_DIVISIBLE,
+  "AssertionTypeIntegerBounded": ASSERTION_TYPE_INTEGER_BOUNDED,
+  "AssertionTypeIntegerBoundedStrict": ASSERTION_TYPE_INTEGER_BOUNDED_STRICT,
+  "AssertionTypeIntegerLowerBound": ASSERTION_TYPE_INTEGER_LOWER_BOUND,
+  "AssertionTypeIntegerLowerBoundStrict": ASSERTION_TYPE_INTEGER_LOWER_BOUND_STRICT,
+  "AssertionStringType": ASSERTION_STRING_TYPE,
+  "AssertionPropertyType": ASSERTION_PROPERTY_TYPE,
+  "AssertionPropertyTypeEvaluate": ASSERTION_PROPERTY_TYPE_EVALUATE,
+  "AssertionPropertyTypeStrict": ASSERTION_PROPERTY_TYPE_STRICT,
+  "AssertionPropertyTypeStrictEvaluate": ASSERTION_PROPERTY_TYPE_STRICT_EVALUATE,
+  "AssertionPropertyTypeStrictAny": ASSERTION_PROPERTY_TYPE_STRICT_ANY,
+  "AssertionPropertyTypeStrictAnyEvaluate": ASSERTION_PROPERTY_TYPE_STRICT_ANY_EVALUATE,
+  "AssertionArrayPrefix": ASSERTION_ARRAY_PREFIX,
+  "AssertionArrayPrefixEvaluate": ASSERTION_ARRAY_PREFIX_EVALUATE,
+  "AssertionObjectPropertiesSimple": ASSERTION_OBJECT_PROPERTIES_SIMPLE,
+  "AnnotationEmit": ANNOTATION_EMIT,
+  "AnnotationToParent": ANNOTATION_TO_PARENT,
+  "AnnotationBasenameToParent": ANNOTATION_BASENAME_TO_PARENT,
+  "Evaluate": EVALUATE,
+  "LogicalNot": LOGICAL_NOT,
+  "LogicalNotEvaluate": LOGICAL_NOT_EVALUATE,
+  "LogicalOr": LOGICAL_OR,
+  "LogicalAnd": LOGICAL_AND,
+  "LogicalXor": LOGICAL_XOR,
+  "LogicalCondition": LOGICAL_CONDITION,
+  "LogicalWhenType": LOGICAL_WHEN_TYPE,
+  "LogicalWhenDefines": LOGICAL_WHEN_DEFINES,
+  "LogicalWhenArraySizeGreater": LOGICAL_WHEN_ARRAY_SIZE_GREATER,
+  "LoopPropertiesUnevaluated": LOOP_PROPERTIES_UNEVALUATED,
+  "LoopPropertiesUnevaluatedExcept": LOOP_PROPERTIES_UNEVALUATED_EXCEPT,
+  "LoopPropertiesMatch": LOOP_PROPERTIES_MATCH,
+  "LoopPropertiesMatchClosed": LOOP_PROPERTIES_MATCH_CLOSED,
+  "LoopProperties": LOOP_PROPERTIES,
+  "LoopPropertiesEvaluate": LOOP_PROPERTIES_EVALUATE,
+  "LoopPropertiesRegex": LOOP_PROPERTIES_REGEX,
+  "LoopPropertiesRegexClosed": LOOP_PROPERTIES_REGEX_CLOSED,
+  "LoopPropertiesStartsWith": LOOP_PROPERTIES_STARTS_WITH,
+  "LoopPropertiesExcept": LOOP_PROPERTIES_EXCEPT,
+  "LoopPropertiesType": LOOP_PROPERTIES_TYPE,
+  "LoopPropertiesTypeEvaluate": LOOP_PROPERTIES_TYPE_EVALUATE,
+  "LoopPropertiesExactlyTypeStrict": LOOP_PROPERTIES_EXACTLY_TYPE_STRICT,
+  "LoopPropertiesExactlyTypeStrictHash": LOOP_PROPERTIES_EXACTLY_TYPE_STRICT_HASH,
+  "LoopPropertiesTypeStrict": LOOP_PROPERTIES_TYPE_STRICT,
+  "LoopPropertiesTypeStrictEvaluate": LOOP_PROPERTIES_TYPE_STRICT_EVALUATE,
+  "LoopPropertiesTypeStrictAny": LOOP_PROPERTIES_TYPE_STRICT_ANY,
+  "LoopPropertiesTypeStrictAnyEvaluate": LOOP_PROPERTIES_TYPE_STRICT_ANY_EVALUATE,
+  "LoopKeys": LOOP_KEYS,
+  "LoopItems": LOOP_ITEMS,
+  "LoopItemsFrom": LOOP_ITEMS_FROM,
+  "LoopItemsUnevaluated": LOOP_ITEMS_UNEVALUATED,
+  "LoopItemsType": LOOP_ITEMS_TYPE,
+  "LoopItemsTypeStrict": LOOP_ITEMS_TYPE_STRICT,
+  "LoopItemsTypeStrictAny": LOOP_ITEMS_TYPE_STRICT_ANY,
+  "LoopItemsPropertiesExactlyTypeStrictHash": LOOP_ITEMS_PROPERTIES_EXACTLY_TYPE_STRICT_HASH,
+  "LoopItemsPropertiesExactlyTypeStrictHash3": LOOP_ITEMS_PROPERTIES_EXACTLY_TYPE_STRICT_HASH3,
+  "LoopItemsIntegerBounded": LOOP_ITEMS_INTEGER_BOUNDED,
+  "LoopItemsIntegerBoundedSized": LOOP_ITEMS_INTEGER_BOUNDED_SIZED,
+  "LoopContains": LOOP_CONTAINS,
+  "ControlGroup": CONTROL_GROUP,
+  "ControlGroupWhenDefines": CONTROL_GROUP_WHEN_DEFINES,
+  "ControlGroupWhenDefinesDirect": CONTROL_GROUP_WHEN_DEFINES_DIRECT,
+  "ControlGroupWhenType": CONTROL_GROUP_WHEN_TYPE,
+  "ControlEvaluate": CONTROL_EVALUATE,
+  "ControlDynamicAnchorJump": CONTROL_DYNAMIC_ANCHOR_JUMP,
+  "ControlJump": CONTROL_JUMP,
+  "Annotation": -1
+};
+
+export const ANNOTATION_OPCODES = new Set([
+  ANNOTATION_EMIT, ANNOTATION_TO_PARENT, ANNOTATION_BASENAME_TO_PARENT
+]);

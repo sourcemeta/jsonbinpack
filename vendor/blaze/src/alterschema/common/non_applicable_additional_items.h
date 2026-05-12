@@ -25,14 +25,16 @@ public:
                           Vocabularies::Known::JSON_Schema_Draft_7,
                           Vocabularies::Known::JSON_Schema_Draft_6,
                           Vocabularies::Known::JSON_Schema_Draft_4,
-                          Vocabularies::Known::JSON_Schema_Draft_3}) &&
+                          Vocabularies::Known::JSON_Schema_Draft_3,
+                          Vocabularies::Known::JSON_Schema_Draft_3_Hyper}) &&
                      schema.is_object() && schema.defines(KEYWORD));
     ONLY_CONTINUE_IF(!frame.has_references_through(
         location.pointer, WeakPointer::Token{std::cref(KEYWORD)}));
 
-    if (schema.defines("items") && is_schema(schema.at("items"))) {
+    const auto *items{schema.try_at("items")};
+    if (items && is_schema(*items)) {
       return APPLIES_TO_KEYWORDS(KEYWORD, "items");
-    } else if (!schema.defines("items")) {
+    } else if (!items) {
       return APPLIES_TO_KEYWORDS(KEYWORD);
     } else {
       return false;

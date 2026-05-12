@@ -22,13 +22,15 @@ public:
                           Vocabularies::Known::JSON_Schema_Draft_6,
                           Vocabularies::Known::JSON_Schema_Draft_4,
                           Vocabularies::Known::JSON_Schema_Draft_3,
+                          Vocabularies::Known::JSON_Schema_Draft_3_Hyper,
                           Vocabularies::Known::JSON_Schema_Draft_2,
                           Vocabularies::Known::JSON_Schema_Draft_2_Hyper,
                           Vocabularies::Known::JSON_Schema_Draft_1,
                           Vocabularies::Known::JSON_Schema_Draft_1_Hyper}) &&
-                     schema.is_object() && schema.defines("items") &&
-                     schema.at("items").is_array() &&
-                     schema.at("items").empty());
+                     schema.is_object());
+
+    const auto *items{schema.try_at("items")};
+    ONLY_CONTINUE_IF(items && items->is_array() && items->empty());
     return APPLIES_TO_KEYWORDS("items");
   }
 

@@ -11,6 +11,8 @@ option(BLAZE_OUTPUT "Build the Blaze output formats library" ON)
 option(BLAZE_TEST "Build the Blaze test runner library" ON)
 option(BLAZE_CONFIGURATION "Build the Blaze configuration file library" ON)
 option(BLAZE_ALTERSCHEMA "Build the Blaze alterschema rule library" ON)
+option(BLAZE_CODEGEN "Build the Blaze codegen library" ON)
+option(BLAZE_DOCUMENTATION "Build the Blaze documentation generator library" ON)
 option(BLAZE_TESTS "Build the Blaze tests" OFF)
 option(BLAZE_BENCHMARK "Build the Blaze benchmarks" OFF)
 option(BLAZE_CONTRIB "Build the Blaze contrib programs" OFF)
@@ -67,6 +69,14 @@ if(BLAZE_ALTERSCHEMA)
   add_subdirectory(src/alterschema)
 endif()
 
+if(BLAZE_CODEGEN)
+  add_subdirectory(src/codegen)
+endif()
+
+if(BLAZE_DOCUMENTATION)
+  add_subdirectory(src/documentation)
+endif()
+
 if(BLAZE_CONTRIB)
   add_subdirectory(contrib)
 endif()
@@ -94,6 +104,7 @@ if(PROJECT_IS_TOP_LEVEL)
     add_custom_target(blaze_format_trace_json
       COMMAND "${Python3_EXECUTABLE}"
         "${PROJECT_SOURCE_DIR}/contrib/format_trace_json.py"
+        "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_draft3.json"
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_draft4.json"
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_draft6.json"
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_draft7.json"
@@ -101,6 +112,8 @@ if(PROJECT_IS_TOP_LEVEL)
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_2020_12.json"
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_openapi_3_1.json"
         "${PROJECT_SOURCE_DIR}/test/evaluator/evaluator_openapi_3_2.json"
+        "${PROJECT_SOURCE_DIR}/test/output/output_standard_basic.json"
+        "${PROJECT_SOURCE_DIR}/test/output/output_standard_flag.json"
       COMMENT "Formatting trace JSON test files"
       VERBATIM)
   endif()
@@ -132,6 +145,14 @@ if(BLAZE_TESTS)
 
   if(BLAZE_ALTERSCHEMA)
     add_subdirectory(test/alterschema)
+  endif()
+
+  if(BLAZE_CODEGEN)
+    add_subdirectory(test/codegen)
+  endif()
+
+  if(BLAZE_DOCUMENTATION)
+    add_subdirectory(test/documentation)
   endif()
 
   if(PROJECT_IS_TOP_LEVEL)

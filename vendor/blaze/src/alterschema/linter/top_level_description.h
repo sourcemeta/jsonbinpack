@@ -25,14 +25,15 @@ public:
          Vocabularies::Known::JSON_Schema_Draft_6,
          Vocabularies::Known::JSON_Schema_Draft_4,
          Vocabularies::Known::JSON_Schema_Draft_3,
+         Vocabularies::Known::JSON_Schema_Draft_3_Hyper,
          Vocabularies::Known::JSON_Schema_Draft_2,
          Vocabularies::Known::JSON_Schema_Draft_1}));
     ONLY_CONTINUE_IF(schema.is_object());
-    if (schema.defines("description") && schema.at("description").is_string() &&
-        schema.at("description").empty()) {
+    const auto *description{schema.try_at("description")};
+    if (description && description->is_string() && description->empty()) {
       return APPLIES_TO_KEYWORDS("description");
     } else {
-      return !schema.defines("description");
+      return !description;
     }
   }
 };
