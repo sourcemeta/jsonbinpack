@@ -1,8 +1,9 @@
+#include <sourcemeta/core/regex.h>
 #include <sourcemeta/core/uritemplate.h>
 
 #include "helpers.h"
 
-#include <algorithm> // std::ranges::lower_bound
+#include <algorithm> // std::ranges::lower_bound, std::ranges::find_if
 #include <cassert>   // assert
 #include <limits>    // std::numeric_limits
 #include <tuple>     // std::get, std::make_tuple
@@ -44,9 +45,15 @@ auto find_or_create_literal_child(std::vector<std::unique_ptr<Node>> &literals,
   return result;
 }
 
+inline auto is_expansion_type(const NodeType type) noexcept -> bool {
+  return type == NodeType::Expansion || type == NodeType::OptionalExpansion;
+}
+
 auto find_or_create_variable_child(std::unique_ptr<Node> &variable,
                                    const std::string_view name,
-                                   const NodeType type) -> Node * {
+                                   const NodeType type,
+                                   const std::string_view expression)
+    -> Node * {
   if (!variable) {
     variable = std::make_unique<Node>();
     variable->type = type;
@@ -58,12 +65,19 @@ auto find_or_create_variable_child(std::unique_ptr<Node> &variable,
     throw URITemplateRouterVariableMismatchError{variable->value, name};
   }
 
-  if (type == NodeType::Expansion) {
+  if (is_expansion_type(variable->type) && is_expansion_type(type) &&
+      variable->type != type) {
+    throw URITemplateRouterInvalidSegmentError{
+        "Conflicting expansion operators on the same path position",
+        expression};
+  }
+
+  if (is_expansion_type(type)) {
     if (variable->type == NodeType::Variable) {
-      variable->type = NodeType::Expansion;
+      variable->type = type;
       return variable.get();
     }
-  } else if (variable->type == NodeType::Expansion) {
+  } else if (is_expansion_type(variable->type)) {
     return nullptr;
   }
 
@@ -106,19 +120,31 @@ inline auto finalize_match(const Node &otherwise,
 
 } // namespace
 
-URITemplateRouter::URITemplateRouter(const std::string_view base_path)
-    : base_path_{base_path} {
+URITemplateRouter::URITemplateRouter(const std::string_view base_path,
+                                     const std::string_view base_url)
+    : base_path_{base_path}, base_url_{base_url} {
   assert(this->base_path_.empty() || this->base_path_.front() == '/');
-  const auto last = this->base_path_.find_last_not_of('/');
-  if (last == std::string::npos) {
+  const auto base_path_last = this->base_path_.find_last_not_of('/');
+  if (base_path_last == std::string::npos) {
     this->base_path_.clear();
   } else {
-    this->base_path_.erase(last + 1);
+    this->base_path_.erase(base_path_last + 1);
+  }
+
+  const auto base_url_last = this->base_url_.find_last_not_of('/');
+  if (base_url_last == std::string::npos) {
+    this->base_url_.clear();
+  } else {
+    this->base_url_.erase(base_url_last + 1);
   }
 }
 
 auto URITemplateRouter::base_path() const noexcept -> std::string_view {
   return this->base_path_;
+}
+
+auto URITemplateRouter::base_url() const noexcept -> std::string_view {
+  return this->base_url_;
 }
 
 auto URITemplateRouter::size() const noexcept -> std::size_t {
@@ -151,6 +177,30 @@ auto URITemplateRouter::path(const Identifier identifier) const -> std::string {
   return std::string{std::get<2>(*entry)};
 }
 
+auto URITemplateRouter::operation(const std::string_view operation_id) const
+    -> std::pair<Identifier, Identifier> {
+  const auto iterator = this->operations_.find(operation_id);
+  if (iterator == this->operations_.end()) {
+    return {Identifier{0}, Identifier{0}};
+  }
+  return iterator->second;
+}
+
+auto URITemplateRouter::operation_id(const Identifier identifier) const
+    -> std::string_view {
+  if (identifier == 0) {
+    return {};
+  }
+  const auto entry =
+      std::ranges::find_if(this->operations_, [&identifier](const auto &item) {
+        return item.second.first == identifier;
+      });
+  if (entry == this->operations_.end()) {
+    return {};
+  }
+  return entry->first;
+}
+
 auto URITemplateRouter::otherwise(const Identifier context,
                                   const std::span<const Argument> arguments)
     -> void {
@@ -174,10 +224,22 @@ auto URITemplateRouter::otherwise(const Identifier context,
 }
 
 auto URITemplateRouter::add(const std::string_view uri_template,
+                            const std::string_view operation_id,
                             const Identifier identifier,
                             const Identifier context,
                             const std::span<const Argument> arguments) -> void {
   assert(identifier > 0);
+
+  static const Regex operation_id_regex =
+      to_regex("^[a-zA-Z][a-zA-Z0-9_-]{0,63}$").value();
+
+  if (!matches(operation_id_regex, operation_id)) {
+    throw URITemplateRouterInvalidOperationIdError{operation_id};
+  }
+
+  if (this->operations_.contains(operation_id)) {
+    throw URITemplateRouterDuplicateOperationIdError{operation_id};
+  }
 
   // Walk base path segments to establish the trie prefix
   Node *current = nullptr;
@@ -216,9 +278,15 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       if (existing != this->entries_.end()) {
         *existing = std::make_tuple(identifier, context, uri_template);
       }
+      std::erase_if(this->operations_,
+                    [&previous_identifier](const auto &entry) {
+                      return entry.second.first == previous_identifier;
+                    });
     }
     target.identifier = identifier;
     target.context = context;
+    this->operations_.emplace(
+        operation_id, std::pair<Identifier, Identifier>{identifier, context});
     if (!arguments.empty()) {
       assert(std::ranges::none_of(this->arguments_,
                                   [&identifier](const auto &entry) {
@@ -268,8 +336,16 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       }
 
       NodeType type = NodeType::Variable;
+      bool path_segment_operator = false;
       if (*position == '+') {
         type = NodeType::Expansion;
+        ++position;
+        if (position >= end || *position == '}') {
+          throw URITemplateRouterInvalidSegmentError{"Empty variable name",
+                                                     expression};
+        }
+      } else if (*position == '/') {
+        path_segment_operator = true;
         ++position;
         if (position >= end || *position == '}') {
           throw URITemplateRouterInvalidSegmentError{"Empty variable name",
@@ -307,6 +383,8 @@ auto URITemplateRouter::add(const std::string_view uri_template,
                                                    expression};
       }
 
+      const char *const varname_end = position;
+
       if (*position == ' ') {
         throw URITemplateRouterInvalidSegmentError{
             "Space in variable expression", expression};
@@ -318,8 +396,25 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       }
 
       if (*position == '*') {
+        if (!path_segment_operator) {
+          throw URITemplateRouterInvalidSegmentError{
+              "Explode modifier not supported", expression};
+        }
+        if (varname_end == varname_start) {
+          throw URITemplateRouterInvalidSegmentError{"Empty variable name",
+                                                     expression};
+        }
+        type = NodeType::OptionalExpansion;
+        ++position;
+        if (position >= end || *position != '}') {
+          throw URITemplateRouterInvalidSegmentError{
+              "Unexpected characters after explode modifier", expression};
+        }
+      } else if (path_segment_operator) {
         throw URITemplateRouterInvalidSegmentError{
-            "Explode modifier not supported", expression};
+            "Path-segment expansion without the explode modifier is not "
+            "supported",
+            expression};
       }
 
       if (*position == ',') {
@@ -328,23 +423,26 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       }
 
       const std::string_view varname{
-          varname_start, static_cast<std::size_t>(position - varname_start)};
+          varname_start, static_cast<std::size_t>(varname_end - varname_start)};
 
       ++position; // skip '}'
 
       if (position < end && *position != '/') {
-        throw URITemplateRouterInvalidSegmentError{
-            "Path segment cannot mix literals and variables",
-            extract_segment(expression_start, end)};
+        if (*position != '{' || position + 1 >= end || *(position + 1) != '/') {
+          throw URITemplateRouterInvalidSegmentError{
+              "Path segment cannot mix literals and variables",
+              extract_segment(expression_start, end)};
+        }
       }
 
-      if (type == NodeType::Expansion && position < end) {
+      if (is_expansion_type(type) && position < end) {
         throw URITemplateRouterInvalidSegmentError{
-            "Reserved expansion must be the last segment", expression};
+            "Expansion operator must be the last segment", expression};
       }
 
       auto &variable = current ? current->variable : this->root_.variable;
-      auto *result = find_or_create_variable_child(variable, varname, type);
+      auto *result =
+          find_or_create_variable_child(variable, varname, type, expression);
       if (result == nullptr) {
         absorbed = true;
       } else {
@@ -360,6 +458,14 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       }
 
       if (position < end && *position == '{') {
+        if (position + 1 < end && *(position + 1) == '/') {
+          const std::string_view segment{
+              segment_start,
+              static_cast<std::size_t>(position - segment_start)};
+          auto &literals = current ? current->literals : this->root_.literals;
+          current = &find_or_create_literal_child(literals, segment);
+          continue;
+        }
         const char *expr_end = find_expression_end(position, end);
         const char *seg_end = expr_end;
         while (seg_end < end && *seg_end != '/') {
@@ -397,9 +503,15 @@ auto URITemplateRouter::add(const std::string_view uri_template,
       if (existing != this->entries_.end()) {
         *existing = std::make_tuple(identifier, context, uri_template);
       }
+      std::erase_if(this->operations_,
+                    [&previous_identifier](const auto &entry) {
+                      return entry.second.first == previous_identifier;
+                    });
     }
     current->identifier = identifier;
     current->context = context;
+    this->operations_.emplace(
+        operation_id, std::pair<Identifier, Identifier>{identifier, context});
     if (!arguments.empty()) {
       assert(std::ranges::none_of(this->arguments_,
                                   [&identifier](const auto &entry) {
@@ -484,7 +596,7 @@ auto URITemplateRouter::match(const std::string_view path,
     } else if (*variable_child) {
       assert(variable_index <=
              std::numeric_limits<URITemplateRouter::Index>::max());
-      if ((*variable_child)->type == NodeType::Expansion) {
+      if (is_expansion_type((*variable_child)->type)) {
         const std::string_view remaining{
             segment_start, static_cast<std::size_t>(path_end - segment_start)};
         callback(static_cast<URITemplateRouter::Index>(variable_index),
@@ -510,6 +622,16 @@ auto URITemplateRouter::match(const std::string_view path,
 
     // Skip the slash and continue to next segment
     ++position;
+  }
+
+  if (current && current->identifier == 0 && current->variable &&
+      current->variable->type == NodeType::OptionalExpansion) {
+    assert(variable_index <=
+           std::numeric_limits<URITemplateRouter::Index>::max());
+    callback(static_cast<URITemplateRouter::Index>(variable_index),
+             current->variable->value, std::string_view{});
+    return finalize_match(this->otherwise_, current->variable->identifier,
+                          current->variable->context);
   }
 
   return current ? finalize_match(this->otherwise_, current->identifier,

@@ -13,12 +13,18 @@
 #include <sourcemeta/core/io_temporary.h>
 // NOLINTEND(misc-include-cleaner)
 
-#include <filesystem> // std::filesystem
-#include <fstream>    // std::basic_ifstream
-#include <iostream>   // std::cin
-#include <istream>    // std::basic_istream
-#include <sstream>    // std::basic_ostringstream
-#include <string>     // std::basic_string, std::char_traits, std::string
+#include <cstddef>      // std::byte
+#include <filesystem>   // std::filesystem
+#include <fstream>      // std::basic_ifstream
+#include <functional>   // std::function
+#include <iostream>     // std::cin
+#include <istream>      // std::basic_istream
+#include <ostream>      // std::ostream
+#include <span>         // std::span
+#include <sstream>      // std::basic_ostringstream
+#include <string>       // std::basic_string, std::char_traits, std::string
+#include <string_view>  // std::string_view
+#include <system_error> // std::error_code
 
 /// @defgroup io I/O
 /// @brief A growing collection of I/O utilities
@@ -64,18 +70,35 @@ auto weakly_canonical(const std::filesystem::path &path)
 
 /// @ingroup io
 ///
-/// Check if a file path starts with another path. This function assumes the
-/// paths are canonicalised. For example:
+/// Check whether a path lies under another path, comparing component by
+/// component after weak canonicalisation. For example:
 ///
 /// ```cpp
 /// #include <sourcemeta/core/io.h>
 /// #include <cassert>
 ///
-/// assert(sourcemeta::core::starts_with("/foo/bar", "/foo"));
+/// assert(sourcemeta::core::is_under_path("/foo/bar/baz", "/foo"));
 /// ```
 SOURCEMETA_CORE_IO_EXPORT
-auto starts_with(const std::filesystem::path &path,
-                 const std::filesystem::path &prefix) -> bool;
+auto is_under_path(const std::filesystem::path &path,
+                   const std::filesystem::path &prefix) -> bool;
+
+/// @ingroup io
+///
+/// Return the portion of a path that follows a given prefix, or the path
+/// unchanged if it does not lie under the prefix. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/io.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::strip_path_prefix("/foo/bar/baz", "/foo") ==
+/// "bar/baz");
+/// ```
+SOURCEMETA_CORE_IO_EXPORT
+auto strip_path_prefix(const std::filesystem::path &path,
+                       const std::filesystem::path &prefix)
+    -> std::filesystem::path;
 
 /// @ingroup io
 ///
@@ -168,9 +191,17 @@ auto read_file_to_string(const std::filesystem::path &path)
 
   stream.exceptions(std::basic_ifstream<CharT, Traits>::badbit);
 
+  // `file_size` only works on regular files, so when it cannot determine a
+  // size (FIFOs from process substitution, sockets, pipes, or any other
+  // stat failure) fall back to a streaming read on the already-open stream.
+  std::error_code file_size_error;
+  const auto size{std::filesystem::file_size(canonical_path, file_size_error)};
+  if (file_size_error) {
+    return read_to_string<CharT, Traits>(stream);
+  }
+
   std::basic_string<CharT, Traits> result;
-  result.resize(
-      static_cast<std::size_t>(std::filesystem::file_size(canonical_path)));
+  result.resize(static_cast<std::size_t>(size));
   stream.read(result.data(), static_cast<std::streamsize>(result.size()));
   // Text-mode reads may return fewer characters than the byte count
   // (i.e. CRLF collapses to LF on Windows), so trim to actual.
@@ -204,6 +235,53 @@ inline auto read_stdin() -> std::string { return read_to_string(std::cin); }
 SOURCEMETA_CORE_IO_EXPORT
 auto hardlink_directory(const std::filesystem::path &source,
                         const std::filesystem::path &destination) -> void;
+
+/// @ingroup io
+///
+/// Non-atomically write `contents` to `path`. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/io.h>
+///
+/// sourcemeta::core::write_file("/tmp/foo.json", "{\"a\":1}");
+/// ```
+SOURCEMETA_CORE_IO_EXPORT
+auto write_file(const std::filesystem::path &path,
+                const std::string_view contents) -> void;
+
+/// @ingroup io
+///
+/// Non-atomically write a byte span to `path`. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/io.h>
+/// #include <array>
+///
+/// constexpr std::array<std::byte, 3> bytes{
+///     std::byte{0x41}, std::byte{0x42}, std::byte{0x43}};
+/// sourcemeta::core::write_file("/tmp/foo.bin", std::span{bytes});
+/// ```
+SOURCEMETA_CORE_IO_EXPORT
+auto write_file(const std::filesystem::path &path,
+                const std::span<const std::byte> contents) -> void;
+
+/// @ingroup io
+///
+/// Callback variant of `write_file`. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/io.h>
+/// #include <sourcemeta/core/json.h>
+///
+/// sourcemeta::core::write_file("/tmp/foo.json",
+///     [&](std::ostream &stream) {
+///       sourcemeta::core::prettify(document, stream);
+///       stream << "\n";
+///     });
+/// ```
+SOURCEMETA_CORE_IO_EXPORT
+auto write_file(const std::filesystem::path &path,
+                const std::function<void(std::ostream &)> &writer) -> void;
 
 /// @ingroup io
 ///
