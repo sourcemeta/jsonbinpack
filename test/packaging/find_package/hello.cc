@@ -1,8 +1,8 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
+#include <sourcemeta/blaze/foundation.h>
 #include <sourcemeta/core/json.h>
-#include <sourcemeta/core/jsonschema.h>
 
 #include <cstdlib>  // EXIT_SUCCESS
 #include <iostream> // std::cout
@@ -15,8 +15,8 @@ auto main() -> int {
     "maximum": 100
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
-                                   sourcemeta::core::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
+                                   sourcemeta::blaze::schema_resolver);
 
   const sourcemeta::jsonbinpack::Encoding encoding{
       sourcemeta::jsonbinpack::load(schema)};

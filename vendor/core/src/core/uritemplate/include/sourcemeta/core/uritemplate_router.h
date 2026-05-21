@@ -5,18 +5,21 @@
 #include <sourcemeta/core/uritemplate_export.h>
 #endif
 
+#include <sourcemeta/core/io.h>
+
 #include <cstddef> // std::size_t
 #include <cstdint> // std::uint16_t, std::uint32_t, std::uint8_t, std::int64_t
-#include <filesystem>  // std::filesystem::path
-#include <functional>  // std::function
-#include <memory>      // std::unique_ptr
-#include <span>        // std::span
-#include <string>      // std::string
-#include <string_view> // std::string_view
-#include <tuple>       // std::tuple
-#include <utility>     // std::pair
-#include <variant>     // std::variant
-#include <vector>      // std::vector
+#include <filesystem>    // std::filesystem::path
+#include <functional>    // std::function
+#include <memory>        // std::unique_ptr
+#include <span>          // std::span
+#include <string>        // std::string
+#include <string_view>   // std::string_view
+#include <tuple>         // std::tuple
+#include <unordered_map> // std::unordered_map
+#include <utility>       // std::pair
+#include <variant>       // std::variant
+#include <vector>        // std::vector
 
 namespace sourcemeta::core {
 
@@ -27,8 +30,18 @@ namespace sourcemeta::core {
 
 /// @ingroup uritemplate
 /// A URI Template path router. Keep in mind that the URI Template specification
-/// DOES NOT define expansion. So this is an opinionated non-standard adaptation
-/// of URI Template for path routing purposes
+/// DOES NOT define matching, only expansion. So this is an opinionated
+/// non-standard adaptation of URI Template for path routing purposes. The
+/// supported operators are:
+///
+/// - `{var}` for a single path segment (RFC 6570 Level 1 simple expansion)
+/// - `{+var}` for greedy capture to the end of the path, requiring at least
+///   one trailing segment (RFC 6570 Level 2 reserved expansion)
+/// - `{/var*}` for optional greedy capture to the end of the path, where
+///   zero trailing segments are also allowed (RFC 6570 Level 3 path-segment
+///   operator with Level 4 explode modifier). Must be the last component of
+///   the template. The captured value is empty when no trailing segments
+///   are present
 class SOURCEMETA_CORE_URITEMPLATE_EXPORT URITemplateRouter {
   friend class URITemplateRouterView;
 
@@ -53,7 +66,8 @@ public:
     Root = 0,
     Literal = 1,
     Variable = 2,
-    Expansion = 3
+    Expansion = 3,
+    OptionalExpansion = 4
   };
 
   /// A node in the router trie
@@ -74,8 +88,11 @@ public:
   URITemplateRouter() = default;
 
   /// Construct a router with a base path prefix. During matching, the base
-  /// path is stripped from incoming request paths before matching
-  explicit URITemplateRouter(std::string_view base_path);
+  /// path is stripped from incoming request paths before matching. An optional
+  /// base URL can be associated with the router as opaque metadata, never used
+  /// for matching
+  explicit URITemplateRouter(std::string_view base_path,
+                             std::string_view base_url = {});
 
   // To avoid mistakes
   URITemplateRouter(const URITemplateRouter &) = delete;
@@ -84,8 +101,11 @@ public:
   auto operator=(URITemplateRouter &&) -> URITemplateRouter & = delete;
 
   /// Add a route to the router. Make sure the string lifetime survives the
-  /// router
-  auto add(const std::string_view uri_template, const Identifier identifier,
+  /// router. The operation identifier must match the regular expression
+  /// `^[a-zA-Z][a-zA-Z0-9_-]{0,63}$` and must be unique across all routes
+  /// registered on this router
+  auto add(const std::string_view uri_template,
+           const std::string_view operation_id, const Identifier identifier,
            const Identifier context = 0,
            const std::span<const Argument> arguments = {}) -> void;
 
@@ -114,6 +134,9 @@ public:
   /// Access the base path prefix
   [[nodiscard]] auto base_path() const noexcept -> std::string_view;
 
+  /// Access the base URL associated with the router
+  [[nodiscard]] auto base_url() const noexcept -> std::string_view;
+
   /// Get the number of registered routes
   [[nodiscard]] auto size() const noexcept -> std::size_t;
 
@@ -128,12 +151,26 @@ public:
   /// for the given identifier
   [[nodiscard]] auto path(const Identifier identifier) const -> std::string;
 
+  /// Resolve an operation identifier to its registered route. Returns
+  /// `(identifier, context)` on hit and `(0, 0)` if no route is registered
+  /// under the given operation identifier
+  [[nodiscard]] auto operation(const std::string_view operation_id) const
+      -> std::pair<Identifier, Identifier>;
+
+  /// Get the operation identifier associated with a registered route
+  /// identifier
+  [[nodiscard]] auto operation_id(const Identifier identifier) const
+      -> std::string_view;
+
 private:
   Node root_;
   Node otherwise_;
   std::string base_path_;
+  std::string base_url_;
   std::vector<std::pair<Identifier, std::vector<Argument>>> arguments_;
   std::vector<std::tuple<Identifier, Identifier, std::string_view>> entries_;
+  std::unordered_map<std::string_view, std::pair<Identifier, Identifier>>
+      operations_;
 };
 
 /// @ingroup uritemplate
@@ -145,7 +182,12 @@ public:
                    const std::filesystem::path &path) -> void;
 
   URITemplateRouterView(const std::filesystem::path &path);
+
+  /// Construct a view over an externally-owned buffer. The buffer must
+  /// outlive the view
   URITemplateRouterView(const std::uint8_t *data, std::size_t size);
+
+  ~URITemplateRouterView();
 
   // To avoid mistakes
   URITemplateRouterView(const URITemplateRouterView &) = delete;
@@ -169,8 +211,18 @@ public:
   /// Access the base path prefix
   [[nodiscard]] auto base_path() const noexcept -> std::string_view;
 
+  /// Access the base URL associated with the router
+  [[nodiscard]] auto base_url() const noexcept -> std::string_view;
+
   /// Get the number of registered routes
   [[nodiscard]] auto size() const noexcept -> std::size_t;
+
+  /// Resolve an operation identifier to its registered route. Returns
+  /// `(identifier, context)` on hit and `(0, 0)` if no route is registered
+  /// under the given operation identifier
+  [[nodiscard]] auto operation(const std::string_view operation_id) const
+      -> std::pair<URITemplateRouter::Identifier,
+                   URITemplateRouter::Identifier>;
 
   /// Get the identifier of the route at the given positional index
   [[nodiscard]] auto at(const std::size_t index) const
@@ -187,8 +239,16 @@ public:
   [[nodiscard]] auto path(const URITemplateRouter::Identifier identifier) const
       -> std::string;
 
+  /// Get the operation identifier associated with a registered route
+  /// identifier
+  [[nodiscard]] auto
+  operation_id(const URITemplateRouter::Identifier identifier) const
+      -> std::string_view;
+
 private:
-  std::vector<std::uint8_t> data_;
+  const std::uint8_t *data_{nullptr};
+  std::size_t size_{0};
+  std::unique_ptr<FileView> owner_;
 };
 
 #if defined(_MSC_VER)

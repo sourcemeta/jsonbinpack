@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <sourcemeta/blaze/foundation.h>
 #include <sourcemeta/core/json.h>
-#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
 #include <optional> // std::optional
@@ -15,7 +15,7 @@ static auto test_resolver(std::string_view identifier)
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON");
   } else {
-    return sourcemeta::core::schema_resolver(identifier);
+    return sourcemeta::blaze::schema_resolver(identifier);
   }
 }
 
@@ -26,8 +26,8 @@ TEST(JSONBinPack_Canonicalizer, unsupported_draft) {
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::core::schema_walker, test_resolver),
-               sourcemeta::core::SchemaUnknownBaseDialectError);
+                   schema, sourcemeta::blaze::schema_walker, test_resolver),
+               sourcemeta::blaze::SchemaUnknownBaseDialectError);
 }
 
 TEST(JSONBinPack_Canonicalizer, unknown_draft) {
@@ -36,7 +36,7 @@ TEST(JSONBinPack_Canonicalizer, unknown_draft) {
   })JSON");
 
   EXPECT_THROW(sourcemeta::jsonbinpack::canonicalize(
-                   schema, sourcemeta::core::schema_walker, test_resolver,
+                   schema, sourcemeta::blaze::schema_walker, test_resolver,
                    "https://example.com/invalid"),
-               sourcemeta::core::SchemaResolutionError);
+               sourcemeta::blaze::SchemaResolutionError);
 }
