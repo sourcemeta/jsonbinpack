@@ -1,6 +1,7 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
+#include <sourcemeta/blaze/format.h>
 #include <sourcemeta/blaze/foundation.h>
 #include <sourcemeta/core/json.h>
 
