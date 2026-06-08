@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
-
-#include "decode_utils.h"
-
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
@@ -10,7 +8,7 @@
 #include <vector>
 
 TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
-  InputByteStream stream{0x00};
+  sourcemeta::core::InputByteStream stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(1);
@@ -22,7 +20,7 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__1_0_0) {
 }
 
 TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
-  InputByteStream stream{0x01};
+  sourcemeta::core::InputByteStream stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -34,7 +32,7 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_1_0) {
 }
 
 TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
-  InputByteStream stream{0x02};
+  sourcemeta::core::InputByteStream stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -46,7 +44,7 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_1__0_0_1) {
 }
 
 TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
-  InputByteStream stream{0x01};
+  sourcemeta::core::InputByteStream stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back("foo");
@@ -58,7 +56,7 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 }
 
 TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
-  InputByteStream stream{0x03};
+  sourcemeta::core::InputByteStream stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
@@ -72,7 +70,7 @@ TEST(JSONBinPack_Decoder, BYTE_CHOICE_INDEX_non_scalar_1) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
-  InputByteStream stream{0x00};
+  sourcemeta::core::InputByteStream stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(1);
@@ -84,7 +82,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__1_0_0) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
-  InputByteStream stream{0x01};
+  sourcemeta::core::InputByteStream stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -96,7 +94,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_1_0) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
-  InputByteStream stream{0x02};
+  sourcemeta::core::InputByteStream stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -108,7 +106,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_1__0_0_1) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
-  InputByteStream stream{0x01};
+  sourcemeta::core::InputByteStream stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back("foo");
@@ -120,7 +118,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
-  InputByteStream stream{0x03};
+  sourcemeta::core::InputByteStream stream{0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
@@ -134,7 +132,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_non_scalar_1) {
 }
 
 TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_enum_250) {
-  InputByteStream stream{0xfa, 0x01};
+  sourcemeta::core::InputByteStream stream{0xfa, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -148,7 +146,7 @@ TEST(JSONBinPack_Decoder, LARGE_CHOICE_INDEX_enum_250) {
 }
 
 TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
-  InputByteStream stream{};
+  sourcemeta::core::InputByteStream stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(1);
@@ -160,7 +158,7 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
 }
 
 TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
-  InputByteStream stream{0x00};
+  sourcemeta::core::InputByteStream stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -172,7 +170,7 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
 }
 
 TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
-  InputByteStream stream{0x01};
+  sourcemeta::core::InputByteStream stream{0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back(0);
@@ -184,7 +182,7 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
 }
 
 TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
-  InputByteStream stream{0x00};
+  sourcemeta::core::InputByteStream stream{0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.emplace_back("foo");
@@ -196,7 +194,7 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
 }
 
 TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
-  InputByteStream stream{0x02};
+  sourcemeta::core::InputByteStream stream{0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
   choices.push_back(sourcemeta::core::parse_json("{ \"foo\": 2 }"));
@@ -210,7 +208,7 @@ TEST(JSONBinPack_Decoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
 }
 
 TEST(JSONBinPack_Decoder, CONST_NONE_scalar) {
-  InputByteStream stream{};
+  sourcemeta::core::InputByteStream stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.CONST_NONE({sourcemeta::core::JSON{1}});
   const sourcemeta::core::JSON expected{1};
@@ -218,7 +216,7 @@ TEST(JSONBinPack_Decoder, CONST_NONE_scalar) {
 }
 
 TEST(JSONBinPack_Decoder, CONST_NONE_complex) {
-  InputByteStream stream{};
+  sourcemeta::core::InputByteStream stream{};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result =
       decoder.CONST_NONE({sourcemeta::core::parse_json("{ \"foo\": 1 }")});
@@ -228,7 +226,7 @@ TEST(JSONBinPack_Decoder, CONST_NONE_complex) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x17};
+  sourcemeta::core::InputByteStream stream{0x17};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{nullptr};
@@ -237,7 +235,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x07};
+  sourcemeta::core::InputByteStream stream{0x07};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{false};
@@ -246,7 +244,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x0f};
+  sourcemeta::core::InputByteStream stream{0x0f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{true};
@@ -255,7 +253,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x2f, 0xf4, 0x04, 0x02};
+  sourcemeta::core::InputByteStream stream{0x2f, 0xf4, 0x04, 0x02};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{3.14};
@@ -264,7 +262,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x37, 0x03};
+  sourcemeta::core::InputByteStream stream{0x37, 0x03};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   EXPECT_TRUE(result.is_real());
@@ -277,7 +275,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x37, 0x67};
+  sourcemeta::core::InputByteStream stream{0x37, 0x67};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   EXPECT_TRUE(result.is_real());
@@ -290,7 +288,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x1f, 0x80, 0x02};
+  sourcemeta::core::InputByteStream stream{0x1f, 0x80, 0x02};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{256};
@@ -299,7 +297,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x27, 0x80, 0x02};
+  sourcemeta::core::InputByteStream stream{0x27, 0x80, 0x02};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{-257};
@@ -308,7 +306,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x05, 0xff};
+  sourcemeta::core::InputByteStream stream{0x05, 0xff};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{255};
@@ -317,7 +315,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x06, 0xff};
+  sourcemeta::core::InputByteStream stream{0x06, 0xff};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{-256};
@@ -326,7 +324,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x0d};
+  sourcemeta::core::InputByteStream stream{0x0d};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{0};
@@ -335,7 +333,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x0e};
+  sourcemeta::core::InputByteStream stream{0x0e};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{-1};
@@ -344,7 +342,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x11, 0x20};
+  sourcemeta::core::InputByteStream stream{0x11, 0x20};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{" "};
@@ -353,7 +351,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x21, 0x66, 0x6f, 0x6f};
+  sourcemeta::core::InputByteStream stream{0x21, 0x66, 0x6f, 0x6f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{"foo"};
@@ -362,10 +360,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0xf9, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
+  sourcemeta::core::InputByteStream stream{
+      0xf9, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{std::string(30, 'x')};
@@ -374,7 +372,8 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x21, 0x66, 0x6f, 0x6f, 0x20, 0x04, 0x20, 0x06};
+  sourcemeta::core::InputByteStream stream{0x21, 0x66, 0x6f, 0x6f,
+                                           0x20, 0x04, 0x20, 0x06};
   Decoder decoder{stream};
   const sourcemeta::core::JSON result1 =
       decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
@@ -392,10 +391,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
+  sourcemeta::core::InputByteStream stream{
+      0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{std::string(31, 'x')};
@@ -404,13 +403,13 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0xf2, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
-                         0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
+  sourcemeta::core::InputByteStream stream{
+      0xf2, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
+      0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{std::string(61, 'x')};
@@ -419,10 +418,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x22, 0x68, 0x74, 0x74, 0x70, 0x73, 0x3a, 0x2f, 0x2f,
-                         0x73, 0x6f, 0x75, 0x6e, 0x64, 0x63, 0x6c, 0x6f, 0x75,
-                         0x64, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x64, 0x61, 0x6e,
-                         0x64, 0x79, 0x6d, 0x75, 0x73, 0x69, 0x63, 0x6e, 0x6c};
+  sourcemeta::core::InputByteStream stream{
+      0x22, 0x68, 0x74, 0x74, 0x70, 0x73, 0x3a, 0x2f, 0x2f, 0x73, 0x6f, 0x75,
+      0x6e, 0x64, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+      0x64, 0x61, 0x6e, 0x64, 0x79, 0x6d, 0x75, 0x73, 0x69, 0x63, 0x6e, 0x6c};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   const sourcemeta::core::JSON expected{"https://soundcloud.com/dandymusicnl"};
@@ -431,7 +430,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x3f, 0x00, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -451,7 +450,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x3f, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -471,7 +470,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x47, 0x00, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -505,7 +504,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x47, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -539,7 +538,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x4f, 0x00,
 
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -601,7 +600,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x4f, 0x01,
 
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -664,7 +663,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x57, 0x00,
 
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -778,7 +777,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
 TEST(JSONBinPack_Decoder,
      ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x01, 0x01, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -794,7 +793,7 @@ TEST(JSONBinPack_Decoder,
 TEST(JSONBinPack_Decoder,
      ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x01, 0x02, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
@@ -809,7 +808,8 @@ TEST(JSONBinPack_Decoder,
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x24, 0x21, 0x66, 0x6f, 0x6f, 0x0f, 0x1f, 0xd0, 0x0f};
+  sourcemeta::core::InputByteStream stream{0x24, 0x21, 0x66, 0x6f, 0x6f,
+                                           0x0f, 0x1f, 0xd0, 0x0f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
 
@@ -823,10 +823,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0xfc, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  sourcemeta::core::InputByteStream stream{
+      0xfc, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
 
@@ -870,10 +870,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x04, 0x00, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  sourcemeta::core::InputByteStream stream{
+      0x04, 0x00, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
 
@@ -919,10 +919,10 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x04, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
-                         0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
+  sourcemeta::core::InputByteStream stream{
+      0x04, 0x01, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
+      0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
 
@@ -970,8 +970,9 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
 TEST(JSONBinPack_Decoder,
      ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x21, 0x62,
-                         0x61, 0x72, 0x04, 0x62, 0x61, 0x7a, 0x15};
+  sourcemeta::core::InputByteStream stream{0x1b, 0x04, 0x66, 0x6f, 0x6f,
+                                           0x21, 0x62, 0x61, 0x72, 0x04,
+                                           0x62, 0x61, 0x7a, 0x15};
   Decoder decoder{stream};
   const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
   EXPECT_TRUE(result.is_object());
@@ -996,7 +997,7 @@ static auto is_member_true(const sourcemeta::core::JSON &object,
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0xfb, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
       0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03,
       0x30, 0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f,
@@ -1049,7 +1050,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x03, 0x00, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
       0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03, 0x30,
       0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f, 0x03, 0x30,
@@ -1104,7 +1105,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x03, 0x01, 0x03, 0x30, 0x30, 0x0f, 0x03, 0x30, 0x31, 0x0f, 0x03, 0x30,
       0x32, 0x0f, 0x03, 0x30, 0x33, 0x0f, 0x03, 0x30, 0x34, 0x0f, 0x03, 0x30,
       0x35, 0x0f, 0x03, 0x30, 0x36, 0x0f, 0x03, 0x30, 0x37, 0x0f, 0x03, 0x30,
@@ -1161,7 +1162,7 @@ TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
 TEST(JSONBinPack_Decoder,
      ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x1b, 0x04, 0x66, 0x6f, 0x6f, 0x01, 0x01, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,
       0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78,

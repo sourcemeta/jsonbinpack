@@ -1,13 +1,11 @@
 #include <gtest/gtest.h>
-
-#include "decode_utils.h"
-
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x00};
+  sourcemeta::core::InputByteStream stream{0x00};
   Decoder decoder{stream};
   BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{-5, -1, 1};
   const auto result = decoder.read(options);
@@ -17,7 +15,7 @@ TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
 
 TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x15, 0x1d, 0x25};
+  sourcemeta::core::InputByteStream stream{0x15, 0x1d, 0x25};
   Decoder decoder{stream};
   ANY_PACKED_TYPE_TAG_BYTE_PREFIX options;
   const auto result_1 = decoder.read(options);

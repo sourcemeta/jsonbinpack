@@ -5,7 +5,9 @@
 #include <sourcemeta/core/text_export.h>
 #endif
 
+#include <concepts>    // std::same_as
 #include <cstddef>     // std::size_t
+#include <filesystem>  // std::filesystem::path
 #include <optional>    // std::optional
 #include <ostream>     // std::ostream
 #include <string>      // std::string
@@ -41,7 +43,7 @@ auto to_title_case(std::string &value) -> void;
 
 /// @ingroup text
 ///
-/// Return the ASCII lowercase form of a character. Non-ASCII bytes pass
+/// Return the ASCII lowercase form of a character. Non-ASCII code units pass
 /// through unchanged. For example:
 ///
 /// ```cpp
@@ -52,8 +54,120 @@ auto to_title_case(std::string &value) -> void;
 /// assert(sourcemeta::core::to_lowercase('a') == 'a');
 /// assert(sourcemeta::core::to_lowercase('5') == '5');
 /// ```
+template <typename Character>
+  requires std::same_as<Character, char> ||
+           std::same_as<Character, signed char> ||
+           std::same_as<Character, unsigned char> ||
+           std::same_as<Character, wchar_t>
+inline constexpr auto to_lowercase(const Character character) noexcept
+    -> Character {
+  return (character >= 'A' && character <= 'Z')
+             ? static_cast<Character>(character + ('a' - 'A'))
+             : character;
+}
+
+/// @ingroup text
+///
+/// Convert a string to ASCII lowercase in place. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+/// #include <string>
+///
+/// std::string value{"Hello WORLD"};
+/// sourcemeta::core::to_lowercase(value);
+/// assert(value == "hello world");
+/// ```
+template <typename Character, typename Traits, typename Allocator>
+  requires requires(Character character) {
+    { to_lowercase(character) } -> std::same_as<Character>;
+  }
+inline auto to_lowercase(std::basic_string<Character, Traits, Allocator> &value)
+    -> void {
+  for (auto &character : value) {
+    character = to_lowercase(character);
+  }
+}
+
+/// @ingroup text
+///
+/// Convert a filesystem path to ASCII lowercase in place. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+/// #include <filesystem>
+///
+/// std::filesystem::path value{"/Foo/Bar.JSON"};
+/// sourcemeta::core::to_lowercase(value);
+/// assert(value == std::filesystem::path{"/foo/bar.json"});
+/// ```
 SOURCEMETA_CORE_TEXT_EXPORT
-auto to_lowercase(const char character) noexcept -> char;
+auto to_lowercase(std::filesystem::path &value) -> void;
+
+/// @ingroup text
+///
+/// Return whether a character is not ASCII uppercase. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::is_lowercase('a'));
+/// assert(!sourcemeta::core::is_lowercase('A'));
+/// assert(sourcemeta::core::is_lowercase('5'));
+/// ```
+template <typename Character>
+  requires std::same_as<Character, char> ||
+           std::same_as<Character, signed char> ||
+           std::same_as<Character, unsigned char> ||
+           std::same_as<Character, wchar_t>
+inline constexpr auto is_lowercase(const Character character) noexcept -> bool {
+  return character < 'A' || character > 'Z';
+}
+
+/// @ingroup text
+///
+/// Return whether every code unit of a string is not ASCII uppercase. For
+/// example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+/// #include <string>
+///
+/// assert(sourcemeta::core::is_lowercase(std::string{"hello"}));
+/// assert(!sourcemeta::core::is_lowercase(std::string{"Hello"}));
+/// ```
+template <typename String>
+  requires requires(const String &value) {
+    { is_lowercase(*value.begin()) } -> std::same_as<bool>;
+  }
+inline auto is_lowercase(const String &value) noexcept -> bool {
+  for (const auto character : value) {
+    if (!is_lowercase(character)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/// @ingroup text
+///
+/// Return whether every code unit of a filesystem path is not ASCII
+/// uppercase. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+/// #include <filesystem>
+///
+/// assert(sourcemeta::core::is_lowercase(std::filesystem::path{"/foo/bar"}));
+/// assert(!sourcemeta::core::is_lowercase(std::filesystem::path{"/Foo/Bar"}));
+/// ```
+SOURCEMETA_CORE_TEXT_EXPORT
+auto is_lowercase(const std::filesystem::path &value) noexcept -> bool;
 
 /// @ingroup text
 ///
