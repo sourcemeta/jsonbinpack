@@ -3,9 +3,12 @@
 
 #include <sourcemeta/blaze/evaluator.h>
 
+#include <sourcemeta/core/crypto.h>
+#include <sourcemeta/core/css.h>
 #include <sourcemeta/core/dns.h>
 #include <sourcemeta/core/email.h>
 #include <sourcemeta/core/ip.h>
+#include <sourcemeta/core/regex.h>
 #include <sourcemeta/core/time.h>
 #include <sourcemeta/core/uritemplate.h>
 
@@ -879,8 +882,17 @@ INSTRUCTION_HANDLER(AssertionStringType) {
     case ValueStringType::URITemplate:
       result = URITemplate::is_uritemplate(target);
       break;
+    case ValueStringType::IRI:
+      result = URI::is_iri(target);
+      break;
+    case ValueStringType::IRIReference:
+      result = URI::is_iri_reference(target);
+      break;
     case ValueStringType::Email:
       result = is_email(target);
+      break;
+    case ValueStringType::IDNEmail:
+      result = is_idn_email(target);
       break;
     case ValueStringType::IPv4:
       result = is_ipv4(target);
@@ -891,11 +903,38 @@ INSTRUCTION_HANDLER(AssertionStringType) {
     case ValueStringType::Hostname:
       result = is_hostname(target);
       break;
+    case ValueStringType::IDNHostname:
+      result = is_idn_hostname(target);
+      break;
     case ValueStringType::DateTime:
       result = is_rfc3339_datetime(target);
       break;
+    case ValueStringType::Date:
+      result = is_rfc3339_fulldate(target);
+      break;
+    case ValueStringType::Time:
+      result = is_rfc3339_fulltime(target);
+      break;
+    case ValueStringType::PartialTime:
+      result = is_rfc3339_partialtime_no_secfrac(target);
+      break;
+    case ValueStringType::Duration:
+      result = is_rfc3339_duration(target);
+      break;
     case ValueStringType::JSONPointer:
       result = is_pointer(target);
+      break;
+    case ValueStringType::RelativeJSONPointer:
+      result = is_relative_pointer(target);
+      break;
+    case ValueStringType::UUID:
+      result = is_uuid_like(target);
+      break;
+    case ValueStringType::Regex:
+      result = is_regex_ecma(target);
+      break;
+    case ValueStringType::Color:
+      result = is_css2_color(target);
       break;
     default:
       std::unreachable();

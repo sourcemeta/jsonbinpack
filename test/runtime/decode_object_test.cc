@@ -1,15 +1,13 @@
 #include <gtest/gtest.h>
-
-#include "decode_utils.h"
-
 #include <sourcemeta/jsonbinpack/runtime.h>
 
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
 
 TEST(JSONBinPack_Decoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x66, 0x6f, 0x6f, // "foo"
       0x01,             // 1
       0x62, 0x61, 0x72, // "bar"
@@ -35,7 +33,7 @@ TEST(JSONBinPack_Decoder,
 TEST(JSONBinPack_Decoder,
      VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{
+  sourcemeta::core::InputByteStream stream{
       0x02,             // length 2
       0x66, 0x6f, 0x6f, // "foo"
       0x01,             // 1

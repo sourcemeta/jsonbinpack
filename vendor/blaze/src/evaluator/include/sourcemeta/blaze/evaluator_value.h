@@ -124,12 +124,24 @@ enum class ValueStringType : std::uint8_t {
   URI,
   URIReference,
   URITemplate,
+  IRI,
+  IRIReference,
   Email,
+  IDNEmail,
   IPv4,
   IPv6,
   Hostname,
+  IDNHostname,
   DateTime,
-  JSONPointer
+  Date,
+  Time,
+  PartialTime,
+  Duration,
+  JSONPointer,
+  RelativeJSONPointer,
+  UUID,
+  Regex,
+  Color
 };
 
 /// @ingroup evaluator

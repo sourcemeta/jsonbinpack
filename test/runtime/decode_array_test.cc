@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
-
-#include "decode_utils.h"
-
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
@@ -9,7 +7,7 @@
 
 TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x00, 0x01, 0x02};
+  sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x02};
   Decoder decoder{stream};
   const auto result = decoder.FIXED_TYPED_ARRAY(
       {3,
@@ -21,7 +19,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
 
 TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x00, 0x01, 0x01};
+  sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -42,7 +40,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
 
 TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{};
+  sourcemeta::core::InputByteStream stream{};
   Decoder decoder{stream};
   const auto result = decoder.FIXED_TYPED_ARRAY(
       {0,
@@ -55,7 +53,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
 TEST(JSONBinPack_Decoder,
      BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x00, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -75,7 +73,7 @@ TEST(JSONBinPack_Decoder,
 TEST(JSONBinPack_Decoder,
      BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x00, 0x01, 0x00, 0x01};
+  sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -94,7 +92,7 @@ TEST(JSONBinPack_Decoder,
 
 TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x02, 0x01, 0x00, 0x05};
+  sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -113,7 +111,8 @@ TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
 
 TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
+                                           0x6f, 0x6f, 0xfa, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -134,7 +133,7 @@ TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
 TEST(JSONBinPack_Decoder,
      FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x00, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -152,7 +151,7 @@ TEST(JSONBinPack_Decoder,
 
 TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x02, 0x01, 0x00, 0x05};
+  sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -170,7 +169,8 @@ TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
 
 TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
+                                           0x6f, 0x6f, 0xfa, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -190,7 +190,7 @@ TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_complex) {
 TEST(JSONBinPack_Decoder,
      ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x00, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -208,7 +208,7 @@ TEST(JSONBinPack_Decoder,
 
 TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x02, 0x01, 0x00, 0x05};
+  sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
@@ -226,7 +226,8 @@ TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
 
 TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
-  InputByteStream stream{0x03, 0x01, 0x01, 0x66, 0x6f, 0x6f, 0xfa, 0x01};
+  sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
+                                           0x6f, 0x6f, 0xfa, 0x01};
   Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;

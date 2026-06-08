@@ -1,17 +1,17 @@
+#include <cstddef> // std::byte
 #include <gtest/gtest.h>
+#include <vector> // std::vector
 
 #include <sourcemeta/jsonbinpack/runtime.h>
 
+#include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
-
-#include "encode_utils.h"
-
 TEST(JSONBinPack_Encoder,
      FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");
-  OutputByteStream stream{};
+  sourcemeta::core::OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARBITRARY_OBJECT(
@@ -21,19 +21,17 @@ TEST(JSONBinPack_Encoder,
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {
-    EXPECT_BYTES(stream, {
-                             0x66, 0x6f, 0x6f, // "foo"
-                             0x01,             // 1
-                             0x62, 0x61, 0x72, // "bar"
-                             0x02              // 2
-                         });
+    EXPECT_EQ(stream.bytes(),
+              (std::vector<std::byte>{std::byte{0x66}, std::byte{0x6f},
+                                      std::byte{0x6f}, std::byte{0x01},
+                                      std::byte{0x62}, std::byte{0x61},
+                                      std::byte{0x72}, std::byte{0x02}}));
   } else {
-    EXPECT_BYTES(stream, {
-                             0x62, 0x61, 0x72, // "bar"
-                             0x02,             // 2
-                             0x66, 0x6f, 0x6f, // "foo"
-                             0x01              // 1
-                         });
+    EXPECT_EQ(stream.bytes(),
+              (std::vector<std::byte>{std::byte{0x62}, std::byte{0x61},
+                                      std::byte{0x72}, std::byte{0x02},
+                                      std::byte{0x66}, std::byte{0x6f},
+                                      std::byte{0x6f}, std::byte{0x01}}));
   }
 }
 
@@ -42,7 +40,7 @@ TEST(JSONBinPack_Encoder,
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");
-  OutputByteStream stream{};
+  sourcemeta::core::OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.VARINT_TYPED_ARBITRARY_OBJECT(
@@ -52,20 +50,16 @@ TEST(JSONBinPack_Encoder,
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {
-    EXPECT_BYTES(stream, {
-                             0x02,             // length 2
-                             0x66, 0x6f, 0x6f, // "foo"
-                             0x01,             // 1
-                             0x62, 0x61, 0x72, // "bar"
-                             0x02              // 2
-                         });
+    EXPECT_EQ(stream.bytes(),
+              (std::vector<std::byte>{
+                  std::byte{0x02}, std::byte{0x66}, std::byte{0x6f},
+                  std::byte{0x6f}, std::byte{0x01}, std::byte{0x62},
+                  std::byte{0x61}, std::byte{0x72}, std::byte{0x02}}));
   } else {
-    EXPECT_BYTES(stream, {
-                             0x02,             // length 2
-                             0x62, 0x61, 0x72, // "bar"
-                             0x02,             // 2
-                             0x66, 0x6f, 0x6f, // "foo"
-                             0x01              // 1
-                         });
+    EXPECT_EQ(stream.bytes(),
+              (std::vector<std::byte>{
+                  std::byte{0x02}, std::byte{0x62}, std::byte{0x61},
+                  std::byte{0x72}, std::byte{0x02}, std::byte{0x66},
+                  std::byte{0x6f}, std::byte{0x6f}, std::byte{0x01}}));
   }
 }
