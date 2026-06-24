@@ -13,6 +13,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT blaze NAME alterschema
     canonicalizer/deprecated_false_drop.h
     canonicalizer/draft3_type_any.h
     canonicalizer/disallow_array_to_extends.h
+    canonicalizer/disallow_double_negation.h
     canonicalizer/disallow_extends_to_type.h
     canonicalizer/disallow_to_array_of_schemas.h
     canonicalizer/disallow_type_union_to_extends.h
@@ -26,6 +27,7 @@ sourcemeta_library(NAMESPACE sourcemeta PROJECT blaze NAME alterschema
     canonicalizer/empty_disallow_drop.h
     canonicalizer/enum_drop_redundant_validation.h
     canonicalizer/enum_filter_by_type.h
+    canonicalizer/enum_split_by_type.h
     canonicalizer/exclusive_maximum_boolean_integer_fold.h
     canonicalizer/exclusive_maximum_integer_to_maximum.h
     canonicalizer/exclusive_minimum_boolean_integer_fold.h
