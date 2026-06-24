@@ -119,6 +119,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "canonicalizer/dependent_schemas_to_any_of.h"
 #include "canonicalizer/deprecated_false_drop.h"
 #include "canonicalizer/disallow_array_to_extends.h"
+#include "canonicalizer/disallow_double_negation.h"
 #include "canonicalizer/disallow_extends_to_type.h"
 #include "canonicalizer/disallow_to_array_of_schemas.h"
 #include "canonicalizer/disallow_type_union_to_extends.h"
@@ -133,6 +134,7 @@ auto WALK_UP_IN_PLACE_APPLICATORS(const JSON &root, const SchemaFrame &frame,
 #include "canonicalizer/empty_disallow_drop.h"
 #include "canonicalizer/enum_drop_redundant_validation.h"
 #include "canonicalizer/enum_filter_by_type.h"
+#include "canonicalizer/enum_split_by_type.h"
 #include "canonicalizer/exclusive_maximum_boolean_integer_fold.h"
 #include "canonicalizer/exclusive_maximum_integer_to_maximum.h"
 #include "canonicalizer/exclusive_minimum_boolean_integer_fold.h"
@@ -524,6 +526,7 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<DependentSchemasToAnyOf>();
     bundle.add<DependentRequiredToAnyOf>();
     bundle.add<EnumDropRedundantValidation>();
+    bundle.add<EnumSplitByType>();
     bundle.add<TypeWithApplicatorToAllOf>();
     bundle.add<TypeWithApplicatorToExtends>();
     bundle.add<EmptyDefinitionsDrop>();
@@ -539,6 +542,7 @@ auto add(SchemaTransformer &bundle, const AlterSchemaMode mode) -> void {
     bundle.add<DisallowArrayToExtends>();
     bundle.add<DisallowExtendsToType>();
     bundle.add<DisallowTypeUnionToExtends>();
+    bundle.add<DisallowDoubleNegation>();
     bundle.add<RequiredToExtends>();
     bundle.add<SingleBranchAllOf>();
     bundle.add<SingleBranchAnyOf>();
