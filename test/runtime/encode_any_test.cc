@@ -1,15 +1,14 @@
-#include <gtest/gtest.h>
-
 #include <algorithm> // std::equal
 #include <cstddef>   // std::byte
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <string>
 #include <utility>
 #include <vector>
 
-TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -21,7 +20,7 @@ TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
-TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -33,7 +32,7 @@ TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -45,7 +44,7 @@ TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::core::JSON document{"bar"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -57,7 +56,7 @@ TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{ \"foo\": 1 }");
   sourcemeta::core::OutputByteStream stream{};
@@ -74,7 +73,7 @@ TEST(JSONBinPack_Encoder, BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x03}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
+TEST(LARGE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -86,7 +85,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
+TEST(LARGE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -98,7 +97,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
+TEST(LARGE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -110,7 +109,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::core::JSON document{"bar"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -122,7 +121,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
+TEST(LARGE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{ \"foo\": 1 }");
   sourcemeta::core::OutputByteStream stream{};
@@ -139,7 +138,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x03}}));
 }
 
-TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_enum_250) {
+TEST(LARGE_CHOICE_INDEX_enum_250) {
   const sourcemeta::core::JSON document{250};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -153,7 +152,7 @@ TEST(JSONBinPack_Encoder, LARGE_CHOICE_INDEX_enum_250) {
             (std::vector<std::byte>{std::byte{0xfa}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -165,7 +164,7 @@ TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{}));
 }
 
-TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -177,7 +176,7 @@ TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
-TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -189,7 +188,7 @@ TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   const sourcemeta::core::JSON document{"bar"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -201,7 +200,7 @@ TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
-TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{ \"foo\": 1 }");
   sourcemeta::core::OutputByteStream stream{};
@@ -218,7 +217,7 @@ TEST(JSONBinPack_Encoder, TOP_LEVEL_BYTE_CHOICE_INDEX_non_scalar_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, CONST_NONE_scalar) {
+TEST(CONST_NONE_scalar) {
   const sourcemeta::core::JSON document{1};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -226,7 +225,7 @@ TEST(JSONBinPack_Encoder, CONST_NONE_scalar) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{}));
 }
 
-TEST(JSONBinPack_Encoder, CONST_NONE_complex) {
+TEST(CONST_NONE_complex) {
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{ \"foo\": 1 }");
   sourcemeta::core::OutputByteStream stream{};
@@ -235,7 +234,7 @@ TEST(JSONBinPack_Encoder, CONST_NONE_complex) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{nullptr};
   sourcemeta::core::OutputByteStream stream{};
@@ -245,7 +244,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__null) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x17}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{false};
   sourcemeta::core::OutputByteStream stream{};
@@ -255,7 +254,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__false) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x07}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{true};
   sourcemeta::core::OutputByteStream stream{};
@@ -265,7 +264,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__true) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x0f}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{3.14};
   sourcemeta::core::OutputByteStream stream{};
@@ -277,7 +276,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_14) {
                                     std::byte{0x04}, std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{3.0};
   sourcemeta::core::OutputByteStream stream{};
@@ -288,7 +287,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_3_0) {
             (std::vector<std::byte>{std::byte{0x37}, std::byte{0x03}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{103.0};
   sourcemeta::core::OutputByteStream stream{};
@@ -299,7 +298,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__real_103_0) {
             (std::vector<std::byte>{std::byte{0x37}, std::byte{0x67}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{256};
   sourcemeta::core::OutputByteStream stream{};
@@ -311,7 +310,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__256) {
                                     std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{-257};
   sourcemeta::core::OutputByteStream stream{};
@@ -323,7 +322,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_257) {
                                     std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{255};
   sourcemeta::core::OutputByteStream stream{};
@@ -334,7 +333,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__255) {
             (std::vector<std::byte>{std::byte{0x05}, std::byte{0xff}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{-256};
   sourcemeta::core::OutputByteStream stream{};
@@ -345,7 +344,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_256) {
             (std::vector<std::byte>{std::byte{0x06}, std::byte{0xff}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{0};
   sourcemeta::core::OutputByteStream stream{};
@@ -355,7 +354,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__0) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x0d}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{-1};
   sourcemeta::core::OutputByteStream stream{};
@@ -365,7 +364,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__minus_1) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x0e}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{" "};
   sourcemeta::core::OutputByteStream stream{};
@@ -376,7 +375,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_space) {
             (std::vector<std::byte>{std::byte{0x11}, std::byte{0x20}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
@@ -388,7 +387,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_foo) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(30, 'x')};
   EXPECT_EQ(document.size(), 30);
@@ -409,7 +408,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_30_xs) {
           std::byte{0x78}, std::byte{0x78}, std::byte{0x78}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
@@ -425,7 +424,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__shared_string_foo) {
                               std::byte{0x20}, std::byte{0x06}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(31, 'x')};
   EXPECT_EQ(document.size(), 31);
@@ -438,7 +437,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_31_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(61, 'x')};
   EXPECT_EQ(document.size(), 61);
@@ -451,7 +450,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_61_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{"https://soundcloud.com/dandymusicnl"};
   sourcemeta::core::OutputByteStream stream{};
@@ -471,7 +470,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_url) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(128, 'x')};
   EXPECT_EQ(document.size(), 128);
@@ -484,7 +483,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_128_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(130, 'x')};
   EXPECT_EQ(document.size(), 130);
@@ -497,7 +496,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_130_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(256, 'x')};
   EXPECT_EQ(document.size(), 256);
@@ -510,7 +509,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_256_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(258, 'x')};
   EXPECT_EQ(document.size(), 258);
@@ -523,7 +522,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_258_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(512, 'x')};
   EXPECT_EQ(document.size(), 512);
@@ -536,7 +535,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_512_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(513, 'x')};
   EXPECT_EQ(document.size(), 513);
@@ -549,7 +548,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_513_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(1024, 'x')};
   EXPECT_EQ(document.size(), 1024);
@@ -562,8 +561,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_1024_xs) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder,
-     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_62_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(62, 'x')};
   EXPECT_EQ(document.size(), 62);
@@ -576,8 +574,7 @@ TEST(JSONBinPack_Encoder,
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder,
-     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__string_63_xs_non_shared) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{std::string(63, 'x')};
   EXPECT_EQ(document.size(), 63);
@@ -590,7 +587,7 @@ TEST(JSONBinPack_Encoder,
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ \"foo\", true, 2000 ]");
@@ -605,7 +602,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__foo_true_2000) {
                 std::byte{0x1f}, std::byte{0xd0}, std::byte{0x0f}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Array{}};
   for (auto count = 0; count < 30; count++) {
@@ -630,7 +627,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_30) {
           std::byte{0x0f}, std::byte{0x0f}, std::byte{0x0f}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Array{}};
   for (auto count = 0; count < 31; count++) {
@@ -647,7 +644,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_31) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Array{}};
   for (auto count = 0; count < 32; count++) {
@@ -664,8 +661,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
   EXPECT_EQ(stream.bytes(), expected);
 }
 
-TEST(JSONBinPack_Encoder,
-     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{ \"foo\": \"bar\", \"baz\": 1 }");
@@ -694,7 +690,7 @@ TEST(JSONBinPack_Encoder,
   }
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Object{}};
   const sourcemeta::core::JSON value{true};
@@ -747,7 +743,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_30_entries) {
   }
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Object{}};
   const sourcemeta::core::JSON value{true};
@@ -804,7 +800,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_31_entries) {
   }
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Object{}};
   const sourcemeta::core::JSON value{true};
@@ -862,8 +858,7 @@ TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_32_entries) {
   }
 }
 
-TEST(JSONBinPack_Encoder,
-     ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
   using namespace sourcemeta::jsonbinpack;
 
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Object{}};

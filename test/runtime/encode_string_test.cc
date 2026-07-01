@@ -1,11 +1,11 @@
 #include <cstddef> // std::byte
-#include <gtest/gtest.h>
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <vector> // std::vector
 
-TEST(JSONBinPack_Encoder, UTF8_STRING_NO_LENGTH_foo_bar) {
+TEST(UTF8_STRING_NO_LENGTH_foo_bar) {
   const sourcemeta::core::JSON document{"foo bar"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -17,7 +17,7 @@ TEST(JSONBinPack_Encoder, UTF8_STRING_NO_LENGTH_foo_bar) {
                               std::byte{0x72}}));
 }
 
-TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
+TEST(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -27,7 +27,7 @@ TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
+TEST(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -40,7 +40,7 @@ TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_foo_0_foo_3) {
                               std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_1) {
+TEST(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_1) {
   const sourcemeta::core::JSON document{"foø"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -51,7 +51,7 @@ TEST(JSONBinPack_Encoder, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_1) {
                               std::byte{0xc3}, std::byte{0xb8}}));
 }
 
-TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
+TEST(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -61,7 +61,7 @@ TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_4) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
+TEST(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -74,7 +74,7 @@ TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_foo_3_foo_5) {
                               std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
+TEST(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
   const sourcemeta::core::JSON document{"foø"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -85,7 +85,7 @@ TEST(JSONBinPack_Encoder, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
                               std::byte{0xc3}, std::byte{0xb8}}));
 }
 
-TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
+TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -95,7 +95,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
+TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -105,8 +105,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
+TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -119,7 +118,7 @@ TEST(JSONBinPack_Encoder,
                               std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
+TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
   const sourcemeta::core::JSON document{"foø"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -130,7 +129,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
                               std::byte{0xc3}, std::byte{0xb8}}));
 }
 
-TEST(JSONBinPack_Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
+TEST(RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
   const sourcemeta::core::JSON document{"2014-10-01"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -140,7 +139,7 @@ TEST(JSONBinPack_Encoder, RFC3339_DATE_INTEGER_TRIPLET_2014_10_01) {
                                     std::byte{0x0a}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED_foo) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -150,7 +149,7 @@ TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo) {
                                     std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo_foo_foo_foo) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED_foo_foo_foo_foo) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -167,8 +166,7 @@ TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_foo_foo_foo_foo) {
                               std::byte{0x03}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     PREFIX_VARINT_LENGTH_STRING_SHARED_non_key_foo_key_foo) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED_non_key_foo_key_foo) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -182,8 +180,7 @@ TEST(JSONBinPack_Encoder,
                               std::byte{0x6f}, std::byte{0x6f}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     PREFIX_VARINT_LENGTH_STRING_SHARED_key_foo_non_key_foo) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED_key_foo_non_key_foo) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
@@ -197,7 +194,7 @@ TEST(JSONBinPack_Encoder,
                               std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, PREFIX_VARINT_LENGTH_STRING_SHARED_unicode) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED_unicode) {
   const sourcemeta::core::JSON document{"foø"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};

@@ -1,11 +1,10 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <variant>
 
-TEST(JSONBinPack_Loader_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
+TEST(FIXED_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FIXED_TYPED_ARRAY",
@@ -63,7 +62,7 @@ TEST(JSONBinPack_Loader_v1, FIXED_TYPED_ARRAY_enum_integer_number) {
             1);
 }
 
-TEST(JSONBinPack_Loader_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_8BITS_TYPED_ARRAY",
@@ -128,7 +127,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_8BITS_TYPED_ARRAY_enum_integer_number) {
       1);
 }
 
-TEST(JSONBinPack_Loader_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
+TEST(FLOOR_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_TYPED_ARRAY",
@@ -186,7 +185,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_TYPED_ARRAY_enum_integer_number) {
             1);
 }
 
-TEST(JSONBinPack_Loader_v1, ROOF_TYPED_ARRAY_enum_integer_number) {
+TEST(ROOF_TYPED_ARRAY_enum_integer_number) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_TYPED_ARRAY",

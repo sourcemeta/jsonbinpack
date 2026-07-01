@@ -1,9 +1,9 @@
-#include <gtest/gtest.h>
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
+TEST(generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x00};
   Decoder decoder{stream};
@@ -13,7 +13,7 @@ TEST(JSONBinPack_Decoder, generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x15, 0x1d, 0x25};
   Decoder decoder{stream};

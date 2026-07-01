@@ -1,8 +1,7 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/numeric.h>
+#include <sourcemeta/core/test.h>
 
-TEST(JSONBinPack_Encoder, real_digits_1) {
+TEST(real_digits_1) {
   const double input{3.14};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -11,7 +10,7 @@ TEST(JSONBinPack_Encoder, real_digits_1) {
   EXPECT_EQ(point_position, 2);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_2) {
+TEST(real_digits_2) {
   const double input{123.456};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -20,7 +19,7 @@ TEST(JSONBinPack_Encoder, real_digits_2) {
   EXPECT_EQ(point_position, 3);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_3) {
+TEST(real_digits_3) {
   const double input{-3.14};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -29,7 +28,7 @@ TEST(JSONBinPack_Encoder, real_digits_3) {
   EXPECT_EQ(point_position, 2);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_4) {
+TEST(real_digits_4) {
   const double input{0};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -38,7 +37,7 @@ TEST(JSONBinPack_Encoder, real_digits_4) {
   EXPECT_EQ(point_position, 0);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_5) {
+TEST(real_digits_5) {
   const double input{-0};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -47,7 +46,7 @@ TEST(JSONBinPack_Encoder, real_digits_5) {
   EXPECT_EQ(point_position, 0);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_6) {
+TEST(real_digits_6) {
   const double input{1};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -56,7 +55,7 @@ TEST(JSONBinPack_Encoder, real_digits_6) {
   EXPECT_EQ(point_position, 0);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_7) {
+TEST(real_digits_7) {
   const double input{-1};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -65,7 +64,7 @@ TEST(JSONBinPack_Encoder, real_digits_7) {
   EXPECT_EQ(point_position, 0);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_8) {
+TEST(real_digits_8) {
   const double input{0.0001};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -74,7 +73,7 @@ TEST(JSONBinPack_Encoder, real_digits_8) {
   EXPECT_EQ(point_position, 4);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_9) {
+TEST(real_digits_9) {
   const double input{0.000123};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -83,7 +82,7 @@ TEST(JSONBinPack_Encoder, real_digits_9) {
   EXPECT_EQ(point_position, 6);
 }
 
-TEST(JSONBinPack_Encoder, real_digits_10) {
+TEST(real_digits_10) {
   const double input{-0.000123};
   std::uint64_t point_position;
   const std::int64_t result{
@@ -92,7 +91,7 @@ TEST(JSONBinPack_Encoder, real_digits_10) {
   EXPECT_EQ(point_position, 6);
 }
 
-TEST(JSONBinPack_Encoder, integer_5) {
+TEST(integer_5) {
   const double input{5};
   std::uint64_t point_position;
   const std::int64_t result{

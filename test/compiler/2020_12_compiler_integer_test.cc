@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
+TEST(maximum_minimum_8_bit) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -27,7 +26,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
+TEST(maximum_minimum_multiplier_8_bit) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -52,7 +51,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_multiplier_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
+TEST(maximum_minimum_greater_than_8_bit) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -75,8 +74,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_minimum_greater_than_8_bit) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12,
-     maximum_minimum_multiplier_greater_than_8_bit) {
+TEST(maximum_minimum_multiplier_greater_than_8_bit) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -100,7 +98,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12,
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, minimum) {
+TEST(minimum) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -122,7 +120,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
+TEST(minimum_multiplier) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -145,7 +143,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, minimum_multiplier) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, maximum) {
+TEST(maximum) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -167,7 +165,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
+TEST(maximum_multiplier) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",
@@ -190,7 +188,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, maximum_multiplier) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded) {
+TEST(unbounded) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer"
@@ -210,7 +208,7 @@ TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Integer_2020_12, unbounded_multiplier) {
+TEST(unbounded_multiplier) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "integer",

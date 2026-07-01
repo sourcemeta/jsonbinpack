@@ -1,5 +1,3 @@
-#include <gtest/gtest.h>
-
 #include <cstddef> // std::byte
 #include <vector>
 
@@ -7,7 +5,8 @@
 
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
-TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
+#include <sourcemeta/core/test.h>
+TEST(FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document = sourcemeta::core::parse_json("[ 0, 1, 2 ]");
   sourcemeta::core::OutputByteStream stream{};
@@ -23,7 +22,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
                                     std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
+TEST(FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ 0, 1, true ]");
@@ -47,7 +46,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
                                     std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
+TEST(FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document{sourcemeta::core::JSON::Array{}};
   sourcemeta::core::OutputByteStream stream{};
@@ -61,8 +60,7 @@ TEST(JSONBinPack_Encoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{}));
 }
 
-TEST(JSONBinPack_Encoder,
-     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, true ]");
@@ -84,8 +82,7 @@ TEST(JSONBinPack_Encoder,
                                     std::byte{0x00}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, true ]");
@@ -107,7 +104,7 @@ TEST(JSONBinPack_Encoder,
                                     std::byte{0x00}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, 5 ]");
@@ -129,7 +126,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
                                     std::byte{0x00}, std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");
@@ -153,8 +150,7 @@ TEST(JSONBinPack_Encoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
                               std::byte{0xfa}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, true ]");
@@ -175,7 +171,7 @@ TEST(JSONBinPack_Encoder,
                                     std::byte{0x00}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
+TEST(FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, 5 ]");
@@ -196,7 +192,7 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
                                     std::byte{0x00}, std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
+TEST(FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");
@@ -219,8 +215,7 @@ TEST(JSONBinPack_Encoder, FLOOR_TYPED_ARRAY_complex) {
                               std::byte{0xfa}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder,
-     ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, true ]");
@@ -241,7 +236,7 @@ TEST(JSONBinPack_Encoder,
                                     std::byte{0x00}, std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
+TEST(ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, false, 5 ]");
@@ -262,7 +257,7 @@ TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
                                     std::byte{0x00}, std::byte{0x05}}));
 }
 
-TEST(JSONBinPack_Encoder, ROOF_TYPED_ARRAY_complex) {
+TEST(ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("[ true, \"foo\", 1000 ]");

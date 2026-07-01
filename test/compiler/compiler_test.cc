@@ -1,11 +1,10 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
 #include <stdexcept>
 
-TEST(JSONBinPack_Compiler, dialect_2020_12) {
+TEST(dialect_2020_12) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
@@ -22,7 +21,7 @@ TEST(JSONBinPack_Compiler, dialect_2020_12) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_2019_09) {
+TEST(dialect_2019_09) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2019-09/schema"
   })JSON");
@@ -39,7 +38,7 @@ TEST(JSONBinPack_Compiler, dialect_2019_09) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft7) {
+TEST(dialect_draft7) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-07/schema#"
   })JSON");
@@ -56,7 +55,7 @@ TEST(JSONBinPack_Compiler, dialect_draft7) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft6) {
+TEST(dialect_draft6) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-06/schema#"
   })JSON");
@@ -73,7 +72,7 @@ TEST(JSONBinPack_Compiler, dialect_draft6) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft4) {
+TEST(dialect_draft4) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-04/schema#"
   })JSON");
@@ -90,7 +89,7 @@ TEST(JSONBinPack_Compiler, dialect_draft4) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft3) {
+TEST(dialect_draft3) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-03/schema#"
   })JSON");
@@ -107,7 +106,7 @@ TEST(JSONBinPack_Compiler, dialect_draft3) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft2) {
+TEST(dialect_draft2) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-02/schema#"
   })JSON");
@@ -124,7 +123,7 @@ TEST(JSONBinPack_Compiler, dialect_draft2) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft1) {
+TEST(dialect_draft1) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-01/schema#"
   })JSON");
@@ -141,7 +140,7 @@ TEST(JSONBinPack_Compiler, dialect_draft1) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, dialect_draft0) {
+TEST(dialect_draft0) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "http://json-schema.org/draft-00/schema#"
   })JSON");
@@ -158,7 +157,7 @@ TEST(JSONBinPack_Compiler, dialect_draft0) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, unknown_dialect_default) {
+TEST(unknown_dialect_default) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "type": "integer"
   })JSON");
@@ -179,25 +178,32 @@ TEST(JSONBinPack_Compiler, unknown_dialect_default) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler, unknown_dialect_without_default) {
+TEST(unknown_dialect_without_default) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "type": "integer"
   })JSON");
 
-  EXPECT_THROW(
-      sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                       sourcemeta::blaze::schema_resolver),
-      sourcemeta::blaze::SchemaUnknownBaseDialectError);
+  try {
+    sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
+                                     sourcemeta::blaze::schema_resolver);
+    FAIL();
+  } catch (const sourcemeta::blaze::SchemaUnknownBaseDialectError &error) {
+    EXPECT_STREQ(error.what(),
+                 "Could not determine the base dialect of the schema");
+  }
 }
 
-TEST(JSONBinPack_Compiler, invalid_dialect) {
+TEST(invalid_dialect) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://foo.com",
     "type": "integer"
   })JSON");
 
-  EXPECT_THROW(
-      sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                       sourcemeta::blaze::schema_resolver),
-      sourcemeta::blaze::SchemaResolutionError);
+  try {
+    sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
+                                     sourcemeta::blaze::schema_resolver);
+    FAIL();
+  } catch (const sourcemeta::blaze::SchemaResolutionError &error) {
+    EXPECT_EQ(error.identifier(), "https://foo.com");
+  }
 }

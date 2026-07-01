@@ -1,11 +1,11 @@
-#include <gtest/gtest.h>
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <vector>
 
-TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
+TEST(FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x02};
   Decoder decoder{stream};
@@ -17,7 +17,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_2__no_prefix_encodings) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
+TEST(FIXED_TYPED_ARRAY_0_1_true__semityped) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x01};
   Decoder decoder{stream};
@@ -38,7 +38,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_0_1_true__semityped) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
+TEST(FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{};
   Decoder decoder{stream};
@@ -50,8 +50,7 @@ TEST(JSONBinPack_Decoder, FIXED_TYPED_ARRAY_empty__no_prefix_encodings) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder,
-     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
@@ -70,8 +69,7 @@ TEST(JSONBinPack_Decoder,
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder,
-     BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_true__same_max_min) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x00, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
@@ -90,7 +88,7 @@ TEST(JSONBinPack_Decoder,
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
@@ -109,7 +107,7 @@ TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
+TEST(BOUNDED_8BITS_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
                                            0x6f, 0x6f, 0xfa, 0x01};
@@ -130,8 +128,7 @@ TEST(JSONBinPack_Decoder, BOUNDED_8BITS_TYPED_ARRAY_complex) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder,
-     FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(FLOOR_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
@@ -149,7 +146,7 @@ TEST(JSONBinPack_Decoder,
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
+TEST(FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
@@ -167,7 +164,7 @@ TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_complex) {
+TEST(FLOOR_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
                                            0x6f, 0x6f, 0xfa, 0x01};
@@ -187,8 +184,7 @@ TEST(JSONBinPack_Decoder, FLOOR_TYPED_ARRAY_complex) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder,
-     ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
+TEST(ROOF_TYPED_ARRAY_true_false_true__no_prefix_encodings) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x00, 0x01};
   Decoder decoder{stream};
@@ -206,7 +202,7 @@ TEST(JSONBinPack_Decoder,
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
+TEST(ROOF_TYPED_ARRAY_true_false_5__1_3) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x02, 0x01, 0x00, 0x05};
   Decoder decoder{stream};
@@ -224,7 +220,7 @@ TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_true_false_5__1_3) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, ROOF_TYPED_ARRAY_complex) {
+TEST(ROOF_TYPED_ARRAY_complex) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x03, 0x01, 0x01, 0x66,
                                            0x6f, 0x6f, 0xfa, 0x01};

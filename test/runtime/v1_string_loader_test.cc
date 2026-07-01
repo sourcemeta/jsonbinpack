@@ -1,11 +1,10 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <variant>
 
-TEST(JSONBinPack_Loader_v1, UTF8_STRING_NO_LENGTH_3) {
+TEST(UTF8_STRING_NO_LENGTH_3) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "UTF8_STRING_NO_LENGTH",
@@ -20,7 +19,7 @@ TEST(JSONBinPack_Loader_v1, UTF8_STRING_NO_LENGTH_3) {
   EXPECT_EQ(std::get<UTF8_STRING_NO_LENGTH>(result).size, 3);
 }
 
-TEST(JSONBinPack_Loader_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
+TEST(FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED",
@@ -37,7 +36,7 @@ TEST(JSONBinPack_Loader_v1, FLOOR_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
             3);
 }
 
-TEST(JSONBinPack_Loader_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
+TEST(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ROOF_VARINT_PREFIX_UTF8_STRING_SHARED",
@@ -53,7 +52,7 @@ TEST(JSONBinPack_Loader_v1, ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_3) {
   EXPECT_EQ(std::get<ROOF_VARINT_PREFIX_UTF8_STRING_SHARED>(result).maximum, 3);
 }
 
-TEST(JSONBinPack_Loader_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
+TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED",
@@ -73,7 +72,7 @@ TEST(JSONBinPack_Loader_v1, BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_open) {
             3);
 }
 
-TEST(JSONBinPack_Loader_v1, RFC3339_DATE_INTEGER_TRIPLET) {
+TEST(RFC3339_DATE_INTEGER_TRIPLET) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "RFC3339_DATE_INTEGER_TRIPLET",
@@ -85,7 +84,7 @@ TEST(JSONBinPack_Loader_v1, RFC3339_DATE_INTEGER_TRIPLET) {
   EXPECT_TRUE(std::holds_alternative<RFC3339_DATE_INTEGER_TRIPLET>(result));
 }
 
-TEST(JSONBinPack_Loader_v1, PREFIX_VARINT_LENGTH_STRING_SHARED) {
+TEST(PREFIX_VARINT_LENGTH_STRING_SHARED) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "PREFIX_VARINT_LENGTH_STRING_SHARED",

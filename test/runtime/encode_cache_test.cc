@@ -1,12 +1,11 @@
-#include <gtest/gtest.h>
-
 #include <cstdint>
 #include <stdexcept>
 #include <string>
 
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime_encoder_cache.h>
 
-TEST(JSONBinPack_Encoder, cache_record_string) {
+TEST(cache_record_string) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   const auto result_1{cache.find("foo", CacheType::Standalone)};
@@ -17,7 +16,7 @@ TEST(JSONBinPack_Encoder, cache_record_string) {
   EXPECT_EQ(result_2.value(), 2);
 }
 
-TEST(JSONBinPack_Encoder, cache_record_string_too_short) {
+TEST(cache_record_string_too_short) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   const auto result_1{cache.find("fo", CacheType::Standalone)};
@@ -27,7 +26,7 @@ TEST(JSONBinPack_Encoder, cache_record_string_too_short) {
   EXPECT_FALSE(result_2.has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_record_string_empty) {
+TEST(cache_record_string_empty) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   const auto result_1{cache.find("fo", CacheType::Standalone)};
@@ -37,14 +36,14 @@ TEST(JSONBinPack_Encoder, cache_record_string_empty) {
   EXPECT_FALSE(result_2.has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_has_on_unknown_string) {
+TEST(cache_has_on_unknown_string) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   const auto result{cache.find("foobarbaz", CacheType::Standalone)};
   EXPECT_FALSE(result.has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_increase_offset) {
+TEST(cache_increase_offset) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   cache.record("foo", 2, CacheType::Standalone);
@@ -54,7 +53,7 @@ TEST(JSONBinPack_Encoder, cache_increase_offset) {
   EXPECT_EQ(result.value(), 4);
 }
 
-TEST(JSONBinPack_Encoder, cache_do_not_decrease_offset) {
+TEST(cache_do_not_decrease_offset) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   cache.record("foo", 4, CacheType::Standalone);
@@ -64,7 +63,7 @@ TEST(JSONBinPack_Encoder, cache_do_not_decrease_offset) {
   EXPECT_EQ(result.value(), 4);
 }
 
-TEST(JSONBinPack_Encoder, cache_not_record_too_big) {
+TEST(cache_not_record_too_big) {
   const auto length{25000000};
   const std::string too_big(length, 'x');
   EXPECT_EQ(too_big.size(), length);
@@ -75,7 +74,7 @@ TEST(JSONBinPack_Encoder, cache_not_record_too_big) {
   EXPECT_FALSE(result.has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_remove_oldest) {
+TEST(cache_remove_oldest) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   cache.record("foo", 10, CacheType::Standalone);
@@ -109,7 +108,7 @@ TEST(JSONBinPack_Encoder, cache_remove_oldest) {
       cache.find("baz", CacheType::PrefixLengthVarintPlusOne).has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_is_a_circular_buffer) {
+TEST(cache_is_a_circular_buffer) {
   const auto length{5000000};
   const std::string string_1(length, 'u');
   const std::string string_2(length, 'v');
@@ -156,7 +155,7 @@ TEST(JSONBinPack_Encoder, cache_is_a_circular_buffer) {
   EXPECT_TRUE(cache.find(string_6, CacheType::Standalone).has_value());
 }
 
-TEST(JSONBinPack_Encoder, cache_same_string_different_type) {
+TEST(cache_same_string_different_type) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   cache.record("foo", 10, CacheType::Standalone);
@@ -172,7 +171,7 @@ TEST(JSONBinPack_Encoder, cache_same_string_different_type) {
   EXPECT_EQ(result_2.value(), 20);
 }
 
-TEST(JSONBinPack_Encoder, cache_no_fallback_type) {
+TEST(cache_no_fallback_type) {
   sourcemeta::jsonbinpack::Cache cache;
   using CacheType = sourcemeta::jsonbinpack::Cache::Type;
   cache.record("foo", 10, CacheType::Standalone);
