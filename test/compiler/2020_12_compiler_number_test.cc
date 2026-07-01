@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
-TEST(JSONBinPack_Compiler_Number_2020_12, arbitrary) {
+TEST(arbitrary) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "number"

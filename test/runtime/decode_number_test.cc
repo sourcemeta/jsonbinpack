@@ -1,9 +1,9 @@
-#include <gtest/gtest.h>
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_5) {
+TEST(DOUBLE_VARINT_TUPLE_5) {
   sourcemeta::core::InputByteStream stream{0x0a, 0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -11,7 +11,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_minus_3_point_14) {
+TEST(DOUBLE_VARINT_TUPLE_minus_3_point_14) {
   sourcemeta::core::InputByteStream stream{0xf3, 0x04, 0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -19,7 +19,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_minus_3_point_14) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_minus_5) {
+TEST(DOUBLE_VARINT_TUPLE_minus_5) {
   sourcemeta::core::InputByteStream stream{0x09, 0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -27,7 +27,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_minus_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_zero) {
+TEST(DOUBLE_VARINT_TUPLE_zero) {
   sourcemeta::core::InputByteStream stream{0x00, 0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -35,7 +35,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_zero) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_1235) {
+TEST(DOUBLE_VARINT_TUPLE_1235) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -43,7 +43,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_1235) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_1235) {
+TEST(DOUBLE_VARINT_TUPLE_0_point_1235) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x04};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -51,7 +51,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_1235) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_1_point_235) {
+TEST(DOUBLE_VARINT_TUPLE_1_point_235) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -59,7 +59,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_1_point_235) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_01235) {
+TEST(DOUBLE_VARINT_TUPLE_0_point_01235) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x05};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -67,7 +67,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_01235) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_12_point_35) {
+TEST(DOUBLE_VARINT_TUPLE_12_point_35) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -75,7 +75,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_12_point_35) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_001235) {
+TEST(DOUBLE_VARINT_TUPLE_0_point_001235) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x06};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -83,7 +83,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_001235) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_123_point_5) {
+TEST(DOUBLE_VARINT_TUPLE_123_point_5) {
   sourcemeta::core::InputByteStream stream{0xa6, 0x13, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -91,7 +91,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_123_point_5) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_314) {
+TEST(DOUBLE_VARINT_TUPLE_314) {
   sourcemeta::core::InputByteStream stream{0xf4, 0x04, 0x00};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -99,7 +99,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_314) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_314) {
+TEST(DOUBLE_VARINT_TUPLE_0_point_314) {
   sourcemeta::core::InputByteStream stream{0xf4, 0x04, 0x03};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -107,7 +107,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_314) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_3_point_14) {
+TEST(DOUBLE_VARINT_TUPLE_3_point_14) {
   sourcemeta::core::InputByteStream stream{0xf4, 0x04, 0x02};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -115,7 +115,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_3_point_14) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_0314) {
+TEST(DOUBLE_VARINT_TUPLE_0_point_0314) {
   sourcemeta::core::InputByteStream stream{0xf4, 0x04, 0x04};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});
@@ -123,7 +123,7 @@ TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_0_point_0314) {
   EXPECT_EQ(result, expected);
 }
 
-TEST(JSONBinPack_Decoder, DOUBLE_VARINT_TUPLE_31_point_4) {
+TEST(DOUBLE_VARINT_TUPLE_31_point_4) {
   sourcemeta::core::InputByteStream stream{0xf4, 0x04, 0x01};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const auto result = decoder.DOUBLE_VARINT_TUPLE({});

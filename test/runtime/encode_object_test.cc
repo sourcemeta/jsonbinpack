@@ -1,13 +1,12 @@
 #include <cstddef> // std::byte
-#include <gtest/gtest.h>
-#include <vector> // std::vector
+#include <vector>  // std::vector
 
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
-TEST(JSONBinPack_Encoder,
-     FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+#include <sourcemeta/core/test.h>
+TEST(FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");
@@ -35,8 +34,7 @@ TEST(JSONBinPack_Encoder,
   }
 }
 
-TEST(JSONBinPack_Encoder,
-     VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
+TEST(VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
       sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");

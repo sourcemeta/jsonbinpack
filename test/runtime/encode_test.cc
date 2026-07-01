@@ -1,11 +1,11 @@
 #include <cstddef> // std::byte
-#include <gtest/gtest.h>
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <vector> // std::vector
 
-TEST(JSONBinPack_Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
+TEST(generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document{-5};
   sourcemeta::core::OutputByteStream stream{};
@@ -15,7 +15,7 @@ TEST(JSONBinPack_Encoder, generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
-TEST(JSONBinPack_Encoder, ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX_many) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::OutputByteStream stream{};
   Encoder encoder{stream};

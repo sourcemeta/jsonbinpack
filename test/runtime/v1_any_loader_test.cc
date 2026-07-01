@@ -1,11 +1,10 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
 #include <variant>
 
-TEST(JSONBinPack_Loader_v1, BYTE_CHOICE_INDEX_scalars) {
+TEST(BYTE_CHOICE_INDEX_scalars) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "BYTE_CHOICE_INDEX",
@@ -26,7 +25,7 @@ TEST(JSONBinPack_Loader_v1, BYTE_CHOICE_INDEX_scalars) {
             sourcemeta::core::JSON{3});
 }
 
-TEST(JSONBinPack_Loader_v1, LARGE_CHOICE_INDEX_scalars) {
+TEST(LARGE_CHOICE_INDEX_scalars) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "LARGE_CHOICE_INDEX",
@@ -47,7 +46,7 @@ TEST(JSONBinPack_Loader_v1, LARGE_CHOICE_INDEX_scalars) {
             sourcemeta::core::JSON{3});
 }
 
-TEST(JSONBinPack_Loader_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
+TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "TOP_LEVEL_BYTE_CHOICE_INDEX",
@@ -68,7 +67,7 @@ TEST(JSONBinPack_Loader_v1, TOP_LEVEL_BYTE_CHOICE_INDEX_scalars) {
             sourcemeta::core::JSON{3});
 }
 
-TEST(JSONBinPack_Loader_v1, CONST_NONE_scalar) {
+TEST(CONST_NONE_scalar) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "CONST_NONE",
@@ -83,7 +82,7 @@ TEST(JSONBinPack_Loader_v1, CONST_NONE_scalar) {
   EXPECT_EQ(std::get<CONST_NONE>(result).value, sourcemeta::core::JSON{1});
 }
 
-TEST(JSONBinPack_Loader_v1, ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX) {
   const sourcemeta::core::JSON input = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
     "binpackEncoding": "ANY_PACKED_TYPE_TAG_BYTE_PREFIX",

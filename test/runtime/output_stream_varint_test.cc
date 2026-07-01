@@ -1,26 +1,25 @@
-#include <gtest/gtest.h>
-
 #include <cstddef> // std::byte
 #include <limits>  // std::numeric_limits
 #include <sourcemeta/core/io.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime_output_stream.h>
 #include <vector> // std::vector
 
-TEST(JSONBinPack_OutputStream, varint_1) {
+TEST(varint_1) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(1);
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
-TEST(JSONBinPack_OutputStream, varint_23) {
+TEST(varint_23) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(23);
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x17}}));
 }
 
-TEST(JSONBinPack_OutputStream, varint_300) {
+TEST(varint_300) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(300);
@@ -28,7 +27,7 @@ TEST(JSONBinPack_OutputStream, varint_300) {
             (std::vector<std::byte>{std::byte{0xac}, std::byte{0x02}}));
 }
 
-TEST(JSONBinPack_OutputStream, varint_50399) {
+TEST(varint_50399) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(50399);
@@ -37,7 +36,7 @@ TEST(JSONBinPack_OutputStream, varint_50399) {
                                     std::byte{0x03}}));
 }
 
-TEST(JSONBinPack_OutputStream, varint_4294967294) {
+TEST(varint_4294967294) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::OutputStream encoder{stream};
   encoder.put_varint(4294967294);
@@ -47,7 +46,7 @@ TEST(JSONBinPack_OutputStream, varint_4294967294) {
                               std::byte{0xff}, std::byte{0x0f}}));
 }
 
-TEST(JSONBinPack_OutputStream, varint_uint64_max) {
+TEST(varint_uint64_max) {
   sourcemeta::core::OutputByteStream stream{};
   const std::uint64_t value = std::numeric_limits<std::uint64_t>::max();
   sourcemeta::jsonbinpack::OutputStream encoder{stream};

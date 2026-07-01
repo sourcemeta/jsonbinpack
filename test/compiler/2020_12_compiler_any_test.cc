@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
-TEST(JSONBinPack_Compiler_Any_2020_12, enum_singleton) {
+TEST(enum_singleton) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 2 ]
@@ -23,7 +22,7 @@ TEST(JSONBinPack_Compiler_Any_2020_12, enum_singleton) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Any_2020_12, const_scalar) {
+TEST(const_scalar) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "const": 2
@@ -43,7 +42,7 @@ TEST(JSONBinPack_Compiler_Any_2020_12, const_scalar) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Any_2020_12, enum_small_top_level) {
+TEST(enum_small_top_level) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "enum": [ 1, 2, 3 ]
@@ -63,7 +62,7 @@ TEST(JSONBinPack_Compiler_Any_2020_12, enum_small_top_level) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Any_2020_12, only_metaschema) {
+TEST(only_metaschema) {
   auto schema = sourcemeta::core::parse_json(R"JSON({
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
@@ -80,7 +79,7 @@ TEST(JSONBinPack_Compiler_Any_2020_12, only_metaschema) {
   EXPECT_EQ(schema, expected);
 }
 
-TEST(JSONBinPack_Compiler_Any_2020_12, empty) {
+TEST(empty) {
   auto schema = sourcemeta::core::parse_json("{}");
 
   sourcemeta::jsonbinpack::compile(

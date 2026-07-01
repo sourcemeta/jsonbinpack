@@ -1,5 +1,4 @@
-sourcemeta_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
-  FOLDER "JSON BinPack/Compiler"
+sourcemeta_test(NAMESPACE sourcemeta PROJECT jsonbinpack NAME compiler
   SOURCES
     canonicalizer_test.cc compiler_test.cc
 

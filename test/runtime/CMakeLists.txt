@@ -1,5 +1,4 @@
-sourcemeta_googletest(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
-  FOLDER "JSON BinPack/Runtime"
+sourcemeta_test(NAMESPACE sourcemeta PROJECT jsonbinpack NAME runtime
   SOURCES
     decode_any_test.cc
     decode_array_test.cc
