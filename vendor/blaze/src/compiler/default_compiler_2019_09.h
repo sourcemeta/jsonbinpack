@@ -144,10 +144,10 @@ auto compiler_2019_09_applicator_contains_with_options(
     }
   }
 
-  if (maximum.has_value() && minimum > maximum.value()) {
-    return {make(sourcemeta::blaze::InstructionIndex::AssertionFail, context,
-                 schema_context, dynamic_context, ValueNone{})};
-  }
+  // An unsatisfiable range is deliberately left for the general check below,
+  // which rejects every array yet leaves non-arrays alone. An unconditional
+  // failure here would instead reject non-arrays too, but `contains` does not
+  // apply to them
 
   if (minimum == 0 && !maximum.has_value() && !track_evaluation) {
     return {};
@@ -175,8 +175,12 @@ auto compiler_2019_09_applicator_contains_with_options(
              schema_context, relative_dynamic_context(), ValuePointer{}));
   }
 
-  if (children.empty()) {
-    // We still need to check the instance is not empty
+  // A trivial subschema matches every element, so the number of matches
+  // equals the array size and the constraint reduces to a size bound. The
+  // plain "at least one match" case has a cheap single-instruction form, but
+  // any higher minimum or any maximum needs the general range check, which
+  // handles an empty subschema correctly on its own
+  if (children.empty() && minimum == 1 && !maximum.has_value()) {
     return {make(sourcemeta::blaze::InstructionIndex::AssertionArraySizeGreater,
                  context, schema_context, dynamic_context,
                  ValueUnsignedInteger{0})};
@@ -195,7 +199,7 @@ auto compiler_2019_09_applicator_contains(const Context &context,
     -> Instructions {
   return compiler_2019_09_applicator_contains_with_options(
       context, schema_context, dynamic_context, current,
-      annotations_collected(context), false);
+      context.collects_annotations, false);
 }
 
 auto compiler_2019_09_applicator_additionalproperties(
@@ -204,7 +208,7 @@ auto compiler_2019_09_applicator_additionalproperties(
 
     -> Instructions {
   return compiler_draft3_applicator_additionalproperties_with_options(
-      context, schema_context, dynamic_context, annotations_collected(context),
+      context, schema_context, dynamic_context, context.collects_annotations,
       requires_evaluation(context, schema_context));
 }
 
@@ -221,12 +225,12 @@ auto compiler_2019_09_applicator_items(const Context &context,
 
   if (schema_context.schema.at(dynamic_context.keyword).is_array()) {
     return compiler_draft3_applicator_items_with_options(
-        context, schema_context, dynamic_context,
-        annotations_collected(context), track);
+        context, schema_context, dynamic_context, context.collects_annotations,
+        track);
   }
 
   return compiler_draft3_applicator_items_with_options(
-      context, schema_context, dynamic_context, annotations_collected(context),
+      context, schema_context, dynamic_context, context.collects_annotations,
       track && !schema_context.schema.defines("unevaluatedItems"));
 }
 
@@ -242,7 +246,7 @@ auto compiler_2019_09_applicator_additionalitems(
       })};
 
   return compiler_draft3_applicator_additionalitems_with_options(
-      context, schema_context, dynamic_context, annotations_collected(context),
+      context, schema_context, dynamic_context, context.collects_annotations,
       track && !schema_context.schema.defines("unevaluatedItems"));
 }
 
@@ -293,8 +297,12 @@ auto compiler_2019_09_applicator_unevaluateditems(
       return {};
     }
 
-    return {make(sourcemeta::blaze::InstructionIndex::Evaluate, context,
-                 schema_context, dynamic_context, ValueNone{})};
+    // An unconditional marker would record this instance as evaluated whatever
+    // its type, so against a non-array it would wrongly suppress a sibling
+    // `unevaluatedProperties`. An array-guarded marker only records arrays
+    return {make(sourcemeta::blaze::InstructionIndex::LoopItemsUnevaluated,
+                 context, schema_context, dynamic_context, ValueNone{},
+                 Instructions{})};
   }
 
   // TODO: Attempt to short-circuit evaluation tracking by looking at sibling
@@ -391,8 +399,12 @@ auto compiler_2019_09_applicator_unevaluatedproperties(
   }
 
   if (children.empty()) {
-    return {make(sourcemeta::blaze::InstructionIndex::Evaluate, context,
-                 schema_context, dynamic_context, ValueNone{})};
+    // An unconditional marker would record this instance as evaluated whatever
+    // its type, so against a non-object it would wrongly suppress a sibling
+    // `unevaluatedItems`. An object-guarded marker only records objects
+    return {make(sourcemeta::blaze::InstructionIndex::LoopPropertiesEvaluate,
+                 context, schema_context, dynamic_context, ValueNone{},
+                 Instructions{})};
   } else if (!filter_strings.empty() || !filter_prefixes.empty() ||
              !filter_regexes.empty()) {
     return {make(
@@ -432,7 +444,7 @@ auto compiler_2019_09_applicator_properties(
     -> Instructions {
   return compiler_draft3_applicator_properties_with_options(
       context, schema_context, dynamic_context, current,
-      annotations_collected(context),
+      context.collects_annotations,
       requires_evaluation(context, schema_context));
 }
 
@@ -441,7 +453,7 @@ auto compiler_2019_09_applicator_patternproperties(
     const DynamicContext &dynamic_context, const Instructions &)
     -> Instructions {
   return compiler_draft3_applicator_patternproperties_with_options(
-      context, schema_context, dynamic_context, annotations_collected(context),
+      context, schema_context, dynamic_context, context.collects_annotations,
       requires_evaluation(context, schema_context));
 }
 
