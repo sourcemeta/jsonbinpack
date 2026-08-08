@@ -134,3 +134,9 @@ Schema](https://www.jviotti.com/dissertation.pdf)
   specifications](https://arxiv.org/abs/2201.03051)
 - [A survey of JSON-compatible binary serialization
   specification](https://arxiv.org/abs/2201.02089)
+
+Contributing
+------------
+
+By contributing to this project, you agree to our organisation-wide
+[contribution guidelines](https://github.com/sourcemeta/.github/blob/main/CONTRIBUTING.md).
