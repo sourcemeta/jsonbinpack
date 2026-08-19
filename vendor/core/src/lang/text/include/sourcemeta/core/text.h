@@ -67,8 +67,7 @@ template <typename Character>
            std::same_as<Character, signed char> ||
            std::same_as<Character, unsigned char> ||
            std::same_as<Character, wchar_t>
-inline constexpr auto to_lowercase(const Character character) noexcept
-    -> Character {
+constexpr auto to_lowercase(const Character character) noexcept -> Character {
   return (character >= 'A' && character <= 'Z')
              ? static_cast<Character>(character + ('a' - 'A'))
              : character;
@@ -131,7 +130,7 @@ template <typename Character>
            std::same_as<Character, signed char> ||
            std::same_as<Character, unsigned char> ||
            std::same_as<Character, wchar_t>
-inline constexpr auto is_lowercase(const Character character) noexcept -> bool {
+constexpr auto is_lowercase(const Character character) noexcept -> bool {
   return character < 'A' || character > 'Z';
 }
 
@@ -194,7 +193,7 @@ template <typename Character>
            std::same_as<Character, signed char> ||
            std::same_as<Character, unsigned char> ||
            std::same_as<Character, wchar_t>
-inline constexpr auto is_alpha(const Character character) noexcept -> bool {
+constexpr auto is_alpha(const Character character) noexcept -> bool {
   return (character >= 'a' && character <= 'z') ||
          (character >= 'A' && character <= 'Z');
 }
@@ -212,7 +211,7 @@ inline constexpr auto is_alpha(const Character character) noexcept -> bool {
 /// assert(!sourcemeta::core::is_alpha("ab1"));
 /// assert(!sourcemeta::core::is_alpha(""));
 /// ```
-inline constexpr auto is_alpha(const std::string_view value) noexcept -> bool {
+constexpr auto is_alpha(const std::string_view value) noexcept -> bool {
   if (value.empty()) {
     return false;
   }
@@ -240,7 +239,7 @@ template <typename Character>
            std::same_as<Character, signed char> ||
            std::same_as<Character, unsigned char> ||
            std::same_as<Character, wchar_t>
-inline constexpr auto is_digit(const Character character) noexcept -> bool {
+constexpr auto is_digit(const Character character) noexcept -> bool {
   return character >= '0' && character <= '9';
 }
 
@@ -257,7 +256,7 @@ inline constexpr auto is_digit(const Character character) noexcept -> bool {
 /// assert(!sourcemeta::core::is_digit("12a"));
 /// assert(!sourcemeta::core::is_digit(""));
 /// ```
-inline constexpr auto is_digit(const std::string_view value) noexcept -> bool {
+constexpr auto is_digit(const std::string_view value) noexcept -> bool {
   if (value.empty()) {
     return false;
   }
@@ -286,7 +285,7 @@ template <typename Character>
            std::same_as<Character, signed char> ||
            std::same_as<Character, unsigned char> ||
            std::same_as<Character, wchar_t>
-inline constexpr auto is_alphanum(const Character character) noexcept -> bool {
+constexpr auto is_alphanum(const Character character) noexcept -> bool {
   return is_alpha(character) || is_digit(character);
 }
 
@@ -303,8 +302,7 @@ inline constexpr auto is_alphanum(const Character character) noexcept -> bool {
 /// assert(!sourcemeta::core::is_alphanum("abc-123"));
 /// assert(!sourcemeta::core::is_alphanum(""));
 /// ```
-inline constexpr auto is_alphanum(const std::string_view value) noexcept
-    -> bool {
+constexpr auto is_alphanum(const std::string_view value) noexcept -> bool {
   if (value.empty()) {
     return false;
   }
@@ -334,6 +332,21 @@ inline constexpr auto is_alphanum(const std::string_view value) noexcept
 SOURCEMETA_CORE_TEXT_EXPORT
 auto truncate(std::string &input, const std::size_t maximum_length,
               const std::string_view marker) -> void;
+
+/// @ingroup text
+///
+/// Return `input` with every occurrence of `target` replaced by `replacement`.
+/// An empty target matches nothing. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::replace("a.b.c", ".", "/") == "a/b/c");
+/// ```
+SOURCEMETA_CORE_TEXT_EXPORT
+auto replace(const std::string_view input, const std::string_view target,
+             const std::string_view replacement) -> std::string;
 
 /// @ingroup text
 ///
@@ -397,8 +410,8 @@ auto strip_right(const std::string_view input, const char character) noexcept
 /// assert(sourcemeta::core::unquote("abc", '"') == "abc");
 /// assert(sourcemeta::core::unquote("\"", '"') == "\"");
 /// ```
-inline constexpr auto unquote(const std::string_view input,
-                              const char quote) noexcept -> std::string_view {
+constexpr auto unquote(const std::string_view input, const char quote) noexcept
+    -> std::string_view {
   if (input.size() < 2 || input.front() != quote || input.back() != quote) {
     return input;
   }
@@ -557,6 +570,36 @@ inline auto split(const std::string_view input, const char delimiter)
 
 /// @ingroup text
 ///
+/// Return the items of `items` as a string, separated by `separator`. The items
+/// must be string-like, as nothing is formatted along the way. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/text.h>
+/// #include <array>
+/// #include <cassert>
+/// #include <string_view>
+///
+/// constexpr std::array<std::string_view, 3> values{{"a", "b", "c"}};
+/// assert(sourcemeta::core::join(values, ", ") == "a, b, c");
+/// ```
+template <typename Range>
+auto join(const Range &items, const std::string_view separator) -> std::string {
+  std::string result;
+  bool first{true};
+  for (const auto &item : items) {
+    if (!first) {
+      result.append(separator);
+    }
+
+    result.append(item);
+    first = false;
+  }
+
+  return result;
+}
+
+/// @ingroup text
+///
 /// Stream each item of `items` to `stream`, separated by `separator`. For
 /// example:
 ///
@@ -565,7 +608,7 @@ inline auto split(const std::string_view input, const char delimiter)
 /// #include <array>
 /// #include <iostream>
 ///
-/// constexpr std::array<int, 3> values{1, 2, 3};
+/// constexpr std::array<int, 3> values{{1, 2, 3}};
 /// sourcemeta::core::join_to(std::cout, values, ", ");
 /// // prints: 1, 2, 3
 /// ```
@@ -599,7 +642,7 @@ concept text_spellable_integer =
 /// represents without loss, and a signed type needs one more again for a sign.
 template <typename Integer>
   requires text_spellable_integer<Integer>
-inline constexpr std::size_t digits_capacity{
+inline constexpr std::size_t DIGITS_CAPACITY{
     static_cast<std::size_t>(std::numeric_limits<Integer>::digits10) + 1 +
     (std::numeric_limits<Integer>::is_signed ? 1U : 0U)};
 
@@ -608,8 +651,8 @@ inline constexpr std::size_t digits_capacity{
 /// A buffer wide enough for the decimal spelling of any integer of up to 64
 /// bits, including a leading sign. That bound is twenty characters, reached by
 /// both the largest unsigned value and the smallest signed one.
-using DigitsBuffer = std::array<char, std::max(digits_capacity<std::uint64_t>,
-                                               digits_capacity<std::int64_t>)>;
+using DigitsBuffer = std::array<char, std::max(DIGITS_CAPACITY<std::uint64_t>,
+                                               DIGITS_CAPACITY<std::int64_t>)>;
 
 /// @ingroup text
 ///
@@ -635,7 +678,7 @@ using DigitsBuffer = std::array<char, std::max(digits_capacity<std::uint64_t>,
 /// to fail, which is why it reports no error.
 template <typename Integer, std::size_t Capacity>
   requires text_spellable_integer<Integer> &&
-           (Capacity >= digits_capacity<Integer>)
+           (Capacity >= DIGITS_CAPACITY<Integer>)
 inline auto digits_view(const Integer value,
                         std::array<char, Capacity> &buffer) noexcept
     -> std::string_view {
@@ -661,7 +704,7 @@ inline auto digits_view(const Integer value,
 template <typename Output, typename Integer>
   requires text_spellable_integer<Integer>
 inline auto digits_append(Output &output, const Integer value) -> void {
-  std::array<char, digits_capacity<Integer>> buffer;
+  std::array<char, DIGITS_CAPACITY<Integer>> buffer;
   const auto digits{digits_view(value, buffer)};
   output.append(digits.data(), digits.size());
 }
@@ -686,7 +729,7 @@ template <typename CharT, typename Traits, typename Integer>
   requires text_spellable_integer<Integer>
 inline auto digits_write(std::basic_ostream<CharT, Traits> &stream,
                          const Integer value) -> void {
-  std::array<char, digits_capacity<Integer>> buffer;
+  std::array<char, DIGITS_CAPACITY<Integer>> buffer;
   const auto digits{digits_view(value, buffer)};
   stream.write(digits.data(), static_cast<std::streamsize>(digits.size()));
 }
@@ -707,7 +750,7 @@ inline auto digits_write(std::basic_ostream<CharT, Traits> &stream,
 inline auto hex_digit_value(const char character) noexcept -> std::int8_t {
   // Indexed by byte value: ASCII '0'-'9', 'A'-'F', and 'a'-'f' map to their
   // hexadecimal value, everything else to -1
-  static constexpr std::array<std::int8_t, 256> table{
+  static constexpr std::array<std::int8_t, 256> TABLE{
       {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  1,  2,  3,  4,  5,
@@ -723,7 +766,7 @@ inline auto hex_digit_value(const char character) noexcept -> std::int8_t {
        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
        -1, -1, -1, -1}};
-  return table[static_cast<unsigned char>(character)];
+  return TABLE[static_cast<unsigned char>(character)];
 }
 
 /// @ingroup text
