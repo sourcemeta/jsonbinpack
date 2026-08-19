@@ -82,6 +82,29 @@ auto truncate(std::string &input, const std::size_t maximum_length,
   input.append(marker);
 }
 
+auto replace(const std::string_view input, const std::string_view target,
+             const std::string_view replacement) -> std::string {
+  if (target.empty()) {
+    return std::string{input};
+  }
+
+  std::string result;
+  result.reserve(input.size());
+  std::size_t index{0};
+
+  while (true) {
+    const auto match{input.find(target, index)};
+    if (match == std::string_view::npos) {
+      result.append(input.substr(index));
+      return result;
+    }
+
+    result.append(input.substr(index, match - index));
+    result.append(replacement);
+    index = match + target.size();
+  }
+}
+
 auto trim(const std::string_view input) noexcept -> std::string_view {
   std::string_view result{input};
   while (!result.empty() && is_ascii_whitespace(result.front())) {
@@ -209,7 +232,7 @@ auto hex_to_bytes(const std::string_view input, const bool allow_odd_length)
   }
 
   std::string result;
-  result.reserve(input.size() / 2 + 1);
+  result.reserve((input.size() / 2) + 1);
 
   std::size_t index{0};
   if (odd_length) {
@@ -236,13 +259,13 @@ auto hex_to_bytes(const std::string_view input, const bool allow_odd_length)
 }
 
 auto bytes_to_hex(const std::string_view input) -> std::string {
-  static constexpr std::string_view digits{"0123456789abcdef"};
+  static constexpr std::string_view DIGITS{"0123456789abcdef"};
   std::string result;
   result.reserve(input.size() * 2);
   for (const auto character : input) {
     const auto byte{static_cast<unsigned char>(character)};
-    result.push_back(digits[byte >> 4u]);
-    result.push_back(digits[byte & 0x0fu]);
+    result.push_back(DIGITS[byte >> 4U]);
+    result.push_back(DIGITS[byte & 0x0fU]);
   }
 
   return result;

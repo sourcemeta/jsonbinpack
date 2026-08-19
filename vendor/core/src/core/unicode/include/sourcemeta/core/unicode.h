@@ -145,6 +145,24 @@ SOURCEMETA_CORE_UNICODE_EXPORT
 auto utf32_to_utf8_lenient(const std::u32string_view input) -> std::string;
 
 /// @ingroup unicode
+/// Read a byte sequence as UTF-8, standing in the replacement character U+FFFD
+/// for every sequence that is not well-formed. One replacement stands in for a
+/// whole maximal subpart, so a sequence cut short yields a single one rather
+/// than one per stray byte. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/unicode.h>
+/// #include <cassert>
+///
+/// // The escapes are broken across literals, as a hexadecimal one otherwise
+/// // swallows the letter that follows it
+/// assert(sourcemeta::core::to_valid_utf8("a\xFF" "b") ==
+///        "a\xEF\xBF\xBD" "b");
+/// ```
+SOURCEMETA_CORE_UNICODE_EXPORT
+auto to_valid_utf8(const std::string_view input) -> std::string;
+
+/// @ingroup unicode
 /// Convert a UTF-8 string into its wide character form without validation.
 /// The input must be valid UTF-8, otherwise the result is undefined.
 /// For example:
@@ -188,8 +206,7 @@ auto wide_to_utf8(const std::wstring_view input) -> std::string;
 /// assert(sourcemeta::core::utf8_lead_byte_size(0xF0) == 4);
 /// assert(sourcemeta::core::utf8_lead_byte_size(0x80) == 0);
 /// ```
-inline constexpr auto utf8_lead_byte_size(const unsigned char byte)
-    -> std::uint8_t {
+constexpr auto utf8_lead_byte_size(const unsigned char byte) -> std::uint8_t {
   if (byte < 0x80) {
     return 1;
   }
@@ -206,6 +223,73 @@ inline constexpr auto utf8_lead_byte_size(const unsigned char byte)
 }
 
 /// @ingroup unicode
+/// Check whether the given byte may follow the given lead byte at the given
+/// position of a UTF-8 sequence, where position 1 is the byte right after the
+/// lead. RFC 3629 Section 4 narrows that first position below the general
+/// %x80-BF for four of the leads, so as to exclude the overlong encodings and
+/// the surrogate range that the shorter grammar would otherwise admit:
+///
+///   UTF8-3 = %xE0 %xA0-BF UTF8-tail / %xE1-EC 2( UTF8-tail ) /
+///            %xED %x80-9F UTF8-tail / %xEE-EF 2( UTF8-tail )
+///   UTF8-4 = %xF0 %x90-BF 2( UTF8-tail ) / %xF1-F3 3( UTF8-tail ) /
+///            %xF4 %x80-8F 2( UTF8-tail )
+///
+/// For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/unicode.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::is_utf8_tail(0xE2, 1, 0x82));
+/// // A surrogate lead admits no byte above %x9F
+/// assert(!sourcemeta::core::is_utf8_tail(0xED, 1, 0xA0));
+/// ```
+constexpr auto is_utf8_tail(const unsigned char lead,
+                            const std::size_t position,
+                            const unsigned char byte) -> bool {
+  const unsigned char lower{static_cast<unsigned char>(
+      position > 1 ? 0x80
+                   : (lead == 0xE0 ? 0xA0 : (lead == 0xF0 ? 0x90 : 0x80)))};
+  const unsigned char upper{static_cast<unsigned char>(
+      position > 1 ? 0xBF
+                   : (lead == 0xED ? 0x9F : (lead == 0xF4 ? 0x8F : 0xBF)))};
+  return byte >= lower && byte <= upper;
+}
+
+/// @ingroup unicode
+/// Determine the byte length of the well-formed UTF-8 sequence that the given
+/// input begins with, or 0 when it does not begin with one. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/unicode.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::utf8_sequence_size("A") == 1);
+/// assert(sourcemeta::core::utf8_sequence_size("\xC3\xA9") == 2);
+/// // A surrogate is not a scalar value, so it is not well-formed
+/// assert(sourcemeta::core::utf8_sequence_size("\xED\xA0\x80") == 0);
+/// ```
+constexpr auto utf8_sequence_size(const std::string_view input) -> std::size_t {
+  if (input.empty()) {
+    return 0;
+  }
+
+  const auto lead{static_cast<unsigned char>(input.front())};
+  const std::size_t size{utf8_lead_byte_size(lead)};
+  if (size == 0 || input.size() < size) {
+    return 0;
+  }
+
+  for (std::size_t index{1}; index < size; index += 1) {
+    if (!is_utf8_tail(lead, index, static_cast<unsigned char>(input[index]))) {
+      return 0;
+    }
+  }
+
+  return size;
+}
+
+/// @ingroup unicode
 /// Check whether the given byte is a UTF-8 continuation byte (%x80-BF per
 /// RFC 3629 Section 4). For example:
 ///
@@ -218,7 +302,7 @@ inline constexpr auto utf8_lead_byte_size(const unsigned char byte)
 /// assert(!sourcemeta::core::is_utf8_continuation(0x7F));
 /// assert(!sourcemeta::core::is_utf8_continuation(0xC0));
 /// ```
-inline constexpr auto is_utf8_continuation(const unsigned char byte) -> bool {
+constexpr auto is_utf8_continuation(const unsigned char byte) -> bool {
   return byte >= 0x80 && byte <= 0xBF;
 }
 
@@ -234,7 +318,7 @@ inline constexpr auto is_utf8_continuation(const unsigned char byte) -> bool {
 /// assert(sourcemeta::core::utf8_codepoint_count("abc") == 3);
 /// assert(sourcemeta::core::utf8_codepoint_count("caf\xc3\xa9") == 4);
 /// ```
-inline constexpr auto utf8_codepoint_count(const std::string_view input)
+constexpr auto utf8_codepoint_count(const std::string_view input)
     -> std::size_t {
   std::size_t count{0};
   for (const auto byte : input) {
@@ -261,9 +345,9 @@ inline constexpr auto utf8_codepoint_count(const std::string_view input)
 /// assert(sourcemeta::core::utf8_codepoint_within("abc", 1, 5));
 /// assert(!sourcemeta::core::utf8_codepoint_within("abc", 4, 5));
 /// ```
-inline constexpr auto utf8_codepoint_within(const std::string_view input,
-                                            const std::size_t minimum,
-                                            const std::size_t maximum) -> bool {
+constexpr auto utf8_codepoint_within(const std::string_view input,
+                                     const std::size_t minimum,
+                                     const std::size_t maximum) -> bool {
   const auto bytes{input.size()};
 
   // A code point is at least one byte, so the count never exceeds the byte
@@ -315,7 +399,7 @@ inline constexpr auto utf8_codepoint_within(const std::string_view input,
 /// assert(!sourcemeta::core::is_surrogate(0xD7FF));
 /// assert(!sourcemeta::core::is_surrogate(0xE000));
 /// ```
-inline constexpr auto is_surrogate(const char32_t codepoint) -> bool {
+constexpr auto is_surrogate(const char32_t codepoint) -> bool {
   return codepoint >= 0xD800 && codepoint <= 0xDFFF;
 }
 
@@ -333,7 +417,7 @@ inline constexpr auto is_surrogate(const char32_t codepoint) -> bool {
 /// assert(!sourcemeta::core::is_valid_codepoint(0xD800));
 /// assert(!sourcemeta::core::is_valid_codepoint(0x110000));
 /// ```
-inline constexpr auto is_valid_codepoint(const char32_t codepoint) -> bool {
+constexpr auto is_valid_codepoint(const char32_t codepoint) -> bool {
   return codepoint <= 0x10FFFF && !is_surrogate(codepoint);
 }
 
@@ -352,7 +436,7 @@ inline constexpr auto is_valid_codepoint(const char32_t codepoint) -> bool {
 /// assert(!sourcemeta::core::is_ucschar(0x0041));
 /// assert(!sourcemeta::core::is_ucschar(0xE000));
 /// ```
-inline constexpr auto is_ucschar(const char32_t codepoint) -> bool {
+constexpr auto is_ucschar(const char32_t codepoint) -> bool {
   if (codepoint >= 0xA0 && codepoint <= 0xD7FF) {
     return true;
   }
@@ -388,7 +472,7 @@ inline constexpr auto is_ucschar(const char32_t codepoint) -> bool {
 /// assert(!sourcemeta::core::is_iprivate(0x0041));
 /// assert(!sourcemeta::core::is_iprivate(0xF8FF + 1));
 /// ```
-inline constexpr auto is_iprivate(const char32_t codepoint) -> bool {
+constexpr auto is_iprivate(const char32_t codepoint) -> bool {
   if (codepoint >= 0xE000 && codepoint <= 0xF8FF) {
     return true;
   }
@@ -416,7 +500,7 @@ inline constexpr auto is_iprivate(const char32_t codepoint) -> bool {
 /// assert(sourcemeta::core::utf8_codepoint_byte_count(0x4E2D) == 3);
 /// assert(sourcemeta::core::utf8_codepoint_byte_count(0x1F600) == 4);
 /// ```
-inline constexpr auto utf8_codepoint_byte_count(const char32_t codepoint)
+constexpr auto utf8_codepoint_byte_count(const char32_t codepoint)
     -> std::uint8_t {
   if (codepoint < 0x80) {
     return 1;
@@ -631,9 +715,8 @@ auto is_nfc(const std::u32string_view input) -> bool;
 /// assert(sourcemeta::core::utf8_codepoint_length("\xf0\x9f\x98\x80", 0) == 4);
 /// assert(sourcemeta::core::utf8_codepoint_length("\xed\xa0\x80", 0) == 0);
 /// ```
-inline constexpr auto
-utf8_codepoint_length(const std::string_view input,
-                      const std::string_view::size_type position)
+constexpr auto utf8_codepoint_length(const std::string_view input,
+                                     const std::string_view::size_type position)
     -> std::size_t {
   if (position >= input.size()) {
     return 0;
@@ -705,8 +788,8 @@ utf8_codepoint_length(const std::string_view input,
 /// assert(result.value().second == 2);
 /// assert(!sourcemeta::core::utf8_decode("\xED\xA0\x80", 0).has_value());
 /// ```
-inline constexpr auto utf8_decode(const std::string_view input,
-                                  const std::string_view::size_type position)
+constexpr auto utf8_decode(const std::string_view input,
+                           const std::string_view::size_type position)
     -> std::optional<std::pair<char32_t, std::size_t>> {
   const auto size{utf8_codepoint_length(input, position)};
   if (size == 0) {
