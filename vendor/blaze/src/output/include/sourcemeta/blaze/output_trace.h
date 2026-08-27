@@ -7,7 +7,6 @@
 
 #include <sourcemeta/blaze/evaluator.h>
 #include <sourcemeta/blaze/foundation.h>
-#include <sourcemeta/blaze/frame.h>
 
 #include <sourcemeta/core/json.h>
 #include <sourcemeta/core/jsonpointer.h>
@@ -61,6 +60,7 @@ namespace sourcemeta::blaze {
 /// ```
 class SOURCEMETA_BLAZE_OUTPUT_EXPORT TraceOutput {
 public:
+  /// The kind of entry being reported. Annotations are always valid
   enum class EntryType : std::uint8_t { Push, Pass, Fail, Annotation };
 
   // NOLINTNEXTLINE(bugprone-exception-escape)
@@ -68,25 +68,23 @@ public:
     // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
     const EntryType type;
     const std::string_view name;
+    /// The instruction that produced this entry
+    const Instruction &step;
     const sourcemeta::core::WeakPointer &instance_location;
     const sourcemeta::core::WeakPointer &evaluate_path;
     const std::string_view keyword_location;
     const sourcemeta::core::JSON &annotation;
-    const std::pair<bool, std::optional<sourcemeta::blaze::Vocabularies::URI>>
-        &vocabulary;
+    /// The vocabulary that owns the keyword, when it has one
+    const std::optional<std::string_view> vocabulary;
     // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
   };
 
   // TODO(C++23): Use std::move_only_function when available in libc++
   using Callback = std::function<void(const Entry &)>;
 
-  TraceOutput(
-      sourcemeta::blaze::SchemaWalker walker,
-      sourcemeta::blaze::SchemaResolver resolver, Callback callback,
-      sourcemeta::core::WeakPointer base = sourcemeta::core::EMPTY_WEAK_POINTER,
-      const std::optional<
-          std::reference_wrapper<const sourcemeta::blaze::SchemaFrame>> &frame =
-          std::nullopt);
+  TraceOutput(const Template &schema_template, Callback callback,
+              sourcemeta::core::WeakPointer base =
+                  sourcemeta::core::EMPTY_WEAK_POINTER);
 
   // Prevent accidental copies
   TraceOutput(const TraceOutput &) = delete;
@@ -106,16 +104,9 @@ private:
 #if defined(_MSC_VER)
 #pragma warning(disable : 4251)
 #endif
-  const sourcemeta::blaze::SchemaWalker walker_;
-  const sourcemeta::blaze::SchemaResolver resolver_;
+  const Template &schema_template_;
   const sourcemeta::core::WeakPointer base_;
-  const std::optional<
-      std::reference_wrapper<const sourcemeta::blaze::SchemaFrame>>
-      frame_;
   Callback callback_;
-  std::vector<
-      std::pair<bool, std::optional<sourcemeta::blaze::Vocabularies::URI>>>
-      vocabulary_stack_;
 #if defined(_MSC_VER)
 #pragma warning(default : 4251)
 #endif

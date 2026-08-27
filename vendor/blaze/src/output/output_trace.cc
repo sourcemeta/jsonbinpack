@@ -1,45 +1,15 @@
-#include <sourcemeta/blaze/frame.h>
-#include <sourcemeta/blaze/output_trace.h>
-
 #include <sourcemeta/blaze/foundation.h>
+#include <sourcemeta/blaze/output_trace.h>
 
 #include <utility> // std::move, std::to_underlying
 #include <variant> // std::visit
 
-static auto try_vocabulary(
-    const std::optional<
-        std::reference_wrapper<const sourcemeta::blaze::SchemaFrame>> &frame,
-    const sourcemeta::core::WeakPointer &evaluate_path,
-    const sourcemeta::blaze::SchemaWalker &walker,
-    const sourcemeta::blaze::SchemaResolver &resolver,
-    const std::string &keyword_location)
-    -> std::pair<bool, std::optional<sourcemeta::blaze::Vocabularies::URI>> {
-  if (!frame.has_value() || evaluate_path.empty() ||
-      !evaluate_path.back().is_property()) {
-    return {false, std::nullopt};
-  }
-
-  const auto entry{frame.value().get().traverse(keyword_location)};
-  if (!entry.has_value()) {
-    return {false, std::nullopt};
-  }
-
-  const auto vocabularies{
-      frame.value().get().vocabularies(entry.value().get(), resolver)};
-  const auto &result{walker(evaluate_path.back().to_property(), vocabularies)};
-  return {true, result.vocabulary};
-}
-
 namespace sourcemeta::blaze {
 
-TraceOutput::TraceOutput(
-    sourcemeta::blaze::SchemaWalker walker,
-    sourcemeta::blaze::SchemaResolver resolver, Callback callback,
-    sourcemeta::core::WeakPointer base,
-    const std::optional<
-        std::reference_wrapper<const sourcemeta::blaze::SchemaFrame>> &frame)
-    : walker_{std::move(walker)}, resolver_{std::move(resolver)},
-      base_{std::move(base)}, frame_{frame}, callback_{std::move(callback)} {}
+TraceOutput::TraceOutput(const Template &schema_template, Callback callback,
+                         sourcemeta::core::WeakPointer base)
+    : schema_template_{schema_template}, base_{std::move(base)},
+      callback_{std::move(callback)} {}
 
 auto TraceOutput::operator()(
     const EvaluationType type, const bool result, const Instruction &step,
@@ -50,23 +20,18 @@ auto TraceOutput::operator()(
 
   const auto short_step_name{InstructionNames[std::to_underlying(step.type)]};
 
-  // Only resolve vocabulary on Pre callbacks and cache for Post
-  if (is_annotation(step.type)) {
-    if (type == EvaluationType::Pre) {
-      return;
-    }
-
-    auto vocabulary{try_vocabulary(this->frame_, evaluate_path, this->walker_,
-                                   this->resolver_,
-                                   step_metadata.keyword_location)};
-    this->vocabulary_stack_.push_back(std::move(vocabulary));
-  } else if (type == EvaluationType::Pre) {
-    this->vocabulary_stack_.push_back(
-        try_vocabulary(this->frame_, evaluate_path, this->walker_,
-                       this->resolver_, step_metadata.keyword_location));
+  if (is_annotation(step.type) && type == EvaluationType::Pre) {
+    return;
   }
 
-  const auto &vocabulary{this->vocabulary_stack_.back()};
+  // The compiler stamps the vocabulary that owns each keyword, indexed into
+  // the template, where zero means the keyword has none
+  const std::optional<std::string_view> vocabulary{
+      step_metadata.vocabulary == 0
+          ? std::nullopt
+          : std::optional<std::string_view>{
+                this->schema_template_.vocabularies.at(
+                    step_metadata.vocabulary - 1)}};
 
   // Determine the entry type
   EntryType entry_type;
@@ -83,6 +48,7 @@ auto TraceOutput::operator()(
   if (this->base_.empty()) {
     const Entry entry{.type = entry_type,
                       .name = short_step_name,
+                      .step = step,
                       .instance_location = instance_location,
                       .evaluate_path = evaluate_path,
                       .keyword_location = step_metadata.keyword_location,
@@ -93,16 +59,13 @@ auto TraceOutput::operator()(
     auto effective_evaluate_path{evaluate_path.resolve_from(this->base_)};
     const Entry entry{.type = entry_type,
                       .name = short_step_name,
+                      .step = step,
                       .instance_location = instance_location,
                       .evaluate_path = effective_evaluate_path,
                       .keyword_location = step_metadata.keyword_location,
                       .annotation = annotation,
                       .vocabulary = vocabulary};
     this->callback_(entry);
-  }
-
-  if (type == EvaluationType::Post || is_annotation(step.type)) {
-    this->vocabulary_stack_.pop_back();
   }
 }
 
