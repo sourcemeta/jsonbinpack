@@ -3,16 +3,16 @@
 #include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
-#include <optional> // std::optional
-#include <string>   // std::string
+#include <string> // std::string
 
 static auto test_resolver(std::string_view identifier)
-    -> std::optional<sourcemeta::core::JSON> {
+    -> sourcemeta::blaze::SchemaResolverResult {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
-    return sourcemeta::core::parse_json(R"JSON({
+    static const auto schema{sourcemeta::core::parse_json(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
-      })JSON");
+      })JSON")};
+    return schema;
   } else {
     return sourcemeta::blaze::schema_resolver(identifier);
   }
