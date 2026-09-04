@@ -8,14 +8,14 @@
 static auto test_resolver(std::string_view identifier)
     -> sourcemeta::blaze::SchemaResolverResult {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
-    static const auto schema{sourcemeta::core::parse_json(R"JSON({
+    static const auto SCHEMA{sourcemeta::core::parse_json(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
         "$id": "https://jsonbinpack.sourcemeta.com/draft/unknown"
       })JSON")};
-    return schema;
-  } else {
-    return sourcemeta::blaze::schema_resolver(identifier);
+    return SCHEMA;
   }
+
+  return sourcemeta::blaze::schema_resolver(identifier);
 }
 
 TEST(unsupported_draft) {

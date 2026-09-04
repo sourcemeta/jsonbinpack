@@ -13,9 +13,9 @@ TEST(BYTE_CHOICE_INDEX_1__1_0_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(1);
+  choices.emplace_back(0);
+  choices.emplace_back(0);
   encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
@@ -25,9 +25,9 @@ TEST(BYTE_CHOICE_INDEX_1__0_1_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(0);
+  choices.emplace_back(1);
+  choices.emplace_back(0);
   encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
@@ -37,9 +37,9 @@ TEST(BYTE_CHOICE_INDEX_1__0_0_1) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
+  choices.emplace_back(0);
+  choices.emplace_back(0);
+  choices.emplace_back(1);
   encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
@@ -49,9 +49,9 @@ TEST(BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{"foo"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
+  choices.emplace_back("foo");
+  choices.emplace_back("bar");
+  choices.emplace_back("bar");
   encoder.BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
@@ -78,9 +78,9 @@ TEST(LARGE_CHOICE_INDEX_1__1_0_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(1);
+  choices.emplace_back(0);
+  choices.emplace_back(0);
   encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
@@ -90,9 +90,9 @@ TEST(LARGE_CHOICE_INDEX_1__0_1_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(0);
+  choices.emplace_back(1);
+  choices.emplace_back(0);
   encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
@@ -102,9 +102,9 @@ TEST(LARGE_CHOICE_INDEX_1__0_0_1) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
+  choices.emplace_back(0);
+  choices.emplace_back(0);
+  choices.emplace_back(1);
   encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
@@ -114,9 +114,9 @@ TEST(LARGE_CHOICE_INDEX_bar__foo_bar_bar) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{"foo"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
+  choices.emplace_back("foo");
+  choices.emplace_back("bar");
+  choices.emplace_back("bar");
   encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
@@ -143,8 +143,9 @@ TEST(LARGE_CHOICE_INDEX_enum_250) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  for (std::int64_t x = 0; x < 255; x++) {
-    choices.push_back(sourcemeta::core::JSON{x});
+  choices.reserve(255);
+  for (std::int64_t value = 0; value < 255; value++) {
+    choices.emplace_back(value);
   }
 
   encoder.LARGE_CHOICE_INDEX(document, {std::move(choices)});
@@ -157,9 +158,9 @@ TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__1_0_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(1);
+  choices.emplace_back(0);
+  choices.emplace_back(0);
   encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{}));
 }
@@ -169,9 +170,9 @@ TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_1_0) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
-  choices.push_back(sourcemeta::core::JSON{0});
+  choices.emplace_back(0);
+  choices.emplace_back(1);
+  choices.emplace_back(0);
   encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
@@ -181,9 +182,9 @@ TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_1__0_0_1) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{0});
-  choices.push_back(sourcemeta::core::JSON{1});
+  choices.emplace_back(0);
+  choices.emplace_back(0);
+  choices.emplace_back(1);
   encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
@@ -193,9 +194,9 @@ TEST(TOP_LEVEL_BYTE_CHOICE_INDEX_bar__foo_bar_bar) {
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
   std::vector<sourcemeta::core::JSON> choices;
-  choices.push_back(sourcemeta::core::JSON{"foo"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
-  choices.push_back(sourcemeta::core::JSON{"bar"});
+  choices.emplace_back("foo");
+  choices.emplace_back("bar");
+  choices.emplace_back("bar");
   encoder.TOP_LEVEL_BYTE_CHOICE_INDEX(document, {std::move(choices)});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
@@ -664,7 +665,7 @@ TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__array_32) {
 TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_foo_bar_baz_1) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
-      sourcemeta::core::parse_json("{ \"foo\": \"bar\", \"baz\": 1 }");
+      sourcemeta::core::parse_json(R"JSON({ "foo": "bar", "baz": 1 })JSON");
   sourcemeta::core::OutputByteStream stream{};
 
   Encoder encoder{stream};
