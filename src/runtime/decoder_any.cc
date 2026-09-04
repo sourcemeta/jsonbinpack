@@ -47,7 +47,7 @@ auto Decoder::CONST_NONE(const struct CONST_NONE &options)
 }
 
 auto Decoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
-    const struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX & /*options*/)
+    [[maybe_unused]] const struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX &options)
     -> sourcemeta::core::JSON {
   using namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
   const std::uint8_t byte{this->get_byte()};

@@ -58,13 +58,13 @@ auto BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
       .maximum = static_cast<std::uint64_t>(maximum.to_integer())};
 }
 
-auto RFC3339_DATE_INTEGER_TRIPLET(const sourcemeta::core::JSON & /*options*/)
-    -> Encoding {
+auto RFC3339_DATE_INTEGER_TRIPLET(
+    [[maybe_unused]] const sourcemeta::core::JSON &options) -> Encoding {
   return sourcemeta::jsonbinpack::RFC3339_DATE_INTEGER_TRIPLET{};
 }
 
 auto PREFIX_VARINT_LENGTH_STRING_SHARED(
-    const sourcemeta::core::JSON & /*options*/) -> Encoding {
+    [[maybe_unused]] const sourcemeta::core::JSON &options) -> Encoding {
   return sourcemeta::jsonbinpack::PREFIX_VARINT_LENGTH_STRING_SHARED{};
 }
 

@@ -75,7 +75,7 @@ auto Decoder::BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
 }
 
 auto Decoder::RFC3339_DATE_INTEGER_TRIPLET(
-    const struct RFC3339_DATE_INTEGER_TRIPLET & /*options*/)
+    [[maybe_unused]] const struct RFC3339_DATE_INTEGER_TRIPLET &options)
     -> sourcemeta::core::JSON {
   const std::uint16_t year{this->get_word()};
   const std::uint8_t month{this->get_byte()};

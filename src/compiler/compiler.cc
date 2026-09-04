@@ -12,9 +12,11 @@
 #include <type_traits> // std::true_type
 
 static auto transformer_callback_noop(
-    const sourcemeta::core::Pointer & /*pointer*/,
-    const std::string_view /*name*/, const std::string_view /*message*/,
-    const sourcemeta::blaze::SchemaTransformRule::Result & /*result*/,
+    [[maybe_unused]] const sourcemeta::core::Pointer &pointer,
+    [[maybe_unused]] const std::string_view name,
+    [[maybe_unused]] const std::string_view message,
+    [[maybe_unused]] const sourcemeta::blaze::SchemaTransformRule::Result
+        &result,
     [[maybe_unused]] const bool applied) -> void {
   assert(applied);
 }

@@ -60,18 +60,15 @@ auto Encoder::TOP_LEVEL_BYTE_CHOICE_INDEX(
 }
 
 auto Encoder::CONST_NONE(
-#ifndef NDEBUG
-    const sourcemeta::core::JSON &document, const struct CONST_NONE &options)
-#else
-    const sourcemeta::core::JSON &, const struct CONST_NONE &)
-#endif
-    -> void {
+    [[maybe_unused]] const sourcemeta::core::JSON &document,
+    [[maybe_unused]] const struct CONST_NONE &options) -> void {
   assert(document == options.value);
 }
 
 auto Encoder::ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
     const sourcemeta::core::JSON &document,
-    const struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX & /*options*/) -> void {
+    [[maybe_unused]] const struct ANY_PACKED_TYPE_TAG_BYTE_PREFIX &options)
+    -> void {
   using namespace internal::ANY_PACKED_TYPE_TAG_BYTE_PREFIX;
   if (document.is_null()) {
     this->put_byte(TYPE_OTHER | (SUBTYPE_NULL << TYPE_SIZE));

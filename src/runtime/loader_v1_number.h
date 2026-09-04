@@ -11,7 +11,7 @@ namespace sourcemeta::jsonbinpack::v1 {
 // they keep their casing rather than following the C++ naming convention
 // NOLINTBEGIN(readability-identifier-naming)
 
-auto DOUBLE_VARINT_TUPLE(const sourcemeta::core::JSON & /*options*/)
+auto DOUBLE_VARINT_TUPLE([[maybe_unused]] const sourcemeta::core::JSON &options)
     -> Encoding {
   return sourcemeta::jsonbinpack::DOUBLE_VARINT_TUPLE{};
 }

@@ -9,7 +9,7 @@ namespace sourcemeta::jsonbinpack {
 
 auto Encoder::DOUBLE_VARINT_TUPLE(
     const sourcemeta::core::JSON &document,
-    const struct DOUBLE_VARINT_TUPLE & /*options*/) -> void {
+    [[maybe_unused]] const struct DOUBLE_VARINT_TUPLE &options) -> void {
   assert(document.is_real());
   const auto value{document.to_real()};
   std::uint64_t point_position;

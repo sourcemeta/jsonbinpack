@@ -51,8 +51,8 @@ auto CONST_NONE(const sourcemeta::core::JSON &options) -> Encoding {
   return sourcemeta::jsonbinpack::CONST_NONE{.value = options.at("value")};
 }
 
-auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(const sourcemeta::core::JSON & /*options*/)
-    -> Encoding {
+auto ANY_PACKED_TYPE_TAG_BYTE_PREFIX(
+    [[maybe_unused]] const sourcemeta::core::JSON &options) -> Encoding {
   return sourcemeta::jsonbinpack::ANY_PACKED_TYPE_TAG_BYTE_PREFIX{};
 }
 
