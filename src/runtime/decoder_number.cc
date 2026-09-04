@@ -8,8 +8,8 @@
 
 namespace sourcemeta::jsonbinpack {
 
-auto Decoder::DOUBLE_VARINT_TUPLE(const struct DOUBLE_VARINT_TUPLE &)
-    -> sourcemeta::core::JSON {
+auto Decoder::DOUBLE_VARINT_TUPLE(
+    const struct DOUBLE_VARINT_TUPLE & /*options*/) -> sourcemeta::core::JSON {
 #ifdef __clang__
 #pragma clang fp reciprocal(off)
 #endif

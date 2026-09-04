@@ -7,12 +7,13 @@ public:
 
   [[nodiscard]] auto
   condition(const sourcemeta::core::JSON &schema,
-            const sourcemeta::core::JSON &,
+            const sourcemeta::core::JSON & /*root*/,
             const sourcemeta::blaze::SchemaVocabularies &vocabularies,
-            const sourcemeta::blaze::SchemaFrame &,
+            const sourcemeta::blaze::SchemaFrame & /*frame*/,
             const sourcemeta::blaze::SchemaFrame::Location &location,
-            const sourcemeta::blaze::SchemaWalker &,
-            const sourcemeta::blaze::SchemaResolver &, const bool) const
+            const sourcemeta::blaze::SchemaWalker & /*walker*/,
+            const sourcemeta::blaze::SchemaResolver & /*resolver*/,
+            const bool /*is_metaschema*/) const
       -> sourcemeta::blaze::SchemaTransformRule::Result override {
     return location.dialect == "https://json-schema.org/draft/2020-12/schema" &&
            vocabularies.contains(sourcemeta::blaze::SchemaVocabularies::Known::
@@ -21,8 +22,9 @@ public:
            schema.at("type").to_string() == "number";
   }
 
-  auto transform(sourcemeta::core::JSON &schema,
-                 const sourcemeta::blaze::SchemaTransformRule::Result &) const
+  auto transform(
+      sourcemeta::core::JSON &schema,
+      const sourcemeta::blaze::SchemaTransformRule::Result & /*result*/) const
       -> void override {
     make_encoding(schema, "DOUBLE_VARINT_TUPLE",
                   sourcemeta::core::JSON::make_object());

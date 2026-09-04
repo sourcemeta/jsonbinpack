@@ -7,7 +7,8 @@ TEST(generic_decode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   using namespace sourcemeta::jsonbinpack;
   sourcemeta::core::InputByteStream stream{0x00};
   Decoder decoder{stream};
-  BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{-5, -1, 1};
+  BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{
+      .minimum = -5, .maximum = -1, .multiplier = 1};
   const auto result = decoder.read(options);
   const sourcemeta::core::JSON expected{-5};
   EXPECT_EQ(result, expected);

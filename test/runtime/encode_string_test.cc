@@ -89,7 +89,8 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 5});
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document,
+                                                 {.minimum = 3, .maximum = 5});
   EXPECT_EQ(stream.bytes(),
             (std::vector<std::byte>{std::byte{0x01}, std::byte{0x66},
                                     std::byte{0x6f}, std::byte{0x6f}}));
@@ -99,7 +100,8 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 3});
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document,
+                                                 {.minimum = 3, .maximum = 3});
   EXPECT_EQ(stream.bytes(),
             (std::vector<std::byte>{std::byte{0x01}, std::byte{0x66},
                                     std::byte{0x6f}, std::byte{0x6f}}));
@@ -109,8 +111,10 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   const sourcemeta::core::JSON document{"foo"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6});
-  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {3, 100});
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document,
+                                                 {.minimum = 0, .maximum = 6});
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+      document, {.minimum = 3, .maximum = 100});
   EXPECT_EQ(
       stream.bytes(),
       (std::vector<std::byte>{std::byte{0x04}, std::byte{0x66}, std::byte{0x6f},
@@ -122,7 +126,8 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
   const sourcemeta::core::JSON document{"foø"};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document, {0, 6});
+  encoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(document,
+                                                 {.minimum = 0, .maximum = 6});
   EXPECT_EQ(
       stream.bytes(),
       (std::vector<std::byte>{std::byte{0x05}, std::byte{0x66}, std::byte{0x6f},

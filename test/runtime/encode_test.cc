@@ -10,7 +10,8 @@ TEST(generic_encode_BOUNDED_MULTIPLE_8BITS_ENUM_FIXED) {
   const sourcemeta::core::JSON document{-5};
   sourcemeta::core::OutputByteStream stream{};
   Encoder encoder{stream};
-  BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{-5, -1, 1};
+  BOUNDED_MULTIPLE_8BITS_ENUM_FIXED options{
+      .minimum = -5, .maximum = -1, .multiplier = 1};
   encoder.write(document, options);
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }

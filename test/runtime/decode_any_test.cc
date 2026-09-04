@@ -136,8 +136,9 @@ TEST(LARGE_CHOICE_INDEX_enum_250) {
   sourcemeta::jsonbinpack::Decoder decoder{stream};
 
   std::vector<sourcemeta::core::JSON> choices;
-  for (std::int64_t x = 0; x < 255; x++) {
-    choices.emplace_back(x);
+  choices.reserve(255);
+  for (std::int64_t value = 0; value < 255; value++) {
+    choices.emplace_back(value);
   }
 
   const auto result = decoder.LARGE_CHOICE_INDEX({std::move(choices)});

@@ -14,9 +14,10 @@ TEST(FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   };
   Decoder decoder{stream};
   const auto result = decoder.FIXED_TYPED_ARBITRARY_OBJECT(
-      {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-       std::make_shared<Encoding>(
-           BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      {.size = 2,
+       .key_encoding = std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       .encoding = std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
+           .minimum = 0, .maximum = 10, .multiplier = 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));
@@ -40,9 +41,9 @@ TEST(VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   };
   Decoder decoder{stream};
   const auto result = decoder.VARINT_TYPED_ARBITRARY_OBJECT(
-      {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-       std::make_shared<Encoding>(
-           BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      {.key_encoding = std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       .encoding = std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
+           .minimum = 0, .maximum = 10, .multiplier = 1})});
   EXPECT_TRUE(result.is_object());
   EXPECT_EQ(result.size(), 2);
   EXPECT_TRUE(result.defines("foo"));

@@ -9,14 +9,16 @@
 TEST(FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
-      sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");
+      sourcemeta::core::parse_json(R"JSON({"foo":1,"bar":2})JSON");
   sourcemeta::core::OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.FIXED_TYPED_ARBITRARY_OBJECT(
-      document, {2, std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-                 std::make_shared<Encoding>(
-                     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      document,
+      {.size = 2,
+       .key_encoding = std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       .encoding = std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
+           .minimum = 0, .maximum = 10, .multiplier = 1})});
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {
@@ -37,14 +39,15 @@ TEST(FIXED_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
 TEST(VARINT_TYPED_ARBITRARY_OBJECT__no_length_string__integer) {
   using namespace sourcemeta::jsonbinpack;
   const sourcemeta::core::JSON document =
-      sourcemeta::core::parse_json("{\"foo\":1,\"bar\":2}");
+      sourcemeta::core::parse_json(R"JSON({"foo":1,"bar":2})JSON");
   sourcemeta::core::OutputByteStream stream{};
 
   Encoder encoder{stream};
   encoder.VARINT_TYPED_ARBITRARY_OBJECT(
-      document, {std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
-                 std::make_shared<Encoding>(
-                     BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{0, 10, 1})});
+      document,
+      {.key_encoding = std::make_shared<Encoding>(UTF8_STRING_NO_LENGTH{3}),
+       .encoding = std::make_shared<Encoding>(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED{
+           .minimum = 0, .maximum = 10, .multiplier = 1})});
 
   // Deal with object property non-determinism
   if (document.as_object().cbegin()->first == "foo") {

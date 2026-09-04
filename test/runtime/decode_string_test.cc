@@ -81,7 +81,8 @@ TEST(ROOF_VARINT_PREFIX_UTF8_STRING_SHARED_unicode_4) {
 TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
   sourcemeta::core::InputByteStream stream{0x01, 0x66, 0x6f, 0x6f};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
-  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({3, 5});
+  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+      {.minimum = 3, .maximum = 5});
   const sourcemeta::core::JSON expected{"foo"};
   EXPECT_EQ(result, expected);
 }
@@ -89,7 +90,8 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_5) {
 TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_3_3) {
   sourcemeta::core::InputByteStream stream{0x01, 0x66, 0x6f, 0x6f};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
-  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({3, 3});
+  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+      {.minimum = 3, .maximum = 3});
   const sourcemeta::core::JSON expected{"foo"};
   EXPECT_EQ(result, expected);
 }
@@ -99,7 +101,8 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
                                            0x00, 0x01, 0x05};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
   const sourcemeta::core::JSON result1 =
-      decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({0, 6});
+      decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+          {.minimum = 0, .maximum = 6});
   const sourcemeta::core::JSON expected{"foo"};
   EXPECT_EQ(result1, expected);
 
@@ -107,14 +110,16 @@ TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_foo_0_6_foo_3_100) {
   EXPECT_EQ(stream.tellg(), 4);
 
   const sourcemeta::core::JSON result2 =
-      decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({3, 100});
+      decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+          {.minimum = 3, .maximum = 100});
   EXPECT_EQ(result2, expected);
 }
 
 TEST(BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED_unicode_0_6) {
   sourcemeta::core::InputByteStream stream{0x05, 0x66, 0x6f, 0xc3, 0xb8};
   sourcemeta::jsonbinpack::Decoder decoder{stream};
-  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED({0, 6});
+  const auto result = decoder.BOUNDED_8BIT_PREFIX_UTF8_STRING_SHARED(
+      {.minimum = 0, .maximum = 6});
   const sourcemeta::core::JSON expected{"foø"};
   EXPECT_EQ(result, expected);
 }

@@ -10,7 +10,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__minus_5_minus_5_minus_1_1) {
   const sourcemeta::core::JSON document{-5};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {-5, -1, 1});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = -5, .maximum = -1, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
@@ -18,7 +19,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__2_minus_5_5_1) {
   const sourcemeta::core::JSON document{2};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {-5, 5, 1});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = -5, .maximum = 5, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x07}}));
 }
 
@@ -26,7 +28,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_2_8_1) {
   const sourcemeta::core::JSON document{5};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {2, 8, 1});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = 2, .maximum = 8, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x03}}));
 }
 
@@ -34,7 +37,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__5_1_19_5) {
   const sourcemeta::core::JSON document{5};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {1, 19, 5});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = 1, .maximum = 19, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x00}}));
 }
 
@@ -42,7 +46,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__15_1_19_5) {
   const sourcemeta::core::JSON document{15};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {1, 19, 5});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = 1, .maximum = 19, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
@@ -50,7 +55,8 @@ TEST(BOUNDED_MULTIPLE_8BITS_ENUM_FIXED__255_0_255_1) {
   const sourcemeta::core::JSON document{255};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(document, {0, 255, 1});
+  encoder.BOUNDED_MULTIPLE_8BITS_ENUM_FIXED(
+      document, {.minimum = 0, .maximum = 255, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0xff}}));
 }
 
@@ -58,7 +64,8 @@ TEST(FLOOR_MULTIPLE_ENUM_VARINT__minus_3_minus_10_1) {
   const sourcemeta::core::JSON document{-3};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {-10, 1});
+  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document,
+                                     {.minimum = -10, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x07}}));
 }
 
@@ -66,7 +73,7 @@ TEST(FLOOR_MULTIPLE_ENUM_VARINT__5_2_1) {
   const sourcemeta::core::JSON document{5};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {2, 1});
+  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {.minimum = 2, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x03}}));
 }
 
@@ -74,7 +81,7 @@ TEST(FLOOR_MULTIPLE_ENUM_VARINT__10_5_5) {
   const sourcemeta::core::JSON document{10};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {5, 5});
+  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {.minimum = 5, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
@@ -82,7 +89,7 @@ TEST(FLOOR_MULTIPLE_ENUM_VARINT__10_2_5) {
   const sourcemeta::core::JSON document{10};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {2, 5});
+  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {.minimum = 2, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
@@ -90,7 +97,8 @@ TEST(FLOOR_MULTIPLE_ENUM_VARINT__1000_minus_2_4) {
   const sourcemeta::core::JSON document{1000};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document, {-2, 4});
+  encoder.FLOOR_MULTIPLE_ENUM_VARINT(document,
+                                     {.minimum = -2, .multiplier = 4});
   EXPECT_EQ(stream.bytes(),
             (std::vector<std::byte>{std::byte{0xfa}, std::byte{0x01}}));
 }
@@ -99,7 +107,8 @@ TEST(ROOF_MULTIPLE_MIRROR_ENUM_VARINT__minus_3_minus_2_1) {
   const sourcemeta::core::JSON document{-3};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {-2, 1});
+  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document,
+                                           {.maximum = -2, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 
@@ -107,7 +116,8 @@ TEST(ROOF_MULTIPLE_MIRROR_ENUM_VARINT__8_10_1) {
   const sourcemeta::core::JSON document{8};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {10, 1});
+  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document,
+                                           {.maximum = 10, .multiplier = 1});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
@@ -115,7 +125,8 @@ TEST(ROOF_MULTIPLE_MIRROR_ENUM_VARINT__5_16_5) {
   const sourcemeta::core::JSON document{5};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {15, 5});
+  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document,
+                                           {.maximum = 15, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x02}}));
 }
 
@@ -123,7 +134,8 @@ TEST(ROOF_MULTIPLE_MIRROR_ENUM_VARINT__10_15_5) {
   const sourcemeta::core::JSON document{10};
   sourcemeta::core::OutputByteStream stream{};
   sourcemeta::jsonbinpack::Encoder encoder{stream};
-  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document, {15, 5});
+  encoder.ROOF_MULTIPLE_MIRROR_ENUM_VARINT(document,
+                                           {.maximum = 15, .multiplier = 5});
   EXPECT_EQ(stream.bytes(), (std::vector<std::byte>{std::byte{0x01}}));
 }
 

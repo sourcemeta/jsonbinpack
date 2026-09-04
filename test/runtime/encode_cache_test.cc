@@ -109,7 +109,7 @@ TEST(cache_remove_oldest) {
 }
 
 TEST(cache_is_a_circular_buffer) {
-  const auto length{5000000};
+  const std::uint64_t length{5000000};
   const std::string string_1(length, 'u');
   const std::string string_2(length, 'v');
   const std::string string_3(length, 'w');
