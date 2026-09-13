@@ -8,8 +8,8 @@ TEST(arbitrary) {
     "type": "number"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",

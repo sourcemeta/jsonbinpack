@@ -1,8 +1,8 @@
 #include <sourcemeta/blaze/alterschema.h>
 #include <sourcemeta/blaze/compiler.h>
 #include <sourcemeta/blaze/evaluator.h>
-#include <sourcemeta/blaze/foundation.h>
 #include <sourcemeta/blaze/output.h>
+#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/regex.h>
 #include <sourcemeta/core/uri.h>
 

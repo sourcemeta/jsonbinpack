@@ -1,12 +1,12 @@
-#include <sourcemeta/blaze/foundation.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/compiler.h>
 
 #include <string> // std::string
 
 static auto test_resolver(std::string_view identifier)
-    -> sourcemeta::blaze::SchemaResolverResult {
+    -> sourcemeta::core::SchemaResolverResult {
   if (identifier == "https://jsonbinpack.sourcemeta.com/draft/unknown") {
     static const auto SCHEMA{sourcemeta::core::parse_json(R"JSON({
         "$schema": "https://jsonbinpack.sourcemeta.com/draft/unknown",
@@ -15,7 +15,7 @@ static auto test_resolver(std::string_view identifier)
     return SCHEMA;
   }
 
-  return sourcemeta::blaze::schema_resolver(identifier);
+  return sourcemeta::core::schema_resolver(identifier);
 }
 
 TEST(unsupported_draft) {
@@ -26,9 +26,9 @@ TEST(unsupported_draft) {
 
   try {
     sourcemeta::jsonbinpack::canonicalize(
-        schema, sourcemeta::blaze::schema_walker, test_resolver);
+        schema, sourcemeta::core::schema_walker, test_resolver);
     FAIL();
-  } catch (const sourcemeta::blaze::SchemaUnknownBaseDialectError &error) {
+  } catch (const sourcemeta::core::SchemaUnknownBaseDialectError &error) {
     EXPECT_STREQ(error.what(),
                  "Could not determine the base dialect of the schema");
   }
@@ -41,10 +41,10 @@ TEST(unknown_draft) {
 
   try {
     sourcemeta::jsonbinpack::canonicalize(
-        schema, sourcemeta::blaze::schema_walker, test_resolver,
+        schema, sourcemeta::core::schema_walker, test_resolver,
         "https://example.com/invalid");
     FAIL();
-  } catch (const sourcemeta::blaze::SchemaResolutionError &error) {
+  } catch (const sourcemeta::core::SchemaResolutionError &error) {
     EXPECT_EQ(error.identifier(), "https://example.com/invalid");
   }
 }

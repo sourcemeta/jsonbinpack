@@ -8,11 +8,11 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::core::JSON &schema,
             const sourcemeta::core::JSON &root,
-            const sourcemeta::blaze::SchemaVocabularies &vocabularies,
-            const sourcemeta::blaze::SchemaFrame &frame,
-            const sourcemeta::blaze::SchemaFrame::Location &location,
-            const sourcemeta::blaze::SchemaWalker &,
-            const sourcemeta::blaze::SchemaResolver &, const bool) const
+            const sourcemeta::core::SchemaVocabularies &vocabularies,
+            const sourcemeta::core::SchemaFrame &frame,
+            const sourcemeta::core::SchemaFrame::Location &location,
+            const sourcemeta::core::SchemaWalker &,
+            const sourcemeta::core::SchemaResolver &, const bool) const
       -> SchemaTransformRule::Result override {
     ONLY_CONTINUE_IF(
         vocabularies.contains(SchemaVocabularies::Known::JSON_SCHEMA_DRAFT_4) &&
@@ -20,7 +20,7 @@ public:
 
     const bool is_resource_scope =
         location.type ==
-            sourcemeta::blaze::SchemaFrame::LocationType::Resource ||
+            sourcemeta::core::SchemaFrame::LocationType::Resource ||
         location.pointer.empty();
 
     const bool sanitization_branch =
@@ -42,7 +42,7 @@ public:
     if (!sanitization_branch) {
       if (frame.any_subschema_under(
               location.pointer,
-              [&root](const sourcemeta::blaze::SchemaFrame::Location &entry)
+              [&root](const sourcemeta::core::SchemaFrame::Location &entry)
                   -> bool {
                 const auto entry_pointer{
                     sourcemeta::core::to_pointer(entry.pointer)};
@@ -554,17 +554,16 @@ private:
   }
 
   static auto enclosing_resource_has_pending_sanitization(
-      const sourcemeta::blaze::SchemaFrame::Location &location,
+      const sourcemeta::core::SchemaFrame::Location &location,
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame) -> bool {
+      const sourcemeta::core::SchemaFrame &frame) -> bool {
     std::optional<sourcemeta::core::WeakPointer> closest;
     frame.for_each_location(
-        [&](const sourcemeta::blaze::SchemaReferenceType,
-            const std::string_view,
-            const sourcemeta::blaze::SchemaFrame::Location &entry) -> void {
+        [&](const sourcemeta::core::SchemaReferenceType, const std::string_view,
+            const sourcemeta::core::SchemaFrame::Location &entry) -> void {
           const bool entry_is_resource_scope =
               entry.type ==
-                  sourcemeta::blaze::SchemaFrame::LocationType::Resource ||
+                  sourcemeta::core::SchemaFrame::LocationType::Resource ||
               entry.pointer.empty();
           if (!entry_is_resource_scope) {
             return;

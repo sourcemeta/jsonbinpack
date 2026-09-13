@@ -7,11 +7,11 @@ public:
 
   [[nodiscard]] auto condition(
       const sourcemeta::core::JSON &schema, const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaVocabularies &vocabularies,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &location,
-      const sourcemeta::blaze::SchemaWalker &,
-      const sourcemeta::blaze::SchemaResolver &, const bool is_metaschema) const
+      const sourcemeta::core::SchemaVocabularies &vocabularies,
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &location,
+      const sourcemeta::core::SchemaWalker &,
+      const sourcemeta::core::SchemaResolver &, const bool is_metaschema) const
       -> SchemaTransformRule::Result override {
     this->metaschema_synthesis_pending_ = false;
 
@@ -34,7 +34,7 @@ public:
     if (frame.any_subschema_under(
             location.pointer,
             [&root](
-                const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+                const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
               const auto entry_pointer{
                   sourcemeta::core::to_pointer(entry.pointer)};
               const auto &entry_schema{
