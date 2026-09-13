@@ -11,4 +11,4 @@ target_link_libraries(sourcemeta_jsonbinpack_compiler_unit
 target_link_libraries(sourcemeta_jsonbinpack_compiler_unit
   PRIVATE sourcemeta::core::json)
 target_link_libraries(sourcemeta_jsonbinpack_compiler_unit
-  PRIVATE sourcemeta::blaze::foundation)
+  PRIVATE sourcemeta::core::jsonschema)

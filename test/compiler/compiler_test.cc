@@ -9,8 +9,8 @@ TEST(dialect_2020_12) {
     "$schema": "https://json-schema.org/draft/2020-12/schema"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -26,8 +26,8 @@ TEST(dialect_2019_09) {
     "$schema": "https://json-schema.org/draft/2019-09/schema"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -43,8 +43,8 @@ TEST(dialect_draft7) {
     "$schema": "http://json-schema.org/draft-07/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -60,8 +60,8 @@ TEST(dialect_draft6) {
     "$schema": "http://json-schema.org/draft-06/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -77,8 +77,8 @@ TEST(dialect_draft4) {
     "$schema": "http://json-schema.org/draft-04/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -94,8 +94,8 @@ TEST(dialect_draft3) {
     "$schema": "http://json-schema.org/draft-03/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -111,8 +111,8 @@ TEST(dialect_draft2) {
     "$schema": "http://json-schema.org/draft-02/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -128,8 +128,8 @@ TEST(dialect_draft1) {
     "$schema": "http://json-schema.org/draft-01/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -145,8 +145,8 @@ TEST(dialect_draft0) {
     "$schema": "http://json-schema.org/draft-00/schema#"
   })JSON");
 
-  sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                   sourcemeta::blaze::schema_resolver);
+  sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                   sourcemeta::core::schema_resolver);
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
@@ -163,8 +163,8 @@ TEST(unknown_dialect_default) {
   })JSON");
 
   sourcemeta::jsonbinpack::compile(
-      schema, sourcemeta::blaze::schema_walker,
-      sourcemeta::blaze::schema_resolver,
+      schema, sourcemeta::core::schema_walker,
+      sourcemeta::core::schema_resolver,
       "https://json-schema.org/draft/2020-12/schema");
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
@@ -184,10 +184,10 @@ TEST(unknown_dialect_without_default) {
   })JSON");
 
   try {
-    sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                     sourcemeta::blaze::schema_resolver);
+    sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                     sourcemeta::core::schema_resolver);
     FAIL();
-  } catch (const sourcemeta::blaze::SchemaUnknownBaseDialectError &error) {
+  } catch (const sourcemeta::core::SchemaUnknownBaseDialectError &error) {
     EXPECT_STREQ(error.what(),
                  "Could not determine the base dialect of the schema");
   }
@@ -200,10 +200,10 @@ TEST(invalid_dialect) {
   })JSON");
 
   try {
-    sourcemeta::jsonbinpack::compile(schema, sourcemeta::blaze::schema_walker,
-                                     sourcemeta::blaze::schema_resolver);
+    sourcemeta::jsonbinpack::compile(schema, sourcemeta::core::schema_walker,
+                                     sourcemeta::core::schema_resolver);
     FAIL();
-  } catch (const sourcemeta::blaze::SchemaResolutionError &error) {
+  } catch (const sourcemeta::core::SchemaResolutionError &error) {
     EXPECT_EQ(error.identifier(), "https://foo.com");
   }
 }

@@ -8,11 +8,11 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::core::JSON &schema,
             const sourcemeta::core::JSON &root,
-            const sourcemeta::blaze::SchemaVocabularies &vocabularies,
-            const sourcemeta::blaze::SchemaFrame &frame,
-            const sourcemeta::blaze::SchemaFrame::Location &location,
-            const sourcemeta::blaze::SchemaWalker &,
-            const sourcemeta::blaze::SchemaResolver &, const bool) const
+            const sourcemeta::core::SchemaVocabularies &vocabularies,
+            const sourcemeta::core::SchemaFrame &frame,
+            const sourcemeta::core::SchemaFrame::Location &location,
+            const sourcemeta::core::SchemaWalker &,
+            const sourcemeta::core::SchemaResolver &, const bool) const
       -> SchemaTransformRule::Result override {
     ONLY_CONTINUE_IF(
         vocabularies.contains(SchemaVocabularies::Known::JSON_SCHEMA_DRAFT_3) &&
@@ -27,7 +27,7 @@ public:
     if (frame.any_subschema_under(
             location.pointer,
             [&root](
-                const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+                const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
               const auto entry_pointer{
                   sourcemeta::core::to_pointer(entry.pointer)};
               const auto &entry_schema{

@@ -1,5 +1,5 @@
 #include <sourcemeta/blaze/alterschema.h>
-#include <sourcemeta/blaze/foundation.h>
+#include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/uri.h>
 
 #include <algorithm>     // std::erase_if
@@ -40,12 +40,12 @@ auto calculate_health_percentage(const std::size_t subschemas,
 
 auto check_rules(
     const sourcemeta::core::JSON &schema,
-    const sourcemeta::blaze::SchemaFrame &frame,
+    const sourcemeta::core::SchemaFrame &frame,
     const std::vector<std::tuple<
         std::unique_ptr<sourcemeta::blaze::SchemaTransformRule>, bool, bool>>
         &rules,
-    const sourcemeta::blaze::SchemaWalker &walker,
-    const sourcemeta::blaze::SchemaResolver &resolver,
+    const sourcemeta::core::SchemaWalker &walker,
+    const sourcemeta::core::SchemaResolver &resolver,
     const sourcemeta::blaze::SchemaTransformer::Callback &callback,
     const sourcemeta::core::JSON::String &exclude_keyword,
     const bool non_mutating_only, const bool is_metaschema)
@@ -59,7 +59,7 @@ auto check_rules(
 
   frame.for_each_subschema(
 
-      [&](const sourcemeta::blaze::SchemaFrame::Location &location) -> void {
+      [&](const sourcemeta::core::SchemaFrame::Location &location) -> void {
         const auto [visited_iterator, inserted] =
             visited.insert(sourcemeta::core::to_pointer(location.pointer));
         if (!inserted) {
@@ -134,15 +134,12 @@ auto SchemaTransformRule::rereference(const std::string_view reference,
                                    "The reference broke after transformation");
 }
 
-auto SchemaTransformRule::check(const core::JSON &schema,
-                                const core::JSON &root,
-                                const blaze::SchemaVocabularies &vocabularies,
-                                const blaze::SchemaWalker &walker,
-                                const blaze::SchemaResolver &resolver,
-                                const blaze::SchemaFrame &frame,
-                                const blaze::SchemaFrame::Location &location,
-                                const core::JSON::String &exclude_keyword,
-                                const bool is_metaschema) const
+auto SchemaTransformRule::check(
+    const core::JSON &schema, const core::JSON &root,
+    const core::SchemaVocabularies &vocabularies,
+    const core::SchemaWalker &walker, const core::SchemaResolver &resolver,
+    const core::SchemaFrame &frame, const core::SchemaFrame::Location &location,
+    const core::JSON::String &exclude_keyword, const bool is_metaschema) const
     -> SchemaTransformRule::Result {
   auto result{this->condition(schema, root, vocabularies, frame, location,
                               walker, resolver, is_metaschema)};
@@ -162,29 +159,29 @@ auto SchemaTransformRule::check(const core::JSON &schema,
 }
 
 auto SchemaTransformer::check(const core::JSON &schema,
-                              const blaze::SchemaWalker &walker,
-                              const blaze::SchemaResolver &resolver,
+                              const core::SchemaWalker &walker,
+                              const core::SchemaResolver &resolver,
                               const SchemaTransformer::Callback &callback,
                               std::string_view default_dialect,
                               std::string_view default_id,
                               const core::JSON::String &exclude_keyword,
                               const bool is_metaschema) const
     -> std::pair<bool, std::uint8_t> {
-  blaze::SchemaFrame frame{
-      blaze::SchemaFrame::Mode::References,
+  core::SchemaFrame frame{
+      core::SchemaFrame::Mode::References,
       schema,
       walker,
       resolver,
       default_dialect,
       default_id,
-      sourcemeta::blaze::SchemaFrame::IdentifierMode::Fallback};
+      sourcemeta::core::SchemaFrame::IdentifierMode::Fallback};
   return check_rules(schema, frame, this->rules_, walker, resolver, callback,
                      exclude_keyword, false, is_metaschema);
 }
 
 auto SchemaTransformer::apply(core::JSON &schema,
-                              const blaze::SchemaWalker &walker,
-                              const blaze::SchemaResolver &resolver,
+                              const core::SchemaWalker &walker,
+                              const core::SchemaResolver &resolver,
                               const SchemaTransformer::Callback &callback,
                               std::string_view default_dialect,
                               std::string_view default_id,
@@ -196,7 +193,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
                      ProcessedRuleHasher>
       processed_rules;
 
-  std::optional<blaze::SchemaFrame> frame;
+  std::optional<core::SchemaFrame> frame;
 
   struct PotentiallyBrokenReference {
     core::Pointer origin;
@@ -215,9 +212,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
         break;
       }
 
-      frame.emplace(blaze::SchemaFrame::Mode::References, schema, walker,
+      frame.emplace(core::SchemaFrame::Mode::References, schema, walker,
                     resolver, default_dialect, default_id,
-                    sourcemeta::blaze::SchemaFrame::IdentifierMode::Fallback);
+                    sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
     }
 
     std::unordered_set<core::Pointer, core::Pointer::Hasher> visited;
@@ -226,7 +223,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
     // Stopping the traversal stands in for the restart that the
     // rules request once they mutate the schema
     [[maybe_unused]] const auto restarted{frame->any_subschema(
-        [&](const blaze::SchemaFrame::Location &location) -> bool {
+        [&](const core::SchemaFrame::Location &location) -> bool {
           const auto [visited_iterator, inserted] =
               visited.insert(core::to_pointer(location.pointer));
           if (!inserted) {
@@ -252,9 +249,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
             }
 
             potentially_broken_references.clear();
-            frame->for_each_reference([&](const blaze::SchemaReferenceType,
+            frame->for_each_reference([&](const core::SchemaReferenceType,
                                           const core::WeakPointer &origin,
-                                          const blaze::SchemaFrame::Reference
+                                          const core::SchemaFrame::Reference
                                               &reference) -> void {
               const auto destination{frame->traverse(reference.destination)};
               if (!destination.has_value() || !reference.fragment.has_value() ||
@@ -280,9 +277,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
 
             if (reframe_after_transform) {
               frame.emplace(
-                  blaze::SchemaFrame::Mode::References, schema, walker,
-                  resolver, default_dialect, default_id,
-                  sourcemeta::blaze::SchemaFrame::IdentifierMode::Fallback);
+                  core::SchemaFrame::Mode::References, schema, walker, resolver,
+                  default_dialect, default_id,
+                  sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
             } else if (current.is_boolean()) {
               std::tuple<core::Pointer, std::string_view, core::JSON> mark{
                   entry_pointer, rule->name(), current};
@@ -390,9 +387,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
   }
 
   if (!frame.has_value() && !schema.is_boolean()) {
-    frame.emplace(blaze::SchemaFrame::Mode::References, schema, walker,
-                  resolver, default_dialect, default_id,
-                  sourcemeta::blaze::SchemaFrame::IdentifierMode::Fallback);
+    frame.emplace(core::SchemaFrame::Mode::References, schema, walker, resolver,
+                  default_dialect, default_id,
+                  sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
   }
 
   if (!frame.has_value()) {

@@ -8,11 +8,11 @@ public:
   [[nodiscard]] auto
   condition(const sourcemeta::core::JSON &schema,
             const sourcemeta::core::JSON &root,
-            const sourcemeta::blaze::SchemaVocabularies &vocabularies,
-            const sourcemeta::blaze::SchemaFrame &frame,
-            const sourcemeta::blaze::SchemaFrame::Location &location,
-            const sourcemeta::blaze::SchemaWalker &walker,
-            const sourcemeta::blaze::SchemaResolver &resolver, const bool) const
+            const sourcemeta::core::SchemaVocabularies &vocabularies,
+            const sourcemeta::core::SchemaFrame &frame,
+            const sourcemeta::core::SchemaFrame::Location &location,
+            const sourcemeta::core::SchemaWalker &walker,
+            const sourcemeta::core::SchemaResolver &resolver, const bool) const
       -> SchemaTransformRule::Result override {
     ONLY_CONTINUE_IF(vocabularies.contains(
                          SchemaVocabularies::Known::JSON_SCHEMA_2019_09_CORE) &&
@@ -20,7 +20,7 @@ public:
 
     const bool is_resource_scope{
         location.type ==
-            sourcemeta::blaze::SchemaFrame::LocationType::Resource ||
+            sourcemeta::core::SchemaFrame::LocationType::Resource ||
         location.pointer.empty()};
 
     if (is_resource_scope) {
@@ -295,11 +295,11 @@ private:
 
   static auto compute_document_has_unevaluated_items(
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaWalker &walker,
-      const sourcemeta::blaze::SchemaResolver &resolver) -> bool {
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaWalker &walker,
+      const sourcemeta::core::SchemaResolver &resolver) -> bool {
     if (frame.any_subschema(
-            [&](const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+            [&](const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
               const auto absolute{sourcemeta::core::to_pointer(entry.pointer)};
               const auto &subschema{sourcemeta::core::get(root, absolute)};
               if (!subschema.is_object() ||
@@ -311,7 +311,7 @@ private:
               const auto &keyword_metadata{
                   walker("unevaluatedItems", location_vocabularies)};
               if (keyword_metadata.type !=
-                  sourcemeta::blaze::SchemaKeywordType::Unknown) {
+                  sourcemeta::core::SchemaKeywordType::Unknown) {
                 return true;
               }
 
@@ -324,11 +324,11 @@ private:
 
   static auto any_descendant_has_pending_pattern(
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &location) -> bool {
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &location) -> bool {
     if (frame.any_subschema_under(
             location.pointer,
-            [&](const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+            [&](const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
               const auto absolute{sourcemeta::core::to_pointer(entry.pointer)};
               const auto &descendant{sourcemeta::core::get(root, absolute)};
               if (has_pending_pattern(descendant, entry)) {
@@ -370,7 +370,7 @@ private:
   }
 
   static auto location_inside_contains_wrapper(
-      const sourcemeta::blaze::SchemaFrame::Location &location) -> bool {
+      const sourcemeta::core::SchemaFrame::Location &location) -> bool {
     if (location.pointer.size() < 2) {
       return false;
     }
@@ -387,7 +387,7 @@ private:
 
   static auto
   has_pending_pattern(const sourcemeta::core::JSON &subschema,
-                      const sourcemeta::blaze::SchemaFrame::Location &location)
+                      const sourcemeta::core::SchemaFrame::Location &location)
       -> bool {
     if (!subschema.is_object()) {
       return false;
@@ -419,20 +419,19 @@ private:
   }
 
   static auto find_enclosing_resource(
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &current_location)
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &current_location)
       -> std::optional<std::reference_wrapper<
-          const sourcemeta::blaze::SchemaFrame::Location>> {
+          const sourcemeta::core::SchemaFrame::Location>> {
     std::optional<
-        std::reference_wrapper<const sourcemeta::blaze::SchemaFrame::Location>>
+        std::reference_wrapper<const sourcemeta::core::SchemaFrame::Location>>
         closest;
     frame.for_each_location(
-        [&](const sourcemeta::blaze::SchemaReferenceType,
-            const std::string_view,
-            const sourcemeta::blaze::SchemaFrame::Location &entry) -> void {
+        [&](const sourcemeta::core::SchemaReferenceType, const std::string_view,
+            const sourcemeta::core::SchemaFrame::Location &entry) -> void {
           const bool entry_is_resource_scope{
               entry.type ==
-                  sourcemeta::blaze::SchemaFrame::LocationType::Resource ||
+                  sourcemeta::core::SchemaFrame::LocationType::Resource ||
               entry.pointer.empty()};
           if (!entry_is_resource_scope) {
             return;
@@ -463,8 +462,8 @@ private:
 
   auto compute_anchor_sanitization(
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &resource_location) const
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &resource_location) const
       -> void {
     this->anchor_renames_.clear();
     this->anchor_ref_rewrites_.clear();
@@ -475,9 +474,9 @@ private:
     std::vector<std::pair<std::string, sourcemeta::core::WeakPointer>> invalid;
 
     frame.for_each_anchor(
-        sourcemeta::blaze::SchemaReferenceType::Static,
+        sourcemeta::core::SchemaReferenceType::Static,
         [&](const std::string_view uri,
-            const sourcemeta::blaze::SchemaFrame::Location &entry) -> void {
+            const sourcemeta::core::SchemaFrame::Location &entry) -> void {
           if (!pointer_within_resource(entry.pointer, resource_pointer)) {
             return;
           }
@@ -543,10 +542,9 @@ private:
 
     frame.for_each_reference_from(
         resource_pointer,
-        [&](const sourcemeta::blaze::SchemaReferenceType,
+        [&](const sourcemeta::core::SchemaReferenceType,
             const sourcemeta::core::WeakPointer &origin,
-            const sourcemeta::blaze::SchemaFrame::Reference &reference)
-            -> void {
+            const sourcemeta::core::SchemaFrame::Reference &reference) -> void {
           if (!reference.fragment.has_value()) {
             return;
           }
@@ -572,9 +570,8 @@ private:
 
   static auto enclosing_resource_has_pending_sanitization(
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &current_location)
-      -> bool {
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &current_location) -> bool {
     const auto closest{find_enclosing_resource(frame, current_location)};
     if (!closest.has_value()) {
       return false;
@@ -582,9 +579,9 @@ private:
     const auto &resource_pointer{closest.value().get().pointer};
 
     return frame.any_anchor(
-        sourcemeta::blaze::SchemaReferenceType::Static,
+        sourcemeta::core::SchemaReferenceType::Static,
         [&](const std::string_view uri,
-            const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+            const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
           if (!pointer_within_resource(entry.pointer, resource_pointer)) {
             return false;
           }
@@ -620,9 +617,8 @@ private:
 
   static auto compute_resource_has_recursive_anchor(
       const sourcemeta::core::JSON &root,
-      const sourcemeta::blaze::SchemaFrame &frame,
-      const sourcemeta::blaze::SchemaFrame::Location &current_location)
-      -> bool {
+      const sourcemeta::core::SchemaFrame &frame,
+      const sourcemeta::core::SchemaFrame::Location &current_location) -> bool {
     const auto closest{find_enclosing_resource(frame, current_location)};
     if (!closest.has_value()) {
       return false;
@@ -631,12 +627,12 @@ private:
     const auto &resource_pointer{closest.value().get().pointer};
     std::set<std::string> seen;
     return frame.any_subschema(
-        [&](const sourcemeta::blaze::SchemaFrame::Location &entry) -> bool {
+        [&](const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
           if (!entry.pointer.starts_with(resource_pointer)) {
             return false;
           }
           if (entry.type ==
-                  sourcemeta::blaze::SchemaFrame::LocationType::Resource &&
+                  sourcemeta::core::SchemaFrame::LocationType::Resource &&
               entry.pointer.size() > resource_pointer.size()) {
             return false;
           }
