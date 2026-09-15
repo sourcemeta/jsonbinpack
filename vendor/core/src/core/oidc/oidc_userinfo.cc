@@ -21,17 +21,23 @@ struct Claim {
   sourcemeta::core::JSON::Object::hash_type hash;
 };
 
-constexpr auto to_claim(const sourcemeta::core::JSON::StringView name) noexcept
-    -> Claim {
-  return {.name = name, .hash = sourcemeta::core::JSON::Object::hash(name)};
-}
-
-constexpr auto CLAIM_EMAIL{to_claim("email"sv)};
-constexpr auto CLAIM_EMAIL_VERIFIED{to_claim("email_verified"sv)};
-constexpr auto CLAIM_PHONE_NUMBER{to_claim("phone_number"sv)};
-constexpr auto CLAIM_PHONE_NUMBER_VERIFIED{to_claim("phone_number_verified"sv)};
-constexpr auto CLAIM_NAMES{to_claim("_claim_names"sv)};
-constexpr auto CLAIM_SOURCES{to_claim("_claim_sources"sv)};
+constexpr Claim CLAIM_EMAIL{
+    .name = "email"sv, .hash = sourcemeta::core::JSON::Object::hash("email"sv)};
+constexpr Claim CLAIM_EMAIL_VERIFIED{
+    .name = "email_verified"sv,
+    .hash = sourcemeta::core::JSON::Object::hash("email_verified"sv)};
+constexpr Claim CLAIM_PHONE_NUMBER{
+    .name = "phone_number"sv,
+    .hash = sourcemeta::core::JSON::Object::hash("phone_number"sv)};
+constexpr Claim CLAIM_PHONE_NUMBER_VERIFIED{
+    .name = "phone_number_verified"sv,
+    .hash = sourcemeta::core::JSON::Object::hash("phone_number_verified"sv)};
+constexpr Claim CLAIM_NAMES{
+    .name = "_claim_names"sv,
+    .hash = sourcemeta::core::JSON::Object::hash("_claim_names"sv)};
+constexpr Claim CLAIM_SOURCES{
+    .name = "_claim_sources"sv,
+    .hash = sourcemeta::core::JSON::Object::hash("_claim_sources"sv)};
 
 // A claim delivers nothing when it is absent, null, or an empty string, which
 // are the shapes OpenID Connect Core 1.0 Section 5.3.2 names in having an

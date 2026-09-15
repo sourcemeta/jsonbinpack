@@ -160,6 +160,12 @@ auto dependencies(
 /// assert(document == expected);
 /// ```
 ///
+/// Pass `default_base` to state the base URI that the document was retrieved
+/// from, which a relative reference within any of the given `paths` resolves
+/// against. As with sourcemeta::core::SchemaFrame, this does not claim that the
+/// document declares an identifier, so bundling never writes it into the
+/// document
+///
 /// How many schemas this ends up embedding follows from what the resolver
 /// hands back rather than from the schema the caller passed in, so pass
 /// `max_locations` to bound it. Every frame that bundling constructs spends
@@ -178,6 +184,7 @@ auto bundle(
         std::nullopt,
     const sourcemeta::core::SchemaFrame::Paths &paths =
         {sourcemeta::core::EMPTY_WEAK_POINTER},
+    std::string_view default_base = "",
     std::uint64_t max_locations = std::numeric_limits<std::uint64_t>::max())
     -> void;
 
@@ -248,6 +255,7 @@ auto bundle(
         std::nullopt,
     const sourcemeta::core::SchemaFrame::Paths &paths =
         {sourcemeta::core::EMPTY_WEAK_POINTER},
+    std::string_view default_base = "",
     std::uint64_t max_locations = std::numeric_limits<std::uint64_t>::max())
     -> sourcemeta::core::JSON;
 

@@ -15,9 +15,9 @@ public:
             const sourcemeta::core::SchemaFrame &,
             const sourcemeta::core::SchemaFrame::Location &location,
             const sourcemeta::core::SchemaWalker &,
-            const sourcemeta::core::SchemaResolver &, const bool) const
+            const sourcemeta::core::SchemaResolver &) const
       -> SchemaTransformRule::Result override {
-    ONLY_CONTINUE_IF(location.pointer.empty());
+    ONLY_CONTINUE_IF(!location.parent.has_value());
     ONLY_CONTINUE_IF(vocabularies.contains_any(
         {SchemaVocabularies::Known::JSON_SCHEMA_2020_12_META_DATA,
          SchemaVocabularies::Known::JSON_SCHEMA_2019_09_META_DATA,

@@ -14,7 +14,7 @@ public:
             const sourcemeta::core::SchemaFrame &frame,
             const sourcemeta::core::SchemaFrame::Location &location,
             const sourcemeta::core::SchemaWalker &,
-            const sourcemeta::core::SchemaResolver &, const bool) const
+            const sourcemeta::core::SchemaResolver &) const
       -> SchemaTransformRule::Result override {
     static const JSON::String KEYWORD{"anyOf"};
     ONLY_CONTINUE_IF(

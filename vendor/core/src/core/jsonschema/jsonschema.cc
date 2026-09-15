@@ -614,42 +614,6 @@ auto parse_vocabularies(const sourcemeta::core::JSON &schema,
 }
 } // namespace
 
-auto sourcemeta::core::vocabularies(
-    const sourcemeta::core::JSON &schema,
-    const sourcemeta::core::SchemaResolver &resolver,
-    std::string_view default_dialect) -> sourcemeta::core::SchemaVocabularies {
-  const auto resolved_base_dialect{
-      sourcemeta::core::base_dialect(schema, resolver, default_dialect)};
-  if (!resolved_base_dialect.has_value()) {
-    throw sourcemeta::core::SchemaUnknownBaseDialectError();
-  }
-
-  const std::string_view resolved_dialect{
-      sourcemeta::core::dialect(schema, default_dialect)};
-  if (resolved_dialect.empty()) {
-    // If the schema has no declared metaschema and the user didn't
-    // provide a explicit default, then we cannot do anything.
-    // Better to abort instead of trying to guess.
-    throw sourcemeta::core::SchemaUnknownDialectError();
-  }
-
-  // A meta-schema that is embedded in the schema itself takes precedence
-  // over what the resolver knows about, as the schema pins the exact
-  // meta-schema it is described by
-  return vocabularies(
-      [&schema,
-       &resolver](const std::string_view identifier) -> SchemaResolverResult {
-        const auto *embedded{sourcemeta::core::metaschema_try_embedded(
-            schema, identifier, resolver)};
-        if (embedded) {
-          return *embedded;
-        }
-
-        return resolver(identifier);
-      },
-      resolved_base_dialect.value(), resolved_dialect);
-}
-
 auto sourcemeta::core::vocabularies(const SchemaResolver &resolver,
                                     const SchemaBaseDialect base_dialect,
                                     std::string_view dialect)

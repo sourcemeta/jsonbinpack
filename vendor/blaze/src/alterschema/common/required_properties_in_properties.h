@@ -15,7 +15,7 @@ public:
             const sourcemeta::core::SchemaFrame &frame,
             const sourcemeta::core::SchemaFrame::Location &location,
             const sourcemeta::core::SchemaWalker &walker,
-            const sourcemeta::core::SchemaResolver &resolver, const bool) const
+            const sourcemeta::core::SchemaResolver &resolver) const
       -> SchemaTransformRule::Result override {
     ONLY_CONTINUE_IF(
         ((vocabularies.contains(

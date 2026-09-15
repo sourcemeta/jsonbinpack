@@ -38,6 +38,14 @@ auto calculate_health_percentage(const std::size_t subschemas,
   return static_cast<std::uint8_t>(result);
 }
 
+auto reframe(const sourcemeta::blaze::SchemaTransformer::Framer &framer,
+             const sourcemeta::core::JSON &document)
+    -> const sourcemeta::core::SchemaFrame * {
+  const auto &frame{framer(document)};
+  assert(frame.mode() == sourcemeta::core::SchemaFrame::Mode::References);
+  return &frame;
+}
+
 auto check_rules(
     const sourcemeta::core::JSON &schema,
     const sourcemeta::core::SchemaFrame &frame,
@@ -48,8 +56,7 @@ auto check_rules(
     const sourcemeta::core::SchemaResolver &resolver,
     const sourcemeta::blaze::SchemaTransformer::Callback &callback,
     const sourcemeta::core::JSON::String &exclude_keyword,
-    const bool non_mutating_only, const bool is_metaschema)
-    -> std::pair<bool, std::uint8_t> {
+    const bool non_mutating_only) -> std::pair<bool, std::uint8_t> {
   std::unordered_set<sourcemeta::core::Pointer,
                      sourcemeta::core::Pointer::Hasher>
       visited;
@@ -81,7 +88,7 @@ auto check_rules(
 
           const auto outcome{rule->check(current, schema, current_vocabularies,
                                          walker, resolver, frame, location,
-                                         exclude_keyword, is_metaschema)};
+                                         exclude_keyword)};
           if (outcome.applies) {
             subschema_failed = true;
             callback(entry_pointer, rule->name(), rule->message(), outcome,
@@ -134,15 +141,17 @@ auto SchemaTransformRule::rereference(const std::string_view reference,
                                    "The reference broke after transformation");
 }
 
-auto SchemaTransformRule::check(
-    const core::JSON &schema, const core::JSON &root,
-    const core::SchemaVocabularies &vocabularies,
-    const core::SchemaWalker &walker, const core::SchemaResolver &resolver,
-    const core::SchemaFrame &frame, const core::SchemaFrame::Location &location,
-    const core::JSON::String &exclude_keyword, const bool is_metaschema) const
+auto SchemaTransformRule::check(const core::JSON &schema,
+                                const core::JSON &root,
+                                const core::SchemaVocabularies &vocabularies,
+                                const core::SchemaWalker &walker,
+                                const core::SchemaResolver &resolver,
+                                const core::SchemaFrame &frame,
+                                const core::SchemaFrame::Location &location,
+                                const core::JSON::String &exclude_keyword) const
     -> SchemaTransformRule::Result {
   auto result{this->condition(schema, root, vocabularies, frame, location,
-                              walker, resolver, is_metaschema)};
+                              walker, resolver)};
 
   if (result.applies && !exclude_keyword.empty() && schema.is_object()) {
     const auto *exclude_value{schema.try_at(exclude_keyword)};
@@ -164,10 +173,9 @@ auto SchemaTransformer::check(const core::JSON &schema,
                               const SchemaTransformer::Callback &callback,
                               std::string_view default_dialect,
                               std::string_view default_id,
-                              const core::JSON::String &exclude_keyword,
-                              const bool is_metaschema) const
+                              const core::JSON::String &exclude_keyword) const
     -> std::pair<bool, std::uint8_t> {
-  core::SchemaFrame frame{
+  const core::SchemaFrame frame{
       core::SchemaFrame::Mode::References,
       schema,
       walker,
@@ -175,8 +183,20 @@ auto SchemaTransformer::check(const core::JSON &schema,
       default_dialect,
       default_id,
       sourcemeta::core::SchemaFrame::IdentifierMode::Fallback};
-  return check_rules(schema, frame, this->rules_, walker, resolver, callback,
-                     exclude_keyword, false, is_metaschema);
+  return this->check(schema, frame, walker, resolver, callback,
+                     exclude_keyword);
+}
+
+auto SchemaTransformer::check(const core::JSON &document,
+                              const core::SchemaFrame &frame,
+                              const core::SchemaWalker &walker,
+                              const core::SchemaResolver &resolver,
+                              const SchemaTransformer::Callback &callback,
+                              const core::JSON::String &exclude_keyword) const
+    -> std::pair<bool, std::uint8_t> {
+  assert(frame.mode() == core::SchemaFrame::Mode::References);
+  return check_rules(document, frame, this->rules_, walker, resolver, callback,
+                     exclude_keyword, false);
 }
 
 auto SchemaTransformer::apply(core::JSON &schema,
@@ -185,15 +205,33 @@ auto SchemaTransformer::apply(core::JSON &schema,
                               const SchemaTransformer::Callback &callback,
                               std::string_view default_dialect,
                               std::string_view default_id,
-                              const core::JSON::String &exclude_keyword,
-                              const bool is_metaschema) const
+                              const core::JSON::String &exclude_keyword) const
+    -> std::pair<bool, std::uint8_t> {
+  std::optional<core::SchemaFrame> frame;
+  return this->apply(
+      schema,
+      [&frame, &walker, &resolver, default_dialect,
+       default_id](const core::JSON &document) -> const core::SchemaFrame & {
+        frame.emplace(core::SchemaFrame::Mode::References, document, walker,
+                      resolver, default_dialect, default_id,
+                      sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
+        return frame.value();
+      },
+      walker, resolver, callback, exclude_keyword);
+}
+
+auto SchemaTransformer::apply(core::JSON &document, const Framer &framer,
+                              const core::SchemaWalker &walker,
+                              const core::SchemaResolver &resolver,
+                              const SchemaTransformer::Callback &callback,
+                              const core::JSON::String &exclude_keyword) const
     -> std::pair<bool, std::uint8_t> {
   assert(!this->rules_.empty());
   std::unordered_set<std::tuple<core::Pointer, std::string_view, core::JSON>,
                      ProcessedRuleHasher>
       processed_rules;
 
-  std::optional<core::SchemaFrame> frame;
+  const core::SchemaFrame *frame{nullptr};
 
   struct PotentiallyBrokenReference {
     core::Pointer origin;
@@ -207,14 +245,12 @@ auto SchemaTransformer::apply(core::JSON &schema,
   std::vector<PotentiallyBrokenReference> potentially_broken_references;
 
   while (true) {
-    if (!frame.has_value()) {
-      if (schema.is_boolean()) {
+    if (frame == nullptr) {
+      if (document.is_boolean()) {
         break;
       }
 
-      frame.emplace(core::SchemaFrame::Mode::References, schema, walker,
-                    resolver, default_dialect, default_id,
-                    sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
+      frame = reframe(framer, document);
     }
 
     std::unordered_set<core::Pointer, core::Pointer::Hasher> visited;
@@ -230,7 +266,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
             return false;
           }
           const auto &entry_pointer{*visited_iterator};
-          auto &current{core::get(schema, entry_pointer)};
+          auto &current{core::get(document, entry_pointer)};
           const auto current_vocabularies{
               frame->vocabularies(location, resolver)};
 
@@ -240,9 +276,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
               continue;
             }
 
-            auto outcome{rule->check(current, schema, current_vocabularies,
+            auto outcome{rule->check(current, document, current_vocabularies,
                                      walker, resolver, *frame, location,
-                                     exclude_keyword, is_metaschema)};
+                                     exclude_keyword)};
 
             if (!outcome.applies) {
               continue;
@@ -276,10 +312,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
             applied = true;
 
             if (reframe_after_transform) {
-              frame.emplace(
-                  core::SchemaFrame::Mode::References, schema, walker, resolver,
-                  default_dialect, default_id,
-                  sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
+              frame = reframe(framer, document);
             } else if (current.is_boolean()) {
               std::tuple<core::Pointer, std::string_view, core::JSON> mark{
                   entry_pointer, rule->name(), current};
@@ -289,7 +322,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
               }
 
               processed_rules.emplace(std::move(mark));
-              frame.reset();
+              frame = nullptr;
               return true;
             }
 
@@ -304,13 +337,13 @@ auto SchemaTransformer::apply(core::JSON &schema,
                 new_location.value().get().relative_pointer};
             const auto current_slice{entry_pointer.slice(resource_offset)};
             for (const auto &saved_reference : potentially_broken_references) {
-              if (core::try_get(schema, saved_reference.target_pointer)) {
+              if (core::try_get(document, saved_reference.target_pointer)) {
                 continue;
               }
 
               // If the origin was also relocated, resolve its new location
               auto effective_origin{saved_reference.origin};
-              if (!core::try_get(schema, saved_reference.origin.initial())) {
+              if (!core::try_get(document, saved_reference.origin.initial())) {
                 try {
                   const auto new_origin{rule->rereference(
                       saved_reference.destination, saved_reference.origin,
@@ -322,7 +355,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
                 } catch (...) {
                   continue;
                 }
-                if (!core::try_get(schema, effective_origin.initial())) {
+                if (!core::try_get(document, effective_origin.initial())) {
                   continue;
                 }
               }
@@ -342,7 +375,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
 
               core::URI original{saved_reference.original};
               original.fragment(core::to_string(new_fragment));
-              core::set(schema, effective_origin,
+              core::set(document, effective_origin,
                         core::JSON{original.recompose()});
               references_fixed = true;
             }
@@ -350,9 +383,9 @@ auto SchemaTransformer::apply(core::JSON &schema,
             const auto new_vocabularies{
                 frame->vocabularies(new_location.value().get(), resolver)};
 
-            if (rule->check(current, schema, new_vocabularies, walker, resolver,
-                            *frame, new_location.value().get(), exclude_keyword,
-                            is_metaschema)
+            if (rule->check(current, document, new_vocabularies, walker,
+                            resolver, *frame, new_location.value().get(),
+                            exclude_keyword)
                     .applies) {
               std::ostringstream error;
               error << "Rule condition holds after application: "
@@ -370,7 +403,7 @@ auto SchemaTransformer::apply(core::JSON &schema,
             processed_rules.emplace(std::move(mark));
 
             if (references_fixed) {
-              frame.reset();
+              frame = nullptr;
             }
 
             if (references_fixed || reframe_after_transform) {
@@ -386,18 +419,16 @@ auto SchemaTransformer::apply(core::JSON &schema,
     }
   }
 
-  if (!frame.has_value() && !schema.is_boolean()) {
-    frame.emplace(core::SchemaFrame::Mode::References, schema, walker, resolver,
-                  default_dialect, default_id,
-                  sourcemeta::core::SchemaFrame::IdentifierMode::Fallback);
+  if (frame == nullptr && !document.is_boolean()) {
+    frame = reframe(framer, document);
   }
 
-  if (!frame.has_value()) {
+  if (frame == nullptr) {
     return {true, static_cast<std::uint8_t>(100)};
   }
 
-  return check_rules(schema, *frame, this->rules_, walker, resolver, callback,
-                     exclude_keyword, true, is_metaschema);
+  return check_rules(document, *frame, this->rules_, walker, resolver, callback,
+                     exclude_keyword, true);
 }
 
 auto SchemaTransformer::remove(const std::string_view name) -> bool {

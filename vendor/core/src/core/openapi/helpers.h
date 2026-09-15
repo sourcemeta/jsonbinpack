@@ -41,11 +41,6 @@ struct OpenAPIField {
   JSON::Object::hash_type hash;
 };
 
-constexpr auto openapi_field(const JSON::StringView name) noexcept
-    -> OpenAPIField {
-  return {.name = name, .hash = JSON::Object::hash(name)};
-}
-
 // What a reference expects to find at the far end of itself, which is fixed by
 // where the reference sits rather than by anything the target says about
 // itself. OpenAPI Specification 3.1.1, Section 4.3.1 calls this "the expected

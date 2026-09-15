@@ -476,8 +476,6 @@ public:
                  std::string_view default_dialect = "");
   [[nodiscard]] auto begin() const -> const_iterator;
   [[nodiscard]] auto end() const -> const_iterator;
-  [[nodiscard]] auto cbegin() const -> const_iterator;
-  [[nodiscard]] auto cend() const -> const_iterator;
 
 private:
   internal subschemas_{};
@@ -522,12 +520,6 @@ inline auto SchemaIterator::begin() const -> const_iterator {
 }
 inline auto SchemaIterator::end() const -> const_iterator {
   return this->subschemas_.end();
-}
-inline auto SchemaIterator::cbegin() const -> const_iterator {
-  return this->subschemas_.cbegin();
-}
-inline auto SchemaIterator::cend() const -> const_iterator {
-  return this->subschemas_.cend();
 }
 
 } // namespace sourcemeta::core

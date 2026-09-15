@@ -328,6 +328,17 @@ unsigned_integer_property(const sourcemeta::core::JSON &document,
   return unsigned_integer_property(document, property).value_or(otherwise);
 }
 
+// Whether the frame addresses the document from its top under the given base,
+// which is what the base that the caller framed a wrapper document with does
+inline auto addresses_document_top(const sourcemeta::core::SchemaFrame &frame,
+                                   const sourcemeta::core::JSON::String &base)
+    -> bool {
+  return frame.any_subschema(
+      [&base](const sourcemeta::core::SchemaFrame::Location &location) -> bool {
+        return location.base == base && location.relative_pointer == 0;
+      });
+}
+
 // A schema context only knows where it sits within the schema resource that
 // encloses it, while an error must report where the problem is within the
 // document that the schema came from. Prepending the pointer of that resource
@@ -338,13 +349,15 @@ absolute_schema_location(const Context &context,
                          const sourcemeta::core::URI &base,
                          const sourcemeta::core::WeakPointer &relative_pointer)
     -> sourcemeta::core::Pointer {
+  const auto base_string{base.recompose()};
   const auto resource{context.frame.location(
-      sourcemeta::core::SchemaReferenceType::Static, base.recompose())};
-  // Framing is where this base came from, so the resource it names is there.
-  // Were that to stop holding, the relative pointer is all we could report,
-  // and it would silently mean something else, so catch the drift here
-  assert(resource.has_value());
-  if (!resource.has_value()) [[unlikely]] {
+      sourcemeta::core::SchemaReferenceType::Static, base_string)};
+  // A base with no location of its own is the one the caller framed a wrapper
+  // document with, under which every relative pointer starts at the top of
+  // that document. Missing the resource of any other base would silently
+  // report a pointer that means something else, so catch that drift here
+  if (!resource.has_value()) {
+    assert(addresses_document_top(context.frame, base_string));
     return to_pointer(relative_pointer);
   }
 
@@ -365,10 +378,11 @@ absolute_schema_pointer(const Context &context,
                         const sourcemeta::core::URI &base,
                         const sourcemeta::core::WeakPointer &relative_pointer)
     -> sourcemeta::core::WeakPointer {
+  const auto base_string{base.recompose()};
   const auto resource{context.frame.location(
-      sourcemeta::core::SchemaReferenceType::Static, base.recompose())};
-  assert(resource.has_value());
-  if (!resource.has_value()) [[unlikely]] {
+      sourcemeta::core::SchemaReferenceType::Static, base_string)};
+  if (!resource.has_value()) {
+    assert(addresses_document_top(context.frame, base_string));
     return relative_pointer;
   }
 
