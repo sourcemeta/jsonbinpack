@@ -43,10 +43,15 @@ constexpr std::array<JSON::StringView, 15> OPENAPI_PATH_ITEM_FIELDS_3_2{
 // RFC 10008. Looping over all nine under either revision is safe because the
 // field table above has already turned down a `query` in a 3.1 document
 constexpr std::array<OpenAPIField, 9> OPENAPI_PATH_ITEM_METHODS{
-    {openapi_field("get"sv), openapi_field("put"sv), openapi_field("post"sv),
-     openapi_field("delete"sv), openapi_field("options"sv),
-     openapi_field("head"sv), openapi_field("patch"sv),
-     openapi_field("trace"sv), openapi_field("query"sv)}};
+    {{.name = "get"sv, .hash = JSON::Object::hash("get"sv)},
+     {.name = "put"sv, .hash = JSON::Object::hash("put"sv)},
+     {.name = "post"sv, .hash = JSON::Object::hash("post"sv)},
+     {.name = "delete"sv, .hash = JSON::Object::hash("delete"sv)},
+     {.name = "options"sv, .hash = JSON::Object::hash("options"sv)},
+     {.name = "head"sv, .hash = JSON::Object::hash("head"sv)},
+     {.name = "patch"sv, .hash = JSON::Object::hash("patch"sv)},
+     {.name = "trace"sv, .hash = JSON::Object::hash("trace"sv)},
+     {.name = "query"sv, .hash = JSON::Object::hash("query"sv)}}};
 
 // The methods those nine fields define, which the same section spells in
 // uppercase in each of their descriptions, and which an `additionalOperations`

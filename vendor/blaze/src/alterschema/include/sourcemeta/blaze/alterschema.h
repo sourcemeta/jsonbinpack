@@ -40,21 +40,6 @@ enum class AlterSchemaMode : std::uint8_t {
   /// Rules that simplify the given schema for both human readability and
   /// performance
   Linter,
-
-  /// Rules that upgrade a JSON Schema document up to JSON Schema Draft 4
-  UpgradeDraft4,
-
-  /// Rules that upgrade a JSON Schema document up to JSON Schema Draft 6
-  UpgradeDraft6,
-
-  /// Rules that upgrade a JSON Schema document up to JSON Schema Draft 7
-  UpgradeDraft7,
-
-  /// Rules that upgrade a JSON Schema document up to JSON Schema 2019-09
-  Upgrade201909,
-
-  /// Rules that upgrade a JSON Schema document up to JSON Schema 2020-12
-  Upgrade202012,
 };
 
 /// @ingroup alterschema
@@ -124,13 +109,13 @@ public:
              const std::string_view default_dialect = "",
              const std::optional<Tweaks> &tweaks = std::nullopt,
              const Scope scope = Scope::All);
-  [[nodiscard]] auto
-  condition(const sourcemeta::core::JSON &, const sourcemeta::core::JSON &,
-            const sourcemeta::core::SchemaVocabularies &,
-            const sourcemeta::core::SchemaFrame &,
-            const sourcemeta::core::SchemaFrame::Location &,
-            const sourcemeta::core::SchemaWalker &,
-            const sourcemeta::core::SchemaResolver &, const bool) const
+  [[nodiscard]] auto condition(const sourcemeta::core::JSON &,
+                               const sourcemeta::core::JSON &,
+                               const sourcemeta::core::SchemaVocabularies &,
+                               const sourcemeta::core::SchemaFrame &,
+                               const sourcemeta::core::SchemaFrame::Location &,
+                               const sourcemeta::core::SchemaWalker &,
+                               const sourcemeta::core::SchemaResolver &) const
       -> SchemaTransformRule::Result override;
 
 private:

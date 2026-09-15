@@ -364,6 +364,7 @@ auto bundle_schema(sourcemeta::core::JSON &root,
                    std::string_view default_dialect,
                    std::string_view default_id,
                    const sourcemeta::core::SchemaFrame::Paths &paths,
+                   std::string_view default_base,
                    std::unordered_map<sourcemeta::core::JSON::String,
                                       sourcemeta::core::JSON::String> &bundled,
                    std::uint64_t &remaining, const std::size_t depth = 0)
@@ -376,8 +377,11 @@ auto bundle_schema(sourcemeta::core::JSON &root,
       sourcemeta::core::SchemaFrame::Mode::References, subschema, walker,
       resolver, default_dialect, default_id,
       sourcemeta::core::SchemaFrame::IdentifierMode::Additional,
-      // We only want to frame in "wrapper" mode for the top level object
-      depth == 0 ? paths : NESTED_PATHS, "", remaining};
+      // We only want to frame in "wrapper" mode for the top level object, which
+      // is also the only one that the base the caller retrieved it from applies
+      // to, as every remote carries the identity it was resolved by
+      depth == 0 ? paths : NESTED_PATHS,
+      depth == 0 ? default_base : std::string_view{}, remaining};
   charge(remaining, frame);
 
   std::vector<std::tuple<sourcemeta::core::JSON, sourcemeta::core::JSON::String,
@@ -549,8 +553,8 @@ auto bundle_schema(sourcemeta::core::JSON &root,
 
   for (auto &[remote, effective_id, remote_dialect] : deferred) {
     bundle_schema(root, container, remote, walker, resolver, mode,
-                  default_dialect, effective_id, paths, bundled, remaining,
-                  depth + 1);
+                  default_dialect, effective_id, paths, default_base, bundled,
+                  remaining, depth + 1);
     elevate_embedded_resources(remote, root, container, remote_dialect, walker,
                                resolver, default_dialect, bundled, remaining);
     embed_schema(root, container, effective_id, std::move(remote));
@@ -589,8 +593,8 @@ static auto bundle_internal(
     const sourcemeta::core::SchemaResolver &resolver, const BundleMode mode,
     std::string_view default_dialect, std::string_view default_id,
     const std::optional<sourcemeta::core::Pointer> &default_container,
-    const sourcemeta::core::SchemaFrame::Paths &paths, std::uint64_t &remaining)
-    -> void {
+    const sourcemeta::core::SchemaFrame::Paths &paths,
+    std::string_view default_base, std::uint64_t &remaining) -> void {
   // Pre-scan the schema to find any already-embedded schemas and mark them
   // as bundled to avoid re-embedding them. This includes the root schema itself
   // and any schemas already embedded within it
@@ -606,7 +610,7 @@ static auto bundle_internal(
       default_id,
       sourcemeta::core::SchemaFrame::IdentifierMode::Additional,
       paths,
-      "",
+      default_base,
       remaining};
   charge(remaining, initial_frame);
   initial_frame.for_each_resource_uri([&bundled](const auto &uri) -> void {
@@ -617,7 +621,8 @@ static auto bundle_internal(
     // This is undefined behavior
     assert(!default_container.value().empty());
     bundle_schema(schema, default_container.value(), schema, walker, resolver,
-                  mode, default_dialect, default_id, paths, bundled, remaining);
+                  mode, default_dialect, default_id, paths, default_base,
+                  bundled, remaining);
     return;
   }
 
@@ -675,7 +680,7 @@ static auto bundle_internal(
         default_id,
         sourcemeta::core::SchemaFrame::IdentifierMode::Additional,
         {sourcemeta::core::EMPTY_WEAK_POINTER},
-        "",
+        default_base,
         remaining};
     charge(remaining, frame);
     if (frame.standalone()) {
@@ -708,7 +713,7 @@ static auto bundle_internal(
 
   bundle_schema(schema, {sourcemeta::core::JSON::String{container_keyword}},
                 schema, walker, resolver, mode, default_dialect, default_id,
-                paths, bundled, remaining);
+                paths, default_base, bundled, remaining);
 }
 
 auto bundle(sourcemeta::core::JSON &schema,
@@ -718,11 +723,12 @@ auto bundle(sourcemeta::core::JSON &schema,
             std::string_view default_id,
             const std::optional<sourcemeta::core::Pointer> &default_container,
             const sourcemeta::core::SchemaFrame::Paths &paths,
-            const std::uint64_t max_locations) -> void {
+            std::string_view default_base, const std::uint64_t max_locations)
+    -> void {
   auto remaining{max_locations};
   try {
     bundle_internal(schema, walker, resolver, mode, default_dialect, default_id,
-                    default_container, paths, remaining);
+                    default_container, paths, default_base, remaining);
   } catch (const sourcemeta::core::SchemaFrameLimitError &) {
     // Every frame spends from what is left rather than from the whole, so the
     // one that ran out reports what it was handed. The caller set the limit
@@ -738,10 +744,11 @@ auto bundle(const sourcemeta::core::JSON &schema,
             std::string_view default_id,
             const std::optional<sourcemeta::core::Pointer> &default_container,
             const sourcemeta::core::SchemaFrame::Paths &paths,
-            const std::uint64_t max_locations) -> sourcemeta::core::JSON {
+            std::string_view default_base, const std::uint64_t max_locations)
+    -> sourcemeta::core::JSON {
   sourcemeta::core::JSON copy = schema;
   bundle(copy, walker, resolver, mode, default_dialect, default_id,
-         default_container, paths, max_locations);
+         default_container, paths, default_base, max_locations);
   return copy;
 }
 

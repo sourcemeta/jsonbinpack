@@ -87,10 +87,7 @@ inline auto ref_overrides_adjacent_keywords(
   }
 }
 
-// The dialect a schema declares, falling back to the given default. Unlike
-// the equivalent helper in alterschema, this one knows nothing about the
-// dialect override marker, as only the upgrade rules ever write one and
-// bundling can never observe a document while those are live
+// The dialect a schema declares, falling back to the given default
 inline auto declared_dialect(const sourcemeta::core::JSON &schema,
                              const std::string_view default_dialect)
     -> std::string_view {

@@ -13,6 +13,7 @@ option(BLAZE_CONFIGURATION "Build the Blaze configuration file library" ON)
 option(BLAZE_ALTERSCHEMA "Build the Blaze alterschema rule library" ON)
 option(BLAZE_CODEGEN "Build the Blaze codegen library" ON)
 option(BLAZE_CANONICALIZER "Build the Blaze canonicalizer library" ON)
+option(BLAZE_CONVERT "Build the Blaze convert library" ON)
 option(BLAZE_EDITOR "Build the Blaze editor schema compatibility library" ON)
 option(BLAZE_BUNDLE "Build the Blaze bundle library" ON)
 option(BLAZE_FORMAT "Build the Blaze format library" ON)
@@ -93,6 +94,10 @@ endif()
 
 if(BLAZE_CANONICALIZER)
   add_subdirectory(src/canonicalizer)
+endif()
+
+if(BLAZE_CONVERT)
+  add_subdirectory(src/convert)
 endif()
 
 if(BLAZE_EDITOR)
@@ -183,6 +188,10 @@ if(BLAZE_TESTS)
 
   if(BLAZE_CANONICALIZER)
     add_subdirectory(test/canonicalizer)
+  endif()
+
+  if(BLAZE_CONVERT)
+    add_subdirectory(test/convert)
   endif()
 
   if(BLAZE_EDITOR)

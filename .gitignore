@@ -235,3 +235,4 @@ dist
 .DS_Store
 CMakeUserPresets.json
 Brewfile.lock.json
+!/vendor/**/out

@@ -8,7 +8,6 @@ pyca-cryptography https://github.com/pyca/cryptography 9747d06e83764e7f1ea4c04da
 wycheproof https://github.com/C2SP/wycheproof 6d7cccd0fcb1917368579adeeac10fe802f1b521
 pcre2 https://github.com/PCRE2Project/pcre2 pcre2-10.48
 googlebenchmark https://github.com/google/benchmark 378fe693a1ef51500db21b11ff05a8018c5f0e55
-libdeflate https://github.com/ebiggers/libdeflate v1.26
 unicodetools https://github.com/unicode-org/unicodetools final-17.0-20250910
 jose-cookbook https://github.com/ietf-jose/cookbook 13692b68bfc18b99557a5b1ed311fd5077bfff04
 w3c-json-ld https://github.com/w3c/json-ld-api 8654ac22b6cf4f441d2fee915ae634d36b5a8067
@@ -38,3 +37,4 @@ iana-oauth/client-metadata.csv https://www.iana.org/assignments/oauth-parameters
 iana-oauth/uri.csv https://www.iana.org/assignments/oauth-parameters/uri.csv dca1a780e342845d2f3b0fe2391f12faf27217f0234933c1a399e27b55dcadec
 iana-oauth/token-introspection-response.csv https://www.iana.org/assignments/oauth-parameters/token-introspection-response.csv d1a3e84f98853b72f51ed59e99d796bf20c415a8aca13e04373c0a25bbb9b1f4
 iana-oauth/endpoint.csv https://www.iana.org/assignments/oauth-parameters/endpoint.csv 1b5d125a9cfa06ac62286e322449cf369647069a6336483f372fbd1d84ad5aca
+whatwg-html-build https://github.com/whatwg/html-build 283a3531a61106d07d9a7d9fb3e6f3b9bfd33d70

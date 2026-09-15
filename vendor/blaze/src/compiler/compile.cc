@@ -492,9 +492,14 @@ auto entrypoint_names_non_schema(const sourcemeta::core::JSON &schema,
       sourcemeta::core::JSON::String{})};
   const auto base_location{frame.traverse(base)};
   if (!base_location.has_value()) {
-    // A base that framing does not know names some other document, which this
-    // one has nothing to say about
-    return base.empty() &&
+    // A base that framing does not locate is either the one the caller framed
+    // a wrapper document with, which addresses that document from its top, or
+    // one that names some other document, which this one has nothing to say
+    // about
+    return (base.empty() ||
+            frame.any_subschema(
+                [&base](const sourcemeta::core::SchemaFrame::Location &location)
+                    -> bool { return location.base == base; })) &&
            sourcemeta::core::try_get(schema, relative.value()) != nullptr;
   }
 
@@ -563,6 +568,17 @@ auto compile(const sourcemeta::core::JSON &schema,
       [&resources](const std::string_view uri,
                    const sourcemeta::core::SchemaFrame::Location &) -> void {
         resources.emplace_back(uri);
+      });
+
+  // A schema that declares no identifier is still addressed by the base the
+  // caller framed it with, which is what its instructions report as their
+  // resource
+  frame.for_each_subschema(
+      [&resources](
+          const sourcemeta::core::SchemaFrame::Location &location) -> void {
+        if (!location.base.empty()) {
+          resources.emplace_back(location.base);
+        }
       });
 
   // Rule out any duplicates as we will use this list as the
@@ -820,7 +836,7 @@ auto compile(const sourcemeta::core::JSON &schema,
   const sourcemeta::core::JSON result{sourcemeta::blaze::bundle(
       schema, walker, resolver, sourcemeta::blaze::BundleMode::References,
       default_dialect, default_id, std::nullopt,
-      {sourcemeta::core::EMPTY_WEAK_POINTER}, max_locations)};
+      {sourcemeta::core::EMPTY_WEAK_POINTER}, "", max_locations)};
 
   sourcemeta::core::SchemaFrame frame{
       sourcemeta::core::SchemaFrame::Mode::References,

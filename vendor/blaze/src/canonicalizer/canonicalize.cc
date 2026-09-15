@@ -7,7 +7,8 @@
 
 #include "schema_helpers.h"
 
-#include <algorithm>     // std::sort, std::unique, std::ranges::none_of
+#include <algorithm>     // std::sort, std::unique, std::ranges::contains,
+                         // std::ranges::none_of
 #include <array>         // std::array
 #include <bit>           // std::popcount
 #include <cassert>       // assert

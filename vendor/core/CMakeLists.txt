@@ -233,7 +233,6 @@ if(SOURCEMETA_CORE_JSONLD)
 endif()
 
 if(SOURCEMETA_CORE_GZIP)
-  find_package(LibDeflate REQUIRED)
   add_subdirectory(src/core/gzip)
 endif()
 
