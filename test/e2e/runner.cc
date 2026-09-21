@@ -1,7 +1,6 @@
 #include <sourcemeta/jsonbinpack/compiler.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
-#include <sourcemeta/blaze/format.h>
 #include <sourcemeta/core/json.h>
 #include <sourcemeta/core/jsonschema.h>
 
@@ -43,9 +42,11 @@ auto main(int argc, char *argv[]) -> int {
                                         std::ios::binary);
   canonical_output_stream.exceptions(std::ios_base::badbit);
 
-  sourcemeta::blaze::format(schema, sourcemeta::core::schema_walker,
-                            sourcemeta::core::schema_resolver,
-                            "https://json-schema.org/draft/2020-12/schema");
+  const sourcemeta::core::SchemaFrame frame{
+      sourcemeta::core::SchemaFrame::Mode::Locations, schema,
+      sourcemeta::core::schema_walker, sourcemeta::core::schema_resolver,
+      DEFAULT_METASCHEMA};
+  sourcemeta::core::schema_format(schema, frame);
   sourcemeta::core::prettify(schema, canonical_output_stream);
   canonical_output_stream << "\n";
   canonical_output_stream.flush();
