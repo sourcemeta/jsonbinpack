@@ -191,7 +191,7 @@ inline auto openapi_check_oauth_flow(const JSON &value, const Pointer &base,
   }
 
   // OpenAPI Specification 3.1.1, Section 4.8.29: "scopes | Map[string, string]
-  // | REQUIRED. The available scopes for the OAuth2 security scheme"
+  // | oauth2 | REQUIRED. The available scopes for the OAuth2 security scheme."
   const auto &scopes{
       openapi_require(value, "scopes"sv, OPENAPI_HASH_SCOPES, base,
                       "The OAuth Flow Object must declare its scopes")};
@@ -233,8 +233,8 @@ inline auto openapi_check_oauth_flows(const JSON &value, const Pointer &base,
                              true, false, walk);
   }
 
-  // Section 4.28 adds the device authorization flow, whose required URLs are
-  // its own and the token URL
+  // 3.2.1 Section 4.28 adds the device authorization flow, whose required URLs
+  // are its own and the token URL
   const auto *device{
       value.try_at("deviceAuthorization"sv, OPENAPI_HASH_DEVICE_AUTHORIZATION)};
   if (device != nullptr) {
@@ -355,7 +355,7 @@ inline auto openapi_check_security_scheme(const JSON &value,
         OPENAPI_SECURITY_SCHEME_OAUTH2_FIELDS_3_2, base,
         "The Security Scheme Object does not define this field", walk);
 
-    // Section 4.27: "oauth2MetadataUrl | string | oauth2"
+    // 3.2.1 Section 4.27: "oauth2MetadataUrl | string | oauth2"
     const auto *metadata{
         value.try_at("oauth2MetadataUrl", OPENAPI_HASH_OAUTH2_METADATA_URL)};
     if (metadata != nullptr) {
@@ -432,6 +432,19 @@ inline auto openapi_check_security_scheme_name(const JSON::StringView name,
                 "scheme or the URI of one"};
   }
 
+  // A name that leads out of the document it was written in is one this does
+  // not hold, and saying so is what keeps a description that spans more than
+  // one document from reading as whole. Every other way of naming another
+  // Object is written down where the Object that makes it sits, which one of
+  // these cannot be, as a single Security Requirement Object may name several
+  walk.security_references.insert_or_assign(
+      openapi_location_uri(walk.base, origin),
+      OpenAPIReference{.original = JSON::String{name},
+                       .destination = target.value().recompose(),
+                       .dangling = false,
+                       .expected = OpenAPIObjectKind::SecurityScheme,
+                       .origin = origin});
+
   // Naming a whole OpenAPI Description is naming something that is not a
   // Security Scheme Object
   openapi_follow_target(target.value(), origin,
@@ -449,7 +462,7 @@ inline auto openapi_check_security_requirement(const JSON &value,
     // declared in the Security Schemes under the Components Object". This
     // Object declares no pattern but its names, so a member called `x-` is a
     // scheme name and is held to the same requirement
-    if (!walk.security_schemes.contains(entry.first)) {
+    if (!walk.security_schemes.contains(entry.first, entry.hash)) {
       openapi_check_security_scheme_name(
           entry.first, openapi_child(base, entry.first), walk);
     }

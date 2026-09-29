@@ -5,7 +5,8 @@ yaml-test-suite https://github.com/yaml/yaml-test-suite data-2022-01-17
 uritemplate-test https://github.com/uri-templates/uritemplate-test 1eb27ab4462b9e5819dc47db99044f5fd1fa9bc7
 pyca-cryptography https://github.com/pyca/cryptography 9747d06e83764e7f1ea4c04daf134cb8f861700b
 wycheproof https://github.com/C2SP/wycheproof 6d7cccd0fcb1917368579adeeac10fe802f1b521
-pcre2 https://github.com/PCRE2Project/pcre2 pcre2-10.48
+pcre2 https://github.com/PCRE2Project/pcre2 pcre2-10.49
+sljit https://github.com/zherczeg/sljit 3908d4c1d46764b7f86e172411e28cec3d0d601c
 unicodetools https://github.com/unicode-org/unicodetools final-17.0-20250910
 jose-cookbook https://github.com/ietf-jose/cookbook 13692b68bfc18b99557a5b1ed311fd5077bfff04
 w3c-json-ld https://github.com/w3c/json-ld-api 8654ac22b6cf4f441d2fee915ae634d36b5a8067
@@ -22,6 +23,7 @@ jsonschema-draft1 https://github.com/json-schema-org/json-schema-spec 2072feec9f
 jsonschema-draft0 https://github.com/json-schema-org/json-schema-spec 7ea575aef8d5c0183acbe6ff65b4c98ee9c236ec
 openapi https://github.com/OAI/OpenAPI-Specification 74906beddddab9e555337031b2a8d8e9338c4972
 openapi-test-suite-3-1 https://github.com/OAI/OpenAPI-Specification 8df69dd6b8c12f50c99e28a864e500aadf3394e5
+openapi-test-suite-3-2 https://github.com/OAI/OpenAPI-Specification bb95c80a93c42749ed79b11a4bb4a5f4cf8eafc0
 referencing-suite https://github.com/python-jsonschema/referencing-suite 61c4cc202b1e96ed5adcaf4842a595f68d659212
 iana-oauth/parameters.csv https://www.iana.org/assignments/oauth-parameters/parameters.csv acfe19a091a15279587e761a399704e886447eec906b19a41528cb37dc2afc35
 iana-oauth/extensions-error.csv https://www.iana.org/assignments/oauth-parameters/extensions-error.csv b49d3e1c9904667551170d12d0943ae9613751f42581f6438a4714c774d64838
