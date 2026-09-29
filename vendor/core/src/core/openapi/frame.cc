@@ -1,4 +1,5 @@
 #include <sourcemeta/core/openapi.h>
+#include <sourcemeta/core/text.h>
 
 #include "discriminator.h"
 #include "document.h"
@@ -13,6 +14,7 @@
 #include <optional>    // std::optional
 #include <set>         // std::set
 #include <string_view> // std::string_view
+#include <tuple>       // std::tuple
 #include <utility>     // std::move, std::pair, std::unreachable
 #include <vector>      // std::vector
 
@@ -22,8 +24,7 @@ using namespace std::string_view_literals;
 // A parent is given as one of the keys a location is held under rather than as
 // a bare pointer, so that following it is a lookup in the same map rather than
 // a key the reader has to rebuild
-auto parent_of(const std::map<sourcemeta::core::JSON::String,
-                              sourcemeta::core::OpenAPILocation> &locations,
+auto parent_of(const sourcemeta::core::OpenAPIFrame::Locations &locations,
                const sourcemeta::core::JSON::String &uri,
                const sourcemeta::core::OpenAPILocation &location)
     -> sourcemeta::core::JSON {
@@ -44,103 +45,13 @@ auto parent_of(const std::map<sourcemeta::core::JSON::String,
   return sourcemeta::core::JSON{document};
 }
 
-// Where a problem found once the walk is over belongs. A location says which
-// base it is keyed by and where under it the Object sits, and a field hangs
-// off that when the problem is with one rather than with the Object holding
-// it
-auto error_at(const std::map<sourcemeta::core::JSON::String,
-                             sourcemeta::core::OpenAPILocation> &locations,
-              const sourcemeta::core::JSON::String &location,
-              const char *message,
-              const sourcemeta::core::JSON::StringView field = {})
-    -> sourcemeta::core::OpenAPIError {
-  const auto match{locations.find(location)};
-  auto pointer{match == locations.cend() ? sourcemeta::core::EMPTY_POINTER
-                                         : match->second.pointer};
-  if (!field.empty()) {
-    pointer = pointer.concat(sourcemeta::core::JSON::String{field});
-  }
-
-  return {sourcemeta::core::openapi_document_uri(location), std::move(pointer),
-          message};
-}
-
 auto error_at(const sourcemeta::core::OpenAPIWalk &walk,
               const sourcemeta::core::JSON::String &location,
               const char *message,
               const sourcemeta::core::JSON::StringView field = {})
     -> sourcemeta::core::OpenAPIError {
-  return error_at(walk.locations, location, message, field);
-}
-
-// OpenAPI Specification 3.2.1, Section 4.22, of a Tag Object's `parent`:
-// "The named tag MUST exist in the API description, and circular references
-// between parent and child tags MUST NOT be used". A description spans every
-// document it references, so a parent naming a tag this one does not declare
-// is only missing where nothing is missing, and a cycle is a property of the
-// tags held rather than of any one tag
-auto check_tag_parents(
-    const sourcemeta::core::OpenAPIWalk &walk,
-    const std::map<sourcemeta::core::JSON::String,
-                   sourcemeta::core::OpenAPILocation> &locations,
-    const bool whole) -> void {
-  std::map<sourcemeta::core::JSON::String, sourcemeta::core::JSON::String>
-      parents;
-  for (const auto &[location, edge] : walk.tag_parents) {
-    if (whole && !walk.tag_names.contains(edge.second)) {
-      throw error_at(locations, location,
-                     "The Tag Object parent must name a tag the OpenAPI "
-                     "Description declares",
-                     "parent");
-    }
-
-    parents.insert_or_assign(edge.first, edge.second);
-  }
-
-  // Walking upward from each tag terminates at a tag with no parent unless the
-  // chain comes back round, and a chain longer than the number of edges has
-  // come back round
-  for (const auto &[location, edge] : walk.tag_parents) {
-    auto name{edge.first};
-    for (std::size_t step = 0; step <= parents.size(); step += 1) {
-      const auto next{parents.find(name)};
-      if (next == parents.cend()) {
-        break;
-      }
-
-      name = next->second;
-      if (step == parents.size()) {
-        throw error_at(locations, location,
-                       "The Tag Object parents must not form a cycle",
-                       "parent");
-      }
-    }
-  }
-}
-
-// OpenAPI Specification 3.1.1, Section 4.8.20: "The identified or reference
-// operation MUST be unique, and in the case of an `operationId`, it MUST be
-// resolved within the scope of the OpenAPI Description". Section 4.3.3
-// recommends resolving one "considering all Operation Objects from all parsed
-// documents", and only one document is ever parsed, which is why nothing is
-// decided here unless the frame stands alone
-auto check_operation_id_links(
-    const sourcemeta::core::OpenAPIWalk &walk,
-    const std::map<sourcemeta::core::JSON::String,
-                   sourcemeta::core::OpenAPILocation> &locations) -> void {
-  for (const auto &[location, identifier] : walk.operation_id_links) {
-    // Section 4.8.20 goes on to say that an operation reached through a Path
-    // Item referenced more than once "cannot be resolved unambiguously", and
-    // that "in such ambiguous cases, the resulting behavior is
-    // implementation-defined and MAY result in an error". So naming nothing at
-    // all is the violation, and naming something twice over is not
-    if (!walk.operation_ids.contains(identifier)) {
-      throw error_at(locations, location,
-                     "The Link Object operation identifier must name an "
-                     "operation the OpenAPI Description declares",
-                     "operationId");
-    }
-  }
+  return sourcemeta::core::openapi_error_at(walk.locations, location, message,
+                                            field);
 }
 
 auto info_json(const sourcemeta::core::OpenAPIInfo &info)
@@ -200,9 +111,12 @@ auto version_string(const sourcemeta::core::OpenAPIVersion version)
 
 // A Reference Object, and a Path Item Object that declares a `$ref`, stand in
 // for what they lead to. OpenAPI Specification 3.1.1, Section 4.8.9 has `$ref`
-// "allow for a referenced definition of this path item" and leaves what a
-// sibling field means undefined, so the definition is what the reference leads
-// to rather than anything written alongside it
+// "Allows for a referenced definition of this path item", and leaves undefined
+// only what "appears both in the defined object and the referenced object", so
+// what the reference leads to is where a place is looked for first. A field
+// written beside it that the referenced Path Item Object does not declare is
+// an ordinary field of the Object holding it, which the projection reads back
+// rather than this
 auto follow_aliases(const sourcemeta::core::OpenAPIWalk &walk,
                     const sourcemeta::core::JSON::String &position)
     -> sourcemeta::core::JSON::String {
@@ -214,6 +128,25 @@ auto identity_of(const sourcemeta::core::OpenAPIWalk &walk,
     -> const std::pair<sourcemeta::core::JSON::String,
                        sourcemeta::core::JSON::String> * {
   return sourcemeta::core::openapi_parameter_identity(walk, position);
+}
+
+// Whether a Parameter Object is one the specification tells a reader to look
+// past. Section 4.8.12 names three by their location and their name: "If `in`
+// is `"header"` and the `name` field is `"Accept"`, `"Content-Type"` or
+// `"Authorization"`, the parameter definition SHALL be ignored". Section
+// 4.8.12.1 reads such a name under RFC 7230, which "states header names are
+// case insensitive", and 3.2.1 Section 4.12.1 says as much under RFC 9110, so
+// which letters it is written with settles nothing
+auto ignored_by_the_specification(
+    const std::pair<sourcemeta::core::JSON::String,
+                    sourcemeta::core::JSON::String> &identity) -> bool {
+  if (identity.second != "header") {
+    return false;
+  }
+
+  auto name{identity.first};
+  sourcemeta::core::to_lowercase(name);
+  return name == "accept" || name == "content-type" || name == "authorization";
 }
 
 // The parameters in force where an operation sits. Section 4.8.9 has the ones
@@ -241,12 +174,24 @@ auto parameters_of(const sourcemeta::core::OpenAPIWalk &walk,
     // A Reference Object that was never followed names no parameter, so
     // nothing can be said to override it
     const auto *identity{identity_of(walk, position)};
+    if (identity != nullptr && ignored_by_the_specification(*identity)) {
+      continue;
+    }
+
     if (identity == nullptr || !claimed.contains(*identity)) {
       result.push_back(position);
     }
   }
 
-  result.insert(result.cend(), operation.cbegin(), operation.cend());
+  for (const auto &position : operation) {
+    const auto *identity{identity_of(walk, position)};
+    if (identity != nullptr && ignored_by_the_specification(*identity)) {
+      continue;
+    }
+
+    result.push_back(position);
+  }
+
   return result;
 }
 
@@ -271,8 +216,16 @@ auto tags_of(const sourcemeta::core::OpenAPIWalk &walk,
 
 // The servers in force where an operation sits. OpenAPI Specification 3.1.1,
 // Section 4.8.10 has an Operation Object's servers override those of "the Path
-// Item Object or OpenAPI Object level", and Section 4.8.1 makes an empty array
-// there stand for none being given at all, so an empty array carries on up
+// Item Object or OpenAPI Object level", and Section 4.8.9 says as much of a
+// Path Item Object's own.
+//
+// Neither says what an empty array means where it is written. Only Section
+// 4.8.1 speaks of one, and only of the array the OpenAPI Object itself holds:
+// "If the `servers` field is not provided, or is an empty array, the default
+// value would be a Server Object with a url value of `/`". That sentence is no
+// authority over the two levels below it,
+// so reading an empty array there as nothing given is a choice this makes
+// where the specification says nothing, rather than a rule it follows
 auto servers_of(const std::vector<sourcemeta::core::JSON::String> &operation,
                 const std::vector<sourcemeta::core::JSON::String> &path_item,
                 const std::vector<sourcemeta::core::JSON::String> &document)
@@ -292,7 +245,8 @@ auto servers_of(const std::vector<sourcemeta::core::JSON::String> &operation,
 auto check_path_parameters(
     const sourcemeta::core::OpenAPIWalk &walk,
     const std::vector<sourcemeta::core::JSON::StringView> &templates,
-    const std::vector<sourcemeta::core::JSON::String> &parameters) -> void {
+    const std::vector<sourcemeta::core::JSON::String> &parameters,
+    const char *message) -> void {
   for (const auto &position : parameters) {
     const auto *identity{identity_of(walk, position)};
     // A Reference Object that was never followed names no parameter, so
@@ -302,11 +256,80 @@ auto check_path_parameters(
     }
 
     if (std::ranges::find(templates, identity->first) == templates.cend()) {
-      throw error_at(walk, position,
-                     "A path Parameter Object must name a template expression "
-                     "of the path it is under");
+      throw error_at(walk, position, message);
     }
   }
+}
+
+// Every Path Item Object a position leads through, from the one written down
+// to the one the chain ends at. A `$ref` may lead to a Path Item Object that
+// declares one of its own, and each of those is a place of the description in
+// its own right, so reading only the two ends would pass over whatever the
+// middle of a chain writes beside its own reference
+auto aliased_path_items(const sourcemeta::core::OpenAPIWalk &walk,
+                        const sourcemeta::core::JSON::String &position)
+    -> std::vector<const sourcemeta::core::OpenAPIPathItemRecord *> {
+  std::vector<const sourcemeta::core::OpenAPIPathItemRecord *> result;
+  // Every position walked through is one the caller or the walk already holds,
+  // so this runs once per path and keeps no string of its own
+  std::set<sourcemeta::core::JSON::StringView> seen;
+  const auto *current{&position};
+  while (seen.insert(*current).second) {
+    const auto record{walk.path_items.find(*current)};
+    if (record != walk.path_items.cend()) {
+      result.push_back(&record->second);
+    }
+
+    const auto alias{walk.references.find(*current)};
+    if (alias == walk.references.cend()) {
+      break;
+    }
+
+    current = &alias->second.destination;
+  }
+
+  return result;
+}
+
+// The template expressions of every path that exposes a given Path Item
+// Object, keyed by where that Path Item sits. The requirement above names the
+// Paths Object rather than wherever the parameter happens to be written, so a
+// Path Item reached as a webhook or through a callback expression is held to
+// what the paths reaching that very Path Item declare, and one no path reaches
+// leaves nothing for such a parameter to correspond to
+auto exposing_expressions(const sourcemeta::core::OpenAPIWalk &walk)
+    -> std::pair<std::map<sourcemeta::core::JSON::String,
+                          std::vector<sourcemeta::core::JSON::StringView>>,
+                 bool> {
+  std::map<sourcemeta::core::JSON::String,
+           std::vector<sourcemeta::core::JSON::StringView>>
+      result;
+  bool whole{true};
+  for (const auto &endpoint : walk.endpoints) {
+    if (endpoint.kind != sourcemeta::core::OpenAPIOperationKind::Path) {
+      continue;
+    }
+
+    const auto position{follow_aliases(walk, endpoint.path_item)};
+    // A path whose own Path Item Object the walk could not reach may be the
+    // very path that exposes another one, so what is gathered here is short of
+    // what the description holds and says nothing about a place it does not
+    // cover. OpenAPI Specification 3.2.1, Section 4.1.2.1 leaves no room to
+    // call a reference unresolvable while a document of the description has
+    // gone unread
+    if (!walk.path_items.contains(position)) {
+      whole = false;
+      continue;
+    }
+
+    auto &expressions{result[position]};
+    for (const auto &expression :
+         sourcemeta::core::openapi_brace_expressions(endpoint.path)) {
+      expressions.push_back(expression);
+    }
+  }
+
+  return {std::move(result), whole};
 }
 
 // OpenAPI Specification 3.2.1, Section 4.12, of a parameter whose location
@@ -352,25 +375,55 @@ auto check_querystring(
 // parameters in force for one operation rather than of either level alone, and
 // Section 3.5 excuses an empty Path Item from it, which is why nothing checks
 // it until there is an operation to check
-auto check_path_templates(
+auto collect_path_parameter_names(
     const sourcemeta::core::OpenAPIWalk &walk,
-    const sourcemeta::core::JSON::String &endpoint,
-    const std::vector<sourcemeta::core::JSON::StringView> &templates,
-    const std::vector<sourcemeta::core::JSON::String> &parameters) -> void {
-  std::set<sourcemeta::core::JSON::StringView> named;
+    const std::vector<sourcemeta::core::JSON::String> &parameters,
+    std::set<sourcemeta::core::JSON::StringView> &names) -> bool {
   for (const auto &position : parameters) {
     const auto *identity{identity_of(walk, position)};
 
     // A reference the walk could not follow may be the very parameter a
     // template expression is looking for, and a description we do not hold in
     // full is one we cannot call incomplete. This is the same restraint
-    // Section 8.7.1 applies to a Link Object's operation identifier
+    // Section 4.3.3 applies to a Link Object's operation identifier, and it
+    // stops in the same place: one that ends inside this very document ends
+    // where no further reading can supply a parameter, so it is passed over
+    // rather than taken as a reason to say nothing
     if (identity == nullptr) {
-      return;
+      if (!sourcemeta::core::openapi_within_document(
+              follow_aliases(walk, position), walk.base)) {
+        return false;
+      }
+
+      continue;
     }
 
     if (identity->second == "path") {
-      named.insert(identity->first);
+      names.insert(identity->first);
+    }
+  }
+
+  return true;
+}
+
+auto check_path_templates(
+    const sourcemeta::core::OpenAPIWalk &walk,
+    const sourcemeta::core::JSON::String &endpoint,
+    const std::vector<sourcemeta::core::JSON::StringView> &templates,
+    const std::vector<const sourcemeta::core::OpenAPIPathItemRecord *> &chain,
+    const std::vector<sourcemeta::core::JSON::String> &parameters) -> void {
+  std::set<sourcemeta::core::JSON::StringView> named;
+  if (!collect_path_parameter_names(walk, parameters, named)) {
+    return;
+  }
+
+  // Section 4.8.9 leaves undefined which of two lists a chain writes is in
+  // force, so a template expression is answered by a path parameter written at
+  // any place the chain leads through. Turning a description down on one
+  // reading alone would refuse what another equally licensed reading accepts
+  for (const auto *record : chain) {
+    if (!collect_path_parameter_names(walk, record->parameters, named)) {
+      return;
     }
   }
 
@@ -383,59 +436,169 @@ auto check_path_templates(
   }
 }
 
+} // namespace
+
+namespace sourcemeta::core {
+
 // Every operation the description exposes, which Section 4.3.3 confines to what
 // the entry document reaches: "only the entry document's Paths Object
 // contributes URLs to the described API". A Callback Object holds Path Item
 // Objects of its own, so what an endpoint reaches may expose further endpoints
-auto project(const sourcemeta::core::OpenAPIWalk &walk)
-    -> std::vector<sourcemeta::core::OpenAPIOperation> {
-  std::vector<sourcemeta::core::OpenAPIOperation> result;
-  std::vector<sourcemeta::core::OpenAPIEndpoint> pending{walk.endpoints};
-  std::set<sourcemeta::core::JSON::String> seen;
+auto openapi_project(const OpenAPIWalk &walk) -> std::vector<OpenAPIOperation> {
+  std::vector<OpenAPIOperation> result;
+  std::vector<OpenAPIEndpoint> pending{walk.endpoints};
+  const auto expressions{exposing_expressions(walk)};
+  // What tells one exposure from another, held as the four things it is
+  // rather than as one string spelling them out. A position carries a `#` of
+  // its own, so any character picked to join them is a character one of them
+  // may hold, and the spelling would not tell every pair of exposures apart
+  std::set<std::tuple<OpenAPIOperationKind, JSON::String, JSON::String,
+                      std::optional<JSON::String>>>
+      seen;
   for (std::size_t index = 0; index < pending.size(); index += 1) {
     const auto kind{pending[index].kind};
     const auto path{pending[index].path};
     const auto endpoint{pending[index].path_item};
+    const auto parent{pending[index].parent};
     auto position{follow_aliases(walk, endpoint)};
 
     // A Path Item that leads back to one already exposed the same way exposes
-    // nothing further, which is what stops a cycle of them
-    sourcemeta::core::JSON::String key{
-        sourcemeta::core::openapi_operation_kind_name(kind)};
-    key.append("#").append(path).append("#").append(position);
-    if (!seen.insert(std::move(key)).second) {
+    // nothing further, which is what stops a cycle of them. Section 4.8.10
+    // hangs a Callback Object off "the parent operation", so one that two of
+    // them reach is reached twice rather than once and the Object it hangs off
+    // is part of what tells the two apart
+    if (!seen.emplace(kind, path, position, parent).second) {
       continue;
     }
 
-    const auto entry{walk.path_items.find(position)};
-    if (entry == walk.path_items.cend()) {
+    // Section 4.8.9 leaves undefined only what "appears both in the defined
+    // object and the referenced object", so a field written beside a `$ref`
+    // that the referenced Path Item Object does not declare is an ordinary
+    // field of the Path Item Object holding it, and Section 3.5 counts a path
+    // parameter "included in the Path Item itself" wherever it is written. So
+    // what the reference leads to answers first, and what sits beside it
+    // answers for whatever that leaves unsaid
+    const auto chain{aliased_path_items(walk, endpoint)};
+    if (chain.empty()) {
       continue;
     }
+
+    // Whether what the chain ends at is settled by the document in hand. It is
+    // settled when that place is a Path Item Object this holds, and equally
+    // when the chain ends on a pointer into this very document that leads
+    // nowhere, since no further reading can rescue one of those. 3.2.1 Section
+    // 4.1.2.1 asks for every document to be parsed before a reference is
+    // called unresolvable, which leaves only a chain ending in a document this
+    // has not read unsettled
+    const auto settled{walk.path_items.contains(position) ||
+                       openapi_within_document(position, walk.base)};
+
+    // The last place the chain leads through that this one holds answers
+    // first, which is what the chain ends at whenever that landed, and each
+    // place nearer to it answers before the one that names it. Section 4.8.9
+    // leaves that order undefined between any two of them and so free to pick
+    const auto *parameters_of_path_item{&chain.back()->parameters};
+    const auto *servers_of_path_item{&chain.back()->servers};
+    auto methods{chain.back()->operations};
+    for (const auto *record : std::ranges::reverse_view{chain}) {
+      if (parameters_of_path_item->empty()) {
+        parameters_of_path_item = &record->parameters;
+      }
+
+      if (servers_of_path_item->empty()) {
+        servers_of_path_item = &record->servers;
+      }
+
+      for (const auto &method : record->operations) {
+        if (std::ranges::none_of(methods, [&method](const auto &known) -> bool {
+              return known.first == method.first;
+            })) {
+          methods.push_back(method);
+        }
+      }
+    }
+
+    const auto &path_item_parameters{*parameters_of_path_item};
+    const auto &path_item_servers{*servers_of_path_item};
 
     // A webhook name and a callback expression are not templated paths, so
-    // only what the Paths Object exposes has any templating to correspond to
-    const auto templated{kind == sourcemeta::core::OpenAPIOperationKind::Path};
-    const auto templates{
-        templated ? sourcemeta::core::openapi_brace_expressions(path)
-                  : std::vector<sourcemeta::core::JSON::StringView>{}};
-    if (templated) {
-      check_path_parameters(walk, templates, entry->second.parameters);
+    // only what the Paths Object exposes has any templating of its own
+    const auto templated{kind == OpenAPIOperationKind::Path};
+    const auto own_templates{templated ? openapi_brace_expressions(path)
+                                       : std::vector<JSON::StringView>{}};
+    // Section 4.8.12 asks a path Parameter Object to name "a template
+    // expression occurring within the path field in the Paths Object" rather
+    // than one of whichever path it happens to sit under, and one Path Item
+    // Object may be reached from several of them. So every path exposing this
+    // one answers, which is the reading a webhook and a callback already went
+    // by, and a Path Item Object no path reached falls back to the path being
+    // projected
+    const auto exposed{expressions.first.find(position)};
+    const auto &templates{
+        exposed == expressions.first.cend() ? own_templates : exposed->second};
+    // A path answers for its own braces whatever else went unread, but the set
+    // gathered from every path exposing one Path Item Object is short by
+    // whatever a path this does not hold would have added to it, so only the
+    // first of those two is worth reading against on its own
+    const auto own_only{templated && exposed == expressions.first.cend()};
+    const auto *const message{
+        "A path Parameter Object must name a template expression of a path "
+        "that exposes it"};
+    // What no path exposes is only known to be exposed by none once every path
+    // has been read, which a description held short of its documents leaves
+    // unsettled
+    // Section 4.8.12 binds every Parameter Object written down rather than
+    // whichever list the fold above carries forward, so each place the chain
+    // leads through answers for the ones it declares itself
+    // A path answers for its own braces whatever else is unread, but every
+    // other kind of endpoint is held to the expressions of the paths reaching
+    // the Path Item Object the chain ends at, and a chain that ends somewhere
+    // this does not hold is one whose end an unread document still decides
+    if ((own_only || expressions.second) && settled) {
+      for (const auto *record : chain) {
+        check_path_parameters(walk, templates, record->parameters, message);
+        // An Operation Object that a method of the same name nearer the end of
+        // the chain outranks is written down all the same, and Section 4.8.12
+        // binds a Parameter Object wherever it is written
+        for (const auto &declared : record->operations) {
+          const auto operation{walk.operation_records.find(declared.second)};
+          if (operation != walk.operation_records.cend()) {
+            check_path_parameters(walk, templates, operation->second.parameters,
+                                  message);
+          }
+        }
+      }
     }
 
-    for (const auto &[method, origin] : entry->second.operations) {
+    for (const auto &[method, origin] : methods) {
       const auto operation{walk.operation_records.find(origin)};
       if (operation == walk.operation_records.cend()) {
         continue;
       }
 
       auto parameters{parameters_of(walk, operation->second.parameters,
-                                    entry->second.parameters)};
-      if (templated) {
-        check_path_parameters(walk, templates, parameters);
-        check_path_templates(walk, endpoint, templates, parameters);
+                                    path_item_parameters)};
+      // The two loops above already answer for every Parameter Object written
+      // at any place the chain leads through, and what is in force here is
+      // drawn from those same lists, so this holds nothing new. It abstains
+      // on the same terms all the same, as the expressions it would be read
+      // against are the ones an unread document settles
+      if ((own_only || expressions.second) && settled) {
+        check_path_parameters(walk, templates, parameters, message);
+      }
+      // This one turns on an expression having no parameter anywhere, and a
+      // chain that ends somewhere this does not hold may well end at the Path
+      // Item Object declaring it, so there is nothing to conclude yet
+      if (templated && settled) {
+        check_path_templates(walk, endpoint, own_templates, chain,
+                             operation->second.parameters);
       }
 
-      check_querystring(walk, origin, parameters);
+      // Which of the chain's lists is in force decides whether these two ever
+      // meet, and that is not settled while the chain ends somewhere unread
+      if (settled) {
+        check_querystring(walk, origin, parameters);
+      }
 
       result.push_back(
           {.kind = kind,
@@ -443,16 +606,17 @@ auto project(const sourcemeta::core::OpenAPIWalk &walk)
            .method = method,
            .origin = origin,
            .endpoint = endpoint,
-           .servers = servers_of(operation->second.servers,
-                                 entry->second.servers, walk.servers),
+           .parent = parent,
+           .servers = servers_of(operation->second.servers, path_item_servers,
+                                 walk.servers),
            // Section 4.8.10: "This definition overrides any declared top-level
            // security. To remove a top-level security declaration, an empty
            // array can be used", which is why declaring none and declaring an
            // empty array are not the same thing here
-           .security = operation->second.security.has_value()
-                           ? operation->second.security.value()
-                           : walk.security.value_or(
-                                 std::vector<sourcemeta::core::JSON::String>{}),
+           .security =
+               operation->second.security.has_value()
+                   ? operation->second.security.value()
+                   : walk.security.value_or(std::vector<JSON::String>{}),
            .parameters = std::move(parameters),
            .tags = tags_of(walk, operation->second.tags)});
 
@@ -463,10 +627,10 @@ auto project(const sourcemeta::core::OpenAPIWalk &walk)
         }
 
         for (const auto &[expression, path_item] : entries->second) {
-          pending.push_back(
-              {.kind = sourcemeta::core::OpenAPIOperationKind::Callback,
-               .path = expression,
-               .path_item = path_item});
+          pending.push_back({.kind = OpenAPIOperationKind::Callback,
+                             .path = expression,
+                             .path_item = path_item,
+                             .parent = origin});
         }
       }
     }
@@ -475,22 +639,19 @@ auto project(const sourcemeta::core::OpenAPIWalk &walk)
   return result;
 }
 
-} // namespace
-
-namespace sourcemeta::core {
-
 struct OpenAPIFrame::Internal {
   OpenAPIVersion version;
   OpenAPIInfo info;
   // Canonicalising means this no longer borrows from what the caller passed
   JSON::String base;
   bool standalone;
-  std::map<JSON::String, OpenAPILocation> locations;
-  std::map<JSON::String, OpenAPIReference> references;
+  OpenAPIFrame::Locations locations;
+  OpenAPIFrame::References references;
   std::vector<OpenAPIOperation> operations;
   // What a Discriminator Object names by URI, which is a reference the schemas
   // hold rather than one the shell around them does
   std::vector<OpenAPIDiscriminator> discriminators;
+  OpenAPIFrame::References security_references;
   // Reading inside a Schema Object is the business of whatever understands
   // JSON Schema, so this is that pass over every Schema Object position at
   // once. It is declared last so that it is destroyed first, as it holds
@@ -510,10 +671,6 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
       max_locations)};
   this->internal_->version = walk.version;
   this->internal_->info = walk.info;
-  // What the caller passed in is where the entry document was retrieved from,
-  // and from 3.2 onwards the document may give itself a URI of its own, which
-  // the walk settles and everything it holds is keyed by
-  this->internal_->base = std::move(walk.base);
   // A frame stands alone when everything it references is inside it, which is
   // what a caller asks before deciding whether it has the whole description.
   // Which references leave it is what making it whole comes down to, so each
@@ -527,11 +684,29 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
     }
   }
 
-  // Projecting reads the whole walk, so nothing is taken out of it until after
-  this->internal_->operations = project(walk);
+  // And so does a Security Requirement Object that names a scheme by the URI
+  // of one, which 3.2 admits alongside the name of a component. Naming one
+  // that this document does not hold leaves the description no more whole than
+  // any other reference out of it would
+  for (auto &reference : walk.security_references) {
+    reference.second.dangling =
+        !walk.locations.contains(reference.second.destination);
+    if (reference.second.dangling) {
+      every_reference_lands = false;
+    }
+  }
+
+  // Projecting reads the whole walk, the base included, so nothing is taken
+  // out of it until after
+  this->internal_->operations = openapi_project(walk);
+  // What the caller passed in is where the entry document was retrieved from,
+  // and from 3.2 onwards the document may give itself a URI of its own, which
+  // the walk settles and everything it holds is keyed by
+  this->internal_->base = std::move(walk.base);
   const auto walk_locations{walk.locations.size()};
   this->internal_->locations = std::move(walk.locations);
   this->internal_->references = std::move(walk.references);
+  this->internal_->security_references = std::move(walk.security_references);
 
   // Every Schema Object position of the document at once, rather than one
   // pass each, so that a schema referring to another resolves against a frame
@@ -552,25 +727,11 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
   //
   // Locations are keyed by the base with the pointer hung off it, so a place
   // within another has that other one's key as a prefix and follows it here
-  std::vector<WeakPointer> enclosing;
   for (const auto &location : this->internal_->locations) {
-    if (location.second.type != OpenAPIObjectKind::Schema) {
-      continue;
+    if (location.second.type == OpenAPIObjectKind::Schema) {
+      this->internal_->schema_paths.push_back(
+          to_weak_pointer(location.second.pointer));
     }
-
-    auto pointer{to_weak_pointer(location.second.pointer)};
-    while (!enclosing.empty() && !pointer.starts_with(enclosing.back())) {
-      enclosing.pop_back();
-    }
-
-    if (!enclosing.empty()) {
-      throw OpenAPIError{
-          this->internal_->base, location.second.pointer,
-          "A Schema Object must not sit within another Schema Object"};
-    }
-
-    enclosing.push_back(pointer);
-    this->internal_->schema_paths.push_back(std::move(pointer));
   }
 
   this->internal_->schema_resolver = resolver;
@@ -620,13 +781,14 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
   // that of, so these wait until the whole of it is settled, which counts what
   // the Schema Objects reach for as much as what the shell around them does
   if (this->internal_->standalone) {
-    check_operation_id_links(walk, this->internal_->locations);
+    sourcemeta::core::openapi_check_operation_id_links(
+        walk, this->internal_->locations);
   }
 
   // A tag the description declares elsewhere is one this cannot say is
   // missing, for the same reason as the identifiers above
-  check_tag_parents(walk, this->internal_->locations,
-                    this->internal_->standalone);
+  sourcemeta::core::openapi_check_tag_parents(walk, this->internal_->locations,
+                                              this->internal_->standalone);
 }
 
 OpenAPIFrame::~OpenAPIFrame() = default;
@@ -649,6 +811,50 @@ auto OpenAPIFrame::standalone() const noexcept -> bool {
 
 auto OpenAPIFrame::schemas() const noexcept -> const SchemaFrame & {
   return *(this->internal_->schemas);
+}
+
+auto OpenAPIFrame::locations() const noexcept -> const Locations & {
+  return this->internal_->locations;
+}
+
+auto OpenAPIFrame::references() const noexcept -> const References & {
+  return this->internal_->references;
+}
+
+auto OpenAPIFrame::security_references() const noexcept -> const References & {
+  return this->internal_->security_references;
+}
+
+auto OpenAPIFrame::operations() const noexcept
+    -> const std::vector<OpenAPIOperation> & {
+  return this->internal_->operations;
+}
+
+auto OpenAPIFrame::discriminators() const noexcept
+    -> const std::vector<OpenAPIDiscriminator> & {
+  return this->internal_->discriminators;
+}
+
+auto OpenAPIFrame::traverse(const JSON::StringView uri) const
+    -> const Location * {
+  const auto match{this->internal_->locations.find(uri)};
+  if (match == this->internal_->locations.cend()) {
+    return nullptr;
+  }
+
+  return &match->second;
+}
+
+auto OpenAPIFrame::uri(const Pointer &pointer) const -> JSON::String {
+  return openapi_location_uri(this->internal_->base, pointer);
+}
+
+auto OpenAPIFrame::object_count() const noexcept -> std::size_t {
+  return this->internal_->locations.size();
+}
+
+auto OpenAPIFrame::reference_count() const noexcept -> std::size_t {
+  return this->internal_->references.size();
 }
 
 auto OpenAPIFrame::to_json() const -> JSON {
@@ -711,6 +917,12 @@ auto OpenAPIFrame::to_json() const -> JSON {
     entry.assign_assume_new("origin", JSON{operation.origin});
     entry.assign_assume_new("endpoint", JSON{operation.endpoint});
 
+    // Only an operation that a Callback Object exposes has one of these, which
+    // is the Operation Object that Callback Object hangs off
+    if (operation.parent.has_value()) {
+      entry.assign_assume_new("parent", JSON{operation.parent.value()});
+    }
+
     entry.assign_assume_new("tags", sourcemeta::core::to_json(operation.tags));
 
     entry.assign_assume_new("servers",
@@ -742,6 +954,22 @@ auto OpenAPIFrame::to_json() const -> JSON {
     }
 
     result.assign_assume_new("discriminators", std::move(discriminators));
+  }
+
+  if (!this->internal_->security_references.empty()) {
+    auto references{JSON::make_array()};
+    for (const auto &reference : this->internal_->security_references) {
+      auto entry{JSON::make_object()};
+      entry.assign_assume_new("pointer",
+                              JSON{to_string(reference.second.origin)});
+      entry.assign_assume_new("original", JSON{reference.second.original});
+      entry.assign_assume_new("destination",
+                              JSON{reference.second.destination});
+      entry.assign_assume_new("dangling", JSON{reference.second.dangling});
+      references.push_back(std::move(entry));
+    }
+
+    result.assign_assume_new("securityReferences", std::move(references));
   }
 
   return result;
