@@ -12,8 +12,10 @@
 
 namespace {
 
+#ifndef NDEBUG
 // The widest coefficient that still fits in a signed 64-bit integer
 constexpr std::size_t MAXIMUM_COEFFICIENT_DIGITS{19};
+#endif
 
 // The coefficient and the base-10 exponent of an arbitrary precision decimal.
 // Core keeps both of them private and only spells them out through the
