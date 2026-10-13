@@ -9,13 +9,13 @@
 #include <sourcemeta/core/oauth_random.h>
 #include <sourcemeta/core/uri.h>
 
-#include <algorithm>   // std::ranges::find_if, std::clamp
+#include <algorithm>   // std::ranges::find_if
+#include <cassert>     // assert
 #include <chrono>      // std::chrono::seconds, std::chrono::duration_cast
 #include <cstdint>     // std::int64_t
 #include <optional>    // std::optional, std::nullopt
 #include <string>      // std::string
 #include <string_view> // std::string_view
-#include <utility>     // std::unreachable
 
 namespace sourcemeta::core {
 
@@ -63,10 +63,10 @@ auto map_verification_error(const JWTVerificationError error)
     case JWTVerificationError::IssuedAt:
       return OAuthAssertionError::IssuedInFuture;
     case JWTVerificationError::Lifetime:
-      return OAuthAssertionError::Lifetime;
+      break;
   }
 
-  std::unreachable();
+  return OAuthAssertionError::Lifetime;
 }
 
 // RFC 7519 Section 4.1.3: the audience is a string or an array of strings, so
@@ -74,10 +74,8 @@ auto map_verification_error(const JWTVerificationError error)
 // rejected for (RFC 7523 Section 3 check 10) rather than accepted because
 // another element happens to match
 auto audience_is_well_formed(const JWT &token) -> bool {
-  if (!token.payload().is_object()) {
-    return false;
-  }
-
+  // Parsing a token rejects a payload that is not an object
+  assert(token.payload().is_object());
   const auto *audience{token.payload().try_at("aud"sv, HASH_AUD)};
   if (audience == nullptr || audience->is_string()) {
     return true;
@@ -138,14 +136,12 @@ auto verify_assertion(
     const auto identifier{token.token_id()};
     const auto expiration{token.expires_at()};
     if (identifier.has_value() && expiration.has_value()) {
-      // The skew is clamped to the same non-negative bounded range the claim
-      // check applies, so a negative value cannot shorten the window below the
+      // The skew is reduced by the same bound the claim check applies, so a
+      // negative or extreme value cannot shorten the window below the
       // acceptance window. The window as a whole is still attacker-influenced,
       // since the remaining lifetime comes from the token's own expiration, so
       // the store saturates rather than trusting it to fit
-      const auto skew{std::clamp(options.clock_skew,
-                                 std::chrono::seconds::zero(),
-                                 std::chrono::seconds{31556952})};
+      const auto skew{jwt_bounded_clock_skew(options.clock_skew)};
       // The remaining lifetime is rounded up to the next whole second so the
       // stored entry never expires before the sub-second interval during which
       // the assertion itself is still accepted, which a truncating cast would

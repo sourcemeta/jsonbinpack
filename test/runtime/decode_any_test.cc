@@ -1,5 +1,6 @@
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/numeric.h>
 #include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 
@@ -1181,4 +1182,24 @@ TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
   const auto &baz{result.at("bar")};
   EXPECT_TRUE(baz.is_string());
   EXPECT_EQ(baz.to_string(), std::string(62, 'x'));
+}
+
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__decimal_2_point_1) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::core::InputByteStream stream{0x5f, 0x2a, 0x03};
+  Decoder decoder{stream};
+  const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  EXPECT_TRUE(result.is_decimal());
+  const sourcemeta::core::JSON expected{sourcemeta::core::Decimal{"2.1"}};
+  EXPECT_EQ(result, expected);
+}
+
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__decimal_minus_122_point_08) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::core::InputByteStream stream{0x5f, 0xdf, 0xbe, 0x01, 0x07};
+  Decoder decoder{stream};
+  const auto result = decoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX({});
+  EXPECT_TRUE(result.is_decimal());
+  const sourcemeta::core::JSON expected{sourcemeta::core::Decimal{"-122.08"}};
+  EXPECT_EQ(result, expected);
 }

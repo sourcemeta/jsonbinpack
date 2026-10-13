@@ -41,15 +41,33 @@ enum class ConvertTarget : std::uint8_t {
 
   /// JSON Schema 2020-12
   Draft202012,
+
+  /// The OpenAPI 3.1 Schema Object dialect
+  OpenAPI31,
+
+  /// The OpenAPI 3.2 Schema Object dialect
+  OpenAPI32,
 };
 
 /// @ingroup convert
 /// Convert the given schema, in place, to the given dialect. Only upgrades are
 /// supported, so a schema already on that dialect or a newer one is left as
 /// is. A document that describes itself or that carries the meta-schema
-/// something in it declares raises `ConvertUnsupportedMetaschemaError`, and one
-/// that sits on a dialect outside the official ladder raises
-/// `ConvertUnsupportedDialectError`. For example:
+/// something in it declares raises `ConvertUnsupportedMetaschemaError`. The
+/// dialects this conversion walks through are the official JSON Schema ones up
+/// to 2020-12, and then the OpenAPI 3.1 and OpenAPI 3.2 Schema Object
+/// dialects, each of which is 2020-12 plus a vocabulary of its own. A document
+/// that sits on any other
+/// dialect raises `ConvertUnsupportedDialectError` whatever the requested
+/// target is, as this
+/// conversion has no rules for moving a schema off such a dialect and will not
+/// convert the document around one either. Note
+/// that a document whose dialect cannot be resolved or framed at all fails
+/// before any of those apply, propagating the error that resolution or framing
+/// raised rather than one of this module's, so a caller that must not fault on
+/// hostile input catches more than the `Convert*Error` family. Conversion
+/// mutates in place and does not roll back, so a document that raises part way
+/// through is left half converted. For example:
 ///
 /// ```cpp
 /// #include <sourcemeta/blaze/convert.h>

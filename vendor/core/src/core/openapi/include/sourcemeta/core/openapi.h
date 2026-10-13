@@ -39,8 +39,13 @@
 namespace sourcemeta::core {
 
 /// @ingroup openapi
-/// The OpenAPI Description versions that this module recognises
+/// The OpenAPI Description versions that this module recognises. The
+/// enumerators run in the order the revisions were published, so that
+/// comparing them says what the specification says when it gives the revision
+/// a field arrived in
 enum class OpenAPIVersion : std::uint8_t {
+  /// The OpenAPI Specification 3.0 revision
+  OPENAPI_3_0,
   /// The OpenAPI Specification 3.1 revision
   OPENAPI_3_1,
   /// The OpenAPI Specification 3.2 revision
@@ -70,6 +75,105 @@ enum class OpenAPIVersion : std::uint8_t {
 /// ```
 SOURCEMETA_CORE_OPENAPI_EXPORT
 auto openapi_version(const JSON &document) -> std::optional<OpenAPIVersion>;
+
+/// @ingroup openapi
+/// The feature set a version designates, which OpenAPI Specification 3.1.1,
+/// Section 4.1 spells as "the `major`.`minor` portion of the version string".
+/// For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::openapi_version_name(
+///            sourcemeta::core::OpenAPIVersion::OPENAPI_3_1) == "3.1");
+/// ```
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_version_name(const OpenAPIVersion version) noexcept
+    -> JSON::StringView;
+
+/// @ingroup openapi
+/// The version that an OpenAPI Description declares, exactly as it wrote it,
+/// returning no value for anything that declares none. A description naming a
+/// revision this module does not recognise reports one here all the same, which
+/// is what lets a caller quote it back. The result borrows from the document it
+/// was read from, so that document must outlive it. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// const auto document{sourcemeta::core::parse_json(R"({
+///   "openapi": "3.0.4",
+///   "info": { "title": "Example", "version": "1.0.0" },
+///   "paths": {}
+/// })")};
+///
+/// assert(sourcemeta::core::openapi_version_string(document).value() ==
+///        "3.0.4");
+/// assert(!sourcemeta::core::openapi_version(document).has_value());
+/// ```
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_version_string(const JSON &document)
+    -> std::optional<JSON::StringView>;
+
+/// @ingroup openapi
+/// Whether a value declares itself an OpenAPI Description, whichever revision
+/// it names and whether or not it holds up as one. This is what tells a
+/// description from a schema before either is read. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// const auto document{sourcemeta::core::parse_json(R"({
+///   "openapi": "3.1.1",
+///   "info": { "title": "Example", "version": "1.0.0" },
+///   "paths": {}
+/// })")};
+///
+/// assert(sourcemeta::core::openapi_is_document(document));
+/// ```
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_is_document(const JSON &document) -> bool;
+
+/// @ingroup openapi
+/// The base that every place of an OpenAPI Description is addressed by, given
+/// the URI the document was retrieved from. That is the URI the document names
+/// itself with, where the revision it declares admits one and what it names can
+/// be made absolute, and the retrieval URI canonicalised otherwise. Asking this
+/// is how a caller holding one document tells a problem reported within it from
+/// one reported in a document reached from it. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/json.h>
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// const auto document{sourcemeta::core::parse_json(R"({
+///   "openapi": "3.2.0",
+///   "$self": "https://example.com/api",
+///   "info": { "title": "Example", "version": "1.0.0" },
+///   "paths": {}
+/// })")};
+///
+/// assert(sourcemeta::core::openapi_base(
+///            document, "https://example.com/openapi.json") ==
+///        "https://example.com/api");
+/// ```
+///
+/// A retrieval URI that establishes nothing is given as the empty URI
+/// reference, which is answered by whatever the document names itself with, and
+/// by the empty URI reference when that is nothing absolute either, leaving
+/// every relative reference the description makes relative. Anything else must
+/// carry a scheme, as RFC 3986 Section 5.2.1 requires one of a base, and one
+/// that does not is refused by throwing sourcemeta::core::OpenAPIError, as
+/// reading a description under such a base is refused too
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_base(const JSON &document, const std::string_view retrieval)
+    -> JSON::String;
 
 /// @ingroup openapi
 /// The contact information that an OpenAPI Description declares for the API.
@@ -317,6 +421,10 @@ public:
     /// schema declares for the URI form, and the description itself for the
     /// name form
     JSON::String scope;
+    /// Whether that destination is no schema the frame holds, which counts a
+    /// position that the schemas record without a schema of its own as nowhere
+    /// to land
+    bool dangling{false};
   };
 
   /// Where an Object sits in a description, and what the frame knows
@@ -326,18 +434,22 @@ public:
     ObjectKind type;
     /// Where in the document it sits, as a pointer from the root
     Pointer pointer;
+    /// The URI of the Object that holds this one, which is the nearest position
+    /// above it that the frame records, with no value for the root of a
+    /// document. It borrows from the key the frame keys that Object by, so the
+    /// frame must outlive it
+    std::optional<JSON::StringView> parent{std::nullopt};
     /// Set on the root of a document and on every Schema Object position it
     /// holds, empty elsewhere: the default `$schema` in force there, resolved
-    /// against the base. A
-    /// Schema Object that declares its own overrides it, which is a matter for
-    /// whatever reads inside one
-    JSON::String dialect;
+    /// against the base. A Schema Object that declares its own overrides it, so
+    /// this is not what that schema is written in. The frame of the schemas a
+    /// description holds answers that
+    JSON::String default_dialect;
     /// Set on a Schema Object position alone, empty elsewhere: the base its
-    /// document keys every
-    /// location by, which is what a relative reference inside that schema
-    /// resolves against until an `$id` says otherwise. RFC 3986 Section 5.1.1
-    /// makes an `$id` the higher precedence source, so this is a default in the
-    /// same way the dialect above is
+    /// document keys every location by, which is what a relative reference
+    /// inside that schema resolves against until an `$id` says otherwise. RFC
+    /// 3986 Section 5.1.1 makes an `$id` the higher precedence source, so this
+    /// is a default in the same way the dialect above is
     JSON::String base;
   };
 
@@ -380,8 +492,11 @@ public:
   /// register past it, which reports the allowance the caller set rather than
   /// whatever was left of it
   ///
-  /// The base must carry a scheme. One that does not is refused before the
-  /// document is read, which is why such a refusal names no place within it
+  /// A base that establishes nothing is given as the empty URI reference, which
+  /// leaves the document to name itself and leaves every relative reference it
+  /// makes relative where it names nothing absolute either. Anything else must
+  /// carry a scheme, and one that does not is refused before the document is
+  /// read, which is why such a refusal names no place within it
   ///
   /// A document that does not conform to the specification is rejected here
   /// rather than reported back, by throwing sourcemeta::core::OpenAPIError.
@@ -397,7 +512,7 @@ public:
   /// sourcemeta::core::SchemaUnknownBaseDialectError
   OpenAPIFrame(
       const JSON &document, const SchemaWalker &walker,
-      const SchemaResolver &resolver, std::string_view default_base = "",
+      const SchemaResolver &resolver, const std::string_view default_base = "",
       std::uint64_t max_locations = std::numeric_limits<std::uint64_t>::max());
 
   ~OpenAPIFrame();
@@ -799,7 +914,13 @@ public:
   /// Export the frame as JSON. This is the complete state of the frame. It asks
   /// the resolver the frame kept, so a meta-schema that has gone out of reach
   /// since throws sourcemeta::core::SchemaResolutionError here rather than at
-  /// construction. For example:
+  /// construction.
+  ///
+  /// Pass the tracker that read the document to report where every place the
+  /// export names by a pointer sits within it, which counts the places its
+  /// Schema Objects hold as much as the Objects around them. A place the
+  /// tracker holds nothing for reports a null position, and where no tracker is
+  /// given no position is reported at all. For example:
   ///
   /// ```cpp
   /// #include <sourcemeta/core/json.h>
@@ -818,7 +939,9 @@ public:
   ///
   /// assert(frame.to_json().at("version").to_string() == "3.1");
   /// ```
-  [[nodiscard]] auto to_json() const -> JSON;
+  [[nodiscard]] auto to_json(
+      const std::optional<PointerPositionTracker> &tracker = std::nullopt) const
+      -> JSON;
 
 private:
 // Exporting symbols that depends on the standard C++ library is considered
@@ -834,6 +957,37 @@ private:
 #pragma warning(pop)
 #endif
 };
+
+/// @ingroup openapi
+/// The name that a frame exports a kind of Object as, which is the name the
+/// specification gives that Object hyphenated and in lower case. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::openapi_kind_name(
+///            sourcemeta::core::OpenAPIFrame::ObjectKind::PathItem) ==
+///        "path-item");
+/// ```
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_kind_name(const OpenAPIFrame::ObjectKind kind) noexcept
+    -> JSON::StringView;
+
+/// @ingroup openapi
+/// The name that a frame exports a route to an operation as. For example:
+///
+/// ```cpp
+/// #include <sourcemeta/core/openapi.h>
+/// #include <cassert>
+///
+/// assert(sourcemeta::core::openapi_operation_kind_name(
+///            sourcemeta::core::OpenAPIFrame::OperationKind::Webhook) ==
+///        "webhook");
+/// ```
+SOURCEMETA_CORE_OPENAPI_EXPORT
+auto openapi_operation_kind_name(
+    const OpenAPIFrame::OperationKind kind) noexcept -> JSON::StringView;
 
 /// @ingroup openapi
 /// What a sourcemeta::core::OpenAPIResolver hands back: either a document it

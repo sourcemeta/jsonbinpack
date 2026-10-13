@@ -5,6 +5,7 @@
 #include <sourcemeta/core/oidc_error.h>
 #include <sourcemeta/core/uri.h>
 
+#include <cassert>     // assert
 #include <optional>    // std::optional, std::nullopt
 #include <string_view> // std::string_view
 #include <utility>     // std::move
@@ -59,13 +60,12 @@ constexpr auto HASH_REQUEST_URI_PARAMETER{
 constexpr auto HASH_REQUIRE_REQUEST_URI_REGISTRATION{
     JSON::Object::hash("require_request_uri_registration"sv)};
 
+// Every caller reads the document of a validated server metadata, which is
+// rejected at construction unless it is an object
 auto string_member(const JSON &data, const JSON::StringView name,
                    const JSON::Object::hash_type hash)
     -> std::optional<std::string_view> {
-  if (!data.is_object()) {
-    return std::nullopt;
-  }
-
+  assert(data.is_object());
   const auto *member{data.try_at(name, hash)};
   if (member == nullptr || !member->is_string()) {
     return std::nullopt;
@@ -308,8 +308,10 @@ auto oidc_make_provider_metadata(const OIDCProviderMetadataConfig &config)
     return std::nullopt;
   }
 
-  // OpenID Connect Discovery 1.0 Section 3: the OpenID Connect endpoints use
-  // the https scheme
+  // Each of these is defined by a document of its own rather than all by one.
+  // OpenID Connect Discovery 1.0 Section 3 gives the first and requires the
+  // https scheme for it, RP-Initiated Logout 1.0 Section 2.1 gives the second
+  // and Session Management 1.0 Section 3.3 the third, both likewise over https
   if ((!config.userinfo_endpoint.empty() &&
        !is_https_url(config.userinfo_endpoint)) ||
       (!config.end_session_endpoint.empty() &&

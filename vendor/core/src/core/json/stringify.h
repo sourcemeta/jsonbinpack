@@ -12,14 +12,37 @@
 #include <cmath>    // std::signbit
 #include <cstddef>  // std::size_t
 #include <cstdint>  // std::int64_t
+#include <ios>      // std::streamsize
 #include <iterator> // std::next, std::cbegin, std::cend, std::back_inserter
 #include <ostream>  // std::basic_ostream
 #include <sstream>  // std::ostringstream
-#include <string>   // std::basic_string
+#include <string>   // std::basic_string, std::string
 #include <vector>   // std::vector
 
 namespace sourcemeta::core::internal {
 constexpr auto LINE_WIDTH{80};
+
+constexpr auto &STRING_CONTROL_ESCAPES{
+    CONSTANT_STRING_CONTROL_ESCAPES<JSON::Char, JSON::CharTraits>};
+
+inline auto stringify_string_size(const JSON::String &document) -> std::size_t {
+  // Account for the surrounding quotes
+  std::size_t result{2};
+  for (const auto character : document) {
+    const auto code_point{static_cast<unsigned char>(character)};
+    if (code_point < STRING_CONTROL_ESCAPES.size()) {
+      result += STRING_CONTROL_ESCAPES[code_point].size();
+    } else if (character == internal::TOKEN_STRING_ESCAPE<JSON::Char> ||
+               character == internal::TOKEN_STRING_QUOTE<JSON::Char>) {
+      result += 2;
+    } else {
+      result += 1;
+    }
+  }
+
+  return result;
+}
+
 template <typename CharT, typename Traits>
 auto indent(std::basic_ostream<CharT, Traits> &stream,
             const std::size_t indentation, const std::size_t indent_by)
@@ -100,288 +123,40 @@ auto stringify(const typename JSON::String &document,
                std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
     -> void {
   stream.put(internal::TOKEN_STRING_QUOTE<JSON::Char>);
-  for (const auto character : document) {
-    switch (character) {
-      case internal::TOKEN_STRING_ESCAPE<JSON::Char>:
-      case internal::TOKEN_STRING_QUOTE<JSON::Char>:
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(character);
-        break;
 
-      // See https://www.asciitable.com
-      // See https://www.rfc-editor.org/rfc/rfc4627#section-2.5
-
-      // Null
-      case '\u0000':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        break;
-      // Start of heading
-      case '\u0001':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        break;
-      // Start of text
-      case '\u0002':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('2');
-        break;
-      // End of text
-      case '\u0003':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('3');
-        break;
-      // End of transmission
-      case '\u0004':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('4');
-        break;
-      // Enquiry
-      case '\u0005':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('5');
-        break;
-      // Acknowledge
-      case '\u0006':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('6');
-        break;
-      // Bell
-      case '\u0007':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('7');
-        break;
-      // Backspace
-      case '\b':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_BACKSPACE<JSON::Char>);
-        break;
-      // Horizontal tab
-      case '\t':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_TABULATION<JSON::Char>);
-        break;
-      // Line feed
-      case '\n':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_LINE_FEED<JSON::Char>);
-        break;
-      // Vertical tab
-      case '\u000B':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('B');
-        break;
-      // Form feed
-      case '\f':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_FORM_FEED<JSON::Char>);
-        break;
-      // Carriage return
-      case '\r':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_CARRIAGE_RETURN<JSON::Char>);
-        break;
-      // Shift out
-      case '\u000E':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('E');
-        break;
-      // Shift in
-      case '\u000F':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('0');
-        stream.put('F');
-        break;
-      // Data link escape
-      case '\u0010':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('0');
-        break;
-      // Device control 1
-      case '\u0011':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('1');
-        break;
-      // Device control 2
-      case '\u0012':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('2');
-        break;
-      // Device control 3
-      case '\u0013':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('3');
-        break;
-      // Device control 4
-      case '\u0014':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('4');
-        break;
-      // Negative acknowledge
-      case '\u0015':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('5');
-        break;
-      // Synchronous idle
-      case '\u0016':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('6');
-        break;
-      // End of transmission block
-      case '\u0017':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('7');
-        break;
-      // Cancel
-      case '\u0018':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('8');
-        break;
-      // End of medium
-      case '\u0019':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('9');
-        break;
-      // Substitute
-      case '\u001A':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('A');
-        break;
-      // Escape
-      case '\u001B':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('B');
-        break;
-      // File separator
-      case '\u001C':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('C');
-        break;
-      // Group separator
-      case '\u001D':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('D');
-        break;
-      // Record separator
-      case '\u001E':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('E');
-        break;
-      // Unit separator
-      case '\u001F':
-        stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
-        stream.put(internal::TOKEN_STRING_ESCAPE_UNICODE<JSON::Char>);
-        stream.put('0');
-        stream.put('0');
-        stream.put('1');
-        stream.put('F');
-        break;
-      default:
-        stream.put(character);
+  // Emit the characters that need no escaping in runs, as writing a block at
+  // a time is considerably cheaper than writing a character at a time
+  std::size_t run{0};
+  for (std::size_t index{0}; index < document.size(); index++) {
+    const auto character{document[index]};
+    const auto code_point{static_cast<unsigned char>(character)};
+    const auto is_control{code_point < internal::STRING_CONTROL_ESCAPES.size()};
+    if (!is_control && character != internal::TOKEN_STRING_ESCAPE<JSON::Char> &&
+        character != internal::TOKEN_STRING_QUOTE<JSON::Char>) {
+      continue;
     }
+
+    if (index == run + 1) {
+      stream.put(document[run]);
+    } else if (index > run) {
+      stream.write(document.data() + run,
+                   static_cast<std::streamsize>(index - run));
+    }
+
+    if (is_control) {
+      const auto escape{internal::STRING_CONTROL_ESCAPES[code_point]};
+      stream.write(escape.data(), static_cast<std::streamsize>(escape.size()));
+    } else {
+      stream.put(internal::TOKEN_STRING_ESCAPE<JSON::Char>);
+      stream.put(character);
+    }
+
+    run = index + 1;
+  }
+
+  if (run < document.size()) {
+    stream.write(document.data() + run,
+                 static_cast<std::streamsize>(document.size() - run));
   }
 
   stream.put(internal::TOKEN_STRING_QUOTE<JSON::Char>);
@@ -497,15 +272,16 @@ auto prettify(const typename JSON::Object &document,
   for (auto iterator = std::cbegin(document); iterator != end; ++iterator) {
     stream.put(internal::TOKEN_WHITESPACE_LINE_FEED<JSON::Char>);
     internal::indent(stream, indentation + 1, indent_by);
-    const auto current_position{stream.tellp()};
+    // The length of the property name as encoded in JSON, plus its
+    // delimiter and the space that follows it, to help determine the
+    // actual current column
+    const auto property_size{internal::stringify_string_size(iterator->first) +
+                             2};
     stringify<Allocator>(iterator->first, stream);
     stream.put(internal::TOKEN_OBJECT_KEY_DELIMITER<JSON::Char>);
     stream.put(internal::TOKEN_WHITESPACE_SPACE<JSON::Char>);
-    prettify<Allocator>(
-        iterator->second, stream, indentation + 1, indent_by,
-        // Pass the length of the property name as encoded in JSON
-        // to help determine the actual current column
-        static_cast<std::size_t>(stream.tellp() - current_position));
+    prettify<Allocator>(iterator->second, stream, indentation + 1, indent_by,
+                        property_size);
     if (std::next(iterator) == end) {
       stream.put(internal::TOKEN_WHITESPACE_LINE_FEED<JSON::Char>);
     } else {
@@ -518,6 +294,27 @@ auto prettify(const typename JSON::Object &document,
   }
 
   stream.put(internal::TOKEN_OBJECT_END<JSON::Char>);
+}
+
+// A number the double precision format holds exactly would be read back as a
+// double, so it keeps an exponent to be read back as a decimal instead. The
+// rest are read back as decimals however they are written, so they take the
+// plain form, which states them as they came in. Where that form needs an
+// exponent of its own it groups the digits in threes, which states them
+// further from how they came in than scientific notation does
+inline auto
+stringify_decimal(const Decimal &decimal,
+                  std::basic_ostream<JSON::Char, JSON::CharTraits> &stream)
+    -> void {
+  if (!decimal.is_double()) {
+    const auto plain{decimal.to_string()};
+    if (plain.find('e') == std::string::npos) {
+      stream << plain;
+      return;
+    }
+  }
+
+  stream << decimal.to_scientific_string();
 }
 
 template <template <typename T> typename Allocator>
@@ -547,10 +344,7 @@ auto stringify(const JSON &document,
       stringify<Allocator>(document.as_object(), stream);
       break;
     case JSON::Type::Decimal:
-      // We ALWAYS parse numbers with exponents as decimal, so if we don't
-      // preserve the exponent, we might end up incorrectly treating the number
-      // when parsing it again
-      stream << document.to_decimal().to_scientific_string();
+      stringify_decimal(document.to_decimal(), stream);
       break;
   }
 }
@@ -587,10 +381,7 @@ auto prettify(const JSON &document,
       prettify<Allocator>(document.as_object(), stream, indentation, indent_by);
       break;
     case JSON::Type::Decimal:
-      // We ALWAYS parse numbers with exponents as decimal, so if we don't
-      // preserve the exponent, we might end up incorrectly treating the number
-      // when parsing it again
-      stream << document.to_decimal().to_scientific_string();
+      stringify_decimal(document.to_decimal(), stream);
       break;
   }
 }

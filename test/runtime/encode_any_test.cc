@@ -2,6 +2,7 @@
 #include <cstddef>   // std::byte
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/numeric.h>
 #include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <string>
@@ -917,4 +918,29 @@ TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__object_62_xs_shared) {
         std::byte{0x6f}, std::byte{0x00}, std::byte{0x01}, std::byte{0x44}};
     EXPECT_EQ(stream.bytes(), expected);
   }
+}
+
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__decimal_2_point_1) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::core::JSON document{sourcemeta::core::Decimal{"2.1"}};
+  sourcemeta::core::OutputByteStream stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x5f}, std::byte{0x2a},
+                                    std::byte{0x03}}));
+}
+
+TEST(ANY_PACKED_TYPE_TAG_BYTE_PREFIX__decimal_minus_122_point_08) {
+  using namespace sourcemeta::jsonbinpack;
+  sourcemeta::core::JSON document{sourcemeta::core::Decimal{"-122.08"}};
+  sourcemeta::core::OutputByteStream stream{};
+
+  Encoder encoder{stream};
+  encoder.ANY_PACKED_TYPE_TAG_BYTE_PREFIX(document, {});
+  EXPECT_EQ(
+      stream.bytes(),
+      (std::vector<std::byte>{std::byte{0x5f}, std::byte{0xdf}, std::byte{0xbe},
+                              std::byte{0x01}, std::byte{0x07}}));
 }
