@@ -3,13 +3,17 @@
 
 #include <algorithm>   // std::max, std::copy, std::fill
 #include <array>       // std::array
+#include <bit>         // std::endian
+#include <cassert>     // assert
 #include <cstdint>     // std::int32_t, std::int64_t, std::uint32_t,
                        // std::uint64_t, std::uintptr_t, std::uint8_t
 #include <cstring>     // std::memcpy
+#include <limits>      // std::numeric_limits
 #include <string>      // std::string, std::to_string
 #include <string_view> // std::string_view
 #include <utility>     // std::pair, std::move
 
+#include <sourcemeta/core/numeric_error.h>
 #include <sourcemeta/core/numeric_uint128.h>
 
 namespace {
@@ -50,6 +54,57 @@ constexpr std::array<std::uint64_t, 20> POWERS_OF_10 = {{
 
 constexpr std::uint64_t BASE = 1000000000000000000ULL; // 10^18
 constexpr std::int32_t BASE_DIGITS = 18;
+
+// Lining two exponents up costs a digit for every step between them, and
+// nothing here bounds that distance, as an exponent spans the whole of its own
+// type. Two otherwise ordinary operands can therefore call for a coefficient of
+// billions of digits. This holds any single coefficient to eight mebibytes,
+// which is far wider than any decimal format calls for, and reports whatever
+// asks for more as beyond what can be represented rather than allocating it
+constexpr std::uint32_t MAXIMUM_WORDS = 1048576;
+
+// How many digits are taken in one go, and what folding that many of them
+// scales the running value by
+constexpr std::uint32_t GATHERED_DIGITS = 8;
+constexpr std::uint64_t GATHERED_SCALE = 100000000ULL; // 10^8
+
+// Take eight digits in one go. Every byte of the word holds one digit once the
+// bias that makes it a character is taken away, and the three multiplications
+// fold the bytes into pairs, the pairs into quadruples, and the quadruples into
+// the whole. Where the bytes of a word land is what makes the folding line up,
+// so only the layout this is written for may use it
+inline auto gather_digits(const char *digits) noexcept -> std::uint64_t {
+  std::uint64_t word = 0;
+  std::memcpy(&word, digits, sizeof(word));
+  word -= static_cast<std::uint64_t>('0') * 0x0101010101010101ULL;
+  const auto pairs = ((word * ((10ULL << 8) + 1)) >> 8) & 0x00FF00FF00FF00FFULL;
+  const auto quadruples =
+      ((pairs * ((100ULL << 16) + 1)) >> 16) & 0x0000FFFF0000FFFFULL;
+  return (quadruples * ((10000ULL << 32) + 1)) >> 32;
+}
+
+// Fold a run of digits into one value. Folding one digit at a time makes every
+// digit wait on the one before it, so as much of the run as possible is taken
+// eight at a time instead, which both shortens the chain and does fewer
+// multiplications. The caller guarantees the run holds nothing but digits
+inline auto fold_digits(const char *digits, const std::uint32_t count) noexcept
+    -> std::uint64_t {
+  std::uint64_t value = 0;
+  std::uint32_t index = 0;
+  if constexpr (std::endian::native == std::endian::little) {
+    while (index + GATHERED_DIGITS <= count) {
+      value = (value * GATHERED_SCALE) + gather_digits(digits + index);
+      index += GATHERED_DIGITS;
+    }
+  }
+
+  while (index < count) {
+    value = (value * 10) + static_cast<std::uint64_t>(digits[index] - '0');
+    index += 1;
+  }
+
+  return value;
+}
 constexpr std::int64_t COMPACT_MAX =
     static_cast<std::int64_t>(BASE - 1); // 999999999999999999
 
@@ -67,6 +122,10 @@ public:
   std::uint32_t capacity;
 
   explicit BigCoefficient(std::uint32_t requested_capacity) {
+    if (requested_capacity > MAXIMUM_WORDS) {
+      throw sourcemeta::core::NumericOverflowError{};
+    }
+
     if (requested_capacity <= INLINE_CAPACITY) {
       this->words = this->inline_words_.data();
       this->capacity = INLINE_CAPACITY;
@@ -178,8 +237,12 @@ public:
     return result;
   }
 
-  auto strip_trailing_zeros() -> std::int32_t {
-    if (this->is_zero()) {
+  // Stripping no more than a given number of digits lets a caller climb to an
+  // exponent it must not pass
+  auto strip_trailing_zeros(
+      const std::int32_t maximum = std::numeric_limits<std::int32_t>::max())
+      -> std::int32_t {
+    if (this->is_zero() || maximum <= 0) {
       return 0;
     }
 
@@ -190,6 +253,9 @@ public:
       zero_words++;
     }
 
+    zero_words =
+        std::min(zero_words, static_cast<std::uint32_t>(maximum / BASE_DIGITS));
+
     if (zero_words > 0 && zero_words < this->length) {
       std::copy(this->words + zero_words, this->words + this->length,
                 this->words);
@@ -197,26 +263,42 @@ public:
       total_stripped += static_cast<std::int32_t>(zero_words) * BASE_DIGITS;
     }
 
-    if (this->words[0] != 0) {
-      // Each word holds a fixed slice of the whole number, so dividing by 10
-      // must carry the remainder of every higher word into the word below
-      while (this->words[0] % 10 == 0) {
-        std::uint64_t borrow = 0;
-        for (auto index = this->length; index > 0; index--) {
-          const auto word = this->words[index - 1];
-          this->words[index - 1] = (word / 10) + (borrow * (BASE / 10));
-          borrow = word % 10;
-        }
-
-        if (this->length > 1 && this->words[this->length - 1] == 0) {
-          this->length--;
-        }
-
-        total_stripped++;
+    // Each word holds a fixed slice of the whole number, so dividing by 10 must
+    // carry the remainder of every higher word into the word below
+    while (total_stripped < maximum && this->words[0] % 10 == 0) {
+      std::uint64_t borrow = 0;
+      for (auto index = this->length; index > 0; index--) {
+        const auto word = this->words[index - 1];
+        this->words[index - 1] = (word / 10) + (borrow * (BASE / 10));
+        borrow = word % 10;
       }
+
+      if (this->length > 1 && this->words[this->length - 1] == 0) {
+        this->length--;
+      }
+
+      total_stripped++;
     }
 
     return total_stripped;
+  }
+
+  // A divisor that the word base is a multiple of divides each word in place,
+  // carrying what one word leaves over into the word below, the same way that
+  // stripping a trailing zero does. The caller establishes that the whole
+  // number divides evenly, which the word base being a multiple of the divisor
+  // reduces to the lowest word doing so
+  auto divide_by_base_factor(const std::uint64_t divisor) -> void {
+    std::uint64_t borrow = 0;
+    for (auto index = this->length; index > 0; index--) {
+      const auto word = this->words[index - 1];
+      this->words[index - 1] = (word / divisor) + (borrow * (BASE / divisor));
+      borrow = word % divisor;
+    }
+
+    if (this->length > 1 && this->words[this->length - 1] == 0) {
+      this->length--;
+    }
   }
 
   [[nodiscard]] auto compare(const BigCoefficient &other) const -> int {
@@ -614,10 +696,8 @@ public:
           end_position > static_cast<std::uint32_t>(BASE_DIGITS)
               ? end_position - static_cast<std::uint32_t>(BASE_DIGITS)
               : 0U;
-      for (auto position = start_position; position < end_position;
-           position++) {
-        word = (word * 10) + static_cast<std::uint64_t>(digits[position] - '0');
-      }
+      word =
+          fold_digits(digits + start_position, end_position - start_position);
       result.words[word_index] = word;
     }
 
@@ -627,13 +707,42 @@ public:
 
   [[nodiscard]] auto to_uint128(std::int32_t exponent) const
       -> sourcemeta::core::uint128_t {
+    // A negative exponent on an integral value means the coefficient carries
+    // trailing zeros that the scale removes, so dividing recovers the true
+    // magnitude rather than returning a result that is too large by a power of
+    // ten. The scale comes off here, while the coefficient is still held to its
+    // full width, because a coefficient wide enough to need the scale is also
+    // wide enough to wrap as it narrows
+    if (exponent < 0 && !this->is_zero()) {
+      const auto scale_digits{-static_cast<std::int64_t>(exponent)};
+      // A scale that reaches past every digit leaves nothing of the value
+      if (static_cast<std::uint64_t>(scale_digits) >= this->digit_count()) {
+        return 0;
+      }
+
+      // Whole words come off by being skipped rather than divided away, so no
+      // divisor is built and a scale as wide as the coefficient stays within
+      // the word limit
+      const auto whole_words{static_cast<std::uint32_t>(
+          scale_digits / static_cast<std::int64_t>(BASE_DIGITS))};
+      const auto residual{static_cast<std::uint32_t>(
+          scale_digits % static_cast<std::int64_t>(BASE_DIGITS))};
+
+      sourcemeta::core::uint128_t value = 0;
+      for (auto index = this->length; index > whole_words; index--) {
+        value = (value * BASE) + this->words[index - 1];
+      }
+
+      return residual == 0 ? value : value / POWERS_OF_10[residual];
+    }
+
     sourcemeta::core::uint128_t value = 0;
     for (auto index = this->length; index > 0; index--) {
       value = (value * BASE) + this->words[index - 1];
     }
 
     // Zero admits arbitrarily extreme exponents, which would otherwise make
-    // the scaling loops below spin for billions of iterations
+    // the scaling loop below spin for billions of iterations
     if (value == 0) {
       return value;
     }
@@ -641,15 +750,6 @@ public:
     while (exponent > 0) {
       value *= 10;
       exponent--;
-    }
-
-    // A negative exponent on an integral value means the coefficient carries
-    // trailing zeros that the scale removes, so dividing recovers the true
-    // magnitude rather than returning a result that is too large by a power of
-    // ten
-    while (exponent < 0) {
-      value = value / 10;
-      exponent++;
     }
 
     return value;
@@ -692,12 +792,14 @@ auto BigCoefficient::align_exponents(BigCoefficient &left,
                                      BigCoefficient &right,
                                      std::int32_t left_exponent,
                                      std::int32_t right_exponent) -> void {
-  if (left_exponent > right_exponent) {
-    left = left.multiply_pow10(
-        static_cast<std::uint32_t>(left_exponent - right_exponent));
-  } else if (right_exponent > left_exponent) {
-    right = right.multiply_pow10(
-        static_cast<std::uint32_t>(right_exponent - left_exponent));
+  // Two exponents at opposite ends of their range are further apart than that
+  // range can hold, so the distance between them is measured more widely
+  const auto difference = static_cast<std::int64_t>(left_exponent) -
+                          static_cast<std::int64_t>(right_exponent);
+  if (difference > 0) {
+    left = left.multiply_pow10(static_cast<std::uint32_t>(difference));
+  } else if (difference < 0) {
+    right = right.multiply_pow10(static_cast<std::uint32_t>(-difference));
   }
 }
 
@@ -791,8 +893,21 @@ auto modular_pow10(std::uint32_t exponent, std::uint64_t modulus)
 // Round-half-even (banker's rounding) to WORKING_PRECISION significant digits
 constexpr std::int32_t WORKING_PRECISION = 16;
 
+// How many positions the working precision drops from a coefficient of the
+// given width, which is what rounding to it adds to the exponent
+auto precision_excess(const std::uint64_t digits) -> std::int32_t {
+  return digits > static_cast<std::uint64_t>(WORKING_PRECISION)
+             ? static_cast<std::int32_t>(
+                   digits - static_cast<std::uint64_t>(WORKING_PRECISION))
+             : 0;
+}
+
+// An operation that cannot represent its result exactly reports that it left
+// something behind, which only decides a tie that the dropped digits alone
+// would settle by parity
 auto rounds_up_half_even(const std::string_view kept,
-                         const std::string_view dropped) -> bool {
+                         const std::string_view dropped,
+                         const bool residue = false) -> bool {
   if (dropped.empty() || dropped.front() < '5') {
     return false;
   }
@@ -807,12 +922,20 @@ auto rounds_up_half_even(const std::string_view kept,
     }
   }
 
+  if (residue) {
+    return true;
+  }
+
   return !kept.empty() && (kept.back() - '0') % 2 != 0;
 }
 
+// The exponent is carried more widely than it is stored, because dropping
+// positions raises it and the caller is the one that knows whether the raised
+// value still fits
 auto round_to_precision(std::int64_t &coefficient,
-                        std::uint64_t &coefficient_high, std::int32_t &exponent,
-                        std::uint8_t &flags) -> void {
+                        std::uint64_t &coefficient_high, std::int64_t &exponent,
+                        std::uint8_t &flags, const bool residue = false)
+    -> void {
   if ((flags & (FLAG_NAN | FLAG_SNAN | FLAG_INFINITE)) != 0) {
     return;
   }
@@ -832,7 +955,7 @@ auto round_to_precision(std::int64_t &coefficient,
     auto dropped =
         digit_string.substr(static_cast<std::size_t>(WORKING_PRECISION));
 
-    const auto round_up = rounds_up_half_even(kept, dropped);
+    const auto round_up = rounds_up_half_even(kept, dropped, residue);
 
     if ((flags & FLAG_HEAP) != 0) {
       delete load_big_pointer(coefficient);
@@ -844,6 +967,15 @@ auto round_to_precision(std::int64_t &coefficient,
     }
     if (round_up) {
       new_coefficient++;
+      // The round operation of the decimal arithmetic specification shortens
+      // the result by one digit and raises the exponent to match when the
+      // increment carries past the precision being rounded to. Leaving that
+      // out hands back one digit more than was asked for
+      if (digit_count(static_cast<std::uint64_t>(new_coefficient)) >
+          static_cast<std::uint32_t>(WORKING_PRECISION)) {
+        new_coefficient /= 10;
+        excess++;
+      }
     }
 
     coefficient = new_coefficient;
@@ -868,8 +1000,14 @@ auto round_to_precision(std::int64_t &coefficient,
   auto remainder = coefficient % divisor;
   auto half = divisor / 2;
 
-  if (remainder > half || (remainder == half && quotient % 2 != 0)) {
+  if (remainder > half ||
+      (remainder == half && (residue || quotient % 2 != 0))) {
     quotient++;
+    if (digit_count(static_cast<std::uint64_t>(quotient)) >
+        static_cast<std::uint32_t>(WORKING_PRECISION)) {
+      quotient /= 10;
+      excess++;
+    }
   }
 
   coefficient = quotient;
@@ -877,7 +1015,8 @@ auto round_to_precision(std::int64_t &coefficient,
   exponent += excess;
 }
 
-void free_big_coefficient(std::int64_t coefficient, std::uint8_t flags) {
+auto free_big_coefficient(std::int64_t coefficient, std::uint8_t flags)
+    -> void {
   if ((flags & FLAG_HEAP) != 0) {
     delete load_big_pointer(coefficient);
   }
@@ -901,11 +1040,14 @@ auto coefficient_as_big(std::int64_t coefficient,
   return BigCoefficient::from_uint64(static_cast<std::uint64_t>(coefficient));
 }
 
-void store_big_result(std::int64_t &coefficient,
+auto store_big_result(std::int64_t &coefficient,
                       std::uint64_t &coefficient_high, std::uint8_t &flags,
-                      BigCoefficient result_big, bool result_negative) {
-  if (result_big.length <= 1 &&
-      result_big.words[0] <= static_cast<std::uint64_t>(COMPACT_MAX)) {
+                      BigCoefficient result_big, bool result_negative) -> void {
+  // Every limb is held below the base it counts in, which is the largest the
+  // narrow form takes plus one, so a lone limb always fits it and asking
+  // whether it does can only ever answer yes
+  assert(result_big.length == 0 || result_big.words[0] < BASE);
+  if (result_big.length <= 1) {
     coefficient = static_cast<std::int64_t>(result_big.words[0]);
     coefficient_high = 0;
     flags = result_negative ? FLAG_SIGN : 0;

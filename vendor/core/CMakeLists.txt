@@ -20,7 +20,7 @@ option(SOURCEMETA_CORE_UNICODE "Build the Sourcemeta Core Unicode library" ON)
 option(SOURCEMETA_CORE_PUNYCODE "Build the Sourcemeta Core Punycode library" ON)
 option(SOURCEMETA_CORE_TIME "Build the Sourcemeta Core time library" ON)
 option(SOURCEMETA_CORE_CRYPTO "Build the Sourcemeta Core Crypto library" ON)
-option(SOURCEMETA_CORE_CRYPTO_USE_SYSTEM_OPENSSL "Use system OpenSSL for the Sourcemeta Core Crypto library" OFF)
+option(SOURCEMETA_CORE_CRYPTO_USE_REFERENCE "Use reference backend for the Sourcemeta Core Crypto library" OFF)
 option(SOURCEMETA_CORE_REGEX "Build the Sourcemeta Core Regex library" ON)
 option(SOURCEMETA_CORE_IP "Build the Sourcemeta Core IP library" ON)
 option(SOURCEMETA_CORE_IDNA "Build the Sourcemeta Core IDNA library" ON)
@@ -37,9 +37,9 @@ option(SOURCEMETA_CORE_JSONLD "Build the Sourcemeta Core JSON-LD library" ON)
 option(SOURCEMETA_CORE_JSONL "Build the Sourcemeta Core JSONL library" ON)
 option(SOURCEMETA_CORE_YAML "Build the Sourcemeta Core YAML library" ON)
 option(SOURCEMETA_CORE_JSONRPC "Build the Sourcemeta Core JSON-RPC library" ON)
-option(SOURCEMETA_CORE_MCP "Build the Sourcemeta Core MCP library" ON)
 option(SOURCEMETA_CORE_HTTP "Build the Sourcemeta Core HTTP library" ON)
 option(SOURCEMETA_CORE_HTTP_USE_SYSTEM_CURL "Use system cURL for the Sourcemeta Core HTTP library" OFF)
+option(SOURCEMETA_CORE_MCP "Build the Sourcemeta Core MCP library" ON)
 option(SOURCEMETA_CORE_OPENAPI "Build the Sourcemeta Core OpenAPI library" ON)
 option(SOURCEMETA_CORE_JOSE "Build the Sourcemeta Core JOSE library" ON)
 option(SOURCEMETA_CORE_OAUTH "Build the Sourcemeta Core OAuth library" ON)
@@ -80,6 +80,37 @@ elseif(SOURCEMETA_CORE_UNDEFINED_SANITIZER)
   sourcemeta_sanitizer(TYPE undefined)
 endif()
 
+# Dependencies
+if(SOURCEMETA_CORE_CRYPTO)
+  if(SOURCEMETA_CORE_CRYPTO_USE_REFERENCE)
+    set(SOURCEMETA_CORE_CRYPTO_BACKEND reference)
+  elseif(APPLE)
+    set(SOURCEMETA_CORE_CRYPTO_BACKEND apple)
+  elseif(WIN32)
+    set(SOURCEMETA_CORE_CRYPTO_BACKEND windows)
+  else()
+    find_package(OpenSSL 3.0 REQUIRED)
+    set(SOURCEMETA_CORE_CRYPTO_BACKEND openssl)
+  endif()
+  message(STATUS
+    "Using the ${SOURCEMETA_CORE_CRYPTO_BACKEND} cryptography backend")
+endif()
+if(SOURCEMETA_CORE_LANG_ALLOCATOR
+   AND (SOURCEMETA_OS_LINUX OR SOURCEMETA_OS_MACOS)
+   AND NOT SOURCEMETA_CORE_ADDRESS_SANITIZER
+   AND NOT SOURCEMETA_CORE_UNDEFINED_SANITIZER
+   AND NOT SOURCEMETA_CORE_USE_SYSTEM_ALLOCATOR)
+  message(STATUS "Using the mimalloc allocator")
+  find_package(Mimalloc REQUIRED)
+endif()
+if(SOURCEMETA_CORE_REGEX)
+  find_package(SLJIT REQUIRED)
+  find_package(PCRE2 REQUIRED)
+endif()
+if(SOURCEMETA_CORE_LANG_PARALLEL)
+  find_package(Threads REQUIRED)
+endif()
+
 # TODO: Turn this into a re-usable utility CMake function
 if(SOURCEMETA_CORE_INSTALL)
   include(GNUInstallDirs)
@@ -100,13 +131,6 @@ endif()
 
 # Every executable in this build links this one, so it comes first
 if(SOURCEMETA_CORE_LANG_ALLOCATOR)
-  if((SOURCEMETA_OS_LINUX OR SOURCEMETA_OS_MACOS)
-     AND NOT SOURCEMETA_CORE_ADDRESS_SANITIZER
-     AND NOT SOURCEMETA_CORE_UNDEFINED_SANITIZER
-     AND NOT SOURCEMETA_CORE_USE_SYSTEM_ALLOCATOR)
-    message(STATUS "Using the mimalloc allocator")
-    find_package(Mimalloc REQUIRED)
-  endif()
   add_subdirectory(src/lang/allocator)
 else()
   # A previous configuration of this same directory may have recorded a library
@@ -128,7 +152,6 @@ if(SOURCEMETA_CORE_LANG_PROCESS)
 endif()
 
 if(SOURCEMETA_CORE_LANG_PARALLEL)
-  find_package(Threads REQUIRED)
   add_subdirectory(src/lang/parallel)
 endif()
 
@@ -177,15 +200,10 @@ if(SOURCEMETA_CORE_TIME)
 endif()
 
 if(SOURCEMETA_CORE_CRYPTO)
-  if(SOURCEMETA_CORE_CRYPTO_USE_SYSTEM_OPENSSL)
-    find_package(OpenSSL 3.0 REQUIRED)
-  endif()
   add_subdirectory(src/core/crypto)
 endif()
 
 if(SOURCEMETA_CORE_REGEX)
-  find_package(SLJIT REQUIRED)
-  find_package(PCRE2 REQUIRED)
   add_subdirectory(src/core/regex)
 endif()
 
@@ -253,12 +271,12 @@ if(SOURCEMETA_CORE_JSONRPC)
   add_subdirectory(src/core/jsonrpc)
 endif()
 
-if(SOURCEMETA_CORE_MCP)
-  add_subdirectory(src/core/mcp)
-endif()
-
 if(SOURCEMETA_CORE_HTTP)
   add_subdirectory(src/core/http)
+endif()
+
+if(SOURCEMETA_CORE_MCP)
+  add_subdirectory(src/core/mcp)
 endif()
 
 if(SOURCEMETA_CORE_OPENAPI)
@@ -452,12 +470,12 @@ if(SOURCEMETA_CORE_TESTS)
     add_subdirectory(test/jsonrpc)
   endif()
 
-  if(SOURCEMETA_CORE_MCP)
-    add_subdirectory(test/mcp)
-  endif()
-
   if(SOURCEMETA_CORE_HTTP)
     add_subdirectory(test/http)
+  endif()
+
+  if(SOURCEMETA_CORE_MCP)
+    add_subdirectory(test/mcp)
   endif()
 
   if(SOURCEMETA_CORE_OPENAPI)

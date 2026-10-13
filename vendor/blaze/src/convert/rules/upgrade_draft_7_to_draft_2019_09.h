@@ -1,73 +1,40 @@
 class UpgradeDraft7To201909 final : public SchemaTransformRule {
 public:
-  using reframe_after_transform = std::true_type;
   UpgradeDraft7To201909()
       : SchemaTransformRule{"upgrade_draft_7_to_2019_09"} {};
 
   [[nodiscard]] auto
   condition(const sourcemeta::core::JSON &schema,
-            const sourcemeta::core::JSON &root,
+            const sourcemeta::core::JSON &,
             const sourcemeta::core::SchemaVocabularies &vocabularies,
-            const sourcemeta::core::SchemaFrame &frame,
-            const sourcemeta::core::SchemaFrame::Location &location,
-            const sourcemeta::core::SchemaWalker &,
+            const Site &site, const sourcemeta::core::SchemaWalker &,
             const sourcemeta::core::SchemaResolver &) const -> bool override {
     ONLY_CONTINUE_IF(
         vocabularies.contains(SchemaVocabularies::Known::JSON_SCHEMA_DRAFT_7) &&
         schema.is_object());
 
-    ONLY_CONTINUE_IF(subschema_at_dialect(schema, location, DRAFT_7_URL) ||
-                     has_actionable_id_fragment(schema) ||
-                     has_actionable_dependencies(schema) ||
-                     has_actionable_ref_siblings(schema));
-
-    if (frame.any_subschema_under(
-            location.pointer,
-            [&root](
-                const sourcemeta::core::SchemaFrame::Location &entry) -> bool {
-              const auto entry_pointer{
-                  sourcemeta::core::to_pointer(entry.pointer)};
-              const auto &entry_schema{
-                  sourcemeta::core::get(root, entry_pointer)};
-
-              return has_descendant_pending_pattern(entry_schema,
-                                                    entry.dialect);
-            })) {
-      return false;
-    }
-
-    return true;
+    return at_dialect_declaration(schema, site) ||
+           has_actionable_id_fragment(schema) ||
+           has_actionable_dependencies(schema) ||
+           has_actionable_ref_siblings(schema);
   }
 
-  auto transform(sourcemeta::core::JSON &schema) const -> void override {
+  auto transform(sourcemeta::core::JSON &schema, const Site &site) const
+      -> void override {
     this->renames_.clear();
     this->prefix_ref_siblings(schema);
     this->split_id_fragment(schema);
     this->split_dependencies(schema);
-    if (bump_schema(schema)) {
-      drop_dialect_overrides(schema, true, DRAFT_2019_09_URL);
-    } else {
-      mark_dialect_override(schema, DRAFT_2019_09_URL);
-    }
+    bump_dialect(schema, site, DRAFT_2019_09_URL);
   }
 
-  [[nodiscard]] auto rereference(const std::string_view,
-                                 const sourcemeta::core::Pointer &,
-                                 const sourcemeta::core::Pointer &target,
-                                 const sourcemeta::core::Pointer &current) const
-      -> std::optional<sourcemeta::core::Pointer> override {
-    for (const auto &[old_pointer, new_pointer] : this->renames_) {
-      const auto result{target.rebase(current.concat(old_pointer),
-                                      current.concat(new_pointer))};
-      if (result != target) {
-        return result;
-      }
-    }
-
-    return target;
+  [[nodiscard]] auto relocations() const -> std::vector<Relocation> override {
+    return {this->renames_.cbegin(), this->renames_.cend()};
   }
 
 private:
+  static constexpr std::string_view DRAFT_3_URL{
+      "http://json-schema.org/draft-03/schema#"};
   static constexpr std::string_view DRAFT_4_URL{
       "http://json-schema.org/draft-04/schema#"};
   static constexpr std::string_view DRAFT_6_URL{
@@ -77,10 +44,16 @@ private:
   static constexpr std::string_view DRAFT_2019_09_URL{
       "https://json-schema.org/draft/2019-09/schema"};
 
+  // A sibling that only ever annotated says the same thing once 2019-09 starts
+  // reading it, so shadowing it would lose a value for nothing. `$schema` is
+  // exempt because it names the dialect the subschema is read as rather than
+  // taking part in validation. `$id` is not exempt: Draft 7 ignored it beside a
+  // `$ref`, so it did not move the base the reference resolved against, and
+  // 2019-09 would start moving it and send the reference somewhere else
   // NOLINTNEXTLINE(cert-err58-cpp,bugprone-throwing-static-initialization)
-  static inline const std::array<std::string_view, 12> SHADOW_EXEMPT_KEYWORDS{
-      {"$schema", "$id", "title", "description", "default", "examples",
-       "$comment", "readOnly", "writeOnly", "deprecated", "contentMediaType",
+  static inline const std::array<std::string_view, 11> SHADOW_EXEMPT_KEYWORDS{
+      {"$schema", "title", "description", "default", "examples", "$comment",
+       "readOnly", "writeOnly", "deprecated", "contentMediaType",
        "contentEncoding"}};
 
   static inline const std::array<std::string_view, 13>
@@ -305,15 +278,6 @@ private:
     schema.at("dependentRequired").into(std::move(dependent_required));
   }
 
-  static auto bump_schema(sourcemeta::core::JSON &schema) -> bool {
-    if (schema.defines("$schema") && schema.at("$schema").is_string() &&
-        schema.at("$schema").to_string() == DRAFT_7_URL) {
-      schema.assign("$schema", sourcemeta::core::JSON{DRAFT_2019_09_URL});
-      return true;
-    }
-    return false;
-  }
-
   static auto has_pending_pattern(const sourcemeta::core::JSON &subschema)
       -> bool {
     if (!subschema.is_object()) {
@@ -329,11 +293,22 @@ private:
            has_actionable_ref_siblings(subschema);
   }
 
+  static auto names_legacy_identifier(const std::string_view dialect) -> bool {
+    return dialect == DRAFT_3_URL || dialect == DRAFT_4_URL;
+  }
+
   static auto
   has_descendant_pending_pattern(const sourcemeta::core::JSON &subschema,
                                  const std::string_view descendant_dialect)
       -> bool {
     if (!subschema.is_object()) {
+      return false;
+    }
+
+    // A descendant read as a dialect the ladder does not name is never
+    // rewritten by anything, so it can never stop having work pending and
+    // waiting for it would block this upgrade for good
+    if (!names_ladder_dialect(descendant_dialect)) {
       return false;
     }
 
@@ -345,19 +320,27 @@ private:
       }
     }
 
-    if (subschema.defines("id") && subschema.at("id").is_string() &&
-        !subschema.defines("$id")) {
-      return true;
-    }
+    // Both of these name a keyword whose meaning depends on the dialect the
+    // descendant is read as. `id` identifies a resource through Draft 4 and is
+    // ordinary data from Draft 6 on, and the exclusive bounds are booleans over
+    // the same span and numbers afterwards. A descendant on a later dialect
+    // carrying either one is holding data that no rule will ever rewrite, so
+    // waiting for it would block this upgrade for good
+    if (names_legacy_identifier(descendant_dialect)) {
+      if (subschema.defines("id") && subschema.at("id").is_string() &&
+          !subschema.defines("$id")) {
+        return true;
+      }
 
-    const auto *exclusive_minimum{subschema.try_at("exclusiveMinimum")};
-    if (exclusive_minimum != nullptr && exclusive_minimum->is_boolean()) {
-      return true;
-    }
+      const auto *exclusive_minimum{subschema.try_at("exclusiveMinimum")};
+      if (exclusive_minimum != nullptr && exclusive_minimum->is_boolean()) {
+        return true;
+      }
 
-    const auto *exclusive_maximum{subschema.try_at("exclusiveMaximum")};
-    if (exclusive_maximum != nullptr && exclusive_maximum->is_boolean()) {
-      return true;
+      const auto *exclusive_maximum{subschema.try_at("exclusiveMaximum")};
+      if (exclusive_maximum != nullptr && exclusive_maximum->is_boolean()) {
+        return true;
+      }
     }
 
     if (descendant_dialect == DRAFT_4_URL) {

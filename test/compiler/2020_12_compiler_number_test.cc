@@ -13,7 +13,7 @@ TEST(arbitrary) {
 
   const auto expected = sourcemeta::core::parse_json(R"JSON({
     "$schema": "tag:sourcemeta.com,2024:jsonbinpack/encoding/v1",
-    "binpackEncoding": "DOUBLE_VARINT_TUPLE",
+    "binpackEncoding": "NUMBER_VARINT_TUPLE",
     "binpackOptions": {}
   })JSON");
 

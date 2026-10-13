@@ -1,6 +1,7 @@
 #include <cstddef> // std::byte
 #include <sourcemeta/core/io.h>
 #include <sourcemeta/core/json.h>
+#include <sourcemeta/core/numeric.h>
 #include <sourcemeta/core/test.h>
 #include <sourcemeta/jsonbinpack/runtime.h>
 #include <vector> // std::vector
@@ -160,4 +161,78 @@ TEST(DOUBLE_VARINT_TUPLE_31_point_4) {
   EXPECT_EQ(stream.bytes(),
             (std::vector<std::byte>{std::byte{0xf4}, std::byte{0x04},
                                     std::byte{0x01}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_2_point_1) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"2.1"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x2a}, std::byte{0x03}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_minus_122_point_08) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"-122.08"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0xdf}, std::byte{0xbe},
+                                    std::byte{0x01}, std::byte{0x07}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_trailing_zeros_reduce) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"2.10"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x2a}, std::byte{0x03}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_positive_exponent) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"1e2"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x02}, std::byte{0x09}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_0_point_1) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"0.1"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x02}, std::byte{0x03}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_decimal_zero) {
+  const sourcemeta::core::JSON document{sourcemeta::core::Decimal{"0"}};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x00}, std::byte{0x01}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_real_3_point_14) {
+  const sourcemeta::core::JSON document{3.14};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0xf4}, std::byte{0x04},
+                                    std::byte{0x06}}));
+}
+
+TEST(NUMBER_VARINT_TUPLE_real_5) {
+  const sourcemeta::core::JSON document{5.0};
+  sourcemeta::core::OutputByteStream stream{};
+  sourcemeta::jsonbinpack::Encoder encoder{stream};
+  encoder.NUMBER_VARINT_TUPLE(document, {});
+  EXPECT_EQ(stream.bytes(),
+            (std::vector<std::byte>{std::byte{0x0a}, std::byte{0x00}}));
 }

@@ -23,26 +23,29 @@ using namespace std::string_view_literals;
 
 // A parent is given as one of the keys a location is held under rather than as
 // a bare pointer, so that following it is a lookup in the same map rather than
-// a key the reader has to rebuild
+// a key the reader has to rebuild. The root of a document is the one place with
+// nothing above it, and every other place has at least that root above it, so
+// the search below cannot come up empty
 auto parent_of(const sourcemeta::core::OpenAPIFrame::Locations &locations,
                const sourcemeta::core::JSON::String &uri,
                const sourcemeta::core::OpenAPILocation &location)
-    -> sourcemeta::core::JSON {
+    -> std::optional<sourcemeta::core::JSON::StringView> {
   if (location.pointer.empty()) {
-    return sourcemeta::core::JSON{nullptr};
+    return std::nullopt;
   }
 
   const auto document{sourcemeta::core::openapi_document_uri(uri)};
   auto pointer{location.pointer};
   while (!pointer.empty()) {
     pointer.pop_back();
-    auto candidate{sourcemeta::core::openapi_location_uri(document, pointer)};
-    if (locations.contains(candidate)) {
-      return sourcemeta::core::JSON{std::move(candidate)};
+    const auto candidate{locations.find(
+        sourcemeta::core::openapi_location_uri(document, pointer))};
+    if (candidate != locations.cend()) {
+      return candidate->first;
     }
   }
 
-  return sourcemeta::core::JSON{document};
+  std::unreachable();
 }
 
 auto error_at(const sourcemeta::core::OpenAPIWalk &walk,
@@ -92,21 +95,6 @@ auto info_json(const sourcemeta::core::OpenAPIInfo &info)
   }
 
   return result;
-}
-
-auto version_string(const sourcemeta::core::OpenAPIVersion version)
-    -> sourcemeta::core::JSON::StringView {
-  switch (version) {
-    // OpenAPI Specification 3.1.1, Section 4.1: "The `major`.`minor` portion
-    // of the version string (for example `3.1`) SHALL designate the OAS
-    // feature set"
-    case sourcemeta::core::OpenAPIVersion::OPENAPI_3_1:
-      return "3.1"sv;
-    case sourcemeta::core::OpenAPIVersion::OPENAPI_3_2:
-      return "3.2"sv;
-  }
-
-  std::unreachable();
 }
 
 // A Reference Object, and a Path Item Object that declares a `$ref`, stand in
@@ -406,6 +394,17 @@ auto collect_path_parameter_names(
   return true;
 }
 
+// Of the 3.0 releases only the last two carry this requirement, 3.0.3 being
+// where "Each template expression in the path MUST correspond to a path
+// parameter that is included in the Path Item itself and/or in each of the
+// Path Item's Operations" arrives. It is held to every 3.0 description all the
+// same, because every release says of itself that "The patch version SHOULD
+// NOT be considered by tooling" and the last one says a patch release
+// "address[es] errors in, or provide[s] clarifications to, this document, not
+// the feature set". A requirement a later patch of the same revision spells
+// out is therefore what that revision always asked for, and reading it as
+// arriving mid-revision would make the feature set turn on a component the
+// specification asks tooling to disregard
 auto check_path_templates(
     const sourcemeta::core::OpenAPIWalk &walk,
     const sourcemeta::core::JSON::String &endpoint,
@@ -439,6 +438,124 @@ auto check_path_templates(
 } // namespace
 
 namespace sourcemeta::core {
+
+auto openapi_kind_name(const OpenAPIObjectKind kind) noexcept
+    -> JSON::StringView {
+  switch (kind) {
+    case OpenAPIObjectKind::Document:
+      return "openapi"sv;
+    case OpenAPIObjectKind::PathItem:
+      return "path-item"sv;
+    case OpenAPIObjectKind::Parameter:
+      return "parameter"sv;
+    case OpenAPIObjectKind::RequestBody:
+      return "request-body"sv;
+    case OpenAPIObjectKind::Response:
+      return "response"sv;
+    case OpenAPIObjectKind::Example:
+      return "example"sv;
+    case OpenAPIObjectKind::Header:
+      return "header"sv;
+    case OpenAPIObjectKind::Link:
+      return "link"sv;
+    case OpenAPIObjectKind::Callbacks:
+      return "callback"sv;
+    case OpenAPIObjectKind::SecurityScheme:
+      return "security-scheme"sv;
+    case OpenAPIObjectKind::Info:
+      return "info"sv;
+    case OpenAPIObjectKind::Contact:
+      return "contact"sv;
+    case OpenAPIObjectKind::License:
+      return "license"sv;
+    case OpenAPIObjectKind::Server:
+      return "server"sv;
+    case OpenAPIObjectKind::ServerVariable:
+      return "server-variable"sv;
+    case OpenAPIObjectKind::Components:
+      return "components"sv;
+    case OpenAPIObjectKind::Paths:
+      return "paths"sv;
+    case OpenAPIObjectKind::Operation:
+      return "operation"sv;
+    case OpenAPIObjectKind::ExternalDocumentation:
+      return "external-documentation"sv;
+    case OpenAPIObjectKind::MediaType:
+      return "media-type"sv;
+    case OpenAPIObjectKind::Encoding:
+      return "encoding"sv;
+    case OpenAPIObjectKind::Responses:
+      return "responses"sv;
+    case OpenAPIObjectKind::Tag:
+      return "tag"sv;
+    case OpenAPIObjectKind::Reference:
+      return "reference"sv;
+    case OpenAPIObjectKind::Schema:
+      return "schema"sv;
+    case OpenAPIObjectKind::OAuthFlows:
+      return "oauth-flows"sv;
+    case OpenAPIObjectKind::OAuthFlow:
+      return "oauth-flow"sv;
+    case OpenAPIObjectKind::SecurityRequirement:
+      return "security-requirement"sv;
+  }
+
+    // Clang settles that no other value arrives, so only GCC and MSVC
+    // need to be told that the end of this function is never reached
+#if !defined(__clang__)
+  std::unreachable();
+#endif
+}
+
+// What framing a document under a given retrieval URI would key every place of
+// it by. It is defined here, beside the frame it answers for, because the two
+// agreeing is the whole of what it is for
+auto openapi_base(const JSON &document, const std::string_view retrieval)
+    -> JSON::String {
+  auto base{openapi_canonical_base(retrieval)};
+
+  // Only 3.2 defines `$self`, and a document of any earlier revision has the
+  // field turned down by its own field table, so nothing before that revision
+  // establishes a base of its own. A document declaring a revision this module
+  // does not recognise never reaches the field either, as framing turns it down
+  // over the revision first
+  const auto version{openapi_version(document)};
+  if (!version.has_value() || version.value() < OpenAPIVersion::OPENAPI_3_2) {
+    return base;
+  }
+
+  // Framing holds this to being a URI reference and throws when it is not,
+  // reporting the base it had settled on by then, which is the one established
+  // here. So a `$self` that framing refuses is one this hands back the
+  // retrieval URI for rather than one it has to refuse in turn
+  const auto *self{document.try_at("$self", OPENAPI_HASH_SELF)};
+  if (self == nullptr || !self->is_string() ||
+      !URI::is_uri_reference(self->to_string())) {
+    return base;
+  }
+
+  auto established{openapi_document_base(self->to_string(), base)};
+  return established.has_value() ? std::move(established.value())
+                                 : std::move(base);
+}
+
+auto openapi_operation_kind_name(const OpenAPIOperationKind kind) noexcept
+    -> JSON::StringView {
+  switch (kind) {
+    case OpenAPIOperationKind::Path:
+      return "path"sv;
+    case OpenAPIOperationKind::Webhook:
+      return "webhook"sv;
+    case OpenAPIOperationKind::Callback:
+      return "callback"sv;
+  }
+
+    // Clang settles that no other value arrives, so only GCC and MSVC
+    // need to be told that the end of this function is never reached
+#if !defined(__clang__)
+  std::unreachable();
+#endif
+}
 
 // Every operation the description exposes, which Section 4.3.3 confines to what
 // the entry document reaches: "only the entry document's Paths Object
@@ -708,6 +825,14 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
   this->internal_->references = std::move(walk.references);
   this->internal_->security_references = std::move(walk.security_references);
 
+  // What holds a place is a property of the whole set of places rather than of
+  // any one of them, so it is settled once the walk has recorded every place
+  // there is
+  for (auto &location : this->internal_->locations) {
+    location.second.parent =
+        parent_of(this->internal_->locations, location.first, location.second);
+  }
+
   // Every Schema Object position of the document at once, rather than one
   // pass each, so that a schema referring to another resolves against a frame
   // that holds both. Section 4.8.24.5 scopes `jsonSchemaDialect` to "all
@@ -743,9 +868,9 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
   try {
     this->internal_->schemas = std::make_unique<SchemaFrame>(
         SchemaFrame::Mode::References, document, walker, resolver,
-        root->second.dialect, "", SchemaFrame::IdentifierMode::Additional,
-        this->internal_->schema_paths, this->internal_->base,
-        max_locations - walk_locations);
+        root->second.default_dialect, "",
+        SchemaFrame::IdentifierMode::Additional, this->internal_->schema_paths,
+        this->internal_->base, max_locations - walk_locations);
   } catch (const SchemaFrameLimitError &) {
     // Framing the schemas was handed what was left rather than the whole, so
     // the allowance it reports is not the one the caller set
@@ -761,12 +886,14 @@ OpenAPIFrame::OpenAPIFrame(const JSON &document, const SchemaWalker &walker,
   this->internal_->discriminators =
       openapi_discriminators(document, *(this->internal_->schemas),
                              this->internal_->base, walker, resolver);
-  const auto every_mapping_lands{
-      std::ranges::all_of(this->internal_->discriminators,
-                          [this](const auto &discriminator) -> bool {
-                            return openapi_discriminator_lands(
-                                *(this->internal_->schemas), discriminator);
-                          })};
+  auto every_mapping_lands{true};
+  for (auto &discriminator : this->internal_->discriminators) {
+    discriminator.dangling = !openapi_discriminator_lands(
+        *(this->internal_->schemas), discriminator);
+    if (discriminator.dangling) {
+      every_mapping_lands = false;
+    }
+  }
 
   // What a Schema Object references is as much a part of the description as
   // what the shell around it does, so a description whose schemas reach for
@@ -857,15 +984,18 @@ auto OpenAPIFrame::reference_count() const noexcept -> std::size_t {
   return this->internal_->references.size();
 }
 
-auto OpenAPIFrame::to_json() const -> JSON {
+auto OpenAPIFrame::to_json(
+    const std::optional<PointerPositionTracker> &tracker) const -> JSON {
   // Read through the accessors rather than the internal state, so that what
   // this reports and what a caller can observe cannot drift apart
   auto result{JSON::make_object()};
-  result.assign_assume_new("version", JSON{version_string(this->version())});
+  result.assign_assume_new("version",
+                           JSON{openapi_version_name(this->version())});
   result.assign_assume_new("base", JSON{this->base()});
   result.assign_assume_new("standalone", JSON{this->standalone()});
-  result.assign_assume_new("schemas", this->internal_->schemas->to_json(
-                                          this->internal_->schema_resolver));
+  result.assign_assume_new("schemas",
+                           this->internal_->schemas->to_json(
+                               this->internal_->schema_resolver, tracker));
   result.assign_assume_new("info", info_json(this->info()));
 
   auto locations{JSON::make_object()};
@@ -875,14 +1005,20 @@ auto OpenAPIFrame::to_json() const -> JSON {
                             JSON{openapi_kind_name(location.second.type)});
     entry.assign_assume_new("pointer",
                             JSON{to_string(location.second.pointer)});
-    // The nearest recorded ancestor, which every Object but the root of a
-    // document has, since an Object is always recorded before its contents
-    entry.assign_assume_new(
-        "parent",
-        parent_of(this->internal_->locations, location.first, location.second));
-    // Only the root of a document and a Schema Object carry one
-    if (!location.second.dialect.empty()) {
-      entry.assign_assume_new("dialect", JSON{location.second.dialect});
+    if (tracker.has_value()) {
+      entry.assign_assume_new(
+          "position",
+          sourcemeta::core::to_json(tracker->get(location.second.pointer)));
+    }
+
+    entry.assign_assume_new("parent",
+                            sourcemeta::core::to_json(location.second.parent));
+    // Only the root of a document and a Schema Object carry one. The effective
+    // dialect of a Schema Object is the business of the schema frame, which
+    // exports its own under the same name one level down
+    if (!location.second.default_dialect.empty()) {
+      entry.assign_assume_new("defaultDialect",
+                              JSON{location.second.default_dialect});
     }
 
     // A Schema Object position alone carries the other half of what whatever
@@ -945,11 +1081,15 @@ auto OpenAPIFrame::to_json() const -> JSON {
     for (const auto &discriminator : this->internal_->discriminators) {
       auto entry{JSON::make_object()};
       entry.assign_assume_new("pointer", JSON{to_string(discriminator.origin)});
+      if (tracker.has_value()) {
+        entry.assign_assume_new(
+            "position",
+            sourcemeta::core::to_json(tracker->get(discriminator.origin)));
+      }
+
       entry.assign_assume_new("destination", JSON{discriminator.destination});
       entry.assign_assume_new("scope", JSON{discriminator.scope});
-      entry.assign_assume_new("dangling",
-                              JSON{!openapi_discriminator_lands(
-                                  *(this->internal_->schemas), discriminator)});
+      entry.assign_assume_new("dangling", JSON{discriminator.dangling});
       discriminators.push_back(std::move(entry));
     }
 
@@ -962,6 +1102,12 @@ auto OpenAPIFrame::to_json() const -> JSON {
       auto entry{JSON::make_object()};
       entry.assign_assume_new("pointer",
                               JSON{to_string(reference.second.origin)});
+      if (tracker.has_value()) {
+        entry.assign_assume_new(
+            "position",
+            sourcemeta::core::to_json(tracker->get(reference.second.origin)));
+      }
+
       entry.assign_assume_new("original", JSON{reference.second.original});
       entry.assign_assume_new("destination",
                               JSON{reference.second.destination});

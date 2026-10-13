@@ -35,15 +35,6 @@ enum class URIEscapeMode : std::uint8_t {
   UserInfo
 };
 
-inline auto uri_percent_encode_byte(std::string &output,
-                                    const unsigned char byte) -> void {
-  const auto high{(byte >> 4) & 0x0F};
-  const auto low{byte & 0x0F};
-  output += URI_PERCENT;
-  output += static_cast<char>(high < 10 ? '0' + high : 'A' + high - 10);
-  output += static_cast<char>(low < 10 ? '0' + low : 'A' + low - 10);
-}
-
 inline auto uri_is_percent_encoded(const std::string &input,
                                    std::string::size_type position) -> bool {
   return position < input.size() && input[position] == URI_PERCENT &&
@@ -53,9 +44,17 @@ inline auto uri_is_percent_encoded(const std::string &input,
 }
 
 inline auto uri_unescape_all_inplace(std::string &input) -> void {
-  std::string::size_type write_position = 0;
+  // Nothing escaped means the string is already its own answer, and otherwise
+  // only what follows the first escape can move, so the bytes ahead of it stay
+  // where they are instead of being written over themselves
+  const auto first{input.find(URI_PERCENT)};
+  if (first == std::string::npos) {
+    return;
+  }
 
-  for (std::string::size_type read_position = 0;
+  std::string::size_type write_position = first;
+
+  for (std::string::size_type read_position = first;
        read_position < input.size();) {
     if (uri_is_percent_encoded(input, read_position)) {
       const auto value = static_cast<unsigned char>(
@@ -72,9 +71,17 @@ inline auto uri_unescape_all_inplace(std::string &input) -> void {
 }
 
 inline auto uri_unescape_unreserved_inplace(std::string &input) -> void {
-  std::string::size_type write_position = 0;
+  // Nothing escaped means the string is already its own answer, and otherwise
+  // only what follows the first escape can move, so the bytes ahead of it stay
+  // where they are instead of being written over themselves
+  const auto first{input.find(URI_PERCENT)};
+  if (first == std::string::npos) {
+    return;
+  }
 
-  for (std::string::size_type read_position = 0;
+  std::string::size_type write_position = first;
+
+  for (std::string::size_type read_position = first;
        read_position < input.size();) {
     if (uri_is_percent_encoded(input, read_position)) {
       const auto value = static_cast<unsigned char>(
@@ -98,7 +105,14 @@ inline auto uri_unescape_unreserved_inplace(std::string &input) -> void {
 }
 
 inline auto uri_normalize_percent_encoding_inplace(std::string &input) -> void {
-  for (std::string::size_type position = 0; position < input.size();) {
+  // Only an escape has anything to normalise, so a string without one is left
+  // alone and a string with one is walked from there
+  const auto first{input.find(URI_PERCENT)};
+  if (first == std::string::npos) {
+    return;
+  }
+
+  for (std::string::size_type position = first; position < input.size();) {
     if (uri_is_percent_encoded(input, position)) {
       input[position + 1] = static_cast<char>(
           std::toupper(static_cast<unsigned char>(input[position + 1])));
@@ -114,9 +128,14 @@ inline auto uri_normalize_percent_encoding_inplace(std::string &input) -> void {
 template <typename Predicate>
 inline auto uri_unescape_if_inplace(std::string &input, Predicate should_decode)
     -> void {
-  std::string::size_type write_position = 0;
+  const auto first{input.find(URI_PERCENT)};
+  if (first == std::string::npos) {
+    return;
+  }
 
-  for (std::string::size_type read_position = 0;
+  std::string::size_type write_position = first;
+
+  for (std::string::size_type read_position = first;
        read_position < input.size();) {
     if (uri_is_percent_encoded(input, read_position)) {
       const auto value = static_cast<unsigned char>(
