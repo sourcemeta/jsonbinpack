@@ -268,13 +268,13 @@ struct ARBITRARY_MULTIPLE_ZIGZAG_VARINT {
 struct DOUBLE_VARINT_TUPLE {};
 
 // clang-format off
-/// @brief The encoding consists of a sequence of two integers: The signed
-/// coefficient of the number as a ZigZag-encoded Base-128 64-bit Little Endian
-/// variable-length unsigned integer; and the base-10 exponent that the
-/// coefficient is scaled by, ZigZag-encoded and shifted left by one bit, whose
-/// least significant bit is set when the number is an arbitrary-precision
-/// decimal rather than a double, as a Base-128 64-bit Little Endian
-/// variable-length unsigned integer.
+/// @brief The encoding consists of a sequence of two integers. The first is
+/// the signed coefficient of the number as a ZigZag-encoded Base-128 64-bit
+/// Little Endian variable-length unsigned integer. The second is the base-10
+/// exponent that the coefficient is scaled by, ZigZag-encoded and shifted left
+/// by one bit, whose least significant bit is set when the number is an
+/// arbitrary-precision decimal rather than a double, as a Base-128 64-bit
+/// Little Endian variable-length unsigned integer.
 ///
 /// Unlike DOUBLE_VARINT_TUPLE, this encoding covers both of the numeric
 /// representations that a JSON document may hold, and the schema-driven mode
