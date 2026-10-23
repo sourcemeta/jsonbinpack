@@ -6,15 +6,18 @@
 #include <sourcemeta/core/jsonschema.h>
 #include <sourcemeta/core/options.h>
 
-#include <algorithm>   // std::min
-#include <cassert>     // assert
-#include <cstdint>     // std::int64_t
-#include <cstdlib>     // EXIT_SUCCESS, EXIT_FAILURE
-#include <filesystem>  // std::filesystem
-#include <iostream>    // std::cerr
-#include <sstream>     // std::istringstream, std::ostringstream
-#include <string>      // std::string, std::stoull, std::to_string
-#include <string_view> // std::string_view
+#include <algorithm>    // std::min
+#include <cassert>      // assert
+#include <charconv>     // std::from_chars
+#include <cstdint>      // std::int64_t
+#include <cstdlib>      // EXIT_SUCCESS, EXIT_FAILURE
+#include <filesystem>   // std::filesystem
+#include <iostream>     // std::cerr
+#include <optional>     // std::optional, std::nullopt
+#include <sstream>      // std::istringstream, std::ostringstream
+#include <string>       // std::string, std::to_string
+#include <string_view>  // std::string_view
+#include <system_error> // std::errc
 
 constexpr auto DEFAULT_METASCHEMA =
     "https://json-schema.org/draft/2020-12/schema";
@@ -85,6 +88,18 @@ auto check_binary_artifact(const std::filesystem::path &path,
   return false;
 }
 
+auto parse_size_artifact(const std::string_view contents)
+    -> std::optional<std::string::size_type> {
+  std::string::size_type result{0};
+  const auto *const end{contents.data() + contents.size()};
+  const auto outcome{std::from_chars(contents.data(), end, result)};
+  if (outcome.ec != std::errc{} || std::string_view{outcome.ptr, end} != "\n") {
+    return std::nullopt;
+  }
+
+  return result;
+}
+
 auto check_size_artifact(const std::filesystem::path &path,
                          const std::string::size_type actual) -> bool {
   if (!std::filesystem::is_regular_file(path)) {
@@ -92,19 +107,25 @@ auto check_size_artifact(const std::filesystem::path &path,
     return false;
   }
 
-  const auto expected{static_cast<std::string::size_type>(
-      std::stoull(sourcemeta::core::read_file_to_string(path)))};
-  if (expected == actual) {
+  const auto contents{std::to_string(actual) + "\n"};
+  const auto expected{sourcemeta::core::read_file_to_string(path)};
+  if (expected == contents) {
     return true;
   }
 
-  const auto difference{static_cast<std::int64_t>(actual) -
-                        static_cast<std::int64_t>(expected)};
   report_artifact_mismatch(path);
-  std::cerr << "GOT: " << actual << " bytes\n"
-            << "EXPECTED: " << expected << " bytes\n"
-            << "DIFFERENCE: " << (difference > 0 ? "+" : "") << difference
-            << " bytes\n";
+  const auto previous{parse_size_artifact(expected)};
+  if (previous.has_value()) {
+    const auto difference{static_cast<std::int64_t>(actual) -
+                          static_cast<std::int64_t>(previous.value())};
+    std::cerr << "GOT: " << actual << " bytes\n"
+              << "EXPECTED: " << previous.value() << " bytes\n"
+              << "DIFFERENCE: " << (difference > 0 ? "+" : "") << difference
+              << " bytes\n";
+  } else {
+    std::cerr << "GOT:\n" << contents << "EXPECTED:\n" << expected;
+  }
+
   return false;
 }
 
