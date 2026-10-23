@@ -4,6 +4,8 @@ target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::core::json
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::compiler)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::jsonbinpack::runtime)
 target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::core::jsonschema)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::core::io)
+target_link_libraries(jsonbinpack_e2e_test_runner PRIVATE sourcemeta::core::options)
 set_target_properties(jsonbinpack_e2e_test_runner
   PROPERTIES FOLDER "JSON BinPack/E2E")
 
