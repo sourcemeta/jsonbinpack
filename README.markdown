@@ -1,3 +1,9 @@
+**This project is being merged into [Blaze](https://github.com/sourcemeta/blaze),
+and its implementation now lives at
+https://github.com/sourcemeta/blaze/tree/main/src/binpack.**
+
+***
+
 **This is a work-in-progress. Please consider starring or watching the repository
 to stay up to date.**
 
