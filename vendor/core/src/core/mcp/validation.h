@@ -11,7 +11,6 @@
 #include <sourcemeta/core/uri.h>
 
 #include <algorithm>        // std::all_of
-#include <cmath>            // std::isfinite
 #include <initializer_list> // std::initializer_list
 #include <set>              // std::set
 #include <utility>          // std::move, std::pair
@@ -166,12 +165,6 @@ inline auto icon_size(const JSON::StringView value) -> bool {
          });
 }
 
-inline auto strings(const JSON &value) -> bool {
-  return value.is_array() &&
-         std::all_of(value.as_array().begin(), value.as_array().end(),
-                     [](const auto &item) { return item.is_string(); });
-}
-
 inline auto annotations(const JSON &value, const bool received = false)
     -> bool {
   const auto *item{
@@ -189,19 +182,18 @@ inline auto annotations(const JSON &value, const bool received = false)
   if (const auto *priority{
           field(*item, "priority", sourcemeta::core::MCP_HASH_PRIORITY)};
       priority != nullptr &&
-      (!priority->is_number() ||
-       (priority->is_real() && !std::isfinite(priority->to_real())) ||
-       *priority < JSON{0} || *priority > JSON{1})) {
+      (!priority->is_number() || *priority < JSON{0} || *priority > JSON{1})) {
     return false;
   }
   if (const auto *audience{
           field(*item, "audience", sourcemeta::core::MCP_HASH_AUDIENCE)};
       audience != nullptr) {
-    if (!strings(*audience)) {
+    if (!audience->is_array_of_strings()) {
       return false;
     }
     for (const auto &role : audience->as_array()) {
-      if (role.to_string() != "user" && role.to_string() != "assistant") {
+      const auto &role_name{role.to_string()};
+      if (role_name != "user" && role_name != "assistant") {
         return false;
       }
     }
@@ -231,7 +223,7 @@ inline auto icons(const JSON &value, const bool received = false) -> bool {
     if (const auto *sizes{
             field(item, "sizes", sourcemeta::core::MCP_HASH_SIZES)};
         sizes != nullptr) {
-      if (!strings(*sizes)) {
+      if (!sizes->is_array_of_strings()) {
         return false;
       }
 
@@ -243,10 +235,14 @@ inline auto icons(const JSON &value, const bool received = false) -> bool {
     }
     if (const auto *theme{
             field(item, "theme", sourcemeta::core::MCP_HASH_THEME)};
-        (theme != nullptr) &&
-        (!theme->is_string() ||
-         (theme->to_string() != "light" && theme->to_string() != "dark"))) {
-      return false;
+        theme != nullptr) {
+      if (!theme->is_string()) {
+        return false;
+      }
+      const auto &theme_name{theme->to_string()};
+      if (theme_name != "light" && theme_name != "dark") {
+        return false;
+      }
     }
   }
   return true;
@@ -317,7 +313,7 @@ inline auto metadata_key(const JSON::StringView key, const bool prefix_required)
   const auto slash{key.find('/')};
   JSON::StringView name{key};
   if (slash == JSON::StringView::npos) {
-    if (prefix_required) {
+    if (prefix_required || key.empty()) {
       return false;
     }
   } else {
@@ -364,7 +360,7 @@ inline auto sampling_block(const JSON &value, const bool received = false)
                                               value)) {
     return false;
   }
-  const auto name{type->to_string()};
+  const auto &name{type->to_string()};
   if (name == "text" || name == "image" || name == "audio") {
     return sourcemeta::core::internal::valid_content(
         MCPProtocolVersion::V_2026_07_28, value, received);
@@ -405,7 +401,7 @@ inline auto sampling_message_block(const JSON &block, const bool tools,
   if (!sampling_block(block)) {
     return false;
   }
-  const auto type{
+  const auto &type{
       block.at("type", sourcemeta::core::MCP_HASH_TYPE).to_string()};
   if (type == "tool_result") {
     return tools && answering && role == "user" &&
@@ -487,7 +483,7 @@ inline auto sampling_options(const JSON &params) -> bool {
   }
   if (const auto *stop{field(params, "stopSequences",
                              sourcemeta::core::MCP_HASH_STOP_SEQUENCES)};
-      (stop != nullptr) && !strings(*stop)) {
+      (stop != nullptr) && !stop->is_array_of_strings()) {
     return false;
   }
   if (const auto *choice{
@@ -917,7 +913,7 @@ inline auto valid_resource(const MCPProtocolVersion version, const JSON &value,
       validation::field(value, "size", sourcemeta::core::MCP_HASH_SIZE)};
   return validation::base(value, received) &&
          validation::annotations(value, received) &&
-         ((size == nullptr) || (size->is_integral() && *size >= JSON{0}));
+         ((size == nullptr) || (size->is_integral() && size->is_positive()));
 }
 
 inline auto valid_content(const MCPProtocolVersion version, const JSON &value,
@@ -931,7 +927,7 @@ inline auto valid_content(const MCPProtocolVersion version, const JSON &value,
   if ((type == nullptr) || !type->is_string()) {
     return false;
   }
-  const auto name{type->to_string()};
+  const auto &name{type->to_string()};
   if (name == "text") {
     return validation::string_field(value, "text",
                                     sourcemeta::core::MCP_HASH_TEXT, true);
@@ -1005,7 +1001,7 @@ inline auto valid_input_requests(const JSON &value,
          !valid_meta(MCPProtocolVersion::V_2026_07_28, *params))) {
       return false;
     }
-    const auto name{method->to_string()};
+    const auto &name{method->to_string()};
     if (name == MCP_METHOD_ROOTS_LIST) {
       if (!capabilities.roots) {
         return false;
@@ -1149,11 +1145,8 @@ inline auto valid_input_response(const JSON::StringView method,
         return false;
       }
       for (const auto &entry : content->as_object()) {
-        if (entry.second.is_real() && !std::isfinite(entry.second.to_real())) {
-          return false;
-        }
         if (!entry.second.is_string() && !entry.second.is_number() &&
-            !entry.second.is_boolean() && !validation::strings(entry.second)) {
+            !entry.second.is_boolean() && !entry.second.is_array_of_strings()) {
           return false;
         }
       }

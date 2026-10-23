@@ -10,6 +10,7 @@
 #include <sourcemeta/core/unicode.h>
 
 #include <algorithm> // std::find
+#include <cassert>   // assert
 #include <optional>  // std::optional, std::nullopt
 #include <span>      // std::span
 #include <string>    // std::string
@@ -285,7 +286,11 @@ auto mcp_make_error_request_meta(
           version, identifier, JSONRPC_CODE_INVALID_PARAMS,
           "Invalid params: clientInfo description must be a string");
   }
+    // Clang settles that no other value arrives, so only GCC and MSVC
+    // need to be told that the end of this function is never reached
+#if !defined(__clang__)
   std::unreachable();
+#endif
 }
 
 auto mcp_request_name_from_body(const sourcemeta::core::JSON &envelope)
@@ -456,11 +461,11 @@ auto mcp_validate_request_headers(
         version, identifier, MCP_HEADER_PROTOCOL_VERSION,
         *protocol_version_header, mcp_protocol_version_string(version));
   }
-  if (meta_status && *meta_status != MCPRequestMetaStatus::Valid) {
-    return mcp_make_error_request_meta(version, identifier, *meta_status,
-                                       *protocol_version_header,
-                                       supported_versions);
-  }
+  // Every other outcome was reported above, and the one left is only reached
+  // by a body version that names no revision carrying metadata, which the two
+  // checks above have already turned down by holding the body to the header
+  // and the header to the revision this session speaks
+  assert(!meta_status || *meta_status == MCPRequestMetaStatus::Valid);
   if (!method_header ||
       !sourcemeta::core::mcp_is_plain_header_value(*method_header)) {
     return mcp_make_error_header_mismatch(version, identifier,
